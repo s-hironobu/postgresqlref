@@ -1,0 +1,709 @@
+%FILE internal/internal-11.html
+%LASTMOD
+%KEY pgsql-internal11
+
+
+%TITLE レプリケーション(Streaming ReplicationとHotStandby)
+
+
+<font color="#ff0000">
+<p>
+コンフリクト回避の説明はもっとうまくやらねばならない。
+</p>
+</font>
+
+
+
+<p>
+バージョン9.0で非同期レプリケーション、バージョン9.1で同期レプリケーションが実装されました。
+</p>
+
+<p>
+PostgreSQLのレプリケーションの基本的なアイディアは、マスタから送信されたWALログを即座に再実行することです。
+つまり、スレーブはマスタのWALログをリカバリし続けているのです。
+さらにリカバリ中であっても検索を許します。
+<br>
+WALログの送受信機能を「Streaming Replication(SRと略することも多い)」と呼びます。
+また、リカバリ中に検索を可能にする機能を「HotStandby」と呼びます。
+<br>
+普段はこの2つの機能をあわせてレプリケーションと呼んでいます。
+</p>
+
+
+<p>
+PostgreSQLのレプリケーションは「1マスタNスレーブ」型です([<図2-64>]参照)。
+構成に関する特徴を列挙します。
+</p>
+
+
+<ul>
+<li>データの更新ができるのは1台のマスタだけで、スレーブは検索のみ可能である。</li>
+
+<li>スレーブの追加:</li>
+ <ul>
+ <li>スレーブは(マスタの設定パラメータ)max_wal_sendersで指定した数だけ接続できる。</li>
+ <li>マスタの稼働中にスレーブの追加や停止ができる。</li>
+ </ul>
+ <li>バージョン9.1以降のレプリケーションでは、同期レプリケーションと非同期レプリケーションのスレーブを混在できる。</li>
+ <li>バージョン9.2から、スレーブのカスケード接続ができる(ただし、非同期レプリケーションのみ)。</li>
+</ul>
+
+<br>
+
+<table border=1>
+<caption>[<図2-64>] レプリケーションの構成</caption>
+<tr><td>
+<left>
+<img src="./fig-2-11-01.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+
+
+<p>
+Streaming Replicationは、
+マスタ側のWALログを送信するwalsenderプロセスと、
+受信するスレーブ側のwalreceiverプロセスから成ります。
+<br>
+バージョン9.0と9.1以降では、WALログの送受信機構が大幅に変わりました([<図2-65>])。
+</p>
+
+<table border=1>
+<caption>[<図2-65>] WALログの送受信機構(簡略版)</caption>
+<tr><td>
+<left>
+<img src="./fig-2-11-02.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<p>
+バージョン9.0では、設定パラメータwal_sender_delayの時間間隔(デフォルト200m秒)で、その間に書き込まれたWALログをまとめて送信していました。
+"非同期"レプリケーションの所以です。
+</p>
+
+<p>
+バージョン9.1以降、
+マスタはWALログをHDDに書き込んだ直後に(同期、非同期関わらず)送信し、
+スレーブは受信したWALログをHDDに書き込んだ後に返答(ACK)を返します(実際はもう少し複雑である。詳細は後述)。
+<br>
+同期レプリケーションの場合、
+(同期書き込みを保証する１台の)スレーブのACKを受信してからCOMMITを終了します。
+非同期の場合、ACKの有無に関わらずCOMMITを終了します。
+</p>
+
+<p>
+WALログの送受信機構から解るように、
+PostgreSQLの同期レプリケーションは
+<u>マスタと1台のスレーブに対してWALログの確実なHDD書き込みを保証</u>することで、
+<u>データの「完全な2重化」を実現</u>しています。
+これはPostgreSQLの同期レプリケーションの実装ポリシーです。
+</p>
+
+
+
+<br>
+
+
+<p>
+以降、レプリケーションの動作シーケンスとスイッチオーバ機能について説明します。
+またHotStandby機能についても説明します。
+</p>
+
+
+%CHAPTER 動作シーケンス
+
+<p>
+レプリケーションの動作シーケンスを説明します。
+</p>
+
+%SECTION 起動シーケンス
+
+<p>
+walsenderとwalreceiverの起動シーケンスを示します。
+</p>
+
+<table border=1>
+<caption>[<図2-66>] レプリケーションの起動シーケンス</caption>
+<tr><td>
+<left>
+<img src="./fig-2-11-03.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<p>
+次のシーケンスはマスタとスレーブ、どちらを先に起動してもかまいません。
+</p>
+
+
+<blockquote>
+(1)master起動<br>
+<p>
+マスタを起動する。スレーブ側から接続要求が届くまでレプリケーション機能を司るwalsenderは起動しない。
+</p>
+
+(2)slave起動<br>
+<p>
+スレーブを起動する。
+</p>
+
+(3)startupプロセス機能
+<br>
+<p>
+スレーブは、WALログをリカバリしつづけるstartupプロセスを起動する。
+</p>
+
+(4)walreceiverプロセス起動
+<br>
+<p>
+スレーブは、WALログを受信するwalreceiverプロセスを起動する。
+</p>
+
+(5)接続要求
+<br>
+<p>
+スレーブのwalreceiverがマスタに接続要求を行う。マスタが起動していない場合は、(マスタが起動するまで)周期的に接続要求を続ける。
+</p>
+
+(6)walsenderプロセス起動
+<br>
+<p>
+マスタのwalsenderプロセスが起動する。
+</p>
+
+(7)ハンドシェイク
+<br>
+<p>
+walsender-walreceiver間でTCPコネクション確立後、walsenderとwalreceiverでハンドシェイクしてデータ交換する。
+具体的にはスレーブ側が欲しいWALログの開始位置情報(LSN)を送る。
+</p>
+
+</blockquote>
+
+<p>
+このように、スレーブが主導してマスタのwalsenderプロセスを起動します。
+よって、スレーブを自由に追加や停止できるわけです。
+</p>
+
+
+%SECTION 9.1以降の動作シーケンス
+
+
+<p>
+同期レプリケーションの動作シーケンスを説明します。
+</p>
+
+
+<p>
+以下に、
+マスタ側のpostgresプロセスがCOMMITしたときに呼ぶ関数RecordTransactionCommit()の概要、
+およびマスタとスレーブ間の動作シーケンス[<図2-67>]を示します([<脚注33>])。
+<br>
+なお、設定パラメータsynchronous_commitは'on'と仮定します。
+それ以外の設定値の挙動は[<コラム2-11>]を参照してください。
+</p>
+
+
+<blockquote><table BORDER="1"><tr><td>脚注33</td><td>
+
+<p>
+WALログは書き込んだ直後に送信されます。
+よって、WALログ送信のトリガは[<2-09>]の「WALログの書き込みタイミングと注意点」に示したように、いくつかあります。
+ここでは、更新系SQLがCOMMITした場合を例として解説します。
+</p>
+
+</td></tr></table></blockquote>
+
+
+
+[< RecordTransactionCommit()@src/backend/access/transam/xact.cの概要>]
+<pre>
+RecordTransactionCommit(void) {
+
+    /* [1] COMMIT実行後、WALログをwrite()＋flush()で確実にHDDに同期書き込みする */
+    (void) XLogInsert(RM_XACT_ID, XLOG_XACT_COMMIT, rdata);
+    XLogFlush(XactLastRecEnd);
+
+    /* [2] WALログをスレーブに送信 */
+    WalSndWakeup();
+    TransactionIdCommitTree(xid, nchildren, children); /* CLOGの更新 */
+
+    /* [3] スレーブからのACKを待つ(処理をblockする) */
+    SyncRepWaitForLSN(XactLastRecEnd)
+
+
+    /* スレーブ側の処理 */
+
+    /* [6] COMMIT処理を終了、トランザクションを閉じる */
+}
+</pre>
+
+
+<table border=1>
+<caption>[<図2-67>] 同期レプリケーションの動作シーケンス</caption>
+<tr><td>
+<left>
+<img src="./fig-2-11-04.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<blockquote>
+[1] トランザクションがCOMMITする
+<br>
+<p>
+RecordTransactionCommit()が呼び出され、XLogInsert()とXLogFlush()で、WALログを確実にHDDに同期書き込みする。
+</p>
+
+[2] 書き込まれたWALログをスレーブに送信
+<br>
+
+[3] SyncRepWaitForLSN()が処理をブロックし、スレーブからのACKを待つ
+<br>
+<p>
+スレーブにWALログを送信したら、スレーブからのACKを待つ。
+</p>
+
+[4] 受信したWALログをwrite()する
+<br>
+<p>
+ここから次の[5]までは、スレーブの処理になる。
+<br>
+受信したWALログをシステムコールwrite()で書き込み、マスタにACKを返す。
+この時点ではWALログがHDDに書き込まれたかどうかは不定である。
+</p>
+
+[5] flush()を実行する
+<br>
+<p>
+flush()で確実にWALログデータをHDDに書き込み、またマスタにACKを返す。
+</p>
+
+[6] スレーブからのACKを受信したら、ブロックを解除してトランザクション終了
+<br>
+<p>
+最後にマスタ側がCOMMITを閉じる。<br>
+(synchronous_commitがonなら[5]、remote_writeなら[4]の)ACKを受け取ったwalsenderが、
+トランザクションを発行したpostgresプロセスに「SyncRepWaitForLSN()のブロックを解除せよ」とメッセージを送る。
+<br>
+なお、メッセージはUNIXのpipe機能をベースにしたPostgreSQL独自のLatch(pg_latch)を利用している。
+</p>
+</blockquote>
+
+<br>
+
+<p>
+このシーケンスから判るようにPostgreSQLの同期レプリケーションは、
+更新データ(WALログ)がスレーブ側のHDDに確実に書き込まれた後、マスタのトランザクションが閉じます。
+<br>
+つまり、(synchronous_commit=onで)<u>トランザクションが正常に閉じた場合、
+更新データはマスタとスレーブのHDDに確実に書き込まれ2重化されていると保証</u>できます。
+<br>
+他方、マスタ故障で<u>トランザクションが正常に閉じなかった場合、ユーザやアプリケーションレベルでの対処が必要</u>です。
+詳細は[<3-23>]を参照してください。
+</p>
+
+
+
+<p>
+ここで、ACKの中身について説明します。
+ACKは次の4つの
+<a href="javascript:void(0)" id="category_XLogWalRcvSendReply" onclick="show('XLogWalRcvSendReply');">データ項目</a>
+から成ります。
+<div id="layer_XLogWalRcvSendReply" style="display: none;position:relative;margin-left:15pt" class="close">
+%INCLUDE XLogWalRcvSendReply.inc
+</div> 
+ <ul>
+ <li>書き込んだ(writeした)WALログのLSN</li>
+ <li>flush()してHDDに書き込んだWALログのLSN</li>
+ <li>startupプロセスが再生したWALログのLSN</li>
+ <li>現在時刻</li>
+ </ul>
+</p>
+<br>
+
+<p>
+COMMITなど、マスタでWALログ書き込みがあるとスレーブに送信され、その都度スレーブはACKとして上のデータ項目を返します。
+<br>
+また、スレーブのHeartbeatとしてパラメータwal_receiver_status_interval毎にACKを返します(デフォルトで10秒間隔)。
+</p>
+
+<p>
+よって、マスタは全スレーブの状態を把握しています。
+<br>
+例えば、次のビューは同期レプリケーションで2台のスレーブの状態を示しています。
+</p>
+
+<pre>
+sampledb=# SELECT application_name AS host, state, sync_priority as priority, 
+sampledb-#        sync_state, write_location AS write_LSN, flush_location AS flush_LSN, 
+sampledb-#        　　　　　　　　　replay_location AS replay_LSN FROM pg_stat_replication;
+
+  host  |   state   | priority | sync_state | write_lsn | flush_lsn | replay_lsn 
+--------+-----------+----------+------------+-----------+-----------+------------
+ slave1 | streaming |        1 | sync       | 0/5000280 | 0/5000280 | 0/5000280
+ slave2 | streaming |        2 | potential  | 0/5000280 | 0/5000280 | 0/5000280
+(2 rows)
+</pre>
+
+<p>
+ビューpg_stat_replicationの詳細は[<3-15>]を参照してください。
+ここではsync_priorityとsync_stateにのみ注目します。
+</p>
+
+<p>
+sync_priorityはスレーブの優先順位で、最も順位の高い(値の小さい)スレーブのみ、WALログの同期書き込みを保証します。
+sync_priorityはマスタのパラメータsynchronous_standby_namesに列挙した順序で定義します。
+例えば次の設定では、slave1の優先順位は1、slave2は2となります。
+</p>
+
+<pre>
+synchronous_standby_names = 'slave1, slave2'
+</pre>
+
+<p>
+sync_stateはスレーブの同期の状態を示します。
+slave1は接続しているスレーブ中で最も優先順位が高いので、
+同期(sync)スレーブとして扱います。
+slave2は予備(potential)で、slave1が停止した場合に同期(sync)スレーブに昇格します。
+</p>
+
+<p>
+2台のスレーブが返すACKの扱いを図示します([<図2-68>])。
+</p>
+
+<table border=1>
+<caption>[<図2-68>] 2台のスレーブが返すACK</caption>
+<tr><td>
+<left>
+<img src="./fig-2-11-05.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<p>
+マスタがCOMMITを完了するのは、同期状態syncのスレーブのACKを受け取った時です。
+先に同期状態potentialのスレーブのACKがwalsenderに届いても、COMMITは完了しません。
+</p>
+
+
+<p>
+最後に非同期レプリケーションについて注意点を述べます。
+<br>
+バージョン9.1以降の非同期レプリケーションはWALログ書き込みの確認について、
+同期状態potentialのスレーブと同等の扱いを受けます。
+よって"非同期"といってもWALログの書き込みが遅延するとは限りません。
+マスタがスレーブのWALログ書き込みを確認せず、同期をとらないという意味で"非同期"なのです。
+<br>
+この点がバージョン9.0の非同期と根本的に異なる点なので注意してください。
+バージョン9.0の非同期レプリケーションはWALログの送信自体が非同期で、必然的に時間的遅延が発生します。
+</p>
+
+
+<blockquote><table BORDER="1"><tr><td>コラム2-11:同期レプリケーションとsynchronous_commit</td><td>
+
+<p>
+設定パラメータsynchronous_commitの値と同期レプリケーションの挙動をまとめます。
+</p>
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>synchronous_commit</th>	<th>同期レプリケーションの挙動</th>
+</tr><tr>
+<td>off</td>	<td>マスタのHDD書き込み、スレーブからの返答(ACK)を待たずにCOMMITする。</td>
+</tr><tr>
+<td>on</td>	<td>スレーブがWALログをFlushした後にマスタがCOMMITする。[<図2-67>]において、[5]の返答(ACK)を受信してCOMMIT。</td>
+</tr><tr>
+<td>remote_write</td>	<td>スレーブがWALログをWriteした後にマスタがCOMMITする。Flushしたかどうかは確認しない。[<図2-67>]において、[4]の返答(ACK)を受信してCOMMIT。バージョン9.2から</td>
+</tr><tr>
+<td>local</td>	<td>マスタはスレーブがWALログをWriteやFlushしたかどうか確認せずにCOMMITする</td>
+
+</tr></table>
+
+
+</td></tr></table></blockquote>
+
+
+%CHAPTER スイッチオーバ
+
+<p>
+マスタが故障したら、スイッチオーバでスレーブをマスタに昇格(promote)させます。
+</p>
+
+<table border=1>
+<caption>[<図2-69>] スイッチオーバ /  1:1マスタ故障</caption>
+<tr><td>
+<left>
+<img src="./fig-2-11-06.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<p>
+スレーブ側で次のいずれかの操作をすると、スレーブがマスタに昇格します。
+マスタに昇格すると検索だけでなく更新も可能になります。
+</p>
+
+<ol>
+<li>trigger_fileを生成</li>
+ <p>
+予めスレーブのrecovery.confに設定されたtrigger_fileを、touchコマンドなどで生成する。
+<br>
+startupプロセスは周期的にtrigger_fileの有無を確認しているので、該当するファイルを見つけるとマスタに昇格する。
+ </p>
+
+<li>pg_ctl promoteコマンドを実行(バージョン9.1から)</li>
+ <p>
+マスタに昇格させるスレーブに対して、pg_ctl promoteコマンドを実行する([<3-06>])。
+ </p>
+</ol>
+
+
+<p>
+<u>マスタに昇格(promote)したサーバのTimeLineIDは一つ繰り上がります</u>。
+例えば、スレーブとして稼働しているときに受信していたWALログのTimeLineIDが1だとすると、
+マスタ昇格後のTimeLineIDは2になります。
+</p>
+
+<p>
+最後に故障について簡単に述べます。
+故障には様々なパターンがあります。
+<br>
+複数のスレーブをもつマスタが故障した場合、
+マスタに昇格しなかったスレーブを新マスタに再接続させなければなりません。
+<br>
+システム故障はマスタだけでなく、スレーブの場合もあります。
+1台しかないスレーブが故障すると、マスタはACKを受信できずにCOMMITが完了しないまま永遠に待たされることになります。
+つまり、マスタは更新処理ができなくなるのです。
+</p>
+
+<p>
+レプリケーションの故障対応は[<3-23>]で詳しく解説します。
+</p>
+
+
+%CHAPTER HotStandby
+
+
+<p>
+スレーブ側で実行できるSQLは制約があります。基本的に検索のみで更新は一切できません。
+[<表2-08>]に実行できるSQLの一覧を示します。
+<br>
+詳細はPostgreSQLのオンラインドキュメントを参照してください([<脚注34>])。
+</p>
+
+<table border=1>
+<caption>[<表2-08>] HotStandbyでスレーブが実行できるSQL</caption>
+<tr bgcolor="#cccccc">
+<th>分類</th>	<th>SQL</th>	<th>備考</th>
+</tr><tr>
+<td>検索</td>		<td>SELECT、COPY TO、DECLARE、FETCH、CLOSE</td>	<td></td>
+</tr><tr>
+<td>パラメータ操作</td>	<td>SHOW、SET、RESET</td>	<td></td>
+</tr><tr>
+<td>トランザクション</td>	<td>BEGIN、END、ABORT、START TRANSACTION、<br>SAVEPOINT、RELEASE、ROLLBACK TO SAVEPOINT</td>  
+<td>
+バージョン9.1以降READ COMMITTEDとREPEATABLE READのみ。
+(バージョン9.0はREAD COMMITTEDとSERIALIZABLE。[<脚注35>]参照)
+</td>
+
+</tr><tr>
+<td>ロック</td>		<td>LOCK TABLE</td>	<td>ACCESS SHARE、ROW SHARE、ROW EXCLUSIVEのみ</td>
+</tr><tr>
+<td>その他</td>		<td>PREPARE、EXECUTE、DEALLOCATE、DISCARD、LOAD</td>	<td></td>
+</tr></table>
+
+<br>
+
+
+
+<blockquote><table BORDER="1"><tr><td>脚注34</td><td>
+<pre>
+http://www.postgresql.jp/document/9.1/html/hot-standby.html
+</pre>
+</td></tr></table></blockquote>
+
+
+
+<blockquote><table BORDER="1"><tr><td>脚注35</td><td>
+<p>
+[<6-41>]で解説するように、
+9.0の"SERIALIZABLE"は9.1以降の"REPEATABLE READ"のことです。
+つまり、9.1でConflictにおける隔離レベルの挙動が変わったのでなく、
+旧来の2つの隔離レベルが使用でき、
+改めて実装されたSERIALIZABLEは使用できないということです。
+</p>
+</td></tr></table></blockquote>
+
+
+
+%SECTION Conflict(衝突)
+
+<p>
+マスタとスレーブの操作が互いに影響しあって「Conflict(衝突)」が起きる場合があります。
+<br>
+具体的な操作でConflictの例を示します。
+</p>
+
+<p>
+
+</p>
+
+<p>
+<font color="#ff0000">
+書籍用テキスト。作図のネタ用。
+</font>
+</p>
+
+<pre>
+sampledb=# DROP TABLE test1; 
+DROP TABLE
+sampledb=# VACUUM;
+VACUUM
+</pre>
+
+
+<pre>
+sampledb=# BEGIN ISOLATION LEVEL REPEATABLE READ;
+BEGIN
+sampledb=# SELECT count(*) FROM test1;
+ count 
+-------
+     1
+(1 row)
+
+sampledb=# SELECT pg_last_xlog_receive_location()AS receive_lsn,
+　　　　　　　    pg_last_xlog_replay_location() AS replay_lsn;
+ receive_lsn | replay_lsn 
+-------------+------------
+ 0/36EBCE8   | 0/36EBCE8
+(1 row)
+
+
+
+sampledb=# SELECT pg_last_xlog_receive_location()AS receive_lsn,
+　　　　　　　    pg_last_xlog_replay_location() AS replay_lsn;
+ receive_lsn | replay_lsn 
+-------------+------------
+ 0/36ED628   | 0/36EC164
+(1 row)
+
+
+
+
+
+sampledb=# FATAL:  terminating connection due to conflict with recovery
+</pre>
+
+<pre>
+受信したWALログは再実行済み
+
+Conflictが発生したので、
+受信したWALログの再実行を休止中
+
+
+max_standby_streaming_delayだけ待って、
+conflictが解消しなければ、FATALエラー
+</pre>
+
+<table border=1>
+<caption>[<図2-70>] Conflictの例</caption>
+<tr><td>
+<left>
+<img src="./fig-2-11-07.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+
+<p>
+次の状況を考えます。
+</p>
+
+<blockquote>
+スレーブ:
+REPEATABLE READでトランザクションを開始し、テーブルtest1にアクセス
+<br>
+マスタ　:
+テーブルtest1を削除し、VACUUMを実行
+</blockquote>
+
+
+<p>
+マスタからテーブル削除とVACUUMのWALログが届いた瞬間、スレーブは該当するテーブルに(REPEATABLE READで)アクセスしているので、Conflictが発生します。
+<br>
+Conflictが発生するとスレーブはWALログの再生(replay)を休止して、
+最大でパラメータmax_standby_streaming_delayに設定された時間(デフォルトで30秒)だけ待ちます([<脚注36>])。
+その間にConflictが解消されなければ、スレーブ側の操作はFATALエラーとなります。
+</p>
+
+
+
+<blockquote><table BORDER="1"><tr><td>脚注36</td><td>
+<p>
+max_standby_streaming_delayは、受信したWALログの再生(replay)にかかる上限値を指定します。
+Conflictが発生してからの休止時間ではないので注意してください。
+</p>
+</td></tr></table></blockquote>
+
+
+
+<p>
+Conflictが発生している間はWALログの再生が中断しているので、データの更新も中断します。
+よって、スレーブのすべてのトランザクションが古いデータを見続けることになります。
+</p>
+
+<p>
+Conflictは上記の例以外に、データベースやテーブルスペースの削除、EXCLUSIVE LOCKなどで発生します。
+詳細はオンラインドキュメントを参照してください[<脚注34>]。
+</p>
+
+
+%SECTION Conflictを避ける方法
+
+
+<p>
+トランザクションの可視性に起因するConflictを避ける方法が、２つ用意されています。
+</p>
+
+<ol>
+<li>スレーブ側で設定パラメータhot_standby_feedbackを有効にする</li>
+ <p>
+スレーブがマスタに自身の状態を送信し、マスタは問題となるタプルの削除を遅延する。
+(当然だが)スレーブがConflictの可能性を排除しない限り、マスタ側の不要なタプルは増え続けるので注意。
+ </p>
+<li>マスタ側で設定パラメータvacuum_defer_cleanup_ageに適当な値を設定する</li>
+ <p>
+マスタ側が設定された値のトランザクションだけ、"自発的に"タプルの削除を遅らせる。
+よってConflictを確実に避けられるわけではない。
+ </p>
+</ol>
+
+<p>
+各パラメータについては[<4-06>]を参照してください。
+</p>
+
+
+<p>
+なお、スレーブ側で稼働統計情報pg_stat_database_conflictsを検索すると、Conflictの発生回数を表示できます。
+</p>
+
+<pre>
+sampledb=# SELECT datname, confl_snapshot FROM pg_stat_database_conflicts 
+sampledb-#                             WHERE datname = 'sampledb';
+ datname  | confl_snapshot 
+----------+----------------
+ sampledb |              1
+(1 row)
+</pre>
+
+

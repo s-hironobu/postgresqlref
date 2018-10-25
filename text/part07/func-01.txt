@@ -1,0 +1,67 @@
+%FILE internal/func-01.html
+%LASTMOD
+%KEY pgsql-func01
+
+%TITLE 関数
+
+<p>
+PostgreSQLは次の関数をサポートしています。本書はその一部を解説します。
+</p>
+
+
+<table border=1>
+<caption>PostgreSQLがサポートする関数一覧</caption>
+<tr bgcolor="#cccccc">
+<th>関数</th>				<th>参照</th>
+</tr><tr>
+<td>算術関数</td>			<td>[<7-21>]</td>
+</tr><tr>
+<td>集約関数</td>				<td>[<7-22>]</td>
+</tr><tr>
+<td>文字列関数</td>				<td>[<7-23>]</td>
+</tr><tr>
+<td>日付・時刻型関数</td>			<td>[<7-24>]</td>
+</tr><tr>
+<td>型変換関数</td>				<td>[<7-25>]</td>
+</tr><tr>
+<td>Range型関数</td>				<td>[<7-26>]</td>
+</tr><tr>
+<td>ウインドウ関数</td>				<td>[<7-27>]</td>
+</tr><tr>
+<td>セッション情報関数</td>			<td>[<7-28>]</td>
+</tr><tr>
+<td>アクセス権限とスキーマ可視性照会関数</td>	<td>[<7-29>]</td>
+</tr><tr>
+<td>データベースオブジェクト容量関数</td>	<td>[<7-30>]</td>
+</tr><tr>
+<td>バックアップとリカバリ制御関数</td>		<td>[<7-31>]</td>
+</tr><tr>
+<td>シーケンス操作関数</td>	<td>[<6-37>]で解説</td>
+</tr><tr>
+<td>幾何関数</td>				<td>省略</td>
+</tr><tr>
+<td>ネットワークアドレス関数</td>		<td>省略</td>
+</tr><tr>
+<td>XML関数</td>	<td>省略</td>
+</tr><tr>
+<td>JSON</td>	<td>省略</td>
+</tr><tr>
+<td>文字列検索(Text Search)関数</td>	<td>省略</td>
+</tr><tr>
+<td>スキーマ可視性照会関数</td>	<td>省略</td>
+</tr><tr>
+<td>システムカタログ情報関数</td>	<td>省略</td>
+</tr><tr>
+<td>汎用ファイルアクセス関数</td>	<td>省略</td>
+</tr><tr>
+<td>サーバシグナル送信関数</td>	<td>省略</td>
+</tr><tr>
+<td>勧告的ロック用関数</td>	<td>省略</td>
+
+
+</tr></table>
+
+<br>
+
+
+

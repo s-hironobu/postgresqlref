@@ -1,0 +1,166 @@
+%FILE internal/admin-16.html
+%LASTMOD
+%KEY pgsql-admin16
+
+%TITLE ログの出力
+
+<p>
+ログの出力方法やフォーマット、およびログローテーションについて解説します。
+</p>
+
+%CHAPTER ログの出力先
+
+<p>
+設定パラメータlog_destinationでログの出力先を設定します。
+<br>
+log_destinationには{stdout,stderr,syslog,eventlog(win32のみ)}を指定します。
+これらはコンマ,で区切って列挙できます。
+'stderr,syslog'とすれば、標準エラーとsyslogの両方にエラーメッセージを書き込みます。
+</p>
+
+%SECTION syslogへのログ出力
+<p>
+syslogにログを出力する場合、log_destinationに'syslog'を設定します。
+またsyslog_facilityも設定します。
+</p>
+
+<p>
+syslogファシリティ(facility)とは、syslogの出力を分類するための名称です。
+LOCAL0、LOCAL1、LOCAL2、LOCAL3、LOCAL4、LOCAL5、LOCAL6、LOCAL7 の中から選びます。
+デフォルトはLOCAL0です。
+</p>
+
+<p>
+syslogの出力は、Linux系ディストリビューションなら/etc/syslog.confファイルで制御できます。
+</p>
+
+
+%SECTION PostgreSQLのログファイルへの出力
+
+<p>
+PostgreSQL独自のログファイルに出力する場合、log_destinationに'stderr'を設定し、logging_collector(バージョン8.2まではredirect_stderr)を有効(on)にします。
+<br>
+つまりPostgreSQL独自のログとは、標準エラーに書き出したメッセージを集約したものなのです。
+</p>
+
+<p>
+デフォルトでは、パラメータlog_directoryに設定したサブディレクトリ(本書では'/usr/local/pgsql/data/pg_log/)を作成し、
+そこにパラメータlog_filenameで設定したファイル名のログファイルが生成されます。
+<br>
+log_filenameのデフォルト値は'postgresql-%Y-%m-%d_%H%M%S.log'です。
+ファイル名には[<表3-19>]に示す日時時刻に関する特殊文字が使えます。
+</p>
+
+
+<table border=1>
+<caption>[<表3-19>] log_filenameに使用できる特殊文字</caption>
+<tr bgcolor="#cccccc">
+<th>特殊文字　　　　</th>		<th>意味　　　　　　　　　　</th>
+</tr><tr>
+<td>%Y</td>		<td>年</td>
+</tr><tr>
+<td>%m</td>		<td>月</td>
+</tr><tr>
+<td>%d</td>		<td>日</td>
+</tr><tr>
+<td>%H</td>		<td>時</td>
+</tr><tr>
+<td>%M</td>		<td>分</td>
+</tr><tr>
+<td>%S</td>		<td>秒</td>
+</tr></table>
+
+<br>
+
+
+<p>
+・log_file_mode
+<br>
+バージョン9.1からログファイルのパーミッションを設定できます。
+デフォルトは"0600"で、PostgreSQLサーバを起動したユーザ以外、読み書きできません。
+</p>
+
+
+%CHAPTER ログローテーション
+
+<p>
+PostgreSQLのログファイルについて、設定パラメータlog_rotation_ageとlog_rotation_sizeに適当な値を設定すれば定期的にログローテーションできます。
+<br>
+例えば、log_rotation_ageのデフォルト値は1440[分] = 24[時間] = 1[日]なので、毎日新しいログファイルが作成されます。
+<br>
+ログローテーションしない場合は、設定パラメータlog_rotation_ageかlog_rotation_sizeに'0'を設定します。
+</p>
+
+
+%CHAPTER  ログの出力項目
+
+<p>
+ログの出力項目を決める設定パラメータを列挙します。
+適宜、必要な情報を得るためのパラメータを設定してください。
+</p>
+
+<p>
+・log_connections, log_disconnections
+<br>
+log_connectionsを有効(on)にすると、PostgreSQLサーバに接続したクライアントのIPアドレスなどの情報を書き込みます。
+<br>
+log_disconnectionsを有効(on)にすると、セッション終了時にセッションの接続時間を書き込みます。
+</p>
+
+<p>
+・log_duration, log_min_duration_statement
+<br>
+log_durationを有効(on)にすると、SQL文の実行に要した時間をログファイルに書き込みます。
+実行したSQL文すべての実行時間を書き込みますが、SQL文そのものは書き込みません。
+<br>
+log_min_duration_statementに処理時間のしきい値を設定すると、
+そのしきい値よりも処理に時間を要したSQL文をログに書き込みます。
+スロークエリの捕捉に必須のパラメータですが、
+あまり低いしきい値を設定すると、ログ書き込みの負荷でサーバ処理が重くなる可能性もあるので注意してください。
+</p>
+
+<p>
+・log_lock_waits
+<br>
+バージョン8.3からサポートされたlog_lock_waitsを有効(on)にすると、deadlock_timeoutよりもロック待ち時間が長くなった場合にログを書き出します。
+これによってユーザ間の資源の競合が検出できます。
+</p>
+
+<p>
+・log_line_prefix
+<br>
+log_line_prefixによって、ログの先頭に各種情報を付加できます。
+log_line_prefixに使用できる特殊文字を[<表3-20>]に示します。
+</p>
+
+
+<table border=1>
+<caption>[<表3-20>]　log_line_prefixに使用できる特殊文字</caption>
+<tr bgcolor="#cccccc">
+<th>特殊文字</th>		<th>説明</th>
+</tr><tr>
+<td>%u</td>	<td>データベースユーザ/ロール名</td>
+</tr><tr>
+<td>%d</td>	<td>データベース名</td>
+</tr><tr>
+<td>%r</td>	<td>リモートホスト名、もしくはIPアドレスとポート番号</td>
+</tr><tr>
+<td>%h</td>	<td>リモートホスト名、もしくはIPアドレス</td>
+</tr><tr>
+<td>%p</td>	<td>プロセス番号</td>
+</tr><tr>
+<td>%t</td>	<td>タイムスタンプ(ミリ秒無し)</td>
+</tr><tr>
+<td>%m</td>	<td>タイムスタンプ(ミリ秒有り)</td>
+</tr><tr>
+<td>%i</td>	<td>実行されたSQL文</td>
+</tr><tr>
+<td>%c</td>	<td>セッションID</td>
+</tr><tr>
+<td>%l</td>	<td>プロセス毎のログ行の番号。(1から始まる)</td>
+</tr><tr>
+<td>%s</td>	<td>セッション開始時のタイムスタンプ</td>
+</tr><tr>
+<td>%x</td>	<td>トランザクションID</td>
+</tr></table>
+

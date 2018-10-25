@@ -1,0 +1,960 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+ <title>PostgreSQLバイブル草稿</title>
+ <link rel="stylesheet" type="text/css" media="screen" href="./default.css"">
+</head>
+
+<body>
+
+<script language=javascript>
+<!--
+function show(inputData) {
+var objID=document.getElementById( "layer_" + inputData );
+var buttonID=document.getElementById( "category_" + inputData );
+if(objID.className=='close') {
+objID.style.display='block';
+objID.className='open';
+}else{
+objID.style.display='none';
+objID.className='close';
+}
+}
+//-->
+</script>
+
+<div id="header">
+<h1 class="title">PostgreSQLバイブル草稿</title></h1>
+    <span class="small">
+</span>
+</div>
+
+
+<hr class="full_hr">
+<table style="width: 100%;" border="0">
+ <tbody><tr>
+  <td class="menubar">
+   <div id="menubar">
+
+
+<h5>PostgreSQLとは</h5>
+
+<li><a href="./index.html">PostgreSQLとは</a><br></li>
+
+<h5>PostgreSQLの内部構造</h5>
+<ul>
+<li><a href="./internal.html">とびら</a><br></li>
+</ul>
+<ol>
+<li><a href="./internal-01.html">プロセスとメモリ構造</a><br></li>
+<li><a href="./internal-02.html">データベースクラスタ、テーブルの構造</a></li>
+<li><a href="./internal-03.html">SQLの実行</a></li>
+<li><a href="./internal-04.html">プラン処理</a></li>
+<li><a href="./internal-05.html">バッファマネージャとバックグランドライタ</a></li>
+<li><a href="./internal-06.html">トランザクションIDと同時実行制御</a></li>
+<li><a href="./internal-07.html">VACUUM</a></li>
+<li><a href="./internal-08.html">HOTとIndex Only Scan</a></li>
+<li><a href="./internal-09.html">WAL(Write Ahead Logging)</a></li>
+<li><a href="./internal-10.html">アーカイブログとPITR</a></li>
+<li><a href="./internal-11.html">レプリケーション(Streaming ReplicationとHotStandby)</a></li>
+</ol>
+
+
+<h5>PostgreSQLサーバ管理</h5>
+
+<ul>
+<li><a href="./admin.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[PostgreSQLの基礎]<br>
+<li><a href="./admin-01.html">オブジェクト、データベース、スキーマ</a><br></li>
+<li><a href="./admin-02.html">システムカタログ</a><br></li>
+<li><a href="./admin-03.html">文字コードの扱い</a><br></li>
+
+
+[インストールと起動、停止]<br>
+<li><a href="./admin-04.html">インストール</a><br></li>
+<li><a href="./admin-05.html">データベースシステムの初期化 initdb</a><br></li>
+<li><a href="./admin-06.html">PostgreSQLサーバの起動/停止</a><br></li>
+
+
+[認証とアクセス制御]<br>
+<li><a href="./admin-07.html">認証とアクセス制御</a><br></li>
+<li><a href="./admin-08.html">クライアントのアクセス制御</a><br></li>
+<li><a href="./admin-09.html">権限について</a><br></li>
+<li><a href="./admin-10.html">ロールの作成と権限制御</a><br></li>
+
+<HR>
+
+[バックアップとアップグレード]<br>
+<li><a href="./admin-11.html">バックアップとアップグレード</a><br></li>
+<li><a href="./admin-12.html">ダンプとリストア</a><br></li>
+<li><a href="./admin-13.html">アップグレード</a><br></li>
+
+[保守、監視とチューニング]<br>
+<li><a href="./admin-14.html">保守、監視とチューニング</a><br></li> 
+<li><a href="./admin-15.html">稼働統計情報</a><br></li>
+<li><a href="./admin-16.html">実行ログの取得</a><br></li>
+<li><a href="./admin-17.html">モニタリングツール</a><br></li>
+<li><a href="./admin-18.html">ログと統計情報の分析</a><br></li>
+<li><a href="./admin-19.html">パラメータチューニング</a><br></li>
+
+[耐障害性、高可用性]<br>
+<li><a href="./admin-20.html">耐障害性、高可用性</a><br></li>
+<li><a href="./admin-21.html">アーカイブログとPITR</a><br></li>
+<li><a href="./admin-22.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-23.html">レプリケーションの故障対応</a><br></li>
+
+
+[FDW]<br>
+<li><a href="./admin-24.html">FDW</a><br></li>
+<li><a href="./admin-25.html">postgres_fdw</a><br></li>
+</ol>
+
+[追加の文章(未完)]<br>
+<li><a href="./admin-26.html">ロギング</a><br></li>
+<li><a href="./admin-27.html">統計情報</a><br></li>
+<li><a href="./admin-28.html">モニタリング</a><br></li>
+<li><a href="./admin-29.html">メンテナンス</a><br></li>
+</ol>
+
+
+<h5>設定パラメータ</h5>
+
+<ol>
+<li><a href="./param-01.html">postgresql.confの設定</a><br></li>
+<li><a href="./param-02.html">ファイルの場所</a><br></li>
+<li><a href="./param-03.html">接続と認証</a><br></li>
+<li><a href="./param-04.html">資源の消費</a><br></li>
+<li><a href="./param-05.html">WAL</a><br></li>
+<li><a href="./param-06.html">レプリケーション</a><br></li>
+<li><a href="./param-07.html">問い合わせ計画</a><br></li>
+<li><a href="./param-08.html">エラー報告とログ取得</a><br></li>
+<li><a href="./param-09.html">稼働統計情報</a><br></li>
+<li><a href="./param-10.html">AUTOVACUUM</a><br></li>
+<li><a href="./param-11.html">クライアント接続デフォルト</a><br></li>
+<li><a href="./param-12.html">ロック管理/バージョンとプラットフォーム互換性</a><br></li>
+</ol>
+
+
+<h5>psql</h5>
+<ul>
+<li><a href="./psql.html">・対話型インタフェースpsqlの使い方</a><br></li>
+</ul>
+
+<ol>
+<li><a href="./psql-01.html">psqlとは</a><br></li>
+<li><a href="./psql-02.html">PostgreSQLサーバとの接続/切断/再接続</a><br></li>
+<li><a href="./psql-03.html">データベース一覧表示</a><br></li>
+<li><a href="./psql-04.html">コマンドラインからSQL実行</a><br></li>
+<li><a href="./psql-05.html">バッチファイルの実行(メタコマンド)</a><br></li>
+<li><a href="./psql-06.html">情報表示</a><br></li>
+<li><a href="./psql-07.html">表示の制御</a><br></li>
+<li><a href="./psql-08.html">ラージオブジェクトの扱い</a><br></li>
+<li><a href="./psql-09.html">データのコピー</a><br></li>
+<li><a href="./psql-10.html">その他のメタコマンド</a><br></li>
+
+</ol>
+
+
+<h5>SQL</h5>
+
+<ul>
+<li><a href="./sql.html">・とびら</a><br></li>
+</ul>
+
+<ol>
+[SQL]<br>
+
+<li><a href="./sql-01.html">SQL語彙</a><br></li>
+<li><a href="./sql-02.html">テーブルスペースの作成/削除/変更</a><br></li>
+<li><a href="./sql-03.html">データベースの作成/変更/削除</a><br></li>
+<li><a href="./sql-04.html">テーブルの作成</a><br></li>
+<li><a href="./sql-05.html">外部キー</a><br></li>
+<li><a href="./sql-06.html">オブジェクトの継承/LIKE句</a><br></li>
+<li><a href="./sql-07.html">問い合わせ結果から新しいテーブルを作成</a><br></li>
+<li><a href="./sql-08.html">テーブルの削除</a><br></li>
+<li><a href="./sql-09.html">スキーマの定義/変更/削除</a><br></li>
+
+<li><a href="./sql-10.html">ALTER TABLE(1)</a><br></li>
+<li><a href="./sql-11.html">ALTER TABLE(2)</a><br></li>
+<li><a href="./sql-12.html">ALTER TABLE(3)</a><br></li>
+
+<li><a href="./sql-13.html">ロール</a><br></li>
+<li><a href="./sql-14.html">GRANT REVOKE(1)</a><br></li>
+<li><a href="./sql-15.html">GRANT REVOKE(2)</a><br></li>
+<li><a href="./sql-16.html">INSERT</a><br></li>
+<li><a href="./sql-17.html">SELECT</a><br></li>
+<li><a href="./sql-18.html">FROM句</a><br></li>
+<li><a href="./sql-19.html">WHERE句</a><br></li>
+
+<li><a href="./sql-20.html">WINDOW句、OVER句</a><br></li>
+<li><a href="./sql-21.html">共通テーブル式(CTE)</a><br></li>
+
+
+<li><a href="./sql-22.html">グループ化</a><br></li>
+<li><a href="./sql-23.html">DISTINCT句</a><br></li>
+<li><a href="./sql-24.html">テーブル結合</a><br></li>
+<li><a href="./sql-25.html">問い合わせの結合</a><br></li>
+<li><a href="./sql-26.html">ORDER BY</a><br></li>
+<li><a href="./sql-27.html">LIMIT OFFSET</a><br></li>
+<li><a href="./sql-28.html">FOR UPDATE/ FOR SHARE</a><br></li>
+<li><a href="./sql-29.html">サブクエリ</a><br></li>
+<li><a href="./sql-30.html">CASE式</a><br></li>
+<li><a href="./sql-31.html">VALUES</a><br></li>
+<li><a href="./sql-32.html">UPDATE</a><br></li>
+<li><a href="./sql-33.html">DELETE</a><br></li>
+<li><a href="./sql-34.html">TRUNCATE</a><br></li>
+
+<li><a href="./sql-35.html">インデックス</a><br></li>
+
+<li><a href="./sql-36.html">VIEW</a><br></li>
+<li><a href="./sql-37.html">シーケンス</a><br></li>
+<li><a href="./sql-38.html">トリガ</a><br></li>
+<li><a href="./sql-39.html">カーソル</a><br></li>
+<li><a href="./sql-40.html">プリペアステートメント</a><br></li>
+<li><a href="./sql-41.html">トランザクション</a><br></li>
+<li><a href="./sql-42.html">セーブポイント</a><br></li>
+<li><a href="./sql-43.html">2相コミット</a><br></li>
+<li><a href="./sql-44.html">LOCK</a><br></li>
+<li><a href="./sql-45.html">SET/SHOW/RESET</a><br></li>
+<li><a href="./sql-46.html">VACUUM</a><br></li>
+<li><a href="./sql-47.html">ANALYZE</a><br></li>
+<li><a href="./sql-48.html">EXPLAIN</a><br></li>
+<li><a href="./sql-49.html">COPY/IMPORT</a><br></li>
+<li><a href="./sql-50.html">COPY/EXPORT</a><br></li>
+<li><a href="./sql-51.html">関数定義</a><br></li>
+<li><a href="./sql-52.html">エクステンション</a><br></li>
+<li><a href="./sql-53.html">外部サーバの定義、変更、削除</a><br></li>
+<li><a href="./sql-54.html">外部サーバのユーザマップ定義、変更、削除</a><br></li>
+<li><a href="./sql-55.html">外部テーブルの定義、変更、削除</a><br></li>
+<hr>
+<li><a href="./sql-56.html">イベントトリガ</a><br></li>
+<li><a href="./sql-57.html">行レベルセキュリティ</a><br></li>
+
+<hr>
+<li><a href="./sql-60.html">新しい機能</a><br></li>
+</ol>
+
+
+<h5>関数</h5>
+
+[関数]<br>
+<ul>
+<li><a href="./function.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[データ型]<br>
+<li><a href="./type-01.html">データ型</a><br></li>
+<li><a href="./type-02.html">数値データ型</a><br></li>
+<li><a href="./type-03.html">文字データ型</a><br></li>
+<li><a href="./type-04.html">日付/時刻データ型</a><br></li>
+<li><a href="./type-05.html">日付/時刻表示形式とタイムゾーンの設定</a><br></li>
+<li><a href="./type-06.html">ブーリアン型</a><br></li>
+<li><a href="./type-07.html">ビット列データ型</a><br></li>
+<li><a href="./type-08.html">疑似データ型</a><br></li>
+<li><a href="./type-09.html">バイナリ列データ型</a><br></li>
+<li><a href="./type-10.html">Range型</a><br></li>
+<li><a href="./type-11.html">配列</a><br></li>
+<hr>
+<li><a href="./type-12.html">JSON型</a><br></li>
+
+<hr>
+[演算子]<br>
+<li><a href="./ope-01.html">演算子</a><br></li>
+<li><a href="./ope-02.html">論理演算子</a><br></li>
+<li><a href="./ope-03.html">比較演算子</a><br></li>
+<li><a href="./ope-04.html">算術演算子</a><br></li>
+<li><a href="./ope-05.html">文字列演算子</a><br></li>
+<li><a href="./ope-06.html">パターンマッチング</a><br></li>
+<li><a href="./ope-07.html">日付/時刻演算子</a><br></li>
+<li><a href="./ope-08.html">Range型演算子</a><br></li>
+<hr>
+<li><a href="./ope-09.html">JSON型演算子</a><br></li>
+
+
+<hr>
+[関数]<br>
+<li><a href="./func-01.html">関数</a><br></li>
+<li><a href="./func-02.html">算術関数</a><br></li>
+<li><a href="./func-03.html">集約関数/統計関数</a><br></li>
+<li><a href="./func-04.html">文字列関数</a><br></li>
+<li><a href="./func-05.html">日付・時刻関数</a><br></li>
+<li><a href="./func-06.html">型変換関数</a><br></li>
+<li><a href="./func-07.html">Range型関数</a><br></li>
+<li><a href="./func-08.html">Window関数</a><br></li>
+<li><a href="./func-09.html">セッション情報関数</a><br></li>
+<li><a href="./func-10.html">アクセス権限とスキーマ可視性照会関数</a><br></li>
+<li><a href="./func-11.html">データベースオブジェクト関数</a><br></li>
+<li><a href="./func-12.html">バックアップとリカバリ制御関数</a><br></li>
+
+<li><a href="./func-13.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-15.html">構成設定関数</a><br></li>
+<li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-17.html">レプリケーションSQL関数</a><br></li>
+
+<hr>
+<li><a href="./func-18.html">JSON関数</a><br></li>
+
+</ol>
+
+<!--
+[削除するもの]<br>
+<li><a href="./type-07.html">幾何データ型</a><br></li>
+<li><a href="./type-08.html">ネットワークアドレス型型</a><br></li>
+<li><a href="./ope-08.html">幾何演算子</a><br></li>
+<li><a href="./ope-09.html">ネットワーク演算子</a><br></li>
+<li><a href="./func-06.html">幾何関数</a><br></li>
+<li><a href="./func-07.html">ネットワークアドレス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-16.html">トランザクションID関数</a><br></li>
+<li><a href="./func-17.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-18.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-19.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-20.html">勧告的ロック用関数</a><br></li>
+-->
+
+<h5>PL/pgSQL</h5>
+
+<ol>
+<li><a href="./plpgsql.html">結果の返し方</a><br></li>
+<li><a href="./plpgsql-01.html">ストアドプロシージャ</a><br></li>
+<li><a href="./plpgsql-02.html">ストアドプロシージャの定義</a><br></li>
+<li><a href="./plpgsql-03.html">変数宣言と値の代入</a><br></li>
+**** まとめる >>
+<li><a href="./plpgsql-04.html">SELECT INTO文</a><br></li>
+<li><a href="./plpgsql-05.html">結果ステータスの取得</a><br></li>
+<li><a href="./plpgsql-06.html">動的なSQL文の実行</a><br></li>
+<< ここまで****
+<li><a href="./plpgsql-07.html">IF 条件分岐</a><br></li>
+<li><a href="./plpgsql-08.html">ループ処理</a><br></li>
+*** >>>
+<li><a href="./plpgsql-09.html">RETURN</a><br></li>
+<<< ***
+<li><a href="./plpgsql-10.html">ループ処理　LOOP</a><br></li>
+<li><a href="./plpgsql-11.html">ループ処理　WHILE</a><br></li>
+<li><a href="./plpgsql-12.html">ループ処理　FOR </a><br></li>
+<li><a href="./plpgsql-13.html">ループ処理 (複数行の問い合わせ結果を扱う)</a><br></li>
+<li><a href="./plpgsql-14.html">カーソルの利用</a><br></li>
+<li><a href="./plpgsql-15.html">カーソル変数の宣言</a><br></li>
+<li><a href="./plpgsql-16.html">カーソルのオープンとクローズ	OPEN / CLOSE</a><br></li>
+<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得		FETCH</a><br></li>
+<li><a href="./plpgsql-18.html">カーソルを使った例</a><br></li>
+<li><a href="./plpgsql-19.html">例外</a><br></li>
+*** >>>
+<li><a href="./plpgsql-21.html">CASE</a><br></li>
+<li><a href="./plpgsql-22.html">FOREACH</a><br></li>
+<<< ***
+</ol>
+
+
+<h5>Appendix(付録)</h5>
+
+<ol>
+<li><a href="./app-01.html">pgpool-II</a><br></li>
+<li><a href="./app-02.html">Pacemaker</a><br></li>
+</ol>
+
+
+<h5>おまけ:ネット公開(ページ数の関係で書籍には載せない)</h5>
+
+<ol>
+[pgpool]<br>
+<li><a href="./ha-06.html">pgpool-II セットアップ</a><br></li>
+<li><a href="./ha-07.html">pgpool-II レプリケーションモード</a><br></li>
+<li><a href="./ha-08.html">pgpool-II マスタースレーブモード</a><br></li>
+[Pacemaker]<br>
+<li><a href="./ha-10.html">Pacemaker</a><br></li>
+</ol>
+
+</div>
+<hr class="full_hr">
+</div>
+
+  </td>
+  <td valign="top">
+   <div id="body">
+
+<h2>インデックスの作成/変更/削除　CREATE INDEX / ALTER INDEX / DROP INDEX</h2>
+
+<pre>
+[<書式>]
+
+●  インデックスの作成
+CREATE [ UNIQUE ] INDEX [ CONCURRENTLY ]  [ IF NOT EXISTS ] index_name ON table_name
+        [ USING method ]
+	( { column | ( expression ) } [ opclass ] [ ASC | DESC ] 
+      [ NULLS { FIRST | LAST } ] [, ...] )
+    [ WITH ( storage_param = value [, ... ] ) ]
+    [ TABLESPACE tablespace ]
+    [ WHERE predicate ]
+
+
+● インデックス名の変更
+ALTER INDEX [ IF EXISTS ] index_name RENAME TO new_index_name
+
+● テーブルスペースの変更
+ALTER INDEX [ IF EXISTS ] index_name SET TABLESPACE tablespace_name
+
+● ストレージパラメータの変更/リセット
+ALTER INDEX [ IF EXISTS ] index_name 
+			SET ( storage_parame = value [, ... ] )
+
+ALTER INDEX [ IF EXISTS ] index_name
+			RESET ( storage_param  [, ... ] )
+
+● 削除
+DROP INDEX [ CONCURRENTLY ] [ IF EXISTS ] index_name [, ...]
+					  [ CASCADE | RESTRICT ] 
+</pre>
+
+<table>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>index_name</td>	<td>作成、変更、または削除するインデックス名</td>
+</tr><tr>
+<td>table_name</td>	<td>インデックスを作成するテーブル名</td>
+</tr><tr>
+<td>column</td>	<td>テーブルのカラム名</td>
+</tr><tr>
+<td>expression</td>	<td>関数、もしくは複数のカラムの組。カラムの組の場合は'('と')'で囲まなければならない</td>
+</tr><tr>
+<td>opclass</td>	<td>関連する演算子クラス</td>
+</tr><tr>
+<td>new_index_name</td>	<td>新しいインデックス名</td>
+</tr><tr>
+<td>tablespace_name</td>	<td>新たにインデックス情報を保管するテーブルスペース名</td>
+
+</tr><tr><td></td><td></td>
+</tr><tr><td></td><td></td>
+
+
+
+</tr><tr bgcolor="#cccccc">
+<th>句</th>	<th>説明[デフォルト]</th>
+
+</tr><tr>
+<td>USING method</td>	<td>アクセスメソッドを指定。別表参照[BTREE] </td>
+</tr><tr>
+<td>TABLESPACE tablespace</td>	<td>インデックスを保存するテーブルスペースtablespaceを指定</td>
+</tr><tr>
+<td>WITH storage_param = value</td>	<td>ストレージパラメータを設定。ストレージパラメータは[<6-04>]を参照。バージョン8.2から</td>
+</tr><tr>
+<td>WHERE predicate	</td>	<td>部分インデックス用の制約式</td>
+
+
+</tr><tr><td></td><td></td>
+</tr><tr><td></td><td></td>
+
+
+</tr><tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+
+</tr><tr>
+<td>UNIQUE	</td>	<td>インデックスを設定したカラム値について、重複しないように制約を設定する</td>
+</tr><tr>
+<td>CASCADE	</td>	<td>インデックスに依存するオブジェクト(制約など)も一緒に削除</td>
+</tr><tr>
+<td>RESTRICT</td>	<td>依存するオブジェクトのないインデックスのみ削除</td>
+</tr><tr>
+<td>IF EXISTS</td>	<td>削除するインデックスが存在しなくともエラーとならない。バージョン8.2から</td>
+</tr><tr>
+<td>CONCURRENTLY</td>	<td>対象テーブルの書き込みロックを行わずに、インデックスを作成/削除する。CREATE INDEXはバージョン8.2から、DROP INDEXはバージョン9.2から</td>
+</tr><tr>
+<td>ASC, DESC</td>	<td>インデックスを昇順で並べるか、降順で並べるか。バージョン8.3から</td>
+</tr><tr>
+<td>NULLSFIRST, NULL LAST</td>	<td>NULLをインデックスの先頭に置くか、末尾に置くか。バージョン8.3から</td>
+
+
+
+</tr><tr><td></td><td></td>
+</tr><tr><td></td><td></td>
+
+
+</tr><tr bgcolor="#cccccc">
+<th>アクセスメソッド</th>	<th>説明</th>
+
+</tr><tr>
+<td>BTREE	</td>	<td>Lehman-Yaoの高並行性B-trees。デフォルト</td>
+</tr><tr>
+<td>RTREE	</td>	<td>Guttmanの二次分割アルゴリズムを使った標準R-trees。バージョン8.1まで</td>
+</tr><tr>
+<td>HASH	</td>	<td>Litwinの線形ハッシュ</td>
+</tr><tr>
+<td>GiST	</td>	<td>汎用検索ツリー(Generalized Search Tree)</td>
+</tr><tr>
+<td>GiN		</td>	<td>汎用転置インデックス(Generalized Inverted Index)。バージョン8.2から</td>
+</tr><tr>
+<td>SP-GiST	</td>	<td>空間分割汎用検索ツリー(space-partitioned Generalized Inverted Index)。バージョン9.2から</td>
+
+</tr><tr>
+<td>BRIN	</td>	<td>BRINインデックス。バージョン9.5から</td>
+</tr></table>
+
+<br>
+
+<div class="jumpmenu"></div><h3>解説</h3>
+
+<p>
+・アクセスメソッド
+<br>
+デフォルトのアクセスメソッドはBTREEです。
+アクセスメソッドの詳細は後述します。
+</p>
+
+<p>
+・UNIQUE 
+<br>
+カラムの値が互いに重複しないインデックスを、ユニークインデックス(一意性インデックス)と呼びます。
+CREATE INDEX文にUNIQUEを設定すると、ユニークインデックスを作成できます。
+ただし、アクセスメソッドがBTREEのときだけです。
+</p>
+
+
+<p>
+・部分インデックス
+<br>
+WHERE句で部分インデックスを作成できます。
+部分インデックスの主な利点は、インデックスのサイズが小さくなるため(インデックスの)検索と更新が高速になることです。
+</p>
+
+<p>
+・マルチカラムインデックス
+<br>
+PostgreSQLは複数カラムの組に対するインデックス(マルチカラムインデックス)をサポートしています。
+カラムは32個まで指定できます。
+<br>
+現在はBTREE、GiST、GiN、BRINがマルチカラムインデックスに対応しています。
+関数インデックスを含むマルチカラムインデックスは作成できません。
+</p>
+
+
+<p>
+マルチカラムインデックスが効果を発揮するのは「各カラムの条件は"="、各条件はANDで結合」する場合です。
+<br>
+例えば、次に示すマルチカラムインデックスidxと、
+検索条件「a = const AND b = const AND c = const」は非常に相性がよいです。
+</p>
+
+<pre>
+sampledb=# CREATE INDEX idx ON table (a, b, c); 
+CREATE INDEX
+SELECT * FROM table WHERE a = 1 AND b = 2 AND c = 3;
+</pre>
+
+<p>
+不等号"<="や">="などの条件式を含む場合、
+結局はインデックステーブルのほとんどをスキャンしなければならない場合もあり、
+マルチカラムインデックスの必然性は薄れます。
+</p>
+
+
+<p>
+マルチカラム(a,b,c)のうち(b,c)や(c)など先頭のカラムaを使わない条件式の場合、
+確実にインデックテーブルを全スキャンが必要なので、
+このマルチカラムインデックスは使われずにシーケンシャルスキャンが選択されます。
+</p>
+
+
+<p>
+現実的には、マルチカラムインデックスよりもシングルカラムインデックスのほうが効率がよい場合も多いので、
+システム開発時は全SELECT文のアクセスパターンを分析した上で、どのようなインデックスを設定するか検討すべきです。
+</p>
+
+
+<p>
+・ビットマップスキャン(Bitmap Scan)
+<br>
+バージョン8.1から実行プランのビットマップスキャン(Bitmap Scan)がサポートされました。
+これにより<u>WHERE句で条件式をORで結合した場合でもインデックスの効果が期待</u>できます。
+詳細は[<2-04>]を参照してください。
+</p>
+
+
+<div class="jumpmenu"></div><h3>アクセスメソッド</h3>
+
+<p>
+アクセスメソッドとは、インデックスを検索して目的のデータにアクセスするアルゴリズムのことです。
+<br>
+PostgreSQLがサポートするアクセスメソッドを示します。
+</p>
+
+<div class="jumpmenu"></div><h4>B-TREE</h4>
+
+<p>
+PostgreSQLのデフォルトです。
+<br>
+B-TREEはスカラ値(一次元の値)の大小比較(=、<、>、<=、>=)のみ可能です。
+<br>
+実装はLehman-Yaoの高並行性B-TREEアルゴリズムです。
+</p>
+
+<pre>
+Lehman, P. and Yao, S. 1981. "Efficient locking for concurrent operations on B-trees." 
+ACM Trans. Database Systems 6, 4, pp650-670. 
+</pre>
+
+
+<div class="jumpmenu"></div><h4>GiST(Generalized Search Tree: 汎用検索ツリー) </h4>
+
+<p>
+GiSTの最も大きな特徴は、その名のとおり"Generalized(汎用)"である点です。
+<br>
+GiST自体はユーザが独自にインデックスメソッドを構築するためのテンプレートのようなもので、
+B-TREEのように単純な大小比較だけでなく、複雑な比較も実装可能です。
+<br>
+contribのいくつかのツール(cube,hstore,pg_trgmなど)や全文検索(tsvector, tsquery)は予めGiSTによるインデックスを実装済みで、
+ユーザは準備無しでGiSTインデックスを利用できます。
+</p>
+
+<p>
+GiSTの詳細は公式ドキュメント、もしくは実装者のサイトを参照してください。
+</p>
+
+<pre>
+http://www.sai.msu.su/~megera/postgres/gist/
+</pre>
+
+
+<div class="jumpmenu"></div><h4>GiN(Generalized Inverted Index: 汎用転置インデックス)</h4>
+
+<p>
+バージョン8.2からサポートされたGiNもGiST同様、汎用的なインデックスです。
+<br>
+contribのいくつかのツール(hstore、pg_trgmなど)や全文検索(tsvector)は予めGiNによるインデックスを実装済みで、
+ユーザは準備無しでGiSTインデックスを利用できます。
+</p>
+
+<p>
+GiNとGiSTの比較を示します。
+</p>
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th colspan=2 align=left>GiNの有利な点</th>
+</tr><tr>
+<td>インデックスの検索速度</td>	<td>GiSTより３倍程度高速</td>
+
+</tr><tr bgcolor="#cccccc">
+<th colspan=2 align=left>GiNの不利な点</th>
+</tr><tr>
+<td>インデックスの構築時間</td>	<td>GiSTより3倍程度時間がかかる</td>
+</tr><tr>
+<td>インデックスの更新</td>	<td>GiSTより非常に低速</td>
+</tr><tr>
+<td>インデックスサイズ</td>	<td>GiSTより数倍大きい</td>
+</tr></table>
+<br>
+<br>
+
+<p>
+GiNとGiSTの特徴をよく考慮して選択してください。
+</p>
+
+<p>
+GiNの詳細は公式ドキュメント、もしくは実装者のサイトを参照してください。
+</p>
+
+<pre>
+http://www.sai.msu.su/~megera/wiki/Gin
+</pre>
+
+
+<div class="jumpmenu"></div><h4>SP-GiST (space-partitioned GiST)</h4>
+
+<p>
+バージョン9.2からSP-GiSTがサポートされました。
+SP-GiSTはGiSTと同じく汎用インデックスですが、
+QuadTree(四分木)やkd-Tree(k-dimensional Tree:kd木)のように多次元空間を対象としたメソッド群です。
+</p>
+
+<p>
+SP-GiSTの詳細は公式ドキュメント、もしくは実装者のサイトを参照してください。
+比較的分かり易い図が載っている論文も示します。
+</p>
+
+<pre>
+http://www.sai.msu.su/~megera/wiki/spgist_dev
+http://www.cs.purdue.edu/spgist/papers/icde06.pdf
+</pre>
+
+
+<div class="jumpmenu"></div><h4>HASH</h4>
+
+<p>
+HASHインデックスはスカラ値の等価比較("=")のみ可能です。
+幾何データ型以外のデータ型に使用できます。
+<br>
+ただし、次の理由からHASHの使用は推奨しません。
+</p>
+
+ <ul>
+ <li>マルチカラムやUNIQUE制約に対応していない</li>
+ <li>B-TREEと比較して、性能が劣る</li>
+ <li>インデックス操作をWALログに書き込まない</li>
+ </ul>
+
+<p>
+実装はLitwin の線形ハッシュです。
+</p>
+
+<pre>
+LITWIN,W.,NEIMAT, M.A., and SCHNEIDER, D. A. LH. 1996. "a scalable, distributed 
+data structure." ACM Transactions on Database Systems (TODS) 21, 4, pp480-525. 
+</pre>
+
+
+<div class="jumpmenu"></div><h4>BRIN (バージョン9.5から)</h4>
+
+<p>
+
+</p>
+
+
+<pre>
+ brin_page_type(page bytea) returns text
+
+    brin_page_typeは指定のBRINインデックスページのページ種別を返します。 ページが有効なBRINページでないときはエラーが発生します。 以下に例を示します。
+
+    test=# SELECT brin_page_type(get_raw_page('brinidx', 0));
+     brin_page_type 
+    ----------------
+     meta
+
+brin_metapage_info(page bytea) returns record
+
+    brin_metapage_infoはBRINインデックスのメタページについて様々な情報を返します。 以下に例を示します。
+
+    test=# SELECT * FROM brin_metapage_info(get_raw_page('brinidx', 0));
+       magic    | version | pagesperrange | lastrevmappage 
+    ------------+---------+---------------+----------------
+     0xA8109CFA |       1 |             4 |              2
+
+brin_revmap_data(page bytea) returns setof tid
+
+    brin_revmap_dataはBRINインデックスの範囲マップページのタプル識別子のリストを返します。 以下に例を示します。
+
+    test=# SELECT * FROM brin_revmap_data(get_raw_page('brinidx', 2)) limit 5;
+      pages  
+    ---------
+     (6,137)
+     (6,138)
+     (6,139)
+     (6,140)
+     (6,141)
+
+brin_page_items(page bytea, index oid) returns setof record
+
+    brin_page_itemsはBRINデータページに記録されているデータを返します。 以下に例を示します。
+
+    test=# SELECT * FROM brin_page_items(get_raw_page('brinidx', 5),
+                                         'brinidx')
+           ORDER BY blknum, attnum LIMIT 6;
+     itemoffset | blknum | attnum | allnulls | hasnulls | placeholder |    value     
+    ------------+--------+--------+----------+----------+-------------+--------------
+            137 |      0 |      1 | t        | f        | f           | 
+            137 |      0 |      2 | f        | f        | f           | {1 .. 88}
+            138 |      4 |      1 | t        | f        | f           | 
+            138 |      4 |      2 | f        | f        | f           | {89 .. 176}
+            139 |      8 |      1 | t        | f        | f           | 
+            139 |      8 |      2 | f        | f        | f           | {177 .. 264}
+
+    返される列はBrinMemTuple構造体およびBrinValues構造体のフィールドに対応します。 詳しくはsrc/include/access/brin_tuple.hを参照して下さい。 
+</pre>
+
+
+
+<div class="jumpmenu"></div><h4>R-TREE (バージョン8.1まで)</h4>
+
+<p>
+幾何データ型のカラムに対してインデックスを作成するために使用します。
+2次元の値の比較が可能です。
+<br>
+しかしマルチカラム、UNIQUE制約には対応していません。
+<br>
+バージョン8.1までサポートしていましたが、8.2で廃止されました。
+</p>
+
+<p>
+実装はGuttmanの二次分割アルゴリズムを使った標準R-treesです。
+</p>
+
+<pre>
+Guttman, A. 1984. "R-trees a dynamic index structure for spatial searching" Proc ACM 
+SIGMOD Int Conf on Management of Data, pp47-57. 
+</pre>
+
+
+
+<div class="jumpmenu"></div><h3>実行例</h3>
+
+<p>
+・インデックスの作成
+<br>
+テーブルcustomerlistのカラムnameに対し、インデックスを作成します。
+</p>
+
+<pre>
+sampledb=# CREATE INDEX name_idx ON customerlist (name);
+CREATE INDEX
+
+sampledb=# \d customerlist
+            Table "public.customerlist"
+   Column    |  Type   |         Modifiers         
+-------------+---------+---------------------------
+ id          | integer | not null default 0
+ name        | text    | not null default ''::text
+ companycode | integer | not null
+Indexes:
+    "name_idx" btree (name)
+</pre>
+
+<p>
+・マルチカラムインデックスの作成
+<br>
+テーブルalbum_listのカラムの組(artist, title)によるマルチカラムインデックスを作成します。
+</p>
+
+<pre>
+sampledb=# CREATE INDEX multicolumn_idx ON album_list
+sampledb-#      USING BTREE (artist, title);
+CREATE INDEX
+
+sampledb=# \d album_list
+  Table "public.album_list"
+ Column |  Type   | Modifiers 
+--------+---------+-----------
+ artist | text    | not null
+ title  | text    | not null
+ year   | integer | 
+Indexes:
+    "multicolumn_idx" btree (artist, title)
+</pre>
+
+<p>
+このインデックスは、カラムartistとカラムtitleをキーとしてテーブル検索するときに使われる可能性があります。
+</p>
+
+<pre>
+SELECT * FROM album_list WHERE artist = 'Bjork' AND title = 'Post'; 
+SELECT * FROM album_list WHERE artist = 'Fleetwood Mac' AND title = 'Rumours'; 
+</pre>
+
+<p>
+・関数インデックスの作成
+<br>
+テーブルmy_classのカラムnameには大文字と小文字が混在しています。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM my_class WHERE id < 5;
+ id | name  | age 
+----+-------+-----
+  1 | Alice |    
+  2 | Bobby |    
+  3 | Candy |    
+  4 | DUKE  |  20
+(4 rows)
+</pre>
+
+<p>
+カラムnameをキーとして検索する場合、
+まずカラムnameに対して関数lower()を使ったインデックスを作成し、
+検索も小文字で行うことにします。
+</p>
+
+<pre>
+sampledb=# CREATE INDEX myclass_name_idx ON my_class (lower(name));
+CREATE INDEX
+
+sampledb=# \d my_class
+   Table "public.my_class"
+ Column |  Type   | Modifiers 
+--------+---------+-----------
+ id     | integer | not null
+ name   | text    | 
+ age    | integer | 
+Indexes:
+    "my_class_pkey" PRIMARY KEY, btree (id)
+    "myclass_name_idx" btree (lower(name))
+</pre>
+
+<p>
+検索は次のように行います。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM my_class WHERE lower(name) = 'duke'; 
+ id | name | age 
+----+------+----- 
+  4 | DUKE | 20 
+(1 row) 
+</pre>
+
+
+<p>
+・部分インデックスの作成
+<br>
+テーブルcustomerlistのカラムidに関して、50以上100未満のレコードについてインデックスを作成します。
+</p>
+
+<pre>
+sampledb=# CREATE INDEX special_ids_idx ON customerlist (id) 
+sampledb-#	  　　　　　　　　　　　　WHERE 50 <= id AND id < 100; 
+</pre>
+
+<p>
+・インデックス名の変更
+<br>
+テーブルcustomerlistのインデックスname_idxを、customerlist_idxに変更します。
+</p>
+
+<pre>
+sampledb=# \d customerlist
+            Table "public.customerlist"
+   Column    |  Type   |         Modifiers         
+-------------+---------+---------------------------
+ id          | integer | not null default 0
+ name        | text    | not null default ''::text
+ companycode | integer | not null
+Indexes:
+    "name_idx" btree (name)
+
+sampledb=# ALTER INDEX name_idx RENAME TO customerlist_idx;
+ALTER INDEX
+
+sampledb=# \d customerlist
+            Table "public.customerlist"
+   Column    |  Type   |         Modifiers         
+-------------+---------+---------------------------
+ id          | integer | not null default 0
+ name        | text    | not null default ''::text
+ companycode | integer | not null
+Indexes:
+    "customerlist_idx" btree (name)
+</pre>
+
+<p>
+・インデックスの削除
+<br>
+インデックスの削除例を以下に示します。
+</p>
+
+<pre>
+sampledb=# DROP INDEX test_index; 
+DROP 
+</pre>
+
+<hr class="full_hr">
+<div id="lastmodified">
+Last-modified: 2018-9-8
+</div>
+</body>
+</html>
+

@@ -1,0 +1,207 @@
+%FILE internal/param-04.html
+%LASTMOD
+%KEY pgsql-param04
+
+%TITLE 資源の消費		RESOURCE USAGE
+
+
+<table border=1>
+<caption>[<設定項目一覧>]</caption>
+<tr bgcolor="#cccccc">
+<th><sup>変更<br>可能性</sup></th> <th>設定項目</th>	<th>パラメータ<br>[デフォルト]</th>		<th>説明</th>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>Memory</th>
+</tr><tr>
+<td>×	</td>	<td>shared_buffers</td>	<td>整数[128M]</td>	<td>共有バッファサイズ。最低限128Kb以上、かつ(2×max_connections×8Kbyte)以上。単位は[byte]。バージョン9.2まではデフォルト32M</td>
+</tr><tr>
+<td>◎</td>	<td>temp_buffers	</td>	<td>整数[8M]	</td>	<td>(セッション毎の)一時テーブルを確保するローカルバッファのサイズ。単位は[byte]。バージョン8.1まではバッファ数。バッファサイズは1つあたり8[Kbyte]。バージョン8.1から</td>
+</tr><tr>
+<td>×	</td>	<td>max_prepared_transactions</td>	<td>整数[0]</td>	<td>2相コミットを同時に保持できる最大数。0なら2相コミットは無効。バージョン8.1から</td>
+</tr><tr>
+<td>◎	</td>	<td>work_mem	</td>	<td>整数[4M]	</td>	<td>内部ソートとハッシュで使うメモリ量。単位は[byte]。最低限64[Kbyte]以上。バージョン9.3まではデフォルト1M</td>
+</tr><tr>
+<td>◎	</td>	<td>maintenance_work_mem</td>	<td>整数[16M]</td>	<td>VACUUM文実行時に使用するメモリの最大量。単位は[byte]。最低限１[Mbyte]以上</td>
+</tr><tr>
+<td>○</td>	<td>	max_stack_depth	</td>	<td>整数[2MB]	</td>	<td>サーバの実行スタックの最大深度を設定</td>
+
+
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>Free Space Map(空き領域マップ)</th>
+
+</tr><tr>
+<td>×	</td>	<td>max_fsm_pages	</td>	<td>整数[20000]	</td>	<td>空き領域マップで管理するディスクページの最大数。最低限16 × max_fsm_relations以上。バージョン8.3まで</td>
+</tr><tr>
+<td>×	</td>	<td>max_fsm_relations	</td>	<td>整数[1000]		</td>	<td>空き領域マップで管理するリレーション(テーブルなど)の最大数。最低限100以上。バージョン8.3まで</td>
+
+
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>Kernel Resource Usage</th>
+
+
+</tr><tr>
+<td>×	  </td>	<td>  max_files_per_process	</td>	<td> 整数[1000]	</td>	<td>	各postgresプロセスがオープンできるファイルの最大数。最低限25以上。</td>
+</tr><tr>
+<td>×	 </td>	<td>   shared_preload_libraries	</td>	<td> 文字列[''(空文字)]	</td>	<td>PostgreSQLサーバ起動時にロードする共有ライブラリを記述する。複数ライブラリの場合は","で区切って列挙する。バージョン8.2から</td>
+</tr><tr>
+<td>×	</td>	<td>    preload_libraries	</td>	<td>	 文字列[''(空文字)]	</td>	<td>PostgreSQLサーバ起動時にロードする共有ライブラリを記述する。バージョン8.0から8.1まで。以降shared_preload_librariesに改名。</td>
+
+
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>Cost-Based Vacuum Delay</th>
+
+</tr><tr>
+<td>◎</td>	<td>	vacuum_cost_delay		</td>	<td>整数(0-1000)[0ms]	</td>	<td>	VACUUM,ANALYZE処理を休止する時間。単位は[ミリ秒]。0なら遅延機能が無効</td>
+</tr><tr>
+<td>◎</td>	<td>	vacuum_cost_page_hit	</td>	<td>	整数(0-10000)[1]</td>	<td>	共有バッファのデータにキャッシュヒットした場合のコスト</td>
+</tr><tr>
+<td>◎</td>	<td>	vacuum_cost_page_miss	</td>	<td>	整数(0-10000)[10]	</td>	<td>共有バッファのデータにキャッシュミスした場合のコスト</td>
+</tr><tr>
+<td>◎</td>	<td>	vacuum_cost_page_dirty	</td>	<td>	整数(0-10000)[20]	</td>	<td>共有バッファのデータを書き換えた場合のコスト</td>
+</tr><tr>
+<td>◎</td>	<td>	vacuum_cost_limit	</td>	<td>	整数(0-10000)[200]	</td>	<td>累積されたコストがこの値を超えると、vacuum_cost_delayで設定した時間だけ、VACUUMやANALYZEを休止する</td>
+
+
+</tr><tr bgcolor="#cccccc">
+<th colspan=4 align=left>Background writer</th>
+
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>全バージョン共通</th>
+
+</tr><tr>
+<td>△	</td>	<td> bgwriter_delay		</td>	<td>整数(10-10000)[200ms]	</td>	<td>バックグランドライタ処理の実行間隔を設定。単位は[ミリ秒]</td>
+
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>バージョン8.3以降の設定パラメータ</th>
+
+</tr><tr>
+<td>△	</td>	<td> bgwriter_lru_maxpages	</td>	<td>整数(0-1000)[100]	</td>	<td>１周期でバックグランドライタが書き込む最大のページ数。0の場合、バックグランドライタの書き込みが無効。導入されたのはバージョン8.1から</td>
+</tr><tr>
+<td>△	</td>	<td> bgwriter_lru_multiplier	</td>	<td>浮動小数(0-10.0)[2.0]	</td>	<td>本文参照。バージョン8.3から</td>
+
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>バージョン8.1から8.2までの設定パラメータ</th>
+
+</tr><tr>
+<td>×	</td>	<td> bgwriter_all_percent	</td>	<td> パーセント[0.333]	</td>	<td>1周期でバックグランドライタが書き込む最大のページ数。共有ページの全ページ数に対して、最大でも設定されたパーセント(割合)のページ数まで。詳細は本文参照。</td>
+</tr><tr>
+<td>×	</td>	<td> bgwriter_lru_percent	</td>	<td>パーセント[1.0]	</td>	<td>1周期でバックグランドライタが書き込む最大のページ数。共有バッファの全ページ数に対して、最大でも最近使われたページのうち、設定されたパーセント(割合)のページ数まで。詳細は本文参照。</td>
+</tr><tr>
+<td>×	</td>	<td> bgwriter_all_maxpages	</td>	<td> 整数(0-1000)[5]	</td>	<td>1周期でバックグランドライタが書き込む最大のページ数。</td>
+</tr><tr>
+<td>×	</td>	<td> bgwriter_lru_maxpages	</td>	<td>整数(0-1000)[5]	</td>	<td>１周期でバックグランドライタが書き込む最大のページ数。0の場合、バックグランドライタの書き込みが無効。バージョン8.3以降も使用できる。</td>
+
+
+
+</tr><tr bgcolor="#eeeee">
+<th colspan=4 align=left>バージョン8.0での設定パラメータ</th>
+
+</tr><tr>
+<td>×	</td>	<td> bgwriter_percent	</td>	<td> パーセント[1]	</td>	<td>	バージョン8.0のみ。バックグランドライタが一度に処理する(バッファ上の)dirtyページの上限を、全dirtyページ数に対するパーセント(割合)で設定。詳細は本文参照</td>
+</tr><tr>
+<td>×	</td>	<td> bgwriter_maxpages	</td>	<td> 整数(0-1000)[100]	</td>	<td>バージョン8.0のみ。バックグランドライタが一度に処理するdirtyページ数の上限を設定</td>
+
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+・ shared_buffers 
+<br>
+共有バッファサイズを設定します。設定値の選択は[<3-19>]を参照してください。
+</p>
+
+
+<p>
+・　空き領域マップ
+<br>
+バージョン8.4以降、空き領域マップは可変サイズになり、全テーブルの空き領域を保存できるようになりました。
+それに伴い、関連する設定パラメータも廃止されました。
+</p>
+
+<p>
+・ VACUUM処理の遅延機能
+<br>
+(コストに基づく)VACUUM処理の遅延機能が実装されています。詳しい機構は[<2-07>]を参照してください。
+</p>
+
+
+%SECTION バックグランドライタ
+
+<p>
+CHECKPOINT処理による性能低下を避けるためにバックグランドライタが実装されました。
+これは、通常ならCHECKPOINT実行時に一度に書き込まれる共有バッファ上のdirtyページを、
+他の処理の邪魔にならないように少しずつ書き込む機能です。
+</p>
+
+<p>
+バックグランドライタを活かすポイントは「どの程度のdirtyページを書き込むか適切に設定すること」です。
+一気に全dirtyページが書き込まれるのならば、バックグランドライタそのものが無意味になります。
+<br>
+しかし、(PostgreSQLにしては非常に珍しいことですが)「どの程度dirtyページを書き込むか」を設定するパラメータがしばらく混乱し続けました。
+</p>
+
+<p>
+・bgwriter_delay
+<br>
+バックグランドライタの実行間隔を設定します。このパラメータは全バージョン共通です。
+</p>
+
+<p>
+・bgwriter_lru_maxpages,bgwriter_lru_multiplier (バージョン8.3から)
+<br>
+バージョン8.3以降は、bgwriter_delayと上記の2つ、計3つの設定パラメータで運用します。
+<br>
+書き込むページ数の上限は以下の式で求まります。
+</p>
+
+[<次の周期で書き込むページ数の上限>]
+<pre>
+MIN(bgwriter_lru_multiplier × 最近の周期で書き込んだページ数の平均, bgwriter_lru_maxpages)
+</pre>
+
+<p>
+bgwriter_lru_maxpagesは１周期でバックグランドライタが書き込む最大のページ数です。
+次の周期で書き込むページ数の上限は、最近の周期で書き込んだページ数の平均値とこのパラメータbgwriter_lru_multiplierを掛け算した値か、bgwriter_lru_maxpagesのどちらか小さい方の値になります。
+</p>
+
+<p>
+・bgwriter_[all|lru]_percent, bgwriter_[all|lru]_maxpages (バージョン8.1から8.2まで)
+<br>
+bgwriter_all_percentとbgwriter_lru_percentには、バックグランドライタが一度に処理するdirtyページの上限を、
+全ページ(共有バッファのページ数)におけるパーセント(割合)で設定します。
+例えば、bgwriter_all_percentが1[%]で全ページ(shared_buffers)が10000だったとすると、10000[ページ] × 1[%] = 100[ページ]が処理対象となります。
+</p>
+
+<p>
+bgwriter_all_maxpagesとbgwriter_lru_maxpagesは、バックグランドライタが一度に処理するdirtyページの上限を設定します。
+</p>
+
+<p>
+・bgwriter_percent, bgwriter_maxpages (バージョン8.0のみ)
+<br>
+bgwriter_percentにはバックグランドライタが一度に処理するdirtyページの上限を、全dirtyページに対するパーセント(割合)で設定します。
+例えば、bgwriter_percentが1[%]で全dirtyページ数が100だったとすると、100[ページ] × 1[%] = 1[ページ]が処理対象となります。
+<br>
+bgwriter_maxpagesには、バックグランドライタが一度に処理するdirtyページ数の上限を設定します。
+</p>
+
+<p>
+バックグランドライタはこれらの設定パラメータのうち"どちらかの"制限に達するまで、バッファを順に検査してdirtyページを書き出します。
+<br>
+なお、次回のバックグランドライタの処理は前回に書き出したページの次から検査を始めます。
+</p>
+
+<p>
+ところで、bgwriter_percentを有効にするとサーバが非常に重くなってしまうという欠点が知られています。
+これは全dirtyページ数を調べるために共有バッファを全スキャンするという実装となっていたためです。
+よってbgwriter_percentには必ず'0'を設定して無効にしてください。
+</p>
+

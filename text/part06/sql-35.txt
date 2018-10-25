@@ -1,0 +1,575 @@
+%FILE internal/sql-35.html
+%LASTMOD
+%KEY pgsql-sql35
+
+%TITLE インデックスの作成/変更/削除　CREATE INDEX / ALTER INDEX / DROP INDEX
+
+<pre>
+[<書式>]
+
+●  インデックスの作成
+CREATE [ UNIQUE ] INDEX [ CONCURRENTLY ]  [ IF NOT EXISTS ] index_name ON table_name
+        [ USING method ]
+	( { column | ( expression ) } [ opclass ] [ ASC | DESC ] 
+      [ NULLS { FIRST | LAST } ] [, ...] )
+    [ WITH ( storage_param = value [, ... ] ) ]
+    [ TABLESPACE tablespace ]
+    [ WHERE predicate ]
+
+
+● インデックス名の変更
+ALTER INDEX [ IF EXISTS ] index_name RENAME TO new_index_name
+
+● テーブルスペースの変更
+ALTER INDEX [ IF EXISTS ] index_name SET TABLESPACE tablespace_name
+
+● ストレージパラメータの変更/リセット
+ALTER INDEX [ IF EXISTS ] index_name 
+			SET ( storage_parame = value [, ... ] )
+
+ALTER INDEX [ IF EXISTS ] index_name
+			RESET ( storage_param  [, ... ] )
+
+● 削除
+DROP INDEX [ CONCURRENTLY ] [ IF EXISTS ] index_name [, ...]
+					  [ CASCADE | RESTRICT ] 
+</pre>
+
+<table>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>index_name</td>	<td>作成、変更、または削除するインデックス名</td>
+</tr><tr>
+<td>table_name</td>	<td>インデックスを作成するテーブル名</td>
+</tr><tr>
+<td>column</td>	<td>テーブルのカラム名</td>
+</tr><tr>
+<td>expression</td>	<td>関数、もしくは複数のカラムの組。カラムの組の場合は'('と')'で囲まなければならない</td>
+</tr><tr>
+<td>opclass</td>	<td>関連する演算子クラス</td>
+</tr><tr>
+<td>new_index_name</td>	<td>新しいインデックス名</td>
+</tr><tr>
+<td>tablespace_name</td>	<td>新たにインデックス情報を保管するテーブルスペース名</td>
+
+</tr><tr><td></td><td></td>
+</tr><tr><td></td><td></td>
+
+
+
+</tr><tr bgcolor="#cccccc">
+<th>句</th>	<th>説明[デフォルト]</th>
+
+</tr><tr>
+<td>USING method</td>	<td>アクセスメソッドを指定。別表参照[BTREE] </td>
+</tr><tr>
+<td>TABLESPACE tablespace</td>	<td>インデックスを保存するテーブルスペースtablespaceを指定</td>
+</tr><tr>
+<td>WITH storage_param = value</td>	<td>ストレージパラメータを設定。ストレージパラメータは[<6-04>]を参照。バージョン8.2から</td>
+</tr><tr>
+<td>WHERE predicate	</td>	<td>部分インデックス用の制約式</td>
+
+
+</tr><tr><td></td><td></td>
+</tr><tr><td></td><td></td>
+
+
+</tr><tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+
+</tr><tr>
+<td>UNIQUE	</td>	<td>インデックスを設定したカラム値について、重複しないように制約を設定する</td>
+</tr><tr>
+<td>CASCADE	</td>	<td>インデックスに依存するオブジェクト(制約など)も一緒に削除</td>
+</tr><tr>
+<td>RESTRICT</td>	<td>依存するオブジェクトのないインデックスのみ削除</td>
+</tr><tr>
+<td>IF EXISTS</td>	<td>削除するインデックスが存在しなくともエラーとならない。バージョン8.2から</td>
+</tr><tr>
+<td>CONCURRENTLY</td>	<td>対象テーブルの書き込みロックを行わずに、インデックスを作成/削除する。CREATE INDEXはバージョン8.2から、DROP INDEXはバージョン9.2から</td>
+</tr><tr>
+<td>ASC, DESC</td>	<td>インデックスを昇順で並べるか、降順で並べるか。バージョン8.3から</td>
+</tr><tr>
+<td>NULLSFIRST, NULL LAST</td>	<td>NULLをインデックスの先頭に置くか、末尾に置くか。バージョン8.3から</td>
+
+
+
+</tr><tr><td></td><td></td>
+</tr><tr><td></td><td></td>
+
+
+</tr><tr bgcolor="#cccccc">
+<th>アクセスメソッド</th>	<th>説明</th>
+
+</tr><tr>
+<td>BTREE	</td>	<td>Lehman-Yaoの高並行性B-trees。デフォルト</td>
+</tr><tr>
+<td>RTREE	</td>	<td>Guttmanの二次分割アルゴリズムを使った標準R-trees。バージョン8.1まで</td>
+</tr><tr>
+<td>HASH	</td>	<td>Litwinの線形ハッシュ</td>
+</tr><tr>
+<td>GiST	</td>	<td>汎用検索ツリー(Generalized Search Tree)</td>
+</tr><tr>
+<td>GiN		</td>	<td>汎用転置インデックス(Generalized Inverted Index)。バージョン8.2から</td>
+</tr><tr>
+<td>SP-GiST	</td>	<td>空間分割汎用検索ツリー(space-partitioned Generalized Inverted Index)。バージョン9.2から</td>
+
+</tr><tr>
+<td>BRIN	</td>	<td>BRINインデックス。バージョン9.5から</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+・アクセスメソッド
+<br>
+デフォルトのアクセスメソッドはBTREEです。
+アクセスメソッドの詳細は後述します。
+</p>
+
+<p>
+・UNIQUE 
+<br>
+カラムの値が互いに重複しないインデックスを、ユニークインデックス(一意性インデックス)と呼びます。
+CREATE INDEX文にUNIQUEを設定すると、ユニークインデックスを作成できます。
+ただし、アクセスメソッドがBTREEのときだけです。
+</p>
+
+
+<p>
+・部分インデックス
+<br>
+WHERE句で部分インデックスを作成できます。
+部分インデックスの主な利点は、インデックスのサイズが小さくなるため(インデックスの)検索と更新が高速になることです。
+</p>
+
+<p>
+・マルチカラムインデックス
+<br>
+PostgreSQLは複数カラムの組に対するインデックス(マルチカラムインデックス)をサポートしています。
+カラムは32個まで指定できます。
+<br>
+現在はBTREE、GiST、GiN、BRINがマルチカラムインデックスに対応しています。
+関数インデックスを含むマルチカラムインデックスは作成できません。
+</p>
+
+
+<p>
+マルチカラムインデックスが効果を発揮するのは「各カラムの条件は"="、各条件はANDで結合」する場合です。
+<br>
+例えば、次に示すマルチカラムインデックスidxと、
+検索条件「a = const AND b = const AND c = const」は非常に相性がよいです。
+</p>
+
+<pre>
+sampledb=# CREATE INDEX idx ON table (a, b, c); 
+CREATE INDEX
+SELECT * FROM table WHERE a = 1 AND b = 2 AND c = 3;
+</pre>
+
+<p>
+不等号"<="や">="などの条件式を含む場合、
+結局はインデックステーブルのほとんどをスキャンしなければならない場合もあり、
+マルチカラムインデックスの必然性は薄れます。
+</p>
+
+
+<p>
+マルチカラム(a,b,c)のうち(b,c)や(c)など先頭のカラムaを使わない条件式の場合、
+確実にインデックテーブルを全スキャンが必要なので、
+このマルチカラムインデックスは使われずにシーケンシャルスキャンが選択されます。
+</p>
+
+
+<p>
+現実的には、マルチカラムインデックスよりもシングルカラムインデックスのほうが効率がよい場合も多いので、
+システム開発時は全SELECT文のアクセスパターンを分析した上で、どのようなインデックスを設定するか検討すべきです。
+</p>
+
+
+<p>
+・ビットマップスキャン(Bitmap Scan)
+<br>
+バージョン8.1から実行プランのビットマップスキャン(Bitmap Scan)がサポートされました。
+これにより<u>WHERE句で条件式をORで結合した場合でもインデックスの効果が期待</u>できます。
+詳細は[<2-04>]を参照してください。
+</p>
+
+
+%CHAPTER アクセスメソッド
+
+<p>
+アクセスメソッドとは、インデックスを検索して目的のデータにアクセスするアルゴリズムのことです。
+<br>
+PostgreSQLがサポートするアクセスメソッドを示します。
+</p>
+
+%SECTION B-TREE
+
+<p>
+PostgreSQLのデフォルトです。
+<br>
+B-TREEはスカラ値(一次元の値)の大小比較(=、<、>、<=、>=)のみ可能です。
+<br>
+実装はLehman-Yaoの高並行性B-TREEアルゴリズムです。
+</p>
+
+<pre>
+Lehman, P. and Yao, S. 1981. "Efficient locking for concurrent operations on B-trees." 
+ACM Trans. Database Systems 6, 4, pp650-670. 
+</pre>
+
+
+%SECTION GiST(Generalized Search Tree: 汎用検索ツリー) 
+
+<p>
+GiSTの最も大きな特徴は、その名のとおり"Generalized(汎用)"である点です。
+<br>
+GiST自体はユーザが独自にインデックスメソッドを構築するためのテンプレートのようなもので、
+B-TREEのように単純な大小比較だけでなく、複雑な比較も実装可能です。
+<br>
+contribのいくつかのツール(cube,hstore,pg_trgmなど)や全文検索(tsvector, tsquery)は予めGiSTによるインデックスを実装済みで、
+ユーザは準備無しでGiSTインデックスを利用できます。
+</p>
+
+<p>
+GiSTの詳細は公式ドキュメント、もしくは実装者のサイトを参照してください。
+</p>
+
+<pre>
+http://www.sai.msu.su/~megera/postgres/gist/
+</pre>
+
+
+%SECTION GiN(Generalized Inverted Index: 汎用転置インデックス)
+
+<p>
+バージョン8.2からサポートされたGiNもGiST同様、汎用的なインデックスです。
+<br>
+contribのいくつかのツール(hstore、pg_trgmなど)や全文検索(tsvector)は予めGiNによるインデックスを実装済みで、
+ユーザは準備無しでGiSTインデックスを利用できます。
+</p>
+
+<p>
+GiNとGiSTの比較を示します。
+</p>
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th colspan=2 align=left>GiNの有利な点</th>
+</tr><tr>
+<td>インデックスの検索速度</td>	<td>GiSTより３倍程度高速</td>
+
+</tr><tr bgcolor="#cccccc">
+<th colspan=2 align=left>GiNの不利な点</th>
+</tr><tr>
+<td>インデックスの構築時間</td>	<td>GiSTより3倍程度時間がかかる</td>
+</tr><tr>
+<td>インデックスの更新</td>	<td>GiSTより非常に低速</td>
+</tr><tr>
+<td>インデックスサイズ</td>	<td>GiSTより数倍大きい</td>
+</tr></table>
+<br>
+<br>
+
+<p>
+GiNとGiSTの特徴をよく考慮して選択してください。
+</p>
+
+<p>
+GiNの詳細は公式ドキュメント、もしくは実装者のサイトを参照してください。
+</p>
+
+<pre>
+http://www.sai.msu.su/~megera/wiki/Gin
+</pre>
+
+
+%SECTION SP-GiST (space-partitioned GiST)
+
+<p>
+バージョン9.2からSP-GiSTがサポートされました。
+SP-GiSTはGiSTと同じく汎用インデックスですが、
+QuadTree(四分木)やkd-Tree(k-dimensional Tree:kd木)のように多次元空間を対象としたメソッド群です。
+</p>
+
+<p>
+SP-GiSTの詳細は公式ドキュメント、もしくは実装者のサイトを参照してください。
+比較的分かり易い図が載っている論文も示します。
+</p>
+
+<pre>
+http://www.sai.msu.su/~megera/wiki/spgist_dev
+http://www.cs.purdue.edu/spgist/papers/icde06.pdf
+</pre>
+
+
+%SECTION HASH
+
+<p>
+HASHインデックスはスカラ値の等価比較("=")のみ可能です。
+幾何データ型以外のデータ型に使用できます。
+<br>
+ただし、次の理由からHASHの使用は推奨しません。
+</p>
+
+ <ul>
+ <li>マルチカラムやUNIQUE制約に対応していない</li>
+ <li>B-TREEと比較して、性能が劣る</li>
+ <li>インデックス操作をWALログに書き込まない</li>
+ </ul>
+
+<p>
+実装はLitwin の線形ハッシュです。
+</p>
+
+<pre>
+LITWIN,W.,NEIMAT, M.A., and SCHNEIDER, D. A. LH. 1996. "a scalable, distributed 
+data structure." ACM Transactions on Database Systems (TODS) 21, 4, pp480-525. 
+</pre>
+
+
+%SECTION BRIN (バージョン9.5から)
+
+<p>
+
+</p>
+
+
+<pre>
+ brin_page_type(page bytea) returns text
+
+    brin_page_typeは指定のBRINインデックスページのページ種別を返します。 ページが有効なBRINページでないときはエラーが発生します。 以下に例を示します。
+
+    test=# SELECT brin_page_type(get_raw_page('brinidx', 0));
+     brin_page_type 
+    ----------------
+     meta
+
+brin_metapage_info(page bytea) returns record
+
+    brin_metapage_infoはBRINインデックスのメタページについて様々な情報を返します。 以下に例を示します。
+
+    test=# SELECT * FROM brin_metapage_info(get_raw_page('brinidx', 0));
+       magic    | version | pagesperrange | lastrevmappage 
+    ------------+---------+---------------+----------------
+     0xA8109CFA |       1 |             4 |              2
+
+brin_revmap_data(page bytea) returns setof tid
+
+    brin_revmap_dataはBRINインデックスの範囲マップページのタプル識別子のリストを返します。 以下に例を示します。
+
+    test=# SELECT * FROM brin_revmap_data(get_raw_page('brinidx', 2)) limit 5;
+      pages  
+    ---------
+     (6,137)
+     (6,138)
+     (6,139)
+     (6,140)
+     (6,141)
+
+brin_page_items(page bytea, index oid) returns setof record
+
+    brin_page_itemsはBRINデータページに記録されているデータを返します。 以下に例を示します。
+
+    test=# SELECT * FROM brin_page_items(get_raw_page('brinidx', 5),
+                                         'brinidx')
+           ORDER BY blknum, attnum LIMIT 6;
+     itemoffset | blknum | attnum | allnulls | hasnulls | placeholder |    value     
+    ------------+--------+--------+----------+----------+-------------+--------------
+            137 |      0 |      1 | t        | f        | f           | 
+            137 |      0 |      2 | f        | f        | f           | {1 .. 88}
+            138 |      4 |      1 | t        | f        | f           | 
+            138 |      4 |      2 | f        | f        | f           | {89 .. 176}
+            139 |      8 |      1 | t        | f        | f           | 
+            139 |      8 |      2 | f        | f        | f           | {177 .. 264}
+
+    返される列はBrinMemTuple構造体およびBrinValues構造体のフィールドに対応します。 詳しくはsrc/include/access/brin_tuple.hを参照して下さい。 
+</pre>
+
+
+
+%SECTION R-TREE (バージョン8.1まで)
+
+<p>
+幾何データ型のカラムに対してインデックスを作成するために使用します。
+2次元の値の比較が可能です。
+<br>
+しかしマルチカラム、UNIQUE制約には対応していません。
+<br>
+バージョン8.1までサポートしていましたが、8.2で廃止されました。
+</p>
+
+<p>
+実装はGuttmanの二次分割アルゴリズムを使った標準R-treesです。
+</p>
+
+<pre>
+Guttman, A. 1984. "R-trees a dynamic index structure for spatial searching" Proc ACM 
+SIGMOD Int Conf on Management of Data, pp47-57. 
+</pre>
+
+
+
+%CHAPTER 実行例
+
+<p>
+・インデックスの作成
+<br>
+テーブルcustomerlistのカラムnameに対し、インデックスを作成します。
+</p>
+
+<pre>
+sampledb=# CREATE INDEX name_idx ON customerlist (name);
+CREATE INDEX
+
+sampledb=# \d customerlist
+            Table "public.customerlist"
+   Column    |  Type   |         Modifiers         
+-------------+---------+---------------------------
+ id          | integer | not null default 0
+ name        | text    | not null default ''::text
+ companycode | integer | not null
+Indexes:
+    "name_idx" btree (name)
+</pre>
+
+<p>
+・マルチカラムインデックスの作成
+<br>
+テーブルalbum_listのカラムの組(artist, title)によるマルチカラムインデックスを作成します。
+</p>
+
+<pre>
+sampledb=# CREATE INDEX multicolumn_idx ON album_list
+sampledb-#      USING BTREE (artist, title);
+CREATE INDEX
+
+sampledb=# \d album_list
+  Table "public.album_list"
+ Column |  Type   | Modifiers 
+--------+---------+-----------
+ artist | text    | not null
+ title  | text    | not null
+ year   | integer | 
+Indexes:
+    "multicolumn_idx" btree (artist, title)
+</pre>
+
+<p>
+このインデックスは、カラムartistとカラムtitleをキーとしてテーブル検索するときに使われる可能性があります。
+</p>
+
+<pre>
+SELECT * FROM album_list WHERE artist = 'Bjork' AND title = 'Post'; 
+SELECT * FROM album_list WHERE artist = 'Fleetwood Mac' AND title = 'Rumours'; 
+</pre>
+
+<p>
+・関数インデックスの作成
+<br>
+テーブルmy_classのカラムnameには大文字と小文字が混在しています。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM my_class WHERE id < 5;
+ id | name  | age 
+----+-------+-----
+  1 | Alice |    
+  2 | Bobby |    
+  3 | Candy |    
+  4 | DUKE  |  20
+(4 rows)
+</pre>
+
+<p>
+カラムnameをキーとして検索する場合、
+まずカラムnameに対して関数lower()を使ったインデックスを作成し、
+検索も小文字で行うことにします。
+</p>
+
+<pre>
+sampledb=# CREATE INDEX myclass_name_idx ON my_class (lower(name));
+CREATE INDEX
+
+sampledb=# \d my_class
+   Table "public.my_class"
+ Column |  Type   | Modifiers 
+--------+---------+-----------
+ id     | integer | not null
+ name   | text    | 
+ age    | integer | 
+Indexes:
+    "my_class_pkey" PRIMARY KEY, btree (id)
+    "myclass_name_idx" btree (lower(name))
+</pre>
+
+<p>
+検索は次のように行います。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM my_class WHERE lower(name) = 'duke'; 
+ id | name | age 
+----+------+----- 
+  4 | DUKE | 20 
+(1 row) 
+</pre>
+
+
+<p>
+・部分インデックスの作成
+<br>
+テーブルcustomerlistのカラムidに関して、50以上100未満のレコードについてインデックスを作成します。
+</p>
+
+<pre>
+sampledb=# CREATE INDEX special_ids_idx ON customerlist (id) 
+sampledb-#	  　　　　　　　　　　　　WHERE 50 <= id AND id < 100; 
+</pre>
+
+<p>
+・インデックス名の変更
+<br>
+テーブルcustomerlistのインデックスname_idxを、customerlist_idxに変更します。
+</p>
+
+<pre>
+sampledb=# \d customerlist
+            Table "public.customerlist"
+   Column    |  Type   |         Modifiers         
+-------------+---------+---------------------------
+ id          | integer | not null default 0
+ name        | text    | not null default ''::text
+ companycode | integer | not null
+Indexes:
+    "name_idx" btree (name)
+
+sampledb=# ALTER INDEX name_idx RENAME TO customerlist_idx;
+ALTER INDEX
+
+sampledb=# \d customerlist
+            Table "public.customerlist"
+   Column    |  Type   |         Modifiers         
+-------------+---------+---------------------------
+ id          | integer | not null default 0
+ name        | text    | not null default ''::text
+ companycode | integer | not null
+Indexes:
+    "customerlist_idx" btree (name)
+</pre>
+
+<p>
+・インデックスの削除
+<br>
+インデックスの削除例を以下に示します。
+</p>
+
+<pre>
+sampledb=# DROP INDEX test_index; 
+DROP 
+</pre>
+

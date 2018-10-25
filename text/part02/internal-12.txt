@@ -1,0 +1,173 @@
+%FILE internal/internal-12.html
+%LASTMOD
+%KEY pgsql-internal12
+
+%TITLE 補足、および文献と資料
+
+
+%CHAPTER 文献と資料
+
+<pre>
+
+# プロセスとメモリ構造
+
+
+# データベースクラスタ、テーブルの構造
+
+http://ikubo.x0.com/PostgreSQL/pdf/IK04_Storage2_041214.pdf
+
+
+# SQLの実行
+
+パースとアナライズ処理	http://www2b.biglobe.ne.jp/~caco/webdb-pdfs/vol27.pdf		石井
+リライト処理	http://www2b.biglobe.ne.jp/~caco/webdb-pdfs/vol28.pdf		石井
+プラン処理(1)	http://www2b.biglobe.ne.jp/~caco/webdb-pdfs/vol29.pdf		石井
+プラン処理(2)	http://www2b.biglobe.ne.jp/~caco/webdb-pdfs/vol30.pdf		石井
+エクゼキュート処理	http://www2b.biglobe.ne.jp/~caco/webdb-pdfs/vol31.pdf			石井
+
+
+
+# プラン処理
+
+
+Explaining EXPLAIN 第２回	http://bit.ly/JgmDs9	中西
+
+
+
+# バッファマネージャとバックグランドライタ
+
+PostgreSQL解析資料 バックグランドライタプロセス	http://ikubo.x0.com/PostgreSQL/pdf/IK16_bgwriter_060331.pdf		井久保
+
+# トランザクションIDと同時実行制御
+
+PostgreSQL解析資料 MVCC				http://ikubo.x0.com/PostgreSQL/pdf/IK09-mvcc.pdf		井久保
+
+
+# VACUUM
+
+PostgreSQL解析資料 VACUUMの実装			http://ikubo.x0.com/PostgreSQL/pdf/IK14_vacuum.pdf		井久保
+
+
+# HOTとIndex Only Scan
+
+
+第１回 HOTの効果(1)	http://lets.postgresql.jp/documents/tutorial/hot_1/hot1_1	笠原
+第１回 HOTの効果(2)	http://lets.postgresql.jp/documents/tutorial/hot_1/hot1_2	笠原
+第２回 HOTの仕組み(1)	http://lets.postgresql.jp/documents/tutorial/hot_2/hot2_1	笠原
+第３回 HOTの上手な使い方(1)	http://lets.postgresql.jp/documents/tutorial/hot3/hot3_1	笠原
+
+
+# WAL(Write Ahead Logging)
+
+logのしくみ http://www.postgresql.jp/wg/shikumi/shikumi_archive/shikumi_archive_files/20040721105406-shikumi_040726_logging1.pdf	坂田
+
+
+# アーカイブログとPITR
+
+
+
+# レプリケーション
+
+
+</pre>
+
+=======================================================================
+=======================================================================
+=======================================================================
+
+
+PostgreSQL解析資料 ストレージマネージャ(2)	http://ikubo.x0.com/PostgreSQL/pdf/IK04_Storage2_041214.pdf		井久保
+
+
+
+
+稼動統計情報を活用しよう(2)	http://lets.postgresql.jp/documents/technical/statistics/2		笠原
+
+
+バックエンド処理の中身の解析(1)	http://www2b.biglobe.ne.jp/~caco/webdb-pdfs/vol27.pdf	石井
+バックエンド処理の中身の解析(2)	http://www2b.biglobe.ne.jp/~caco/webdb-pdfs/vol28.pdf	石井
+
+
+＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+
+http://ml.postgresql.jp/pipermail/pgsql-jp/2011-June/015787.html
+Serializable Isolation for Snapshot Databases	http://hdl.handle.net/2123/5353	Michael James Cahill. 2009
+http://postgresql.g.hatena.ne.jp/umitanuki/20101124/1290622651
+http://postgresql.g.hatena.ne.jp/umitanuki/20110425/1303752697
+
+
+＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+
+tunning-02.txt:http://lets.postgresql.jp/documents/technical/log_setting
+tunning-02.txt:http://lets.postgresql.jp/documents/technical/statistics/1
+tunning-02.txt:http://lets.postgresql.jp/documents/technical/query_analysis
+tunning-02.txt:http://lets.postgresql.jp/documents/technical/statistics/2
+tunning-03.txt:http://lets.postgresql.jp/documents/technical/bulkload/1
+tunning-03.txt:http://lets.postgresql.jp/map/tuning
+
+maintenance.txt:<td>PostgreSQL 9.0 High Performance</td>	<td>http://www.packtpub.com/postgresql-90-high-performance/book</td>
+maintenance.txt:<td>PostgreSQL 9 Admin Cookbook</td>	<td>http://www.packtpub.com/postgresql-9-admin-cookbook/book</td>
+maintenance.txt:<td>PostgreSQLのチューニング技法</td>	<td>https://www.postgresql.jp/events/pgcon09j/doc/b2-3.pdf</td>
+maintenance.txt:http://www.postgresql.jp/events/pgcon2012/docs/K2.pdf
+
+tunning-03.txt:http://www.postgresql.jp/events/event_sozai/Summer_seminar2011_Operation_technique.pdf
+
+
+charcode-01.txt:(こちらも参照のこと http://www.unisys.co.jp/services/atlasbase/pdf/dbm_1001_postresql.pdf)
+
+＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+
+
+information.txt:	http://www.postgresql.org/ (英語)
+information.txt:	http://www.postgresql.jp/ (日本語)
+information.txt:	http://lets.postgresql.jp/ (日本語)
+
+information.txt:http://www.postgresql.jp/events/pgcon2012/
+information.txt:    http://archives.postgresql.org/pgsql-performance/
+information.txt:    http://wiki.postgresql.org/wiki/Guide_to_reporting_problems
+information.txt:     http://wiki.postgresql.org/wiki/Performance_Optimization
+information.txt:http://wiki.postgresql.org/wiki/Community_Guide_to_PostgreSQL_GUI_Tools/ja
+information.txt:  http://www.postgresql.jp/document/pg841doc/html/pgfreespacemap.html
+information.txt:http://pgfoundry.org/softwaremap/trove_list.php
+information.txt:  http://reorg.projects.postgresql.org/index-ja.html
+information.txt:  http://pgfoundry.org/projects/skytools/
+information.txt:  http://pgfoundry.org/projects/pglesslog/
+information.txt:  http://pgfoundry.org/projects/ptop/
+information.txt:  http://pgfoundry.org/projects/pgstatsinfo/
+information.txt:  http://pgfoundry.org/projects/pgstatspack/
+maintenance.txt:http://code.google.com/p/pg-rman/
+maintenance.txt:  <li>pgstatspack	(http://pgfoundry.org/projects/pgstatspack)</li>
+maintenance.txt:  <li>pg_statsinfo	(http://pgstatsinfo.projects.postgresql.org/pg_statsinfo-ja.html)</li>
+maintenance.txt:  <li>sysstat	(http://sebastien.godard.pagesperso-orange.fr/)</li>
+maintenance.txt:  <li>nagios	(http://www.nagios.org/)</li>
+
+
+maintenance.txt:http://d.hatena.ne.jp/sh2/20090907
+
+sql-out.txt:http://lets.postgresql.jp/documents/technical/partitioning
+sql-out.txt:http://lets.postgresql.jp/documents/technical/partitioning/2/
+
+sql-out.txt:http://www.iso.org/iso/iso_catalogue/catalogue_tc/catalogue_detail.htm?csnumber=34136
+
+
+sql-out.txt:http://lets.postgresql.jp/documents/technical/text-processing/3/
+
+tunning-01.txt:http://d.hatena.ne.jp/sh2/20090907
+
+tunning-03.txt:https://www.postgresql.jp/events/pgcon09j/doc/b2-3.pdf/view
+tunning-03.txt:http://www.pgcon.org/2008/schedule/events/90.en.html
+tunning-03.txt:http://www.pgcon.org/2008/schedule/events/57.en.html
+tunning-03.txt:http://www.pgcon.org/2009/schedule/events/153.en.html
+tunning-03.txt:http://www.pgcon.org/2009/schedule/events/122.en.html
+tunning-03.txt:http://www.pgcon.org/2010/schedule/events/208.en.html
+tunning-03.txt:http://www.pgcon.org/2010/schedule/events/211.en.html
+tunning-03.txt:http://www.pgcon.org/2007/schedule/events/16.en.html
+tunning-03.txt:http://www.pgcon.org/2007/schedule/events/52.en.html
+tunning-03.txt:http://www.pgcon.org/2007/schedule/events/47.en.html
+tunning-03.txt:http://www.pgcon.org/2011/schedule/events/361.en.html
+tunning-03.txt:http://www.pgcon.org/2011/schedule/events/297.en.html
+tunning-03.txt:http://www.pgcon.org/2011/schedule/events/366.en.html
+tunning-03.txt:http://www.pgcon.org/2011/schedule/events/287.en.html
+tunning-03.txt:http://www.pgcon.org/2012/schedule/events/408.en.html
+tunning-03.txt:http://www.pgcon.org/2012/schedule/events/450.en.html
+tunning-03.txt:  http://suckit.blog.hu/2009/09/29/postgresql_history

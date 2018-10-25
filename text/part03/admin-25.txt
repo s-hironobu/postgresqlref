@@ -1,0 +1,210 @@
+%FILE internal/admin-25.html
+%LASTMOD
+%KEY pgsql-admin25
+
+
+%TITLE postgres_fdw
+
+%CHAPTER 設定と実行例
+
+<pre>
+$ cd contrib/postgres_fdw
+$ make && make install
+</pre>
+
+<pre>
+testdb=# CREATE EXTENSION postgres_fdw;
+CREATE EXTENSION
+
+CREATE SERVER remote_server FOREIGN DATA WRAPPER postgres_fdw
+OPTIONS(host 'localhost', port '5555', dbname 'testdb');
+
+testdb=# CREATE SERVER remote_server FOREIGN DATA WRAPPER postgres_fdw
+testdb-# OPTIONS(host 'localhost', port '5555', dbname 'testdb');
+CREATE SERVER
+
+CREATE USER MAPPING FOR PUBLIC SERVER remote_server OPTIONS(user 'postgres');
+CREATE USER MAPPING
+</pre>
+
+<p>
+<font color="#ff0000">
+******外部サーバ remote_serverのpg_hba.confを編集して、このサーバからのアクセスを可能としてください。*******
+</font>
+</p>
+
+
+<pre>
+testdb=# CREATE SCHEMA remote;
+CREATE SCHEMA
+
+testdb=# SET search_path = postgres,public,remote;
+SET
+
+
+testdb=# SELECT * FROM member_list;
+ id |  name  | age | location_id 
+----+--------+-----+-------------
+  1 | SUZUKI |  30 |           1
+  1 | SATO   |  44 |           1
+  1 | SAITO  |  21 |           1
+(3 rows)
+
+testdb=# SELECT * FROM location;
+ location_id | name  
+-------------+-------
+           1 | Japan
+           2 | EU
+           3 | USA
+(3 rows)
+</pre>
+
+<pre>
+CREATE FOREIGN TABLE remote.member_list (id int, name text, age int, location_id int)
+   SERVER remote_server;
+
+testdb=# CREATE FOREIGN TABLE remote.member_list (id int, name text, age int, location_id int)
+testdb-#    SERVER remote_server;
+CREATE FOREIGN TABLE
+
+
+testdb=# IMPORT FOREIGN SCHEMA public LIMIT TO (member_list) FROM SERVER remote_server INTO remote;
+IMPORT FOREIGN SCHEMA
+
+
+testdb=# \d -- remote.member_list は表示されない
+                  List of relations
+ Schema |     Name      |       Type        |  Owner  
+--------+---------------+-------------------+---------
+ public | member_list   | table             | vagrant
+ remote | item_list     | foreign table     | vagrant
+(2 rows)
+
+</pre>
+
+
+<pre>
+testdb=# SELECT * FROM member_list;
+ id |   name   | age | location_id 
+----+----------+-----+-------------
+ 11 | Anderson |  39 |           3
+ 12 | Bowyer   |  61 |           2
+ 13 | Cohen    |  53 |           2
+(3 rows)
+
+
+testdb=# SELECT * FROM remote.member_list UNION SELECT * FROM public.member_list;
+ id |   name   | age | location_id 
+----+----------+-----+-------------
+  1 | SATO     |  44 |           1
+  1 | SUZUKI   |  30 |           1
+ 12 | Bowyer   |  61 |           2
+  1 | SAITO    |  21 |           1
+ 11 | Anderson |  39 |           3
+ 13 | Cohen    |  53 |           2
+(6 rows)
+
+
+testdb=# SELECT m.id, m.name, m.age, l.name FROM remote.member_list AS m, public.location AS l 
+testdb-#         WHERE l.location_id = m.location_id;
+ id |   name   | age | name 
+----+----------+-----+------
+ 12 | Bowyer   |  61 | EU
+ 13 | Cohen    |  53 | EU
+ 11 | Anderson |  39 | USA
+(3 rows)
+
+
+testdb=# WITH m AS (SELECT * FROM remote.member_list UNION SELECT * FROM public.member_list)
+testdb-# SELECT m.id, m.name, m.age, l.name FROM  m, public.location AS l
+testdb-#          WHERE l.location_id = m.location_id;
+ id |   name   | age | name  
+----+----------+-----+-------
+  1 | SATO     |  44 | Japan
+  1 | SUZUKI   |  30 | Japan
+  1 | SAITO    |  21 | Japan
+ 12 | Bowyer   |  61 | EU
+ 13 | Cohen    |  53 | EU
+ 11 | Anderson |  39 | USA
+(6 rows)
+</pre>
+
+
+<!--
+CREATE TABLE member_list (id int, name text, age int, location_id int);
+INSERT INTO member_list VALUES(1, 'SUZUKI', 30, 1);
+INSERT INTO member_list VALUES(1, 'SATO', 44, 1);
+INSERT INTO member_list VALUES(1, 'SAITO', 21, 1);
+
+
+CREATE TABLE location (location_id int, name text);
+INSERT INTO location VALUES(1, 'Japan');
+INSERT INTO location VALUES(2, 'EU');
+INSERT INTO location VALUES(3, 'USA');
+
+----
+CREATE TABLE member_list (id int, name text, age int, location_id int);
+INSERT INTO member_list VALUES(11, 'Anderson', 39, 3);
+INSERT INTO member_list VALUES(12, 'Bowyer', 61, 2);
+INSERT INTO member_list VALUES(13, 'Cohen', 53, 2);
+
+CREATE TABLE item_list (id int, name text, price int, maker_id int);
+
+---
+CREATE FOREIGN TABLE remote.item_list (id int, name text, price int, maker_id int)
+   SERVER remote_server;
+
+----
+test
+
+WITH m AS (SELECT * FROM remote.member_list UNION SELECT * FROM public.member_list)
+SELECT m.id, m.name, m.age, l.name FROM  m, public.location AS l 
+         WHERE l.location_id = m.location_id;
+
+SELECT
+
+-->
+
+<pre>
+testdb=# \des
+            List of foreign servers
+     Name      |   Owner  | Foreign-data wrapper 
+---------------+----------+----------------------
+ remote_server | postgres | postgres_fdw
+(1 row)
+
+
+testdb=# \det
+       List of foreign tables
+ Schema |   Table   |    Server     
+--------+-----------+---------------
+ remote | item_list | remote_server
+(1 row)
+
+testdb=# \deu
+   List of user mappings
+    Server     | User name 
+---------------+-----------
+ remote_server | public
+(1 row)
+
+testdb=# \dew
+                     List of foreign-data wrappers
+     Name     |  Owner   |       Handler        |       Validator        
+--------------+----------+----------------------+------------------------
+ postgres_fdw | postgres | postgres_fdw_handler | postgres_fdw_validator
+(1 row)
+</pre>
+
+%CHAPTER 注意点
+
+
+
+%SECTION トランザクションの隔離レベル
+
+
+%SECTION デッドロック
+
+
+
+

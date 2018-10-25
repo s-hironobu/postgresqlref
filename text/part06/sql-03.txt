@@ -1,0 +1,142 @@
+%FILE internal/sql-03.html
+%LASTMOD
+%KEY pgsql-sql03
+
+%TITLE データベースの作成/変更/削除	CREATE DATABASE / ALTER DATABASE / DROP DATABASE
+
+<pre>
+[<書式>]
+
+● データベースの作成
+CREATE DATABASE name
+    [ [ WITH ] [ OWNER [=] dbowner ]     [ TEMPLATE [=] template ]
+           [ ENCODING [=] encoding ]     [ LC_COLLATE [=] lc_collate ] 
+           [ LC_CTYPE [=] lc_ctype ]
+           [ TABLESPACE [=] tablespace ] [ CONNECTION LIMIT [=] connlimit ] ]
+	   [ ALLOW_CONNECTIONS [=] allowconn ]
+
+●  設定パラメータの設定
+ALTER DATABASE db_name SET variable { TO | = } { value | DEFAULT } 
+
+●  設定パラメータの変更
+ALTER DATABASE db_name RESET variable
+
+● データベース名の変更 
+ALTER DATABASE db_name RENAME TO new_db_name
+
+● データベース所有者の変更
+ALTER DATABASE owner OWNER TO new_owner
+
+● テーブルスペースの変更
+ALTER DATABASE db_name SET TABLESPACE new_tablespace
+					(バージョン8.4から)
+
+● データベースの削除
+DROP DATABASE db_name 
+
+==========================================================================
+パラメータ	説明[デフォルト値]
+==========================================================================
+db_name		作成/変更/削除するデータベース名
+dbowner		データベースの所有者
+tablespace	データベースを作成するテーブルスペース
+dbpath		データベースクラスタのあるディレクトリ(ベースディレクトリ)
+template	作成するデータベースのテンプレート[template1]
+encoding	作成するデータベースのエンコーディング[initdb実行時に指定したエンコーディグ]
+connlimit	このデータベースに接続できる最大数。デフォルト-1は無制限。バージョン8.1から
+allowconn	falseの場合は誰もこのデータベースに接続できない。バージョン9.5から
+lc_collate	データベースで使用する照合順（LC_COLLATE)。バージョン8.4から
+lc_ctype	データベースで使用する文字のクラス（LC_CTYPE）。バージョン8.4から
+variable	設定パラメータ名
+value		設定パラメータの設定値
+new_db_name	新たに設定するデータベース名
+new_tablespace	変更するテーブルスペース。バージョン8.4から
+owner		データベースの所有者
+new_owner	データベースの新しい所有者
+==========================================================================
+</pre>
+
+%CHAPTER 解説
+
+<p>
+CREATE DATABASE文とDROP DATABASE文を実行できるのは、データベース作成権限を持つデータベースユーザだけです。
+\duメタコマンドでデータベースユーザの権限を表示できます。
+</p>
+
+<p>
+ALTER DATABASE文のSET形式とRESET形式で、データベースの設定パラメータの設定や変更ができます。
+これはSET文[<6-45>]と同機能です。
+<br>
+ALTER DATABASE文のRENAME TO形式でデータベース名を、OWNER TO形式で所有者を、それぞれ変更できます。
+</p>
+
+<p>
+・マルチバイトコードの利用
+<br>
+日本語などのマルチバイトコードを利用する場合、ENCODING句にエンコーディングを設定します。
+指定できるエンコーディングの一覧は[<3-03>]にあります。日本語利用についても[<3-03>]を参照してください。
+</p>
+
+<p>
+・OWNER
+<br>
+データベースの所有者を設定します。'DEFAULT'という文字列を設定すると、CREATE DATABASE文を実行したデータベースロールが所有者になります。
+</p>
+
+
+<p>
+・TABLESPACE
+<br>
+テーブルスペースの作成や利用方法は[<6-02>]を参照してください。
+</p>
+
+%CHAPTER 実行例
+
+<p>
+・エンコーディングを指定してデータベースを作成
+</p>
+
+<p>
+エンコーディングを指定してデータベースを作成します。
+</p>
+
+<pre>
+template1=# CREATE DATABASE sampledb WITH ENCODING = 'UTF-8'; 
+CREATE DATABASE
+template1=# \l
+                                  List of databases
+   Name    |  Owner   | Encoding |   Collate   |    Ctype    |   Access privileges   
+-----------+----------+----------+-------------+-------------+-----------------------
+ sampledb  | postgres | UTF8     | ja_JP.UTF-8 | ja_JP.UTF-8 | 
+ postgres  | postgres | UTF8     | ja_JP.UTF-8 | ja_JP.UTF-8 | 
+ template0 | postgres | UTF8     | ja_JP.UTF-8 | ja_JP.UTF-8 | =c/postgres          +
+           |          |          |             |             | postgres=CTc/postgres
+ template1 | postgres | UTF8     | ja_JP.UTF-8 | ja_JP.UTF-8 | =c/postgres          +
+           |          |          |             |             | postgres=CTc/postgres
+(4 rows)
+</pre>
+
+<p>
+・設定パラメータの設定値を変更
+<br>
+データベースsampledbについて、設定パラメータenable_indexscan([<4-07>]参照) をOFFにします。
+</p>
+
+<pre>
+sampledb=# ALTER DATABASE sampledb SET enable_indexscan TO off; 
+ALTER DATABASE 
+</pre>
+
+<p>
+・データベースの削除
+</p>
+
+<p>
+データベースの削除は以下のように行います。
+</p>
+
+<pre>
+template1=# DROP DATABASE sampledb; 
+</pre>
+
+

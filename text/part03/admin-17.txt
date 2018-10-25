@@ -1,0 +1,784 @@
+%FILE internal/admin-17.html
+%LASTMOD
+%KEY pgsql-admin17
+
+%TITLE モニタリングツール
+
+<p>
+PostgreSQLやOSをモニタリングするツールをいくつか紹介します。
+</p>
+
+
+
+%CHAPTER pg_activity
+
+<p>
+pythonで実装されたツールpg_activityは、PostgreSQLのactivityをリアルタイムでターミナルに表示する、topコマンドのようなtoolです。
+</p>
+
+<ul>
+<li><a href="https://github.com/julmon/pg_activity/">https://github.com/julmon/pg_activity/</a></li>
+</ul>
+
+
+%SECTION インストール
+
+<p>
+pg_activityを実行するにはpythonの言語環境と、
+pythonの
+psycopg2とpsutilが必要です。予め、これらをインストールしておいてください。
+</p>
+
+<p>
+pg_activityのURLから、アーカイブpg_activity-master.zip をダウンロードし、
+以下の手順でインストールします。
+</p>
+</font>
+
+<pre>
+postgres> unzip pg_activity-master.zip 
+postgres> cd pg_activity-master
+postgres> export PATH=$PATH:/usr/local/pgsql/bin/
+postgres> sudo python ./setup.py  install
+</pre>
+
+%SECTION 実行例
+
+<p>
+以下のように、ターミナルからpg_activityを起動すると、Fig X-XXのように接続したDatabaseのactivityをリアルタイムで表示できます。
+デフォルトでは2秒毎に画面が更新されます。
+</p>
+
+<pre>
+postgres> pg_activity -h localhost -U postgres -d sampledb
+</pre>
+
+
+
+<table border=1>
+<caption>[< fig 4-XX>] pg_activity<br></caption>
+<tr><td>
+<left>
+<img src="./pg_activity.jpg" width="640" height="400"><br>
+</left>
+</td></tr></table>
+
+
+<p>
+pg_activityはいくつかのモードがあり、
+Waiting queriesやBlocking queriesだけを表示することもできます。
+</p>
+
+<table border=1>
+<caption>[< fig 4-XX>] pg_activity (display: Blocking queries)<br></caption>
+<tr><td>
+<left>
+<img src="./pg_activity2.jpg" width="640" height="400"><br>
+</left>
+</td></tr></table>
+
+
+<p>
+簡単にDatabaseのactivityを表示できるので、
+管理PCにインストールしておくと便利です。
+</p>
+
+<p>
+なお、ほとんど同じようなtoolにpg_viewがあります。機能もほとんど同じなので、ユーザの好みで選択すると良いでしょう。
+</p>
+
+<ul>
+<li><a href="https://github.com/zalando/pg_view">https://github.com/zalando/pg_view</a></li>
+</ul>
+
+%CHAPTER pgstatspack
+
+<p>
+pgstatspackは、稼働統計情報の収集と分析を行ういくつのシェルスクリプトからなるツール群です。
+<br>
+pgstatspackの仕組みは非常に簡単で、PostgreSQL内部に稼働統計情報保存用のテーブルを作り、
+シェルスクリプトの実行をトリガとして稼働統計情報を保存していきます。
+定期的に情報を集計するにはcronを使います。
+</p>
+
+%SECTION インストール
+<p>
+以下のサイトからパッケージをダウンロードします。
+</p>
+
+<pre>
+http://pgfoundry.org/frs/?group_id=1000375
+</pre>
+
+<p>
+インストールするディレクトリに展開し、インストールスクリプトinstall_pgstats.shを実行します。
+</p>
+
+<pre>
+postgres> tar xvfz pgstatspack_version_2.3.1.tar.gz
+postgres> cd pgstatspack
+postgres> PATH=/usr/local/pgsql/bin:$PATH ./install_pgstats.sh
+</pre>
+
+%SECTION 稼働統計情報の取得
+
+<p>
+関数pgstatspack_snap()を実行する度に、その瞬間の稼働統計情報をテーブルに保存していきます。
+</p>
+
+<pre>
+postgres> psql -q template1
+template1=# SELECT pgstatspack_snap('');
+</pre>
+
+
+<p>
+cronで定期的に統計情報を収集するためのスクリプト(snapshot.sh)も用意されています。
+pgstatspackの開発者は15分毎の実行を推奨しています。
+</p>
+
+<p>
+また、保存した稼働統計情報を削除するスクリプトdelete_snapshot.shもあるので、必ず定期的に実行してください。
+<br>
+バージョン2.3のdelete_snapshot.shは30日より前の情報を削除するように実装されています(30日以内の情報は削除できない)。よって、毎日実行すれば常に30日間のデータのみ保存し続けることになります。
+<br>
+ただし、バージョンによって挙動が異なる場合もあるので確認してください。
+</p>
+
+<p>
+crontabの記述例を示します。snapshot.shは15分毎、delete_snapshot.shは毎日午前1時30分に実行します。
+</p>
+
+[< crontabの記述例>]
+<pre>
+*/15 * * * * PATH=/usr/local/pgsql/bin:$PATH /dir/snapshot.sh 1>/dev/null 2>&1
+30   1 * * * PATH=/usr/local/pgsql/bin:$PATH /dir/delete_snapshot.sh 1>/dev/null 2>&1
+</pre>
+
+%SECTION レポート
+
+<p>
+取得した稼働統計情報を集計してレポートを作成するスクリプトpgstatspack_report.shもあります。
+</p>
+
+<p>
+オプション-uにデータベースユーザ名、-dに統計情報を収集するデータベース名、-fにレポートを書き込むファイル名を指定して実行します。
+<br>
+すると、保存している稼働統計情報の一覧を表示し、
+どこから(start snapshot id)どこまで(stop snapshot id)集計するか、尋ねてきます。
+<br>
+必要な範囲の稼働統計情報のid番号を入力すると、指定したファイルにレポートを書き込みます。
+</p>
+
+<pre>
+postgres> ./pgstatspack_report.sh -u postgres -d sampledb -f report.txt
+ snapid |             ts             |     description     
+--------+----------------------------+---------------------
+      7 | 2012-04-14 20:30:01.591125 | cron based snapshot
+
+.,. 略 ...
+
+      2 | 2012-04-14 19:15:01.593137 | cron based snapshot
+      1 | 2012-04-14 19:00:01.896974 | cron based snapshot
+(7 rows)
+
+Enter start snapshot id : 1
+Enter stop snapshot id  : 7
+</pre>
+
+
+%CHAPTER pgBadger
+
+<p>
+log analyzer toolを一つであるpgBadgerを紹介します。
+pgBadgerはPerlで作られたPostgreSQLのserver logの分析ツールで、
+似たようなログ分析ツールであるpgFouineの代替を目指して開発されています。
+</p>
+
+<ul>
+<li><a href="http://dalibo.github.io/pgbadger/">http://dalibo.github.io/pgbadger/</a></li>
+</ul>
+
+
+<p>
+後発のpgBagderはpgFouineと比較して次の長所があります。
+</p>
+
+<ol>
+<li>分析できる項目が多い</li>
+<p>
+pgBadgerの機能紹介を兼ねて、pgBadgerが分析できる項目をリストアップします。比較のためにpgFouineの分析項目も併記します。
+ご覧のように、pgBadgerは多くの役に立つ分析ができます。
+</p>
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>分析項目</th>　　　<th>pgBadger</th><th>pgFouine</th>
+</tr><tr>
+<td>Overall statistics </td>	<td>X</td>	<td>X</td>
+</tr><tr>
+<td>Hourly statistics	</td>	<td>X</td>	<td></td>
+</tr><tr>
+<td>Queries by type </td>	<td>X</td>	<td>X</td>
+</tr><tr>
+<td>Sessions per database	</td>	<td>X</td>	<td></td>
+</tr><tr>
+<td>Sessions per user 		</td>	<td>X</td>	<td></td>
+</tr><tr>
+<td>Sessions per host 	</td>	<td>X</td>	<td></td>
+</tr><tr>
+<td>Connections per database 	</td>	<td>X</td>	<td></td>
+</tr><tr>
+<td>Connections per user 	</td>	<td>X</td>	<td></td>
+</tr><tr>
+<td>Connections per host 	</td>	<td>X</td>	<td></td>
+</tr><tr>
+<td>Queries that took up the most time (N)  	</td>	<td>X</td>	<td>X</td>
+</tr><tr>
+<td>Most frequent queries (N) 	</td>	<td>X</td>	<td>X</td>
+</tr><tr>
+<td>Slowest queries (N) </td>	<td>X</td>	<td>X</td>
+</tr><tr>
+<td>Most frequent events (N) </td>	<td>X</td>	<td>X</td>
+</tr><tr>
+<td>Logs per type </td>	<td>X</td>		<td></td>
+</tr><tr>
+</table>
+
+<br>
+
+
+<li>グラフィカルな表示ができる</li>
+<p>
+結果をpie chartsやtime based chartsで表示できます。
+</p>
+
+<li>log_line_prefixの制約が少ない。</li>
+<p>
+pgFouineはlog_line_prefixに特定の値を設定しなければなりませんが、
+pgBadgerは自由にlog_line_prefixを設定できます。
+</p>
+
+
+<li>file formatを自動検出(autodetect)する</li>
+
+<p>
+syslog, csvlog, server logの違いを自動検出します。
+<br>
+また、gzipで圧縮されたfileを、圧縮されたまま分析できます。
+server logは巨大になり易いので、この機能はとても有用です。
+</p>
+
+<li>incremental mode</li>
+<p>
+Incremental modeはversion 5.0からサポートされた機能で、
+ログを分析した結果を、日別に表示できます。
+この機能によって、log messagesの分析がより便利になるでしょう。
+</p>
+<blockquote>
+It is possible to run pgbadger each days or even more, each hours, and have cumulative reports per day and per week. A top index page allow you to go directly to the weekly and daily reports. 
+</blockquote>
+
+
+<table border=1>
+<caption>[< fig 4-XX>] pgBadger<br></caption>
+<tr><td>
+<left>
+<img src="./pgBadger3.jpg"><br>
+</left>
+</td></tr>
+</table>
+
+
+</ol>
+
+<p>
+pgBadgerは上記のような長所を持つので、
+これまでpgFouineを使っていたユーザも、pgBadgerの使用を検討するとよいでしょう。
+</p>
+
+
+%SECTION ダウンロードとインストール
+
+<p>
+以下のサイトからpgBadgerのアーカイブをダウンロードします。
+</p>
+
+<pre>
+http://sourceforge.net/projects/pgbadger/files/latest/download
+</pre>
+
+<p>
+ダウンロードしたアーカイブを、PostgreSQLのcontribディレクトリで展開し、
+make とmake installを実行します。
+</p>
+
+<pre>
+cd postgresql-9.3.2/contrib
+tar xvfz pgbadger-5.0.tar.gz
+
+cd pgbadger-5.0
+perl Makefile.PL
+make
+sudo make install
+
+# make install
+Installing /usr/local/share/man/man1/pgbadger.1
+Installing /usr/local/bin/pgbadger
+Appending installation info to /Library/Perl/Updates/5.16.2/darwin-thread-multi-2level/perllocal.pod
+</pre>
+
+
+%SECTION 設定
+
+<p>
+potgresql.confにいくつかのパラメータを設定します。
+詳細はpgBadgerのREADMEを参照してください。
+ここでは参考値(reference values)を示します。
+</p>
+
+<pre>
+#------------------------------------------------------------------------------
+# ERROR REPORTING AND LOGGING
+#------------------------------------------------------------------------------
+# - Where to Log -
+log_destination = 'stderr'
+logging_collector = on
+
+# - What to Log -
+log_checkpoints = on
+log_connections = on
+log_disconnections = on
+log_line_prefix = '%t [%p]: [%l-1] user=%u,db=%d '
+log_lock_waits = on
+log_temp_files = 0
+
+# - When to Log -
+log_min_duration_statement=500
+
+#------------------------------------------------------------------------------
+# RUNTIME STATISTICS
+#------------------------------------------------------------------------------
+# - Query/Index Statistics Collector -
+track_io_timing = on
+track_functions = all 
+# - Statistics Monitoring -
+log_statement_stats = on
+
+#------------------------------------------------------------------------------
+# CLIENT CONNECTION DEFAULTS
+#------------------------------------------------------------------------------
+# - Locale and Formatting -
+lc_messages='C'
+
+</pre>
+
+
+%SECTION ログ分析
+
+<p>
+ログの分析はpgbadgerコマンドで行います。
+例として、2014年2月14日のログの分析を行いましょう。
+次のコマンドを実行すると、out.htmlというHTMLフォーマットのファイルが生成されます。
+</p>
+
+<pre>
+postgre> pgbadger --prefix '%t [%p]: [%l-1] user=%u,db=%d ' \
+>   $PGDATA/pg_log/postgresql-2014-02-17_*.log
+</pre>
+
+<p>
+ブラウザでout.htmlにアクセスしてください。
+分析結果が多くのグラフと共に表示されます。
+</p>
+
+<table border=1>
+<caption>[< fig 4-XX>] pgBadger<br></caption>
+<tr><td>
+<left>
+<img src="./pgBadger1.jpg" width="400" height="300"><br>
+</left>
+</td>
+<td>
+<left>
+<img src="./pgBadger2.jpg" width="400" height="300"><br>
+</left>
+</td></tr>
+</table>
+
+
+====================
+
+%CHAPTER pg_statsinfo
+
+<p>
+pg_statsinfoは日本で開発されているPostgreSQL専用の監視ツールです。
+監視データをgraphicalに表示するpg_stats_reporterも開発されています。
+</p>
+
+
+<ul>
+<li>pg_statsinfo</li>
+<a href="http://pgstatsinfo.projects.pgfoundry.org/index.html">http://pgstatsinfo.projects.pgfoundry.org/index.html</a>
+<li>pg_stats_reporter</li>
+<a href="http://pgstatsinfo.projects.pgfoundry.org/pg_stats_reporter.html">http://pgstatsinfo.projects.pgfoundry.org/pg_stats_reporter.html</a>
+</ul>
+
+
+<p>
+pg_stats_infoの特徴は4つあります。
+第一に、多くのitemを監視していることです。
+他のMonitorting softwareが監視しているitemに加えて、
+WAL statisticsやFragmented Tableやreplication statusなど、
+とても有用なitemsがサポートされています。
+第二に、PostgreSQLだけでなくOSのactivity(cpu load, io, memory usage)も監視する統合monitoring softwareであることです。
+pg_statsinfoはPostgreSQLを運用するための監視itemを全てカバー(cover)しています。
+第３に、pg_stats_reporterというgraphical displayをするfront endがあることです。
+そして最後に、pg_stats_infoはLinux専用のsoftwareであることです。
+残念ながらLinux以外のOSでは稼働しません。
+</p>
+
+<p>
+pg_statsinfoがカバーする監視itemsを以下に示します。
+他のmonitoring softwareよりも詳細で有用なstatisticsを収集、表示できることがわかると思います。
+</p>
+
+<ul>
+<li>All of the information collected by the statistics collector. For example, numbers of INSERT/UPDATE/DELETE and buffer access counters.</li>
+<li>Disk usages of each tablespace, pg_xlog, and archive log directory.</li>
+<li>Long transactions and their query strings.</li>
+<li>Process status in running, waiting for locks, idles in transaction, and idle.</li>
+<li>Amount of WAL output size.</li>
+<li>Number of CHECKPOINT ,VACUUM execution time and access of buffers.</li>
+<li>SQLs and functions that take long time.</li>
+<li>PostgreSQL configuration parameters.</li>
+<li>Lock information</li>
+<li>Number of canceled queries which conflicts recovery</li>
+<li>State fo replication</li>
+<li>OS resource information(Usage of CPU, Memory, Disk I/O, Load Average)</li>
+</ul>
+
+<br>
+
+<p>
+pg_statsinfoとpg_stats_reporterは、これまで説明したmonitoring softwareと違い、構造が少し複雑です。
+ここで、pg_statsinfoとpg_stats_reporterを理解するために、これらの構造を図解して、
+動作の仕組みを解説することにします。
+</p>
+
+<table border=1>
+<caption>[< fig 4-XX>] pg_statsinfo + pg_stats_reporter architecture<br></caption>
+<tr><td>
+<left>
+<img src="./pg_statsinfo.jpg"  width="600" height="400"><br>
+</left>
+</td></tr></table>
+
+<br>
+<br>
+
+<p>
+監視データの保存場所から説明しましょう。
+PostgreSQLのデータベースpostgresにstatsinfoというschemaがあり、
+そのschemaに監視データ保存のためのいくつかのテーブルを作ります。
+<br>
+また、取得した(PostgreSQLの)沢山のstatisticsをそれらのテーブルに格納するfunctionsや、
+それらのテーブルからデータを取得するfunctionsやviewsを定義します。
+</p>
+
+<p>
+監視データを取得するのはpg_statsinfodというプロセスです。
+pg_statsinfodプロセスが周期的に、
+監視データを取得するためにfunctionsを実行したり、
+OSのstatisticsをテーブルに書き込んだり、
+取得した監視データのmaintenance(古いデータの削除など)を行います。
+<br>
+pg_statsinfodプロセスは、PostgreSQLの"statsinfo launcher"というbackendに制御(control)されていて、
+PostgreSQLの起動と共にpgstatsinfodが起動されて、PostgreSQLの停止と共にpg_statsinfodも停止します。
+</p>
+
+<p>
+データベースpostgresのstatsinfo schemaに保存された監視データは、
+pg_statsinfoというクライアントsoftwareでPostgreSQLにアクセスすることで、取得(get)できます。
+</p>
+
+<p>
+graphical front endであるpg_stats_reporterは、web serverからcallされて起動し、
+pg_statsinfoのデータをgraphicalに整形してweb serverに渡します。
+</p>
+
+
+
+<table border=1>
+<caption>[< fig 4-XX>] pg_statsinfo: WAL<br></caption>
+<tr><td>
+<left>
+<img src="./pg_statsinfo-WAL.jpg"><br>
+</left>
+</td></tr></table>
+
+
+<table border=1>
+<caption>[< fig 4-XX>] pg_statsinfo: Fragmented tables<br></caption>
+<tr><td>
+<left>
+<img src="./pg_statsinfo-FRAGMENTED-TABLES.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+<br>
+
+
+<p>
+pg_statsinfoのインストール方法は多少煩雑なので、本書では説明を省略します。
+Documentが完備しているので、是非使ってみることを勧めます。
+</p>
+
+
+<table border=1>
+<caption>[< fig 4-XX>] pg_stats_reporter<br></caption>
+<tr><td>
+<left>
+<img src="./pg_stats_reporter.jpg" width="640" height="400"><br>
+</left>
+</td></tr></table>
+
+
+
+%CHAPTER sysstat(sar)
+
+<p>
+sysstatはOSの統計情報を収集するツールです。もともとはLinux用に作られましたが、Solarisなど他のOSにも移植されました。
+<br>
+収集する情報はHDDなどのI/O情報をはじめ、ネットワーク、メモリやCPUの統計情報など広範囲に渡ります。
+
+</p>
+
+<p>
+使いかたは非常に簡単です。
+例えば10秒毎に60回データ収集し、結果を/tmp/sar.logに保存するには次のコマンドを実行します。
+</p>
+
+<pre>
+postgres> sar -o /tmp/sar.log 10 60
+</pre>
+
+<p>
+情報収集後、必要な情報を取り出します。
+例えばI/Oなら"-b"オプションでsarコマンドを実行します。
+</p>
+
+<pre>
+postgres> LANG=C sar -b -f /tmp/sar.log
+...
+
+03:20:05          tps      rtps      wtps   bread/s   bwrtn/s
+03:20:15       468.07     49.35    418.72   2043.64   9638.44
+03:20:25       369.93    331.67     38.26   9412.19   1034.97
+03:20:35       319.15    304.74     14.41   4377.49    469.10
+....
+</pre>
+
+<p>
+この他、非常に多くのオプションがあります。
+利用時は--helpで確認してください。
+</p>
+
+<p>
+Linuxのディストリビューションによっては、パッケージでインストールすると自動的にcronで定期的な情報収集を行っている場合があります。
+各自利用しているOSのマニュアルを参照してください。
+</p>
+
+
+<p>
+systsatの収集したログ(ここでは/tmp/sar.log)をグラフ化して表示するツールkSarも公開されています。
+kSarはJavaベースのツールで、GUIで直感的に操作できます。
+</p>
+
+<pre>
+kSar	http://sourceforge.net/projects/ksar/
+</pre>
+
+
+
+%CHAPTER 汎用監視ソフトウエア
+
+<p>
+最後に、汎用の監視ソフトウエアについて簡単に説明します。
+</p>
+
+<p>
+現在、オープンソースのgeneral-purpose monitoring and alerting softwareが多数、リリースされています。
+これらのmonitoring softwareは、CPUやメモリなどハードウエアのactivity、
+ネットワークのトラフィック、DBMSを代表とするMiddle wareのstatisticsなど、
+システム全体をモニタリングできるように作られています。
+また、収集したactivityやstatisticsをpie chartやline chartによってgraphicalにdisplayできます。
+</p>
+
+
+<p>
+ほとんどのopen source monitoring softwareは、
+プラグインやテンプレートで監視項目を後から追加できます。
+プラグインによる監視項目の拡張の仕組みを、簡単に説明します。
+</p>
+
+
+
+<table border=1>
+<caption>[< fig 4-XX>] monitoring system's plugin architecture <br></caption>
+<tr><td>
+<left>
+<img src="./monitoring_plugin.jpg"><br>
+</left>
+</td></tr></table>
+
+
+<p>
+プラグインやテンプレートのformatはmonitoring softwareに依存して異なりますが、
+記述されている内容はほぼ同じです。
+ここでは、PostgreSQLのdatabase activityをmonitorするプラグインを例にして説明します。
+</p>
+
+<p>
+プラグインにはdatabase activityをmonitorするために、statistic view pg_stat_databaseをSELECTするqueryが書かれています。
+monitoring softwareがPostgreSQLのdatabase activityを求める時は、
+psql clientを使ってプラグインに記述されたqueryを実行して、
+結果を得ます。
+</p>
+
+
+<p>
+monitoring softwareがPostgreSQLからstatisticsを得るには、
+psql clientを使ってstatistics viewやfunctionを求めるqueryを実行する以外にありません。
+よって、monitoring softwareのプラグインの間に大きな違いは無く(There is no big difference between the plugins of them)、
+ほとんど同じ監視項目が並んでいます(All monitoring softwares have almost the same monitoring items.)。
+<br>
+また、サポートされていない監視項目がある場合であっても、statistics view or/and functionを求めるqueryを作成することで、ユーザ自身が監視項目を追加できます。
+</p>
+
+
+<p>
+以下に、いくつかの有名なmonitoring softwareを列挙します。
+</p>
+
+%SECTION Nagios
+
+<ul>
+<li><a href="http://www.nagios.org/">http://www.nagios.org/</a></li>
+</ul>
+
+<p>
+NagiosはLinuxを含むUNIX系OS上で動作する、open sorce monitoring and alerting softwareです。
+おそらく最も多く使われている監視システムでしょう。
+PostgreSQLのためのいくつかのpluginが公開されていて、
+それらをリストアップするサイトも存在します。
+</p>
+
+<ul>
+<li><a href="http://exchange.nagios.org/directory/Plugins/Databases/PostgresQL">http://exchange.nagios.org/directory/Plugins/Databases/PostgresQL</a></li>
+</ul>
+
+<p>
+これらの中で、最も多機能で最も多く使われているpluginは"check_postgres"です。
+</p>
+
+<ul>
+<li><a href="http://exchange.nagios.org/directory/Plugins/Databases/PostgresQL/check_postgres/details">http://exchange.nagios.org/directory/Plugins/Databases/PostgresQL/check_postgres/details</a></li>
+</ul>
+
+
+
+%SECTION Cacti
+
+<ul>
+<li><a href="http://www.cacti.net/">http://www.cacti.net/</a></li>
+</ul>
+
+<p>
+CactiはPHPで実装されたMonitoring softwareです。収集した監視データはRRDtoolに保存します。
+Cactiは高機能であるにも関らず、Nagiosと比較して設定や管理が簡単です。
+PostgreSQLのための、非常にすぐれたtemplateが公開されています。これはグラフ表示も含めて簡単に設定が可能です。
+</p>
+
+<ul>
+<li><a href="https://github.com/palominodb/cacti-templates/blob/master/postgres/README.md">https://github.com/palominodb/cacti-templates/blob/master/postgres/README.md</a></li>
+</ul>
+
+<p>
+Cactiは上に示したtemplateだけでなく、check_postgresなど、Nagiosのpluginも使えます。
+</p>
+
+<table border=1>
+<caption>[< fig 4-XX>] cacti screen shot<br></caption>
+<tr><td>
+<left>
+<img src="./cacti.jpg" width="640" height="400"><br>
+</left>
+</td></tr></table>
+
+
+
+%SECTION Munin
+
+<ul>
+<li><a href="http://munin-monitoring.org/">http://munin-monitoring.org/</a></li>
+</ul>
+
+<p>
+MuninはPerlで実装されたMonitoring softwareです。収集したデータは、Cactiと同じく、RRDtoolに保存します。
+Muninはここで紹介したmonitoring softwareの中で最も設定や運用が簡単です。
+<br>
+Muninのプラグインは以下のURLにまとまっています。
+</p>
+
+<ul>
+<li><a href="https://github.com/munin-monitoring/contrib/">https://github.com/munin-monitoring/contrib/</a></li>
+</ul>
+
+<p>
+PostgreSQLのためのpluginは以下のURLからダウンロードできます。
+</p>
+
+<ul>
+<li><a href="https://github.com/munin-monitoring/contrib/tree/master/plugins/postgresql">https://github.com/munin-monitoring/contrib/tree/master/plugins/postgresql</a></li>
+</ul>
+
+
+<p>
+他のmoniroting softwareと比較して、muninのPostgreSQLのためのpluginの数が少ないです、
+しかしmuninのpluginのフォーマットはとてもsimpleなので、簡単に新しいpluginを実装できると思います。
+</p>
+
+<table border=1>
+<caption>[< fig 4-XX>] munin screen shot<br></caption>
+<tr><td>
+<left>
+<img src="./munin.jpg" width="640" height="400"><br>
+</left>
+</td></tr></table>
+
+
+%SECTION Zabbix
+
+<ul>
+<li><a href="http://www.zabbix.com/">http://www.zabbix.com/</a></li>
+</ul>
+
+<p>
+ZabbixはC言語で実装されたalerting and monitoring softwareで、
+特にalerting機能がより充実していて、alertを出す複雑な条件を設定できます。
+<br>
+しかし、Zabbixのmoniroting機能には大きな制約があります。
+その制約とは、監視項目(item)毎に1データしか取得できないということです。
+例えばstatictics viewのデータを一度に収集することは困難です。
+そのため、ZabbixはPostgreSQLのmonitoringにはあまり適していません。
+ZabbixはPostgreSQLのalert機能だけを利用して、monitoringはpg_statsinfoを使うなど、
+役割分担をして他のmonitoring softwareと併用すると良いでしょう。
+<br>
+Zabbix用のPostgreSQL監視テンプレートは、以下のURLに示すpg_monzが公開されています。
+</p>
+
+
+<ul>
+<li><a href="http://pg-monz.github.io/pg_monz/index-en.html">http://pg-monz.github.io/pg_monz/index-en.html</a></li>
+</ul>

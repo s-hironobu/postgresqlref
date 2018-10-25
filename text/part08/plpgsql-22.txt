@@ -1,0 +1,59 @@
+%FILE internal/plpgsql-22.html
+%LASTMOD
+%KEY pgsql-plpgsql22
+
+%TITLE  FOREACH
+
+<pre>
+[<書式>]
+
+[ <<label>> ]
+FOREACH target [ SLICE number ] IN ARRAY expression LOOP
+    statements
+END LOOP [ label ];
+
+======================================================================
+パラメータ	説明
+======================================================================
+target		取り出した配列の要素
+number		処理する配列の要素数。デフォルトは0で全て
+expression	処理を行う配列
+statements	取り出した要素targetに対して処理を行う
+label		ラベル
+======================================================================
+</pre>
+
+[<解説>]
+
+<p>
+FOREACHループは、配列の中身を取り出して繰り返し処理を行う場合に使います。
+</p>
+
+
+[<実行例>]
+
+<p>
+公式ドキュメントにある例を示します。
+</p>
+
+<pre>
+testdb=# CREATE FUNCTION sum(int[]) RETURNS int8 AS $$
+testdb$# DECLARE
+testdb$#   s int8 := 0;
+testdb$#   x int;
+testdb$# BEGIN
+testdb$#   FOREACH x IN ARRAY $1
+testdb$#   LOOP
+testdb$#     s := s + x;
+testdb$#   END LOOP;
+testdb$#   RETURN s;
+testdb$# END;
+testdb$# $$ LANGUAGE plpgsql;
+CREATE FUNCTION
+
+testdb=# SELECT sum('{1,2,3,4}'::int[]);
+ sum 
+-----
+  10
+(1 row)
+</pre>

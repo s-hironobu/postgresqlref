@@ -1,0 +1,45 @@
+%FILE internal/func-17.html
+%LASTMOD
+%KEY pgsql-func17
+
+%TITLE レプリケーションSQL関数
+
+
+
+<p>
+表9.72 レプリケーションSQL関数
+</p>
+<pre>
+関数   戻り値型	説明
+pg_create_physical_replication_slot(slot_name name)	(slot_name name, xlog_position pg_lsn)	slot_nameという名前の新しい物理レプリケーションスロットを作成します。 物理スロットからのストリーミングの変更はストリーミングレプリケーションプロトコルでのみ可能です。「ストリーミングレプリケーションプロトコル」を参照してください。 レプリケーションプロトコルコマンドCREATE_REPLICATION_SLOT ... PHYSICALに対応します。
+pg_drop_replication_slot(slot_name name)      void 	slot_nameという名前の物理もしくは論理レプリケーションスロットを削除します。 レプリケーションプロトコルコマンドDROP_REPLICATION_SLOTと同じです。
+pg_create_logical_replication_slot(slot_name name, plugin name) 								    (slot_name name, xlog_position pg_lsn)  slot_nameという名前の新しい論理(デコード)レプリケーションスロットを作成します。 この関数を呼び出すのはレプリケーションプロトコルコマンドCREATE_REPLICATION_SLOT ... LOGICALと同じ効果があります。
+pg_logical_slot_get_changes(slot_name name, upto_lsn pg_lsn, upto_nchanges int, VARIADIC options text[]) 			    (location pg_lsn, xid xid, data text)   変更が最後に消費された時点から開始して、スロットslot_nameの変更を返します。 upto_lsnとupto_nchangesがNULLならば論理デコードはWALの最後まで続きます。 upto_lsnが非NULLであれば、デコードは指定されたLSNより前にコミットされたトランザクションのみを含みます。 upto_nchangesが非NULLであれば、デコードにより生成された行の数が指定された値を越えたときに、デコードは止まります。 しかしながら、新しいトランザクションの各コミットをデコードして生成された行を追加した後でしかこの制限は確認されませんので、実際に返される行の数は大きいかもしれないことに注意してください。
+pg_logical_slot_peek_changes(slot_name name, upto_lsn pg_lsn, upto_nchanges int, VARIADIC options text[]) 			    (location text, xid xid, data text)     変更が消費されないということを除いて、pg_logical_slot_get_changes()関数と同じように振る舞います。すなわち、将来の呼び出しでは再び同じものが返ります。
+pg_logical_slot_get_binary_changes(slot_name name, upto_lsn pg_lsn, upto_nchanges int, VARIADIC options text[]) 		    (location pg_lsn, xid xid, data bytea)  変更はbyteaとして返されるということを除いてpg_logical_slot_get_changes()関数と同じように振る舞います。
+pg_logical_slot_peek_binary_changes(slot_name name, upto_lsn pg_lsn, upto_nchanges int, VARIADIC options text[]) 		    (location pg_lsn, xid xid, data bytea)  変更はbyteaとして返され消費されないということを除いてpg_logical_slot_get_changes()関数と同じように振る舞います。すなわち、将来の呼び出しでは再び同じものが返ります。
+pg_replication_origin_create(node_name text)  oid   指定した外部名でレプリケーション起点を作成し、割り当てられた内部IDを返します。
+pg_replication_origin_drop(node_name text)    void  以前に作成されたレプリケーション起点を、それに関連するすべての再生の進捗も含めて削除します。
+pg_replication_origin_oid(node_name text)     oid   レプリケーション起点を名前で検索し、内部IDを返します。 相当するレプリケーション起点が見つからない場合はエラーが発生します。
+pg_replication_origin_session_setup(node_name text) 							   void		現在のセッションに、指定の起点から再生中であると印を付け、再生の進捗が追跡できるようにします。 元に戻すにはpg_replication_origin_session_resetを使って下さい。 以前に起点が設定されていない場合にのみ使うことができます。
+pg_replication_origin_session_reset() 	      void 							   pg_replication_origin_session_setup()の効果を取り消します。
+pg_replication_origin_session_is_setup()      bool 							   現在のセッションで、レプリケーション起点が設定されたか
+pg_replication_origin_session_progress(flush bool) 							   pg_lsn	現在のセッションで設定されたレプリケーション起点の再生位置を返します。 パラメータflushにより、対応するローカルトランザクションがディスクにフラッシュされていることが保証されるかどうかを決定します。
+pg_replication_origin_xact_setup(origin_lsn pg_lsn, origin_timestamp timestamptz) 			   void 	現在のトランザクションに、指定のLSNおよびタイムスタンプでコミットしたトランザクションを再生中であると印をつけます。 事前にレプリケーション起点がpg_replication_origin_session_setup()を使って設定されている場合にのみ呼び出せます。
+pg_replication_origin_xact_reset() 	    void    pg_replication_origin_xact_setup()の効果を取り消します。
+pg_replication_origin_advance(node_name text, pos pg_lsn)	void	指定したノードのレプリケーションの進捗を、指定の位置に設定します。 これは主に設定変更の後で初期位置や新しい位置を設定するときなどに役立ちます。 この関数を不注意に使うと、レプリケーションデータが一貫性を失うかもしれないことに注意して下さい。
+pg_replication_origin_progress(node_name text, flush bool) 	pg_lsn 	指定したレプリケーション起点の再生位置を返します。 パラメータflushにより、対応するローカルトランザクションがディスクにフラッシュされていることが保証されるかどうかを決定します。 
+</pre>
+
+
+<p>
+表9.72「レプリケーションSQL関数」に示す関数はレプリケーション機能を制御したり、情報を取得したりするためのものです。 基盤となっている機能の情報に関しては「ストリーミングレプリケーション」、「レプリケーションスロット」、47章レプリケーション進捗の追跡を参照してください。 これらの関数の使用はスーパユーザに限定されています。
+</p>
+
+<p>
+ここの関数の多くには、レプリケーションプロトコルに等価なコマンドがあります。「ストリーミングレプリケーションプロトコル」を参照してください。
+</p>
+
+<p>
+「バックアップ制御関数」、「リカバリ制御関数」、「スナップショット同期関数」に書かれている関数もレプリケーションに関係するものです。
+</p>

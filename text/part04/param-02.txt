@@ -1,0 +1,56 @@
+%FILE internal/param-02.html
+%LASTMOD
+%KEY pgsql-param02
+
+%TITLE ファイルの場所	FILE LOCATIONS
+
+<table border=1>
+<caption>[<設定項目一覧>]</caption>
+<tr bgcolor="#cccccc">
+<th><sup>変更<br>可能性</sup></th> <th>設定項目</th>	<th>パラメータ<br>[デフォルト]</th>		<th>説明</th>
+</tr><tr>
+<td>×	</td><td>data_directory	</td>	<td>文字列['ConfigDir']	</td>	<td>設定ファイル群のあるディレクトリ。ConfigDirなら環境変数PGDATAか、pg_ctlの-Dオプションに設定した値</td>
+</tr><tr>
+<td>×	</td><td>hba_file</td>	<td>文字列['ConfigDir/pg_hba.conf']</td>	<td>ホストベース認証(HBA)用ファイル</td>
+</tr><tr>
+<td>×</td><td>ident_file</td>	<td>文字列['ConfigDir/pg_ident.conf']</td>	<td>ident認証ファイル</td>
+</tr><tr>
+<td>×	</td><td>external_pid_file</td>	<td>文字列[''=空文字]	</td>	<td>postgresプロセス番号を記録するファイル</td>
+</tr></table>
+<br>
+
+%CHAPTER 解説
+
+<p>
+・external_pid_file
+<br>
+external_pid_fileに設定したファイルには、postmasterのプロセス番号が書かれます。
+自作のプログラムからPostgreSQLサーバのプロセス番号を取得するときに利用できます。
+<br>
+同様のファイルであるpostmaster.pidにはプロセス番号と共にベースディレクトリなどの情報も書かれますが、
+external_pid_fileに設定したファイルにはプロセス番号のみ書き込まれます。
+</p>
+
+<p>
+external_pid_fileに'/usr/local/pgsql/data/pid.data'を設定し、
+PostgreSQLサーバを起動して上記2つのファイルの中身を表示します。
+</p>
+
+[< postgresql.confの変更箇所>]
+<pre>
+external_pid_file = '/usr/local/pgsql/data/pid.data'
+</pre>
+
+<p>
+ファイルを表示します。
+</p>
+
+<pre>
+postgres> cat /usr/local/pgsql/data/pid.data
+25603
+
+postgres> cat /usr/local/pgsql/data/postmaster.pid
+25603
+/usr/local/pgsql/data
+  5432001  11403269
+</pre>

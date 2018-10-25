@@ -1,0 +1,132 @@
+%FILE internal/func-10.html
+%LASTMOD
+%KEY pgsql-func10
+
+%TITLE アクセス権限照会関数とスキーマ可視性照会関数
+
+[<アクセス権限照会関数>]
+
+<table><tr bgcolor="#cccccc">
+<th>関数</th>							<th>返り値型</th>	<th>説明</th>
+</tr><tr>
+<td>has_table_privilege(role, table, privilege)		</td>	<td>boolean</td>	<td>テーブルtableにロールroleの権限privilegeがあるか否か</td>
+</tr><tr>
+<td>has_table_privilege(table, privilege)			</td>	<td>boolean</td>	<td>テーブルtableに現在のロールの権限privilegeがあるか否か</td>
+</tr><tr>
+<td>has_any_column_privilege(role, table, privilege)	</td>	<td>boolean</td>	<td>ロールroleがテーブルtableの全カラムに権限privilegeがあるか否か。バージョン8.4から</td>
+</tr><tr>
+<td>has_any_column_privilege(table, privilege)		</td>	<td>boolean</td>	<td>現在のロールがテーブルtableの全カラムに権限privilegeがあるか否か。バージョン8.4から</td>
+</tr><tr>
+<td>has_column_privilege(role, table, column, privilege)	</td>	<td>boolean</td>	<td>ロールroleにテーブルtableのカラムcolumnに対する権限privilegeがあるか否か。バージョン8.4から</td>
+</tr><tr>
+<td>has_column_privilege(table, column, privilege)		</td>	<td>boolean</td>	<td>現在のロールにテーブルtableのカラムcolumnに対する権限privilegeがあるか否か。バージョン8.4から</td>
+</tr><tr>
+<td>has_database_privilege(role, database, privilege)	</td>	<td>boolean</td>	<td>ロールroleにデータベースdatabaseの権限privilegeがあるか否か</td>
+</tr><tr>
+<td>has_database_privilege(database, privilege)		</td>	<td>boolean</td>	<td>現在のロールにデータベースdatabaseの権限privilegeがあるか否か</td>
+</tr><tr>
+<td>has_function_privilege(role, function, privilege)	</td>	<td>boolean</td>	<td>ロールroleに関数functionの権限privilegeがあるか否か</td>
+</tr><tr>
+<td>has_function_privilege(function, privilege)		</td>	<td>boolean</td>	<td>現在のロールに関数functionの権限privilegeがあるか否か</td>
+</tr><tr>
+<td>has_language_privilege(role, language, privilege)	</td>	<td>boolean</td>	<td>ロールroleに言語languageの権限privilegeがあるか否か</td>
+</tr><tr>
+<td>has_language_privilege(language, privilege)		</td>	<td>boolean</td>	<td>現在のロールに言語languageの権限privilegeがあるか否か</td>
+</tr><tr>
+<td>pg_has_role(role1, role2, privilege)			</td>	<td>boolean</td>	<td>ロールrole1がロールrole2の権限privilegeを所有しているか否か。バージョン8.1から</td>
+</tr><tr>
+<td>pg_has_role(role, privilege)				</td>	<td>boolean</td>	<td>現在のロールがロールroleの権限privilegeを所有しているか否か。バージョン8.1から</td>
+</tr><tr>
+<td>has_schema_privilege(role, schema, privilege)		</td>	<td>boolean</td>	<td>ロールroleにスキーマschemaの権限privilegeがあるか否か</td>
+</tr><tr>
+<td>has_schema_privilege(schema, privilege)			</td>	<td>boolean</td>	<td>現在のロールにスキーマschemaの権限privilegeがあるか否か</td>
+</tr><tr>
+<td>has_tablespace_privilege(role, tablespace, privilege)	</td>	<td>boolean</td>	<td>ロールにテーブルスペースtablespaceの権限privilegeがあるか否か</td>
+</tr><tr>
+<td>has_tablespace_privilege(tablespace, privilege)		</td>	<td>boolean</td>	<td>現在のロールにテーブルスペースtablespaceの権限privilegeがあるか否か</td>
+</tr><tr>
+<td>has_foreign_data_wrapper_privilege(role, fdw, privilege)	</td>	<td>boolean</td>	<td>ロールroleに外部データラッパfdwに対する権限privilegeがあるか否か。バージョン8.4から</td>
+</tr><tr>
+<td>has_foreign_data_wrapper_privilege(fdw, privilege)	</td>	<td>boolean</td>	<td>現在のロールに外部データラッパfdwに対する権限privilegeがあるか否か。バージョン8.4から</td>
+</tr><tr>
+<td>has_server_privilege(role, server, privilege)		</td>	<td>boolean</td>	<td>ロールroleに外部サーバserverに対する権限privilegeがあるか否か。バージョン8.4まで</td>
+</tr><tr>
+<td>has_server_privilege(server, privilege)			</td>	<td>boolean</td>	<td>現在のロールに外部サーバserverに対する権限privilegeがあるか否か。バージョン8.4まで</td>
+</tr><tr>
+<td>has_sequence_privilege(role, sequence, privilege)	</td>	<td>boolean</td>	<td>ロールroleにシーケンスsequenceに対する権限privilegeがあるか否か。バージョン9.0から</td>
+</tr><tr>
+<td>has_sequence_privilege(sequence, privilege)		</td>	<td>boolean</td>	<td>現在のロールにシーケンスsequenceに対する権限privilegeがあるか否か。バージョン9.0から</td>
+</tr><tr>
+<td>row_security_active(table) </td> <td>boolean</td>	<td>現在のユーザに有効なテーブルの行単位セキュリティが設定されているか否か。バージョン9.5から</td>
+
+</tr></table>
+<p>
+※ privilege:権限は[<3-09>]参照
+</p>
+
+<br>
+
+[<スキーマ可視性照会関数>]
+
+<pre>
+pg_collation_is_visible(collation_oid)	boolean	照合順序が検索パスにおいて可視かどうか
+pg_conversion_is_visible(conversion_oid) 	boolean	変換が検索パスにおいて可視かどうか
+pg_function_is_visible(function_oid) 		boolean	関数が検索パスにおいて可視であるか
+pg_opclass_is_visible(opclass_oid) 		boolean	演算子クラスが検索パスにおいて可視であるか
+pg_operator_is_visible(operator_oid) 		boolean	演算子が検索パスにおいて可視であるか
+pg_opfamily_is_visible(opclass_oid) 		boolean	演算子族が検索パスにおいて可視であるか
+pg_table_is_visible(table_oid) 			boolean	テーブルが検索パスにおいて可視かどうか
+pg_ts_config_is_visible(config_oid) 		boolean	テキスト検索設定が検索パスにおいて可視かどうか
+pg_ts_dict_is_visible(dict_oid) 		boolean	テキスト検索辞書が検索パスにおいて可視かどうか
+pg_ts_parser_is_visible(parser_oid) 		boolean	テキスト検索パーサが検索パスにおいて可視かどうか
+pg_ts_template_is_visible(template_oid) 	boolean	テキスト検索テンプレートが検索パスにおいて可視かどうか
+pg_type_is_visible(type_oid) 			boolean	型（またはドメイン）が検索パスにおいて可視かどうか
+</pre>
+
+
+<br>
+
+
+%CHAPTER 解説
+
+<p>
+PostgreSQLは上記のアクセス権限照会関数をサポートしています。
+検査する権限(privilege)は[<3-09>]の[<表3-09>]を参照してください。
+</p>
+
+<p>
+
+</p>
+
+%CHAPTER 実行例
+
+<p>
+テーブルcompanylistは所有者postgresだけがアクセスできます。
+</p>
+
+<pre>
+sampledb=# SELECT current_user;
+ current_user 
+--------------
+ postgres
+(1 row)
+
+sampledb=# \z companylist
+                              Access privileges
+ Schema |     Name    | Type  | Access privileges | Column access privileges 
+--------+-------------+-------+-------------------+--------------------------
+ public | companylist | table |                   | 
+(1 row)
+
+sampledb=# SELECT has_table_privilege('customerlist', 'SELECT');
+ has_table_privilege 
+---------------------
+ t
+(1 row)
+
+sampledb=# SELECT has_table_privilege('webuser3', 'customerlist', 'SELECT');
+ has_table_privilege 
+---------------------
+ f
+(1 row)
+</pre>

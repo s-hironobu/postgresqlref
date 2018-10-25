@@ -1,0 +1,847 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+ <title>PostgreSQLバイブル草稿</title>
+ <link rel="stylesheet" type="text/css" media="screen" href="./default.css"">
+</head>
+
+<body>
+
+<script language=javascript>
+<!--
+function show(inputData) {
+var objID=document.getElementById( "layer_" + inputData );
+var buttonID=document.getElementById( "category_" + inputData );
+if(objID.className=='close') {
+objID.style.display='block';
+objID.className='open';
+}else{
+objID.style.display='none';
+objID.className='close';
+}
+}
+//-->
+</script>
+
+<div id="header">
+<h1 class="title">PostgreSQLバイブル草稿</title></h1>
+    <span class="small">
+</span>
+</div>
+
+
+<hr class="full_hr">
+<table style="width: 100%;" border="0">
+ <tbody><tr>
+  <td class="menubar">
+   <div id="menubar">
+
+
+<h5>PostgreSQLとは</h5>
+
+<li><a href="./index.html">PostgreSQLとは</a><br></li>
+
+<h5>PostgreSQLの内部構造</h5>
+<ul>
+<li><a href="./internal.html">とびら</a><br></li>
+</ul>
+<ol>
+<li><a href="./internal-01.html">プロセスとメモリ構造</a><br></li>
+<li><a href="./internal-02.html">データベースクラスタ、テーブルの構造</a></li>
+<li><a href="./internal-03.html">SQLの実行</a></li>
+<li><a href="./internal-04.html">プラン処理</a></li>
+<li><a href="./internal-05.html">バッファマネージャとバックグランドライタ</a></li>
+<li><a href="./internal-06.html">トランザクションIDと同時実行制御</a></li>
+<li><a href="./internal-07.html">VACUUM</a></li>
+<li><a href="./internal-08.html">HOTとIndex Only Scan</a></li>
+<li><a href="./internal-09.html">WAL(Write Ahead Logging)</a></li>
+<li><a href="./internal-10.html">アーカイブログとPITR</a></li>
+<li><a href="./internal-11.html">レプリケーション(Streaming ReplicationとHotStandby)</a></li>
+</ol>
+
+
+<h5>PostgreSQLサーバ管理</h5>
+
+<ul>
+<li><a href="./admin.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[PostgreSQLの基礎]<br>
+<li><a href="./admin-01.html">オブジェクト、データベース、スキーマ</a><br></li>
+<li><a href="./admin-02.html">システムカタログ</a><br></li>
+<li><a href="./admin-03.html">文字コードの扱い</a><br></li>
+
+
+[インストールと起動、停止]<br>
+<li><a href="./admin-04.html">インストール</a><br></li>
+<li><a href="./admin-05.html">データベースシステムの初期化 initdb</a><br></li>
+<li><a href="./admin-06.html">PostgreSQLサーバの起動/停止</a><br></li>
+
+
+[認証とアクセス制御]<br>
+<li><a href="./admin-07.html">認証とアクセス制御</a><br></li>
+<li><a href="./admin-08.html">クライアントのアクセス制御</a><br></li>
+<li><a href="./admin-09.html">権限について</a><br></li>
+<li><a href="./admin-10.html">ロールの作成と権限制御</a><br></li>
+
+<HR>
+
+[バックアップとアップグレード]<br>
+<li><a href="./admin-11.html">バックアップとアップグレード</a><br></li>
+<li><a href="./admin-12.html">ダンプとリストア</a><br></li>
+<li><a href="./admin-13.html">アップグレード</a><br></li>
+
+[保守、監視とチューニング]<br>
+<li><a href="./admin-14.html">保守、監視とチューニング</a><br></li> 
+<li><a href="./admin-15.html">稼働統計情報</a><br></li>
+<li><a href="./admin-16.html">実行ログの取得</a><br></li>
+<li><a href="./admin-17.html">モニタリングツール</a><br></li>
+<li><a href="./admin-18.html">ログと統計情報の分析</a><br></li>
+<li><a href="./admin-19.html">パラメータチューニング</a><br></li>
+
+[耐障害性、高可用性]<br>
+<li><a href="./admin-20.html">耐障害性、高可用性</a><br></li>
+<li><a href="./admin-21.html">アーカイブログとPITR</a><br></li>
+<li><a href="./admin-22.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-23.html">レプリケーションの故障対応</a><br></li>
+
+
+[FDW]<br>
+<li><a href="./admin-24.html">FDW</a><br></li>
+<li><a href="./admin-25.html">postgres_fdw</a><br></li>
+</ol>
+
+[追加の文章(未完)]<br>
+<li><a href="./admin-26.html">ロギング</a><br></li>
+<li><a href="./admin-27.html">統計情報</a><br></li>
+<li><a href="./admin-28.html">モニタリング</a><br></li>
+<li><a href="./admin-29.html">メンテナンス</a><br></li>
+</ol>
+
+
+<h5>設定パラメータ</h5>
+
+<ol>
+<li><a href="./param-01.html">postgresql.confの設定</a><br></li>
+<li><a href="./param-02.html">ファイルの場所</a><br></li>
+<li><a href="./param-03.html">接続と認証</a><br></li>
+<li><a href="./param-04.html">資源の消費</a><br></li>
+<li><a href="./param-05.html">WAL</a><br></li>
+<li><a href="./param-06.html">レプリケーション</a><br></li>
+<li><a href="./param-07.html">問い合わせ計画</a><br></li>
+<li><a href="./param-08.html">エラー報告とログ取得</a><br></li>
+<li><a href="./param-09.html">稼働統計情報</a><br></li>
+<li><a href="./param-10.html">AUTOVACUUM</a><br></li>
+<li><a href="./param-11.html">クライアント接続デフォルト</a><br></li>
+<li><a href="./param-12.html">ロック管理/バージョンとプラットフォーム互換性</a><br></li>
+</ol>
+
+
+<h5>psql</h5>
+<ul>
+<li><a href="./psql.html">・対話型インタフェースpsqlの使い方</a><br></li>
+</ul>
+
+<ol>
+<li><a href="./psql-01.html">psqlとは</a><br></li>
+<li><a href="./psql-02.html">PostgreSQLサーバとの接続/切断/再接続</a><br></li>
+<li><a href="./psql-03.html">データベース一覧表示</a><br></li>
+<li><a href="./psql-04.html">コマンドラインからSQL実行</a><br></li>
+<li><a href="./psql-05.html">バッチファイルの実行(メタコマンド)</a><br></li>
+<li><a href="./psql-06.html">情報表示</a><br></li>
+<li><a href="./psql-07.html">表示の制御</a><br></li>
+<li><a href="./psql-08.html">ラージオブジェクトの扱い</a><br></li>
+<li><a href="./psql-09.html">データのコピー</a><br></li>
+<li><a href="./psql-10.html">その他のメタコマンド</a><br></li>
+
+</ol>
+
+
+<h5>SQL</h5>
+
+<ul>
+<li><a href="./sql.html">・とびら</a><br></li>
+</ul>
+
+<ol>
+[SQL]<br>
+
+<li><a href="./sql-01.html">SQL語彙</a><br></li>
+<li><a href="./sql-02.html">テーブルスペースの作成/削除/変更</a><br></li>
+<li><a href="./sql-03.html">データベースの作成/変更/削除</a><br></li>
+<li><a href="./sql-04.html">テーブルの作成</a><br></li>
+<li><a href="./sql-05.html">外部キー</a><br></li>
+<li><a href="./sql-06.html">オブジェクトの継承/LIKE句</a><br></li>
+<li><a href="./sql-07.html">問い合わせ結果から新しいテーブルを作成</a><br></li>
+<li><a href="./sql-08.html">テーブルの削除</a><br></li>
+<li><a href="./sql-09.html">スキーマの定義/変更/削除</a><br></li>
+
+<li><a href="./sql-10.html">ALTER TABLE(1)</a><br></li>
+<li><a href="./sql-11.html">ALTER TABLE(2)</a><br></li>
+<li><a href="./sql-12.html">ALTER TABLE(3)</a><br></li>
+
+<li><a href="./sql-13.html">ロール</a><br></li>
+<li><a href="./sql-14.html">GRANT REVOKE(1)</a><br></li>
+<li><a href="./sql-15.html">GRANT REVOKE(2)</a><br></li>
+<li><a href="./sql-16.html">INSERT</a><br></li>
+<li><a href="./sql-17.html">SELECT</a><br></li>
+<li><a href="./sql-18.html">FROM句</a><br></li>
+<li><a href="./sql-19.html">WHERE句</a><br></li>
+
+<li><a href="./sql-20.html">WINDOW句、OVER句</a><br></li>
+<li><a href="./sql-21.html">共通テーブル式(CTE)</a><br></li>
+
+
+<li><a href="./sql-22.html">グループ化</a><br></li>
+<li><a href="./sql-23.html">DISTINCT句</a><br></li>
+<li><a href="./sql-24.html">テーブル結合</a><br></li>
+<li><a href="./sql-25.html">問い合わせの結合</a><br></li>
+<li><a href="./sql-26.html">ORDER BY</a><br></li>
+<li><a href="./sql-27.html">LIMIT OFFSET</a><br></li>
+<li><a href="./sql-28.html">FOR UPDATE/ FOR SHARE</a><br></li>
+<li><a href="./sql-29.html">サブクエリ</a><br></li>
+<li><a href="./sql-30.html">CASE式</a><br></li>
+<li><a href="./sql-31.html">VALUES</a><br></li>
+<li><a href="./sql-32.html">UPDATE</a><br></li>
+<li><a href="./sql-33.html">DELETE</a><br></li>
+<li><a href="./sql-34.html">TRUNCATE</a><br></li>
+
+<li><a href="./sql-35.html">インデックス</a><br></li>
+
+<li><a href="./sql-36.html">VIEW</a><br></li>
+<li><a href="./sql-37.html">シーケンス</a><br></li>
+<li><a href="./sql-38.html">トリガ</a><br></li>
+<li><a href="./sql-39.html">カーソル</a><br></li>
+<li><a href="./sql-40.html">プリペアステートメント</a><br></li>
+<li><a href="./sql-41.html">トランザクション</a><br></li>
+<li><a href="./sql-42.html">セーブポイント</a><br></li>
+<li><a href="./sql-43.html">2相コミット</a><br></li>
+<li><a href="./sql-44.html">LOCK</a><br></li>
+<li><a href="./sql-45.html">SET/SHOW/RESET</a><br></li>
+<li><a href="./sql-46.html">VACUUM</a><br></li>
+<li><a href="./sql-47.html">ANALYZE</a><br></li>
+<li><a href="./sql-48.html">EXPLAIN</a><br></li>
+<li><a href="./sql-49.html">COPY/IMPORT</a><br></li>
+<li><a href="./sql-50.html">COPY/EXPORT</a><br></li>
+<li><a href="./sql-51.html">関数定義</a><br></li>
+<li><a href="./sql-52.html">エクステンション</a><br></li>
+<li><a href="./sql-53.html">外部サーバの定義、変更、削除</a><br></li>
+<li><a href="./sql-54.html">外部サーバのユーザマップ定義、変更、削除</a><br></li>
+<li><a href="./sql-55.html">外部テーブルの定義、変更、削除</a><br></li>
+<hr>
+<li><a href="./sql-56.html">イベントトリガ</a><br></li>
+<li><a href="./sql-57.html">行レベルセキュリティ</a><br></li>
+
+<hr>
+<li><a href="./sql-60.html">新しい機能</a><br></li>
+</ol>
+
+
+<h5>関数</h5>
+
+[関数]<br>
+<ul>
+<li><a href="./function.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[データ型]<br>
+<li><a href="./type-01.html">データ型</a><br></li>
+<li><a href="./type-02.html">数値データ型</a><br></li>
+<li><a href="./type-03.html">文字データ型</a><br></li>
+<li><a href="./type-04.html">日付/時刻データ型</a><br></li>
+<li><a href="./type-05.html">日付/時刻表示形式とタイムゾーンの設定</a><br></li>
+<li><a href="./type-06.html">ブーリアン型</a><br></li>
+<li><a href="./type-07.html">ビット列データ型</a><br></li>
+<li><a href="./type-08.html">疑似データ型</a><br></li>
+<li><a href="./type-09.html">バイナリ列データ型</a><br></li>
+<li><a href="./type-10.html">Range型</a><br></li>
+<li><a href="./type-11.html">配列</a><br></li>
+<hr>
+<li><a href="./type-12.html">JSON型</a><br></li>
+
+<hr>
+[演算子]<br>
+<li><a href="./ope-01.html">演算子</a><br></li>
+<li><a href="./ope-02.html">論理演算子</a><br></li>
+<li><a href="./ope-03.html">比較演算子</a><br></li>
+<li><a href="./ope-04.html">算術演算子</a><br></li>
+<li><a href="./ope-05.html">文字列演算子</a><br></li>
+<li><a href="./ope-06.html">パターンマッチング</a><br></li>
+<li><a href="./ope-07.html">日付/時刻演算子</a><br></li>
+<li><a href="./ope-08.html">Range型演算子</a><br></li>
+<hr>
+<li><a href="./ope-09.html">JSON型演算子</a><br></li>
+
+
+<hr>
+[関数]<br>
+<li><a href="./func-01.html">関数</a><br></li>
+<li><a href="./func-02.html">算術関数</a><br></li>
+<li><a href="./func-03.html">集約関数/統計関数</a><br></li>
+<li><a href="./func-04.html">文字列関数</a><br></li>
+<li><a href="./func-05.html">日付・時刻関数</a><br></li>
+<li><a href="./func-06.html">型変換関数</a><br></li>
+<li><a href="./func-07.html">Range型関数</a><br></li>
+<li><a href="./func-08.html">Window関数</a><br></li>
+<li><a href="./func-09.html">セッション情報関数</a><br></li>
+<li><a href="./func-10.html">アクセス権限とスキーマ可視性照会関数</a><br></li>
+<li><a href="./func-11.html">データベースオブジェクト関数</a><br></li>
+<li><a href="./func-12.html">バックアップとリカバリ制御関数</a><br></li>
+
+<li><a href="./func-13.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-15.html">構成設定関数</a><br></li>
+<li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-17.html">レプリケーションSQL関数</a><br></li>
+
+<hr>
+<li><a href="./func-18.html">JSON関数</a><br></li>
+
+</ol>
+
+<!--
+[削除するもの]<br>
+<li><a href="./type-07.html">幾何データ型</a><br></li>
+<li><a href="./type-08.html">ネットワークアドレス型型</a><br></li>
+<li><a href="./ope-08.html">幾何演算子</a><br></li>
+<li><a href="./ope-09.html">ネットワーク演算子</a><br></li>
+<li><a href="./func-06.html">幾何関数</a><br></li>
+<li><a href="./func-07.html">ネットワークアドレス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-16.html">トランザクションID関数</a><br></li>
+<li><a href="./func-17.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-18.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-19.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-20.html">勧告的ロック用関数</a><br></li>
+-->
+
+<h5>PL/pgSQL</h5>
+
+<ol>
+<li><a href="./plpgsql.html">結果の返し方</a><br></li>
+<li><a href="./plpgsql-01.html">ストアドプロシージャ</a><br></li>
+<li><a href="./plpgsql-02.html">ストアドプロシージャの定義</a><br></li>
+<li><a href="./plpgsql-03.html">変数宣言と値の代入</a><br></li>
+**** まとめる >>
+<li><a href="./plpgsql-04.html">SELECT INTO文</a><br></li>
+<li><a href="./plpgsql-05.html">結果ステータスの取得</a><br></li>
+<li><a href="./plpgsql-06.html">動的なSQL文の実行</a><br></li>
+<< ここまで****
+<li><a href="./plpgsql-07.html">IF 条件分岐</a><br></li>
+<li><a href="./plpgsql-08.html">ループ処理</a><br></li>
+*** >>>
+<li><a href="./plpgsql-09.html">RETURN</a><br></li>
+<<< ***
+<li><a href="./plpgsql-10.html">ループ処理　LOOP</a><br></li>
+<li><a href="./plpgsql-11.html">ループ処理　WHILE</a><br></li>
+<li><a href="./plpgsql-12.html">ループ処理　FOR </a><br></li>
+<li><a href="./plpgsql-13.html">ループ処理 (複数行の問い合わせ結果を扱う)</a><br></li>
+<li><a href="./plpgsql-14.html">カーソルの利用</a><br></li>
+<li><a href="./plpgsql-15.html">カーソル変数の宣言</a><br></li>
+<li><a href="./plpgsql-16.html">カーソルのオープンとクローズ	OPEN / CLOSE</a><br></li>
+<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得		FETCH</a><br></li>
+<li><a href="./plpgsql-18.html">カーソルを使った例</a><br></li>
+<li><a href="./plpgsql-19.html">例外</a><br></li>
+*** >>>
+<li><a href="./plpgsql-21.html">CASE</a><br></li>
+<li><a href="./plpgsql-22.html">FOREACH</a><br></li>
+<<< ***
+</ol>
+
+
+<h5>Appendix(付録)</h5>
+
+<ol>
+<li><a href="./app-01.html">pgpool-II</a><br></li>
+<li><a href="./app-02.html">Pacemaker</a><br></li>
+</ol>
+
+
+<h5>おまけ:ネット公開(ページ数の関係で書籍には載せない)</h5>
+
+<ol>
+[pgpool]<br>
+<li><a href="./ha-06.html">pgpool-II セットアップ</a><br></li>
+<li><a href="./ha-07.html">pgpool-II レプリケーションモード</a><br></li>
+<li><a href="./ha-08.html">pgpool-II マスタースレーブモード</a><br></li>
+[Pacemaker]<br>
+<li><a href="./ha-10.html">Pacemaker</a><br></li>
+</ol>
+
+</div>
+<hr class="full_hr">
+</div>
+
+  </td>
+  <td valign="top">
+   <div id="body">
+
+
+http://linux-ha.sourceforge.jp/wp/manual/ocf%E3%83%AA%E3%82%BD%E3%83%BC%E3%82%B9%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E9%96%8B%E7%99%BA%E8%80%85%E3%82%AC%E3%82%A4%E3%83%89
+
+
+
+http://www.clusterlabs.org/doc/en-US/Pacemaker/1.1/html-single/Clusters_from_Scratch/index.html
+
+<h2>pacemaker</h2>
+
+
+プロセス：
+	heartbeat:master contrall process
+	heartbeat:FIFO reader
+	heartbeat:write bcast ethX
+	heartbeat:read bcast ethX
+	...
+
+	ccm
+	cib		[cib=XML形式の・・・]
+
+	lrmd -r
+	attrd
+	crmd
+
+	stonithd
+
+command:
+	crm
+	crm_attribute		Manage node's attributes and cluster options.
+	crm_failcount		A convenience wrapper for crm_attribute
+
+	crm_mon			Provides a summary of cluster's current state.
+	crm_node		Tool for displaying low-level node information
+
+	crm_resource		Perform tasks related to cluster resources.
+	crm_shadow		Perform configuration changes in a sandbox before updating the live cluster.
+
+	crm_standby		A convenience wrapper for crm_attribute
+	crm_uuid
+	crm_verify		Check a (complete) confiuration for syntax and common conceptual errors.
+	crmadmin		Development tool for performing some crmd-specific commands.
+
+
+
+<div class="jumpmenu"></div><h3>セットアップ</h3>
+
+<p>
+Linux系ディストリビューションCentOSでPacemakerを使う場合、
+Linux-HA-Japanプロジェクト(http://linux-ha.sourceforge.jp/wp/)が提供しているパッケージを
+インストールするのが最も簡単、且つ確実である。
+</p>
+
+<pre>
+http://sourceforge.jp/projects/linux-ha/releases/?package_id=11413
+</pre>
+
+pacemaker-1.0.11-1.2.1.el5.x86_64.repo.tar.gz
+
+<pre>
+root> mv pacemaker-1.0.11-1.2.1.el5.x86_64.repo.tar.gz /tmp
+root> cd /tmp
+root> tar zxvf pacemaker-1.0.11-1.2.1.el5.x86_64.repo.tar.gz
+root> cd pacemaker-1.0.11-1.2.1.el5.x86_64.repo
+root> yum -c pacemaker.repo install corosync.x86_64 heartbeat.x86_64 pacemaker.x86_64
+</pre>
+
+
+
+<p>
+ソースコードから全てを構築するには、以下のサイトを参照。
+</p>
+
+<pre>
+http://www.linux-ha.org/wiki/Download/ja
+</pre>
+
+
+
+
+
+<pre>
+    * /etc/ha.d/ha.cf ファイルを以下のように編集します
+
+pacemaker on
+logfacility local1
+
+debug 0
+udpport 694       ← 複数のクラスタを同じインターコネクトLAN上で使用する場合は
+                    ポート番号を変更すること 
+keepalive 2
+warntime 20
+deadtime 24
+initdead 48
+
+bcast eth1        ← 1本目のインターコネクトのインタフェース
+bcast eth3        ← 2本目のインターコネクトのインタフェース
+
+node pm01         ← Heartbeat3で使用する1台目のサーバの「uname -n」コマンドで表示されるホスト名
+node pm02         ← Heartbeat3で使用する2台目のサーバの「uname -n」コマンドで表示されるホスト名
+watchdog /dev/watchdog
+
+</pre>
+
+
+
+<pre>
+https://github.com/t-matsuo/resource-agents/blob/pgsql-rep-master/heartbeat/pgsql
+</pre>
+
+
+PostgreSQL 9.1 ストリーミングレプリケーション対応 リソースエージェント
+http://bit.ly/Iq75Qb
+https://github.com/t-matsuo/resource-agents/wiki/PostgreSQL-9.1-%E3%82%B9%E3%83%88%E3%83%AA%E3%83%BC%E3%83%9F%E3%83%B3%E3%82%B0%E3%83%AC%E3%83%97%E3%83%AA%E3%82%B1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E5%AF%BE%E5%BF%9C-%E3%83%AA%E3%82%BD%E3%83%BC%E3%82%B9%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88
+
+
+cp pgsql /usr/lib/ocf/resource.d/heartbeat/
+
+＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+[cib]
+
+
+Jul 16 12:41:43 localhost heartbeat: [13878]: info: Starting child client "/usr/lib64/heartbeat/cib" (100,101)
+Jul 16 12:41:43 localhost heartbeat: [13891]: info: Starting "/usr/lib64/heartbeat/cib" as uid 100  gid 101 (pid 13891)
+Jul 16 12:41:43 localhost cib: [13891]: info: Invoked: /usr/lib64/heartbeat/cib 
+Jul 16 12:41:43 localhost cib: [13891]: info: G_main_add_TriggerHandler: Added signal manual handler
+Jul 16 12:41:43 localhost cib: [13891]: info: G_main_add_SignalHandler: Added signal handler for signal 17
+Jul 16 12:41:44 localhost cib: [13891]: info: retrieveCib: Reading cluster configuration from: /var/lib/heartbeat/crm/cib.xml (digest: /var/lib/heartbeat/crm/cib.xml.sig)
+
+(1) cib.xml読み込み
+Jul 16 12:41:44 localhost cib: [13891]: info: startCib: CIB Initialization completed successfully
+Jul 16 12:41:44 localhost cib: [13891]: info: register_heartbeat_conn: Hostname: xc-data1
+Jul 16 12:41:44 localhost cib: [13891]: info: register_heartbeat_conn: UUID: c4d4be45-a700-4e9b-98e8-cb7f623a703f
+
+(2) crm_cluster_connet 
+Jul 16 12:41:44 localhost cib: [13891]: info: crm_cluster_connect: Connecting to Heartbeat
+
+***
+Jul 16 12:41:44 localhost heartbeat: [13878]: info: the send queue length from heartbeat to client cib is set to 1024
+
+
+(3)ccm_connect
+Jul 16 12:41:50 localhost cib: [13891]: info: ccm_connect: Registering with CCM...
+Jul 16 12:41:50 localhost cib: [13891]: info: cib_init: Requesting the list of configured nodes
+Jul 16 12:41:50 localhost cib: [13891]: info: cib_init: Starting cib mainloop
+Jul 16 12:41:50 localhost cib: [13891]: info: cib_client_status_callback: Status update: Client xc-data1/cib now has status [join]
+
+Jul 16 12:41:50 localhost cib: [13891]: info: crm_new_peer: Node 0 is now known as xc-data1
+Jul 16 12:41:50 localhost cib: [13891]: info: crm_update_peer_proc: xc-data1.cib is now online
+Jul 16 12:41:50 localhost cib: [13891]: info: cib_client_status_callback: Status update: Client xc-data2/cib now has status [join]
+
+Jul 16 12:41:51 localhost cib: [13891]: info: crm_new_peer: Node 0 is now known as xc-data2
+Jul 16 12:41:51 localhost cib: [13891]: info: crm_update_peer_proc: xc-data2.cib is now online
+Jul 16 12:41:51 localhost cib: [13891]: info: cib_client_status_callback: Status update: Client xc-data1/cib now has status [online]
+
+
+Jul 16 12:41:51 localhost crmd: [13895]: info: do_cib_control: CIB connection established
+
+
+(4)cib.xmlをHDDに書く？
+Jul 16 12:41:51 localhost cib: [13898]: info: write_cib_contents: Archived previous version as /var/lib/heartbeat/crm/cib-34.raw
+Jul 16 12:41:51 localhost cib: [13898]: info: write_cib_contents: Wrote version 0.356.0 of the CIB to disk (digest: d6a27891019570326e3e02b9db9a94ef)
+Jul 16 12:41:51 localhost cib: [13898]: info: retrieveCib: Reading cluster configuration from: /var/lib/heartbeat/crm/cib.I3hqZW (digest: /var/lib/heartbeat/crm/cib.6N3h1n)
+
+(5)
+Jul 16 12:41:51 localhost cib: [13891]: info: cib_client_status_callback: Status update: Client xc-data2/cib now has status [online]
+Jul 16 12:41:52 localhost cib: [13891]: info: mem_handle_event: Got an event OC_EV_MS_NEW_MEMBERSHIP from ccm
+Jul 16 12:41:52 localhost cib: [13891]: info: mem_handle_event: instance=2, nodes=2, new=2, lost=0, n_idx=0, new_idx=0, old_idx=4
+
+(6)
+Jul 16 12:41:52 localhost cib: [13891]: info: cib_ccm_msg_callback: Processing CCM event=NEW MEMBERSHIP (id=2)
+
+
+(7) このあたり、全部内部処理っぽい。hashテーブルcrm_peer_cacheを検査してるだけ。
+    もともとのhashテーブルは誰が更新しているのは crm_get_peer()@membership.c
+
+Jul 16 12:41:52 localhost cib: [13891]: info: crm_get_peer: Node xc-data2 now has id: 1
+Jul 16 12:41:52 localhost cib: [13891]: info: crm_update_peer: Node xc-data2: id=1 state=member (new) addr=(null) votes=-1 born=1 seen=2 proc=00000000000000000000000000000100
+Jul 16 12:41:52 localhost cib: [13891]: info: crm_update_peer_proc: xc-data2.ais is now online
+Jul 16 12:41:52 localhost cib: [13891]: info: crm_update_peer_proc: xc-data2.crmd is now online
+Jul 16 12:41:52 localhost cib: [13891]: info: crm_update_peer: Node xc-data1: id=0 state=member (new) addr=(null) votes=-1 born=2 seen=2 proc=00000000000000000000000000000100
+Jul 16 12:41:52 localhost cib: [13891]: info: crm_update_peer_proc: xc-data1.ais is now online
+Jul 16 12:41:52 localhost cib: [13891]: info: crm_update_peer_proc: xc-data1.crmd is now online
+
+
+(8)
+Jul 16 12:41:54 localhost attrd: [13894]: info: cib_connect: Connected to the CIB after 2 signon attempts
+Jul 16 12:41:54 localhost attrd: [13894]: info: cib_connect: Sending full refresh
+
+
+Jul 16 12:42:19 localhost cib: [13891]: info: cib_process_request: Operation complete: op cib_sync for section 'all' (origin=xc-data2/crmd/13, version=0.356.0): ok (rc=0)
+Jul 16 12:42:24 localhost cib: [13900]: info: write_cib_contents: Archived previous version as /var/lib/heartbeat/crm/cib-35.raw
+
+
+Jul 16 12:42:24 localhost crmd: [13895]: info: process_lrm_event: LRM operation pingCheck:1_monitor_0 (call=4, rc=7, cib-update=8, confirmed=true) not running
+
+
+
+Jul 16 12:42:24 localhost cib: [13900]: info: write_cib_contents: Wrote version 0.357.0 of the CIB to disk (digest: ceadf715e436a95048e2fc5c65f60aa8)
+Jul 16 12:42:24 localhost cib: [13900]: info: retrieveCib: Reading cluster configuration from: /var/lib/heartbeat/crm/cib.oIbt25 (digest: /var/lib/heartbeat/crm/cib.SG924W)
+
+
+Jul 16 12:42:25 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-master_monitor_0 (call=5, rc=7, cib-update=9, confirmed=true) not running
+Jul 16 12:42:25 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-slave_monitor_0 (call=3, rc=7, cib-update=10, confirmed=true) not running
+Jul 16 12:42:25 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:0_monitor_0 (call=2, rc=7, cib-update=11, confirmed=true) not running
+Jul 16 12:42:25 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-rep_monitor_0 (call=6, rc=7, cib-update=12, confirmed=true) not running
+Jul 16 12:42:27 localhost crmd: [13895]: info: process_lrm_event: LRM operation pingCheck:1_start_0 (call=7, rc=0, cib-update=13, confirmed=true) ok
+Jul 16 12:42:28 localhost crmd: [13895]: info: process_lrm_event: LRM operation pingCheck:1_monitor_10000 (call=8, rc=0, cib-update=14, confirmed=false) ok
+Jul 16 12:42:38 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_start_0 (call=9, rc=0, cib-update=15, confirmed=true) ok
+Jul 16 12:42:40 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_notify_0 (call=10, rc=0, cib-update=16, confirmed=true) ok
+Jul 16 12:42:42 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_monitor_7000 (call=11, rc=0, cib-update=17, confirmed=false) ok
+Jul 16 12:43:13 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_monitor_7000 (call=11, status=1, cib-update=0, confirmed=true) Cancelled
+Jul 16 12:43:13 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_notify_0 (call=12, rc=0, cib-update=19, confirmed=true) ok
+Jul 16 12:43:20 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_promote_0 (call=13, rc=0, cib-update=20, confirmed=true) ok
+Jul 16 12:43:38 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_notify_0 (call=14, rc=0, cib-update=21, confirmed=true) ok
+Jul 16 12:43:53 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-rep_start_0 (call=18, rc=0, cib-update=22, confirmed=true) ok
+Jul 16 12:43:53 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-master_start_0 (call=17, rc=0, cib-update=23, confirmed=true) ok
+Jul 16 12:43:53 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-slave_start_0 (call=16, rc=0, cib-update=24, confirmed=true) ok
+Jul 16 12:43:54 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_monitor_2000 (call=15, rc=8, cib-update=25, confirmed=false) master
+Jul 16 12:43:54 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-rep_monitor_10000 (call=20, rc=0, cib-update=26, confirmed=false) ok
+Jul 16 12:43:54 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-master_monitor_10000 (call=19, rc=0, cib-update=27, confirmed=false) ok
+Jul 16 12:43:54 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-slave_monitor_10000 (call=21, rc=0, cib-update=28, confirmed=false) ok
+
+
+
+Jul 16 12:44:00 localhost cib: [15915]: info: write_cib_contents: Archived previous version as /var/lib/heartbeat/crm/cib-36.raw
+Jul 16 12:44:00 localhost cib: [15915]: info: write_cib_contents: Wrote version 0.358.0 of the CIB to disk (digest: 7d3aa1d4e0dfc084d0f8a3b7a093218b)
+Jul 16 12:44:00 localhost cib: [15915]: info: retrieveCib: Reading cluster configuration from: /var/lib/heartbeat/crm/cib.dVHpQ4 (digest: /var/lib/heartbeat/crm/cib.TL3McZ)
+
+
+Jul 16 12:44:02 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-slave_monitor_10000 (call=21, status=1, cib-update=0, confirmed=true) Cancelled
+Jul 16 12:44:02 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-slave_stop_0 (call=22, rc=0, cib-update=29, confirmed=true) ok
+
+
+Jul 16 12:51:50 localhost cib: [13891]: info: cib_stats: Processed 3185 operations (3243.00us average, 1% utilization) in the last 10min
+Jul 16 13:01:50 localhost cib: [13891]: info: cib_stats: Processed 3660 operations (3232.00us average, 1% utilization) in the last 10min
+Jul 16 13:11:20 localhost cib: [23647]: info: write_cib_contents: Archived previous version as /var/lib/heartbeat/crm/cib-37.raw
+Jul 16 13:11:20 localhost cib: [23647]: info: write_cib_contents: Wrote version 0.359.0 of the CIB to disk (digest: 209326fe622530b8b0212495a758d1e3)
+Jul 16 13:11:20 localhost cib: [23647]: info: retrieveCib: Reading cluster configuration from: /var/lib/heartbeat/crm/cib.Y0W8Nv (digest: /var/lib/heartbeat/crm/cib.fQITsG)
+
+
+Jul 16 13:11:27 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_notify_0 (call=23, rc=0, cib-update=30, confirmed=true) ok
+Jul 16 13:11:29 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_notify_0 (call=24, rc=0, cib-update=31, confirmed=true) ok
+Jul 16 13:11:30 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-slave_start_0 (call=25, rc=0, cib-update=32, confirmed=true) ok
+Jul 16 13:11:32 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-slave_monitor_10000 (call=26, rc=0, cib-update=33, confirmed=false) ok
+
+
+Jul 16 13:11:50 localhost cib: [13891]: info: cib_stats: Processed 3654 operations (3325.00us average, 2% utilization) in the last 10min
+Jul 16 13:13:27 localhost cib: [29185]: info: write_cib_contents: Archived previous version as /var/lib/heartbeat/crm/cib-38.raw
+Jul 16 13:13:27 localhost cib: [29185]: info: write_cib_contents: Wrote version 0.360.0 of the CIB to disk (digest: 9a998ebc86aaa5197d7b2f8128dbc760)
+Jul 16 13:13:27 localhost cib: [29185]: info: retrieveCib: Reading cluster configuration from: /var/lib/heartbeat/crm/cib.8X2aiP (digest: /var/lib/heartbeat/crm/cib.dozGIo)
+
+
+Jul 16 13:13:28 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_notify_0 (call=27, rc=0, cib-update=35, confirmed=true) ok
+
+
+Jul 16 13:13:32 localhost cib: [29425]: info: write_cib_contents: Archived previous version as /var/lib/heartbeat/crm/cib-39.raw
+Jul 16 13:13:32 localhost cib: [29425]: info: write_cib_contents: Wrote version 0.361.0 of the CIB to disk (digest: 6175ffce38406bf41efe6ecd1ce6bbd0)
+Jul 16 13:13:32 localhost cib: [29425]: info: retrieveCib: Reading cluster configuration from: /var/lib/heartbeat/crm/cib.b2kx94 (digest: /var/lib/heartbeat/crm/cib.bZBwFP)
+
+
+Jul 16 13:13:33 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_notify_0 (call=28, rc=0, cib-update=36, confirmed=true) ok
+Jul 16 13:13:34 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-slave_monitor_10000 (call=26, status=1, cib-update=0, confirmed=true) Cancelled
+Jul 16 13:13:34 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-slave_stop_0 (call=29, rc=0, cib-update=37, confirmed=true) ok
+
+
+
+
+＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+[crmd]
+
+Jul 16 12:41:43 localhost heartbeat: [13878]: info: Starting child client "/usr/lib64/heartbeat/crmd" (100,101)
+Jul 16 12:41:43 localhost heartbeat: [13895]: info: Starting "/usr/lib64/heartbeat/crmd" as uid 100  gid 101 (pid 13895)
+
+Jul 16 12:41:43 localhost crmd: [13895]: info: Invoked: /usr/lib64/heartbeat/crmd 
+Jul 16 12:41:43 localhost crmd: [13895]: info: main: CRM Hg Version: unknown 
+
+(1)g_main_new() --> g_main_run()
+Jul 16 12:41:43 localhost crmd: [13895]: info: crmd_init: Starting crmd
+
+Jul 16 12:41:43 localhost crmd: [13895]: info: G_main_add_SignalHandler: Added signal handler for signal 17
+
+
+Jul 16 12:41:45 localhost crmd: [13895]: info: crmd_init: Starting crmd's mainloop
+
+
+Jul 16 12:41:50 localhost crmd: [13895]: info: crm_timer_popped: Wait Timer (I_NULL) just popped!
+
+
+(2) crmd -> heartbeat接続
+Jul 16 12:41:51 localhost crmd: [13895]: info: do_cib_control: CIB connection established
+Jul 16 12:41:51 localhost crmd: [13895]: info: register_heartbeat_conn: Hostname: xc-data1
+Jul 16 12:41:51 localhost crmd: [13895]: info: register_heartbeat_conn: UUID: c4d4be45-a700-4e9b-98e8-cb7f623a703f
+Jul 16 12:41:51 localhost crmd: [13895]: info: crm_cluster_connect: Connecting to Heartbeat
+
+(3)
+Jul 16 12:41:52 localhost heartbeat: [13878]: info: the send queue length from heartbeat to client crmd is set to 1024
+
+(4)
+Jul 16 12:41:52 localhost cib: [13891]: info: crm_update_peer_proc: xc-data2.crmd is now online
+Jul 16 12:41:52 localhost cib: [13891]: info: crm_update_peer_proc: xc-data1.crmd is now online
+
+
+(5) 
+Jul 16 12:41:52 localhost crmd: [13895]: info: do_ha_control: Connected to the cluster
+
+(6) crmd -> ccm 接続
+Jul 16 12:41:52 localhost crmd: [13895]: info: do_ccm_control: CCM connection established... waiting for first callback
+Jul 16 12:41:52 localhost crmd: [13895]: info: do_started: Delaying start, CCM (0000000000100000) not connected
+Jul 16 12:41:52 localhost crmd: [13895]: info: config_query_callback: Checking for expired actions every 900000ms
+
+Jul 16 12:41:52 localhost crmd: [13895]: notice: crmd_client_status_callback: Status update: Client xc-data1/crmd now has status [online] (DC=false)
+Jul 16 12:41:52 localhost crmd: [13895]: info: crm_new_peer: Node 0 is now known as xc-data1
+Jul 16 12:41:52 localhost crmd: [13895]: info: crm_update_peer_proc: xc-data1.crmd is now online
+
+Jul 16 12:41:52 localhost crmd: [13895]: info: crmd_client_status_callback: Not the DC
+Jul 16 12:41:52 localhost crmd: [13895]: notice: crmd_client_status_callback: Status update: Client xc-data1/crmd now has status [online] (DC=false)
+
+Jul 16 12:41:53 localhost crmd: [13895]: info: crmd_client_status_callback: Not the DC
+Jul 16 12:41:53 localhost crmd: [13895]: notice: crmd_client_status_callback: Status update: Client xc-data2/crmd now has status [online] (DC=false)
+
+
+Jul 16 12:41:53 localhost crmd: [13895]: info: crm_new_peer: Node 0 is now known as xc-data2
+Jul 16 12:41:53 localhost crmd: [13895]: info: crm_update_peer_proc: xc-data2.crmd is now online
+
+Jul 16 12:41:53 localhost crmd: [13895]: info: crmd_client_status_callback: Not the DC
+
+
+Jul 16 12:41:53 localhost crmd: [13895]: info: mem_handle_event: Got an event OC_EV_MS_NEW_MEMBERSHIP from ccm
+Jul 16 12:41:53 localhost crmd: [13895]: info: mem_handle_event: instance=2, nodes=2, new=2, lost=0, n_idx=0, new_idx=0, old_idx=4
+Jul 16 12:41:53 localhost crmd: [13895]: info: crmd_ccm_msg_callback: Quorum (re)attained after event=NEW MEMBERSHIP (id=2)
+
+Jul 16 12:41:53 localhost crmd: [13895]: info: ccm_event_detail: NEW MEMBERSHIP: trans=2, nodes=2, new=2, lost=0 n_idx=0, new_idx=0, old_idx=4
+Jul 16 12:41:53 localhost crmd: [13895]: info: ccm_event_detail: 	CURRENT: xc-data2 [nodeid=1, born=1]
+Jul 16 12:41:53 localhost crmd: [13895]: info: ccm_event_detail: 	CURRENT: xc-data1 [nodeid=0, born=2]
+Jul 16 12:41:53 localhost crmd: [13895]: info: ccm_event_detail: 	NEW:     xc-data2 [nodeid=1, born=1]
+Jul 16 12:41:53 localhost crmd: [13895]: info: ccm_event_detail: 	NEW:     xc-data1 [nodeid=0, born=2]
+Jul 16 12:41:53 localhost crmd: [13895]: info: crm_get_peer: Node xc-data2 now has id: 1
+Jul 16 12:41:53 localhost crmd: [13895]: info: crm_update_peer: Node xc-data2: id=1 state=member (new) addr=(null) votes=-1 born=1 seen=2 proc=00000000000000000000000000000200
+Jul 16 12:41:53 localhost crmd: [13895]: info: crm_update_peer_proc: xc-data2.ais is now online
+Jul 16 12:41:54 localhost crmd: [13895]: info: crm_update_peer: Node xc-data1: id=0 state=member (new) addr=(null) votes=-1 born=2 seen=2 proc=00000000000000000000000000000200
+Jul 16 12:41:54 localhost crmd: [13895]: info: crm_update_peer_proc: xc-data1.ais is now online
+
+Jul 16 12:41:54 localhost crmd: [13895]: info: do_started: The local CRM is operational
+Jul 16 12:41:54 localhost crmd: [13895]: info: do_state_transition: State transition S_STARTING -> S_PENDING [ input=I_PENDING cause=C_FSA_INTERNAL origin=do_started ]
+
+
+
+
+Jul 16 12:42:17 localhost crmd: [13895]: info: update_dc: Set DC to xc-data2 (3.0.1)
+
+
+Jul 16 12:42:19 localhost cib: [13891]: info: cib_process_request: Operation complete: op cib_sync for section 'all' (origin=xc-data2/crmd/13, version=0.356.0): ok (rc=0)
+
+
+Jul 16 12:42:21 localhost crmd: [13895]: info: update_attrd: Connecting to attrd...
+Jul 16 12:42:21 localhost crmd: [13895]: info: do_state_transition: State transition S_PENDING -> S_NOT_DC [ input=I_NOT_DC cause=C_HA_MESSAGE origin=do_cl_join_finalize_respond ]
+
+
+Jul 16 12:42:21 localhost attrd: [13894]: info: attrd_local_callback: Sending full refresh (origin=crmd)
+
+
+Jul 16 12:42:22 localhost crmd: [13895]: info: erase_xpath_callback: Deletion of "//node_state[@uname='xc-data1']/transient_attributes": ok (rc=0)
+
+Jul 16 12:42:24 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=10:0:7:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=postgresql:0_monitor_0 )
+Jul 16 12:42:24 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=11:0:7:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=vip-slave_monitor_0 )
+Jul 16 12:42:24 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=12:0:7:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=pingCheck:1_monitor_0 )
+Jul 16 12:42:24 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=13:0:7:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=vip-master_monitor_0 )
+Jul 16 12:42:24 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=14:0:7:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=vip-rep_monitor_0 )
+
+Jul 16 12:42:24 localhost crmd: [13895]: info: process_lrm_event: LRM operation pingCheck:1_monitor_0 (call=4, rc=7, cib-update=8, confirmed=true) not running
+Jul 16 12:42:25 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-master_monitor_0 (call=5, rc=7, cib-update=9, confirmed=true) not running
+Jul 16 12:42:25 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-slave_monitor_0 (call=3, rc=7, cib-update=10, confirmed=true) not running
+Jul 16 12:42:25 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:0_monitor_0 (call=2, rc=7, cib-update=11, confirmed=true) not running
+Jul 16 12:42:25 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-rep_monitor_0 (call=6, rc=7, cib-update=12, confirmed=true) not running
+
+Jul 16 12:42:27 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=41:0:0:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=pingCheck:1_start_0 )
+Jul 16 12:42:27 localhost crmd: [13895]: info: process_lrm_event: LRM operation pingCheck:1_start_0 (call=7, rc=0, cib-update=13, confirmed=true) ok
+
+Jul 16 12:42:28 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=42:0:0:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=pingCheck:1_monitor_10000 )
+Jul 16 12:42:28 localhost crmd: [13895]: info: process_lrm_event: LRM operation pingCheck:1_monitor_10000 (call=8, rc=0, cib-update=14, confirmed=false) ok
+
+Jul 16 12:42:36 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=11:2:0:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=postgresql:1_start_0 )
+Jul 16 12:42:38 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_start_0 (call=9, rc=0, cib-update=15, confirmed=true) ok
+
+Jul 16 12:42:39 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=64:2:0:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=postgresql:1_notify_0 )
+Jul 16 12:42:40 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_notify_0 (call=10, rc=0, cib-update=16, confirmed=true) ok
+
+Jul 16 12:42:41 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=14:3:0:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=postgresql:1_monitor_7000 )
+Jul 16 12:42:42 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_monitor_7000 (call=11, rc=0, cib-update=17, confirmed=false) ok
+
+Jul 16 12:43:13 localhost crmd: [13895]: info: send_direct_ack: ACK'ing resource op postgresql:1_monitor_7000 from 4:5:0:e1807768-25a7-4bfb-8886-a1cdad8e0690: lrm_invoke-lrmd-1342410193-5
+
+Jul 16 12:43:13 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=73:5:0:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=postgresql:1_notify_0 )
+Jul 16 12:43:13 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_monitor_7000 (call=11, status=1, cib-update=0, confirmed=true) Cancelled
+Jul 16 12:43:13 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_notify_0 (call=12, rc=0, cib-update=19, confirmed=true) ok
+
+Jul 16 12:43:14 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=15:5:0:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=postgresql:1_promote_0 )
+Jul 16 12:43:20 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_promote_0 (call=13, rc=0, cib-update=20, confirmed=true) ok
+
+Jul 16 12:43:21 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=74:5:0:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=postgresql:1_notify_0 )
+Jul 16 12:43:38 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_notify_0 (call=14, rc=0, cib-update=21, confirmed=true) ok
+
+
+Jul 16 12:43:53 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=15:6:8:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=postgresql:1_monitor_2000 )
+Jul 16 12:43:53 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=40:6:0:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=vip-slave_start_0 )
+Jul 16 12:43:53 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=50:6:0:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=vip-master_start_0 )
+Jul 16 12:43:53 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=52:6:0:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=vip-rep_start_0 )
+
+
+Jul 16 12:43:53 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-rep_start_0 (call=18, rc=0, cib-update=22, confirmed=true) ok
+Jul 16 12:43:53 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-master_start_0 (call=17, rc=0, cib-update=23, confirmed=true) ok
+Jul 16 12:43:53 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-slave_start_0 (call=16, rc=0, cib-update=24, confirmed=true) ok
+Jul 16 12:43:54 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_monitor_2000 (call=15, rc=8, cib-update=25, confirmed=false) master
+
+Jul 16 12:43:54 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=51:6:0:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=vip-master_monitor_10000 )
+Jul 16 12:43:54 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=53:6:0:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=vip-rep_monitor_10000 )
+Jul 16 12:43:54 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-rep_monitor_10000 (call=20, rc=0, cib-update=26, confirmed=false) ok
+Jul 16 12:43:54 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-master_monitor_10000 (call=19, rc=0, cib-update=27, confirmed=false) ok
+Jul 16 12:43:54 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=41:6:0:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=vip-slave_monitor_10000 )
+Jul 16 12:43:54 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-slave_monitor_10000 (call=21, rc=0, cib-update=28, confirmed=false) ok
+Jul 16 12:44:02 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=43:9:0:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=vip-slave_stop_0 )
+Jul 16 12:44:02 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-slave_monitor_10000 (call=21, status=1, cib-update=0, confirmed=true) Cancelled
+Jul 16 12:44:02 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-slave_stop_0 (call=22, rc=0, cib-update=29, confirmed=true) ok
+
+
+
+
+
+
+Jul 16 13:11:27 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=67:15:0:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=postgresql:1_notify_0 )
+Jul 16 13:11:27 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_notify_0 (call=23, rc=0, cib-update=30, confirmed=true) ok
+Jul 16 13:11:28 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=68:15:0:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=postgresql:1_notify_0 )
+Jul 16 13:11:29 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_notify_0 (call=24, rc=0, cib-update=31, confirmed=true) ok
+Jul 16 13:11:30 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=40:16:0:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=vip-slave_start_0 )
+Jul 16 13:11:30 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-slave_start_0 (call=25, rc=0, cib-update=32, confirmed=true) ok
+Jul 16 13:11:32 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=41:16:0:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=vip-slave_monitor_10000 )
+Jul 16 13:11:32 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-slave_monitor_10000 (call=26, rc=0, cib-update=33, confirmed=false) ok
+Jul 16 13:13:27 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=66:17:0:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=postgresql:1_notify_0 )
+Jul 16 13:13:27 localhost crmd: [13895]: info: config_query_callback: Checking for expired actions every 900000ms
+Jul 16 13:13:28 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_notify_0 (call=27, rc=0, cib-update=35, confirmed=true) ok
+Jul 16 13:13:30 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=67:17:0:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=postgresql:1_notify_0 )
+Jul 16 13:13:33 localhost crmd: [13895]: info: process_lrm_event: LRM operation postgresql:1_notify_0 (call=28, rc=0, cib-update=36, confirmed=true) ok
+Jul 16 13:13:34 localhost crmd: [13895]: info: do_lrm_rsc_op: Performing key=43:18:0:e1807768-25a7-4bfb-8886-a1cdad8e0690 op=vip-slave_stop_0 )
+Jul 16 13:13:34 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-slave_monitor_10000 (call=26, status=1, cib-update=0, confirmed=true) Cancelled
+Jul 16 13:13:34 localhost crmd: [13895]: info: process_lrm_event: LRM operation vip-slave_stop_0 (call=29, rc=0, cib-update=37, confirmed=true) ok
+
+
+＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+
+[lrmd]
+
+
+<hr class="full_hr">
+<div id="lastmodified">
+Last-modified: 2018-9-8
+</div>
+</body>
+</html>
+

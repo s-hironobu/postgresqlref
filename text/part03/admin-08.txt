@@ -1,0 +1,271 @@
+%FILE internal/admin-08.html
+%LASTMOD
+%KEY pgsql-admin08
+
+%TITLE クライアントのアクセス制御
+
+
+<p>
+リモートホストからPostgreSQLサーバにアクセス(接続)するための設定について、順を追って説明します。
+</p>
+
+
+%CHAPTER [1] TCP/IPポートのアクセスを許可する
+
+<p>
+リモートホストからPostgreSQLサーバへのアクセスはTCP5432番ポート(デフォルト)を使うので、
+このポートへのアクセスを許可します。
+<br>
+許可の方法はOSによって異なるので、マニュアルなどを参照してください。
+</p>
+
+
+%CHAPTER [2] postgresql.confファイルの設定
+
+<p>
+設定パラメータlisten_addressesにアクセスを許可する(サーバ自身の)IPアドレスを設定します。
+設定方法を簡単に紹介します([<図3-03>])。
+</p>
+
+
+<table border=1>
+<caption>[<図3-03>]listen_addressesの設定方法</caption>
+<tr><td>
+<img src="./fig-3-03.jpg">
+</td></tr></table>
+
+<br>
+<br>
+
+<p>
+[<図3-03>]において、PostgreSQLの稼働しているサーバには2つのネットワーク("192.168.1.0"と"192.168.2.0")が接続されています。
+サーバのIPアドレスは'192.168.1.10'と'192.168.2.10'です。
+</p>
+
+<blockquote>
+<p>
+(1) listen_addresses = 'localhost'
+<br>
+デフォルトは'localhost'で、PostgreSQLの稼働しているサーバからの接続しか許可しない。よってリモートホストからはアクセスできない。
+</p>
+
+<p>
+(2) listen_addresses = 'localhost,192.168.1.10'
+<br>
+'localhost'に加えて、サーバのIPアドレス'192.168.1.10'からの接続も許可する。よって、ネットワーク"192.168.1.0"からのアクセスも許可する。他方、ネットワーク"192.168.2.0"からのアクセスは拒否する。
+</p>
+
+<p>
+(3) listen_addresses = '*' 
+<br>
+'*'を設定すると、すべてのネットワークからのアクセスを許可する。
+</p>
+</blockquote>
+
+<p>
+listen_addressesに空文字を設定した場合は、(localhostを含む)すべての接続を拒否します。
+</p>
+
+%CHAPTER [3] pg_hba.confファイルの設定
+
+<p>
+pg_hba.confファイルにリモートホストの認証方法を設定します("hba"は"hostbased authentication"の略)。書式は次のとおりです。
+</p>
+
+<p>
+<font color="#ff0000">
+ここは、並びをそろえるためにテーブルを使っていますが、
+実際は1行毎に設定方法を示した[<書式>]なので、
+枠線はつけないでください。
+<br>
+見栄えをきれいにお願いします。できればみえた通りに。
+</font>
+</p>
+
+[<書式>]
+<table>
+<tr bgcolor="#cccccc">
+<th>タイプ</th>	<th>データベース</th>	<th>ロール</th>	<th>ネットワーク:ホスト指定</th>	<th>認証方式</th>	<th>認証オプション</th>
+</tr><tr>
+<td>local</td>	<td>db[,db,..]	</td>	<td>role[,role,..]</td>	<td>	</td>	<td>auth-method</td>	<td>[auth-option]</td>
+</tr><tr>
+<td>host</td>	<td>db[,db,..]	</td>	<td>role[,role,..]</td>	<td>IP-address{ IP-mask|/IP-masklen}</td>	<td>auth-method</td> <td>[auth-option]</td>
+</tr><tr>
+<td>hostssl</td>	<td>db[,db,..]</td>	<td>role[,role,..]</td>	<td>IP-address{ IP-mask|/IP-masklen}</td>	<td>auth-method</td> <td>[auth-option]</td>
+</tr><tr>
+<td>hostnossl</td>	<td>db[,db,..]</td>	<td>role[,role,..]</td>	<td>IP-address{ IP-mask|/IP-masklen}</td>	<td>auth-method</td> <td>[auth-option]</td>
+</tr></table>
+
+<br>
+
+<font color="#ff0000">
+以下のテーブルは、他の[<書式>]の説明と同じ形式でお願いします。
+</font>
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>タイプ　　</th>  <th>説明　　　　　　　　　　　　　</th>
+</tr><tr>
+<td>local</td>	<td>ローカルホストに対するアクセス制御</td>  
+</tr><tr>
+<td>host</td>	<td>リモートホストに対するアクセス制御</td>	
+</tr><tr>
+<td>hostssl</td> <td>SSLで接続するリモートホストに対するアクセス制御</td>
+</tr><tr>
+<td>hostnossl</td> <td>SSL以外で接続するリモートホストに対するアクセス制御</td>
+
+</tr><tr bgcolor="#cccccc">
+<th>データベース(db)　　　　</th>	<th>説明</th>
+</tr><tr>
+<td>db_name</td>	<td>アクセス制御対象のデータベース名を指定。バージョン9.1からはレプリケーションのみに利用できる"replication"も使用可能</td>
+</tr><tr>
+<td>all	</td>		<td>すべてのデータベースにアクセス可能</td>
+</tr><tr>
+<td>sameuser</td>	<td>アクセスするデータベースと同名のロールに属していればアクセス可能</td>
+</tr><tr>
+<td>@file_name</td>	<td>アクセスできるデータベース名を列挙したファイルfile_nameを絶対パスで指定</td>
+</tr><tr bgcolor="#cccccc">
+<th>ロール(role)　　　　　　　</th>	<th>説明</th>
+</tr><tr>
+<td>all	</td>	<td>全ロール</td>
+</tr><tr>
+<td>role_name</td>	<td>アクセス制御対象のロール</td>
+</tr><tr>
+<td>+role_name</td>	<td>'role_name'と同じグループ/ロールに属するロールを含めたアクセス制御を行なう</td>
+</tr><tr>
+<td>@file_name</td>	<td>アクセスできるロール名を列挙したファイルfile_nameを絶対パスで指定</td>
+</tr><tr bgcolor="#cccccc">
+<th>ネットワーク:ホスト指定　　</th>	<th>説明</th>
+</tr><tr>
+<td>IP-address IP-mask</td>	<td>リモートホスト、またはリモートホストが属するネットワークアドレスと、ネットマスク</td>
+</tr><tr>
+<td>IP-address/IP-masklen</td>	<td>リモートホスト、またはリモートホストが属するネットワークアドレスと、ネットマスク長</td>
+</tr><tr bgcolor="#cccccc">
+<th>認証方式　　　　</th><th>説明</th>  
+</tr><tr>
+<td>trust</td>	<td>無条件に接続を許可</td>
+</tr><tr>
+<td>reject</td>	<td>無条件に接続を拒否</td>
+</tr><tr>
+<td>password</td><td>パスワードによる認証</td>
+</tr><tr>
+<td>crypt</td>	<td>暗号化されたパスワードによる認証</td>
+</tr><tr>
+<td>md5</td>	<td>md5で暗号化されたパスワードによる認証</td>
+</tr><tr>
+<td>krb4</td>	<td>Kerberos V4を用いたユーザ認証</td>
+</tr><tr>
+<td>krb5</td>	<td>Kerberos V5を用いたユーザ認証</td>
+</tr><tr>
+<td>ident</td>	<td>identサーバによる認証</td>
+</tr><tr>
+<td> pam</td>	<td rowspan=2 valign=top>PAM(Pluggable Authentication Modules)を利用した認証。詳細はオンラインドキュメントを参照。</td>
+</tr></table>
+
+<br>
+<br>
+
+<p>
+・データベース(db)
+<br>
+データベースの項には、アクセスを許可するデータベース名を記述します。カンマ記号,でデータベース名を列挙します。
+<br>
+多くのデータベースを列挙したいなら、それらのデータベース名を列挙したファイルfile_nameをつくり、pg_hba.confファイルには'@file_name'と記述してPostgreSQL起動時に読み込ませることも可能です。
+<br>
+'all'を設定するとすべてのデータベースにアクセスできます。
+<br>
+'sameuser'を設定すると、接続するロールと同名のデータベースのみアクセスできます。例えば、ロールrole_1はデータベースrole_1にだけアクセスできます。
+</p>
+
+<p>
+・ロール(role)
+<br>
+ロールの項にはアクセスを許可するロール名を記述します。カンマ記号,でロールを列挙できます。データベース名と同様、多くのロールを列挙したいなら、ファイルfile_nameにそれらを列挙して、pg_hba.confファイルには'@file_name'と記述することも可能です。
+<br>
+ロール名の前に'+'記号をつけると、そのグループ/ロールに属したロールにもアクセスを許可します。例えばロールrole_1はロールrole_2のメンバーだとします。その場合、'+role_2'と記述すれば、role_2だけでなくrole_1にもアクセスを許可します。
+</p>
+
+<p>
+・認証方式(auth-method)
+<br>
+PostgreSQLはパスワード認証をはじめ、pamやidentなど各種認証機構をサポートしています。現在はmd5が推奨されています。SSLによる接続のアクセス制御の詳細はオンラインマニュアルなどを参照してください。
+</p>
+
+
+<p>
+・アクセス条件の適用順序
+<br>
+pg_hba.confファイルに記述されたアクセス条件は上から順に検査され、先に一致した条件が適用されます。
+</p>
+<pre>
+local   all     all                                        trust 
+host    all     all     192.168.1.2     255.255.255.255    trust 
+host    all     all     192.168.1.0     255.255.255.0      md5 
+host    all     all     0.0.0.0	        0.0.0.0            reject 
+</pre>
+
+<p>
+この例では、ローカルホストとリモートホスト192.168.1.2は無条件でアクセスを許可し、(192.168.1.2を除く)ネットワーク192.168.1.0に属するリモートホストは(暗号化された)パスワード認証を行います。
+それ以外のアクセスは拒否します。
+</p>
+
+<p>
+・ロールのアクセス制御
+<br>
+次の例では、ローカルホストからのアクセスはすべて許可します。
+また、ネットワーク192.168.2.0からのロールwebroleのアクセスも許可します。
+それ以外はmd5によるパスワード認証を行います(ネットワーク192.168.2.0以外からのwebroleのアクセスも、md5によるパスワード認証)。
+</p>
+
+<pre>
+local   all     all                                         trust 
+host    all     webrole  192.168.2.0 255.255.255.0          trust
+host    all     all      0.0.0.0 0.0.0.0                    md5
+</pre>
+
+
+
+%CHAPTER [4]パスワードの設定
+
+<p>
+次に、md5によるパスワード認証の設定方法を説明します。
+パスワード認証とはサーバへアクセスする時にパスワードを尋ねる方式で、「(md5による)暗号化されたパスワード認証」の場合はパスワードをmd5で暗号化して保存します。
+<p>
+
+<p>
+ロールのパスワード設定はALTER ROLE文で行います。
+<br>
+パスワードを暗号化するか否かは設定パラメータpassword_encryptionの値によって決まります。デフォルトはtrueで暗号化します。
+</p>
+
+<p>
+ロールwebrole3にパスワードを設定する例を示します。
+</p>
+
+<pre>
+sampledb=# ALTER ROLE webrole3 WITH ENCRYPTED PASSWORD 'xxxxx'; ← 実際に設定するパスワードを記述
+ALTER USER 
+</pre>
+
+<p>
+パスワードはシステムカタログpg_authidに"暗号化して"保存します。
+</p>
+
+<pre>
+sampledb=# SELECT rolname, rolpassword FROM pg_authid WHERE rolname = 'webrole3';
+ rolname  |             rolpassword             
+----------+-------------------------------------
+ webrole3 | md55abf2a0ca893e3e79c914033c4c725a3
+(1 row)
+</pre>
+
+<p>
+この設定によってロールwebrole3は、リモートホスト192.168.1.10から認証方式md5を利用して全データベースにアクセスできます。
+</p>
+
+
+%CHAPTER [5] PostgreSQLサーバの再起動
+
+<p>
+設定を反映させるため、PostgreSQLサーバを再起動します。
+</p>

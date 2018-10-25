@@ -1,0 +1,148 @@
+%FILE internal/param-08.html
+%LASTMOD
+%KEY pgsql-param08
+
+%TITLE エラー報告とログ取得		ERROR REPORTING AND LOGGING
+
+
+<table border=1>
+<caption>[<設定項目一覧>]</caption>
+<tr bgcolor="#cccccc">
+<th><sup>変更<br>可能性</sup></th> <th>設定項目</th>	<th>パラメータ<br>[デフォルト]</th>		<th>説明</th>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>Where to Log</th>
+</tr><tr>
+<td>△</td>		<td>log_destination</td>		<td>文字列['stderr']</td>		<td>ログの出力先。stdout,stderr,syslog,eventlog(win32のみ)</td>
+</tr><tr>
+<td>×   </td>		<td>logging_collector	</td>		<td>on/off[off]	</td>		<td>標準エラーに出力されたエラーログを、PostgreSQLのログファイルに書き込むか否か。バージョン8.3から</td>
+
+</tr><tr>
+
+<td>×   </td>		<td> redirect_stderr</td>		<td>on/off[off]	</td>		<td>標準エラーに出力されたエラーログを、PostgreSQLのログファイルに書き込むか否か。バージョン8.2以降logging_collectorに改名</td>
+</tr><tr>
+<td>△  </td>		<td> log_directory	</td>		<td>文字列['pg_log']</td>		<td>PostgreSQLのログファイルを書き込む(ベースディレクトリ下の)サブディレクトリ</td>
+</tr><tr>
+<td>△   </td>		<td> log_filename	</td>		<td>文字列</td>		<td>	PostgreSQLのログファイル名。デフォルト値や設定方法は[<3-16>]参照</td>
+</tr><tr>
+<td>△  </td>		<td>  log_file_mode	</td>		<td> 数値列[0600]	</td>		<td>ログファイルのパーミッション。バージョン9.1から</td>
+</tr><tr>
+<td>△ </td>		<td>   log_truncate_on_rotation	</td>		<td> on/off[off]</td>		<td>すでにログファイルが存在する場合、ログファイルに上書きする(on)か、追記する(off)か</td>
+</tr><tr>
+<td>△ </td>		<td>   log_rotation_age	</td>		<td> 整数[1d]	</td>		<td>ログローテーションする時間間隔。単位は[分][時][日]など。バージョン8.1までは[分]。0ならローテーションしない</td>
+</tr><tr>
+<td>△  </td>		<td> log_rotation_size	</td>		<td> 整数[10MB]	</td>		<td>ログローテーションするファイルサイズ。単位は[byte]。バージョン8.1までは[Kbyte]。0ならローテーションしない</td>
+</tr><tr>
+<td>△	</td>		<td>syslog_facility	</td>		<td>文字列['LOCAL0']	</td>		<td>syslogのファシリティを指定</td>
+</tr><tr>
+<td>△	</td>		<td>syslog_ident	</td>		<td>文字列['postgres']	</td>		<td>メッセージのプログラム名を指定</td>
+
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>When to Log</th>
+
+
+</tr><tr>
+<td>◎	</td>		<td>client_min_messages</td>		<td>	下表[notice]	</td>		<td>クライアントのメッセージ出力レベルを設定</td>
+</tr><tr>
+<td>○	</td>		<td>log_min_messages	</td>		<td>下表[warning]	</td>		<td>PostgreSQLサーバのメッセージ出力レベルを設定</td>
+</tr><tr>
+<td>○</td>		<td>	log_error_verbosity	</td>		<td>文字列[default]	</td>		<td>	ログファイルに書き込む情報の詳細さを設定。[terse|default|verbose]から選択する</td>
+</tr><tr>
+<td>○	</td>		<td>log_min_error_statement</td>		<td> 下表[error]</td>		<td>	エラーを起こすSQL文を実行した際のメッセージ出力レベルを設定</td>
+</tr><tr>
+<td>○</td>		<td>	log_min_duration_statement	</td>		<td>整数[-1]	</td>		<td>設定した時間よりも処理時間を要したSQL文とその処理時間をログに書き込む。単位は[ミリ秒]。0の場合はすべてのSQL文と処理時間を書き込む。-1の場合は機能が無効</td>
+</tr><tr>
+<td>×	</td>		<td>silent_mode		</td>		<td>on/off[off]</td>		<td>	バックグラウンドで起動するか否か</td>
+
+
+
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>What to Log</th>
+
+
+</tr><tr>
+<td>◎</td>		<td>	debug_print_parse	</td>		<td>on/off[off]</td>		<td>	パーサの解析結果(パースツリー)を出力するか否か。デバッグ用</td>
+</tr><tr>
+<td>◎</td>		<td>	debug_print_rewritten</td>		<td>	 on/off[off]	</td>	<td>オプティマイザが行った問い合わせ(query)の書き換えを出力するか否か。デバッグ用</td>
+</tr><tr>
+<td>◎</td>		<td>	debug_print_plan </td>		<td>     on/off[off]		</td>		<td>問い合わせプランを出力するか否か。デバッグ用</td>
+</tr><tr>
+<td>◎</td>		<td>	debug_pretty_print  </td>		<td>  on/off[on]		</td>		<td>デバッグ情報を整形して出力するか否か。デバッグ用</td>
+</tr><tr>
+<td>△</td>		<td>	log_checkpoints	</td>		<td>      on/off[off]	</td>		<td>	CHECKPOINTの開始と完了時にログを書き出すか否か。バージョン8.3から</td>
+</tr><tr>
+<td>×</td>		<td>	log_connections		</td>		<td>on/off[off]	</td>		<td>接続情報をsyslogファイルに出力するか否か </td>
+</tr><tr>
+<td>×	</td>		<td>log_disconnections	</td>		<td>on/off[off]	</td>		<td>セッション終了時に、セッションの接続時間を記録するか否か</td>
+</tr><tr>
+<td>○</td>		<td>	log_duration	</td>		<td>	on/off[off]	</td>		<td>SQL文の実行に要した時間を出力するか否か</td>
+</tr><tr>
+<td>△</td>		<td>	log_line_prefix	</td>		<td>	文字列[''(空文字)]	</td>		<td>ログの先頭に添付する情報の書式。詳細は[<3-16>]参照</td>
+</tr><tr>
+<td>○</td>		<td>	log_error_verbosity	</td>		<td>terse/default/verbose[default]	</td>		<td>メッセージの詳細さ。バージョン9.0から</td>
+</tr><tr>
+<td>△</td>		<td>	log_hostname	</td>		<td>	on/off[off]	</td>		<td>(IPアドレスでなく)ホスト名を表示するか否か</td>
+</tr><tr>
+<td>○</td>		<td>	log_lock_waits	</td>		<td>	on/off[off]	</td>		<td>	deadlock_timeoutよりもロック待ち時間が長くなった場合にログを書き出すか否か。バージョン8.3から</td>
+</tr><tr>
+<td>○</td>		<td>	log_statement	</td>		<td>	下表参照	</td>		<td>	実行したSQL文を出力するか否か </td>
+</tr><tr>
+<td>○</td>		<td>	log_temp_files	</td>		<td>	整数[-1]	</td>		<td>	一時ファイルが削除された時にログに書き出すか否か。-1なら書き出さない。0なら全て書き出す。整数値ならそのkBを越える一時テーブルサイズのみ書き出す。バージョン8.3から</td>
+</tr><tr>
+<td>△</td>		<td>	log_timezone	</td>		<td>	文字列[サーバのTZ]	</td>		<td>ログに書き出す時刻のタイムゾーン。デフォルトはサーバのTZ。バージョン8.3から</td>
+</tr></table>
+
+<br>
+
+<table border=1>
+<caption>[syslogのログ出力レベル]</caption>
+<tr bgcolor="#cccccc">
+<th>ログの出力レベル</th>	<th>説明</th>
+</tr><tr>
+<td>0	</td>	<td>ログ出力無効</td>
+</tr><tr>
+<td>1	</td>	<td>syslogファイルと標準出力の両方に表示 </td>
+</tr><tr>
+<td>2	</td>	<td>syslogファイルのみに表示 </td>
+</tr></table>
+
+<br>
+
+
+<table border=1>
+<caption>[メッセージ出力レベル]</caption>
+<tr bgcolor="#cccccc">
+<th>設定項目</th>	<th>設定可能な値</th>
+</tr><tr>
+<td>client_min_messages</td>	<td rowspan=2>DEBUG5, DEBUG4, DEBUG3, DEBUG2, DEBUG1, LOG, NOTICE, WARNING, ERROR, FATAL, PANIC</td>
+</tr><tr>
+<td>log_min_error_statement</td>
+</tr><tr>
+<td>log_min_messages</td>	<td rowspan=2>DEBUG5, DEBUG4, DEBUG3, DEBUG2, DEBUG1, INFO, NOTICE, WARNING, ERROR, LOG, FATAL, PANIC</td>
+</tr><tr>
+<td>server_min_messages</td>
+</tr></table>
+
+<br>
+
+<table border=1>
+<caption>[log_statementの設定値とデフォルト]</caption>
+<tr bgcolor="#cccccc">
+<th>設定可能な値</th>	<th>デフォルト</th>
+</tr><tr>
+<td>{none, ddl, mod, all} </td>	<td>none</td>
+</tr></table>
+
+<p>
+    ddl(Data Definition Language) = 各種CREATE文, ALTER文など
+<br>
+     mod = ddlに加えてINSERT文、UPDATE文、DELETE文、TRUNCATE文、COPY FROM文など
+</p>
+
+%CHAPTER 解説
+
+<p>
+具体的なログの出力方法は[<3-16>]を参照してください。
+</p>
+

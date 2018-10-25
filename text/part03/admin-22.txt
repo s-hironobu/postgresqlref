@@ -1,0 +1,335 @@
+%FILE internal/admin-22.html
+%LASTMOD
+%KEY pgsql-admin22
+
+
+%TITLE レプリケーションの設定
+
+<p>
+[<2-11>]で解説したレプリケーションの設定方法を説明します。
+<br>
+構築するシステム構成を[<図3-06>]に示します。
+</p>
+
+
+<table BORDER=1>
+<caption>[<図3-06>] システム構成</caption>
+<tr><td><center>
+<img src="./fig-3-22-01.jpg"><br>
+</center></td></tr>
+</table>
+
+<p>
+マスタ１台に対し、3台のスレーブを接続します。
+slave1とslave2は同期レプリケーション、slave3は非同期レプリケーションとします。
+</p>
+
+<p>
+ここでは、設定方法の紹介の意味で非同期も説明します。
+しかしカスケード接続でシステム構築する場合を除き、
+(耐障害性の観点から)実運用では同期レプリケーションを選択すべきでしょう。
+</p>
+
+
+%CHAPTER マスタの準備
+
+<p>
+マスタ側の設定を説明します。
+</p>
+
+%SECTION postgresql.confの設定
+
+<p>
+以下、マスタのpostgresql.confの設定例を示します。
+</p>
+
+[< postgresql.confの設定例>]
+
+<pre>
+# 適宜、セキュリティポリシーに合わせて設定する。
+listen_addresses = '*'
+
+# archive か hot_standby。今回はHotStandbyと併用するので"hot_standby"
+wal_level = hot_standby
+
+# スレーブの最大数。ここでは3。
+max_wal_senders = 3
+
+# pg_xlog以下に残すWALログの数。詳細は[<コラム3-6>]を参照。
+wal_keep_segments = 5
+
+# 同期レプリケーションするスレーブ。ここではslave1とslave2　
+synchronous_standby_names = 'slave1,slave2'
+</pre>
+
+
+<blockquote><table BORDER="1"><tr><td>コラム3-6:マスタのWALログ切り替えについて</td><td>
+
+<p>
+スレーブの起動が遅れると、マスタ側pg_xlog以下のWALログが入れ替わってしまい、
+スレーブが要求するWALログが削除されてしまう可能性があります。
+よって、ベースバックアップ取得後は速やかにスレーブ起動することが望ましいです。
+<br>
+安全策として、
+<u>マスタの設定パラメータwal_keep_segmentsに1以上の値を設定することを推奨</u>します。
+<br>
+これによってマスタは、指定した数のWALログをpg_xlog以下に残すので、
+スレーブ起動にしばらく時間的猶予ができます。
+</p>
+
+</td></tr></table></blockquote>
+
+
+
+%SECTION pg_hba.confの設定
+
+<p>
+スレーブからの接続を許可するため、pg_hba.confに以下の行を追加します。 
+USERはスレーブの実行ユーザを指定します(ここではpostgres)。
+</p>
+
+<pre>
+# TYPE  DATABASE        USER            CIDR-ADDRESS            METHOD
+host    replication     postgres	192.168.1.0/24            trust
+</pre>
+
+%SECTION 起動
+
+<p>
+ベースバックアップ取得のため、マスタを起動します。
+</p>
+
+<pre>
+master> pg_ctl -D /usr/local/pgsql/data start
+</pre>
+
+
+
+%CHAPTER スレーブの準備
+
+<p>
+次に、スレーブのサーバ設定を説明します。
+slave1を例にするので、適宜slave2とslave3の設定も行ってください。
+</p>
+
+
+%SECTION ベースバックアップの取得
+
+<p>
+[<3-21>]において、手動でベースバックアップを取得する方法を説明しました。
+ここでは、バージョン9.1でサポートされたpg_basebackupコマンドによる方法を説明します。
+</p>
+
+<p>
+pg_basebackupコマンドはStreamingReplicationに依存したツールです。
+<br>
+pg_basebackupはマスタサーバのwalsenderプロセスに接続し、
+すべてのテーブルスペース以下のファイルと、
+指定されていれば最新のWALログファイルを転送します。
+</p>
+
+%SUBSECTION pg_basebackupの使い方
+
+<p>
+マスタが起動していることを確認します。
+<br>
+スレーブ側で既にデータベースクラスタが存在する場合は削除します。
+削除しないとpg_basebackupはエラーメッセージを出力して終了してしまいます。
+</p>
+
+<pre>
+slave1> rm -rf /usr/local/pgsql/data
+</pre>
+
+
+<p>
+スレーブを稼働するサーバ上でpg_basebackupコマンドを実行します。
+<br>
+コマンドの構文とオプションを以下に示します。
+</p>
+
+[<書式>]
+<pre>
+  pg_basebackup [OPTION]...
+</pre>
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>Options controlling the output:</th>
+</tr><tr>
+<td>-D DIRECTORY </td>	<td>スレーブ側で作成するデータベースクラスタのディレクトリを指定</td>
+</tr><tr>
+<td>--format=plain|tar  </td>	<td>バックアップしたデータのフォーマット。plainはデータベースクラスタそのもの。tarはtarコマンドでアーカイブ化したもの。デフォルトはplain</td>
+</tr><tr>
+<td>--xlog  </td>	<td>マスタ側pg_xlog以下のWALログをバックアップする。このオプションを設定しないとWALログをバックアップしない。</td>
+</tr><tr>
+<td>--xlog-method=fetch|stream    </td>	<td>マスタ側pg_xlog以下のWALログをバックアップする。--xlogは--xlog-method=fetchと同等。バージョン9.2から</td>
+</tr><tr>
+<td>--gzip   </td>	<td>--format=tarと併用。tarアーカイブをgzipで圧縮する</td>
+</tr><tr>
+<td>--compress=0-9  </td>	<td> gzipの圧縮レベル</td>
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>General options:</th>
+
+</tr><tr>
+<td>--checkpoint=fast|spread </td>	<td>fastの場合、basebackup実行直前にCHECKPOINTを実行する</td>
+</tr><tr>
+<td>--label=LABEL	  </td>	<td> ベースバックアップ実行時のラベル</td>
+</tr><tr>
+<td>--progress　</td>	<td> pg_basebackupコマンド実行中の進捗を表示する</td>
+</tr><tr>
+<td>--verbose</td>	<td> 詳細なメッセージを表示する</td>
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>Connection options:</th>
+
+</tr><tr>
+<td>  -h HOSTNAME   </td>	<td> マスタのホスト名</td>
+</tr><tr>
+<td>  -p PORT     </td>	<td> マスタのポート番号</td>
+</tr><tr>
+<td>  -U NAME   </td>	<td> マスタへの接続ユーザ名</td>
+</tr><tr>
+<td> --no-password  </td>	<td>  パスワード入力しない</td>
+</tr></table>
+
+<br>
+
+<p>
+slave1での、pg_basebackupコマンドの実行例を示します。
+</p>
+
+<pre>
+slave1> pg_basebackup -h master -p 5432 -D /usr/local/pgsql/data 
+>                                       --xlog --progress --verbose
+xlog start point: 0/1D000020
+810851/810851 kB (100%), 1/1 tablespace                                    
+xlog end point: 0/1D0000C4
+pg_basebackup: base backup completed
+</pre>
+
+<p>
+バックアップが終了すると、
+指定したディレクトリ(/usr/local/pgsql/data)にマスタ側のデータベースクラスタの内容が
+コピーされています。
+また、バックアップ開始から完了までの間に生成されたWALログもコピーされています。
+</p>
+
+<pre>
+slave1> cd /usr/local/pgsql/data
+slave1> ls data/
+PG_VERSION    pg_clog        pg_multixact  pg_stat_tmp  pg_xlog
+backup_label  pg_hba.conf    pg_notify     pg_subtrans  postgresql.conf
+base          pg_ident.conf  pg_serial     pg_tblspc    postmaster.opts
+global        pg_log         pg_snapshots  pg_twophase
+
+slave1> ls data/pg_xlog
+00000001000000000000001D
+</pre>
+
+<p>
+今回はマスタ側にテーブルスペースを作成していませんが、もしもテーブルスペースが存在すればそのディレクトリも
+スレーブ側にコピーされます。
+</p>
+
+
+%SECTION postgresql.conf、recovery.confファイルの設定
+
+<p>
+pg_basebackupコマンドでコピーしたデータベースクラスタには、マスタのpostgresql.confとpg_hba.confもコピーされているので、
+適宜パラメータ値を変更します。
+<br>
+以下に、postgresql.confで最低限修正すべき点を示します。
+</p>
+
+[< postgresql.confの修正>]
+<pre>
+# スレーブはsynchronous_standby_namesを無効にする。
+synchronous_standby_names = ''
+
+# HotStandbyの設定
+hot_standby = on
+</pre>
+
+
+<p>
+次にrecovery.confを準備します。 PostgreSQLをインストールしたディレクトリにshareというサブディレクトリがあり、そこにサンプルファイルrecovery.conf.sampleがあるので、それをコピーして編集します。
+</p>
+
+<pre>
+slave1> cd /usr/local/pgsql/data
+slave1> cp ../share/recovery.conf.sample recovery.conf
+</pre>
+
+<p>
+編集が必要な項目を示します。これはslave1の例です。slave2、slave3でも同様の編集を行ってください。
+</p>
+
+[< recovery.confの設定例>]
+<pre>
+standby_mode = on
+
+# スレーブ名をapplication_nameに設定
+primary_conninfo = 'host=master port=5432 application_name=slave1' 
+</pre>
+
+
+%SECTION スレーブ起動
+
+<p>
+slave1を起動します。
+</p>
+
+<pre>
+slave1> pg_ctl -D /usr/local/pgsql/data start
+</pre>
+
+<p>
+slave2、slave3も起動します。
+</p>
+
+%CHAPTER 動作確認
+
+<p>
+マスタ側で動作確認を行います。
+<br>
+稼働統計情報pg_stat_replicationの詳細は、[<3-15>]の[<表3-17>]を参照してください。
+</p>
+
+<pre>
+sampledb=# SELECT application_name,state,sync_priority,sync_state
+sampledb-#                                   FROM pg_stat_replication;
+ application_name |   state   | sync_priority | sync_state 
+------------------+-----------+---------------+------------
+ slave1           | streaming |             1 | sync
+ slave2           | streaming |             2 | potential
+ slave3           | streaming |             0 | async
+(3 rows)
+</pre>
+
+<p>
+slave1からslave3まで、3スレーブの接続が確認できます。
+<br>
+各スレーブの状態(sync_state)について簡単に説明します。
+</p>
+
+<ul>
+<li>slave1: sync
+ <p>
+slave1は同期レプリケーションで稼働している。
+ </p>
+
+<li>slave2: potential
+ <p>
+slave2は現時点では非同期レプリケーションだが、slave1がダウンすると同期レプリケーションに移行する(potentialを持つ)。
+ </p>
+
+<li>slave3: async
+ <p>
+slave3は非同期レプリケーションで稼働している。
+ </p>
+</ul>
+

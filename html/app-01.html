@@ -1,0 +1,835 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+ <title>PostgreSQLバイブル草稿</title>
+ <link rel="stylesheet" type="text/css" media="screen" href="./default.css"">
+</head>
+
+<body>
+
+<script language=javascript>
+<!--
+function show(inputData) {
+var objID=document.getElementById( "layer_" + inputData );
+var buttonID=document.getElementById( "category_" + inputData );
+if(objID.className=='close') {
+objID.style.display='block';
+objID.className='open';
+}else{
+objID.style.display='none';
+objID.className='close';
+}
+}
+//-->
+</script>
+
+<div id="header">
+<h1 class="title">PostgreSQLバイブル草稿</title></h1>
+    <span class="small">
+</span>
+</div>
+
+
+<hr class="full_hr">
+<table style="width: 100%;" border="0">
+ <tbody><tr>
+  <td class="menubar">
+   <div id="menubar">
+
+
+<h5>PostgreSQLとは</h5>
+
+<li><a href="./index.html">PostgreSQLとは</a><br></li>
+
+<h5>PostgreSQLの内部構造</h5>
+<ul>
+<li><a href="./internal.html">とびら</a><br></li>
+</ul>
+<ol>
+<li><a href="./internal-01.html">プロセスとメモリ構造</a><br></li>
+<li><a href="./internal-02.html">データベースクラスタ、テーブルの構造</a></li>
+<li><a href="./internal-03.html">SQLの実行</a></li>
+<li><a href="./internal-04.html">プラン処理</a></li>
+<li><a href="./internal-05.html">バッファマネージャとバックグランドライタ</a></li>
+<li><a href="./internal-06.html">トランザクションIDと同時実行制御</a></li>
+<li><a href="./internal-07.html">VACUUM</a></li>
+<li><a href="./internal-08.html">HOTとIndex Only Scan</a></li>
+<li><a href="./internal-09.html">WAL(Write Ahead Logging)</a></li>
+<li><a href="./internal-10.html">アーカイブログとPITR</a></li>
+<li><a href="./internal-11.html">レプリケーション(Streaming ReplicationとHotStandby)</a></li>
+</ol>
+
+
+<h5>PostgreSQLサーバ管理</h5>
+
+<ul>
+<li><a href="./admin.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[PostgreSQLの基礎]<br>
+<li><a href="./admin-01.html">オブジェクト、データベース、スキーマ</a><br></li>
+<li><a href="./admin-02.html">システムカタログ</a><br></li>
+<li><a href="./admin-03.html">文字コードの扱い</a><br></li>
+
+
+[インストールと起動、停止]<br>
+<li><a href="./admin-04.html">インストール</a><br></li>
+<li><a href="./admin-05.html">データベースシステムの初期化 initdb</a><br></li>
+<li><a href="./admin-06.html">PostgreSQLサーバの起動/停止</a><br></li>
+
+
+[認証とアクセス制御]<br>
+<li><a href="./admin-07.html">認証とアクセス制御</a><br></li>
+<li><a href="./admin-08.html">クライアントのアクセス制御</a><br></li>
+<li><a href="./admin-09.html">権限について</a><br></li>
+<li><a href="./admin-10.html">ロールの作成と権限制御</a><br></li>
+
+<HR>
+
+[バックアップとアップグレード]<br>
+<li><a href="./admin-11.html">バックアップとアップグレード</a><br></li>
+<li><a href="./admin-12.html">ダンプとリストア</a><br></li>
+<li><a href="./admin-13.html">アップグレード</a><br></li>
+
+[保守、監視とチューニング]<br>
+<li><a href="./admin-14.html">保守、監視とチューニング</a><br></li> 
+<li><a href="./admin-15.html">稼働統計情報</a><br></li>
+<li><a href="./admin-16.html">実行ログの取得</a><br></li>
+<li><a href="./admin-17.html">モニタリングツール</a><br></li>
+<li><a href="./admin-18.html">ログと統計情報の分析</a><br></li>
+<li><a href="./admin-19.html">パラメータチューニング</a><br></li>
+
+[耐障害性、高可用性]<br>
+<li><a href="./admin-20.html">耐障害性、高可用性</a><br></li>
+<li><a href="./admin-21.html">アーカイブログとPITR</a><br></li>
+<li><a href="./admin-22.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-23.html">レプリケーションの故障対応</a><br></li>
+
+
+[FDW]<br>
+<li><a href="./admin-24.html">FDW</a><br></li>
+<li><a href="./admin-25.html">postgres_fdw</a><br></li>
+</ol>
+
+[追加の文章(未完)]<br>
+<li><a href="./admin-26.html">ロギング</a><br></li>
+<li><a href="./admin-27.html">統計情報</a><br></li>
+<li><a href="./admin-28.html">モニタリング</a><br></li>
+<li><a href="./admin-29.html">メンテナンス</a><br></li>
+</ol>
+
+
+<h5>設定パラメータ</h5>
+
+<ol>
+<li><a href="./param-01.html">postgresql.confの設定</a><br></li>
+<li><a href="./param-02.html">ファイルの場所</a><br></li>
+<li><a href="./param-03.html">接続と認証</a><br></li>
+<li><a href="./param-04.html">資源の消費</a><br></li>
+<li><a href="./param-05.html">WAL</a><br></li>
+<li><a href="./param-06.html">レプリケーション</a><br></li>
+<li><a href="./param-07.html">問い合わせ計画</a><br></li>
+<li><a href="./param-08.html">エラー報告とログ取得</a><br></li>
+<li><a href="./param-09.html">稼働統計情報</a><br></li>
+<li><a href="./param-10.html">AUTOVACUUM</a><br></li>
+<li><a href="./param-11.html">クライアント接続デフォルト</a><br></li>
+<li><a href="./param-12.html">ロック管理/バージョンとプラットフォーム互換性</a><br></li>
+</ol>
+
+
+<h5>psql</h5>
+<ul>
+<li><a href="./psql.html">・対話型インタフェースpsqlの使い方</a><br></li>
+</ul>
+
+<ol>
+<li><a href="./psql-01.html">psqlとは</a><br></li>
+<li><a href="./psql-02.html">PostgreSQLサーバとの接続/切断/再接続</a><br></li>
+<li><a href="./psql-03.html">データベース一覧表示</a><br></li>
+<li><a href="./psql-04.html">コマンドラインからSQL実行</a><br></li>
+<li><a href="./psql-05.html">バッチファイルの実行(メタコマンド)</a><br></li>
+<li><a href="./psql-06.html">情報表示</a><br></li>
+<li><a href="./psql-07.html">表示の制御</a><br></li>
+<li><a href="./psql-08.html">ラージオブジェクトの扱い</a><br></li>
+<li><a href="./psql-09.html">データのコピー</a><br></li>
+<li><a href="./psql-10.html">その他のメタコマンド</a><br></li>
+
+</ol>
+
+
+<h5>SQL</h5>
+
+<ul>
+<li><a href="./sql.html">・とびら</a><br></li>
+</ul>
+
+<ol>
+[SQL]<br>
+
+<li><a href="./sql-01.html">SQL語彙</a><br></li>
+<li><a href="./sql-02.html">テーブルスペースの作成/削除/変更</a><br></li>
+<li><a href="./sql-03.html">データベースの作成/変更/削除</a><br></li>
+<li><a href="./sql-04.html">テーブルの作成</a><br></li>
+<li><a href="./sql-05.html">外部キー</a><br></li>
+<li><a href="./sql-06.html">オブジェクトの継承/LIKE句</a><br></li>
+<li><a href="./sql-07.html">問い合わせ結果から新しいテーブルを作成</a><br></li>
+<li><a href="./sql-08.html">テーブルの削除</a><br></li>
+<li><a href="./sql-09.html">スキーマの定義/変更/削除</a><br></li>
+
+<li><a href="./sql-10.html">ALTER TABLE(1)</a><br></li>
+<li><a href="./sql-11.html">ALTER TABLE(2)</a><br></li>
+<li><a href="./sql-12.html">ALTER TABLE(3)</a><br></li>
+
+<li><a href="./sql-13.html">ロール</a><br></li>
+<li><a href="./sql-14.html">GRANT REVOKE(1)</a><br></li>
+<li><a href="./sql-15.html">GRANT REVOKE(2)</a><br></li>
+<li><a href="./sql-16.html">INSERT</a><br></li>
+<li><a href="./sql-17.html">SELECT</a><br></li>
+<li><a href="./sql-18.html">FROM句</a><br></li>
+<li><a href="./sql-19.html">WHERE句</a><br></li>
+
+<li><a href="./sql-20.html">WINDOW句、OVER句</a><br></li>
+<li><a href="./sql-21.html">共通テーブル式(CTE)</a><br></li>
+
+
+<li><a href="./sql-22.html">グループ化</a><br></li>
+<li><a href="./sql-23.html">DISTINCT句</a><br></li>
+<li><a href="./sql-24.html">テーブル結合</a><br></li>
+<li><a href="./sql-25.html">問い合わせの結合</a><br></li>
+<li><a href="./sql-26.html">ORDER BY</a><br></li>
+<li><a href="./sql-27.html">LIMIT OFFSET</a><br></li>
+<li><a href="./sql-28.html">FOR UPDATE/ FOR SHARE</a><br></li>
+<li><a href="./sql-29.html">サブクエリ</a><br></li>
+<li><a href="./sql-30.html">CASE式</a><br></li>
+<li><a href="./sql-31.html">VALUES</a><br></li>
+<li><a href="./sql-32.html">UPDATE</a><br></li>
+<li><a href="./sql-33.html">DELETE</a><br></li>
+<li><a href="./sql-34.html">TRUNCATE</a><br></li>
+
+<li><a href="./sql-35.html">インデックス</a><br></li>
+
+<li><a href="./sql-36.html">VIEW</a><br></li>
+<li><a href="./sql-37.html">シーケンス</a><br></li>
+<li><a href="./sql-38.html">トリガ</a><br></li>
+<li><a href="./sql-39.html">カーソル</a><br></li>
+<li><a href="./sql-40.html">プリペアステートメント</a><br></li>
+<li><a href="./sql-41.html">トランザクション</a><br></li>
+<li><a href="./sql-42.html">セーブポイント</a><br></li>
+<li><a href="./sql-43.html">2相コミット</a><br></li>
+<li><a href="./sql-44.html">LOCK</a><br></li>
+<li><a href="./sql-45.html">SET/SHOW/RESET</a><br></li>
+<li><a href="./sql-46.html">VACUUM</a><br></li>
+<li><a href="./sql-47.html">ANALYZE</a><br></li>
+<li><a href="./sql-48.html">EXPLAIN</a><br></li>
+<li><a href="./sql-49.html">COPY/IMPORT</a><br></li>
+<li><a href="./sql-50.html">COPY/EXPORT</a><br></li>
+<li><a href="./sql-51.html">関数定義</a><br></li>
+<li><a href="./sql-52.html">エクステンション</a><br></li>
+<li><a href="./sql-53.html">外部サーバの定義、変更、削除</a><br></li>
+<li><a href="./sql-54.html">外部サーバのユーザマップ定義、変更、削除</a><br></li>
+<li><a href="./sql-55.html">外部テーブルの定義、変更、削除</a><br></li>
+<hr>
+<li><a href="./sql-56.html">イベントトリガ</a><br></li>
+<li><a href="./sql-57.html">行レベルセキュリティ</a><br></li>
+
+<hr>
+<li><a href="./sql-60.html">新しい機能</a><br></li>
+</ol>
+
+
+<h5>関数</h5>
+
+[関数]<br>
+<ul>
+<li><a href="./function.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[データ型]<br>
+<li><a href="./type-01.html">データ型</a><br></li>
+<li><a href="./type-02.html">数値データ型</a><br></li>
+<li><a href="./type-03.html">文字データ型</a><br></li>
+<li><a href="./type-04.html">日付/時刻データ型</a><br></li>
+<li><a href="./type-05.html">日付/時刻表示形式とタイムゾーンの設定</a><br></li>
+<li><a href="./type-06.html">ブーリアン型</a><br></li>
+<li><a href="./type-07.html">ビット列データ型</a><br></li>
+<li><a href="./type-08.html">疑似データ型</a><br></li>
+<li><a href="./type-09.html">バイナリ列データ型</a><br></li>
+<li><a href="./type-10.html">Range型</a><br></li>
+<li><a href="./type-11.html">配列</a><br></li>
+<hr>
+<li><a href="./type-12.html">JSON型</a><br></li>
+
+<hr>
+[演算子]<br>
+<li><a href="./ope-01.html">演算子</a><br></li>
+<li><a href="./ope-02.html">論理演算子</a><br></li>
+<li><a href="./ope-03.html">比較演算子</a><br></li>
+<li><a href="./ope-04.html">算術演算子</a><br></li>
+<li><a href="./ope-05.html">文字列演算子</a><br></li>
+<li><a href="./ope-06.html">パターンマッチング</a><br></li>
+<li><a href="./ope-07.html">日付/時刻演算子</a><br></li>
+<li><a href="./ope-08.html">Range型演算子</a><br></li>
+<hr>
+<li><a href="./ope-09.html">JSON型演算子</a><br></li>
+
+
+<hr>
+[関数]<br>
+<li><a href="./func-01.html">関数</a><br></li>
+<li><a href="./func-02.html">算術関数</a><br></li>
+<li><a href="./func-03.html">集約関数/統計関数</a><br></li>
+<li><a href="./func-04.html">文字列関数</a><br></li>
+<li><a href="./func-05.html">日付・時刻関数</a><br></li>
+<li><a href="./func-06.html">型変換関数</a><br></li>
+<li><a href="./func-07.html">Range型関数</a><br></li>
+<li><a href="./func-08.html">Window関数</a><br></li>
+<li><a href="./func-09.html">セッション情報関数</a><br></li>
+<li><a href="./func-10.html">アクセス権限とスキーマ可視性照会関数</a><br></li>
+<li><a href="./func-11.html">データベースオブジェクト関数</a><br></li>
+<li><a href="./func-12.html">バックアップとリカバリ制御関数</a><br></li>
+
+<li><a href="./func-13.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-15.html">構成設定関数</a><br></li>
+<li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-17.html">レプリケーションSQL関数</a><br></li>
+
+<hr>
+<li><a href="./func-18.html">JSON関数</a><br></li>
+
+</ol>
+
+<!--
+[削除するもの]<br>
+<li><a href="./type-07.html">幾何データ型</a><br></li>
+<li><a href="./type-08.html">ネットワークアドレス型型</a><br></li>
+<li><a href="./ope-08.html">幾何演算子</a><br></li>
+<li><a href="./ope-09.html">ネットワーク演算子</a><br></li>
+<li><a href="./func-06.html">幾何関数</a><br></li>
+<li><a href="./func-07.html">ネットワークアドレス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-16.html">トランザクションID関数</a><br></li>
+<li><a href="./func-17.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-18.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-19.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-20.html">勧告的ロック用関数</a><br></li>
+-->
+
+<h5>PL/pgSQL</h5>
+
+<ol>
+<li><a href="./plpgsql.html">結果の返し方</a><br></li>
+<li><a href="./plpgsql-01.html">ストアドプロシージャ</a><br></li>
+<li><a href="./plpgsql-02.html">ストアドプロシージャの定義</a><br></li>
+<li><a href="./plpgsql-03.html">変数宣言と値の代入</a><br></li>
+**** まとめる >>
+<li><a href="./plpgsql-04.html">SELECT INTO文</a><br></li>
+<li><a href="./plpgsql-05.html">結果ステータスの取得</a><br></li>
+<li><a href="./plpgsql-06.html">動的なSQL文の実行</a><br></li>
+<< ここまで****
+<li><a href="./plpgsql-07.html">IF 条件分岐</a><br></li>
+<li><a href="./plpgsql-08.html">ループ処理</a><br></li>
+*** >>>
+<li><a href="./plpgsql-09.html">RETURN</a><br></li>
+<<< ***
+<li><a href="./plpgsql-10.html">ループ処理　LOOP</a><br></li>
+<li><a href="./plpgsql-11.html">ループ処理　WHILE</a><br></li>
+<li><a href="./plpgsql-12.html">ループ処理　FOR </a><br></li>
+<li><a href="./plpgsql-13.html">ループ処理 (複数行の問い合わせ結果を扱う)</a><br></li>
+<li><a href="./plpgsql-14.html">カーソルの利用</a><br></li>
+<li><a href="./plpgsql-15.html">カーソル変数の宣言</a><br></li>
+<li><a href="./plpgsql-16.html">カーソルのオープンとクローズ	OPEN / CLOSE</a><br></li>
+<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得		FETCH</a><br></li>
+<li><a href="./plpgsql-18.html">カーソルを使った例</a><br></li>
+<li><a href="./plpgsql-19.html">例外</a><br></li>
+*** >>>
+<li><a href="./plpgsql-21.html">CASE</a><br></li>
+<li><a href="./plpgsql-22.html">FOREACH</a><br></li>
+<<< ***
+</ol>
+
+
+<h5>Appendix(付録)</h5>
+
+<ol>
+<li><a href="./app-01.html">pgpool-II</a><br></li>
+<li><a href="./app-02.html">Pacemaker</a><br></li>
+</ol>
+
+
+<h5>おまけ:ネット公開(ページ数の関係で書籍には載せない)</h5>
+
+<ol>
+[pgpool]<br>
+<li><a href="./ha-06.html">pgpool-II セットアップ</a><br></li>
+<li><a href="./ha-07.html">pgpool-II レプリケーションモード</a><br></li>
+<li><a href="./ha-08.html">pgpool-II マスタースレーブモード</a><br></li>
+[Pacemaker]<br>
+<li><a href="./ha-10.html">Pacemaker</a><br></li>
+</ol>
+
+</div>
+<hr class="full_hr">
+</div>
+
+  </td>
+  <td valign="top">
+   <div id="body">
+
+
+<h2>pgpool-II</h2>
+
+<p>
+pgpool-IIは同期レプリケーション機能をはじめ、コネクションプール機能や負荷分散機能を提供するPostgreSQL専用のミドルウエアです。
+</p>
+
+<table border=1>
+<caption>[<表A-01>] pgpool-IIの歴史</caption>
+<tr bgcolor="#cccccc">
+<th>プロダクト</th>  <th>バージョン</th>  <th>リリース時期</th>  <th>主な追加機能</th>
+</tr><tr>
+<td rowspan=2>pgpool</td>  <td>ver1</td>  <td>2004.4</td>  <td>コネクションプール機能、(2台による)同期レプリケーション機能</td>
+</tr><tr>
+<td>ver2</td>  <td>2004.6</td>  <td>負荷分散機能</td>
+ 
+</tr><tr>
+
+<td rowspan=3>pgpool-II</td> <td>ver1</td>  <td>2006.9</td>  <td>パラレルクエリ、2台以上の同期レプリケーション機能</td>
+
+</tr><tr>
+ <td>ver2</td>  <td>2007.11</td>  <td>オンラインリカバリ</td>
+
+</tr><tr>
+
+  <td>ver3</td>  <td>2010.9</td>  <td>PostgreSQLのStreamingReplicationに対応</td>
+
+</tr></table>
+
+<br>
+
+<p>
+PostgreSQLのコネクションプールサーバとして誕生したpgpoolは、
+非常に早い段階で同期レプリケーションを実装しました。
+以降、負荷分散(ロードバランス)やパラレルクエリなど機能拡張を続けて現在に至ります。
+</p>
+
+<p>
+pgpool-IIバージョン3がサポートしている４モードのうち、以下の2モードを説明します。
+<br>
+なお、以降pgpool-IIの説明ではPostgreSQLサーバを「ノード」と記述します。
+</p>
+
+
+<table BORDER=1>
+<caption>[<図A-01>] レプリケーションモードとマスタスレーブモード</caption>
+<tr><td><center>
+<img src="./fig-A-01-01.jpg"><br>
+</center></td></tr>
+</table>
+
+<br>
+
+<p>
+(1) レプリケーションモード
+</p>
+<blockquote>
+<p>
+更新系SQLは全ノードで実行し、検索系SQLは一つのノードで実行します。
+これにより同期レプリケーションと負荷分散(ロードバランス)を同時に実現します。
+<br>
+2台以上のノードを接続できます。
+</p>
+</blockquote>
+
+<p>
+(2) マスタスレーブモード
+</p>
+<blockquote>
+<p>
+PostgreSQLのレプリケーション機能のフロントエンドとして機能します。
+<br>
+Streaming ReplicationやSlony-Iなど、1マスタNスレーブ方式のレプリケーションを利用する場合、
+通常はアプリケーション側が更新系SQLと検索系SQLでアクセスするノードを分けなければなりません。
+<br>
+マスタスレーブモードのpgpool-IIは、
+更新系と検索系でアクセスするノードを自動的に振り分けるので、
+アプリケーションはレプリケーションサーバの存在を意識する必要がありません。
+</p>
+</blockquote>
+
+
+<p>
+具体的な設定方法や内部構造の解説は、以下の筆者のサイトを参照してください。
+</p>
+
+<pre>
+	http://www.interdb.jp/techinfo/postgresql#pgpool
+</pre>
+
+
+<div class="jumpmenu"></div><h3>動作機構と主な機能</h3>
+
+<div class="jumpmenu"></div><h4>動作機構</h4>
+
+<p>
+レプリケーションモードを例として、pgpool-IIの動作機構を簡単に説明します。
+</p>
+
+
+<table BORDER=1>
+<caption>[<図A-02>] pgpool-IIの動作</caption>
+<tr><td><center>
+<img src="./fig-A-01-02.jpg"><br>
+</center></td></tr>
+</table>
+
+<br>
+
+<p>
+PostgreSQL、pgpool-IIとも構造的にはマルチプロセス型のプログラムです。
+<br>
+クライアントからの接続要求に対してpgpool-IIはchildプロセスを立ち上げ、
+そのプロセスがPostgreSQLにコネクションを張ります。
+</p>
+
+<p>
+Grayらの分類[<脚注1>]に当てはめると、pgpool-IIはEagerレプリケーションに該当します。
+すなわち、各SQL文をすべてのノードに同期的に配送します。
+<br>
+例えば[<図A-02>]においてpgpool-IIのプロセスは、
+クライアントから受信したINSERT文を２つのノードに同時に送ります。
+そして双方のノードからレスポンスが返った後、クライアントにレスポンスを返します。
+</p>
+
+
+<p>
+本節の目的は耐障害性の解説なので、
+ノード間のデータ一貫性(Consistency)を確保する機構の詳細には立ち入りません。
+唯一、故障検出に関連した機構のみ後述します。
+その他についてはpgpool-IIの公式ドキュメントなどを参照してください。
+</p>
+
+<blockquote><table BORDER="1"><tr><td>脚注1</td><td>
+<p>
+J. Gray, P. Helland, P. O’Neil, and D. Shasha. The dangers of replication and a solution. In ACM SIGMOD, pages 173–182, 1996.
+</p>
+<pre>
+ftp://ftp.research.microsoft.com/pub/tr/tr-96-17.pdf
+</pre>
+
+</td></tr></table></blockquote>
+
+
+
+<div class="jumpmenu"></div><h4>耐障害性に関係する機能</h4>
+
+<p>
+pgpool-IIがサポートする各種機能のうち、耐障害性に関係する機能を列挙します。
+</p>
+
+<ol>
+<li>フェールオーバ</li>
+ <p>
+接続しているノードが故障した場合、速やかに切り離して(縮退して)、サービスを継続する。
+ </p>
+
+<li>オンラインリカバリ</li>
+ <p>
+稼働中のpgpool-IIに新たにノードを追加する。フェールオーバで縮退したシステムの復旧で用いる。
+ </p>
+
+</ol>
+
+
+<p>
+以降、この２つの機能について説明します。
+</p>
+
+
+<div class="jumpmenu"></div><h3>故障検出とフェールオーバ</h3>
+
+<p>
+PostgreSQLはマルチプロセスのプログラムなので、
+postgresプロセス単体の故障と、ノード(サーバ本体)の故障を区別しなければなりません。
+</p>
+
+<table BORDER=1>
+<caption>[<図A-03>] ノード故障とプロセス故障</caption>
+<tr><td><center>
+<img src="./fig-A-01-03.jpg"><br>
+</center></td></tr>
+</table>
+
+<br>
+
+<p>
+はじめにプロセス単体の故障検出条件とノードの故障検出条件について説明します。
+次にノード故障を検出してフェールオーバする条件を述べます。
+</p>
+
+
+<div class="jumpmenu"></div><h4>postgresプロセスの故障検出条件</h4>
+
+
+<p>
+postgresプロセスを故障として検出する条件を列挙します。
+</p>
+
+<ol>
+<li>postgresプロセスから読み出しに失敗した場合</li>
+<p>
+postgresプロセスと接続に使用しているソケット(socket)から読み出し(read)に失敗した場合、
+故障とみなす。
+</p>
+
+<li>"fail_over_on_backend_error=off"且つ、postgresプロセスに書き込み失敗した場合</li>
+<p>
+同様にソケットに書き込み(flush)を失敗した場合、故障とみなす。
+ただし、パラメータfail_over_on_backend_error=offの場合に限る。onの場合はノード故障とみなす。
+</p>
+
+</ol>
+
+
+<p>
+pgpoolのchildプロセスがpostgresプロセスの故障を検出したら、
+一旦すべてのセッションを切断して、再接続します([<図A-03>](1)参照)。
+<br>
+再接続に失敗したらノード故障と判定します。
+</p>
+
+
+<div class="jumpmenu"></div><h4>ノード故障の検出条件</h4>
+
+
+<p>
+ノードを故障と判断する条件を列挙します。
+</p>
+
+<ol>
+<li>postgresプロセスに接続できない場合</li>
+<p>
+接続できない場合はノード故障とみなす。
+</p>
+
+
+<li>ノードがダウンしたことを検出した場合</li>
+ <p>
+PostgreSQLは正常に停止するか、自ら異常を検出して停止する際、
+エラーメッセージ(ERRCORE_ADMIN_SHUTDOWN or ERRCODE_CRASH_SHUTDOWN)を送信して接続を切る。
+ <br>
+pgpool-IIのchildプロセスがこれらのエラーメッセージを受信した場合、ノード故障とみなす。
+ <br>
+pgpool-IIはノードがオペレーションとして停止したのか、なんらかの異常で停止したのかは気にしない(Don't Care)。
+ </p>
+
+
+<li>"fail_over_on_backend_error=on"且つ、postgresプロセスに書き込み失敗した場合</li>
+<p>
+(プロセス故障でふれたが、)パラメータfail_over_on_backend_errorがonの場合、
+postgresプロセスのソケットに書き込み(flush)失敗したらすぐにノード故障とみなす。
+</p>
+
+
+<li>SQLのレスポンスが異なる場合</li>
+
+ <p>
+pgpool-IIは次に示すSQL実行レベルのエラー検出を行う。
+<br>
+これはノード間のデータ一貫性(Consistency)確保のためで、
+少数派のノード群を故障とみなす。
+多数決できない場合は若いノード番号を含むグループを優先する。
+ </p>
+
+ <p>
+ <ol>
+  <li>SQLエラー</li>
+
+<p>
+パラメータreplication_stop_on_mismatch=onで、
+例えばINSERT文でノード1は成功、ノード2は"テーブルが存在しない"などエラーが返った場合、
+ノード2を故障とみなす。
+<br>
+パラメータがoffの場合はpostgresプロセスの故障とみなす(ノード故障とはみなさない)。
+</p>
+
+  <li>更新系SQL(UPDATE/DELETE/INSERT)の更新行数が異なる</li>
+
+<p>
+パラメータfailover_if_affected_tuples_mismatch=onで、
+更新系SQLの返り値が異なる場合、少数派のノードを故障とみなす。
+<br>
+パラメータがoffの場合はpostgresプロセスの故障とみなす(ノード故障とはみなさない)。
+</p>
+
+ </ol>
+
+ </p>
+
+<li>health_check(ヘルスチェック)で異常を検出した場合</li>
+ <p>
+設定パラメータhealth_check_periodで指定した時間間隔で定期的に全ノードにアクセスを試みる。
+<br>
+health_check(ヘルスチェック)は接続の健全性を調べ、
+次の場合は"故障"と判断する:
+ <ul>
+  <li>ネットワーク的に接続できない</li>
+  <li>ノードがアクセスを拒否</li>
+  <li>設定パラメータhealth_check_timeout以内に応答がない</li>
+ </ul>
+ </p>
+
+</ol>
+
+
+<div class="jumpmenu"></div><h4>故障検出とフェールオーバ</h4>
+
+<p>
+pgpool-IIがノード故障を検出すると、
+設定パラメータfailover_commandに設定したスクリプトを実行してシステムをフェールオーバします。
+<br>
+通常このスクリプトには、
+システムを縮退運転モードに移行するための一連のコマンドを列挙します。
+</p>
+
+<p>
+ただしこのスクリプトが実行されるのは、
+設定パラメータbackend_flagNの値が'ALLOW_TO_FAILOVER'のノードが故障した場合のみです。
+<br>
+backend_flagNの値が'DISALLOW_TO_FAILOVER'の場合、
+そのノードが故障してもfailover_commandのスクリプトを実行しません(フェールオーバしない)。
+この設定(DISALLOW_TO_FAILOVER)は、Pacemakerなどの監視ツールにフェールオーバ制御を委ねるシステム構成で利用します。
+</p>
+
+
+
+<div class="jumpmenu"></div><h3>オンラインリカバリ</h3>
+
+<p>
+pgpool-IIのオンラインリカバリの仕組みを簡単に解説します。
+詳細な解説は末尾の情報源を参照してください。
+</p>
+
+
+
+<p>
+pgpool-IIのオンラインリカバリは、2つのフェーズに分かれています。
+</p>
+
+<blockquote>
+フェーズ1
+<p>
+リカバリ元のベースバックアップを転送する。
+</p>
+
+フェーズ2
+<p>
+フェース1の作業中に更新されたアーカイブログを転送し、
+先に転送されたベースバックアップと合わせてリカバリする。
+</p>
+</blockquote>
+
+<table BORDER=1>
+<caption>[<図A-04>] pgpool-IIのオンラインリカバリ</caption>
+<tr><td><center>
+<img src="./fig-A-01-04.jpg"><br>
+</center></td></tr>
+</table>
+
+<br>
+
+<p>
+フェーズ１の最中はデータ操作が可能です。
+<br>
+フェーズ1の最中に更新されたデータは、フェーズ2でアーカイブログとして転送し、
+リカバリするサーバに反映します。
+</p>
+
+<p>
+なお、pgpool-IIは
+フェーズ2に入る前に全トランザクションが終了するのを待ちます。
+これは、すべてのセッションを切断して初期化するためです。
+<br>
+pgpool-IIの機構からも解るように、
+全セッションの初期化によって、
+リカバリ後は全ノードが同一条件で更新を再開します。
+</p>
+
+<p>
+フェーズ2の間はデータベースアクセスができません。
+しかしフェーズ2の時間は非常に短いです。
+<br>
+フェーズ2にかかる時間は、アーカイブログの転送時間とPostgreSQLサーバの起動にかかる時間の和です。
+</p>
+
+
+
+<div class="jumpmenu"></div><h3>単一障害点(Single Point of Failure)の解消</h3>
+
+<p>
+pgpool-IIの最も大きな弱点は、pgpool-IIが単一障害点(Single Point of Failure)となることです。
+<br>
+これを避けるには、pgpool-IIを二重化してアプリケーションかロードバランサで負荷分散させるか、
+pgpool-haとPacemakerで冗長化させるなどの方法があります。
+<br>
+pgpool-haに関する情報は以下を参照してください。
+ただし、改良の余地が多く残っているので、使用に関しては十分な検討が必要です。
+</p>
+
+<pre>
+http://pgpool.sraoss.jp/index.php?pgpool-HA
+</pre>
+
+<p>
+2012年8月リリースのバージョン3.2においてWatchdog機能を内蔵しました。
+</p>
+
+<pre>
+http://www.pgpool.net/pgpool-web/contrib_docs/watchdog/ja.html
+</pre>
+
+<p>
+一般に高可用性に関わる機能実装は、長い時間をかけて細かな不具合を改善しつづけることが必要です。
+この機能が安定するまで、しばらく時間がかかると思われるので、使用に関しては十分に検討を行ってください。
+</p>
+
+<div class="jumpmenu"></div><h3>情報源</h3>
+
+<p>
+pgpool-IIに関する情報源を以下に示します。
+</p>
+
+<ul>
+<li>http://pgfoundry.org/projects/pgpool/</li>
+ <p>
+pgpool-IIのサイトです。
+ </p>
+
+<li>http://www.interdb.jp/techinfo/postgresql/index.html#pgpool</li>
+
+ <p>
+筆者のpgpool-IIに関するサイトです。
+レプリケーションモード、マスタスレーブモードの設定方法、
+pgpool-IIの内部構造など解説しています。
+
+ </p>
+
+</ul>
+
+
+
+
+
+
+
+<hr class="full_hr">
+<div id="lastmodified">
+Last-modified: 2018-9-8
+</div>
+</body>
+</html>
+

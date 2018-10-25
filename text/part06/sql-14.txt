@@ -1,0 +1,113 @@
+%FILE internal/sql-14.html
+%LASTMOD
+%KEY pgsql-sql14
+
+%TITLE 権限の付与/取り上げ(1)		GRANT/REVOKE
+
+<pre>
+[<書式>]
+
+● データベースの権限付与/取り上げ
+GRANT { { CREATE | CONNECT | TEMPORARY | TEMP } [, ...] | ALL [ PRIVILEGES ] }
+    ON DATABASE database_name [, ...]  
+    TO { [ GROUP ] role_name | PUBLIC } [, ...] [ WITH GRANT OPTION ]
+
+REVOKE [ GRANT OPTION FOR ] 
+   { { CREATE | CONNECT | TEMPORARY | TEMP } [, ...] | ALL [ PRIVILEGES ] }
+    ON DATABASE database_name [, ...]
+    FROM { [ GROUP ] role_name | PUBLIC } [, ...]    [ CASCADE | RESTRICT ]
+
+● スキーマの権限付与/取り上げ
+GRANT { { CREATE | USAGE } [, ...] | ALL [ PRIVILEGES ] }
+    ON SCHEMA schema_name [, ...]
+    TO { [ GROUP ] role_name | PUBLIC } [, ...] [ WITH GRANT OPTION ]
+
+REVOKE [ GRANT OPTION FOR ]  { { CREATE | USAGE } [, ...] | ALL [ PRIVILEGES ] }
+    ON SCHEMA schema_name [, ...]
+    FROM { [ GROUP ] role_name | PUBLIC } [, ...]  [ CASCADE | RESTRICT ]
+
+● テーブルスペースの権限付与/取り上げ
+GRANT { CREATE | ALL [ PRIVILEGES ] }
+    ON TABLESPACE tablespace_name [, ...]
+    TO { [ GROUP ] role_name | PUBLIC } [, ...] [ WITH GRANT OPTION ]
+
+REVOKE [ GRANT OPTION FOR ] { CREATE | ALL [ PRIVILEGES ] }
+    ON TABLESPACE tablespace_name [, ...]
+    FROM { [ GROUP ] role_name | PUBLIC } [, ...] [ CASCADE | RESTRICT ]
+</pre>
+
+
+<table>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>		<th>説明</th>
+</tr><tr>
+<td>database_name</td>		<td>アクセス権限を付与/削除するデータベース名</td>
+</tr><tr>
+<td>schema_name</td>		<td>アクセス権限を付与/削除するスキーマ名</td>
+</tr><tr>
+<td>tablespace_name</td>		<td>アクセス権限を付与/削除するテーブルスペース名</td>
+</tr><tr>
+
+</tr><tr>
+<td>role_name</td>		<td>権限を付与/削除するロール</td>
+</tr><tr>
+<td>PUBLIC</td>			<td>全ロール</td>
+
+
+</tr><tr><td></td><td></td>
+</tr><tr><td></td><td></td>
+
+
+</tr><tr bgcolor="#cccccc">
+<th>権限</th>			<th>説明</th>
+</tr><tr bgcolor="#eeeeee">
+<th align=left bgcolor="#eeeeee" colspan=2>データベース</th>
+</tr><tr>
+<td>CREATE</td>			<td>データベース内での新規スキーマ作成</td>
+</tr><tr>
+<td>CONNECT</td>			<td>データベースへの接続。バージョン8.2から	</td>
+</tr><tr>
+<td>TEMP, TEMPORARY</td>		<td>一時テーブルの作成</td>	
+</tr><tr>
+<th align=left bgcolor="#eeeeee" colspan=2>スキーマ</th>
+</tr><tr>
+<td>CREATE</td>			<td>スキーマ内での新規オブジェクト作成</td>
+</tr><tr>
+<td>USAGE</td>			<td>スキーマ内のオブジェクトへのアクセス</td>
+</tr><tr>
+<th align=left bgcolor="#eeeeee" colspan=2>テーブルスペース</th>
+</tr><tr>
+<td>CREATE</td>			<td>テーブルスペース内でテーブル、インデックス、一時ファイル、データベースの作成</td>
+</tr><tr>
+<th align=left bgcolor="#eeeeee" colspan=2>共通</th>
+</tr><tr>
+<td>ALL, ALL PRIVILEGES</td>		<td>すべての権限</td>
+
+
+</tr><tr><td></td><td></td>
+</tr><tr><td></td><td></td>
+
+</tr><tr bgcolor="#cccccc">
+<th>オプション</th>		<th>説明</th>
+</tr><tr>
+<td>WITH GRANT OPTION</td>	<td>権限を得たロールが他のロールにその権限を付与/取り上げできる(継承)</td>
+</tr><tr>
+<td>CASCADE			<td>他のロールに継承した権限も削除する</td>
+</tr><tr>
+<td>RESTRICT			<td>他のロールに権限を継承した場合、REVOKE文を実行しない(エラーが返る)</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+権限の付与/取り上げは[<3-09>]と[<3-10>]に説明があります。
+テーブルやシーケンス、関数などの権限付与/取り上げは[<6-15>]を参照してください。
+</p>
+
+<p>
+PostgreSQLは、ロールが各種データベースオブジェクト(スキーマ、テーブル、関数など)に対してアクセス権限を持つか否か調べる関数群を持ちます。
+関数の一覧は[<7-29>]を参照してください。
+</p>
+

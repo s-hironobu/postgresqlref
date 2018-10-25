@@ -1,0 +1,258 @@
+%FILE internal/sql-24.html
+%LASTMOD
+%KEY pgsql-sql24
+
+%TITLE テーブル結合	JOIN
+
+<pre>
+[<書式>]
+T1 CROSS JOIN T2 
+T1 { [INNER] | { LEFT | RIGHT | FULL } [OUTER] } JOIN T2 ON boolean_expression 
+T1 { [INNER] | { LEFT | RIGHT | FULL } [OUTER] } JOIN T2 USING ( join_column_list ) 
+T1 NATURAL { [INNER] | { LEFT | RIGHT | FULL } [OUTER] } JOIN T2 
+
+※T1, T2 テーブル
+
+==============================================================
+句					説明
+==============================================================
+CROSS JOIN				クロス結合
+INNER JOIN				内部結合
+{LEFT | RIGHT | FULL} OUTER JOIN	外部結合。'OUTER'は省略可能
+==============================================================
+
+==============================================================
+パラメータ		説明
+==============================================================
+boolean_expression	論理式
+join_column_list	結合するカラムのリスト
+==============================================================
+</pre>
+
+%CHAPTER 解説
+
+<p>
+PostgreSQLはクロス結合(CROSS JOIN)、内部結合(INNER JOIN)、外部結合(OUTER JOIN)をサポートしています。
+</p>
+
+<p>
+・クロス結合(CROSS JOIN) 
+<br>
+デカルト積ともいいます。
+テーブルT1の1レコード毎に、テーブルT2の全レコードを結合して表示します。
+クロス結合で得られる結果のレコード数は、テーブルT1とT2のレコード数の積です。
+</p>
+
+<p>
+・内部結合(INNER JOIN) 
+<br>
+内部結合はもっとも一般的な結合です。
+複数のテーブルから、一致する要素があるレコードのみ結合して表示します。
+</p>
+
+<p>
+・外部結合(OUTER JOIN) 
+<br>
+外部結合は複数のテーブルから一致する要素があるなしに関わらず、結合して表示します。
+</p>
+
+%CHAPTER 実行例
+
+<font color="#ff0000">
+SQL表示、縦線をそろえて表示してください。(HTMLでは縦線が揺れているが、これは表示がおかしい)
+</font>
+
+
+<p>
+以下、次に示す2つのテーブルを使って説明します。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM book_list;
+       title        | author_id 
+--------------------+-----------
+ カラマーゾフの兄弟 |         1
+ 罪と罰             |         1
+ 我輩は猫である     |         2
+ 夢十夜             |         2
+ 倫敦塔             |         2
+ 車輪の下           |         3
+ クヌルプ           |         3
+ 幼年期の終わり     |        10
+(8 rows)
+
+sampledb=# SELECT * FROM author_list;
+ author_id |       name       
+-----------+------------------
+         1 | ドストエフスキー
+         2 | 夏目漱石
+         3 | ヘッセ
+        20 | シェークスピア
+(4 rows)
+</pre>
+
+<p>
+・クロス結合
+<br>
+クロス結合の例を以下に示します。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM book_list CROSS JOIN author_list;
+       title        | author_id | author_id |       name       
+--------------------+-----------+-----------+------------------
+ カラマーゾフの兄弟 |         1 |         1 | ドストエフスキー
+ カラマーゾフの兄弟 |         1 |         2 | 夏目漱石
+ カラマーゾフの兄弟 |         1 |         3 | ヘッセ
+ カラマーゾフの兄弟 |         1 |        20 | シェークスピア
+ 罪と罰             |         1 |         1 | ドストエフスキー
+ 罪と罰             |         1 |         2 | 夏目漱石
+ 罪と罰             |         1 |         3 | ヘッセ
+ 罪と罰             |         1 |        20 | シェークスピア
+
+.... 略 ....
+
+ 幼年期の終わり     |        10 |         1 | ドストエフスキー
+ 幼年期の終わり     |        10 |         2 | 夏目漱石
+ 幼年期の終わり     |        10 |         3 | ヘッセ
+ 幼年期の終わり     |        10 |        20 | シェークスピア
+(32 rows)
+</pre>
+
+<p> 
+・内部結合
+</p>
+
+<p>
+次のSELECT文と同じ結果を返す、内部結合形式のSELECT文を示します。
+</p>
+
+<pre>
+sampledb=# SELECT title, name FROM book_list AS b, author_list AS a 
+sampledb-#                          WHERE b.author_id = a.author_id;
+       title        |       name       
+--------------------+------------------
+ カラマーゾフの兄弟 | ドストエフスキー
+ 罪と罰             | ドストエフスキー
+ 我輩は猫である     | 夏目漱石
+ 夢十夜             | 夏目漱石
+ 倫敦塔             | 夏目漱石
+ 車輪の下           | ヘッセ
+ クヌルプ           | ヘッセ
+(7 rows)
+</pre>
+
+<ol>
+<li>NATURAL INNER JOIN </li>
+<p>
+NATURAL INNER JOINは以下のようになります。
+</p>
+
+<pre>
+sampledb=# SELECT title, name FROM book_list 
+sampledb-#         NATURAL INNER JOIN author_list;
+</pre>
+
+<li>INNER JOIN</li>
+<p>
+INNER JOINは以下のようになります。
+</p>
+<pre>
+sampledb=# SELECT b.title, a.name FROM book_list AS b 
+sampledb-#         INNER JOIN author_list AS a 
+sampledb-#                ON (b.author_id = a.author_id);
+
+</pre>
+
+<li>INNER JOIN USING</li>
+<p>
+INNER JOIN USINGは以下のようになります。
+</p>
+
+<pre>
+sampledb=# SELECT title, name FROM book_list 
+sampledb-#           INNER JOIN author_list AS a
+sampledb-#                (author_id) USING (author_id);
+</pre>
+
+</ol>
+
+<p>
+・外部結合
+<br>
+外部結合の使用例を示します。
+</p>
+
+<ol>
+<li> LEFT OUTER JOIN句を使った例</li>
+<p>
+LEFT OUTER JOIN句の左側にあるテーブルcomic_listのレコードは、すべて表示します。
+右側のテーブルauthor_listの中で条件式(この場合、c.author_id = a.author_id)に一致した値があれば、その値も表示します。
+それ以外はNULLを返します。
+</p>
+
+<pre>
+sampledb=# SELECT title, name FROM book_list AS b
+ LEFT OUTER JOIN
+   author_list AS a ON (b.author_id = a.author_id);
+       title        |       name       
+--------------------+------------------
+ カラマーゾフの兄弟 | ドストエフスキー
+ 罪と罰             | ドストエフスキー
+ 我輩は猫である     | 夏目漱石
+ 夢十夜             | 夏目漱石
+ 倫敦塔             | 夏目漱石
+ 車輪の下           | ヘッセ
+ クヌルプ           | ヘッセ
+ 幼年期の終わり     | 
+(8 rows)
+</pre>
+
+<li>RIGHT OUTER JOIN句を使った例</li>
+<p>
+RIGHT OUTER JOIN句は、LEFT OUTER JOIN句と左右反対の処理を行います。
+</p>
+
+<pre>
+sampledb=# SELECT title, name FROM book_list AS b
+ RIGHT OUTER JOIN
+   author_list AS a ON (b.author_id = a.author_id);
+       title        |       name       
+--------------------+------------------
+ カラマーゾフの兄弟 | ドストエフスキー
+ 罪と罰             | ドストエフスキー
+ 我輩は猫である     | 夏目漱石
+ 夢十夜             | 夏目漱石
+ 倫敦塔             | 夏目漱石
+ 車輪の下           | ヘッセ
+ クヌルプ           | ヘッセ
+                    | シェークスピア
+(8 rows)
+</pre>
+
+<li>FULL OUTER JOIN句を使った場合</li>
+
+<p>
+FULL OUTER JOIN句は左右のテーブルをすべて表示します。
+このとき、条件式(この場合c.author_id = a.author_id)に一致するレコードは結合して表示します。
+</p>
+
+<pre>
+sampledb=# SELECT title, name FROM book_list AS b
+ FULL OUTER JOIN
+   author_list AS a ON (b.author_id = a.author_id);
+       title        |       name       
+--------------------+------------------
+ カラマーゾフの兄弟 | ドストエフスキー
+ 罪と罰             | ドストエフスキー
+ 我輩は猫である     | 夏目漱石
+ 夢十夜             | 夏目漱石
+ 倫敦塔             | 夏目漱石
+ 車輪の下           | ヘッセ
+ クヌルプ           | ヘッセ
+ 幼年期の終わり     | 
+                    | シェークスピア
+(9 rows)
+</pre>
+
+</ol>

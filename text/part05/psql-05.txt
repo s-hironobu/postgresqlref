@@ -1,0 +1,106 @@
+%FILE internal/psql-05.html
+%LASTMOD
+%KEY pgsql-psql05
+
+
+%TITLE バッチファイルの実行(メタコマンド)
+
+
+<pre>
+[<メタコマンド一覧>]
+
+================================================================
+メタコマンド			説明
+================================================================
+\i batch_file		        バッチファイルbatch_fileを実行する
+\g [{file_name | |command}]     1つのSQL文の出力結果をファイルfile_nameに書き込む
+\o [{file_name | |command}]     以降の問い合わせ結果をファイルfile_nameに書き込む
+================================================================
+</pre>
+
+%CHAPTER 解説
+
+<p>
+・\i
+<br>
+バッチファイルを実行します。
+バッチファイルのディレクトリ指定は絶対パス、psqlを起動したディレクトリからの相対パス、どちらも可能です。
+<br>
+コマンドラインからバッチ処理を行うには、-fオプション[<5-04>]を参照してください。
+</p>
+
+<p>
+[<5-04>]のバッチファイルbatch.sqlの実行例を示します。
+</p>
+
+<pre>
+sampledb=# \i ./batch.sql 
+ count 
+-------
+     8
+(1 row)
+
+INSERT 0 1
+ count 
+-------
+     9
+(1 row)
+</pre>
+
+
+<p>
+・\g , \o
+<br>
+<p>
+\gや\oで、指定したファイルにSQL文や結果を書き込めます。
+<br>
+パイプ'|' とリダイレクト'>'を使い、出力結果にUNIXコマンドを作用させることも可能です。
+</p>
+
+<p>
+1つのSQL文の出力結果のみファイルに書き込むには、メタコマンド\gに続けてファイル名を記述します。
+<br>
+例を示す。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM customerlist 
+sampledb-# \g sql.out 
+</pre>
+
+
+<p>
+メタコマンド\oを実行すると、以降の出力結果をすべて設定したファイルに書き込みます。
+書き込みを止めるにはメタコマンド\oのみ実行します。これで設定がリセットされます。
+</p>
+
+<p>
+具体例を示します。
+<br>
+出力結果をファイルsql.outに書き込みます。
+メタコマンド'\o sql.out'実行後は、すべてのSQL文の結果をsql.outに書き込みます。
+ターミナル(端末)に結果は表示しません。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM customerlist 
+sampledb-# \o sql.out; 
+sampledb=# SELECT * FROM companylist; 
+sampledb=# SELECT * FROM itemlist; 
+sampledb=# \o; 
+</pre>
+
+
+<p>
+・UNIXコマンドの利用
+<br>
+具体例を示します。
+<br>
+SELECT文の出力結果をUNIXのgrepコマンドでフィルタリングし、ファイルsql.outに書き出します。
+</p>
+
+<pre>
+sampledb=# SELECT name, phone FROM companylist 
+sampledb-# \g | grep 045 > sql.out 
+</pre>
+

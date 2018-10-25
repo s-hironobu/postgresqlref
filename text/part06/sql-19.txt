@@ -1,0 +1,145 @@
+%FILE internal/sql-19.html
+%LASTMOD
+%KEY pgsql-sql19
+
+%TITLE 検索条件の指定			WHERE句
+
+<pre>
+[<書式>]
+
+● 論理式
+WHERE [NOT] expression comparison_operator expression 
+WHERE [NOT] expression comparison_operator expression 
+      {AND | OR} expression comparison_operator expression 
+WHERE [NOT] column_name IS [NOT] NULL 
+
+● パターンマッチング
+WHERE [NOT] column_name [NOT] LIKE 'match_pattern' [ESCAPE escape-character]
+WHERE [NOT] column_name { ~ | ~* | !~ | !~* } 'posix_pattern'
+WHERE column_name [NOT] SIMILAR TO 'match_pattern' [ESCAPE escape-character]
+
+● 検索範囲指定
+WHERE [NOT] expression BETWEEN expression AND expression 
+
+● 検索値の列挙
+WHERE [NOT] expression [NOT] IN (value_list) 
+
+● サブクエリ(副問い合わせ)
+WHERE [NOT] EXISTS (sub_query) 
+WHERE [NOT] expression [NOT] IN (sub_query) 
+WHERE [NOT] expression comparison_operator {ANY | SOME | ALL} (sub_query) 
+
+=================================================================
+引数			説明
+=================================================================
+column_name		カラム名
+value_list		値を列挙したリスト。区切り文字はカンマ','
+expression		値、または式
+comparison_operator	比較演算子
+posix_pattern		POSIX正規表現
+match_pattern		パターンマッチの検索用文字列
+sub_query		サブクエリ(副問い合わせ)
+=================================================================
+</pre>
+
+%CHAPTER 解説
+
+<p>
+WHERE句には、論理値として評価できる表現であればどんなものでも設定可能です。
+AND演算子、OR演算子を使って論理式を結合することもできます。
+</p>
+
+<p>
+・IS演算子
+<br>
+IS演算子で値がNULLか否か判断できます。
+</p>
+
+<p>
+・文字列のパターンマッチング
+<br>
+LIKE演算子やSIMILAR TO演算子などで、文字列のパターンマッチングによる検索ができます。
+パターンマッチングの詳細は[<7-17>]を参照してください。
+</p>
+
+<p>
+・BETWEEN句、IN句
+<br>
+BETWEEN句で検索範囲を指定できます。また、IN句で検索する値を直接列挙できます。
+</p>
+
+%CHAPTER 実行例
+
+<p>
+・AND演算子による論理式の結合
+<br>
+2つの論理式をAND演算子で結合した例です。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM author_list WHERE 2 <= id AND id <= 3;
+ id |   name   
+----+----------
+  2 | 夏目漱石
+  3 | ヘッセ
+(2 rows)
+</pre>
+
+<p>
+・IS演算子によるNULLレコードの検索
+<br>
+カラムsoloの値がNULLのレコードを検索します。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM queen WHERE solo IS NULL; 
+   name      | part | solo 
+-------------+------+------ 
+ Deacon John | Bass | 
+(1 row) 
+</pre>
+
+<p>
+・パターンマッチングによる検索
+<br>
+LIKE演算子を使ったパターンマッチングの例です。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM queen WHERE name LIKE '%May'; 
+    name   |    part    |       solo
+-----------+------------+------------------- 
+ Brian May | Guitar, Vo | Back To The Light 
+(1 row) 
+</pre>
+
+<p>
+・範囲指定による検索
+<br>
+カラムidの値が、2から3のレコードを表示します。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM author_list WHERE id BETWEEN 2 AND 3;
+ id |   name   
+----+----------
+  2 | 夏目漱石
+  3 | ヘッセ
+(2 rows)
+</pre>
+
+<p>
+・複数の値を列挙して検索
+<br>
+カラムidの値が1と3のレコードを表示します。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM author_list WHERE id IN (1,3);
+ id |       name       
+----+------------------
+  1 | ドストエフスキー
+  3 | ヘッセ
+(2 rows)
+</pre>
+

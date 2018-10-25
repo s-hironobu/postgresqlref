@@ -1,0 +1,164 @@
+%FILE internal/sql-13.html
+%LASTMOD
+%KEY pgsql-sql13
+
+%TITLE ロールの作成/変更/削除	CREATE ROLE / ALTER ROLE / DROP ROLE
+
+<pre>
+[<書式>]
+
+● ロールの作成
+CREATE ROLE role_name  [ [ WITH ] option [...] ]
+
+option:
+     SUPERUSER    | NOSUPERUSER
+    | BYPASSRLS   | NOBYPASSRLS
+    | CREATEDB    | NOCREATEDB
+    | CREATEROLE  | NOCREATEROLE
+    | CREATEUSER  | NOCREATEUSER
+    | INHERIT     | NOINHERIT 
+    | REPLICATION | NOREPLICATION
+    | LOGIN       | NOLOGIN
+    | CONNECTION LIMIT connlimit
+    | [ ENCRYPTED | UNENCRYPTED ] PASSWORD 'password'
+    | VALID UNTIL 'timestamp' 
+    | IN ROLE role_name [, ...]    | IN GROUP role_name [, ...]
+    | ROLE role_name [, ...]
+    | ADMIN role_name [, ...]      | USER role_name [, ...]
+    | SYSID uid 
+
+● ロールの権限/属性の変更
+ALTER ROLE role_name [ [ WITH ] option [...] ]
+
+option:
+      SUPERUSER   | NOSUPERUSER
+    | BYPASSRLS   | NOBYPASSRLS
+    | CREATEDB    | NOCREATEDB
+    | CREATEROLE  | NOCREATEROLE
+    | CREATEUSER  | NOCREATEUSER
+    | INHERIT     | NOINHERIT
+    | REPLICATION | NOREPLICATION
+    | CONNECTION LIMIT connlimit
+    | [ ENCRYPTED | UNENCRYPTED ] PASSWORD 'password'
+    | VALID UNTIL 'timestamp' 
+
+
+● ロール名の変更
+ALTER ROLE role_name RENAME TO newname
+
+
+● 設定パラメータの変更
+ALTER ROLE role_name [ IN DATABASE db_name ]
+		       SET parameter { TO | = } { value | DEFAULT }
+ALTER ROLE role_name [ IN DATABASE db_name ]
+		       RESET parameter
+
+
+ALTER ROLE role_name [ IN DATABASE db_name ]
+		       SET parameter FROM CURRENT
+ALTER ROLE role_name [ IN DATABASE db_name ]
+		       RESET ALL
+
+
+● 権限を継承する
+SET [ SESSION | LOCAL ] ROLE role_name
+
+● 権限を元に戻す
+SET [ SESSION | LOCAL ] ROLE NONE
+RESET ROLE
+
+
+● ロールの削除
+DROP ROLE [ IF EXISTS ] role_name [, ...]
+
+</pre>
+
+<table>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>role_name</td>	<td>作成/変更/削除するロール名</td>
+</tr><tr>
+<td>rolename</td>	<td>作成するロールへ、権限などを継承するロール名</td>
+</tr><tr>
+<td>abstime</td>	<td>パスワードの期限(日付)。例：'2018-12-31' </td>
+</tr><tr>
+<td>parameter</td>	<td>変更する設定パラメータ</td>
+
+
+</tr><tr><td></td><td></td>
+</tr><tr><td></td><td></td>
+
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明[デフォルト]</th>
+
+</tr><tr>
+<td>SUPERUSER, NOSUPERUSER</td>	<td>スーパーユーザ権限を与えるか否か[NOSUPERUSER]</td>
+</tr><tr>
+<td>BYPASSRLS,NOBYPASSRLS</td>	<td>行レベルセキュリティ(RLS)のポリシーを無視するか(BYPASSRLS)、否か(NOBYPASSRLS)。バージョン9.5から[NOBYPASSRLS]</td>
+</tr><tr>
+<td>CREATEDB, NOCREATEDB</td>	<td>作成するロールによる、新しいデータベースの作成を許可、禁止[NOCREATEDB]</td>
+</tr><tr>
+<td>CREATEROLE, NOCREATEROLE</td>	<td>作成するロールによる新しいロールの作成を許可、禁止[NOCREATEROLE]</td>
+</tr><tr>
+<td>CREATEUSER, NOCREATEUSER</td>	<td>CREATEROLE, NOCREATEROLEの別名。廃止予定</td>
+</tr><tr>
+<td>LOGIN, NOLOGIN	</td>	<td>LOGIN可能か否か[CREATE ROLE=NOLOGIN, CREATE USER=LOGIN]</td>
+</tr><tr>
+<td>INHERIT, NOINHERIT	</td>	<td>権限を継承するか否か[INHERIT]</td>
+</tr><tr>
+<td>REPLICATION, NOREPLICATION	</td>	<td>ストリーミングレプリケーションが開始可能か、pg_basebackupによるバックアップが実行可能か否か。バージョン9.1から[NOREPLICATION]</td>
+</tr><tr>
+<td>SESSION		</td>	<td>セッションの間のみ設定値が有効。デフォルト</td>
+</tr><tr>
+<td>LOCAL		</td>	<td>トランザクションの間のみ設定値が有効</td>
+</tr><tr>
+<td>IF EXISTS		</td>	<td>削除するロールが存在しなくともエラーにならない。バージョン8.2から</td>
+
+
+</tr><tr><td></td><td></td>
+</tr><tr><td></td><td></td>
+
+<tr bgcolor="#cccccc">
+<th>句</th>	<th>説明[デフォルト]</th>
+
+</tr><tr>
+<td>CONNECTION LIMIT connlimit		</td>	<td>同名ロールによる最大接続(セッション)数[無制限]</td>
+</tr><tr>
+<td>[ENCRYPTED | UNENCRYPTED] PASSWORD password	</td>	<td>パスワードpasswordを暗号化して保存するか否か[UNENCRYPTED]</td>
+</tr><tr>
+<td>VALID UNTIL timestamp	</td>	<td>パスワードの有効期間。timestampまで。[無期限]</td>
+</tr><tr>
+<td>IN ROLE role_name		</td>	<td>親になるロールを列挙する</td>
+</tr><tr>
+<td>IN GROUP role_name		</td>	<td>IN ROLEの別名。廃止予定</td>
+</tr><tr>
+<td>ROLE role_name		</td>	<td>子にするロールを列挙する</td>
+</tr><tr>
+<td>ADMIN role_name		</td>	<td>WITH ADMIN OPTIONつきで子にするロールを列挙する</td>
+</tr><tr>
+<td>USER role_name		</td>	<td>ROLEの別名。廃止予定</td>
+</tr><tr>
+<td>SYSID uid			</td>	<td>SYSID句は無視される。下位互換性のため存続</td>
+</tr><tr>
+<td>IN DATABASE db_name		</td>	<td>データベースdb_nameに限定して変更する。バージョン9.0から</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+CREATE ROLE文、ALTER ROLE文、DROP ROLE文でロールの作成と削除など行います。
+<br>
+SET ROLE文でロールの権限(SUPERUSER, CREATEDB, CREATEROLEなど)を継承できます。
+</p>
+
+<p>
+ロールの権限はメタコマンド\du、より詳細なシステムカタログpg_rolesで表示できます。
+また、ロールが各種データベースオブジェクト(テーブルや関数など)に対してアクセス権限を持つか否か調べる関数群([<7-29>])があります。
+</p>
+
+<p>
+ロールのアクセス制御に関する詳細は[<3-09>]、[<3-10>]を参照してください。
+</p>

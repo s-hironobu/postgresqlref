@@ -1,0 +1,20 @@
+%FILE internal/psql.html
+%LASTMOD
+%KEY pgsql-psql
+
+%TITLE 対話型インタフェースpsql
+
+<font color="#ff0000">
+
+<p>
+見出しのみ。解説文なし
+</p>
+
+</font>
+
+
+
+
+
+
+

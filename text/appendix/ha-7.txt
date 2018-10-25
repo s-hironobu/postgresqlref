@@ -1,0 +1,592 @@
+%FILE internal/ha-07.html
+%LASTMOD
+%KEY pgsql-ha07
+
+%TITLE pgpool レプリケーションモード
+
+<p>
+レプリケーションモードで運用するための設定方法、
+およびオンラインリカバリの方法を説明する。
+</p>
+
+<p>
+ここでPostgreSQLは３重化し、2台故障まで障害を(静的)マスクする。
+<br>
+また、(動的)マスクながらオンラインリカバリで故障ノードを復旧できる。
+</p>
+
+%CHAPTER 設定
+
+<p>
+pgpool-IIの設定ファイルpgpool.confの設定方法と、
+PostgreSQLの準備の概要を示す。
+</p>
+
+%SECTION pgpool.confの設定
+
+<p>
+pgpool-IIについて、レプリケーションモードの設定を行う。
+以下に例を示す。
+</p>
+
+[<レプリケーションモード:pgpool.confの抜粋>]
+<pre>
+ 1: listen_addresses = '*'
+ 2: port = 5432
+ 3: pcp_port = 9898
+ 4: 
+ 5: # - Backend Connection Settings -
+ 6: backend_hostname0 = '192.168.0.10'
+ 7: backend_port0 = 5432
+ 8: backend_weight0 = 1
+ 9: backend_data_directory0 = '/usr/local/pgsql/data'
+10: backend_flag0 = 'ALLOW_TO_FAILOVER'
+11: 
+12: backend_hostname1 = '192.168.0.11'
+13: backend_port1 = 5432
+14: backend_weight1 = 1
+15: backend_data_directory1 = '/usr/local/pgsql/data'
+16: backend_flag1 = 'ALLOW_TO_FAILOVER'
+17: 
+18: backend_hostname2 = '192.168.0.12'
+19: backend_port2 = 5432
+20: backend_weight2 = 1
+21: backend_data_directory2 = '/usr/local/pgsql/data'
+22: backend_flag2 = 'ALLOW_TO_FAILOVER'
+23: 
+24: # - Authentication -
+25: enable_pool_hba = on
+26: 
+27: # -- REPLICATION MODE
+28: replication_mode = on
+29: replication_stop_on_mismatch = on
+30: failover_if_affected_tuples_mismatch = on
+31: 
+32: # -- LOAD BALANCING MODE
+33: load_balance_mode = on
+34: 
+35: # -- ONLINE RECOVERY
+36: recovery_user = 'postgres'
+37: recovery_password = ''
+38: recovery_1st_stage_command = 'recovery_1st_stage.sh'
+39: recovery_2nd_stage_command = 'recovery_2nd_stage.sh'
+40: recovery_timeout = 600
+</pre>
+
+<ul>
+<li>1行目〜3行目: 外部からのアクセスを制御する</li>
+
+<ul>
+ <li>listen_addresses</li>
+ <p>
+  PostgreSQLのlisten_addressesと同じ。
+ </p>
+
+ <li>port</li>
+ <p>
+ 外部からpgpool-IIにアクセスするポート番号。ここではPostgreSQLとおなじ5432を設定する。
+ </p>
+
+ <li>pcp_port</li>
+ <p>
+ pgpool-IIを制御するコマンドが接続するポート番号。
+ </p>
+</ul>
+
+
+<li>5行目〜22行目: 接続するノードの情報</li>
+
+ <ul>
+ <li>backend_hostname0、backend_port0</li>
+ <p>
+ node0のIPアドレスとポート番号。
+ </p>
+
+ <li>backend_weight0</li>
+ <p>
+ 負荷分散アクセスにおける各ノード間の重み付け。
+ </p>
+
+  <li>backend_data_directory0</li>
+ <p>
+ node0のPostgreSQLのベースディレクトリ。
+ </p>
+
+ <li>backend_flag0 = 'ALLOW_TO_FAILOVER'</li>
+ <p>
+  このノードの故障を検出したら、pgpool-IIが自律的にこのノードを切り離す(フェールオーバする)。
+ </p>
+ </ul>
+
+<p>
+node1、node2についても同様。
+</p>
+
+<li>25行目: pg_ha.confでアクセス制御するか否か</li>
+
+<li>27行目〜30行目: レプリケーションモードの設定</li>
+
+ <ul>
+ <li>replication_mode = on</li>
+ <p>
+レプリケーションモードを有効にする。
+ </p>
+
+ <li>replication_stop_on_mismatch</li>
+ <p>
+ SQLを全ノードに送り、あるノードからは成功、別のノードからは失敗と、異なるレスポンスが返った場合にフェールオーバするか否か。
+ <br>
+例えばノード間でデータ不一致があり、あるノードにテーブルtblが存在しないとする。
+このテーブルに対してUPDATEやDELETEを実行するとノードによって成功を返すものと失敗を返すものがある。
+replication_stop_on_mismatchが有効(on)なら、多数決で少数派のノードを切り離す。
+ </p>
+
+ <li>failover_if_affected_tuples_mismatch</li>
+ <p>
+UPDATEやINSERTを全ノードに送り、レスポンスの更新数や挿入数が異なる場合にフェールオーバするか否か。
+<br>
+例えばあるテーブルtblのデータ数が異なっているとする。
+このテーブルに対してUPDATEを実行すると、ノード毎に返す更新数が異なる。
+failover_if_affected_tuples_mismatchが有効(on)なら、多数決で少数派のノードを切り離す。
+ </p>
+
+ </ul>
+
+<li>33行目: 負荷分散モードで稼働するか否か</li>
+
+
+<li>35行目〜40行目: オンラインリカバリの設定</li>
+
+ <ul>
+ <li>recovery_user、recovery_password</li>
+ <p>
+オンラインリカバリを実行するユーザ名とパスワード。
+ </p>
+
+ <li>recovery_1st_stage_command、recovery_2nd_stage_command</li>
+ <p>
+オンラインリカバリを実行するシェルスクリプト名を記述する。詳細は後述。
+ </p>
+ <li>recovery_timeout</li>
+ <p>
+オンラインリカバリのタイムアウトを設定する。オンラインリカバリが終了するに十分な時間を設定すること。
+ </p>
+
+ </ul>
+
+</ul>
+
+
+%SECTION  PostgreSQL
+
+<p>
+レプリケーションモードでpgpool-IIを運用する場合、
+3台のPostgreSQLのデータが同期していなければならない。
+</p>
+
+<p>
+オンラインリカバリを行う場合は、さらに次の設定が必要である。
+</p>
+
+<ol>
+<li>アーカイブログ機能</li>
+<p>
+ディレクトリ/home/postgres/archivelogsにアーカイブログを保存する。
+</p>
+
+<li>オンラインリカバリ用スクリプト</li>
+<p>
+次の3つのスクリプトをベースディレクトリに配置する。詳細は後述する。
+</p>
+
+<p>
+ ・recovery_1st_stage.sh	 ・recovery_2nd_stage.sh	・pgpool_remote_start
+</p>
+
+</ol>
+
+
+
+%CHAPTER pgpool-IIの起動/停止と管理コマンド
+
+<p>
+-nオプション付きでバックグランドで起動するのが、最も簡単である。
+ログの書き込みなどはpgpoolのドキュメントを参照。
+<br>
+停止はstopオプションでpgpoolコマンドを実行する。
+</p>
+
+<pre>
+postgres@pgpool> pgpool -n &
+postgres@pgpool> pgpool stop
+</pre>
+
+<p>
+pgpool-IIの管理は[<表5-XX>]に示す一連の管理コマンドで行う。
+</p>
+
+
+<table border=1>
+<caption>[<表5-XX>] pgpool-IIの管理コマンド</caption>
+<tr bgcolor="#cccccc">
+<th>コマンド</th>	<th>説明</th>
+</tr><tr>
+<td>pcp_node_count</td>	<td>接続しているノード数を返す</td>
+</tr><tr>
+<td>pcp_proc_count</td>	<td>プロセス一覧を返す</td>
+</tr><tr>
+<td>pcp_node_info</td>	<td>指定したノードの情報を返す</td>
+</tr><tr>
+<td>pcp_proc_info</td>	<td>指定したノードに関わるプロセス情報を返す</td>
+</tr><tr>
+<td>pcp_attach_node</td>	<td>(フェールオーバなどによって切り離されたノードを)復帰させる</td>
+</tr><tr>
+<td>pcp_detach_node</td>	<td>明示的にノードを切り離す</td>
+</tr><tr>
+<td>pcp_recovery_node</td>	<td>オンラインリカバリを実行する</td>
+</tr></table>
+
+<br>
+
+
+<p>
+これら管理コマンドは独特のオプション体系を持っている。
+<br>
+以下、いくつかのコマンドについて説明する。
+</p>
+
+
+%SECTION pcp_node_count、pcp_proc_count
+
+[< pcp_node_countの使い方>]
+<pre>
+Usage: pcp_node_count timeout hostname port# username password
+
+  timeout  - connection timeout value in seconds. command exits on timeout
+  hostname - pgpool-II hostname
+  port#    - pgpool-II port number
+  username - username for PCP authentication
+  password - password for PCP authentication
+  -h       - print this help
+</pre>
+
+<p>
+タイムアウトtimeoutは適当な時間を設定してよい。
+<br>
+port番号は9898を指定する。
+<br>
+ユーザ名とパスワードは[<5-06>]のpcp.confファイルに設定した値を使う(本書ではユーザ名"pgpool2"、パスワード"pass-pgpool2")。
+</p>
+
+<p>
+サーバpgpool上でpcp_node_countを実行した結果を示す。3台のPostgreSQLサーバが接続していることがわかる。
+</p>
+
+<pre>
+postgres@pgpool> pcp_node_count 10 localhost 9898 pgpool2 pass-pgpool2
+3
+</pre>
+
+
+%SECTION pcp_node_info
+
+[< pcp_node_infoの使い方>]
+<pre>
+Usage: pcp_node_info timeout hostname port# username password nodeID
+
+  timeout  - connection timeout value in seconds. command exits on timeout
+  hostname - pgpool-II hostname
+  port#    - pgpool-II port number
+  username - username for PCP authentication
+  password - password for PCP authentication
+  nodeID   - ID of a node to get information for
+</pre>
+
+<p>
+pcp_node_infoのオプションはpcp_node_countとほぼ同じで、最後にnodeIDを設定する点のみ異なる。
+</p>
+
+<p>
+pcp_node_infoの出力を[<表5-XX>]に示す。
+重要なのは第3項目の"状態[<表5-XX>]"である。
+</p>
+
+
+<table border=1>
+<caption>[<表5-XX>] pcp_node_infoの出力</caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>	<th>説明</th>
+</tr><tr>
+<td>IPaddr</td>	<td>ノードのアドレス</td>
+</tr><tr>
+<td>port</td>	<td>ノードのport番号</td>
+</tr><tr>
+<td>status</td>	<td>状態[<表5-XX>]参照)</td>
+</tr><tr>
+<td>weight</td>	<td>重み(pgpool.confのbackend_weight0など参照)</td>
+</tr></table>
+
+<br>
+
+
+</%quote>
+<table border=1>
+<caption>[表5-XX>] pcp_node_infoの状態</caption>
+<tr bgcolor="#cccccc">
+<th>状態</th>	<th>説明　　　　　　　　　</th><th>状態</th>	<th>説明　　　　　　　　　</th>
+</tr><tr>
+<td>1</td>	<td>正常接続</td>		<td>4</td>	<td>エラー</td>
+</tr><tr>
+<td>2</td>	<td>アイドル状態</td>		<td>5</td>	<td>フェイタルエラー</td>
+</tr><tr>
+<td>3</td>	<td>切断</td>			<td>6</td>	<td>デッドロック</td>
+</tr></table>
+
+<br>
+
+
+<p>
+node0の情報を表示する。
+<br>
+状態は2、つまりアイドルだが正常な状態である。状態が1か2ならば問題ない。
+</p>
+
+<pre>
+postgres@pgpool> pcp_node_info 10 localhost 9898 pgpool2 pass-pgpool2  0
+192.168.0.10 5432 2 0.333333
+</pre>
+
+<p>
+ここで、node2を緊急停止する(immediateモードで停止)。
+</p>
+
+<p>
+この状態でpcp_node_infoを実行すると、node2の状態が3で、切断されていることが判る。
+</p>
+
+<pre>
+postgres@pgpool> pcp_node_info 100 localhost 9898 pgpool2 pass-pgpool2  2
+192.168.0.12 5432 3 0.333333
+</pre>
+
+
+%SECTION pcp_detach_node, pcp_attach_node
+
+<p>
+停止したノードを切り離すにはpcp_detach_nodeコマンド、
+ノードを接続するにはpcp_attach_nodeコマンドを使う。
+<br>
+コマンド実行時の引数はpcp_node_infoコマンドと同じである。
+</p>
+
+<p>
+pcp_detach_nodeでnode2を切り離す。
+</p>
+
+<pre>
+postgres@pgpool> pcp_detach_node 10 localhost 9898 pgpool2 pass-pgpool2 2
+</pre>
+
+
+%CHAPTER オンラインリカバリの準備	
+
+<p>
+オンラインリカバリは、recovery_1st_stage.sh、recovery_2nd_stage.sh、pgpool_remote_startという３つのスクリプトファイルが連携して行う。
+<br>
+はじめにこれらのスクリプトがどのような働きをするか、時系列で示す([<図5-XX>]参照)。
+</p>
+
+
+<table BORDER=1>
+<caption>[<図5-XX>] スクリプト実行の時系列</caption>
+<tr><td><center>
+<img src="./fig-5-07-02.jpg"><br>
+</center></td></tr>
+</table>
+
+<p>
+ここでは、サーバnode0からサーバnode1(リカバリ先)をリカバリすると仮定する。
+</p>
+
+<p>
+pcp_recovery_nodeコマンド実行すると、オンラインリカバリが始まる。
+</p>
+
+<ul>
+<li>フェーズ1</li>
+
+<p>
+pgpool-IIがサーバnode0に対して関数pgpool_recovery()を介してrecvery_1st_stage.shを実行する([<コラム1>]参照)。
+<br>
+recvery_1st_stage.shの主な仕事は、ベースバックアップをリカバリするサーバに転送することである。
+本書ではrsyncのsshモードで転送している。
+</p>
+
+<p>
+フェーズ1が終わると、全接続が切断されるのを待ってフェーズ2に入る。
+</p>
+
+
+
+<li>フェーズ2</li>
+
+
+<p>
+recovery_2nd_stage.shとpgpool_remote_startを実行する。
+</p>
+
+<p>
+recovery_2nd_stage.shは、サーバnode0でpg_switch_xlog()関数を実行して最新のアーカイブログを書き出し、
+そのアーカイブログをrsyncのsshモードで転送する。
+</p>
+
+<p>
+これでサーバnode1を再起動する準備が整ったので、
+pgpool-IIはサーバnode0にpgpool_remote_start()関数を実行させる。
+<br>
+ここでpgpool_remote_start()関数も、先のインストールで登録された関数である。
+</p>
+
+<p>
+pgpool_remote_start()関数はシェルスクリプトpgpool_remote_startを実行する関数で、
+pgpool_remote_startの中身は、リカバリするサーバ上のPostgreSQLを起動するコマンドだけが書かれている。
+</p>
+
+</ul>
+
+
+<blockquote><table BORDER="1"><tr><td>コラム1:pgpool_recovery関数</td><td>
+
+<p>
+ここでpgpool_recovery()関数は、pgpool-IIインストール時に設定したライブラリpgpool-recovery.soと
+バッチファイルpgpool-recovery.sqlによってPostgreSQLに登録された関数で、
+ベースディレクトリにあるシェルスクリプトを実行する。
+</p>
+
+</td></tr></table></blockquote>
+
+
+%SECTION スクリプト
+
+<p>
+オンラインリカバリのためのシェルスクリプトrecovery_1st_stage.sh、recovery_2nd_stage.sh、pgpool_remote_startを示す。
+</p>
+
+[< recovery_1st_stage.sh>]
+<pre>
+#! /bin/bash
+
+PSQL=/usr/local/pgsql/bin/psql
+MASTER_BASEDIR=$1
+RECOVERY_HOST=$2
+RECOVERY_BASEDIR=$3
+
+# ベースバックアップの開始
+$PSQL -c "SELECT pg_start_backup('pgpool-recovery')" postgres
+
+# リカバリ先用のrecovry.confファイル生成
+echo "restore_command = 'cp /home/postgres/archivelogs/%f %p'" > \
+  $MASTER_BASEDIR/recovery.conf
+
+# リカバリ先のデータベースクラスタを念のためにバックアップ
+ssh -l postgres -T $RECOVERY_HOST rm -rf $RECOVERY_BASEDIR.bk
+ssh -l postgres -T $RECOVERY_HOST mv -f  $RECOVERY_BASEDIR{,.bk}
+
+# データベースクラスタ=ベースバックアップをリカバリ先に転送
+rsync -az -e ssh  -l postgres $MASTER_BASEDIR/ \
+    $RECOVERY_HOST:$RECOVERY_BASEDIR/
+
+ssh -l postgres  -T $RECOVERY_HOST cp -f  \
+               $RECOVERY_BASEDIR.bk/postgresql.conf $RECOVERY_BASEDIR
+ssh -l postgres  -T $RECOVERY_HOST rm -f  \
+               $RECOVERY_BASEDIR/postmaster.pid
+
+# リカバリ先に転送したので、不要になったrecovery.confを削除
+rm -f $MASTER_BASEDIR/recovery.conf
+
+# ベースバックアップの終了
+$PSQL -c "SELECT pg_stop_backup()" postgres
+
+exit 0
+</pre>
+
+
+[< recovery_2nd_stage.sh>]
+<pre>
+#! /bin/bash
+
+PSQL=/usr/local/pgsql/bin/psql
+ARCHIVEDIR=/home/postgres/archivelogs/
+MASTER_BASEDIR=$1
+RECOVERY_HOST=$2
+RECOVERY_BASEDIR=$3
+
+# 最新のアーカイブログを保存
+$PSQL -c 'SELECT pg_switch_xlog()' postgres
+
+# 最新のアーカイブログをリカバリ先に転送
+rsync -az -e ssh  -l postgres $ARCHIVEDIR $RECOVERY_HOST:$ARCHIVEDIR
+
+exit 0
+</pre>
+
+
+[< pgpool_remote_start>]
+
+<pre>
+#! /bin/sh
+
+PGCTL=/usr/local/pgsql/bin/pg_ctl
+RECOVERY_HOST=$1
+RECOVERY_BASEDIR=$2
+
+# リカバリ先のPostgreSQLを起動
+ssh  -l postgres -T $RECOVERY_HOST $PGCTL -w -D $RECOVERY_BASEDIR start \
+		 2>/dev/null 1> /dev/null < /dev/null &
+</pre>
+
+<p>
+サーバnode0、node1、node2のベースディレクトリ(ここでは/usr/local/pgsql/data)に、
+これらのシェルスクリプトを置き、パーミッションを実行可能にする。
+</p>
+
+<pre>
+postgres@> cd /usr/local/pgsql/data
+postgres@> chmod +x recovery_1st_stage.sh
+postgres@> chmod +x recovery_2nd_stage.sh 
+postgres@> chmod +x pgpool_remote_start 
+</pre>
+
+
+
+%CHAPTER オンラインリカバリの実行
+
+<p>
+手動でpcp_recovery_nodeコマンドを実行する。
+</p>
+
+<p>
+引数はpcp_node_infoコマンドと同じである。
+<br>
+ここでは、node1をオンラインリカバリする。
+</p>
+
+<pre>
+postgres@pgpool> pcp_recovery_node 100 localhost 9898 pgpool2 pass-pgpool2 1
+</pre>
+
+<p>
+リカバリ中にエラーが発生すれば、エラーメッセージが出る。
+<br>
+オンラインリカバリが終了したら、pcp_attach_nodeコマンドでnode1を接続する。
+</p>
+
+<pre>
+postgres@pgpool> pcp_attach_node 100 localhost 9898 pgpool2 pass-pgpool2 1
+</pre>
+
+<p>
+正常に接続されたかどうかは、pcp_node_infoで確認できる。
+</p>
+
+

@@ -1,0 +1,105 @@
+%FILE internal/psql-07.html
+%LASTMOD
+%KEY pgsql-psql07
+
+
+%TITLE 表示の制御
+
+<pre>
+[<メタコマンド一覧>]
+================================================================
+メタコマンド			説明[デフォルト]
+================================================================
+\encoding [encoding]		クライアント側のエンコーディングを設定
+\x				拡張形式モードの切替え
+\t				"結果のみ表示"と"完全表示"を切替え
+\a				位置揃え無しの出力モード
+\f[string]			カラムの区切り文字stringを設定。位置揃え無しモード(\a)を設定しないと無効。[|]
+\C [TITLE]			テーブルに"TITLE"を表示
+================================================================
+</pre>
+
+%CHAPTER 解説
+
+<p>
+・\encoding 
+<br>
+\encoding メタコマンドで、psqlが動作しているターミナルのエンコーディングを設定します。
+引数なしで実行すると現在のエンコーディングを表示します。
+<br>
+なお、\encoding メタコマンドと"SET client_encoding TO"文は同じです。
+</p>
+
+
+<p>
+・\x 
+<br>
+拡張形式モードの設定/解除を切替えます。
+<u>拡張形式モードはカラムが多くて表示しきれない場合に有効</u>です。
+</p>
+
+<pre>
+sampledb=# \x
+Expanded display is on.
+
+sampledb=# SELECT datid,datname,numbackends,xact_commit,xact_rollback,
+sampledb-#        blks_read,blks_hit,tup_returned,tup_fetched,
+sampledb-#       tup_inserted,tup_updated,tup_deleted, conflicts 
+sampledb-# FROM pg_stat_database
+sampledb-#         WHERE datname = 'postgres' OR datname = 'sampledb';
+-[ RECORD 1 ]-+---------
+datid         | 12788
+datname       | postgres
+numbackends   | 0
+xact_commit   | 36936
+xact_rollback | 0
+blks_read     | 476
+blks_hit      | 1021466
+tup_returned  | 12229043
+tup_fetched   | 206802
+tup_inserted  | 0
+tup_updated   | 0
+tup_deleted   | 0
+conflicts     | 0
+-[ RECORD 2 ]-+---------
+datid         | 16384
+datname       | sampledb
+numbackends   | 1
+xact_commit   | 37851
+xact_rollback | 95
+blks_read     | 6905
+blks_hit      | 1073867
+tup_returned  | 13105475
+tup_fetched   | 228019
+tup_inserted  | 100888
+tup_updated   | 741
+tup_deleted   | 150
+conflicts     | 0
+</pre>
+
+<p>
+・\f 
+<br>
+位置揃え無しの出力モード(\aメタコマンド)のときの、フィールド区切り文字を設定します。
+区切り文字はシングルクオート(')で囲んで指定します。
+</p>
+
+
+<pre>
+sampledb=# --  区切り文字','を設定
+sampledb=# \f ','
+Field separator is ",".
+
+sampledb=# \a
+Output format is unaligned.
+
+sampledb=# SELECT * FROM book_list WHERE author_id < 3;
+title,author_id
+カラマーゾフの兄弟,1
+罪と罰,1
+我輩は猫である,2
+夢十夜,2
+倫敦塔,2
+(5 rows)
+</pre>
+

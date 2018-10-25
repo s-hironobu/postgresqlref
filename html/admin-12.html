@@ -1,0 +1,605 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+ <title>PostgreSQLバイブル草稿</title>
+ <link rel="stylesheet" type="text/css" media="screen" href="./default.css"">
+</head>
+
+<body>
+
+<script language=javascript>
+<!--
+function show(inputData) {
+var objID=document.getElementById( "layer_" + inputData );
+var buttonID=document.getElementById( "category_" + inputData );
+if(objID.className=='close') {
+objID.style.display='block';
+objID.className='open';
+}else{
+objID.style.display='none';
+objID.className='close';
+}
+}
+//-->
+</script>
+
+<div id="header">
+<h1 class="title">PostgreSQLバイブル草稿</title></h1>
+    <span class="small">
+</span>
+</div>
+
+
+<hr class="full_hr">
+<table style="width: 100%;" border="0">
+ <tbody><tr>
+  <td class="menubar">
+   <div id="menubar">
+
+
+<h5>PostgreSQLとは</h5>
+
+<li><a href="./index.html">PostgreSQLとは</a><br></li>
+
+<h5>PostgreSQLの内部構造</h5>
+<ul>
+<li><a href="./internal.html">とびら</a><br></li>
+</ul>
+<ol>
+<li><a href="./internal-01.html">プロセスとメモリ構造</a><br></li>
+<li><a href="./internal-02.html">データベースクラスタ、テーブルの構造</a></li>
+<li><a href="./internal-03.html">SQLの実行</a></li>
+<li><a href="./internal-04.html">プラン処理</a></li>
+<li><a href="./internal-05.html">バッファマネージャとバックグランドライタ</a></li>
+<li><a href="./internal-06.html">トランザクションIDと同時実行制御</a></li>
+<li><a href="./internal-07.html">VACUUM</a></li>
+<li><a href="./internal-08.html">HOTとIndex Only Scan</a></li>
+<li><a href="./internal-09.html">WAL(Write Ahead Logging)</a></li>
+<li><a href="./internal-10.html">アーカイブログとPITR</a></li>
+<li><a href="./internal-11.html">レプリケーション(Streaming ReplicationとHotStandby)</a></li>
+</ol>
+
+
+<h5>PostgreSQLサーバ管理</h5>
+
+<ul>
+<li><a href="./admin.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[PostgreSQLの基礎]<br>
+<li><a href="./admin-01.html">オブジェクト、データベース、スキーマ</a><br></li>
+<li><a href="./admin-02.html">システムカタログ</a><br></li>
+<li><a href="./admin-03.html">文字コードの扱い</a><br></li>
+
+
+[インストールと起動、停止]<br>
+<li><a href="./admin-04.html">インストール</a><br></li>
+<li><a href="./admin-05.html">データベースシステムの初期化 initdb</a><br></li>
+<li><a href="./admin-06.html">PostgreSQLサーバの起動/停止</a><br></li>
+
+
+[認証とアクセス制御]<br>
+<li><a href="./admin-07.html">認証とアクセス制御</a><br></li>
+<li><a href="./admin-08.html">クライアントのアクセス制御</a><br></li>
+<li><a href="./admin-09.html">権限について</a><br></li>
+<li><a href="./admin-10.html">ロールの作成と権限制御</a><br></li>
+
+<HR>
+
+[バックアップとアップグレード]<br>
+<li><a href="./admin-11.html">バックアップとアップグレード</a><br></li>
+<li><a href="./admin-12.html">ダンプとリストア</a><br></li>
+<li><a href="./admin-13.html">アップグレード</a><br></li>
+
+[保守、監視とチューニング]<br>
+<li><a href="./admin-14.html">保守、監視とチューニング</a><br></li> 
+<li><a href="./admin-15.html">稼働統計情報</a><br></li>
+<li><a href="./admin-16.html">実行ログの取得</a><br></li>
+<li><a href="./admin-17.html">モニタリングツール</a><br></li>
+<li><a href="./admin-18.html">ログと統計情報の分析</a><br></li>
+<li><a href="./admin-19.html">パラメータチューニング</a><br></li>
+
+[耐障害性、高可用性]<br>
+<li><a href="./admin-20.html">耐障害性、高可用性</a><br></li>
+<li><a href="./admin-21.html">アーカイブログとPITR</a><br></li>
+<li><a href="./admin-22.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-23.html">レプリケーションの故障対応</a><br></li>
+
+
+[FDW]<br>
+<li><a href="./admin-24.html">FDW</a><br></li>
+<li><a href="./admin-25.html">postgres_fdw</a><br></li>
+</ol>
+
+[追加の文章(未完)]<br>
+<li><a href="./admin-26.html">ロギング</a><br></li>
+<li><a href="./admin-27.html">統計情報</a><br></li>
+<li><a href="./admin-28.html">モニタリング</a><br></li>
+<li><a href="./admin-29.html">メンテナンス</a><br></li>
+</ol>
+
+
+<h5>設定パラメータ</h5>
+
+<ol>
+<li><a href="./param-01.html">postgresql.confの設定</a><br></li>
+<li><a href="./param-02.html">ファイルの場所</a><br></li>
+<li><a href="./param-03.html">接続と認証</a><br></li>
+<li><a href="./param-04.html">資源の消費</a><br></li>
+<li><a href="./param-05.html">WAL</a><br></li>
+<li><a href="./param-06.html">レプリケーション</a><br></li>
+<li><a href="./param-07.html">問い合わせ計画</a><br></li>
+<li><a href="./param-08.html">エラー報告とログ取得</a><br></li>
+<li><a href="./param-09.html">稼働統計情報</a><br></li>
+<li><a href="./param-10.html">AUTOVACUUM</a><br></li>
+<li><a href="./param-11.html">クライアント接続デフォルト</a><br></li>
+<li><a href="./param-12.html">ロック管理/バージョンとプラットフォーム互換性</a><br></li>
+</ol>
+
+
+<h5>psql</h5>
+<ul>
+<li><a href="./psql.html">・対話型インタフェースpsqlの使い方</a><br></li>
+</ul>
+
+<ol>
+<li><a href="./psql-01.html">psqlとは</a><br></li>
+<li><a href="./psql-02.html">PostgreSQLサーバとの接続/切断/再接続</a><br></li>
+<li><a href="./psql-03.html">データベース一覧表示</a><br></li>
+<li><a href="./psql-04.html">コマンドラインからSQL実行</a><br></li>
+<li><a href="./psql-05.html">バッチファイルの実行(メタコマンド)</a><br></li>
+<li><a href="./psql-06.html">情報表示</a><br></li>
+<li><a href="./psql-07.html">表示の制御</a><br></li>
+<li><a href="./psql-08.html">ラージオブジェクトの扱い</a><br></li>
+<li><a href="./psql-09.html">データのコピー</a><br></li>
+<li><a href="./psql-10.html">その他のメタコマンド</a><br></li>
+
+</ol>
+
+
+<h5>SQL</h5>
+
+<ul>
+<li><a href="./sql.html">・とびら</a><br></li>
+</ul>
+
+<ol>
+[SQL]<br>
+
+<li><a href="./sql-01.html">SQL語彙</a><br></li>
+<li><a href="./sql-02.html">テーブルスペースの作成/削除/変更</a><br></li>
+<li><a href="./sql-03.html">データベースの作成/変更/削除</a><br></li>
+<li><a href="./sql-04.html">テーブルの作成</a><br></li>
+<li><a href="./sql-05.html">外部キー</a><br></li>
+<li><a href="./sql-06.html">オブジェクトの継承/LIKE句</a><br></li>
+<li><a href="./sql-07.html">問い合わせ結果から新しいテーブルを作成</a><br></li>
+<li><a href="./sql-08.html">テーブルの削除</a><br></li>
+<li><a href="./sql-09.html">スキーマの定義/変更/削除</a><br></li>
+
+<li><a href="./sql-10.html">ALTER TABLE(1)</a><br></li>
+<li><a href="./sql-11.html">ALTER TABLE(2)</a><br></li>
+<li><a href="./sql-12.html">ALTER TABLE(3)</a><br></li>
+
+<li><a href="./sql-13.html">ロール</a><br></li>
+<li><a href="./sql-14.html">GRANT REVOKE(1)</a><br></li>
+<li><a href="./sql-15.html">GRANT REVOKE(2)</a><br></li>
+<li><a href="./sql-16.html">INSERT</a><br></li>
+<li><a href="./sql-17.html">SELECT</a><br></li>
+<li><a href="./sql-18.html">FROM句</a><br></li>
+<li><a href="./sql-19.html">WHERE句</a><br></li>
+
+<li><a href="./sql-20.html">WINDOW句、OVER句</a><br></li>
+<li><a href="./sql-21.html">共通テーブル式(CTE)</a><br></li>
+
+
+<li><a href="./sql-22.html">グループ化</a><br></li>
+<li><a href="./sql-23.html">DISTINCT句</a><br></li>
+<li><a href="./sql-24.html">テーブル結合</a><br></li>
+<li><a href="./sql-25.html">問い合わせの結合</a><br></li>
+<li><a href="./sql-26.html">ORDER BY</a><br></li>
+<li><a href="./sql-27.html">LIMIT OFFSET</a><br></li>
+<li><a href="./sql-28.html">FOR UPDATE/ FOR SHARE</a><br></li>
+<li><a href="./sql-29.html">サブクエリ</a><br></li>
+<li><a href="./sql-30.html">CASE式</a><br></li>
+<li><a href="./sql-31.html">VALUES</a><br></li>
+<li><a href="./sql-32.html">UPDATE</a><br></li>
+<li><a href="./sql-33.html">DELETE</a><br></li>
+<li><a href="./sql-34.html">TRUNCATE</a><br></li>
+
+<li><a href="./sql-35.html">インデックス</a><br></li>
+
+<li><a href="./sql-36.html">VIEW</a><br></li>
+<li><a href="./sql-37.html">シーケンス</a><br></li>
+<li><a href="./sql-38.html">トリガ</a><br></li>
+<li><a href="./sql-39.html">カーソル</a><br></li>
+<li><a href="./sql-40.html">プリペアステートメント</a><br></li>
+<li><a href="./sql-41.html">トランザクション</a><br></li>
+<li><a href="./sql-42.html">セーブポイント</a><br></li>
+<li><a href="./sql-43.html">2相コミット</a><br></li>
+<li><a href="./sql-44.html">LOCK</a><br></li>
+<li><a href="./sql-45.html">SET/SHOW/RESET</a><br></li>
+<li><a href="./sql-46.html">VACUUM</a><br></li>
+<li><a href="./sql-47.html">ANALYZE</a><br></li>
+<li><a href="./sql-48.html">EXPLAIN</a><br></li>
+<li><a href="./sql-49.html">COPY/IMPORT</a><br></li>
+<li><a href="./sql-50.html">COPY/EXPORT</a><br></li>
+<li><a href="./sql-51.html">関数定義</a><br></li>
+<li><a href="./sql-52.html">エクステンション</a><br></li>
+<li><a href="./sql-53.html">外部サーバの定義、変更、削除</a><br></li>
+<li><a href="./sql-54.html">外部サーバのユーザマップ定義、変更、削除</a><br></li>
+<li><a href="./sql-55.html">外部テーブルの定義、変更、削除</a><br></li>
+<hr>
+<li><a href="./sql-56.html">イベントトリガ</a><br></li>
+<li><a href="./sql-57.html">行レベルセキュリティ</a><br></li>
+
+<hr>
+<li><a href="./sql-60.html">新しい機能</a><br></li>
+</ol>
+
+
+<h5>関数</h5>
+
+[関数]<br>
+<ul>
+<li><a href="./function.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[データ型]<br>
+<li><a href="./type-01.html">データ型</a><br></li>
+<li><a href="./type-02.html">数値データ型</a><br></li>
+<li><a href="./type-03.html">文字データ型</a><br></li>
+<li><a href="./type-04.html">日付/時刻データ型</a><br></li>
+<li><a href="./type-05.html">日付/時刻表示形式とタイムゾーンの設定</a><br></li>
+<li><a href="./type-06.html">ブーリアン型</a><br></li>
+<li><a href="./type-07.html">ビット列データ型</a><br></li>
+<li><a href="./type-08.html">疑似データ型</a><br></li>
+<li><a href="./type-09.html">バイナリ列データ型</a><br></li>
+<li><a href="./type-10.html">Range型</a><br></li>
+<li><a href="./type-11.html">配列</a><br></li>
+<hr>
+<li><a href="./type-12.html">JSON型</a><br></li>
+
+<hr>
+[演算子]<br>
+<li><a href="./ope-01.html">演算子</a><br></li>
+<li><a href="./ope-02.html">論理演算子</a><br></li>
+<li><a href="./ope-03.html">比較演算子</a><br></li>
+<li><a href="./ope-04.html">算術演算子</a><br></li>
+<li><a href="./ope-05.html">文字列演算子</a><br></li>
+<li><a href="./ope-06.html">パターンマッチング</a><br></li>
+<li><a href="./ope-07.html">日付/時刻演算子</a><br></li>
+<li><a href="./ope-08.html">Range型演算子</a><br></li>
+<hr>
+<li><a href="./ope-09.html">JSON型演算子</a><br></li>
+
+
+<hr>
+[関数]<br>
+<li><a href="./func-01.html">関数</a><br></li>
+<li><a href="./func-02.html">算術関数</a><br></li>
+<li><a href="./func-03.html">集約関数/統計関数</a><br></li>
+<li><a href="./func-04.html">文字列関数</a><br></li>
+<li><a href="./func-05.html">日付・時刻関数</a><br></li>
+<li><a href="./func-06.html">型変換関数</a><br></li>
+<li><a href="./func-07.html">Range型関数</a><br></li>
+<li><a href="./func-08.html">Window関数</a><br></li>
+<li><a href="./func-09.html">セッション情報関数</a><br></li>
+<li><a href="./func-10.html">アクセス権限とスキーマ可視性照会関数</a><br></li>
+<li><a href="./func-11.html">データベースオブジェクト関数</a><br></li>
+<li><a href="./func-12.html">バックアップとリカバリ制御関数</a><br></li>
+
+<li><a href="./func-13.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-15.html">構成設定関数</a><br></li>
+<li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-17.html">レプリケーションSQL関数</a><br></li>
+
+<hr>
+<li><a href="./func-18.html">JSON関数</a><br></li>
+
+</ol>
+
+<!--
+[削除するもの]<br>
+<li><a href="./type-07.html">幾何データ型</a><br></li>
+<li><a href="./type-08.html">ネットワークアドレス型型</a><br></li>
+<li><a href="./ope-08.html">幾何演算子</a><br></li>
+<li><a href="./ope-09.html">ネットワーク演算子</a><br></li>
+<li><a href="./func-06.html">幾何関数</a><br></li>
+<li><a href="./func-07.html">ネットワークアドレス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-16.html">トランザクションID関数</a><br></li>
+<li><a href="./func-17.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-18.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-19.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-20.html">勧告的ロック用関数</a><br></li>
+-->
+
+<h5>PL/pgSQL</h5>
+
+<ol>
+<li><a href="./plpgsql.html">結果の返し方</a><br></li>
+<li><a href="./plpgsql-01.html">ストアドプロシージャ</a><br></li>
+<li><a href="./plpgsql-02.html">ストアドプロシージャの定義</a><br></li>
+<li><a href="./plpgsql-03.html">変数宣言と値の代入</a><br></li>
+**** まとめる >>
+<li><a href="./plpgsql-04.html">SELECT INTO文</a><br></li>
+<li><a href="./plpgsql-05.html">結果ステータスの取得</a><br></li>
+<li><a href="./plpgsql-06.html">動的なSQL文の実行</a><br></li>
+<< ここまで****
+<li><a href="./plpgsql-07.html">IF 条件分岐</a><br></li>
+<li><a href="./plpgsql-08.html">ループ処理</a><br></li>
+*** >>>
+<li><a href="./plpgsql-09.html">RETURN</a><br></li>
+<<< ***
+<li><a href="./plpgsql-10.html">ループ処理　LOOP</a><br></li>
+<li><a href="./plpgsql-11.html">ループ処理　WHILE</a><br></li>
+<li><a href="./plpgsql-12.html">ループ処理　FOR </a><br></li>
+<li><a href="./plpgsql-13.html">ループ処理 (複数行の問い合わせ結果を扱う)</a><br></li>
+<li><a href="./plpgsql-14.html">カーソルの利用</a><br></li>
+<li><a href="./plpgsql-15.html">カーソル変数の宣言</a><br></li>
+<li><a href="./plpgsql-16.html">カーソルのオープンとクローズ	OPEN / CLOSE</a><br></li>
+<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得		FETCH</a><br></li>
+<li><a href="./plpgsql-18.html">カーソルを使った例</a><br></li>
+<li><a href="./plpgsql-19.html">例外</a><br></li>
+*** >>>
+<li><a href="./plpgsql-21.html">CASE</a><br></li>
+<li><a href="./plpgsql-22.html">FOREACH</a><br></li>
+<<< ***
+</ol>
+
+
+<h5>Appendix(付録)</h5>
+
+<ol>
+<li><a href="./app-01.html">pgpool-II</a><br></li>
+<li><a href="./app-02.html">Pacemaker</a><br></li>
+</ol>
+
+
+<h5>おまけ:ネット公開(ページ数の関係で書籍には載せない)</h5>
+
+<ol>
+[pgpool]<br>
+<li><a href="./ha-06.html">pgpool-II セットアップ</a><br></li>
+<li><a href="./ha-07.html">pgpool-II レプリケーションモード</a><br></li>
+<li><a href="./ha-08.html">pgpool-II マスタースレーブモード</a><br></li>
+[Pacemaker]<br>
+<li><a href="./ha-10.html">Pacemaker</a><br></li>
+</ol>
+
+</div>
+<hr class="full_hr">
+</div>
+
+  </td>
+  <td valign="top">
+   <div id="body">
+
+<h2>ダンプとリストア	pg_dump/pg_restore</h2>
+
+
+<pre>
+[<書式>]
+
+● ダンプ
+pg_dump [OPTION .. ] db_name 
+
+● リストア
+pg_restore [OPTION ..] [archive_file]
+</pre>
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>引数</th>	<th>説明</th>
+</tr><tr>
+<td>db_name</td>	<td>ダンプするデータベース名</td>
+</tr><tr>
+<td>archive_file</td>	<td>リストアするアーカイブファイルを設定。指定しない場合、標準入力からリストアデータを読み込む</td>
+</tr></table>
+
+<br>
+<br>
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>主なオプション</th>				<th>説明[デフォルト]</th>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>共通のオプション</th>
+</tr><tr>
+<td>-h host_name</td>		<td>PostgreSQLサーバが稼働しているホスト名(host_name)を設定</td>
+</tr><tr>
+<td>-p port_no</td>		<td>PostgreSQLサーバに接続するTCP/IPポート番号(port_no)を設定[5432]</td>
+</tr><tr>
+<td>-U user_name</td>		<td>接続するデータベースユーザ/ロール名(user_name)を設定</td>
+</tr><tr>
+<td>-W	</td>		<td>パスワード入力プロンプトを表示</td>
+</tr><tr>
+<td>-w	</td>		<td>パスワード入力を促さない。バージョン8.4から</td>
+</tr><tr>
+<td>-v, --verbose</td>		<td>処理の内容を詳細に表示</td>
+</tr><tr>
+<td>-a, --data-only</td>		<td>テーブルのデータのみダンプ/リストア。各種定義(テーブル定義、権限定義、関数定義など)はダンプ/リストアしない。プレーンテキスト形式のみ有効</td>
+
+</tr><tr>
+<td>-C, --create</td>		<td>リストア前にCREATE DATABASE文を実行してデータベースを新たに作成。プレーンテキスト形式のみ有効</td>
+
+</tr><tr>
+<td>-c, --clean	</td>		<td>データベースとテーブルの削除コマンド(DROP DATABASE文、DROP TABLE文)を含める。プレーンテキスト形式のみ有効</td>
+
+</tr><tr>
+<td>-F format</td>		<td>出力フォーマット(format)を指定。別表参照</td>
+</tr><tr>
+<td>-O, --no-owner</td>		<td>所有権に関するSQL文をダンプ/リストアしない(復元時、復元作業を行ったユーザが所有権をもつ)。プレーンテキスト形式のみ有効</td>
+</tr><tr>
+<td>-no-security-labels</td>		<td>セキュリティラベルに関する設定をダンプ/リストアしない。バージョン9.1から</td>
+</tr><tr>
+<td>--role=ROLENAME</td>		<td>ダンプ/リストアの前に"SET ROLE文でROLENAMEを設定。バージョン8.4から</td>
+</tr><tr>
+<td>-R, --no-reconnect</td>		<td>メタコマンド\connectをダンプしない(\connectはリストア時に所有権を反映するために用いる場合がある)。プレーンテキスト形式のみ有効</td>
+</tr><tr>
+<td>--no-tablespaces</td>		<td>テーブルスペースに関する設定をダンプ/リストアしない。バージョン8.4から</td>
+</tr><tr>
+<td>-S user_name</td>		<td>スーパーユーザ権限をもつデータベースユーザ名(user_name)を指定</td>
+</tr><tr>
+<td>-s, --schema-only</td>		<td>各種定義のみをダンプ/リストア。データはダンプ/リストアしない</td>
+</tr><tr>
+<td>--schema=schema</td>		<td>指定したschemaの内容のみをダンプ/リストア</td>
+</tr><tr>
+<td>-t table</td>		<td>指定したテーブルのデータのみダンプ/リストア。プレーンテキスト形式のみ有効</td>
+</tr><tr>
+<td>-x, --no-privileges</td>		<td>GRANT文、REVOKE文(アクセス権限を制御する文)をダンプ/リストアしない</td>
+</tr>
+<tr bgcolor="#eeeeee">
+<th colspan=2 align=left>pg_dumpだけのオプション</th>
+</tr><tr>
+<td>--column-inserts</td>		<td>データを(COPY文ではなく)明示的にカラム名をつけたINSERT文としてダンプする</td>
+</tr><tr>
+<td>-d, --inserts</td>		<td>データを(COPY文ではなく)INSERT文としてダンプする</td>
+</tr><tr>
+<td>--disable-dollar-quoting</td>		<td>関数定義のドル引用符を無効にし、強制的に標準SQLの文字列構文を使用した引用符付けにする。バージョン8.1から</td>
+</tr><tr>
+<td>-f file_name</td>		<td>アーカイブを書き込むファイル名(file_name)。指定しない場合は標準出力へデータを出力</td>
+</tr><tr>
+<td>-i, --ignore-version</td>		<td> pg_dumpコマンドとPostgreSQLサーバのバージョンの不一致を無視</td>
+</tr><tr>
+<td>--no-unlogged-table-data</td>		<td>WALログを取らないテーブルのデータをダンプしない。バージョン9.1から</td>
+</tr><tr>
+<td>-o, --oids	</td>		<td>オブジェクトIDをダンプ</td>
+</tr><tr>
+<td>--quote-all-identifiers</td>		<td>強制的にすべての識別子を引用符で囲む。バージョン9.1から</td>
+</tr>
+<tr bgcolor="#eeeeee">
+<th colspan=2 align=left>pg_restoreだけのオプション</th>
+</tr><tr>
+<td>-d db_name</td>		<td>リストアするデータベース名(db_name)を設定</td>
+</tr><tr>
+<td>-e, --exit-on-error	</td>		<td>エラーが発生したら終了する。デフォルトはエラーが発生しても終了しない。バージョン8.1から</td>
+</tr><tr>
+<td>-f file_name</td>		<td>作成するスクリプト(file_name)、もしくは、'-l'を使用した場合の一覧用の出力ファイル(file_name)を指定。デフォルトは標準出力</td>
+</tr><tr>
+<td>-i index_name</td>		<td>指定されたインデックス(index_name)のみリストア</td>
+</tr><tr>
+<td>jobs=NUM</td>		<td>NUM個のスレッドで並列にリストアする。バージョン8.4から</td>
+</tr><tr>
+<td>-T trigger_name</td>		<td>指定したトリガ(trigger_name)の定義のみリストア</td>
+</tr><tr>
+<td>-P function_name</td>		<td>リストアするプロシージャや関数(function_name)を指定</td>
+</tr><tr>
+<td>--single-transaction</td>		<td>リストアを１トランザクションで実行する。バージョン8.2から</td>
+</tr><tr>
+<td>-I, --index=NAME</td>		<td>指定したインデックスの定義のみリストアする。バージョン8,1から</td>
+</tr><tr>
+<td>-l, --list	</td>		<td>アーカイブの内容を一覧表示</td>
+</tr><tr>
+<td>-L list_file</td>		<td>list_file内の要素のみをファイル内の出現順にリストア。行を移動することも、行の先頭に;をつけてコメントアウトすることも可能</td>
+</tr><tr>
+<td>--no-data-for-failed-tables	</td>		<td>デフォルトでは既にテーブルが存在しても、データをリストアによって追記してしまう可能性がある。このオプションを設定すると(既にテーブルが存在するため)テーブル生成に失敗するとリストアをしない。バージョン8.2から</td>
+</tr><tr>
+<td>-N, --orig-order	</td>		<td>OIDによる順番づけを無視し、ダンプした時の順番のままリストア</td>
+</tr><tr>
+<td>-o, --oid-order	</td>		<td>OIDによる順番づけに従ってリストア</td>
+</tr><tr>
+<td>-r, --rearrange	</td>		<td>変更されたOIDによる順番づけに従ってリストア。デフォルトで有効</td>
+</tr>
+</table>
+
+<br>
+<br>
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>フォーマットオプション</th>		<th>形式名</th>			<th>説明</th>
+</tr><tr>
+<td>p</td>		<td>プレーンテキスト形式</td>		<td>プレーンテキストのSQLスクリプトファイルを出力(デフォルト)</td>
+</tr><tr>
+<td>t</td>		<td>tarアーカイブ形式</td>		<td>pg_restoreコマンドが読み込み可能なtarアーカイブを出力</td>
+</tr><tr>
+<td>c</td>		<td>カスタムアーカイブ形式</td>		<td>pg_restoreコマンドが読み込み可能なカスタムアーカイブを出力</td>
+</tr>
+</table>
+
+<br>
+<br>
+
+<div class="jumpmenu"></div><h3>解説</h3>
+
+<p>
+バージョンが進む毎にオプションが増え、使いかたも変化しています。例えば-Xオプションはバージョン8.2以降使われなくなっています。使用バージョンのhelpメッセージを確認してください。
+</p>
+
+
+<p>
+・-Fオプション
+<br>
+-Fオプションでアーカイブファイルの出力フォーマットを設定します。
+<br>
+設定する値は'p'(プレーンテキスト形式)、't'(tarアーカイブ形式)、'c'(カスタムアーカイブ形式)のいずれかです。特にPostgreSQLのカスタムアーカイブ形式は圧縮してダンプするため、サイズの大きなデータベースをバックアップする際に有効です。
+</p>
+
+<p>
+•-c, --clean
+<br>
+データベースとテーブルの削除コマンド(DROP DATABASE文、DROP TABLE文)を含めます。
+<br>
+リストア時に指定すると、リストア前にDROP文を実行してデータベースオブジェクトを削除します。
+</p>
+
+<p>
+・ラージオブジェクトの扱い
+<br>
+バージョン8.0までのpg_dumpはラージオブジェクトを扱う場合、-bオプションを設定して明示的にラージオブジェクトを扱うと宣言し、tarアーカイブ形式かカスタムアーカイブ形式でダンプしなければなりませんでした(-Fオプションで't'か'c'を設定)。
+<br>
+バージョン8.1からラージオブジェクトを特別扱いする必要がなくなり、-bオプションと-Fオプションなしでもラージオブジェクトをダンプできるようになりました。
+</p>
+
+<div class="jumpmenu"></div><h3>実行例</h3>
+
+<p>
+データベースsampledbをダンプします。
+ダンプデータはアーカイブファイルsampledb.dbに書き込みます。
+</p>
+
+<pre>
+postgres> pg_dump -U postgres -f sampledb.db sampledb
+</pre>
+
+<p>
+アーカイブファイルsampledb.dbはプレーンテキスト形式なので、データベースnew_sampledbへのリストアはpsqlコマンドで行います。
+</p>
+
+<pre>
+postgres> createdb -U postgres new_sampledb
+postgres> psql -U postgres -d new_sampledb -f sampledb.db
+</pre>
+
+<p>
+・カスタムアーカイブ形式によるダンプ
+<br>
+データベースsampledbを、PostgreSQLのカスタムアーカイブ形式でダンプします。
+</p>
+
+<pre>
+postgres> pg_dump -U postgres -F c -f sampledb.car sampledb
+</pre>
+
+<p>
+リストアの手順は次のとおりです。
+</p>
+
+<pre>
+postgres> createdb -U postgres new_sampledb
+postgres> pg_restore -U postgres -d new_sampledb -F c sampledb.car 
+</pre>
+
+<hr class="full_hr">
+<div id="lastmodified">
+Last-modified: 2018-9-8
+</div>
+</body>
+</html>
+

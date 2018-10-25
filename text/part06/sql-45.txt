@@ -1,0 +1,122 @@
+%FILE internal/sql-45.html
+%LASTMOD
+%KEY pgsql-sql45
+
+%TITLE 設定パラメータの設定/表示/リセット	SET / SHOW / RESET
+
+<pre>
+[<書式>]
+
+● 設定
+SET [ SESSION | LOCAL ] variable { TO | = } { value | 'value' | DEFAULT } 
+SET [ SESSION | LOCAL ] TIME ZONE { timezone | LOCAL | DEFAULT } 
+
+● 表示
+SHOW parameter 
+SHOW ALL 
+
+
+● リセット
+RESET parameter 
+RESET ALL 
+
+
+==========================================================
+パラメータ	説明
+==========================================================
+variable	設定パラメータ名
+value		設定パラメータの設定値
+timezone	設定するタイムゾーン
+parameter	設定値を表示、またはリセットする設定パラメータ名
+==========================================================
+
+==========================================================
+オプション	説明
+==========================================================
+SESSION		セッションの間のみ設定値が有効。デフォルト
+LOCAL		トランザクションの間のみ設定値が有効
+==========================================================
+</pre>
+
+%CHAPTER 解説
+
+<p>
+SET文で設定パラメータやタイムゾーンを設定します。
+<br>
+SHOW文で設定パラメータの値を表示します。SHOW ALL文ですべての設定パラメータの値を表示します。
+<br>
+RESET文で設定パラメータの値をデフォルト値に戻します。RESET ALL文ですべての設定パラメータの値をデフォルト値に戻します。ここでデフォルト値とは、postgresql.confファイルに設定された値のことです。
+</p>
+
+<p>
+・設定パラメータの設定
+<br>
+SET文で設定できる設定パラメータは、[<3-02>]〜[<3-12>]の表中、"変更可能性"の欄に'◎'か'○'が付いています。
+<br>
+変更した設定パラメータの値は、設定したセッション(もしくはトランザクション)の間だけ有効です。
+</p>
+
+%CHAPTER 実行例
+
+<p>
+・設定パラメータの変更(1)
+<br>
+enable_seqscanを無効にします。
+</p>
+
+<pre>
+sampledb=# SET enable_seqscan TO OFF;
+SET
+
+sampledb=# SHOW enable_seqscan;
+ enable_seqscan 
+----------------
+ off
+(1 row)
+</pre>
+
+<p>
+・設定パラメータの変更(2)
+<br>
+commit_delayの値を変更します。
+</p>
+
+<pre>
+sampledb=# SET commit_delay = 1000;
+SET
+
+sampledb=# SHOW commit_delay;
+ commit_delay 
+--------------
+ 1000
+(1 row)
+</pre>
+
+<p>
+・設定パラメータの値を表示
+<br>
+enable_seqscanの値を表示します。
+</p>
+
+<pre>
+sampledb=# SHOW enable_seqscan;
+ enable_seqscan 
+----------------
+ on
+(1 row)
+</pre>
+
+<p>
+・設定パラメータの値をデフォルト値に戻す
+</p>
+
+<pre>
+sampledb=# RESET enable_seqscan;
+RESET
+
+sampledb=# SHOW enable_seqscan;
+ enable_seqscan 
+----------------
+ on
+(1 row)
+</pre>

@@ -1,0 +1,275 @@
+%FILE internal/sql-56.html
+%LASTMOD
+%KEY pgsql-sql56
+
+%TITLE イベントトリガ
+
+<pre>
+[<書式>]
+
+● 定義
+
+CREATE EVENT TRIGGER name
+    ON event
+    [ WHEN filter_variable IN (filter_value [, ... ]) [ AND ... ] ]
+    EXECUTE PROCEDURE function_name()
+
+			バージョン9.3から
+
+● 定義の変更
+
+ALTER EVENT TRIGGER name DISABLE
+ALTER EVENT TRIGGER name ENABLE [ REPLICA | ALWAYS ]
+ALTER EVENT TRIGGER name OWNER TO { new_owner | CURRENT_USER | SESSION_USER }
+ALTER EVENT TRIGGER name RENAME TO new_name
+
+			バージョン9.3から
+● 削除
+DROP EVENT TRIGGER [ IF EXISTS ] name [ CASCADE | RESTRICT ]
+
+			バージョン9.3から
+
+=================================================================
+引数			説明
+=================================================================
+
+=================================================================
+
+=================================================================
+オプション		説明
+=================================================================
+
+=================================================================
+</pre>
+
+%CHAPTER 解説
+
+<pre>
+CREATE TABLE removed_table_list (tbl_oid oid, tbl_name text, cnt int);
+
+CREATE OR REPLACE FUNCTION removed_table_list_trigger()
+       RETURNS event_trigger LANGUAGE plpgsql AS $$
+DECLARE
+	obj record;
+	cnt int;
+	query text;
+BEGIN
+	SELECT * INTO obj FROM pg_event_trigger_dropped_objects();
+	query := 'SELECT count(*) FROM ' || obj.schema_name || '.' || obj.object_name || ';';
+	EXECUTE query INTO cnt;
+
+	query := 'INSERT INTO removed_table_list VALUES (' || obj.object_identity;
+	query := query || ', "' || obj.object_name || '" ,' || cnt || ')';
+	EXECUTE query;
+END
+$$;
+
+
+CREATE EVENT TRIGGER removed_table_list_trigger
+   ON sql_drop
+   EXECUTE PROCEDURE removed_table_list_trigger();
+</pre>
+
+
+https://www.postgresql.jp/document/9.5/html/functions-event-triggers.html
+
+.28.1. コマンド側での変更を捕らえる
+
+<p>
+pg_event_trigger_ddl_commandsがddl_command_endイベントトリガーに付与された関数から起動されると、各ユーザの操作によって実行されたDDLコマンドの一覧を返します。 それ以外の環境から呼び出された場合はエラーが発生します。 pg_event_trigger_ddl_commandsは、実行された基となるコマンドのそれぞれについて1行を返します。 1つのSQL文として実行されるいくつかのコマンドに対して、複数の行が返されることもあります。 この関数は以下の列を返します。
+</p>
+
+<pre>
+名前	    型		説明
+classid     Oid		オブジェクトが属するカタログのOID
+objid		Oid	カタログ内のオブジェクトのOID
+objsubid	integer	オブジェクトのサブID（例：列の属性番号）
+command_tag	text	コマンドのタグ
+object_type	text	オブジェクトの型
+schema_name	text	オブジェクトが属するスキーマの名前（あれば）。 なければNULL。 引用符づけされない。
+object_identity	text	オブジェクトの識別をテキスト表現したもので、スキーマ修飾される。 識別内に存在するすべての識別子は、必要なら引用符で括られる。
+in_extension	bool	コマンドが拡張のスクリプトの一部かどうか
+command		pg_ddl_command	コマンドを内部形式で完全に表現したもの。 これを直接出力することはできないが、コマンドについて他の情報を得るために、他の関数に渡すことができる。 
+</pre>
+
+9.28.2. DDLコマンドで削除されたオブジェクトの処理
+
+<p>
+関数pg_event_trigger_dropped_objectsは、それが呼ばれたsql_dropイベントのコマンドにより削除された全てのオブジェクトのリストを返します。 その他いかなる状況で呼ばれた場合、pg_event_trigger_dropped_objectsはエラーを生じさせます。 pg_event_trigger_dropped_objectsは以下の列を返します。
+</p>
+
+<pre>
+名前		   型				  説明
+classid		 Oid		 オブジェクトが所属するカタログのOID
+objid       	 Oid		カタログ内に所有するオブジェクトのOID
+objsubid	 int32		(列の属性番号のような)オブジェクトの副id
+original     	 bool		削除のルートオブジェクトを特定するために使われるフラグ
+normal		bool		このオブジェクトへと至る依存関係グラフで、通常の依存があることを示すフラグ
+is_temporary	bool		オブジェクトが一時オブジェクトであったことを示すフラグ
+object_type	text		オブジェクトの型
+schema_name	text		オブジェクトが所属しているスキーマの名前（あれば）。 なければNULL。 引用符づけされない。
+object_name	text		スキーマと名前の組み合わせがオブジェクトに対する一意の識別子として使用可能な場合はオブジェクトの名前。そうでないときはNULL。 引用符は適用されず、名前は決してスキーマで修飾されない。
+object_identity	text		オブジェクト識別のテキスト表現で、スキーマ修飾される。 権限のなかにあるそれぞれ全ての識別子は必要であれば引用符で括られる。
+address_names	text[]		object_typeおよびaddress_argsと一緒にpg_get_object_address()で使うことで、同じ種類で全く同じ名前のオブジェクトを含むリモートサーバ内のオブジェクトアドレスを再作成できる配列。
+address_args	text[]		上記address_namesの補足。
+</pre>
+
+関数pg_event_trigger_dropped_objectsは以下のようにイベントトリガとして使用可能です。
+
+<pre>
+CREATE FUNCTION test_event_trigger_for_drops()
+        RETURNS event_trigger LANGUAGE plpgsql AS $$
+DECLARE
+    obj record;
+BEGIN
+    FOR obj IN SELECT * FROM pg_event_trigger_dropped_objects()
+    LOOP
+        RAISE NOTICE '% dropped object: % %.% %',
+                     tg_tag,
+                     obj.object_type,
+                     obj.schema_name,
+                     obj.object_name,
+                     obj.object_identity;
+    END LOOP;
+END
+$$;
+CREATE EVENT TRIGGER test_event_trigger_for_drops
+   ON sql_drop
+   EXECUTE PROCEDURE test_event_trigger_for_drops();
+</pre>
+
+9.28.3. テーブル書き換えイベントの処理
+
+<p>
+表9.78「テーブル書き換え情報」に示す関数は、table_rewriteイベントが呼び出されたばかりのテーブルについての情報を提供します。 それ以外の状況で呼び出された場合はエラーが発生します。
+</p>
+
+表9.78 テーブル書き換え情報
+<pre>
+名前   戻り型	説明
+pg_event_trigger_table_rewrite_oid()	Oid	書き換えようとされているテーブルのOID
+pg_event_trigger_table_rewrite_reason() 	int	書き換えの理由を説明する理由コード。 コードの正確な意味はリリースに依存する。
+</pre>
+
+<pre>
+pg_event_trigger_table_rewrite_oid関数はイベントトリガ内で以下のように使うことができます。
+</pre>
+
+<pre>
+CREATE FUNCTION test_event_trigger_table_rewrite_oid()
+ RETURNS event_trigger
+ LANGUAGE plpgsql AS
+$$
+BEGIN
+  RAISE NOTICE 'rewriting table % for reason %',
+                pg_event_trigger_table_rewrite_oid()::regclass,
+                pg_event_trigger_table_rewrite_reason();
+END;
+$$;
+
+CREATE EVENT TRIGGER test_table_rewrite_oid
+                  ON table_rewrite
+   EXECUTE PROCEDURE test_event_trigger_table_rewrite_oid();
+</pre>
+
+
+イベントトリガマトリクス
+https://www.postgresql.jp/document/9.5/html/event-trigger-matrix.html
+
+
+================
+
+CREATE EVENT TRIGGERは新しいイベントトリガを作成します。 指定されたイベントが発生し、トリガに関連するWHEN条件がもしあればそれを満たす場合、トリガ関数が実行されます。 イベントトリガの一般的な紹介については、37章イベントトリガを参照してください。 イベントトリガを作成したユーザがその所有者となります。
+パラメータ
+
+name
+
+    新しいトリガに付ける名前です。 この名前はデータベース内で一意でなければなりません。 
+event
+
+    指定関数を呼び出すきっかけとなるイベントの名前です。 イベント名の詳細については37.1. イベントトリガ動作の概要を参照してください。 
+filter_variable
+
+    イベントをフィルタするために使用される変数の名前です。 これにより、サポートしている状況の一部に対してのみにトリガの発行を制限することができます。 現在filter_variableでサポートされているものはTAGのみです。 
+filter_value
+
+    どこでトリガを発行すべきかについて、関連するfilter_variable用の値のリストです。 TAGの場合、これはコマンドタグ（例えば'DROP FUNCTION'）のリストを意味します。 
+function_name
+
+    引数を取らずevent_trigger型を返すと宣言された、ユーザが提供する関数です。 
+
+注釈
+
+スーパーユーザのみがイベントトリガを作成することができます。
+
+シングルユーザモード（postgres参照）ではイベントトリガは無効になります。 エラーのあるイベントトリガが原因でデータベースの動作がおかしくなり、トリガを削除することもできない状態になった場合は、シングルユーザモードで再起動してください。 削除できるようになります。
+例
+
+すべてのDDLコマンドの実行を禁じます。
+
+CREATE OR REPLACE FUNCTION abort_any_command()
+  RETURNS event_trigger
+ LANGUAGE plpgsql
+  AS $$
+BEGIN
+  RAISE EXCEPTION 'command % is disabled', tg_tag;
+END;
+$$;
+
+CREATE EVENT TRIGGER abort_ddl ON ddl_command_start
+   EXECUTE PROCEDURE abort_any_command();
+
+互換性
+
+標準SQLにはCREATE EVENT TRIGGER文はありません。
+
+
+
+==============
+
+説明
+
+ALTER EVENT TRIGGERは既存のイベントトリガの属性を変更します。
+
+イベントトリガを変更するためにはスーパーユーザでなければなりません。
+パラメータ
+
+name
+
+    変更する既存のトリガの名前です。 
+new_owner
+
+    イベントトリガの新しい所有者となるユーザの名前です。 
+new_name
+
+    イベントトリガの新しい名前です。 
+DISABLE/ENABLE [ REPLICA | ALWAYS ] TRIGGER
+
+    この構文はイベントトリガの発行処理を設定します。 無効化されたトリガはまだシステムで認識されていますが、きっかけとなるイベントが起きたとしても実行されません。 session_replication_roleも参照してください。 
+
+==============
+説明
+
+DROP EVENT TRIGGERは既存のイベントトリガを削除します。 このコマンドを実行するためには、現在のユーザがイベントトリガの所有者でなければなりません。
+パラメータ
+
+IF EXISTS
+
+    イベントトリガが存在しない場合でもエラーを発生しません。 この場合は注意が発生します。 
+name
+
+    削除対象のイベントトリガの名前です。 
+CASCADE
+
+    トリガに依存するオブジェクトを自動的に削除します。 
+RESTRICT
+
+    依存するオブジェクトが存在する場合はトリガの削除を取りやめます。 これがデフォルトです。 
+
+例
+
+トリガsnitchを破棄します。
+
+DROP EVENT TRIGGER snitch;
+
+

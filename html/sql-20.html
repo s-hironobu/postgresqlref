@@ -1,0 +1,697 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+ <title>PostgreSQLバイブル草稿</title>
+ <link rel="stylesheet" type="text/css" media="screen" href="./default.css"">
+</head>
+
+<body>
+
+<script language=javascript>
+<!--
+function show(inputData) {
+var objID=document.getElementById( "layer_" + inputData );
+var buttonID=document.getElementById( "category_" + inputData );
+if(objID.className=='close') {
+objID.style.display='block';
+objID.className='open';
+}else{
+objID.style.display='none';
+objID.className='close';
+}
+}
+//-->
+</script>
+
+<div id="header">
+<h1 class="title">PostgreSQLバイブル草稿</title></h1>
+    <span class="small">
+</span>
+</div>
+
+
+<hr class="full_hr">
+<table style="width: 100%;" border="0">
+ <tbody><tr>
+  <td class="menubar">
+   <div id="menubar">
+
+
+<h5>PostgreSQLとは</h5>
+
+<li><a href="./index.html">PostgreSQLとは</a><br></li>
+
+<h5>PostgreSQLの内部構造</h5>
+<ul>
+<li><a href="./internal.html">とびら</a><br></li>
+</ul>
+<ol>
+<li><a href="./internal-01.html">プロセスとメモリ構造</a><br></li>
+<li><a href="./internal-02.html">データベースクラスタ、テーブルの構造</a></li>
+<li><a href="./internal-03.html">SQLの実行</a></li>
+<li><a href="./internal-04.html">プラン処理</a></li>
+<li><a href="./internal-05.html">バッファマネージャとバックグランドライタ</a></li>
+<li><a href="./internal-06.html">トランザクションIDと同時実行制御</a></li>
+<li><a href="./internal-07.html">VACUUM</a></li>
+<li><a href="./internal-08.html">HOTとIndex Only Scan</a></li>
+<li><a href="./internal-09.html">WAL(Write Ahead Logging)</a></li>
+<li><a href="./internal-10.html">アーカイブログとPITR</a></li>
+<li><a href="./internal-11.html">レプリケーション(Streaming ReplicationとHotStandby)</a></li>
+</ol>
+
+
+<h5>PostgreSQLサーバ管理</h5>
+
+<ul>
+<li><a href="./admin.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[PostgreSQLの基礎]<br>
+<li><a href="./admin-01.html">オブジェクト、データベース、スキーマ</a><br></li>
+<li><a href="./admin-02.html">システムカタログ</a><br></li>
+<li><a href="./admin-03.html">文字コードの扱い</a><br></li>
+
+
+[インストールと起動、停止]<br>
+<li><a href="./admin-04.html">インストール</a><br></li>
+<li><a href="./admin-05.html">データベースシステムの初期化 initdb</a><br></li>
+<li><a href="./admin-06.html">PostgreSQLサーバの起動/停止</a><br></li>
+
+
+[認証とアクセス制御]<br>
+<li><a href="./admin-07.html">認証とアクセス制御</a><br></li>
+<li><a href="./admin-08.html">クライアントのアクセス制御</a><br></li>
+<li><a href="./admin-09.html">権限について</a><br></li>
+<li><a href="./admin-10.html">ロールの作成と権限制御</a><br></li>
+
+<HR>
+
+[バックアップとアップグレード]<br>
+<li><a href="./admin-11.html">バックアップとアップグレード</a><br></li>
+<li><a href="./admin-12.html">ダンプとリストア</a><br></li>
+<li><a href="./admin-13.html">アップグレード</a><br></li>
+
+[保守、監視とチューニング]<br>
+<li><a href="./admin-14.html">保守、監視とチューニング</a><br></li> 
+<li><a href="./admin-15.html">稼働統計情報</a><br></li>
+<li><a href="./admin-16.html">実行ログの取得</a><br></li>
+<li><a href="./admin-17.html">モニタリングツール</a><br></li>
+<li><a href="./admin-18.html">ログと統計情報の分析</a><br></li>
+<li><a href="./admin-19.html">パラメータチューニング</a><br></li>
+
+[耐障害性、高可用性]<br>
+<li><a href="./admin-20.html">耐障害性、高可用性</a><br></li>
+<li><a href="./admin-21.html">アーカイブログとPITR</a><br></li>
+<li><a href="./admin-22.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-23.html">レプリケーションの故障対応</a><br></li>
+
+
+[FDW]<br>
+<li><a href="./admin-24.html">FDW</a><br></li>
+<li><a href="./admin-25.html">postgres_fdw</a><br></li>
+</ol>
+
+[追加の文章(未完)]<br>
+<li><a href="./admin-26.html">ロギング</a><br></li>
+<li><a href="./admin-27.html">統計情報</a><br></li>
+<li><a href="./admin-28.html">モニタリング</a><br></li>
+<li><a href="./admin-29.html">メンテナンス</a><br></li>
+</ol>
+
+
+<h5>設定パラメータ</h5>
+
+<ol>
+<li><a href="./param-01.html">postgresql.confの設定</a><br></li>
+<li><a href="./param-02.html">ファイルの場所</a><br></li>
+<li><a href="./param-03.html">接続と認証</a><br></li>
+<li><a href="./param-04.html">資源の消費</a><br></li>
+<li><a href="./param-05.html">WAL</a><br></li>
+<li><a href="./param-06.html">レプリケーション</a><br></li>
+<li><a href="./param-07.html">問い合わせ計画</a><br></li>
+<li><a href="./param-08.html">エラー報告とログ取得</a><br></li>
+<li><a href="./param-09.html">稼働統計情報</a><br></li>
+<li><a href="./param-10.html">AUTOVACUUM</a><br></li>
+<li><a href="./param-11.html">クライアント接続デフォルト</a><br></li>
+<li><a href="./param-12.html">ロック管理/バージョンとプラットフォーム互換性</a><br></li>
+</ol>
+
+
+<h5>psql</h5>
+<ul>
+<li><a href="./psql.html">・対話型インタフェースpsqlの使い方</a><br></li>
+</ul>
+
+<ol>
+<li><a href="./psql-01.html">psqlとは</a><br></li>
+<li><a href="./psql-02.html">PostgreSQLサーバとの接続/切断/再接続</a><br></li>
+<li><a href="./psql-03.html">データベース一覧表示</a><br></li>
+<li><a href="./psql-04.html">コマンドラインからSQL実行</a><br></li>
+<li><a href="./psql-05.html">バッチファイルの実行(メタコマンド)</a><br></li>
+<li><a href="./psql-06.html">情報表示</a><br></li>
+<li><a href="./psql-07.html">表示の制御</a><br></li>
+<li><a href="./psql-08.html">ラージオブジェクトの扱い</a><br></li>
+<li><a href="./psql-09.html">データのコピー</a><br></li>
+<li><a href="./psql-10.html">その他のメタコマンド</a><br></li>
+
+</ol>
+
+
+<h5>SQL</h5>
+
+<ul>
+<li><a href="./sql.html">・とびら</a><br></li>
+</ul>
+
+<ol>
+[SQL]<br>
+
+<li><a href="./sql-01.html">SQL語彙</a><br></li>
+<li><a href="./sql-02.html">テーブルスペースの作成/削除/変更</a><br></li>
+<li><a href="./sql-03.html">データベースの作成/変更/削除</a><br></li>
+<li><a href="./sql-04.html">テーブルの作成</a><br></li>
+<li><a href="./sql-05.html">外部キー</a><br></li>
+<li><a href="./sql-06.html">オブジェクトの継承/LIKE句</a><br></li>
+<li><a href="./sql-07.html">問い合わせ結果から新しいテーブルを作成</a><br></li>
+<li><a href="./sql-08.html">テーブルの削除</a><br></li>
+<li><a href="./sql-09.html">スキーマの定義/変更/削除</a><br></li>
+
+<li><a href="./sql-10.html">ALTER TABLE(1)</a><br></li>
+<li><a href="./sql-11.html">ALTER TABLE(2)</a><br></li>
+<li><a href="./sql-12.html">ALTER TABLE(3)</a><br></li>
+
+<li><a href="./sql-13.html">ロール</a><br></li>
+<li><a href="./sql-14.html">GRANT REVOKE(1)</a><br></li>
+<li><a href="./sql-15.html">GRANT REVOKE(2)</a><br></li>
+<li><a href="./sql-16.html">INSERT</a><br></li>
+<li><a href="./sql-17.html">SELECT</a><br></li>
+<li><a href="./sql-18.html">FROM句</a><br></li>
+<li><a href="./sql-19.html">WHERE句</a><br></li>
+
+<li><a href="./sql-20.html">WINDOW句、OVER句</a><br></li>
+<li><a href="./sql-21.html">共通テーブル式(CTE)</a><br></li>
+
+
+<li><a href="./sql-22.html">グループ化</a><br></li>
+<li><a href="./sql-23.html">DISTINCT句</a><br></li>
+<li><a href="./sql-24.html">テーブル結合</a><br></li>
+<li><a href="./sql-25.html">問い合わせの結合</a><br></li>
+<li><a href="./sql-26.html">ORDER BY</a><br></li>
+<li><a href="./sql-27.html">LIMIT OFFSET</a><br></li>
+<li><a href="./sql-28.html">FOR UPDATE/ FOR SHARE</a><br></li>
+<li><a href="./sql-29.html">サブクエリ</a><br></li>
+<li><a href="./sql-30.html">CASE式</a><br></li>
+<li><a href="./sql-31.html">VALUES</a><br></li>
+<li><a href="./sql-32.html">UPDATE</a><br></li>
+<li><a href="./sql-33.html">DELETE</a><br></li>
+<li><a href="./sql-34.html">TRUNCATE</a><br></li>
+
+<li><a href="./sql-35.html">インデックス</a><br></li>
+
+<li><a href="./sql-36.html">VIEW</a><br></li>
+<li><a href="./sql-37.html">シーケンス</a><br></li>
+<li><a href="./sql-38.html">トリガ</a><br></li>
+<li><a href="./sql-39.html">カーソル</a><br></li>
+<li><a href="./sql-40.html">プリペアステートメント</a><br></li>
+<li><a href="./sql-41.html">トランザクション</a><br></li>
+<li><a href="./sql-42.html">セーブポイント</a><br></li>
+<li><a href="./sql-43.html">2相コミット</a><br></li>
+<li><a href="./sql-44.html">LOCK</a><br></li>
+<li><a href="./sql-45.html">SET/SHOW/RESET</a><br></li>
+<li><a href="./sql-46.html">VACUUM</a><br></li>
+<li><a href="./sql-47.html">ANALYZE</a><br></li>
+<li><a href="./sql-48.html">EXPLAIN</a><br></li>
+<li><a href="./sql-49.html">COPY/IMPORT</a><br></li>
+<li><a href="./sql-50.html">COPY/EXPORT</a><br></li>
+<li><a href="./sql-51.html">関数定義</a><br></li>
+<li><a href="./sql-52.html">エクステンション</a><br></li>
+<li><a href="./sql-53.html">外部サーバの定義、変更、削除</a><br></li>
+<li><a href="./sql-54.html">外部サーバのユーザマップ定義、変更、削除</a><br></li>
+<li><a href="./sql-55.html">外部テーブルの定義、変更、削除</a><br></li>
+<hr>
+<li><a href="./sql-56.html">イベントトリガ</a><br></li>
+<li><a href="./sql-57.html">行レベルセキュリティ</a><br></li>
+
+<hr>
+<li><a href="./sql-60.html">新しい機能</a><br></li>
+</ol>
+
+
+<h5>関数</h5>
+
+[関数]<br>
+<ul>
+<li><a href="./function.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[データ型]<br>
+<li><a href="./type-01.html">データ型</a><br></li>
+<li><a href="./type-02.html">数値データ型</a><br></li>
+<li><a href="./type-03.html">文字データ型</a><br></li>
+<li><a href="./type-04.html">日付/時刻データ型</a><br></li>
+<li><a href="./type-05.html">日付/時刻表示形式とタイムゾーンの設定</a><br></li>
+<li><a href="./type-06.html">ブーリアン型</a><br></li>
+<li><a href="./type-07.html">ビット列データ型</a><br></li>
+<li><a href="./type-08.html">疑似データ型</a><br></li>
+<li><a href="./type-09.html">バイナリ列データ型</a><br></li>
+<li><a href="./type-10.html">Range型</a><br></li>
+<li><a href="./type-11.html">配列</a><br></li>
+<hr>
+<li><a href="./type-12.html">JSON型</a><br></li>
+
+<hr>
+[演算子]<br>
+<li><a href="./ope-01.html">演算子</a><br></li>
+<li><a href="./ope-02.html">論理演算子</a><br></li>
+<li><a href="./ope-03.html">比較演算子</a><br></li>
+<li><a href="./ope-04.html">算術演算子</a><br></li>
+<li><a href="./ope-05.html">文字列演算子</a><br></li>
+<li><a href="./ope-06.html">パターンマッチング</a><br></li>
+<li><a href="./ope-07.html">日付/時刻演算子</a><br></li>
+<li><a href="./ope-08.html">Range型演算子</a><br></li>
+<hr>
+<li><a href="./ope-09.html">JSON型演算子</a><br></li>
+
+
+<hr>
+[関数]<br>
+<li><a href="./func-01.html">関数</a><br></li>
+<li><a href="./func-02.html">算術関数</a><br></li>
+<li><a href="./func-03.html">集約関数/統計関数</a><br></li>
+<li><a href="./func-04.html">文字列関数</a><br></li>
+<li><a href="./func-05.html">日付・時刻関数</a><br></li>
+<li><a href="./func-06.html">型変換関数</a><br></li>
+<li><a href="./func-07.html">Range型関数</a><br></li>
+<li><a href="./func-08.html">Window関数</a><br></li>
+<li><a href="./func-09.html">セッション情報関数</a><br></li>
+<li><a href="./func-10.html">アクセス権限とスキーマ可視性照会関数</a><br></li>
+<li><a href="./func-11.html">データベースオブジェクト関数</a><br></li>
+<li><a href="./func-12.html">バックアップとリカバリ制御関数</a><br></li>
+
+<li><a href="./func-13.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-15.html">構成設定関数</a><br></li>
+<li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-17.html">レプリケーションSQL関数</a><br></li>
+
+<hr>
+<li><a href="./func-18.html">JSON関数</a><br></li>
+
+</ol>
+
+<!--
+[削除するもの]<br>
+<li><a href="./type-07.html">幾何データ型</a><br></li>
+<li><a href="./type-08.html">ネットワークアドレス型型</a><br></li>
+<li><a href="./ope-08.html">幾何演算子</a><br></li>
+<li><a href="./ope-09.html">ネットワーク演算子</a><br></li>
+<li><a href="./func-06.html">幾何関数</a><br></li>
+<li><a href="./func-07.html">ネットワークアドレス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-16.html">トランザクションID関数</a><br></li>
+<li><a href="./func-17.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-18.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-19.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-20.html">勧告的ロック用関数</a><br></li>
+-->
+
+<h5>PL/pgSQL</h5>
+
+<ol>
+<li><a href="./plpgsql.html">結果の返し方</a><br></li>
+<li><a href="./plpgsql-01.html">ストアドプロシージャ</a><br></li>
+<li><a href="./plpgsql-02.html">ストアドプロシージャの定義</a><br></li>
+<li><a href="./plpgsql-03.html">変数宣言と値の代入</a><br></li>
+**** まとめる >>
+<li><a href="./plpgsql-04.html">SELECT INTO文</a><br></li>
+<li><a href="./plpgsql-05.html">結果ステータスの取得</a><br></li>
+<li><a href="./plpgsql-06.html">動的なSQL文の実行</a><br></li>
+<< ここまで****
+<li><a href="./plpgsql-07.html">IF 条件分岐</a><br></li>
+<li><a href="./plpgsql-08.html">ループ処理</a><br></li>
+*** >>>
+<li><a href="./plpgsql-09.html">RETURN</a><br></li>
+<<< ***
+<li><a href="./plpgsql-10.html">ループ処理　LOOP</a><br></li>
+<li><a href="./plpgsql-11.html">ループ処理　WHILE</a><br></li>
+<li><a href="./plpgsql-12.html">ループ処理　FOR </a><br></li>
+<li><a href="./plpgsql-13.html">ループ処理 (複数行の問い合わせ結果を扱う)</a><br></li>
+<li><a href="./plpgsql-14.html">カーソルの利用</a><br></li>
+<li><a href="./plpgsql-15.html">カーソル変数の宣言</a><br></li>
+<li><a href="./plpgsql-16.html">カーソルのオープンとクローズ	OPEN / CLOSE</a><br></li>
+<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得		FETCH</a><br></li>
+<li><a href="./plpgsql-18.html">カーソルを使った例</a><br></li>
+<li><a href="./plpgsql-19.html">例外</a><br></li>
+*** >>>
+<li><a href="./plpgsql-21.html">CASE</a><br></li>
+<li><a href="./plpgsql-22.html">FOREACH</a><br></li>
+<<< ***
+</ol>
+
+
+<h5>Appendix(付録)</h5>
+
+<ol>
+<li><a href="./app-01.html">pgpool-II</a><br></li>
+<li><a href="./app-02.html">Pacemaker</a><br></li>
+</ol>
+
+
+<h5>おまけ:ネット公開(ページ数の関係で書籍には載せない)</h5>
+
+<ol>
+[pgpool]<br>
+<li><a href="./ha-06.html">pgpool-II セットアップ</a><br></li>
+<li><a href="./ha-07.html">pgpool-II レプリケーションモード</a><br></li>
+<li><a href="./ha-08.html">pgpool-II マスタースレーブモード</a><br></li>
+[Pacemaker]<br>
+<li><a href="./ha-10.html">Pacemaker</a><br></li>
+</ol>
+
+</div>
+<hr class="full_hr">
+</div>
+
+  </td>
+  <td valign="top">
+   <div id="body">
+
+<h2>WINDOW句、OVER句</h2>
+
+<pre>
+[<書式>]
+
+● WINDOW句
+WINDOW window_name AS ( window_definition ) [, ...]
+
+● OVER句
+function_name ([expression [, expression ... ]]) OVER ( window_definition )
+function_name ([expression [, expression ... ]]) OVER window_name
+function_name ( * ) OVER ( window_definition )
+function_name ( * ) OVER window_name
+
+・window_definition
+	[ existing_window_name ]
+	[ PARTITION BY expression [, ...] ]
+	[ ORDER BY expression [ ASC | DESC | USING operator ]
+	[ NULLS { FIRST | LAST } ] [, ...] ]
+	[ frame_clause ]
+
+・frame_clause
+  [ RANGE | ROWS ] frame_start 
+  [ RANGE | ROWS ] BETWEEN frame_start AND frame_end
+
+・frame_start、frame_end
+ [ UNBOUNDED PRECEDING | value PRECEDING 
+  | CURRENT ROW 
+  | value FOLLOWING | UNBOUNDED FOLLOWING ]
+
+</pre>
+
+<table>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>		<th>説明</th>
+
+</tr><tr>
+<td>window_name</td>	<td>WINDOWの名前</td>
+</tr><tr>
+<td>existing_window_name</td>	<td>既存のWINDOWの名前</td>
+</tr><tr>
+<td>function_name</td>	<td>WINDOW関数や集約関数など</td>
+
+</tr><tr><td></td><td></td>
+</tr><tr><td></td><td></td>
+
+
+</tr><tr bgcolor="#cccccc">
+<th>句</th>		<th>説明</th>
+
+</tr><tr>
+<td>PARTITION BY expression</td>	<td>expressionでグループ化。集約関数も使える</td>
+</tr><tr>
+<td>ORDER BY expression	</td>	<td>expressionで並べ替え。オプションとして[ASC | DESC | USING operator]が設定できる</td>
+
+</tr><tr><td></td><td></td>
+</tr><tr><td></td><td></td>
+
+
+</tr><tr bgcolor="#cccccc">
+<th>オプション</th>		<th>説明</th>
+
+</tr><tr>
+<td>NULLS FIRST	</td>	<td>NULLを先頭に置く</td>
+</tr><tr>
+<td>NULLS LAST	</td>	<td>NULLを末尾に置く</td>
+
+</tr><tr><td></td><td></td>
+</tr><tr><td></td><td></td>
+
+
+</tr><tr bgcolor="#cccccc">
+<th>フレーム(frame)</th>		<th>説明</th>
+
+</tr><tr>
+<td>UNBOUNDED PRECEDING</td>	<td>フレームの開始位置はパーティションの先頭。frame_startのデフォルト。frame_endでは設定できない</td>
+</tr><tr>
+<td>value PRECEDING</td>	<td>フレームの開始位置は自身の位置からvalueレコード前</td>
+</tr><tr>
+<td>CURRENT ROW	</td>	<td>自身の位置。frame_endのデフォルト</td>
+</tr><tr>
+<td>value FOLLOWING	</td>	<td>フレームの末尾は自身の位置からvalueレコード後</td>
+</tr><tr>
+<td>UNBOUNDED FOLLOWING</td>	<td>フレームの末尾はパーティションの末尾。frame_startでは設定できない</td>
+</tr></table>
+
+<br>
+
+<div class="jumpmenu"></div><h3>解説</h3>
+
+<p>
+バージョン8.4からWINDOW句とOVER句がサポートされました。
+</p>
+
+<p>
+・パーティション、フレーム
+<br>
+パーティションはPARTITION BY句に指定したカラムの値でグループ化したものです。
+</p>
+
+<p>
+実例を示します。
+<br>
+カラムpartの値でテーブルwindow_testをグループ化します。partの値(1,2,3)によって3つのパーティションにグループ化されています。
+</p>
+
+<font color="#ff0000">
+作図用データ。
+</font>
+
+<pre>
+sampledb=# SELECT part, data, row_number() OVER (PARTITION BY part ORDER BY data) 
+sampledb-#                             FROM window_test;
+ part | data | row_number 
+------+------+------------
+    1 |    1 |          1
+    1 |    2 |          2
+    1 |    3 |          3
+    1 |    4 |          4
+    2 |   10 |          1
+    2 |   20 |          2
+    2 |   30 |          3
+    3 |  100 |          1
+    3 |  200 |          2
+(9 rows)
+</pre>
+
+<table border=1><tr><td>
+<img src="./fig-6-windowfunc-01.jpg"><br>
+</td></tr></table><br>
+
+
+<p>
+フレームとは、(レコード毎の)WINDOW関数や集約関数の有効範囲のことです。
+<br>
+デフォルトの設定である"RANGE BETWEEN unbounded preceding AND current row"の結果を示します。
+</p>
+
+<font color="#ff0000">
+作図用データ。表示は通常のSQLの出力形式で、矢印と青文字を追記してください。
+</font>
+
+<pre>
+sampledb=# SELECT part, data, sum(data) OVER (PARTITION BY part ORDER BY data 
+sampledb(#     RANGE BETWEEN unbounded preceding AND current row) AS 
+sampledb-#     "unbounded preceding -> current row" FROM window_test;
+ part | data | unbounded preceding -> current row 
+------+------+-----------------------------------
+    1 |    1 |                                 1  = 1
+    1 |    2 |                                 3  = 1 + 2
+    1 |    3 |                                 6  = 1 + 2 + 3
+    1 |    4 |                                10  = 1 + 2 + 3 + 4
+    2 |   10 |                                10  = 10
+    2 |   20 |                                30  = 10 + 20
+    2 |   30 |                                60  = 10 + 20 + 30
+    3 |  100 |                               100  = 100
+    3 |  200 |                               300  = 100 + 200
+(9 rows)
+</pre>
+
+<table border=1><tr><td>
+<img src="./fig-6-windowfunc-02.jpg"><br>
+</td></tr></table><br>
+
+
+<p>
+この例のフレームは、
+パーティションの先頭(UNBOUNDED PRECEDING)からそのレコード(CURRENT ROW)までです。
+<br>
+1レコード目、自身がパーティションの先頭なのでフレームは自分自身のみです。よって集約関数sum()の結果は自分自身の値=1です。
+<br>
+2レコード目、フレームはパーティションの先頭と自分自身の2レコードです。集約関数sum()の結果はパーティションの先頭の値=１と自分自身の値=2の加算した結果(1+2=3)になります。
+<br>
+3レコード目以降も同様です。
+</p>
+
+
+<p>
+別の例を示します。
+<br>
+この例のフレームは、
+"RANGE BETWEEN current row AND unbounded following"、つまり自分自身(CURRENT ROW)からパーティションの末尾(UNBOUNDED FOLLOWING)までです。
+<br>
+1レコード目、自身がパーティションの先頭なのでフレームはパーティション全体(先頭から末尾まで)です。よって集約関数sum()は、そのパーティションの値をすべて加算した結果(1+2+3+4=10)を返します。
+<br>
+2レコード目、集約関数sum()は自身からパーティション末尾までの加算した結果(2+3+4=9)を返します。
+<br>
+3レコード目以降も同様です。
+</p>
+
+
+<font color="#ff0000">
+作図用データ。表示は通常のSQLの出力形式で、矢印と青文字を追記してください。
+</font>
+
+<pre>
+sampledb=# SELECT part, data, sum(data) OVER (PARTITION BY part ORDER BY data 
+sampledb(#      RANGE BETWEEN current row AND unbounded following) AS 
+sampledb-#     "current row -> unbounded following" FROM window_test;
+ part | data | current row -> unbounded following 
+------+------+------------------------------------
+    1 |    1 |                                 10     = 1 + 2 + 3 + 4
+    1 |    2 |                                  9     =     2 + 3 + 4
+    1 |    3 |                                  7     =         3 + 4
+    1 |    4 |                                  4     =             4
+    2 |   10 |                                 60     = 10 + 20 + 30
+    2 |   20 |                                 50     =      20 + 30
+    2 |   30 |                                 30     =           30
+    3 |  100 |                                300     = 100 + 200
+    3 |  200 |                                200     =       200
+(9 rows)
+</pre>
+
+<table border=1><tr><td>
+<img src="./fig-6-windowfunc-03.jpg"><br>
+</td></tr></table><br>
+
+<div class="jumpmenu"></div><h3>実行例</h3>
+
+<font color="#ff0000">
+SQL表示、縦線をそろえて表示してください。(HTMLでは縦線が揺れているが、これは表示がおかしい)
+</font>
+
+
+<p>
+製品売上げを保存したテーブルordersを使って、WINDOW句とOVER句を解説します。
+</p>
+
+<pre>
+sampledb=# SELECT region, product, sales FROM orders;
+  region  | product  | sales  
+----------+----------+---------
+ アフリカ | 食品     |    4500
+ アフリカ | 木工製品 |   30160
+ アフリカ | 工業製品 |  265000
+ アフリカ | 貴金属   |  527850
+ アフリカ | 精密機械 |  205800
+ アジア   | 食品     |   19000
+ アジア   | 木工製品 |   67600
+ アジア   | 工業製品 | 3300000
+ アジア   | 貴金属   |  459000
+ アジア   | 精密機械 | 4900000
+... 略 ...
+</pre>
+
+<p>
+・製品毎の、地域売上げをランキング
+<br>
+製品毎に、地域毎の売上げをランキングします。
+<br>
+並べ替えはOVER句、ランキングは関数rank()を使います。
+</p>
+
+<pre>
+sampledb=# SELECT product, region, sales, rank() 
+sampledb-#       OVER (PARTITION BY product ORDER BY sales) FROM orders;
+ product  |   region   |  sales  | rank 
+----------+------------+---------+------
+ 貴金属   | オセアニア |   76500 |    1
+ 貴金属   | アジア     |  459000 |    2
+ 貴金属   | アフリカ   |  527850 |    3
+ 貴金属   | 中南米     |  918000 |    4
+ 貴金属   | ヨーロッパ | 2830500 |    5
+ 貴金属   | 北米       | 4360500 |    6
+ 工業製品 | アフリカ   |  265000 |    1
+ 工業製品 | ヨーロッパ | 1650000 |    2
+ 工業製品 | 中南米     | 1850000 |    3
+ 工業製品 | アジア     | 3300000 |    4
+ 工業製品 | 北米       | 4150000 |    5
+ 工業製品 | オセアニア | 4750000 |    6
+... 略 ...
+</pre>
+
+<p>
+・複数のWINDOW関数を使う
+<br>
+ランキングの分析も同時に行います。
+複数のWINDOW関数を使うのでWINDOW句を設定します。
+<br>
+ここでカラムdiffは、各製品の最高売上げからの差額です。
+各製品の最高売上げは関数first_value()で求めます。
+<br>
+またカラムgapは、一つ上の順位の売上げとの差額です。
+一つ上の値は関数lag()で求めます。
+</p>
+
+<pre>
+sampledb=# SELECT product, region, rank() OVER w, sales, 
+sampledb-#                   (first_value(sales) OVER w - sales) AS diff,
+sampledb-#                   ( lag(sales) OVER w - sales) AS gap
+sampledb-#      FROM orders WINDOW w AS  (PARTITION BY product ORDER BY sales DESC);
+ product  |   region   | rank |  sales  |  diff   |   gap   
+----------+------------+------+---------+---------+---------
+ 貴金属   | 北米       |    1 | 4360500 |       0 |        
+ 貴金属   | ヨーロッパ |    2 | 2830500 | 1530000 | 1530000
+ 貴金属   | 中南米     |    3 |  918000 | 3442500 | 1912500
+ 貴金属   | アフリカ   |    4 |  527850 | 3832650 |  390150
+ 貴金属   | アジア     |    5 |  459000 | 3901500 |   68850
+ 貴金属   | オセアニア |    6 |   76500 | 4284000 |  382500
+ 工業製品 | オセアニア |    1 | 4750000 |       0 |        
+ 工業製品 | 北米       |    2 | 4150000 |  600000 |  600000
+ 工業製品 | アジア     |    3 | 3300000 | 1450000 |  850000
+ 工業製品 | 中南米     |    4 | 1850000 | 2900000 | 1450000
+ 工業製品 | ヨーロッパ |    5 | 1650000 | 3100000 |  200000
+ 工業製品 | アフリカ   |    6 |  265000 | 4485000 | 1385000
+... 略 ...
+</pre>
+
+<hr class="full_hr">
+<div id="lastmodified">
+Last-modified: 2018-9-8
+</div>
+</body>
+</html>
+

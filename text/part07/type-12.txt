@@ -1,0 +1,88 @@
+%FILE internal/type-12.html
+%LASTMOD
+%KEY pgsql-type12
+
+%TITLE JSON
+
+[< JSON/JSONB型>]
+
+<table><tr bgcolor="#cccccc">
+<th>データ型名</th>	<th>説明</th>
+</tr><tr>
+<td>json</td>		<td>JSON型のデータをテキストで保存する。インデックスは設定できない</td>
+</tr><tr>
+<td>jsonb</td>		<td>JSON型のデータをバイナリ形式で保存する。GINインデックスを設定可能</td>
+</tr></table>
+
+%CHAPTER 解説
+
+<p>
+バージョン9.2からJSON(JavaScript Object Notation)型、バージョン9.4からJSONB型がサポートされました。
+使用方法はJSON型演算子<font color="#ff0000">[<7-19>]</font>、
+JSON型関数<font color="#ff0000">[<7-26>]</font>を参照してください。
+</p>
+
+
+<p>
+・JSON型
+<br>
+JSON型はJSON形式のデータをテキストとしてそのまま保存するデータ型です。
+トークン間のタブや空白もそのまま保存されます。また各JSONオブジェクト内のキーの順番も保存されます。重複したキーも保存されます。
+よってJSON型のデータを読む際は、常に構文解析処理が必要になります。
+</p>
+
+<pre>
+sampledb=# SELECT '{           "bar": "baz", "balance": 7.77, "active":false,
+sampledb'#                            "data": 1.230e-5, "bar":"foo"}'::json;
+                            json                            
+------------------------------------------------------------
+ {           "bar": "baz", "balance": 7.77, "active":false,+
+                             "data": 1.230e-5, "bar":"foo"}
+(1 row)
+</pre>
+
+<p>
+以下に、JSONプリミティブ型とPostgreSQL型の対応を示します。
+</p>
+
+<table><tr bgcolor="#cccccc">
+<title>JSONプリミティブ型とPostgreSQL型の対応表</title>
+<th>JSON プリミティブ型</th><th>PostgreSQL型</th><th>注釈</th>
+</tr><tr>
+<td>string	</td><td>	text		</td><td> \u0000は許可されていない。データベースエンコーディングがUTF8でない場合、非アスキーのユニコードエスケープも許可されない。</td>
+</tr><tr>
+<td>number	</td><td>	numeric	</td><td>	NaN と infinity 値は許可されない</td>
+</tr><tr>
+<td>boolean	</td><td>	boolean	</td><td>	小文字の"true"と"false" のみ使用可能</td>
+</tr><tr>
+<td>null	</td><td>	(none)		</td><td>	SQLのNULLとは概念が異なる</td>
+</tr>
+</table>
+
+<p>
+JSON型はインデックスを張ることができません。これは実用的なシステムにおいては致命的な欠点でしょう。
+よって、通常は以下に示すJSONB型が使われます。
+</p>
+
+
+<p>
+・JSONB型
+<br>
+バージョン9.4からサポートされたJSONB型は、
+JSON形式のデータをバイナリに変換して保存します。
+
+</p>
+
+<pre>
+sampledb=# SELECT '{           "bar": "baz", "balance": 7.77, "active":false,
+sampledb'#                            "data": 1.230e-5, "bar":"foo"}'::jsonb;
+                                jsonb                                 
+----------------------------------------------------------------------
+ {"bar": "foo", "data": 0.00001230, "active": false, "balance": 7.77}
+(1 row)
+</pre>
+
+
+<p>
+GINインデックスの利用法は、演算子の説明<font color="#ff0000">[< XXX>]</font>と共に行います。
+</p>

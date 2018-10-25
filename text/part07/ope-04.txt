@@ -1,0 +1,87 @@
+%FILE internal/ope-04.html
+%LASTMOD
+%KEY pgsql-ope-04
+
+%TITLE 算術演算子
+
+[<算術演算子>]
+
+<table><tr bgcolor="#cccccc">
+<th>算術演算子</th>	<th>説明</th>			<th>例</th>		<th>結果</th>
+</tr><tr>
+<td>+	</td>	<td>和				</td>	<td>2 + 3	</td>	<td>5	</td>
+</tr><tr>
+<td>-	</td>	<td>差				</td>	<td>2 - 3	</td>	<td>-1	</td>
+</tr><tr>
+<td>*	</td>	<td>積				</td>	<td>2 * 3	</td>	<td>6	</td>
+</tr><tr>
+<td>/	</td>	<td>商(整数の割算では余りを切捨て)</td>	<td>4 / 2	</td>	<td>2	</td>
+</tr><tr>
+<td>%	</td>	<td>剰余(余り)			</td>	<td>5 % 4	</td>	<td>1	</td>
+</tr><tr>
+<td>^	</td>	<td>べき乗			</td>	<td>2.0 ^ 3.0	</td>	<td>8	</td>
+</tr><tr>
+<td>|/	</td>	<td>平方根			</td>	<td>|/ 25.0	</td>	<td>5	</td>
+</tr><tr>
+<td>||/	</td>	<td>立方根			</td>	<td>||/ 27.0	</td>	<td>3	</td>
+</tr><tr>
+<td>!	</td>	<td>階乗			</td>	<td>5!		</td>	<td>120	</td>
+</tr><tr>
+<td>!!	</td>	<td>階乗(前置演算子)		</td>	<td>!!5		</td>	<td>120	</td>
+</tr><tr>
+<td>@	</td>	<td>絶対値			</td>	<td>@-5.0	</td>	<td>5	</td>
+</tr><tr>
+<td>&	</td>	<td>バイナリのAND		</td>	<td>91 & 15	</td>	<td>11	</td>
+</tr><tr>
+<td>|	</td>	<td>バイナリのOR		</td>	<td>31 | 3	</td>	<td>35	</td>
+</tr><tr>
+<td>#	</td>	<td>バイナリのXOR(排他的論理和)	</td>	<td>17 # 5	</td>	<td>20	</td>
+</tr><tr>
+<td>~	</td>	<td>バイナリのNOT		</td>	<td>~1		</td>	<td>-2	</td>
+</tr><tr>
+<td><<	</td>	<td>バイナリの左シフト		</td>	<td>1 << 4	</td>	<td>16	</td>
+</tr><tr>
+<td>>>	</td>	<td>バイナリの右シフト		</td>	<td>8 >> 2	</td>	<td>2	</td>
+</tr></table><br>
+
+%CHAPTER 解説
+
+<p>
+PostgreSQLの算術演算子は、いくつかの例外を除いて、異なる算術データ型どうしでも使用できます。
+
+<p>
+・演算できない型の組合せ
+</p>
+
+<ol>
+<li>四則演算 +、-、*、/ </li>
+smallint型- bigint型間で、四則演算できない。
+
+<li>剰余演算子 %、階乗 ! </li>
+real型、およびdouble precision型のデータに対して、剰余演算子%と階乗!は使用できない。
+
+<li>バイナリの演算子 &、|、#、~、<<、>> </li>
+バイナリの演算子(&、|、#、~、<<、>>)は、整数型(smallint, integer, bigint)とビット型に対してのみ使用可能。
+
+</ol>
+
+%CHAPTER 実行例
+
+<p>
+・異なる算術データ型どうしの演算
+</p>
+
+<pre>
+sampledb=# SELECT 2::integer + 3::smailint; 
+ ?column? 
+---------- 
+        5 
+(1 row) 
+
+sampledb=# SELECT 2::integer + 2.5::decimal; 
+ ?column? 
+---------- 
+      4.5 
+(1 row) 
+</pre>
+

@@ -1,0 +1,72 @@
+%FILE internal/func-07.html
+%LASTMOD
+%KEY pgsql-func07
+
+%TITLE Range型関数
+
+[< Range型関数>]
+
+<table>
+<tr bgcolor="#cccccc">
+<th>関数</th>			<th>返り値型</th>	<th>説明</th>	<th>例</th>	<th>解</th>
+</tr><tr>
+<td>lower(anyrange)</td>	<td>引数と同じ</td>	<td>指定した範囲の下限値</td>	<td>lower(numrange(1.1,2.2))</td>	<td>1.1</td>
+
+</tr><tr>
+<td>upper(anyrange)</td>	<td>引数と同じ</td>	<td>指定した範囲の上限値</td>	<td>upper(numrange(1.1,2.2))</td>	<td>2.2</td>
+
+</tr><tr>
+<td>isempty(anyrange)</td>	<td>boolean</td>	<td>指定した範囲が空(empty)かどうか </td>	<td>isempty(numrange(1.1,2.2))	</td>	<td>false</td>
+
+</tr><tr>
+<td>lower_inc(anyrange)</td>	<td>boolean</td>	<td>下限値が含まれるか</td>	<td>lower_inc(numrange(1.1,2.2))</td>	<td>true</td>
+
+</tr><tr>
+<td>upper_inc(anyrange)</td>	<td>boolean</td>	<td>上限値が含まれるか</td>	<td>upper_inc(numrange(1.1,2.2))</td>	<td>false</td>
+
+</tr><tr>
+<td>lower_inf(anyrange)</td>	<td>boolean</td>	<td>下限値が無限か</td>	<td>lower_inf('(,)'::daterange) </td>	<td>true</td>
+
+</tr><tr>
+<td>upper_inf(anyrange)</td>	<td>boolean</td>	<td>上限値が無限か</td>	<td>upper_inf('(,)'::daterange) </td>	<td>true</td>
+
+</tr><tr>
+<td>range_merge(anyrange, anyrange)</td>  <td>anyrange</td>	<td>両方の範囲を含む最小の範囲。バージョン9.5から</td>	<td>range_merge('[1,2)'::int4range, '[3,4)'::int4range)</td> <td>[1,4)</td>
+
+</tr></table>
+
+
+<br>
+
+%CHAPTER 解説
+
+
+<p>
+バージョン9.2からRange型関数がサポートされました。使用方法は上表の例を参照してください。
+</p>
+
+<p>
+・lower_inc()、upper_inc()
+<br>
+実例を示します。
+<br>
+「int4range(1, 10)」の範囲を明示的に記述すると「'[1, 10)'::int4range'」であることに注意してください。
+</p>
+
+<pre>
+sampledb=# -- int4range(1, 10) <==> '[1, 10)'::int4range'
+sampledb=# SELECT lower_inc(int4range(1,10)), 
+sampledb-#               lower_inc('[1,10]'::int4range);
+ lower_inc | lower_inc 
+-----------+-----------
+ t         | t
+(1 row)
+
+sampledb=# SELECT upper_inc(int4range(1,10)), 
+sampledb-#               upper_inc('[1,10]'::int4range);
+ upper_inc | upper_inc 
+-----------+-----------
+ f         | f
+(1 row)
+</pre>
+

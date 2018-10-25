@@ -1,0 +1,67 @@
+%FILE internal/plpgsql-09.html
+%LASTMOD
+%KEY pgsql-plpgsql09
+
+%TITLE RETURN
+
+<pre>
+[<書式>]
+
+	   RETURN NEXT value
+
+	   RETURN QUERY query
+			(バージョン8.3から)
+
+======================================================================
+パラメータ	説明
+======================================================================
+value		返り値
+======================================================================
+</pre>
+
+[<解説>]
+<p>
+RETURN NEXT文は、設定された値を一時的な保管場所に保存して次の処理に進みます。この文は値を保存し続けるだけなので、関数の終了時に引数のないRETURN文を実行し、保存してきた値を返さなければなりません。
+</p>
+
+<pre> RETURN NEXT文の使い方
+	LOOP 
+	     statemants;
+	     RETURN NEXT ret; /* retの値を保存し続ける */
+        END LOOP;
+
+        RETURN; /* 保存された値を返し、関数を終了 */
+</pre>
+
+
+<p>
+RETURN NEXT文を使った関数を呼び出すには、SELECT文のFROM句に設定しなければなりません([<補足 1>])。
+---under-line---under-line---under-line---under-line---under-line---under-line---under-line-----
+</p>
+
+
+<pre> RETURN NEXTを使った関数の呼び出し方法
+sample=# SELECT * FROM item_names ();
+</pre>
+
+<p>
+なお、関数item_names()は[<8-12>]〜[<8-15>]、および[<8-20>]で定義しています。RETURN NEXT文の具体的な使い方は、以降の説明を参照してください。
+</p>
+
+
+[<補足>]
+
+<p>
+(1)
+念のため、関数をFROM句に設定しないとどうなるか、示しておきます。
+</p>
+
+
+<pre> 間違った呼び出し方法
+sampledb=# SELECT item_names();
+ERROR:  set-valued function called in context that cannot accept a set
+CONTEXT:  PL/pgSQL function "item_names" line 19 at return next
+ERROR:  set-valued function called in context that cannot accept a set
+CONTEXT:  PL/pgSQL function "item_names" line 19 at return next
+</pre>
+

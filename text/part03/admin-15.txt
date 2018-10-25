@@ -1,0 +1,451 @@
+%FILE internal/admin-15.html
+%LASTMOD
+%KEY pgsql-admin15
+
+
+%TITLE 稼働統計情報
+
+<p>
+稼働統計情報を表示するビューの一覧を示します。稼働統計情報に関する設定パラメータは[<4-09>]を参照してください。
+</p>
+
+<table border=1>
+<caption>[<表3-09>] 稼働統計情報を表示するビュー</caption>
+<tr bgcolor="#cccccc">
+<th>ビュー名</th>		<th>説明</th>
+</tr><tr>
+<td>pg_stat_activity</td>	<td>postgresプロセスのPID、データベース、データベースユーザ/ロール、現在の問い合わせを表示</td>
+</tr><tr>
+<td>pg_stat_bgwriter</td>	<td>バックグランドライタの稼働統計情報を表示。バージョン8.3から</td>
+</tr><tr>
+<td>pg_stat_database</td>	<td>データベース毎のpostgresプロセス数、コミットされたトランザクションの総数、ロールバックされたトランザクションの総数などを表示</td>
+</tr><tr>
+<td>pg_stat_database_conflicts</td>	<td>レプリケーション実行時、データベースのConflict状態を表示。Conflictはスレーブでのみ発生するので、スレーブでのみ表示。バージョン9.1から</td>
+</tr><tr>
+<td>pg_stat_replication</td>	<td>レプリケーションしているスレーブの状態を表示。マスタのみ利用可能(スレーブでは表示されない)。バージョン9.1から</td>
+</tr><tr>
+<td>pg_stat_all_tables</td>	<td>テーブルに関する、シーケンシャルスキャン、インデックススキャンの総数、各種スキャンによって返されたレコードの総数、挿入、更新、削除されたレコードの総数を表示</td>
+</tr><tr>
+<td>pg_stat_sys_tables</td>	<td>システムカタログのみ表示される点を除き、pg_stat_all_tables と同じ</td>
+</tr><tr>
+<td>pg_stat_user_tables</td>	<td>一般のテーブルのみが表示される点を除き、pg_stat_all_tables と同じ</td>
+</tr><tr>
+<td>pg_stat_xact_all_tables</td>	<td>pg_stat_all_tablesとほぼ同じ項目を表示。ただし、現在のトランザクション内での処理結果のみ(ここで表示されている情報はまだ、pg_stat_all_tablesには反映されない)。バージョン9.1から</td>
+</tr><tr>
+<td>pg_stat_xact_sys_tables</td>	<td>システムテーブルのみが表示される点を除き、pg_stat_xact_all_tablesと同じ。バージョン9.1から</td>
+</tr><tr>
+<td>pg_stat_xact_user_tables</td>	<td>ユーザテーブルのみが表示される点を除き、pg_stat_xact_all_tablesと同じ。バージョン9.1から</td>
+</tr><tr>
+<td>pg_stat_all_indexes	</td>	<td>各インデックスに関する、インデックススキャン数、読みとられたインデックス数などを表示</td>
+</tr><tr>
+<td>pg_stat_sys_indexes	</td>	<td>システムカタログのインデックスのみ表示される点を除き、pg_stat_all_indexes と同じ</td>
+</tr><tr>
+<td>pg_stat_user_indexes</td>	<td>一般のテーブルのインデックスのみが表示される点を除き、pg_stat_all_indexes と同じ</td>
+</tr><tr>
+<td>pg_statio_all_tables</td>	<td>テーブル毎の読み取られたディスクブロックの総数、バッファヒット数などを表示</td>
+</tr><tr>
+<td>pg_statio_sys_tables</td>	<td>システムカタログのみが表示される点を除き、pg_statio_all_tables と同じ</td>
+</tr><tr>
+<td>pg_statio_user_tables</td>	<td>一般のテーブルのみが表示される点を除き、pg_statio_all_tables と同じ</td>
+</tr><tr>
+<td>pg_statio_all_indexes</td>	<td>各インデックスに関する、そのインデックスの読みとられたディスクブロック数とバッファヒット数を表示</td>
+</tr><tr>
+<td>pg_statio_sys_indexes</td>	<td>システムテーブルのインデックスのみが表示される点を除き、pg_statio_all_indexes と同じ</td>
+</tr><tr>
+<td>pg_statio_user_indexes</td>	<td>ユーザテーブルのインデックスのみが表示される点を除き、pg_statio_all_indexes と同じ</td>
+</tr><tr>
+<td>pg_statio_all_sequences</td>	<td>各シーケンスに関する、読みとられたディスクブロック数とバッファヒット数を表示</td>
+</tr><tr>
+<td>pg_statio_sys_sequences</td>	<td>システムカタログのシーケンスのみが表示される点を除き、pg_statio_all_sequences と同じ</td>
+</tr><tr>
+<td>pg_statio_user_sequences</td>	<td>一般のシーケンスのみが表示される点を除き、pg_statio_all_sequences と同じ</td>
+</tr><tr>
+<td>pg_stat_user_functions</td>	<td>ユーザ定義関数の稼働統計情報を表示。設定パラメータtrack_functionの値によって表示する関数の範囲が異なる。noneなら表示しない、plならPL/pgSQLなどで定義された関数のみ、allならSQLやCで定義したユーザ定義関数すべて。バージョン8.4から</td>
+</tr><tr>
+<td>pg_stat_xact_user_functions</td>	<td>pg_stat_user_functionsと同じ項目を表示。ただし、現在のトランザクション内での処理結果のみ(ここで表示されている情報はまだ、pg_stat_user_functionsには反映されない)。バージョン9.1から</td>
+</tr></table>
+
+<br>
+
+
+<p>
+以下、主要なものを解説します。
+</p>
+
+%CHAPTER データベースユーザ/ロールの稼働統計情報
+
+<p>
+ビューpg_stat_activityは、現在接続中のデータベースユーザ/ロール毎に接続しているデータベース名や接続した時刻などを表示します。
+</p>
+
+<table border=1>
+<caption>[<表3-10>] pg_stat_activity</caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>		<th>説明</th>
+</tr><tr>
+<td>datid</td>		<td>接続しているデータベースのOID。バージョン8.1から</td>
+</tr><tr>
+<td>datname</td>	<td>接続しているデータベース名</td>
+</tr><tr>
+<td>pid (ver9.1までprocpid)</td>	<td>接続しているpostgresプロセスのプロセス番号</td>
+</tr><tr>
+<td>usesysid</td>	<td>データベースユーザ/ロールのID</td>
+</tr><tr>
+<td>usename</td>	<td>データベースユーザ/ロール名</td>
+</tr><tr>
+<td>application_name</td>	<td>接続しているアプリケーション名。バージョン9.0から</td>
+</tr><tr>
+<td>query (ver9.1までcurrent_query)</td>	<td>現在、実行しているSQL文</td>
+
+
+</tr><tr>
+<td>state_change</td>	<td>stateが最後に変更された時刻。バージョン9.2から</td>
+
+</tr><tr>
+<td>waiting</td>	<td>待機状態。バージョン8.2から</td>
+
+
+</tr><tr>
+<td>state</td>		
+<td>postgresプロセスの状態。<br>
+"active"は問い合わせ実行中。
+"idle"はクライアントからの問い合わせ待ち。
+"idle in transaction"はBEGIN実行後(トランザクション内で)問い合わせを待っている状態。
+"idle in transaction (aborted)"はトランザクション内でエラーが発生し、ABORTすることが確定している状態。
+"fastpath function call"はfastpath関数を実行中。バージョン9.2から</td>
+
+
+</tr><tr>
+<td>xact_start</td>	<td>現在のトランザクションの開始時刻。バージョン8.4から</td>
+</tr><tr>
+<td>query_start</td>	<td>最近のSQL文を実行した時刻</td>
+</tr><tr>
+<td>backend_start</td>	<td>接続してpostgresプロセスが起動した時刻</td>
+</tr><tr>
+<td>client_addr	</td>	<td>クライアントのIPアドレス</td>
+</tr><tr>
+<td>client_hostname</td><td>クライアントのホスト名。バージョン9.1から</td>
+</tr><tr>
+<td>client_port</td>	<td>クライアントが接続しているポート番号</td>
+</tr></table>
+
+<br>
+
+%CHAPTER データベースの稼働統計情報
+
+<p>
+ビューpg_stat_databaseは、データベース毎に接続しているデータベースユーザ/ロール数や実行されたSQL文の総数、読み込まれたブロック数などを表示します([<表3-11>])。
+</p>
+
+<table border=1>
+<caption>[<表3-11>] pg_stat_database</cation>
+<tr bgcolor="#cccccc">
+<th>項目</th>		<th>説明</th>
+</tr><tr>
+<td>datid</td>		<td>データベースのOID</td>
+</tr><tr>
+<td>datname	</td>		<td>データベース名</td>
+</tr><tr>
+<td>numbackends</td>		<td>現在、接続しているデータベースユーザ/ロール数</td>
+</tr><tr>
+<td>xact_commit</td>		<td>今までにSQL文がコミットされた回数</td>
+</tr><tr>
+<td>xact_rollback</td>		<td>今までにSQL文がロールバックされた回数</td>
+</tr><tr>
+<td>blks_read</td>		<td>今までに読み込まれたブロックの総数</td>
+</tr><tr>
+<td>blks_hit</td>		<td>今までにヒットしたブロックの総数</td>
+</tr><tr>
+<td>tup_returned</td>		<td>今までに返されたレコード数。バージョン8.3から</td>
+</tr><tr>
+<td>tup_fetched</td>		<td>今までにFETCHされたレコード数。バージョン8.3から</td>
+</tr><tr>
+<td>tup_inserted</td>		<td>今までにINSERTされたレコード数。バージョン8.3から</td>
+</tr><tr>
+<td>tup_updated</td>		<td>今までにUPDATEされたレコード数。バージョン8.3から</td>
+</tr><tr>
+<td>tup_deleted</td>		<td>今までにDELETEされたレコード数。バージョン8.3から</td>
+</tr><tr>
+<td>	conflicts	</td>	<td>(レプリケーションで)Conflictが発生してキャンセルした問い合わせの数。バージョン9.1から</td>
+
+</tr><tr>
+<td>temp_files	</td>		<td>生成した一時ファイルの数。バージョン9.2から</td>
+</tr><tr>
+<td>temp_bytes	</td>		<td>一時ファイルに書き込んだデータのバイト数。バージョン9.2から</td>
+</tr><tr>
+<td>deadlocks	</td>		<td>発生したデッドロックの数。バージョン9.2から</td>
+</tr><tr>
+<td>blk_read_time	</td>		<td>共有バッファにデータを読み込むために要した時間の総計。単位は[ミリ秒]。この集計を有効にするには設定パラメータtrack_timingをonにする。バージョン9.2から</td>
+</tr><tr>
+<td>blk_write_time	</td>		<td>共有バッファにデータを書き込むために要した時間の総計。単位は[ミリ秒]。この集計を有効にするには設定パラメータtrack_timingをonにする。バージョン9.2から</td>
+
+</tr><tr>
+<td>stats_reset</td>		<td>稼働統計情報をリセットした時刻。バージョン9.1から</td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER テーブルやインデックスの稼働統計情報
+
+<p>
+ビューpg_stat_all_tablesは、シーケンシャルスキャンとインデックススキャンされた総数、
+各種スキャンによって返されたレコードの総数、挿入、更新、削除されたレコードの総数などを表示します([<表3-12>])。
+バージョンが進むにつれてVACUUMやANALYZEした回数や、有効なタプル数や削除対象のタプル数など有用な情報が取得できるようになりました。
+<br>
+ブロックの読み込み数とキャッシュヒット数などはビューpg_statio_all_tablesで表示できます([<表3-13>])。
+</p>
+
+<table border=1>
+<caption>[<表3-12>] pg_stat_all_tables</caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>		<th>説明</th>
+</tr><tr>
+<td>relid</td>	<td>テーブルのOID</td>
+</tr><tr>
+<td>schemaname</td>	<td>テーブルの属するスキーマ名</td>
+</tr><tr>
+<td>relname</td>	<td>テーブル名</td>
+</tr><tr>
+<td>seq_scan</td>	<td>シーケンシャルスキャンされた回数</td>
+</tr><tr>
+<td>seq_tup_read</td>	<td>シーケンシャルスキャンされたレコード数</td>
+</tr><tr>
+<td>idx_scan</td>	<td>インデックススキャンされた回数</td>
+</tr><tr>
+<td>idx_tup_fetch</td>	<td>インデックススキャンされたレコード数</td>
+</tr><tr>
+<td>n_tup_ins</td>	<td>INSERTされたレコード数</td>
+</tr><tr>
+<td>n_tup_upd</td>	<td>UPDATEされたレコード数</td>
+</tr><tr>
+<td>n_tup_del</td>	<td>DELETEされたレコード数</td>
+</tr><tr>
+<td>n_tup_hot_upd</td>	<td>UPDATEでHOTが使われたレコード数。バージョン8.3から</td>
+</tr><tr>
+<td>n_live_tup</td>	<td>有効なタプル数。バージョン8.3から</td>
+</tr><tr>
+<td>n_dead_tup</td>	<td>削除や更新で無効になったタプル数(VACUUMの対象)。バージョン8.3から</td>
+</tr><tr>
+<td>last_vacuum</td>	<td>手動でVACUUMコマンドを実行した時刻。バージョン8.2から</td>
+</tr><tr>
+<td>last_autovacuum</td>	<td>AUTOVACUUMプロセスがVACUUM処理した時刻。バージョン8.2から</td>
+</tr><tr>
+<td>last_analyze</td>	<td>手動でANALYZEコマンドを実行した時刻。バージョン8.2から</td>
+</tr><tr>
+<td>last_autoanalyze</td>	<td>AUTOVACUUMプロセスがANALYZEを行った時刻。バージョン8.2から</td>
+</tr><tr>
+<td>vacuum_count</td>	<td>手動でVACUUMコマンドが実行された回数。バージョン9.1から</td>
+</tr><tr>
+<td>autovacuum_count</td>	<td>AUTOVACUUMプロセスでVACUUMされた回数。バージョン9.1から</td>
+</tr><tr>
+<td>analyze_count</td>	<td>手動でANALYZEコマンドが実行された回数。バージョン9.1から</td>
+</tr><tr>
+<td>autoanalyze_count</td>	<td>AUTOVACUUMプロセスでANALYZEされた回数。バージョン9.1から</td>
+</tr></table>
+
+<br>
+
+<table border=1>
+<caption>[<表3-13>] pg_statio_all_tables</caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>		<th>説明</th>
+</tr><tr>
+<td>relid</td>		<td>テーブルのOID</td>
+</tr><tr>
+<td>schemaname</td>		<td>テーブルの属するスキーマ名</td>
+</tr><tr>
+<td>relname</td>		<td>テーブル名</td>
+</tr><tr>
+<td>heap_blks_read</td>		<td>ディスクからのブロック読み込み数</td>
+</tr><tr>
+<td>heap_blks_hit</td>		<td>ブロックのキャッシュヒット数</td>
+</tr><tr>
+<td>idx_blks_read</td>		<td>(テーブルの)全インデックスのブロック読み込み数</td>
+</tr><tr>
+<td>idx_blks_hit</td>		<td>インデックスブロックのキャッシュヒット数</td>
+</tr><tr>
+<td>toast_blks_read</td>		<td>(TOASTテーブルの)ブロック読み込み数</td>
+</tr><tr>
+<td>toast_blks_hit</td>		<td>(TOASTテーブルの)ブロックのキャッシュヒット数</td>
+</tr><tr>
+<td>tidx_blks_read</td>		<td>(TOASTテーブルの)全インデックスのブロック読み込み数</td>
+</tr><tr>
+<td>tidx_blks_hit</td>		<td>(TOASTテーブルの)インデックスブロックのキャッシュヒット数</td>
+</tr></table>
+
+
+<br>
+
+
+<p>
+ビューpg_stat_all_indexesは、テーブルのインデックス毎にスキャンした回数や読み取ったタプル数などを表示します([<表3-14>])。
+ブロックの読み込み数やキャッシュヒット数などはビューpg_statio_all_indexesで表示できます([<表3-15>])。
+</p>
+
+<table border=1>
+<caption>[<表3-14>] pg_stat_all_indexes</caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>		<th>説明</th>
+</tr><tr>
+<td>relid</td>		<td>テーブルのOID</td>
+</tr><tr>
+<td>indexrelid</td>	<td>インデックスのIOD</td>
+</tr><tr>
+<td>schemaname</td>	<td>テーブルの属するスキーマ名</td>
+</tr><tr>
+<td>relname</td>	<td>テーブル名</td>
+</tr><tr>
+<td>indexrelname</td>		<td>インデックス名</td>
+</tr><tr>
+<td>idx_scan</td>	<td>インデックススキャンされた回数</td>
+</tr><tr>
+<td>idx_tup_read</td>		<td>読み取られたタプル数</td>
+</tr><tr>
+<td>idx_tup_fetch</td>		<td>読み取られたうち、実際に使われたタプル数</td>
+</tr></table>
+
+<br>
+
+<table border=1>
+<caption>[<表3-15>] pg_statio_all_indexes</caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>		<th>説明</th>
+</tr><tr>
+<td>relid</td>		<td>テーブルのOID</td>
+</tr><tr>
+<td>indexrelid</td>		<td>インデックスのIOD</td>
+</tr><tr>
+<td>schemaname</td>		<td>テーブルの属するスキーマ名</td>
+</tr><tr>
+<td>relname</td>		<td>テーブル名</td>
+</tr><tr>
+<td>indexrelname</td>		<td>インデックス名</td>
+</tr><tr>
+<td>idx_blks_read</td>		<td>インデックスのブロック読み取り回数</td>
+</tr><tr>
+<td>idx_blks_hit</td>		<td>インデックスブロックのキャッシュヒット回数</td>
+</tr></table>
+
+<br>
+
+%CHAPTER バックグランドライタの稼働状況
+
+<p>
+バージョン8.3からサポートされたビューpg_stat_bgwriterで、バックグランドライタの稼働統計情報を表示できます([<表3-16>])。
+</p>
+
+
+<table border=1>
+<caption>[<表3-16>] pg_stat_bgwriter</caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>		<th>説明</th>
+</tr><tr>
+<td>checkpoints_timed</td>	<td>(checkpoint_timeout時間経過したことによって)実行されたCHECKPOINTの回数</td>
+</tr><tr>
+<td>checkpoints_req</td>	<td>(CHECKPOINT文の手動実行など)明示的に実行された、もしくはcheckpoint_segmentsを超えたことによって実行されたCHECKPOINTの回数</td>
+</tr><tr>
+
+<td>checkpoint_write_time</td>	<td>CHECKPOINTでデータの書き込み(write())に要した時間の総計。単位は[ミリ秒]。バージョン9.2から</td>
+
+</tr><tr>
+<td>checkpoint_sync_time</td><td>CHECKPOINTでデータの同期(fsync())に要した時間の総計。単位は[ミリ秒]。バージョン9.2から</td>
+
+</tr><tr>
+<td>buffers_checkpoint</td>	<td>バックグランドライタがCHECKPOINTで書き込んだページ数</td>
+</tr><tr>
+<td>buffers_clean</td>		<td>(CHECKPOINT以外で)ダーティページの処理のためにバックグランドライタが書き込んだページ数</td>
+</tr><tr>
+<td>maxwritten_clean</td>	<td>設定パラメータbgwriter_lru_maxpagesで指定した数以上のページ書き込みをしたため、書き込みを中断した回数</td>
+</tr><tr>
+<td>buffers_backend</td>	<td>postgresプロセス(バックグランドライタとCHEKCPOINTER以外)がページ入れ替えなどで書き込んだページ数</td>
+</tr><tr>
+<td>buffers_backend_fsync</td>	<td>postgresプロセス(バックグランドライタとCHECKPOINTER以外)がページ入れ替えなどでfsync()を呼び出した回数。バージョン9.1から</td>
+</tr><tr>
+<td>buffers_alloc</td>	<td>これまでに読み込んだバッファの総数。積算していく。</td>
+</tr><tr>
+<td>stats_reset	</td>	<td>直近の稼働統計情報をリセットした時刻。バージョン9.1から</td>
+</tr></table>
+
+<br>
+
+
+
+%CHAPTER レプリケーション
+
+<p>
+バージョン9.1からレプリケーションに関連する２つのビューがサポートされました。
+</p>
+
+<p>
+ビューpg_stat_replicationはスレーブの状態を表示します([<表3-17>])。このデータはマスタのみ保持しています。
+<br>
+ビューpg_stat_database_conflictsはデータベースのConflict(衝突)に関する情報を表示します([<表3-18>])。
+このデータはスレーブのみ保持しています。
+</p>
+
+<table border=1>
+<caption>[<表3-17>] pg_stat_replication</cation>
+<tr bgcolor="#cccccc">
+ <th>項目</th> <th>説明</th>
+</tr><tr>
+<td>usename</td>  <td>接続してきたスレーブのユーザ名</td>
+</tr><tr>
+<td>application_name</td>  <td>recovery.conf/primary_conninfoのapplication_nameに記述したスレーブ名
+</td>
+</tr><tr>
+<td>client_addr</td>  <td>スレーブのIPアドレス</td>
+</tr><tr>
+<td>client_hostname</td>  <td>スレーブのホスト名</td>
+</tr><tr>
+<td>client_port</td>  <td>スレーブのport番号</td>
+</tr><tr>
+<td>backend_start</td>  <td>スレーブの起動開始時刻</td>
+</tr><tr>
+<td>state</td>  <td>スレーブの状態<br>
+
+<blockquote>
+idle:　　　　プロセス初期状態<br>
+backup:　　　pg_basebackupから接続要求<br>
+catchup:　　スレーブから接続要求<br>
+streaming:　ストリーミング中<br>
+</blockquote>
+
+</td>
+</tr><tr>
+<td>sent_location</td>  <td>マスタが送ったWALログの最新LSN</td>
+</tr><tr>
+<td>write_location</td>  <td>スレーブが(受信して)書き込んだ最新のLSN</td>
+</tr><tr>
+<td>flush_location</td>  <td>スレーブが(受信し書き込んで)Flushした最新のLSN</td>
+</tr><tr>
+<td>replay_location</td>  <td>スレーブがHotStandbyで再生した最新のLSN</td>
+</tr><tr>
+<td>sync_priority</td>  <td>同期レプリケーションの優先順位。1は同期で稼働中。0は非同期</td>
+</tr><tr>
+<td>sync_state</td>  <td>レプリケーションの状態。sync=同期、potential=同期レプリケーションの候補(非同期で稼働中)、async=非同期。本文の説明参照</td>
+</tr>
+</table>
+<br>
+
+<table border=1>
+<caption>[<表3-18>] pg_stat_database_conflicts</caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>		<th>説明</th>
+</tr><tr>
+<td>datid</td>			<td>データベースのOID</td>
+</tr><tr>
+<td>datname</td>		<td>データベース名</td>
+</tr><tr>
+<td>confl_tablespace</td>		<td>テーブルスペースの削除が原因でキャンセルされたConflictの数</td>
+</tr><tr>
+<td>confl_lock</td>			<td>LOCKのタイムアウトが原因でキャンセルされたConflictの数</td>
+</tr><tr>
+<td>confl_snapshot</td>		<td>トランザクションの可視性が原因でキャンセルされたConflictの数</td>
+</tr><tr>
+<td>confl_bufferpin	</td>	<td>(スレーブ側のpostgresプロセスが)バッファをPINし続けたことが原因でキャンセルされたConflictの数</td>
+</tr><tr>
+<td>confl_deadlock	</td>	<td>デッドロックが原因でキャンセルされたConflictの数</td>
+
+</tr></table>
+

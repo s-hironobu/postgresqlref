@@ -1,0 +1,1120 @@
+%FILE internal/internal-09.html
+%LASTMOD
+%KEY pgsql-internal09
+
+%TITLE WAL (Write Ahead Logging)
+
+<p>
+WALが導入された当初の目的は、
+サーバのプロセス故障によるメモリ(共有バッファ)とHDDのデータ不一致を解消することにありました。
+</p>
+
+
+<p>
+PostgreSQLは共有バッファ上でデータ操作することで高速なデータアクセスと処理を実現していますが、
+障害発生の保険として、
+データの変更情報をWALログと呼ぶ16[Mbyte]のファイルに、
+シーケンシャルに同期書き込みしていきます。
+<br>
+万が一、共有バッファのデータをデータ領域に書き込む前にサーバプロセスがクラッシュしても、
+WALログに記録された更新データを再実行(REDO)することで、
+クラッシュ直前の状態にリカバリできます(WALログはREDOログ)。
+<br>
+このように、PostgreSQLはプロセス故障に対し、WALを使ってデータベースの一貫性(consistency)と永続性(durability)を確保します。
+</p>
+
+
+<table border=1>
+<caption>[< figure 2-41>] concept of WAL</caption>
+<tr><td>
+<left>
+<img src="./fig-2-09-01.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<p>
+当初はサーバプロセスの故障対策として導入されたWALですが、
+WALログを利用してさらに耐障害性と可用性を高める仕組みが導入されました。PITR(Point In Time Recovery)とレプリケーションです。
+</p>
+
+<p>
+以降、WALの仕組みを詳細に説明します。PITRとレプリケーションは[<2-10>]と[<2-11>]で説明します。
+</p>
+
+
+%CHAPTER 概略
+%CHAPTER Outline
+
+<p>
+WALは複雑な機能なので、一度にすべてを説明するのは困難です。
+見通しを良くするため、詳細な説明は後回しにして、ここではいくつかのキーワードと共にWALの書き込みとリカバリの概略を説明します。
+</p>
+
+<p>
+PostgreSQLのWALは書籍「トランザクション処理 概念と技法(下)」Jim Gray他(ISBN4-8222-8103-5)にある物理論理ロギング(physiological logging)をほぼ忠実に実装したものです。
+<br>
+この方式はCHECKPOINT毎にリカバリの起点となるブロックデータを物理的にすべて保存し、それ以外は差分データを保存します。
+</p>
+
+<p>
+以下、２つのブロックから成るテーブルを例に解説します([<図2-42>])。
+</p>
+
+
+<ol>
+<li>
+CHECKPOINT開始直後のWALログの位置(LSN)は「REDOポイント」と呼ばれ、リカバリの起点になる。
+</li>
+
+<li>
+ブロック１にタプルを追加する。ブロック１はCHECKPOINT開始後はじめての追加なのでWALログにはブロック１全体を書き込む。このブロックを「バックアップブロック」という。
+<br>
+WALログには「LSN(Log Sequence Number)」という"番地"が定義されている。
+バックアップブロックを書き込むLSNを、共有バッファ上のブロック(ページ)のヘッダ情報にも書き込む(ここではLSN_1)。
+この情報はリカバリ時に必要になる。
+</li>
+
+<li>
+次にまたブロック１にタプルを追加する。
+すでにブロック１のバックアップブロックが書き込まれたので、WALログには通常のWALデータ、つまり当該ブロックの差分に相当する追加したタプルの情報だけを書き込む。
+<br>
+なお、共有バッファ上の当該ブロック(ページ)のヘッダにはLSN_2を上書きする。
+</li>
+
+<li>
+次にブロック２にタプルを追加する。ブロック２はCHECKPOINT開始後はじめての追加なので、ブロック２全体をバックアップブロックとして書き込む。
+</li>
+
+</ol>
+
+
+<p>
+ここで物理論理ロギングの威力を示すため、
+ブロック2に再度タプルを追加している最中にサーバクラッシュし、ブロック2のデータを喪失したと仮定します。
+</p>
+
+<table border=1>
+<caption>[< figure 2-42>] physiological logging</caption>
+<tr><td>
+<left>
+<img src="./fig-2-09-02.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+
+
+<p>
+次にリカバリをみていきます([<図2-43>])。
+リカバリするテーブルのブロック1はLSN_2の状態、
+ブロック2は書き込み失敗でデータを喪失した状態と仮定します。
+</p>
+
+<ol>
+
+<li>
+リカバリはREDOポイントを起点として行う。
+よって、リカバリ開始後に初めて再実行(REDO)するブロックのWALログは必ずバックアップブロックである。
+バックアップブロックはLSNに関わらず無条件で再実行、つまり上書きする。
+</li>
+
+
+<li>
+2番目のWALログはブロック１の変更分である。念のためにLSNを比較する。
+ブロック1は先の再実行でLSN_1に書換えられ、WALログのそれはLSN_2である。
+「LSN_1 < LSN_2」なので、WALログを再実行してブロックをリカバリする。
+もしもなんらかの事情でブロック側のLSNがWALログのLSNよりも大きい場合は、
+そのWALログを再実行しない([<コラム2-9>])。
+</li>
+
+<li>
+3番目のWALログはブロック2のバックアップブロックである。
+ブロック2は内容が失われているが、バックアップブロックを上書きすることでリカバリできる。
+</li>
+
+
+<li>
+以下同様、WALログが尽きるまでリカバリを繰り返す。
+</li>
+
+</ol>
+
+
+<blockquote><table BORDER="1"><tr><td>コラム2-9:WALログの再実行操作のべき等性</td><td>
+<p>
+情報工学での「べき等性」とは、「ある操作を1度行っても複数回行っても同じ効果となること」です。
+</p>
+
+<p>
+WALログによるリカバリで、バックアップブロックをデータベースクラスタに再実行(REDO)する操作は「べき等である」。
+なぜならバックアップブロックを何度上書きしても、当然ながらそのブロックのデータは同じだからです。
+</p>
+
+<p>
+他方、通常のWALログは差分データなので、同じWALログを２度３度と再実行したり、WALログの再実行順序が狂ってしまうと、データベースクラスタのデータの一貫性が損なわれます。
+つまり通常のWALログの再実行は「べき等でない」。
+</p>
+
+<p>
+よって、通常のWALログは「実行順序を守って、必ず一度だけ再実行」するため、当該WALログのLSN_Wとブロック側のLSN_Bを比較し「LSN_B < LSN_W」の時だけ再実行します。
+</p>
+</td></tr></table></blockquote>
+
+
+
+<table border=1>
+<caption>[< figure 2-43>] Recovery process</caption>
+<tr><td>
+<left>
+<img src="./fig-2-09-03.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<p>
+そもそもリカバリを行うということは、なんらかの故障が発生したということであり、
+データベースクラスタのデータも正常に書き込まれたかどうか不明です。
+一方、WALログデータはCRC32のエラーチェックもあり、ほぼ完全なデータであると保証できます。
+よって、リカバリはWALログを完全に信頼するという前提で行われます。
+<p>
+
+
+<p>
+上記のリカバリプロセスを要約すると、次のようになります。
+</p>
+
+
+<blockquote>
+<p>
+「信頼できるブロックを上書きしてそのブロックの時間をCHECKPOINT直後にまで巻き戻し、
+それを各ブロックのリカバリの出発点とする。
+<br>
+その後は信頼できる差分データを正しい順序で次々に再実行(REDO)しながら、
+クラッシュ直前の状態までリカバリしていく」。
+</p>
+</blockquote>
+
+
+<p>
+ここまで、WALログの書き込みとリカバリの関係について簡単に説明しました。
+<br>
+以降、
+ここで説明したことがらを基に、次に記す項目について詳細に解説します。
+</p>
+
+
+<ol>
+<li>WALログの論理構造</li>
+	LSNとはなにか、WALログファイルとの関係など
+<li>WALログに書き込むデータ</li>
+	バックアップブロック、通常のWALログのデータ構造など
+<li>WALログの書き込みシーケンス</li>
+<li>CHECKPOINTとリカバリ</li>
+	WALログの視点からみたCHECKPOINTとリカバリの詳細
+</ol>
+
+
+<p>
+最後にWALログ書き込みに関する様々な機能についてまとめて解説します。
+</p>
+
+%CHAPTER WALログの論理構造
+%CHAPTER Logical structure of WAL segment
+
+<p>
+WALの情報は(tli, xlogid, xrecoff)の3組の数値で管理します。各データの詳細を以下に示します。
+</p>
+
+<table border=1><tr bgcolor="#cccccc">
+<th>データ名</th>  <th>説明</th>  <th>バイト長[byte]</th> 
+</tr><tr>
+<td>tli</td>		<td>TimeLineID(タイムラインId)</td>	<td>4</td>
+</tr><tr>
+<td>xlogid</td>		<td>ログID</td>		<td>4</td>
+</tr><tr>
+<td>xrecoff</td>	<td>ログID毎のオフセット</td>	<td>4</td>
+</tr></table>
+
+
+<p>
+xlogidとxrecoffの組を「LSN(Log Sequence Number)」と呼びます。TimeLineIdは[<2-10>]で説明します。
+</p>
+
+<p>
+WALログの論理的な構造を示します([<図2-44>])。
+</p>
+
+<font color="#ff0000">
+図中、0xF*E*FFFFFF の"E"の部分を青にしていますが、書籍では黒文字でお願いします。
+これは、作図で間違わないよう、注意するために青にしています。
+</font>
+
+<table border=1>
+<caption>[<図2-44>] WALログの論理構造</caption>
+<caption>[< figure 2-44>] Logical structure of WAL segment</caption>
+<tr><td>
+<left>
+<img src="./fig-2-09-04.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<p>
+WALログは、論理的にはxlogid毎に約4[Gbyte]の領域が確保されています([<脚注26>])。
+xlogidも4[byte]=32[bit]=42億強の値を持つことができます。
+よって実用的には無限大の領域が確保されているといってよいでしょう。
+<br>
+WALログが確保する広大な領域に、PostgreSQLで行われるすべてのデータ処理が保存されていくのです。
+</p>
+
+
+<blockquote><table BORDER="1"><tr><td>footnote 26</td><td>
+<p>
+より正確には、末尾の16[Mbyte]を除いた(4[Gbyte]-16[Mbyte])、特にxlogid=0の場合は先頭の16[Mbyte]も除いた4[Gbyte]-32[Mbyte]です。
+なお、xlogid=0の先頭16[Mybte]不使用はバージョン9.0からです。バージョン8.4まではxlogid=0の先頭部分も使用していました。
+<p>
+
+</td></tr></table></blockquote>
+
+
+<p>
+ただし、実用上は4[Gbyte]のファイルすら扱うのは難しいので、16[Mbyte]のセグメント毎にファイル化して利用します。
+<br>
+ファイルの命名規則は次のとおりです。
+</p>
+
+
+[< WALログファイルの命名規則>]
+[< Naming rule of WAL file>] 
+
+<pre>
+ファイル名 = TimeLineID + xlogid + (00000000 から 000000FE までのシーケンシャルな番号)
+</pre>
+
+<p>
+WALログのアドレス指定はLSNで行いますが、LSNからそのLSNを含むセグメントを知ることも容易です。
+<br>
+例えばTimeLineID=1、LSNが(xlogid=0, xrecoff=0x14FBD68=22003048)の場合、((22003048 -1)/16[Mbyte]) = 1なので、ファイル名は"00000001 00000000 00000001"となります。
+図示すると以下のようになります。
+</p>
+
+
+<table border=1>
+<caption>[<図2-45>] Naming rule of WAL file</caption>
+<tr><td>
+<left>
+<img src="./fig-2-09-05.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+
+%CHAPTER WALログに書き込むデータ
+
+<p>
+WALログとして書き込むデータを説明します。
+はじめにWALログの内部構造を示します([<図2-46>])。
+</p>
+
+<table border=1>
+<caption>[<図2-46>] WALログの内部構造</caption>
+<tr><td>
+<left>
+<img src="./fig-2-09-06.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<p>
+16[Mbyte]のWALログの内部は、8192[byte]のページに分割されています。
+最初のページの先頭部分には
+<a href="javascript:void(0)" id="category_XLogLongPageHeaderData" onclick="show('XLogLongPageHeaderData');">XLogLongPageHeaderData</a>
+構造体で定義されたページ情報が、
+</p>
+2ページ目以降の各ページの先頭部分には
+<a href="javascript:void(0)" id="category_XLogPageHeaderData" onclick="show('XLogPageHeaderData');">XLogPageHeaderData</a>
+構造体で定義されたページ情報が、それぞれ保存されています。
+</p>
+
+<div id="layer_XLogLongPageHeaderData" style="display: none;position:relative;margin-left:15pt" class="close">
+%INCLUDE XLogLongPageHeaderData.inc
+</div> 
+
+
+<div id="layer_XLogPageHeaderData" style="display: none;position:relative;margin-left:15pt" class="close">
+%INCLUDE XLogPageHeaderData.inc
+</div> 
+
+
+<p>
+ページ内部は
+<a href="javascript:void(0)" id="category_XLogRecord" onclick="show('XLogRecord');">XLogRecord</a>
+と実際のデータの組から成ります。
+</p>
+
+<div id="layer_XLogRecord" style="display: none;position:relative;margin-left:15pt" class="close">
+%INCLUDE XLogRecord.inc
+</div> 
+
+%SECTION XLogRecord
+
+<p>
+XLogRecord構造体で重要な項目を説明します。
+</p>
+
+<p>
+A XLogRecord structure explains an important item. 
+</p>
+
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>データ項目　　</th>	<th>説明</th>
+</tr><tr>
+<td>xl_crc</td>		<td>データ本体のCRC誤り訂正コード</td>
+</tr><tr>
+<td>xl_prev</td>	<td>このWALログ情報の１つ手前のWALログ情報のLSN値</td>
+</tr><tr>
+<td>xl_xid</td>		<td>このWALログを書き込んだトランザクションのXID</td>
+</tr><tr>
+<td>xl_tot_len</td>	<td>XLogRecord構造体とデータ本体の長さ</td>
+</tr><tr>
+<td>xl_len</td>		<td>データ本体の長さ</td>
+</tr><tr>
+<td>xl_rmid</td>	<td>リソースマネージャ(ResourceManager)の種類</td>
+</tr><tr>
+<td>xl_info</td>	<td>リソースマネージャ(ResourceManager)の操作コード</td>
+</tr></table>
+
+<br>
+
+
+<p>
+ここでリソースマネージャ(ResourceManager)とは、WAL関連の操作を機能的に分割したもので、
+バージョンが進むにつれて増えていきました。
+バージョン9.2では以下のリソースマネージャがあります。
+</p>
+
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>機能</th>	<th>リソースマネージャ</th>
+</tr><tr>
+<td>ヒープタプル操作</td>	<td>RM_HEAP2, RM_HEAP</td>
+</tr><tr>
+<td>インデックス操作</td>	<td>RM_BTREE、RM_HASH、RM_GIN、RM_GIST、RM_SPGIST</td>
+</tr><tr>
+<td>シーケンス操作</td>		<td>RM_SEQ</td>
+</tr><tr>
+<td>トランザクション関係</td>	<td>RM_XACT、RM_MULTIXACT、RM_CLOG、RM_XLOG</td>
+</tr><tr>
+<td>DBやテーブルスペースなどの操作</td>		<td>RM_SMGR、RM_DBASE、RM_TBLSPC、RM_RELMAP</td>
+</tr><tr>
+<td>ホットスタンバイ用</td>		<td>RM_STANDBY</td>
+</tr></table>
+
+<br>
+
+<p>
+例えばINSERTやUPDATEでタプル追加した場合は、
+リソースマネージャRM_HEAPの操作オペレーションXLOG_HEAP_INSERTやXLOG_HEAP_UPDATEが、
+COMMITはリソースマネージャRM_XACTの操作オペレーションXLOG_XACT_COMMITが、
+それぞれWALログデータをWALバッファに書き込みます。
+</p>
+
+
+%SECTION データ部
+
+<p>
+前記のように、データ本体は操作オペレーション毎に異なります。代表的な例としてINSERTとUPDATEを説明します。
+</p>
+
+<p>
+INSERTの場合、各レコードの更新毎に[<図2-47>]に示すデータをWALバッファに書き込みます。
+</p>
+
+<table border=1>
+<caption>[<図2-47>] INSERTのWALログデータ</caption>
+<tr><td>
+<left>
+<img src="./fig-2-09-07.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+
+<p>
+ブロックにタプルを追記してから、WALバッファにXLogRecordとxl_heap_insert、および追記したタプルを(一部データを削除して)書き込みます([<コラム2-10>])。
+その後、タプルを追記したブロックのXLogRecPtrに(WALログを書き込んだ)LSNを書きます。
+</p>
+
+<blockquote><table BORDER="1"><tr><td>コラム2-10:HeapTupleFieldsを削除する理由</td><td>
+<p>
+WALバッファに書き込む際に削除するHeapTupleFieldsには、t_min、t_maxなど同時実行制御に必須のデータが含まれています。
+INSERTやUPDATEのWALログはこのフィールドを削除して保存しますが、その理由は
+<a href="javascript:void(0)" id="category_xl_heap_header" onclick="show('xl_heap_header');">構造体xl_heap_headerのコメント</a>
+に書かれています[<脚注27>]。
+<br>
+意訳すると「リカバリ時にWALログヘッダのXIDを使えば、HeapTupleFieldsのデータは再構築できるので、WALログサイズ小さくするため削除する」。実際、タプルヘッダHeapTupleHeaderDataは26バイトなので、そこからHeapTupleFieldsの12バイト削減するとWALログ全体のサイズ圧縮に多少なりとも効果があります。
+
+<div id="layer_xl_heap_header" style="display: none;position:relative;margin-left:15pt" class="close">
+%INCLUDE xl_heap_header.inc
+</div> 
+
+</p>
+</td></tr></table></blockquote>
+
+<blockquote><table BORDER="1"><tr><td>脚注27</td><td>
+<p>
+構造体xl_heap_headerの定義はsrc/include/access/htup.h。
+</p>
+</td></tr></table></blockquote>
+
+<br>
+
+<p>
+<a href="javascript:void(0)" id="category_xl_heap_insert" onclick="show('xl_heap_insert');">xl_heap_insert</a>
+には対象となるリレーション(テーブル)node、挿入するタプルの位置(tid)などの情報を持っています。
+</p>
+
+<div id="layer_xl_heap_insert" style="display: none;position:relative;margin-left:15pt" class="close">
+%INCLUDE xl_heap_insert.inc
+</div> 
+
+
+<p>
+UPDATEもほぼ同様ですが、データの先頭部分の
+<a href="javascript:void(0)" id="category_xl_heap_update" onclick="show('xl_heap_update');">xl_heap_update</a>
+構造体には削除(無効化)するタプルと新たに追加するタプル、計２つのタプル情報を持ちます。
+</p>
+
+<div id="layer_xl_heap_update" style="display: none;position:relative;margin-left:15pt" class="close">
+%INCLUDE xl_heap_update.inc
+</div> 
+
+
+<p>
+INSERTやUPDATEなどデータ操作コマンド以外でもWALログを書き込みます
+例えばCOMMITでは閉じたトランザクションのXIDなどを書き込みます。
+CHECKPOINTでは構造体CheckPoint([<脚注28>])で定義されたデータを保存します(リカバリの説明で改めて説明する)。
+</p>
+
+
+<blockquote><table BORDER="1"><tr><td>脚注28</td><td>
+<p>
+構造体CheckPointの定義はsrc/include/catalog/pg_control.h。
+</p>
+</td></tr></table></blockquote>
+
+<br>
+
+%SECTION バックアップブロックの構造
+
+<p>
+バックアップブロックの構造を示します([<図2-48>])。
+</p>
+
+<table border=1>
+<caption>[<図2-48>] バックアップブロックの構造</caption>
+<tr><td>
+<left>
+<img src="./fig-2-09-08.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<p>
+バックアップブロックはXLogRecordの次に構造体
+<a href="javascript:void(0)" id="category_BkpBlock" onclick="show('BkpBlock');">BkpBlock</a>
+のデータ、
+次いで空白(hole)を除いたブロック内の全データを連結したものです。
+<br>
+構造体BkpBlockにはこのブロックを持つテーブルの情報と、このブロックの位置、およびholeの位置と長さを記録します。
+</p>
+
+
+<div id="layer_BkpBlock" style="display: none;position:relative;margin-left:15pt" class="close">
+%INCLUDE BkpBlock.inc
+</div> 
+
+
+
+%CHAPTER WALログの書き込みシーケンス
+
+<p>
+具体的な操作でWALの書き込みシーケンスを説明します([<図2-49>])。
+</p>
+
+<p>
+テーブルtblの2レコードを更新したとします。
+</p>
+
+
+<font color="#ff0000">
+<p>
+以下は書籍編集用のデータ。書籍では図のように配置、色付け
+</p>
+</font>
+
+
+<pre>
+exec_simple_query() @postgres.c                                                                ----(1)
+        ExtendCLOG() @clog.c                        <--  CLOGに"IN_PROGRES"書き込み            ----(2)
+
+        heap_update()@heapam.c 		            <--  1レコード目更新
+           XLogInsert() @xlog.c                     <--  WALログバッファに書き込み             ----(3)
+                                                         WALログ書き込みのLSNを更新ページに書き込む
+
+        heap_update()@heapam.c                      <-- 2レコード目更新
+           XLogInsert() @xlog.c                     <-- WALログバッファに書き込み               ----(4)
+                                                        WALログ書き込みのLSNを更新ページに書き込む
+
+        finish_xact_command() @postgres.c           <--　commit処理
+           XLogInsert() @xlog.c                     <-- WALログバッファに書き込み               ----(5)
+		
+        CommitTransaction()@xact.c
+           XLogFlush() @xlog.c
+              XLogWrite() @xlog.c                   <-- WALログに書き込み                       ----(6)
+              issue_xlog_fsync() @xlog.c            <-- 同期書き込みfsync() || fdatasync()実行
+
+        TransactionIdSetTreeStatus() @transam.c
+           TransactionIdCommitTree() @transam.c     <-- CLOGに"COMMITTED"書き込み               ----(7)
+</pre>
+
+
+<table border=1>
+<caption>[<図2-49>] UPDATE文の実行</caption>
+<tr><td>
+<left>
+<img src="./fig-2-09-program1.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<p>
+(1)UPDATE文を実行する
+</p>
+<blockquote>
+<p>
+クライアントがUPDATEを実行します。
+</p>
+</blockquote>
+
+<p>
+(2)CLOGを更新する
+</p>
+<blockquote>
+<p>
+1レコード目の更新に先立ち、CLOGを更新します。具体的にはこのXIDの状態を"IN_PROGRESS"に設定します。
+</p>
+</blockquote>
+
+<p>
+(3)1レコード目の更新データをWALバッファに書き込む
+</p>
+
+<blockquote>
+<p>
+1レコード目のタプルをブロック(正確には共有バッファ上のページ)に追加した直後、
+その更新情報を関数XLogInsert()でWALバッファに書き込みます。
+<br>
+図を使って少し詳しく説明します([<図2-50>])。
+<br>
+リソースマネージャRM_HEAPがWALバッファに更新データを書き込みます。
+書き込み位置は、図の例ではLSN_1です。
+次に、この更新データの書き込み位置LSN_1を、
+更新したタプルを含むブロックのXLogRecPtrに書き込みます。
+</p>
+
+
+<table border=1>
+<caption>[<図2-50>]UPDATE文の実行シーケンス(1)</caption>
+<tr><td>
+<left>
+<img src="./fig-2-09-09.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+</blockquote>
+
+
+<p>
+(4)2レコード目についても同様に処理する
+</p>
+<blockquote>
+<p>
+以降の説明は[<図2-51>]を参照してください。
+</p>
+</blockquote>
+
+
+<p>
+(5)COMMITに関するWALログをWALバッファに書き込む
+</p>
+
+<blockquote>
+<p>
+リソースマネージャRM_XACTがCOMMITに関するデータをWALバッファに書き込みます。
+</p>
+</blockquote>
+
+
+<p>
+(6)WALログに同期書き込みする
+</p>
+
+<blockquote>
+<p>
+COMMIT後、WALバッファのデータをWALログに同期書き込みします。
+</p>
+
+<table border=1>
+<caption>[<図2-51>]UPDATE文の実行シーケンス(2)</caption>
+<tr><td>
+<left>
+<img src="./fig-2-09-10.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+</blockquote>
+
+
+<p>
+(7)CLOGを更新する
+</p>
+<blockquote>
+<p>
+トランザクションがCOMMITしたので、CLOGに"COMMITTED"を書き込みます。
+<br>
+念のため付記すると、トランザクションがCLOGに書き込んだデータは、
+VACUUM処理が削除するまでCLOGに残っています。
+</p>
+
+
+</blockquote>
+
+
+%SECTION WALログの書き込みタイミングと注意点 <a name="wal_write_timing"></a>
+
+<p>
+ここまで、COMMIT時のWALログ書き込みに注目して説明してきました。
+しかしWALログ書き込みのタイミングは他にもあります。
+以下に書き込みタイミングを列挙します。
+</p>
+
+<ul>
+<li>実行中のトランザクションのどれかがCOMMITされたとき</li>
+<li>WALバッファがあふれたとき</li>
+<li>CHECKPOINT、VACUUM実行時</li>
+<li>(後述する)WALライタが作動したとき</li>
+</ul>
+
+<p>
+ここで、COMMIT時の書き込みに関する注意点を述べます。
+</p>
+
+<ol>
+<li>複数トランザクション</li>
+<p>
+複数のトランザクションが走っている場合、
+ひとつのトランザクションがCOMMITすればWALバッファのデータはすべてWALログに同期書き込みされます。
+書き込まれたWALログの中にはまだCOMMITしてないトランザクションのWALデータが存在する場合もあります。
+<br>
+「<u>WALログに書き込まれるのはCOMMIT済みのデータだけではない</u>」ので注意してください。
+</p>
+
+<li>検索系SQL</li>
+<p>
+通常はINSERTやUPDATE、DELETEなど更新系のSQLがWALログを書き込みます。
+しかし状況によってはSELECT文など検索系SQLでもWALログの書き込みがあります。
+<br>
+例えば、
+SELECT文実行中にHOT([<2-08>])による不要なタプルの削除と並べ替えが発生すると、
+WALログ書き込みが行われます。
+</p>
+
+</ol>
+
+
+%CHAPTER CHECKPOINTとリカバリ
+
+<p>
+CHECKPOINTは[<2-05>]で解説しましたが、ここではWALログ書き込みとリカバリの観点から改めて解説します。
+</p>
+
+
+%SECTION CHECKPOINTの詳細
+
+<p>
+CHECKPOINTの実行シーケンスと、保存するデータについて説明します。
+</p>
+
+
+<table border=1>
+<caption>[<図2-52>]CHECKPOINTの詳細</caption>
+<tr><td>
+<left>
+<img src="./fig-2-09-11.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+
+<p>
+(1) CHECKPOINT開始
+</p>
+<blockquote>
+
+<p>
+CHECKPOINT開始時のWALログのLSNを"REDOポイント"としてメモリ上に記憶します。
+そして共有バッファのdirtyページをHDDに書き出します。
+<br>
+PostgreSQLのCHECKPOINTは"Fuzzy Checkpoint"(非ブロッキングチェックポイント)で、他の処理と並行して行います。
+よって、CHECKPOINTの開始時と終了時の間に、他のプロセスによってページが更新されることもあります。
+</p>
+
+
+
+</blockquote>
+
+<p>
+(2) CHECKPOINT実行終了
+</p>
+<blockquote>
+<p>
+CHECKPOINT情報をWALログに書き込みます。書き込むデータは
+構造体<a href="javascript:void(0)" id="category_xl_heap_update" onclick="show('structCheckPoint');">CheckPoint</a>
+に定義されています[<脚注28>]。
+<br>
+いくつか項目がありますが、リカバリの説明に必要なものを以下に示します。
+</p>
+
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>項目</th>	<th>説明</th>
+</tr><tr>
+<td>REDOポイント</td>	<td>CHECKPOINT開始時に記憶したREDOポイントを書き込む</td>
+</tr><tr>
+<td>Timeline</td>	<td>[<2-10>]を参照</td>
+</tr><tr>
+<td>Next XID</td>	<td>CHECKPOINT終了時点での、次のトランザクションに割り振るXIDを書き込む</td>
+</table>
+
+<div id="layer_structCheckPoint" style="display: none;position:relative;margin-left:15pt" class="close">
+%INCLUDE structCheckPoint.inc
+</div>
+</p>
+
+
+</blockquote>
+
+<p>
+(3) pg_controlファイル更新
+</p>
+<blockquote>
+
+<p>
+pg_controlファイルを更新します。このファイルはリカバリの出発点となる非常に重要なファイルです。
+このファイルが壊れたら、リカバリできなくなります。
+<br>
+pg_controlファイルは、各種データのバージョン番号など、全部で34項目のデータをもちます。
+ここではリカバリの説明に必要な以下の項目のみ示します。
+</p>
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>項目</th>	<th>説明</th>
+</tr><tr>
+<td>status</td>	<td>データベースの状態</td>
+</tr><tr>
+<td>Latest checkpoint location</td>	<td>最新のCHECKPOINT情報を書き込んだWALログのLSN</td>
+</tr><tr>
+<td>Prior checkpoint location</td>	<td>ひとつ前のCHECKPOINT情報を書き込んだWALログのLSN</td>
+</table>
+
+
+</blockquote>
+
+
+<p>
+pg_controlファイルはデータベースクラスタのサブディレクトリglobal下にあり、pg_controldataコマンドで内容を表示できます。
+</p>
+
+
+<pre>
+postgres> pg_controldata  /usr/local/pgsql/data
+pg_control version number:            903
+Catalog version number:               201105231
+Database system identifier:           5727008483010673663
+Database cluster state:               in production
+pg_control last modified:             Fri May 11 02:33:11 2012
+Latest checkpoint location:           1/59009AF0
+Prior checkpoint location:            1/59009A70
+Latest checkpoint's REDO location:    1/59009AC0
+Latest checkpoint's TimeLineID:       2
+Latest checkpoint's NextXID:          0/1073742230
+
+... 略 ...
+</pre>
+
+
+
+
+%SECTION リカバリ
+
+
+<p>
+次に、リカバリ処理を説明します。
+</p>
+
+
+<table border=1>
+<caption>[<図2-53>]リカバリの詳細</caption>
+<tr><td>
+<left>
+<img src="./fig-2-09-12.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<p>
+(1)サーバ再起動時、pg_controlファイルを読み込む
+</p>
+ <blockquote>
+<p>
+statusが異常終了("in production")ならば、以降のリカバリシーケンスを実行します。
+正常終了("shut down")の場合は通常の起動シーケンスを実行します。
+</p>
+
+
+ </blockquote>
+
+<p>
+(2)WALログからCHECKPOINT情報を読み出す
+</p>
+ <blockquote>
+<p>
+pg_controlファイルからCHECKPOINTロケーション(Latest checkpoint location)を求め、
+WALログからCHECKPOINT情報を読み出します。
+<br>
+もしもLatest checkpoint locationのデータが壊れていたら、
+Prior checkpoint location(一つ手前)のWALログデータを読み出します。
+<br>
+どちらも読み出せなかったらリカバリは失敗します。
+</p>
+
+
+ </blockquote>
+
+<p>
+(3)REDOポイントからWALログのデータを読み出してリカバリする
+</p>
+
+<blockquote>
+<p>
+CHECKPOINT情報で得たREDOポイントから、WALログを順次取り出します。
+<br>
+WALログのXLogRecordにはリソースマネージャが記述されているので、
+そのリソースマネージャにデータを渡し、決められた操作でリカバリを行います。
+<br>
+例えば、UPDATE文ならリソースマネージャHeapがデータを読み出して指定されたブロックの更新を行います。
+<br>
+概要でも触れましたが、バックアップブロックは無条件で上書きし、通常のWALログは該当ブロックのLSNと比較し、WALログのLSNが大きい場合にリカバリ(REDO)します。
+</p>
+
+
+ </blockquote>
+
+
+<p>
+なお、WALログを読み出す際、
+XLogRecordのXIDと先に読み出したNextXIDを比較し、
+もしも今読み出したWALログデータのXIDのほうが大きい場合は、
+保存してあるNextXIDの値を今読み出したXID+1に書き換えます。
+このようにして、データベースクラスタ内部でリカバリ後にXIDが重複することを避けます。
+</p>
+
+
+%SUBSECTION トランザクションの不定性
+
+<p>
+ここで、リカバリ後のトランザクションの不定性について述べます。
+</p>
+
+<p>
+COMMITのレスポンスを返す直前にPostgreSQLがクラッシュした状況を考えます。
+<br>
+このようなクリティカルな故障に関し、
+WALの書き込みに着目すると[<図2-54>]に示す2つのパターンがありますが、
+どちらのパターンもリカバリ後のデータベースクラスタの
+一貫性(consistency)と永続性(durability)は保たれます。
+
+</p>
+
+<table border=1>
+<caption>[<図2-54>] WAL書き込み時のクラッシュパターン</caption>
+<tr><td>
+<left>
+<img src="./fig-2-09-13.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<blockquote>
+<p>
+(1)WALログ書き込み前にクラッシュ
+<br>
+リカバリ後、このトランザクションはABORTしたようにみえる。
+</p>
+<p>
+(2)WALログ書き込み後にクラッシュ
+<br>
+このトランザクションはCOMMITしている。
+HDDに(同期)書き込みが完了したWALログはリカバリ時に再実行(REDO)され、データロストは発生しない。
+</p>
+</blockquote>
+
+
+<p>
+一方、ユーザやアプリケーションから見ると、
+COMMITのレスポンスが無かったのでトランザクションの結果は不定です。
+よってリカバリ後に作業を再開する場合は、
+まず最初にそのトランザクションがCOMMITされたのかABORTされたのかを確認しなければなりません。
+<br>
+もし、COMMITしているにも関わらずリカバリ後に再度データ更新すると、
+その操作が"べき等でない"場合はデータベースの論理的一貫性が損なわれる可能性があります。
+DBの説明でよく使われる銀行を例にすると、「同じ金額を2度振り込む」ことになるわけです。
+</p>
+
+
+<p>
+(PostgreSQLに限らず)一般的なRDBMSは、
+データベースの物理的な一貫性と永続性しか保証しません。
+よって、このようなクリティカルな故障における論理レベルの一貫性は、
+ユーザやアプリケーションが確保しなければなりません。
+</p>
+
+
+
+<p>
+同様の問題はレプリケーションのマスタ故障でも発生します。
+対策などの詳細は[<3-23>]で解説しています。
+</p>
+
+
+
+%CHAPTER WALログ書き込みに関する機能
+
+<p>
+WALログ書き込みに関するいくつかの機能を紹介します。
+</p>
+
+
+%SECTION 遅延コミット(Commit Delay)
+
+<p>
+遅延コミット(commit_delay)とは、
+設定パラメータcommit_delayに設定した時間だけCOMMITを待ち、
+複数のトランザクションのCOMMITを一度に行うことで、
+特にWALログのHDDへの(同期)書き込み回数を減らす仕組みです。
+</p>
+
+<p>
+遅延コミットは常に遅延するのではなく、設定パラメータcommit_siblings個以上のトランザクションが走っているときにcommit_delayだけCOMMITを待ちます。
+同時に走っているトランザクションがcommit_siblings個未満の場合は遅延しないで即座にCOMMITします。
+</p>
+
+
+<p>
+遅延コミットが機能した場合、ひとつのトランザクションに着目すれば最悪でcommit_delay時間だけCOMMITが遅延します(レスポンスが遅れる)が、
+サーバの総スループットは向上する可能性があります。
+</p>
+
+
+<table border=1>
+<caption>[<図2-55>] 遅延コミット</caption>
+<tr><td>
+<left>
+<img src="./fig-2-09-14.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+%SECTION WALライタと非同期コミット
+
+<p>
+WALライタは周期的にWALバッファを監視し、まだ書き込まれていないWALバッファ上のWALログをHDDに(同期)書き込みするプロセスです。デフォルトで稼働しています。
+<br>
+監視周期は設定パラメータwal_writer_delayで設定し、デフォルト値は200[ミリ秒]です。
+</p>
+
+
+<p>
+非同期コミットとは、WALログをWALバッファに書き込むだけでHDDへの(同期)書き込みを省き、WALログ書き込みによる性能低下を防ぐ機構です。
+<br>
+[<図2-49>]を例に具体的に述べると、関数XLogFlush()から同期書き込み(XLogWrite()とfsync())までの一連の処理を省略し、
+WALバッファのデータ書き込みはWALライタに任せます。
+</p>
+
+
+<p>
+念のため、通常のコミットと非同期コミットについて、WALバッファとWALログの書き込みの観点からまとめた図を示します([<図2-56>])。
+</p>
+
+
+<table border=1>
+<caption>[<図2-56>] 同期コミットと非同期コミット</caption>
+<tr><td>
+<img src="./fig-2-09-15.jpg"><br>
+</td></tr></table>
+
+<br>
+
+<p>
+図から明らかなように、
+COMMITのレスポンス時間は短縮されますが、
+WALライタがHDDに書き込む前にPostgreSQLサーバがクラッシュすると、COMMITしたデータが失われます。
+<br>
+このように、非同期コミットは耐障害性を犠牲にして処理速度を確保する機能なので、通常は使うべきでありません。
+</p>
+
+
+
+%CHAPTER 参考文献
+
+<ul>
+<li>LOCK関連とWALのボトルネックに関する議論 by 堀川隆氏</li>
+ <ul>
+ <li>http://bit.ly/HWy6ya</li>
+ <li>http://bit.ly/ISbxVN</li>
+ </ul>
+
+<li>pgbenchによるEarly Lock Releaseの評価 by 堀川隆氏</li>
+ <ul>
+　<li> http://bit.ly/V37jWS </li>
+ </ul>
+</ul>
+
+<p>
+WALログ書き込みのボトルネックに関する講演。資料内の参考文献も参考になります。
+</p>
+

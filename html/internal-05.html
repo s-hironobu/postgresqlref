@@ -1,0 +1,1201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+ <title>PostgreSQLバイブル草稿</title>
+ <link rel="stylesheet" type="text/css" media="screen" href="./default.css"">
+</head>
+
+<body>
+
+<script language=javascript>
+<!--
+function show(inputData) {
+var objID=document.getElementById( "layer_" + inputData );
+var buttonID=document.getElementById( "category_" + inputData );
+if(objID.className=='close') {
+objID.style.display='block';
+objID.className='open';
+}else{
+objID.style.display='none';
+objID.className='close';
+}
+}
+//-->
+</script>
+
+<div id="header">
+<h1 class="title">PostgreSQLバイブル草稿</title></h1>
+    <span class="small">
+</span>
+</div>
+
+
+<hr class="full_hr">
+<table style="width: 100%;" border="0">
+ <tbody><tr>
+  <td class="menubar">
+   <div id="menubar">
+
+
+<h5>PostgreSQLとは</h5>
+
+<li><a href="./index.html">PostgreSQLとは</a><br></li>
+
+<h5>PostgreSQLの内部構造</h5>
+<ul>
+<li><a href="./internal.html">とびら</a><br></li>
+</ul>
+<ol>
+<li><a href="./internal-01.html">プロセスとメモリ構造</a><br></li>
+<li><a href="./internal-02.html">データベースクラスタ、テーブルの構造</a></li>
+<li><a href="./internal-03.html">SQLの実行</a></li>
+<li><a href="./internal-04.html">プラン処理</a></li>
+<li><a href="./internal-05.html">バッファマネージャとバックグランドライタ</a></li>
+<li><a href="./internal-06.html">トランザクションIDと同時実行制御</a></li>
+<li><a href="./internal-07.html">VACUUM</a></li>
+<li><a href="./internal-08.html">HOTとIndex Only Scan</a></li>
+<li><a href="./internal-09.html">WAL(Write Ahead Logging)</a></li>
+<li><a href="./internal-10.html">アーカイブログとPITR</a></li>
+<li><a href="./internal-11.html">レプリケーション(Streaming ReplicationとHotStandby)</a></li>
+</ol>
+
+
+<h5>PostgreSQLサーバ管理</h5>
+
+<ul>
+<li><a href="./admin.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[PostgreSQLの基礎]<br>
+<li><a href="./admin-01.html">オブジェクト、データベース、スキーマ</a><br></li>
+<li><a href="./admin-02.html">システムカタログ</a><br></li>
+<li><a href="./admin-03.html">文字コードの扱い</a><br></li>
+
+
+[インストールと起動、停止]<br>
+<li><a href="./admin-04.html">インストール</a><br></li>
+<li><a href="./admin-05.html">データベースシステムの初期化 initdb</a><br></li>
+<li><a href="./admin-06.html">PostgreSQLサーバの起動/停止</a><br></li>
+
+
+[認証とアクセス制御]<br>
+<li><a href="./admin-07.html">認証とアクセス制御</a><br></li>
+<li><a href="./admin-08.html">クライアントのアクセス制御</a><br></li>
+<li><a href="./admin-09.html">権限について</a><br></li>
+<li><a href="./admin-10.html">ロールの作成と権限制御</a><br></li>
+
+<HR>
+
+[バックアップとアップグレード]<br>
+<li><a href="./admin-11.html">バックアップとアップグレード</a><br></li>
+<li><a href="./admin-12.html">ダンプとリストア</a><br></li>
+<li><a href="./admin-13.html">アップグレード</a><br></li>
+
+[保守、監視とチューニング]<br>
+<li><a href="./admin-14.html">保守、監視とチューニング</a><br></li> 
+<li><a href="./admin-15.html">稼働統計情報</a><br></li>
+<li><a href="./admin-16.html">実行ログの取得</a><br></li>
+<li><a href="./admin-17.html">モニタリングツール</a><br></li>
+<li><a href="./admin-18.html">ログと統計情報の分析</a><br></li>
+<li><a href="./admin-19.html">パラメータチューニング</a><br></li>
+
+[耐障害性、高可用性]<br>
+<li><a href="./admin-20.html">耐障害性、高可用性</a><br></li>
+<li><a href="./admin-21.html">アーカイブログとPITR</a><br></li>
+<li><a href="./admin-22.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-23.html">レプリケーションの故障対応</a><br></li>
+
+
+[FDW]<br>
+<li><a href="./admin-24.html">FDW</a><br></li>
+<li><a href="./admin-25.html">postgres_fdw</a><br></li>
+</ol>
+
+[追加の文章(未完)]<br>
+<li><a href="./admin-26.html">ロギング</a><br></li>
+<li><a href="./admin-27.html">統計情報</a><br></li>
+<li><a href="./admin-28.html">モニタリング</a><br></li>
+<li><a href="./admin-29.html">メンテナンス</a><br></li>
+</ol>
+
+
+<h5>設定パラメータ</h5>
+
+<ol>
+<li><a href="./param-01.html">postgresql.confの設定</a><br></li>
+<li><a href="./param-02.html">ファイルの場所</a><br></li>
+<li><a href="./param-03.html">接続と認証</a><br></li>
+<li><a href="./param-04.html">資源の消費</a><br></li>
+<li><a href="./param-05.html">WAL</a><br></li>
+<li><a href="./param-06.html">レプリケーション</a><br></li>
+<li><a href="./param-07.html">問い合わせ計画</a><br></li>
+<li><a href="./param-08.html">エラー報告とログ取得</a><br></li>
+<li><a href="./param-09.html">稼働統計情報</a><br></li>
+<li><a href="./param-10.html">AUTOVACUUM</a><br></li>
+<li><a href="./param-11.html">クライアント接続デフォルト</a><br></li>
+<li><a href="./param-12.html">ロック管理/バージョンとプラットフォーム互換性</a><br></li>
+</ol>
+
+
+<h5>psql</h5>
+<ul>
+<li><a href="./psql.html">・対話型インタフェースpsqlの使い方</a><br></li>
+</ul>
+
+<ol>
+<li><a href="./psql-01.html">psqlとは</a><br></li>
+<li><a href="./psql-02.html">PostgreSQLサーバとの接続/切断/再接続</a><br></li>
+<li><a href="./psql-03.html">データベース一覧表示</a><br></li>
+<li><a href="./psql-04.html">コマンドラインからSQL実行</a><br></li>
+<li><a href="./psql-05.html">バッチファイルの実行(メタコマンド)</a><br></li>
+<li><a href="./psql-06.html">情報表示</a><br></li>
+<li><a href="./psql-07.html">表示の制御</a><br></li>
+<li><a href="./psql-08.html">ラージオブジェクトの扱い</a><br></li>
+<li><a href="./psql-09.html">データのコピー</a><br></li>
+<li><a href="./psql-10.html">その他のメタコマンド</a><br></li>
+
+</ol>
+
+
+<h5>SQL</h5>
+
+<ul>
+<li><a href="./sql.html">・とびら</a><br></li>
+</ul>
+
+<ol>
+[SQL]<br>
+
+<li><a href="./sql-01.html">SQL語彙</a><br></li>
+<li><a href="./sql-02.html">テーブルスペースの作成/削除/変更</a><br></li>
+<li><a href="./sql-03.html">データベースの作成/変更/削除</a><br></li>
+<li><a href="./sql-04.html">テーブルの作成</a><br></li>
+<li><a href="./sql-05.html">外部キー</a><br></li>
+<li><a href="./sql-06.html">オブジェクトの継承/LIKE句</a><br></li>
+<li><a href="./sql-07.html">問い合わせ結果から新しいテーブルを作成</a><br></li>
+<li><a href="./sql-08.html">テーブルの削除</a><br></li>
+<li><a href="./sql-09.html">スキーマの定義/変更/削除</a><br></li>
+
+<li><a href="./sql-10.html">ALTER TABLE(1)</a><br></li>
+<li><a href="./sql-11.html">ALTER TABLE(2)</a><br></li>
+<li><a href="./sql-12.html">ALTER TABLE(3)</a><br></li>
+
+<li><a href="./sql-13.html">ロール</a><br></li>
+<li><a href="./sql-14.html">GRANT REVOKE(1)</a><br></li>
+<li><a href="./sql-15.html">GRANT REVOKE(2)</a><br></li>
+<li><a href="./sql-16.html">INSERT</a><br></li>
+<li><a href="./sql-17.html">SELECT</a><br></li>
+<li><a href="./sql-18.html">FROM句</a><br></li>
+<li><a href="./sql-19.html">WHERE句</a><br></li>
+
+<li><a href="./sql-20.html">WINDOW句、OVER句</a><br></li>
+<li><a href="./sql-21.html">共通テーブル式(CTE)</a><br></li>
+
+
+<li><a href="./sql-22.html">グループ化</a><br></li>
+<li><a href="./sql-23.html">DISTINCT句</a><br></li>
+<li><a href="./sql-24.html">テーブル結合</a><br></li>
+<li><a href="./sql-25.html">問い合わせの結合</a><br></li>
+<li><a href="./sql-26.html">ORDER BY</a><br></li>
+<li><a href="./sql-27.html">LIMIT OFFSET</a><br></li>
+<li><a href="./sql-28.html">FOR UPDATE/ FOR SHARE</a><br></li>
+<li><a href="./sql-29.html">サブクエリ</a><br></li>
+<li><a href="./sql-30.html">CASE式</a><br></li>
+<li><a href="./sql-31.html">VALUES</a><br></li>
+<li><a href="./sql-32.html">UPDATE</a><br></li>
+<li><a href="./sql-33.html">DELETE</a><br></li>
+<li><a href="./sql-34.html">TRUNCATE</a><br></li>
+
+<li><a href="./sql-35.html">インデックス</a><br></li>
+
+<li><a href="./sql-36.html">VIEW</a><br></li>
+<li><a href="./sql-37.html">シーケンス</a><br></li>
+<li><a href="./sql-38.html">トリガ</a><br></li>
+<li><a href="./sql-39.html">カーソル</a><br></li>
+<li><a href="./sql-40.html">プリペアステートメント</a><br></li>
+<li><a href="./sql-41.html">トランザクション</a><br></li>
+<li><a href="./sql-42.html">セーブポイント</a><br></li>
+<li><a href="./sql-43.html">2相コミット</a><br></li>
+<li><a href="./sql-44.html">LOCK</a><br></li>
+<li><a href="./sql-45.html">SET/SHOW/RESET</a><br></li>
+<li><a href="./sql-46.html">VACUUM</a><br></li>
+<li><a href="./sql-47.html">ANALYZE</a><br></li>
+<li><a href="./sql-48.html">EXPLAIN</a><br></li>
+<li><a href="./sql-49.html">COPY/IMPORT</a><br></li>
+<li><a href="./sql-50.html">COPY/EXPORT</a><br></li>
+<li><a href="./sql-51.html">関数定義</a><br></li>
+<li><a href="./sql-52.html">エクステンション</a><br></li>
+<li><a href="./sql-53.html">外部サーバの定義、変更、削除</a><br></li>
+<li><a href="./sql-54.html">外部サーバのユーザマップ定義、変更、削除</a><br></li>
+<li><a href="./sql-55.html">外部テーブルの定義、変更、削除</a><br></li>
+<hr>
+<li><a href="./sql-56.html">イベントトリガ</a><br></li>
+<li><a href="./sql-57.html">行レベルセキュリティ</a><br></li>
+
+<hr>
+<li><a href="./sql-60.html">新しい機能</a><br></li>
+</ol>
+
+
+<h5>関数</h5>
+
+[関数]<br>
+<ul>
+<li><a href="./function.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[データ型]<br>
+<li><a href="./type-01.html">データ型</a><br></li>
+<li><a href="./type-02.html">数値データ型</a><br></li>
+<li><a href="./type-03.html">文字データ型</a><br></li>
+<li><a href="./type-04.html">日付/時刻データ型</a><br></li>
+<li><a href="./type-05.html">日付/時刻表示形式とタイムゾーンの設定</a><br></li>
+<li><a href="./type-06.html">ブーリアン型</a><br></li>
+<li><a href="./type-07.html">ビット列データ型</a><br></li>
+<li><a href="./type-08.html">疑似データ型</a><br></li>
+<li><a href="./type-09.html">バイナリ列データ型</a><br></li>
+<li><a href="./type-10.html">Range型</a><br></li>
+<li><a href="./type-11.html">配列</a><br></li>
+<hr>
+<li><a href="./type-12.html">JSON型</a><br></li>
+
+<hr>
+[演算子]<br>
+<li><a href="./ope-01.html">演算子</a><br></li>
+<li><a href="./ope-02.html">論理演算子</a><br></li>
+<li><a href="./ope-03.html">比較演算子</a><br></li>
+<li><a href="./ope-04.html">算術演算子</a><br></li>
+<li><a href="./ope-05.html">文字列演算子</a><br></li>
+<li><a href="./ope-06.html">パターンマッチング</a><br></li>
+<li><a href="./ope-07.html">日付/時刻演算子</a><br></li>
+<li><a href="./ope-08.html">Range型演算子</a><br></li>
+<hr>
+<li><a href="./ope-09.html">JSON型演算子</a><br></li>
+
+
+<hr>
+[関数]<br>
+<li><a href="./func-01.html">関数</a><br></li>
+<li><a href="./func-02.html">算術関数</a><br></li>
+<li><a href="./func-03.html">集約関数/統計関数</a><br></li>
+<li><a href="./func-04.html">文字列関数</a><br></li>
+<li><a href="./func-05.html">日付・時刻関数</a><br></li>
+<li><a href="./func-06.html">型変換関数</a><br></li>
+<li><a href="./func-07.html">Range型関数</a><br></li>
+<li><a href="./func-08.html">Window関数</a><br></li>
+<li><a href="./func-09.html">セッション情報関数</a><br></li>
+<li><a href="./func-10.html">アクセス権限とスキーマ可視性照会関数</a><br></li>
+<li><a href="./func-11.html">データベースオブジェクト関数</a><br></li>
+<li><a href="./func-12.html">バックアップとリカバリ制御関数</a><br></li>
+
+<li><a href="./func-13.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-15.html">構成設定関数</a><br></li>
+<li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-17.html">レプリケーションSQL関数</a><br></li>
+
+<hr>
+<li><a href="./func-18.html">JSON関数</a><br></li>
+
+</ol>
+
+<!--
+[削除するもの]<br>
+<li><a href="./type-07.html">幾何データ型</a><br></li>
+<li><a href="./type-08.html">ネットワークアドレス型型</a><br></li>
+<li><a href="./ope-08.html">幾何演算子</a><br></li>
+<li><a href="./ope-09.html">ネットワーク演算子</a><br></li>
+<li><a href="./func-06.html">幾何関数</a><br></li>
+<li><a href="./func-07.html">ネットワークアドレス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-16.html">トランザクションID関数</a><br></li>
+<li><a href="./func-17.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-18.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-19.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-20.html">勧告的ロック用関数</a><br></li>
+-->
+
+<h5>PL/pgSQL</h5>
+
+<ol>
+<li><a href="./plpgsql.html">結果の返し方</a><br></li>
+<li><a href="./plpgsql-01.html">ストアドプロシージャ</a><br></li>
+<li><a href="./plpgsql-02.html">ストアドプロシージャの定義</a><br></li>
+<li><a href="./plpgsql-03.html">変数宣言と値の代入</a><br></li>
+**** まとめる >>
+<li><a href="./plpgsql-04.html">SELECT INTO文</a><br></li>
+<li><a href="./plpgsql-05.html">結果ステータスの取得</a><br></li>
+<li><a href="./plpgsql-06.html">動的なSQL文の実行</a><br></li>
+<< ここまで****
+<li><a href="./plpgsql-07.html">IF 条件分岐</a><br></li>
+<li><a href="./plpgsql-08.html">ループ処理</a><br></li>
+*** >>>
+<li><a href="./plpgsql-09.html">RETURN</a><br></li>
+<<< ***
+<li><a href="./plpgsql-10.html">ループ処理　LOOP</a><br></li>
+<li><a href="./plpgsql-11.html">ループ処理　WHILE</a><br></li>
+<li><a href="./plpgsql-12.html">ループ処理　FOR </a><br></li>
+<li><a href="./plpgsql-13.html">ループ処理 (複数行の問い合わせ結果を扱う)</a><br></li>
+<li><a href="./plpgsql-14.html">カーソルの利用</a><br></li>
+<li><a href="./plpgsql-15.html">カーソル変数の宣言</a><br></li>
+<li><a href="./plpgsql-16.html">カーソルのオープンとクローズ	OPEN / CLOSE</a><br></li>
+<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得		FETCH</a><br></li>
+<li><a href="./plpgsql-18.html">カーソルを使った例</a><br></li>
+<li><a href="./plpgsql-19.html">例外</a><br></li>
+*** >>>
+<li><a href="./plpgsql-21.html">CASE</a><br></li>
+<li><a href="./plpgsql-22.html">FOREACH</a><br></li>
+<<< ***
+</ol>
+
+
+<h5>Appendix(付録)</h5>
+
+<ol>
+<li><a href="./app-01.html">pgpool-II</a><br></li>
+<li><a href="./app-02.html">Pacemaker</a><br></li>
+</ol>
+
+
+<h5>おまけ:ネット公開(ページ数の関係で書籍には載せない)</h5>
+
+<ol>
+[pgpool]<br>
+<li><a href="./ha-06.html">pgpool-II セットアップ</a><br></li>
+<li><a href="./ha-07.html">pgpool-II レプリケーションモード</a><br></li>
+<li><a href="./ha-08.html">pgpool-II マスタースレーブモード</a><br></li>
+[Pacemaker]<br>
+<li><a href="./ha-10.html">Pacemaker</a><br></li>
+</ol>
+
+</div>
+<hr class="full_hr">
+</div>
+
+  </td>
+  <td valign="top">
+   <div id="body">
+
+<h2>バッファマネージャとバックグランドライタ</h2>
+
+<p>
+PostgreSQLはメモリ上に確保した共有バッファにデータブロックを読み込み、データ操作を行います。
+これはもちろん、HDDの読み書きが遅すぎるためで、
+共有バッファをキャッシュ(cache)として利用しています。
+このキャッシュ機能を司るのがバッファマネージャです。
+</p>
+
+<p>
+バッファマネージャの性能はDBMSの性能に直結するので、バージョン8.0から8.3にかけて大幅な改良が施され、現在でも改善が続いています。
+</p>
+
+
+<p>
+共有バッファ上で書き換えられたデータは、何らかのタイミングでHDDに書き込まなければなりません。
+<br>
+PostgreSQLはバックグランドライタというサブプロセスが、他の処理を邪魔せずに書き換えられたページをHDDに書き込みます。
+CHECKPOINTもバックグランドライタ(バージョン9.2からはCHECKPOINTER)が実行します。
+</p>
+
+<p>
+以下、バッファマネージャの機構と、バックグランドライタの動作について説明します。
+</p>
+
+<div class="jumpmenu"></div><h3>バッファマネージャの概要</h3>
+
+
+
+<p>
+バッファマネージャはバッファテーブル、バッファディスクリプタ(管理)層、およびバッファプールの３層構造になっています([<図2-16>])。
+</p>
+
+
+<table border=1>
+<caption>[<図2-16>]バッファマネージャの構造</caption>
+<tr><td>
+<left>
+<img src="./fig-2-05-01.jpg"><br>
+</left>
+</td></tr></table>
+
+
+<p>
+PostgreSQLがデータにアクセスするときの最小単位はブロックで、メモリに読み込む場合も8192[byte]単位で読み込みます。
+共有バッファに読み込んだブロックを「ページ」と呼びます。
+特に、書き込みなどで内容が変更されたページを「dirtyページ」と呼びます。
+</p>
+
+
+<div class="jumpmenu"></div><h4>バッファテーブル</h4>
+<p>
+テーブル(リレーション)とブロックの組を「BufferTag」と呼びます([<脚注9>])。
+</p>
+
+
+<blockquote><table BORDER="1"><tr><td>脚注9</td><td>
+
+<p>
+正確には[テーブル(リレーション)、Fork、ブロック]の3つ組ですが、ここでForkの説明は省略します。
+</p>
+</td></tr></table></blockquote>
+
+
+<p>
+postgresプロセスはBufferTagをキーとしてハッシュテーブルBufferTableを検索し、バッファディスクリプタを経由してバッファプールの該当するページにアクセスします。
+</p>
+
+<div class="jumpmenu"></div><h4>バッファディスクリプタ層</h4>
+<p>
+バッファディスクリプタとは１つのページを管理するためのデータ構造です。
+バッファディスクリプタ層は、それらデータ構造の集合と管理アルゴリズムから成ります。
+<br>
+バッファディスクリプタ層は大まかに次の2つの役割を受け持ちます。
+<p>
+
+
+<ol>
+
+
+<li>ページの入れ替え</li>
+<p>
+共有バッファをキャッシュとして利用しますが、メモリサイズは有限なので、
+新しいページを読み込む場所がない場合は、使っていないページと交換しなければなりません。
+交換されるページを「victimページ」と呼びます。
+<br>
+victimページを選ぶアルゴリズムは「ページ置換アルゴリズム」と呼ぶことがあります。
+PostgreSQLのページ置換アルゴリズムはバージョン8.0から8.1にかけて何度か変更されました。
+詳細は後述します。
+</p>
+
+
+<li>競合の調停</li>
+<p>
+各ページは複数のpostgresプロセスからアクセスされることも頻繁にあるので、
+同時に書き込みしたり、勝手に共有バッファから削除しないよう、調停機構が必要です。
+<br>
+バッファマネージャだけでなく、バッファディスクリプタ毎にロック機構を持ち、プロセス間の競合を避けます。
+</p>
+
+</ol>
+
+
+<div class="jumpmenu"></div><h4>バッファプール</h4>
+
+<p>
+バッファプールは実際にページを保存している領域です。
+</p>
+
+<div class="jumpmenu"></div><h3>バッファマネージャの進化</h3>
+
+<p>
+バッファマネージャの性能はRDBMSの同時実行性能に大きく影響します。
+<br>
+[<表2-05>]にPostgreSQLにおけるページ置換アルゴリズムと、バッファマネージャ全体を制御するロックの変遷を示します[<脚注10>]。
+本書ではバージョン8.1以降のバッファディスクリプタの機構について説明します。
+</p>
+
+<table border=1>
+<caption>[<表2-05>] ページ置換アルゴリズムとロックの変遷</caption>
+<tr bgcolor="#cccccc">
+<th rowspan=2>バージョン</th>	<th colspan=2>ページ置換アルゴリズム</th>	<th colspan=2>バッファマネージャのロック</th>
+</tr><tr bgcolor="#eeeeee">
+				<th>方式</th>	<th>説明</th>			<th>PostgreSQL<br>での呼称</th>	<th>説明</th>
+
+</tr><tr>
+<td>7.4まで</td>	<td>LRU</td>	<td>"Least Recently Used"の略称。最もオーソドックスなアルゴリズム。</td>	<td valign=top rowspan=3>BufMgrLock</td> <td valign=top rowspan=3>排他ロックのみ。ページの入れ替えだけでなく、読み取りでも排他ロックをかける([<脚注11>])。</td> 
+
+</tr><tr>
+<td>8.0.0〜8.0.1</td>	<td>ARC</td>	<td>"Adaptive Replacement Cache"の略称。LRUのバリエーション。IBMが特許申請したため、8.0.2で不採用となった。</td>
+
+</tr><tr>
+<td>8.0.2〜8.0.36</td>	<td>2Q</td>	<td>ARC特許問題回避のために行われた一時的実装。	</td>
+
+</tr><tr>
+<td>8.1</td>	<td rowspan=2>Clocksweep</td>	<td rowspan=2>実際はClocksweepのバリエーションで、様々な改良を加えている。</td>	<td rowspan=2>BufMappingLock</td> <td>読み取りでは共有ロック、ページの入れ替え時だけ排他ロックをかける。</td>
+
+
+</tr><tr>
+<td>8.2以降</td>	<td>ロックを(デフォルトで)16分割して、より並列実行性を高めた。</td>
+
+
+</tr></table>
+
+<br>
+
+<p>
+同時実行制御のための様々なレベルでの排他制御（要するにロックの実装)も性能に影響を与えます。
+よって、バッファマネージャのみならずPostgreSQL全般でロック関係の改良が続いています。
+特にCPUのマルチコア化が進むにつれて、並列処理性能を向上させるための努力がなされています。
+</p>
+
+
+
+
+<blockquote><table BORDER="1"><tr><td>脚注10</td><td>
+
+<p>
+念のため付記しますが、PostgreSQLが採用したページ置換アルゴリズムは、ARCを除いてすべて古典的なアルゴリズムです。
+Clocksweepも、少なくとも1970年代には広く研究されていました。
+</p>
+</td></tr></table></blockquote>
+
+
+<blockquote><table BORDER="1"><tr><td>脚注11</td><td>
+<p>
+postgresプロセスが同時にアクセスしようとしても、BufMgrLockが排他ロックなので同時に読み込みできるのは一つのプロセスだけです。これは並列処理の大きなボトルネックとなっていました。
+</p>
+</td></tr></table></blockquote>
+
+
+<div class="jumpmenu"></div><h3>バッファディスクプリプタの構造</h3>
+
+
+<p>
+バージョン8.1以降のバッファディスクリプタと管理層について説明します。
+バッファディスクリプタを定義する構造体
+<a href="javascript:void(0)" id="category_BufferDesc" onclick="show('BufferDesc');">BufferDesc</a>
+は"src/include/storage/buf_internals.h"で定義されています。
+<div id="layer_BufferDesc" style="display: none;position:relative;margin-left:15pt" class="close">
+
+<pre>
+/*
+ * Flags for buffer descriptors
+ *
+ * Note: TAG_VALID essentially means that there is a buffer hashtable
+ * entry associated with the buffer's tag.
+ */
+#define BM_DIRTY                                (1 << 0)                /* data needs writing */
+#define BM_VALID                                (1 << 1)                /* data is valid */
+#define BM_TAG_VALID                    (1 << 2)                /* tag is assigned */
+#define BM_IO_IN_PROGRESS               (1 << 3)                /* read or write in progress */
+#define BM_IO_ERROR                             (1 << 4)                /* previous I/O failed */
+#define BM_JUST_DIRTIED                 (1 << 5)                /* dirtied since write started */
+#define BM_PIN_COUNT_WAITER             (1 << 6)                /* have waiter for sole pin */
+#define BM_CHECKPOINT_NEEDED    (1 << 7)                /* must write for checkpoint */
+#define BM_PERMANENT                    (1 << 8)                /* permanent relation (not unlogged) */
+
+
+src/include/storage/buf_internals.h
+typedef struct sbufdesc
+{
+   BufferTag    tag;                 /* ID of page contained in buffer */
+   BufFlags     flags;               /* see bit definitions above */
+   uint16       usage_count;         /* usage counter for clock sweep code */
+   unsigned     refcount;            /* # of backends holding pins on buffer */
+   int          wait_backend_pid;    /* backend PID of pin-count waiter */
+   slock_t      buf_hdr_lock;        /* protects the above fields */
+   int          buf_id;              /* buffer's index number (from 0) */
+   int          freeNext;            /* link in freelist chain */
+
+   LWLockId     io_in_progress_lock; /* to wait for I/O to complete */
+   LWLockId     content_lock;        /* to lock access to buffer contents */
+} BufferDesc;
+</pre>
+
+</div> 
+
+
+ここでは簡略化して主要な5項目のみ説明します([<図2-17(2)>]参照)。
+</p>
+
+
+
+<br>
+<table border=1>
+<caption>[<図2-17>]バッファディスクリプタ層とバッファディスクリプタ</caption>
+<tr><td>
+<left>
+<img src="./fig-2-05-02.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>役割</th>	<th>データ項目</th>	<th>説明</th>
+</tr><tr>
+<td>アクセスされているか否かをカウントする</td><td>refcount</td>
+<td>
+refcountには、現時点でアクセスしているpostgresプロセスの数を保存する。
+postgresプロセスがアクセスするときは1を加え、アクセスをやめるときは1を減じる。
+<br>
+postgresプロセスがrefcountに1を加えることを「"Pin"を立てる」、減じることを「"Pin"を降ろす」という。
+<br>
+refcountが0のバッファディスクリプタは「Pinが立っていない」、1以上のものは「Pinが立っている」という。
+ </td>
+
+</tr><tr>
+<td>アクセスされた回数をカウントする</td><td>usage_count</td>
+ <td>
+usage_countには、そのページが読まれた回数を保存する。この値はページ置換アルゴリズムが利用する。
+ </td>
+
+</tr><tr>
+<td>dirtyか否かを判定する</td>	<td>flagsの0ビット目</td>
+ <td>
+ページが更新されたかどうかを記録する。更新されたページは"dirty"なので、HDDに書き込む必要がある。
+ </td>
+
+</tr><tr>
+<td>プロセス間のアクセス制御を行う</td> <td>context_lock,<br>io_in_progress_lock</td>
+ <td>
+どちらもLWロック(Lightweight Lock)である。
+詳細はバッファマネージャのアルゴリズムで説明する。
+ </td>
+
+</tr><tr>
+<td>ページを保存しているバッファプールのid</td> <td>buf_id</td>
+ <td>
+バッファプールは配列と同じ構造を持ち、インデックスbuf_idでページにアクセスする。(buf_idは0から数える。)
+ </td>
+
+</table>
+
+<br>
+
+
+<p>
+バッファディスクリプタ層は配列で実装されており、単方向リングリストとして利用します([<図2-17(1)>]参照)。
+<br>
+また、ページ置換アルゴリズムClocksweepのためにnextVictimBufferという整数値を確保します。Clocksweepの詳細はバッファマネージャのアルゴリズムで解説します。
+
+</p>
+
+
+<p>
+以降、説明の便宜上、バッファディスクリプタを論理的に3つに分けます([<図2-18>])。図示する際もこの分類を利用します。
+</p>
+
+<table border=1>
+<caption>[<図2-18>]バッファディスクリプタの論理構造</caption>
+<tr><td>
+<left>
+<img src="./fig-2-05-03.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+
+<ul>
+<li>Freelistに属するもの(未使用)</li>
+ <p>
+起動直後のバッファディスクリプタはすべてFreelistにつながれていて、
+データを読み込む場合はFreelistの先頭から外して使用する。
+<br>
+ディスククリプタがFreelistに戻るのは、テーブルやデータベースを削除したとき、
+およびVACUUM FULLで不要ブロックが回収されたときだけである。
+よって"Freelistは未使用のバッファディスクリプタの集合"と見なしても支障はない。
+ </p>
+
+
+<li>使用中のもの</li>
+ <p>
+Pinが立っている、つまりrefcountが1以上のバッファディスクリプタはpostgresプロセスが使用中である。
+ </p>
+
+<li>使用済みのもの</li>
+ <p>
+アクセスされなくなったバッファディスクリプタは使用済みになる。refcountは0で「Pinは立っていない」。
+ </p>
+
+</ul>
+
+
+<div class="jumpmenu"></div><h4>ロックの階層</h4>
+
+<p>
+[<表2-06>]にバッファマネージャに関連するロックをまとめます。
+具体的な使い方は後述するアルゴリズムを参照してください。
+</p>
+
+<table border=1>
+<caption>[<表2-06>]バッファマネージャに関係するロック</caption>
+<tr bgcolor="#cccccc">
+<th>ロックの範囲</th>	<th>ロック</th>		<th>説明</th>
+</tr><tr>
+<td rowspan=2>バッファマネージャ全体</td>
+<td>BufMappingLock</td>		<td>バッファマネージャ全体を制御する。ページへのアクセスでは共有ロック、(victimページを選んだ後)ページ置換する際は排他ロックをかける。</td>
+</tr><tr>
+<td>BufFreelistLock</td>	<td>victimページを選ぶ際にかける。排他ロックのみ。</td>
+</tr><tr>
+<td rowspan=2>バッファディスクリプタ毎</td>
+<td>content_lock</td>		<td>ページの読み書きで使う。読み取りは共有ロック、ページの更新を伴う書き込みは排他ロックをかける。</td>
+</tr><tr>
+<td>io_in_progress_lock</td>	<td>HDDからの読み込み時、排他ロックをかける。</td>
+</tr></table>
+
+<br>
+<br>
+
+<div class="jumpmenu"></div><h5>BufMappingLockの分割による並列実効性の向上</h5>
+
+<p>
+BufMappingLockは、通常は共有ロックで複数プロセスが同時にアクセスでき、
+victimページを選択した直後にだけ排他ロックをかけます。
+</p>
+<p>
+バージョン8.2で、BufMappingLockをデフォルトで16のブロックに分けて、別々にロックをかけることができるようになり、さらに並列実効性が向上しました([<脚注12>])。
+</p>
+
+
+<blockquote><table BORDER="1"><tr><td>脚注12</td><td>
+<p>
+分割数を変更するには、include/storage/lwlock.hのマクロNUM_BUFFER_PARTITIONSを直接書き換えて、再コンパイルします。
+</p>
+</td></tr></table></blockquote>
+
+
+
+<br>
+
+
+<div class="jumpmenu"></div><h3>バッファマネージャのアルゴリズム</h3>
+
+<p>
+バッファマネージャのアルゴリズムを説明します。
+</p>
+
+<p>
+はじめにページへのアクセスについて、
+ページが既にバッファプールにある場合と、
+HDDから新たに読み込む場合に分けて説明します。
+<br>
+次にアクセスをやめる場合を示します。
+</p>
+
+
+<div class="jumpmenu"></div><h4>読み込み済のページにアクセスする場合</h4>
+
+<p>
+読み込み済みのページは、使用中か使用済みのバッファディスクリプタを使ってアクセスできます。
+<br>
+使用中も使用済みも、アクセス方法は同じです([<図2-19>])。
+</p>
+
+<font color="#ff0000">
+図中、小さな箱の数字もすべて意味があるので、きっちりあわせてください。
+</font>
+
+
+<br>
+<table border=1>
+<caption>[<図2-19>]読み込み済のページにアクセスする場合</caption>
+<tr><td>
+<left>
+<img src="./fig-2-05-04.jpg"><br>
+</left>
+</td></tr></table>
+
+
+
+
+<blockquote>
+<p>
+(1)BufMappingLockで共有ロックをかけ、該当するバッファディスクリプタを見つける。
+<br>
+(2)みつけたバッファディスクリプタにPinを立て(refcountに+1する)、usage_countにも+1する。
+<br>
+(3)BufMappingLockを解除する。
+<br>
+</p>
+</blockquote>
+
+
+<br>
+<p>
+ここで、バッファにアクセスした後の処理も説明します。
+</p>
+
+<p>
+アクセスした後、そのページを読み込む場合は
+content_lockに共有ロックをかけます。読み込みは並列に実行できるのです。
+<br>
+他方、そのページにデータを書き込む場合はcontent_lockに排他ロックをかけます([<脚注13>])。
+そして実際に更新したらdirtyビットを立てます。
+これによってそのページは"dirtyページ"となります。
+</p>
+
+<blockquote><table BORDER="1"><tr><td>脚注13</td><td>
+<p>
+タプルのx_minやx_maxを更新する場合も排他ロックが必要です。x_minとx_maxは[<2-06>]で解説します。
+</p>
+</td></tr></table></blockquote>
+
+
+
+<div class="jumpmenu"></div><h4>HDDからデータを読み込む場合</h4>
+
+<p>
+バッファプールにないデータにアクセスするには、バッファディスクリプタを用意してHDDからデータを読み込まなければなりません。
+<br>
+このとき、２つの可能性があります。Freelistに未使用のバッファディスクリプタがある場合とない場合です。
+どちらの場合も一時的にBufMappingLockで排他ロックをかけてBufferTableを更新します。
+</p>
+
+<p>
+まず、Freelistにディスクリプタが残っている場合を示します([<図2-20>])。
+サーバ起動直後はこの状況が続きます。
+</p>
+
+<font color="#ff0000">
+図中、小さな箱の数字もすべて意味があるので、きっちりあわせてください。
+</font>
+
+
+
+<br>
+<table border=1>
+<caption>[<図2-20>] Freelistからバッファディスクリプタを選ぶ場合</caption>
+<tr><td>
+<left>
+<img src="./fig-2-05-05.jpg"><br>
+</left>
+</td></tr></table>
+<br>
+
+
+
+<blockquote>
+<p>
+(1)BufFreelistLockで排他ロックをかけて、Freelistからvictimを選ぶ。
+victimディスクリプタにPinを立てて(refcount++)、usage_countに+1する。
+BufFreelistLockはすぐに解除する。
+<br>
+(2)BufMappingLockで排他ロックをかけ、BufferTableを更新する。
+更新後すぐにBufMappingLockを解除する。
+<br>
+(3)io_in_progress_lockで排他ロックをかけ、HDDからデータを読み込む。
+<br>
+</p>
+</blockquote>
+
+
+
+<p>
+サーバがしばらく稼働するとFreelistは尽きるので、
+使用済みのバッファディスクリプタからvictimを選ばなければなりません([<図2-21>])。
+バージョン8.1からはClocksweepで選びます。
+</p>
+
+<font color="#ff0000">
+図中、小さな箱の数字もすべて意味があるので、きっちりあわせてください。
+</font>
+
+<br>
+<table border=1>
+<caption>[<図2-21>] Clocksweepでvictimを選ぶ場合</caption>
+<tr><td>
+<left>
+<img src="./fig-2-05-06.jpg"><br>
+</left>
+</td></tr></table>
+
+
+<blockquote>
+<p>
+(1)BufFreelistLockで排他ロックをかけ、Clocksweepで使用済みバッファディスクリプタからvictimを探す。
+victimの選択基準は「NextVictimBufferが最初に指した、Pinが立っていないusage_count=0のディスクリプタ」である。
+<br>
+(2)victimページにPinを立てて(refcount++)、usage_countに1を加え(usage_count++)、BufFreelistLockを解除する。
+<br>
+(3)もしもvictimがdirtyページなら、content_lockで共有ロックをかけてHDDに書き込む(Flushする)。書き込み後すぐにロックを解除する。
+<br>
+(4)BufMappingLockで排他ロックをかけ、BufferTableを更新する。更新後すぐにロックを解除する。
+<br>
+(5)io_in_progress_lockで排他ロックをかけ、 HDDからデータを読み込む。
+</p>
+</blockquote>
+
+
+<p>
+Clocksweepのアルゴリズムを以下に示します。
+<br>
+
+<blockquote>
+<p>[1] nextVictimBufferの指すバッファディスクリプタを検査する</p>
+<p>[2] Pinの立っていない(使用済みの)ディスクリプタの場合:</p>
+ <ul>
+ <li>usage_count=0ならvictimに選ぶ</li>
+ <li>usage_countが1以上なら、1を減じる(usage_count--)</li>
+ </ul>
+<p>[3] nextVictimBufferに1を加え(共有バッファの末尾までいったら0にリセットして) [1]に戻り、victimが見つかるまで続ける</p>
+</blockquote>
+
+<p>
+(容易に想像がつくように)nextVictimBufferを"時計の針のように回しながら"victimページを探すので"Clocksweep"と呼びます。
+</p>
+
+<p>
+Clocksweepで検査した使用済みのバッファディスクリプタは、usage_countを1減じます。
+よってnextVictimBufferを回しつづければ、(使用済みディスクリプタが存在する限り)必ずusage_countが0になるvictimディスクリプタが見つかります。
+<br>
+すべてのページが使用中の場合は、エラーを返します。
+</p>
+
+
+
+<div class="jumpmenu"></div><h4>アクセスをやめる場合</h4>
+
+<p>
+アクセスをやめる場合、Pinを降ろす(refcountを-1する)だけです。usage_countは変更しません。
+<br>
+アクセスしている他のpostgresプロセスがあればrefcountは1以上の値を持つので、そのバッファディスクリプタの"Pinは立った状態"のままです。
+refcountが0になれば"Pinは立っていない状態"で、使用済みとなります。
+</p>
+
+
+<br>
+<table border=1>
+<caption>[<図2-22>] アクセスをやめる場合</caption>
+<tr><td>
+<left>
+<img src="./fig-2-05-07.jpg"><br>
+</left>
+</td></tr></table>
+<br>
+
+
+<div class="jumpmenu"></div><h3>ローカルバッファとリングバッファ</h3>
+
+<p>
+バッファマネージャの解説の最後に、一時テーブルを扱うローカルバッファと、バージョン8.3から導入されたリングバッファについて説明します。
+</p>
+
+<div class="jumpmenu"></div><h4>ローカルバッファ</h4>
+
+<p>
+各postgresプロセスはローカルバッファを確保しています(設定パラメータtemp_buffersでサイズを指定)。
+これは一時テーブルを保存する場合に用います。
+</p>
+
+<br>
+<table border=1>
+<caption>[<図2-23>] ローカルバッファ</caption>
+<tr><td>
+<left>
+<img src="./fig-2-05-08.jpg"><br>
+</left>
+</td></tr></table>
+
+
+<p>
+共有バッファ上のバッファプールにアクセスするには、buf_idに0から正の値を指定します。
+他方、ローカルバッファは-1から負の値でアクセスします。
+<br>
+このような実装の工夫によって、全postgresプロセスがアクセスする(通常の)テーブルと、自身しかアクセスしない一時テーブルを統一的に扱うことができます。
+</p>
+
+<div class="jumpmenu"></div><h4>リングバッファと同期シーケンシャルスキャン</h4>
+
+<p>
+バージョン8.3で実装されたリングバッファと同期シーケンシャルスキャンを解説します。
+</p>
+
+<p>
+大規模なテーブルをシーケンシャルスキャンすると、共有バッファ上のページがどんどん追い出されてしまいます。
+このような状況が発生すると共有バッファのキャッシュ効果が損なわれるので、好ましいことではありません。
+<br>
+この問題に対処するため、
+例えばスキャンするテーブルデータが共有バッファの1/4を越える場合など、
+特定の条件下では256[Kbyte]のリングバッファを一時的に確保し、
+この小さなバッファ上で操作を行う機能が実装されました([<図2-24>])。
+</p>
+
+
+<br>
+<table border=1>
+<caption>[<図2-24>] リングバッファ</caption>
+<tr><td>
+<left>
+<img src="./fig-2-05-09.jpg"><br>
+</left>
+</td></tr></table>
+
+
+<br>
+
+
+<p>
+リングバッファの導入に伴い、同期シーケンシャルスキャンも実装されました([<図2-25>])。これは複数のトランザクションが巨大なテーブルを同時にスキャンする場合に有効です。
+</p>
+
+
+<br>
+<table border=1>
+<caption>[<図2-25>]同期シーケンシャルスキャン<br></caption>
+<tr><td>
+<left>
+<img src="./fig-2-05-10.jpg"><br>
+</left>
+</td></tr></table>
+
+<p>
+[<図2-25>]において、トランザクションAは巨大なテーブルをリングバッファに読み込みながらスキャンしています。
+<br>
+そこにトランザクションBも同じテーブルのスキャンを始めたとします。
+このとき、トランザクションBはテーブルの先頭でなく、リングバッファに存在しているページから読み始め、
+先行するトランザクションAと並列にテーブルの末尾までスキャンします。
+<br>
+トランザクションAのスキャンが終わると、トランザクションBはテーブルの先頭に戻って残りのページをスキャンします。
+</p>
+
+<p>
+この機構によって、巨大テーブルを同時にスキャンする場合でも、ある程度キャッシュ効果を維持できます。
+</p>
+
+
+<div class="jumpmenu"></div><h3>dirtyページの書き込みとバックグランドライタ</h3>
+
+
+<p>
+共有バッファ上のdirtyページはいずれHDDに書き込まなければなりません。
+書き込みタイミングは次のとおりです。
+</p>
+
+
+<ol>
+<li>victimページとしてデータを書き換えるとき</li>
+<p>
+(前述のように)各postgresプロセスがページ置換する時に、dirtyページを書き込む。
+</p>
+
+<li>CHECKPOINT処理が起動し、バッファプール上のdirtyページをまとめて書き込むとき</li>
+<p>
+他のRDBMSと同様、CHECKPOINTでdirtyページを書き込む([<図2-26(1)>]参照)。
+</p>
+
+<li>バックグランドライタが少しずつdirtyページを書き込むとき</li>
+<p>
+バージョン8.0から追加されたバックグランドライタで、少量だが(非常に短い周期で)絶えずdirtyページをHDDに書き込み続ける。([<図2-26(2)>]参照)。
+</p>
+</ol>
+
+
+<p>
+バージョン9.1までのPostgreSQLは、バックグランドライタがCHECKPOINT処理も担当していました。
+バージョン9.2でバックグランドライタからCHECKPOINT機能が独立し、サブプロセスCHECKPOINTERが追加されました。
+</p>
+
+<br>
+<table border=1>
+<caption>[<図2-26>] CHECKPOINTとバックグランドライタによるdirtyページの書き込み</caption>
+<tr><td>
+<left>
+<img src="./fig-2-05-11.jpg"><br>
+</left>
+</td></tr></table>
+<br>
+
+<p>
+[<3-15>]に解説した稼働統計情報pg_stat_bgwriterで、
+CHECKPOINTの実行回数や書き込んだページ数など、バックグランドライタの稼働状況がわかります([<脚注14>])。
+</p>
+
+<p>
+なお、dirtyページの書き込みは同期書き込みです。具体的にはdirtyページをwrite()した後、システムコールfsync()を呼びます([<脚注15>])。
+</p>
+
+
+<blockquote><table BORDER="1"><tr><td>脚注14</td><td>
+<p>
+バージョン9.2から、稼働統計情報pg_stat_bgwriterのcheckpoint_write_timeとcheckpoint_sync_timeで、
+write()に要した時間の総計とfsync()に要した時間の総計も表示できます(単位は[ミリ秒])。
+</p>
+</td></tr></table></blockquote>
+
+
+
+<blockquote><table BORDER="1"><tr><td>脚注15</td><td>
+<p>
+CHECKPOINTは常にfsync()呼出しによる同期書き込みです。設定パラメータwal_sync_methodはCHECKPOINTには影響しないので注意してください。
+<br>
+ただし、設定パラメータfsyncを無効(off)にすると、WALログだけなくCHECKPOINTも非同期書き込みになります(fsync()を呼ばない)。
+</p>
+</td></tr></table></blockquote>
+
+<p>
+以下、バックグランドライタとCHECKPOINTERの動作について説明します。
+</p>
+
+
+<div class="jumpmenu"></div><h4>CHECKPOINTと負荷分散CHECKPOINT</h4>
+
+<p>
+これらの処理はバージョン9.1まではバックグランドライタ、バージョン9.2以降はCHECKPOINTERが行います。
+<br>
+なお、ここではdirtyページの書き込みという観点からCHECKPOINTを説明しますが、
+[<2-09>]では耐障害性の観点からCHECKPOINTを説明し直しているので参照してください。
+</p>
+
+<p>
+CHECKPOINT処理のトリガは次の5つです。
+</p>
+
+<ol>
+<li>postgresプロセスからCHECKPOINTコマンドが入力された時</li>
+<li>パラメータcheckpoint_timeoutで設定した時間毎に定期的に起動</li>
+ <p>
+デフォルトの場合、300[秒]間隔でCHECKPOINT処理を行う。
+ </p>
+<li>書き込まれたWALバッファの数が、パラメータcheckpoint_segmentsに設定した数に達したとき</li>
+ <p>
+大量の更新があった場合は、念のためにCHECKPOINT処理を起動してdirtyページをHDDに(同期)書き込みする。
+WALについては[<2-09>]で詳しく説明する。
+ </p>
+<li>関数pg_start_backup()の実行時</li>
+ <p>
+この関数はベースバックアップ取得に実行する([<2-10>]参照)。
+ </p>
+<li>PostgreSQLサーバの終了時</li>
+
+</ol>
+
+<p>
+特に2.と3.のCHECKPOINT処理に関して、バージョン8.3で負荷分散CHECKPOINTがサポートされました。
+これはCHECKPOINT起動時に一挙にdirtyページを書き込んでHDD負荷を集中させるのでなく、
+CHECKPOINTの起動周期(checkpoint_timeout)内の指定した期間に書き込みを分散する機能です。
+[<図2-26(3)>]を参照してください。
+<br>
+負荷分散の設定パラメータはcheckpoint_completion_targetで、0から1.0の値を設定できます。
+</p>
+
+
+
+<div class="jumpmenu"></div><h4>周期的なdirtyページの書き込み</h4>
+
+<p>
+この処理はバックグランドライタが行います。
+</p>
+
+
+<p>
+バックグランドライタは設定パラメータbgwriter_delayに指定された周期(サイクル)でバッファプールをスキャンしつづけます。
+デフォルトでは200[ミリ秒]という短い周期です。
+<br>
+1周期毎に、設定された割合のdirtyでPINが立ってないページについて、PINを立てて共有ロックをかけてからデータを書き出します。
+<br>
+バックグランドライタの実行にBufFreelistLockは不要、且つページには共有ロックしか必要としないので、他の処理への影響は軽微です。
+</p>
+
+<p>
+バックグランドライタは短い周期で「少しずつ」dirtyページの内容を書き込むことがポイントです。
+手当たり次第にdirtyページをHDDに書き込んでしまえば、HDDアクセスの負荷が分散されないからです。
+<br>
+バージョン8.3以降は設定パラメータbgwriter_lru_maxpagesによって、1周期に書き込める最大ページ数を設定します。
+また、書き込みを平滑化する設定パラメータbgwriter_lru_multiplierもサポートされました。詳細は[<4-04>]を参照してください。
+</p>
+
+<hr class="full_hr">
+<div id="lastmodified">
+Last-modified: 2018-9-8
+</div>
+</body>
+</html>
+

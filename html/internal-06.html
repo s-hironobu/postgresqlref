@@ -1,0 +1,898 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+ <title>PostgreSQLバイブル草稿</title>
+ <link rel="stylesheet" type="text/css" media="screen" href="./default.css"">
+</head>
+
+<body>
+
+<script language=javascript>
+<!--
+function show(inputData) {
+var objID=document.getElementById( "layer_" + inputData );
+var buttonID=document.getElementById( "category_" + inputData );
+if(objID.className=='close') {
+objID.style.display='block';
+objID.className='open';
+}else{
+objID.style.display='none';
+objID.className='close';
+}
+}
+//-->
+</script>
+
+<div id="header">
+<h1 class="title">PostgreSQLバイブル草稿</title></h1>
+    <span class="small">
+</span>
+</div>
+
+
+<hr class="full_hr">
+<table style="width: 100%;" border="0">
+ <tbody><tr>
+  <td class="menubar">
+   <div id="menubar">
+
+
+<h5>PostgreSQLとは</h5>
+
+<li><a href="./index.html">PostgreSQLとは</a><br></li>
+
+<h5>PostgreSQLの内部構造</h5>
+<ul>
+<li><a href="./internal.html">とびら</a><br></li>
+</ul>
+<ol>
+<li><a href="./internal-01.html">プロセスとメモリ構造</a><br></li>
+<li><a href="./internal-02.html">データベースクラスタ、テーブルの構造</a></li>
+<li><a href="./internal-03.html">SQLの実行</a></li>
+<li><a href="./internal-04.html">プラン処理</a></li>
+<li><a href="./internal-05.html">バッファマネージャとバックグランドライタ</a></li>
+<li><a href="./internal-06.html">トランザクションIDと同時実行制御</a></li>
+<li><a href="./internal-07.html">VACUUM</a></li>
+<li><a href="./internal-08.html">HOTとIndex Only Scan</a></li>
+<li><a href="./internal-09.html">WAL(Write Ahead Logging)</a></li>
+<li><a href="./internal-10.html">アーカイブログとPITR</a></li>
+<li><a href="./internal-11.html">レプリケーション(Streaming ReplicationとHotStandby)</a></li>
+</ol>
+
+
+<h5>PostgreSQLサーバ管理</h5>
+
+<ul>
+<li><a href="./admin.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[PostgreSQLの基礎]<br>
+<li><a href="./admin-01.html">オブジェクト、データベース、スキーマ</a><br></li>
+<li><a href="./admin-02.html">システムカタログ</a><br></li>
+<li><a href="./admin-03.html">文字コードの扱い</a><br></li>
+
+
+[インストールと起動、停止]<br>
+<li><a href="./admin-04.html">インストール</a><br></li>
+<li><a href="./admin-05.html">データベースシステムの初期化 initdb</a><br></li>
+<li><a href="./admin-06.html">PostgreSQLサーバの起動/停止</a><br></li>
+
+
+[認証とアクセス制御]<br>
+<li><a href="./admin-07.html">認証とアクセス制御</a><br></li>
+<li><a href="./admin-08.html">クライアントのアクセス制御</a><br></li>
+<li><a href="./admin-09.html">権限について</a><br></li>
+<li><a href="./admin-10.html">ロールの作成と権限制御</a><br></li>
+
+<HR>
+
+[バックアップとアップグレード]<br>
+<li><a href="./admin-11.html">バックアップとアップグレード</a><br></li>
+<li><a href="./admin-12.html">ダンプとリストア</a><br></li>
+<li><a href="./admin-13.html">アップグレード</a><br></li>
+
+[保守、監視とチューニング]<br>
+<li><a href="./admin-14.html">保守、監視とチューニング</a><br></li> 
+<li><a href="./admin-15.html">稼働統計情報</a><br></li>
+<li><a href="./admin-16.html">実行ログの取得</a><br></li>
+<li><a href="./admin-17.html">モニタリングツール</a><br></li>
+<li><a href="./admin-18.html">ログと統計情報の分析</a><br></li>
+<li><a href="./admin-19.html">パラメータチューニング</a><br></li>
+
+[耐障害性、高可用性]<br>
+<li><a href="./admin-20.html">耐障害性、高可用性</a><br></li>
+<li><a href="./admin-21.html">アーカイブログとPITR</a><br></li>
+<li><a href="./admin-22.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-23.html">レプリケーションの故障対応</a><br></li>
+
+
+[FDW]<br>
+<li><a href="./admin-24.html">FDW</a><br></li>
+<li><a href="./admin-25.html">postgres_fdw</a><br></li>
+</ol>
+
+[追加の文章(未完)]<br>
+<li><a href="./admin-26.html">ロギング</a><br></li>
+<li><a href="./admin-27.html">統計情報</a><br></li>
+<li><a href="./admin-28.html">モニタリング</a><br></li>
+<li><a href="./admin-29.html">メンテナンス</a><br></li>
+</ol>
+
+
+<h5>設定パラメータ</h5>
+
+<ol>
+<li><a href="./param-01.html">postgresql.confの設定</a><br></li>
+<li><a href="./param-02.html">ファイルの場所</a><br></li>
+<li><a href="./param-03.html">接続と認証</a><br></li>
+<li><a href="./param-04.html">資源の消費</a><br></li>
+<li><a href="./param-05.html">WAL</a><br></li>
+<li><a href="./param-06.html">レプリケーション</a><br></li>
+<li><a href="./param-07.html">問い合わせ計画</a><br></li>
+<li><a href="./param-08.html">エラー報告とログ取得</a><br></li>
+<li><a href="./param-09.html">稼働統計情報</a><br></li>
+<li><a href="./param-10.html">AUTOVACUUM</a><br></li>
+<li><a href="./param-11.html">クライアント接続デフォルト</a><br></li>
+<li><a href="./param-12.html">ロック管理/バージョンとプラットフォーム互換性</a><br></li>
+</ol>
+
+
+<h5>psql</h5>
+<ul>
+<li><a href="./psql.html">・対話型インタフェースpsqlの使い方</a><br></li>
+</ul>
+
+<ol>
+<li><a href="./psql-01.html">psqlとは</a><br></li>
+<li><a href="./psql-02.html">PostgreSQLサーバとの接続/切断/再接続</a><br></li>
+<li><a href="./psql-03.html">データベース一覧表示</a><br></li>
+<li><a href="./psql-04.html">コマンドラインからSQL実行</a><br></li>
+<li><a href="./psql-05.html">バッチファイルの実行(メタコマンド)</a><br></li>
+<li><a href="./psql-06.html">情報表示</a><br></li>
+<li><a href="./psql-07.html">表示の制御</a><br></li>
+<li><a href="./psql-08.html">ラージオブジェクトの扱い</a><br></li>
+<li><a href="./psql-09.html">データのコピー</a><br></li>
+<li><a href="./psql-10.html">その他のメタコマンド</a><br></li>
+
+</ol>
+
+
+<h5>SQL</h5>
+
+<ul>
+<li><a href="./sql.html">・とびら</a><br></li>
+</ul>
+
+<ol>
+[SQL]<br>
+
+<li><a href="./sql-01.html">SQL語彙</a><br></li>
+<li><a href="./sql-02.html">テーブルスペースの作成/削除/変更</a><br></li>
+<li><a href="./sql-03.html">データベースの作成/変更/削除</a><br></li>
+<li><a href="./sql-04.html">テーブルの作成</a><br></li>
+<li><a href="./sql-05.html">外部キー</a><br></li>
+<li><a href="./sql-06.html">オブジェクトの継承/LIKE句</a><br></li>
+<li><a href="./sql-07.html">問い合わせ結果から新しいテーブルを作成</a><br></li>
+<li><a href="./sql-08.html">テーブルの削除</a><br></li>
+<li><a href="./sql-09.html">スキーマの定義/変更/削除</a><br></li>
+
+<li><a href="./sql-10.html">ALTER TABLE(1)</a><br></li>
+<li><a href="./sql-11.html">ALTER TABLE(2)</a><br></li>
+<li><a href="./sql-12.html">ALTER TABLE(3)</a><br></li>
+
+<li><a href="./sql-13.html">ロール</a><br></li>
+<li><a href="./sql-14.html">GRANT REVOKE(1)</a><br></li>
+<li><a href="./sql-15.html">GRANT REVOKE(2)</a><br></li>
+<li><a href="./sql-16.html">INSERT</a><br></li>
+<li><a href="./sql-17.html">SELECT</a><br></li>
+<li><a href="./sql-18.html">FROM句</a><br></li>
+<li><a href="./sql-19.html">WHERE句</a><br></li>
+
+<li><a href="./sql-20.html">WINDOW句、OVER句</a><br></li>
+<li><a href="./sql-21.html">共通テーブル式(CTE)</a><br></li>
+
+
+<li><a href="./sql-22.html">グループ化</a><br></li>
+<li><a href="./sql-23.html">DISTINCT句</a><br></li>
+<li><a href="./sql-24.html">テーブル結合</a><br></li>
+<li><a href="./sql-25.html">問い合わせの結合</a><br></li>
+<li><a href="./sql-26.html">ORDER BY</a><br></li>
+<li><a href="./sql-27.html">LIMIT OFFSET</a><br></li>
+<li><a href="./sql-28.html">FOR UPDATE/ FOR SHARE</a><br></li>
+<li><a href="./sql-29.html">サブクエリ</a><br></li>
+<li><a href="./sql-30.html">CASE式</a><br></li>
+<li><a href="./sql-31.html">VALUES</a><br></li>
+<li><a href="./sql-32.html">UPDATE</a><br></li>
+<li><a href="./sql-33.html">DELETE</a><br></li>
+<li><a href="./sql-34.html">TRUNCATE</a><br></li>
+
+<li><a href="./sql-35.html">インデックス</a><br></li>
+
+<li><a href="./sql-36.html">VIEW</a><br></li>
+<li><a href="./sql-37.html">シーケンス</a><br></li>
+<li><a href="./sql-38.html">トリガ</a><br></li>
+<li><a href="./sql-39.html">カーソル</a><br></li>
+<li><a href="./sql-40.html">プリペアステートメント</a><br></li>
+<li><a href="./sql-41.html">トランザクション</a><br></li>
+<li><a href="./sql-42.html">セーブポイント</a><br></li>
+<li><a href="./sql-43.html">2相コミット</a><br></li>
+<li><a href="./sql-44.html">LOCK</a><br></li>
+<li><a href="./sql-45.html">SET/SHOW/RESET</a><br></li>
+<li><a href="./sql-46.html">VACUUM</a><br></li>
+<li><a href="./sql-47.html">ANALYZE</a><br></li>
+<li><a href="./sql-48.html">EXPLAIN</a><br></li>
+<li><a href="./sql-49.html">COPY/IMPORT</a><br></li>
+<li><a href="./sql-50.html">COPY/EXPORT</a><br></li>
+<li><a href="./sql-51.html">関数定義</a><br></li>
+<li><a href="./sql-52.html">エクステンション</a><br></li>
+<li><a href="./sql-53.html">外部サーバの定義、変更、削除</a><br></li>
+<li><a href="./sql-54.html">外部サーバのユーザマップ定義、変更、削除</a><br></li>
+<li><a href="./sql-55.html">外部テーブルの定義、変更、削除</a><br></li>
+<hr>
+<li><a href="./sql-56.html">イベントトリガ</a><br></li>
+<li><a href="./sql-57.html">行レベルセキュリティ</a><br></li>
+
+<hr>
+<li><a href="./sql-60.html">新しい機能</a><br></li>
+</ol>
+
+
+<h5>関数</h5>
+
+[関数]<br>
+<ul>
+<li><a href="./function.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[データ型]<br>
+<li><a href="./type-01.html">データ型</a><br></li>
+<li><a href="./type-02.html">数値データ型</a><br></li>
+<li><a href="./type-03.html">文字データ型</a><br></li>
+<li><a href="./type-04.html">日付/時刻データ型</a><br></li>
+<li><a href="./type-05.html">日付/時刻表示形式とタイムゾーンの設定</a><br></li>
+<li><a href="./type-06.html">ブーリアン型</a><br></li>
+<li><a href="./type-07.html">ビット列データ型</a><br></li>
+<li><a href="./type-08.html">疑似データ型</a><br></li>
+<li><a href="./type-09.html">バイナリ列データ型</a><br></li>
+<li><a href="./type-10.html">Range型</a><br></li>
+<li><a href="./type-11.html">配列</a><br></li>
+<hr>
+<li><a href="./type-12.html">JSON型</a><br></li>
+
+<hr>
+[演算子]<br>
+<li><a href="./ope-01.html">演算子</a><br></li>
+<li><a href="./ope-02.html">論理演算子</a><br></li>
+<li><a href="./ope-03.html">比較演算子</a><br></li>
+<li><a href="./ope-04.html">算術演算子</a><br></li>
+<li><a href="./ope-05.html">文字列演算子</a><br></li>
+<li><a href="./ope-06.html">パターンマッチング</a><br></li>
+<li><a href="./ope-07.html">日付/時刻演算子</a><br></li>
+<li><a href="./ope-08.html">Range型演算子</a><br></li>
+<hr>
+<li><a href="./ope-09.html">JSON型演算子</a><br></li>
+
+
+<hr>
+[関数]<br>
+<li><a href="./func-01.html">関数</a><br></li>
+<li><a href="./func-02.html">算術関数</a><br></li>
+<li><a href="./func-03.html">集約関数/統計関数</a><br></li>
+<li><a href="./func-04.html">文字列関数</a><br></li>
+<li><a href="./func-05.html">日付・時刻関数</a><br></li>
+<li><a href="./func-06.html">型変換関数</a><br></li>
+<li><a href="./func-07.html">Range型関数</a><br></li>
+<li><a href="./func-08.html">Window関数</a><br></li>
+<li><a href="./func-09.html">セッション情報関数</a><br></li>
+<li><a href="./func-10.html">アクセス権限とスキーマ可視性照会関数</a><br></li>
+<li><a href="./func-11.html">データベースオブジェクト関数</a><br></li>
+<li><a href="./func-12.html">バックアップとリカバリ制御関数</a><br></li>
+
+<li><a href="./func-13.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-15.html">構成設定関数</a><br></li>
+<li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-17.html">レプリケーションSQL関数</a><br></li>
+
+<hr>
+<li><a href="./func-18.html">JSON関数</a><br></li>
+
+</ol>
+
+<!--
+[削除するもの]<br>
+<li><a href="./type-07.html">幾何データ型</a><br></li>
+<li><a href="./type-08.html">ネットワークアドレス型型</a><br></li>
+<li><a href="./ope-08.html">幾何演算子</a><br></li>
+<li><a href="./ope-09.html">ネットワーク演算子</a><br></li>
+<li><a href="./func-06.html">幾何関数</a><br></li>
+<li><a href="./func-07.html">ネットワークアドレス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-16.html">トランザクションID関数</a><br></li>
+<li><a href="./func-17.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-18.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-19.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-20.html">勧告的ロック用関数</a><br></li>
+-->
+
+<h5>PL/pgSQL</h5>
+
+<ol>
+<li><a href="./plpgsql.html">結果の返し方</a><br></li>
+<li><a href="./plpgsql-01.html">ストアドプロシージャ</a><br></li>
+<li><a href="./plpgsql-02.html">ストアドプロシージャの定義</a><br></li>
+<li><a href="./plpgsql-03.html">変数宣言と値の代入</a><br></li>
+**** まとめる >>
+<li><a href="./plpgsql-04.html">SELECT INTO文</a><br></li>
+<li><a href="./plpgsql-05.html">結果ステータスの取得</a><br></li>
+<li><a href="./plpgsql-06.html">動的なSQL文の実行</a><br></li>
+<< ここまで****
+<li><a href="./plpgsql-07.html">IF 条件分岐</a><br></li>
+<li><a href="./plpgsql-08.html">ループ処理</a><br></li>
+*** >>>
+<li><a href="./plpgsql-09.html">RETURN</a><br></li>
+<<< ***
+<li><a href="./plpgsql-10.html">ループ処理　LOOP</a><br></li>
+<li><a href="./plpgsql-11.html">ループ処理　WHILE</a><br></li>
+<li><a href="./plpgsql-12.html">ループ処理　FOR </a><br></li>
+<li><a href="./plpgsql-13.html">ループ処理 (複数行の問い合わせ結果を扱う)</a><br></li>
+<li><a href="./plpgsql-14.html">カーソルの利用</a><br></li>
+<li><a href="./plpgsql-15.html">カーソル変数の宣言</a><br></li>
+<li><a href="./plpgsql-16.html">カーソルのオープンとクローズ	OPEN / CLOSE</a><br></li>
+<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得		FETCH</a><br></li>
+<li><a href="./plpgsql-18.html">カーソルを使った例</a><br></li>
+<li><a href="./plpgsql-19.html">例外</a><br></li>
+*** >>>
+<li><a href="./plpgsql-21.html">CASE</a><br></li>
+<li><a href="./plpgsql-22.html">FOREACH</a><br></li>
+<<< ***
+</ol>
+
+
+<h5>Appendix(付録)</h5>
+
+<ol>
+<li><a href="./app-01.html">pgpool-II</a><br></li>
+<li><a href="./app-02.html">Pacemaker</a><br></li>
+</ol>
+
+
+<h5>おまけ:ネット公開(ページ数の関係で書籍には載せない)</h5>
+
+<ol>
+[pgpool]<br>
+<li><a href="./ha-06.html">pgpool-II セットアップ</a><br></li>
+<li><a href="./ha-07.html">pgpool-II レプリケーションモード</a><br></li>
+<li><a href="./ha-08.html">pgpool-II マスタースレーブモード</a><br></li>
+[Pacemaker]<br>
+<li><a href="./ha-10.html">Pacemaker</a><br></li>
+</ol>
+
+</div>
+<hr class="full_hr">
+</div>
+
+  </td>
+  <td valign="top">
+   <div id="body">
+
+<h2>トランザクションIDと同時実行制御</h2>
+
+<font color="#ff0000">
+<p>
+今読むと記述が甘い。間違いもある。
+</p>
+</font>
+
+<p>
+PostgreSQLの同時実行制御と、その中核的概念であるトランザクションID(XID)について説明します。
+</p>
+
+<div class="jumpmenu"></div><h3>PostgreSQLのトランザクションID(XID)</h3>
+
+<p>
+トランザクションID(XID)はトランザクション管理の根幹を担う重要な値です。
+PostgreSQLに限らず、すべてのDBMSが独自に実装しています。
+</p>
+
+<p>
+PostgreSQLのXIDは32[bit]の符号無し整数で、0から2^32-1(約42億9千万)までの範囲の値をとります([<脚注16>])。
+トランザクションが開く毎にXIDが発行され、その値は1ずつ増えていきます。
+<br>
+ここで32[bit]というXIDのサイズが問題になります。実運用では42億9千万トランザクションを超えて稼働しつづけることも稀ではありません。
+単純にXIDの大小関係で過去と未来を識別すると、(42億9千万トランザクション発行した後に)XIDが2サイクル目に入ってもう一度小さな値を使いはじめた瞬間に、トランザクション管理が破綻します。
+<br>
+この問題を避けるため、PostgreSQLは2つの工夫がなされています。
+</p>
+
+<ol>
+<li>無限の過去を意味するXID=2を導入</li>
+<p>
+VACUUM処理時、
+現在のXIDより数千万(パラメータvacuum_freeze_max_ageで設定)以前の(トランザクション処理が終了した)XIDをすべて"2"につけ換え、
+"無限の過去のデータ"として保存し直す。
+これを「FREEZE処理」という。
+<p>
+
+<li> XIDの過去と未来の識別方法を変更</li>
+<p>
+最大値(2^32-1)の次のXIDは3、次は4、という具合にXIDを循環させて、32bitの整数空間を繰り返し利用する。そして、あるXIDにとって過去のXIDとは、そのXIDよりも21億(正確には2^31-1)以前の値と解釈する(未来のXIDとは21億先までの値)。
+</p>
+
+</ol>
+
+
+<p>
+よって定期的にVACUUM処理を行い、どのトランザクションからも操作されなくなったタプルのXIDを"凍結"していれば、XIDが3から2^32-1の範囲を循環しながら、トランザクション管理は破綻なく続きます。
+<br>
+VACUUMにおけるFREEZE処理は[<2-07>]で解説します。
+</p>
+
+
+<blockquote><table BORDER="1"><tr><td>脚注16</td><td>
+<p>
+本書はLOCKの仕組みを省略したので触れませんが、
+内部的にLOCKの処理を補助するため"VIRTUAL TRANSACTION ID"という値も用います。
+詳細は、src/backend/storage/lmgr/READMEを参照してください。
+</p>
+</td></tr></table></blockquote>
+
+
+
+<div class="jumpmenu"></div><h3>MVCCによる同時実行制御</h3>
+
+<p>
+PostgreSQLをはじめ現代の多くのRDBMSは、同時実行制御の方式としてMVCC(Multi-Version Concurrency Control: 多版式同時実行制御)を採用しています([<脚注17>])。
+<br>
+MVCCにもいくつかの実装方式があり、PostgreSQLが採用しているのは追記型です[<脚注18>]。
+</p>
+
+
+<blockquote><table BORDER="1"><tr><td>脚注17</td><td>
+<p>
+他の方式としては、ロックを使った同時実行制御があります。これはDB2やSybaseなど古くから実装されたシステムに多い方式です。
+</p>
+</td></tr></table></blockquote>
+
+
+<blockquote><table BORDER="1"><tr><td>脚注18</td><td>
+SQLiteも追記型MVCCです。MySQLのInnoDBストレージエンジンやOracleはロールバックセグメント型MVCCです。
+</td></tr></table></blockquote>
+
+<p>
+追記型とは、データの挿入(INSERT)だけでなく更新(UPDATE)のときも、
+古いデータを無効にするだけで削除は行わず、新たにデータを追加するデータ管理方法です。
+</p>
+
+
+<p>
+簡単に追記型を説明します([<図2-27>])。詳細は後述します。
+</p>
+
+
+<table border=1>
+<caption>[<図2-27>] 追記型MVCCの仕組み</caption>
+<tr><td>
+<left>
+<img src="./fig-2-06-01.jpg"><br>
+</left>
+</td></tr></table>
+
+<blockquote>
+
+<table><tr>
+<td valign="top">[1]</td> 
+<td>
+ユーザAとBが同じテーブルにアクセスする。
+ユーザAが先にトランザクションを開始し、そのトランザクションID(XID)は100である。ユーザBのXIDは101である。
+</td>
+
+</tr><tr>
+
+<td valign="top">[2]</td>
+<td>
+ユーザAがテーブルのデータを更新する。
+このとき古いデータタプルを削除せず、新しいデータタプルをデータ領域に追記する。
+</td>
+
+</tr><tr>
+
+<td valign="top">[3]</td>
+
+<td>
+ユーザAはまだトランザクションをコミットしていないので、
+ユーザBがテーブル検索するとユーザAの更新は反映されず、
+ユーザBのトランザクション開始時点のデータが見える。
+<br>
+自分がどのように見えるかは、データを更新したXIDと自身のXIDとの比較で分かる。
+</td>
+
+</tr><tr>
+
+<td valign="top">[4]</td>
+
+<td>
+ユーザAとBがどちらもトランザクションをコミットすると、
+更新された古いデータタプルは不要になる。
+更新毎に不要なタプルが溜っていくので、これを削除して空き領域を作る機構が必要になる。
+</td>
+
+</tr></table>
+
+
+</blockquote>
+
+<p>
+追記型はデータが際限なく増えていくので、
+不要なデータタプルを回収する機構が必要です。その機構を「VACUUM」と呼びます。
+<br>
+データタプルの追記は、次々と新しいブロックに追記するのでなく、
+空き領域のあるブロックに追記し、無闇にファイルサイズが大きくなることを防がねばなりません。
+空き領域を効率的に捜し出すために、空き領域マップ(FSM: Free Space Map)があります。
+</p>
+
+<p>
+VACUUMと空き領域マップは[<2-07>]で解説します。
+</p>
+
+
+<div class="jumpmenu"></div><h3>ヒープタプルの構造</h3>
+
+<p>
+追記型MVCCを理解するために必要となる、ヒープタプル(レコードデータ)の構造を説明します。
+</p>
+
+<p>
+ヒープタプルのヘッダ部分は構造体
+<a href="javascript:void(0)" id="category_HeapTupleHeaderData" onclick="show('HeapTupleHeaderData');">HeapTupleHeaderData</a>
+で定義されています[<脚注19>]。
+これを図示すると[<図2-28>]のようになります。
+</p>
+<div id="layer_HeapTupleHeaderData" style="display: none;position:relative;margin-left:15pt" class="close">
+<pre>
+typedef struct HeapTupleFields
+{
+        TransactionId t_xmin;           /* inserting xact ID */
+        TransactionId t_xmax;           /* deleting or locking xact ID */
+
+        union
+        {
+                CommandId       t_cid;          /* inserting or deleting command ID, or both */
+                TransactionId t_xvac;   /* old-style VACUUM FULL xact ID */
+        }                       t_field3;
+} HeapTupleFields;
+
+typedef struct DatumTupleFields
+{
+        int32           datum_len_;             /* varlena header (do not touch directly!) */
+
+        int32           datum_typmod;   /* -1, or identifier of a record type */
+
+        Oid                     datum_typeid;   /* composite type OID, or RECORDOID */
+
+        /*                                                                                               
+         * Note: field ordering is chosen with thought that Oid might someday                            
+         * widen to 64 bits.                                                                             
+         */
+} DatumTupleFields;
+
+typedef struct HeapTupleHeaderData
+{
+        union
+        {
+                HeapTupleFields t_heap;
+                DatumTupleFields t_datum;
+        }                       t_choice;
+
+        ItemPointerData t_ctid;         /* current TID of this or newer tuple */
+
+        /* Fields below here must match MinimalTupleData! */
+
+        uint16          t_infomask2;    /* number of attributes + various flags */
+
+        uint16          t_infomask;             /* various flag bits, see below */
+
+        uint8           t_hoff;                 /* sizeof header incl. bitmap, padding */
+
+        /* ^ - 23 bytes - ^ */
+
+        bits8           t_bits[1];              /* bitmap of NULLs -- VARIABLE LENGTH */
+
+        /* MORE DATA FOLLOWS AT END OF STRUCT */
+} HeapTupleHeaderData;
+
+typedef HeapTupleHeaderData *HeapTupleHeader;
+
+
+</pre></div> 
+
+
+<blockquote><table BORDER="1"><tr><td>脚注19</td><td>
+<p>
+HeapTupleHeaderDataの定義はsrc/include/access/htup.h。
+</p>
+</td></tr></table></blockquote>
+
+
+<table border=1>
+<caption>[<図2-28>] ヒープタプルの構造<br></caption>
+<tr><td>
+<left>
+<img src="./fig-2-06-02.jpg"><br>
+</left>
+</td></tr></table>
+
+<p>
+ここでは、以降の説明で必要なデータ項目のみ説明します。
+</p>
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>項目</th>	<th>説明</th>
+</tr><tr>
+<td>t_xmin</td>	<td>このタプルを追記したXID</td>
+</tr><tr>
+<td>t_xmax</td>	<td>このタプルを削除、もしくは更新したXID</td>
+</tr><tr>
+<td>t_cid</td>	<td>そのトランザクション内で、何番目の追記か</td>
+</tr><tr>
+<td>t_tcid</td>	<td>追記された新しいタプルへのポインタ</td>
+</table>
+
+<p>
+これら以外のデータについて、詳細はソースコードのコメントを参照してください。
+たとえばt_infomaskはそのタプルがNULLを持つか否かなど様々な情報を保持しています。
+</p>
+
+
+<div class="jumpmenu"></div><h3>追記型MVCC</h3>
+
+<p>
+追記型MVCCの動作を説明します。
+</p>
+
+<p>
+はじめに単一トランザクション内でのタプルの追記について説明します。その際、説明を容易にするため、このセクションでのみ使用する表記法も説明します。
+<br>
+次に２つのトランザクションでの同時実行制御について説明します。
+</p>
+
+<div class="jumpmenu"></div><h4>単一トランザクション内でのデータの追加、更新</h4>
+
+<p>
+まず、このセクションでのみ使用するタプルの表記法を示します([<図2-29>])。
+</p>
+
+<table border=1>
+<caption>[<図2-29>] ブロック内のタプルの表記法(1)</caption>
+<tr><td>
+<left>
+<img src="./fig-2-06-03.jpg"><br>
+</left>
+</td></tr></table>
+
+
+<p>
+[<図2-29>](1)は1レコードしかデータを持たないテーブルtblのブロックです。
+<br>
+現時点の値'A'はXIDが90のときにINSERTされたとします。
+このタプルの状態を、説明に必要な部分だけ取り出して[<図2-29>](2)のように表現します。
+t_xminにはこのタプルを書き込んだトランザクションのXIDが書かれています。
+このタプルはまだ更新されていないのでt_maxには値がありません。
+</p>
+
+<p>
+次に、XID=100のトランザクションがこのデータを更新したとします([<図2-30>])。
+</p>
+
+<table border=1>
+<caption>[<図2-30>] ブロック内のタプルの表記法(2)</caption>
+<tr><td>
+<left>
+<img src="./fig-2-06-04.jpg"><br>
+</left>
+</td></tr></table>
+
+
+<p>
+新たにタプルが追記され、タプルは計２つになります。
+<br>
+[<図2-30>](2)において、先のタプルは更新されたので、t_maxには更新したトランザクションのXID(100)が書かれています。
+またt_ctidには新たに追記されたタプルへのポインタが入ります。
+レコードの更新履歴は、このt_ctidを辿ればすぐに判ります。
+<br>
+新たに追記したタプルのt_minに更新したトランザクションのXID(100)が書かれます。
+また、このトランザクションによる１番めのコマンドなので、t_cidに1が書かれます。
+</p>
+
+<p>
+これらを時系列に沿って描き直します([<図2-31>])。
+</p>
+
+
+<table border=1>
+<caption>[<図2-31>] 追記型による同時実行制御の仕組み(1)</caption>
+<tr><td>
+<left>
+<img src="./fig-2-06-05.jpg"><br>
+</left>
+</td></tr></table>
+
+
+<blockquote>
+<p>
+(1) はじめに'A'というデータが書き込まれていた。
+XID=100のトランザクションを開始し、SELECT文を実行すると'A'がみえる。
+</p>
+
+<p>
+(2) 次にUPDATE文で値を'B'に更新すると、
+古いデータ'A'を保存しているタプルのt_maxに更新したトランザクションのXID(100)を記入し、
+新たにデータ'B'を保存するタプルを追記する。
+</p>
+
+<p>
+(3) さらにUPDATE文で値を'C'に更新すると、またタプルを追記する。
+同一トランザクション内でのSQL文はt_cidによって番号付けされ、区別する。
+</p>
+
+</blockquote>
+
+<p>
+以上、単一トランザクション内でのタプルの追記について簡単に説明しました。
+<br>
+ここまではタプルの追記に注目して説明するため、同時実行制御に必要なスナップショットとCLOG(コミットログ)を省略しました。
+次に説明する複数トランザクションでのタプルの追記では、これらを省略することなくPostgreSQLの同時実行制御について説明します。
+</p>
+
+
+<div class="jumpmenu"></div><h4>複数トランザクションにおける同時実行制御</h4>
+
+<p>
+複数トランザクションが実行されている状況での、PostgreSQLの同時実行制御について説明します([<図2-32>]参照)。
+</p>
+
+
+<table border=1>
+<caption>[<図2-32>] 追記型による同時実行制御の仕組み(2)</caption>
+<tr><td>
+<left>
+<img src="./fig-2-06-06.jpg"><br>
+</left>
+</td></tr></table>
+
+
+<p>
+はじめに、トランザクションの状態を保持するCLOG(コミットログ)とプロセステーブルについて説明します。
+</p>
+
+<p>
+CLOGはトランザクション毎の状態(IN_PROGRESS, COMMITTED, ABORTED, SUB_COMMITTED)を保持します。
+トランザクションの状態は、処理中は"IN_PROGRES"、COMMITすると"COMMITTED"、ABORTすると"ABORTED"となります。
+SAVEPOINT設定中は"SUB_COMMITTED"です。
+<br>
+トランザクションが開始される度、CLOGに情報が追加されます。
+CLOGに書き込まれた古い(FREEZEされた)XIDの情報は、VACUUM処理が削除します。
+<br>
+なお、CLOGはCHECKPOINT毎にデータベースクラスタのサブディレクトリpg_clog以下にファイルとして保存します。
+</p>
+
+<p>
+プロセステーブルは、postgresプロセスが実行中のトランザクションIDを保持しています。
+トランザクションが開始されると、XIDと(そのトランザクションの)開始時に、既に開いている全トランザクションのXIDを保存します。
+これがそのトランザクションにとって最初のスナップショットになります。
+</p>
+
+<p>
+例えば、XID=102のトランザクションが開始するとき、既にXID=101が開いているので、
+XID=102のスナップショットにはXID=101と102が含まれます。
+(XID=101は開始時に他のトランザクションが走っていないので、最初のスナップショットはXID=101だけである)
+</p>
+
+<p>
+以下、具体的に２つのトランザクションによる同時実行制御を説明します。
+</p>
+
+<blockquote>
+<p>
+(1) XID=101と102の２つのトランザクションが開始した。
+</p>
+
+<p>
+(2) XID=101のトランザクションがUPDATE文を実行した。
+</p>
+
+<p>
+(3) その直後、XID＝102のトランザクション内でSELECT文を実行する。
+<br>
+その際、スナップショットから自分より古いトランザクション(XID=101)が進行中と判る。
+XID=101はコミット前なので、その更新結果は表示できない。
+よって検索結果はXID=101の更新前の 'C'を表示する。
+</p>
+</blockquote>
+
+<p>
+次に、XID=101のトランザクションがコミットした後の挙動を説明します。
+</p>
+
+<blockquote>
+<p>
+(4) XID=102のトランザクションがSELECT文を実行する。<br>
+スナップショットを得ると、自分より古いトランザクションX=101はCOMMITTEDで終了したことがわかる。
+ここで検索を行うが、XID=102の検索結果は自身の隔離レベルに依存する。
+<br>
+READ COMMITTEDなら、XID=101の結果を読むことができるので、検索結果は'D'となる。
+<br>
+しかしSERIALIZABLEなどはXID=101の更新を反映してはならないので、検索結果は'C'となる。
+</p>
+
+</blockquote>
+
+
+<div class="jumpmenu"></div><h4>ビジビリティマップ(Visibility Map)</h4>
+
+<p>
+トランザクションの隔離を実現するには、
+スナップショットを得てから、各タプルがそのトランザクション内で可視かどうかを逐次検査しなければなりません。
+<br>
+これは非常に手間のかかる処理ですが、
+もしもブロック内に不要なタプルがひとつも存在せず、
+且つどのトランザクションも更新していないなら、
+そのブロックのタプルはすべて可視なので検査をスキップできます。
+</>
+
+<p>
+そこでメモリ上、テーブルのブロックごとに1[bit]のデータ領域を確保し、
+上記の条件(不要なタプルが存在しない && どのトランザクションも更新してない)を満たすブロックには"0"、
+それ以外は"1"を保存する機能がバージョン8.4でサポートされました([<脚注20>])。
+これをビジビリティマップ(Visibility Map)と呼びます。
+<br>
+このビジビリティマップを利用してトランザクション内の可視の検査を効率化できます。
+<br>
+また、バージョン9.2でサポートするIndex-Only Scan([<2-08>])でも重要な役割を担っています。
+</p>
+
+
+<blockquote><table BORDER="1"><tr><td>脚注20</td><td>
+<p>
+テーブルの先頭ブロックから順に1[bit]づつ割り当てるので、確保する領域も非常に小さく、またブロック検索も効率的にできます。
+</p>
+</td></tr></table></blockquote>
+
+
+<p>
+なお、データベースクラスタ内にはテーブルファイルXXXに対してXXX_vmというファイルが存在します。
+これはテーブル毎にメモリ上のビジビリティマップのデータをファイルとして保存しているものです。
+<br>
+例えばテーブルsimpletblは、テーブルデータを保存するファイル"18740"とビジビリティマップファイル"18740_vm"を持ちます。
+</p>
+
+<pre>
+postgres> ls -la 18740 18740_vm 
+-rw------- 1 postgres users 8192 Mar 23 14:09 18740
+-rw------- 1 postgres users 8192 Mar 23 14:13 18740_vm
+</pre>
+
+
+</font>
+
+
+
+<div class="jumpmenu"></div><h3>参考文献</h3>
+
+<ol>
+<li>PostgreSQL解析資料 MVCC	井久保氏</li>
+http://ikubo.x0.com/PostgreSQL/pdf/IK09-mvcc.pdf
+</ol>
+
+<hr class="full_hr">
+<div id="lastmodified">
+Last-modified: 2018-9-8
+</div>
+</body>
+</html>
+

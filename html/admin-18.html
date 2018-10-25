@@ -1,0 +1,811 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+ <title>PostgreSQLバイブル草稿</title>
+ <link rel="stylesheet" type="text/css" media="screen" href="./default.css"">
+</head>
+
+<body>
+
+<script language=javascript>
+<!--
+function show(inputData) {
+var objID=document.getElementById( "layer_" + inputData );
+var buttonID=document.getElementById( "category_" + inputData );
+if(objID.className=='close') {
+objID.style.display='block';
+objID.className='open';
+}else{
+objID.style.display='none';
+objID.className='close';
+}
+}
+//-->
+</script>
+
+<div id="header">
+<h1 class="title">PostgreSQLバイブル草稿</title></h1>
+    <span class="small">
+</span>
+</div>
+
+
+<hr class="full_hr">
+<table style="width: 100%;" border="0">
+ <tbody><tr>
+  <td class="menubar">
+   <div id="menubar">
+
+
+<h5>PostgreSQLとは</h5>
+
+<li><a href="./index.html">PostgreSQLとは</a><br></li>
+
+<h5>PostgreSQLの内部構造</h5>
+<ul>
+<li><a href="./internal.html">とびら</a><br></li>
+</ul>
+<ol>
+<li><a href="./internal-01.html">プロセスとメモリ構造</a><br></li>
+<li><a href="./internal-02.html">データベースクラスタ、テーブルの構造</a></li>
+<li><a href="./internal-03.html">SQLの実行</a></li>
+<li><a href="./internal-04.html">プラン処理</a></li>
+<li><a href="./internal-05.html">バッファマネージャとバックグランドライタ</a></li>
+<li><a href="./internal-06.html">トランザクションIDと同時実行制御</a></li>
+<li><a href="./internal-07.html">VACUUM</a></li>
+<li><a href="./internal-08.html">HOTとIndex Only Scan</a></li>
+<li><a href="./internal-09.html">WAL(Write Ahead Logging)</a></li>
+<li><a href="./internal-10.html">アーカイブログとPITR</a></li>
+<li><a href="./internal-11.html">レプリケーション(Streaming ReplicationとHotStandby)</a></li>
+</ol>
+
+
+<h5>PostgreSQLサーバ管理</h5>
+
+<ul>
+<li><a href="./admin.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[PostgreSQLの基礎]<br>
+<li><a href="./admin-01.html">オブジェクト、データベース、スキーマ</a><br></li>
+<li><a href="./admin-02.html">システムカタログ</a><br></li>
+<li><a href="./admin-03.html">文字コードの扱い</a><br></li>
+
+
+[インストールと起動、停止]<br>
+<li><a href="./admin-04.html">インストール</a><br></li>
+<li><a href="./admin-05.html">データベースシステムの初期化 initdb</a><br></li>
+<li><a href="./admin-06.html">PostgreSQLサーバの起動/停止</a><br></li>
+
+
+[認証とアクセス制御]<br>
+<li><a href="./admin-07.html">認証とアクセス制御</a><br></li>
+<li><a href="./admin-08.html">クライアントのアクセス制御</a><br></li>
+<li><a href="./admin-09.html">権限について</a><br></li>
+<li><a href="./admin-10.html">ロールの作成と権限制御</a><br></li>
+
+<HR>
+
+[バックアップとアップグレード]<br>
+<li><a href="./admin-11.html">バックアップとアップグレード</a><br></li>
+<li><a href="./admin-12.html">ダンプとリストア</a><br></li>
+<li><a href="./admin-13.html">アップグレード</a><br></li>
+
+[保守、監視とチューニング]<br>
+<li><a href="./admin-14.html">保守、監視とチューニング</a><br></li> 
+<li><a href="./admin-15.html">稼働統計情報</a><br></li>
+<li><a href="./admin-16.html">実行ログの取得</a><br></li>
+<li><a href="./admin-17.html">モニタリングツール</a><br></li>
+<li><a href="./admin-18.html">ログと統計情報の分析</a><br></li>
+<li><a href="./admin-19.html">パラメータチューニング</a><br></li>
+
+[耐障害性、高可用性]<br>
+<li><a href="./admin-20.html">耐障害性、高可用性</a><br></li>
+<li><a href="./admin-21.html">アーカイブログとPITR</a><br></li>
+<li><a href="./admin-22.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-23.html">レプリケーションの故障対応</a><br></li>
+
+
+[FDW]<br>
+<li><a href="./admin-24.html">FDW</a><br></li>
+<li><a href="./admin-25.html">postgres_fdw</a><br></li>
+</ol>
+
+[追加の文章(未完)]<br>
+<li><a href="./admin-26.html">ロギング</a><br></li>
+<li><a href="./admin-27.html">統計情報</a><br></li>
+<li><a href="./admin-28.html">モニタリング</a><br></li>
+<li><a href="./admin-29.html">メンテナンス</a><br></li>
+</ol>
+
+
+<h5>設定パラメータ</h5>
+
+<ol>
+<li><a href="./param-01.html">postgresql.confの設定</a><br></li>
+<li><a href="./param-02.html">ファイルの場所</a><br></li>
+<li><a href="./param-03.html">接続と認証</a><br></li>
+<li><a href="./param-04.html">資源の消費</a><br></li>
+<li><a href="./param-05.html">WAL</a><br></li>
+<li><a href="./param-06.html">レプリケーション</a><br></li>
+<li><a href="./param-07.html">問い合わせ計画</a><br></li>
+<li><a href="./param-08.html">エラー報告とログ取得</a><br></li>
+<li><a href="./param-09.html">稼働統計情報</a><br></li>
+<li><a href="./param-10.html">AUTOVACUUM</a><br></li>
+<li><a href="./param-11.html">クライアント接続デフォルト</a><br></li>
+<li><a href="./param-12.html">ロック管理/バージョンとプラットフォーム互換性</a><br></li>
+</ol>
+
+
+<h5>psql</h5>
+<ul>
+<li><a href="./psql.html">・対話型インタフェースpsqlの使い方</a><br></li>
+</ul>
+
+<ol>
+<li><a href="./psql-01.html">psqlとは</a><br></li>
+<li><a href="./psql-02.html">PostgreSQLサーバとの接続/切断/再接続</a><br></li>
+<li><a href="./psql-03.html">データベース一覧表示</a><br></li>
+<li><a href="./psql-04.html">コマンドラインからSQL実行</a><br></li>
+<li><a href="./psql-05.html">バッチファイルの実行(メタコマンド)</a><br></li>
+<li><a href="./psql-06.html">情報表示</a><br></li>
+<li><a href="./psql-07.html">表示の制御</a><br></li>
+<li><a href="./psql-08.html">ラージオブジェクトの扱い</a><br></li>
+<li><a href="./psql-09.html">データのコピー</a><br></li>
+<li><a href="./psql-10.html">その他のメタコマンド</a><br></li>
+
+</ol>
+
+
+<h5>SQL</h5>
+
+<ul>
+<li><a href="./sql.html">・とびら</a><br></li>
+</ul>
+
+<ol>
+[SQL]<br>
+
+<li><a href="./sql-01.html">SQL語彙</a><br></li>
+<li><a href="./sql-02.html">テーブルスペースの作成/削除/変更</a><br></li>
+<li><a href="./sql-03.html">データベースの作成/変更/削除</a><br></li>
+<li><a href="./sql-04.html">テーブルの作成</a><br></li>
+<li><a href="./sql-05.html">外部キー</a><br></li>
+<li><a href="./sql-06.html">オブジェクトの継承/LIKE句</a><br></li>
+<li><a href="./sql-07.html">問い合わせ結果から新しいテーブルを作成</a><br></li>
+<li><a href="./sql-08.html">テーブルの削除</a><br></li>
+<li><a href="./sql-09.html">スキーマの定義/変更/削除</a><br></li>
+
+<li><a href="./sql-10.html">ALTER TABLE(1)</a><br></li>
+<li><a href="./sql-11.html">ALTER TABLE(2)</a><br></li>
+<li><a href="./sql-12.html">ALTER TABLE(3)</a><br></li>
+
+<li><a href="./sql-13.html">ロール</a><br></li>
+<li><a href="./sql-14.html">GRANT REVOKE(1)</a><br></li>
+<li><a href="./sql-15.html">GRANT REVOKE(2)</a><br></li>
+<li><a href="./sql-16.html">INSERT</a><br></li>
+<li><a href="./sql-17.html">SELECT</a><br></li>
+<li><a href="./sql-18.html">FROM句</a><br></li>
+<li><a href="./sql-19.html">WHERE句</a><br></li>
+
+<li><a href="./sql-20.html">WINDOW句、OVER句</a><br></li>
+<li><a href="./sql-21.html">共通テーブル式(CTE)</a><br></li>
+
+
+<li><a href="./sql-22.html">グループ化</a><br></li>
+<li><a href="./sql-23.html">DISTINCT句</a><br></li>
+<li><a href="./sql-24.html">テーブル結合</a><br></li>
+<li><a href="./sql-25.html">問い合わせの結合</a><br></li>
+<li><a href="./sql-26.html">ORDER BY</a><br></li>
+<li><a href="./sql-27.html">LIMIT OFFSET</a><br></li>
+<li><a href="./sql-28.html">FOR UPDATE/ FOR SHARE</a><br></li>
+<li><a href="./sql-29.html">サブクエリ</a><br></li>
+<li><a href="./sql-30.html">CASE式</a><br></li>
+<li><a href="./sql-31.html">VALUES</a><br></li>
+<li><a href="./sql-32.html">UPDATE</a><br></li>
+<li><a href="./sql-33.html">DELETE</a><br></li>
+<li><a href="./sql-34.html">TRUNCATE</a><br></li>
+
+<li><a href="./sql-35.html">インデックス</a><br></li>
+
+<li><a href="./sql-36.html">VIEW</a><br></li>
+<li><a href="./sql-37.html">シーケンス</a><br></li>
+<li><a href="./sql-38.html">トリガ</a><br></li>
+<li><a href="./sql-39.html">カーソル</a><br></li>
+<li><a href="./sql-40.html">プリペアステートメント</a><br></li>
+<li><a href="./sql-41.html">トランザクション</a><br></li>
+<li><a href="./sql-42.html">セーブポイント</a><br></li>
+<li><a href="./sql-43.html">2相コミット</a><br></li>
+<li><a href="./sql-44.html">LOCK</a><br></li>
+<li><a href="./sql-45.html">SET/SHOW/RESET</a><br></li>
+<li><a href="./sql-46.html">VACUUM</a><br></li>
+<li><a href="./sql-47.html">ANALYZE</a><br></li>
+<li><a href="./sql-48.html">EXPLAIN</a><br></li>
+<li><a href="./sql-49.html">COPY/IMPORT</a><br></li>
+<li><a href="./sql-50.html">COPY/EXPORT</a><br></li>
+<li><a href="./sql-51.html">関数定義</a><br></li>
+<li><a href="./sql-52.html">エクステンション</a><br></li>
+<li><a href="./sql-53.html">外部サーバの定義、変更、削除</a><br></li>
+<li><a href="./sql-54.html">外部サーバのユーザマップ定義、変更、削除</a><br></li>
+<li><a href="./sql-55.html">外部テーブルの定義、変更、削除</a><br></li>
+<hr>
+<li><a href="./sql-56.html">イベントトリガ</a><br></li>
+<li><a href="./sql-57.html">行レベルセキュリティ</a><br></li>
+
+<hr>
+<li><a href="./sql-60.html">新しい機能</a><br></li>
+</ol>
+
+
+<h5>関数</h5>
+
+[関数]<br>
+<ul>
+<li><a href="./function.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[データ型]<br>
+<li><a href="./type-01.html">データ型</a><br></li>
+<li><a href="./type-02.html">数値データ型</a><br></li>
+<li><a href="./type-03.html">文字データ型</a><br></li>
+<li><a href="./type-04.html">日付/時刻データ型</a><br></li>
+<li><a href="./type-05.html">日付/時刻表示形式とタイムゾーンの設定</a><br></li>
+<li><a href="./type-06.html">ブーリアン型</a><br></li>
+<li><a href="./type-07.html">ビット列データ型</a><br></li>
+<li><a href="./type-08.html">疑似データ型</a><br></li>
+<li><a href="./type-09.html">バイナリ列データ型</a><br></li>
+<li><a href="./type-10.html">Range型</a><br></li>
+<li><a href="./type-11.html">配列</a><br></li>
+<hr>
+<li><a href="./type-12.html">JSON型</a><br></li>
+
+<hr>
+[演算子]<br>
+<li><a href="./ope-01.html">演算子</a><br></li>
+<li><a href="./ope-02.html">論理演算子</a><br></li>
+<li><a href="./ope-03.html">比較演算子</a><br></li>
+<li><a href="./ope-04.html">算術演算子</a><br></li>
+<li><a href="./ope-05.html">文字列演算子</a><br></li>
+<li><a href="./ope-06.html">パターンマッチング</a><br></li>
+<li><a href="./ope-07.html">日付/時刻演算子</a><br></li>
+<li><a href="./ope-08.html">Range型演算子</a><br></li>
+<hr>
+<li><a href="./ope-09.html">JSON型演算子</a><br></li>
+
+
+<hr>
+[関数]<br>
+<li><a href="./func-01.html">関数</a><br></li>
+<li><a href="./func-02.html">算術関数</a><br></li>
+<li><a href="./func-03.html">集約関数/統計関数</a><br></li>
+<li><a href="./func-04.html">文字列関数</a><br></li>
+<li><a href="./func-05.html">日付・時刻関数</a><br></li>
+<li><a href="./func-06.html">型変換関数</a><br></li>
+<li><a href="./func-07.html">Range型関数</a><br></li>
+<li><a href="./func-08.html">Window関数</a><br></li>
+<li><a href="./func-09.html">セッション情報関数</a><br></li>
+<li><a href="./func-10.html">アクセス権限とスキーマ可視性照会関数</a><br></li>
+<li><a href="./func-11.html">データベースオブジェクト関数</a><br></li>
+<li><a href="./func-12.html">バックアップとリカバリ制御関数</a><br></li>
+
+<li><a href="./func-13.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-15.html">構成設定関数</a><br></li>
+<li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-17.html">レプリケーションSQL関数</a><br></li>
+
+<hr>
+<li><a href="./func-18.html">JSON関数</a><br></li>
+
+</ol>
+
+<!--
+[削除するもの]<br>
+<li><a href="./type-07.html">幾何データ型</a><br></li>
+<li><a href="./type-08.html">ネットワークアドレス型型</a><br></li>
+<li><a href="./ope-08.html">幾何演算子</a><br></li>
+<li><a href="./ope-09.html">ネットワーク演算子</a><br></li>
+<li><a href="./func-06.html">幾何関数</a><br></li>
+<li><a href="./func-07.html">ネットワークアドレス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-16.html">トランザクションID関数</a><br></li>
+<li><a href="./func-17.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-18.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-19.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-20.html">勧告的ロック用関数</a><br></li>
+-->
+
+<h5>PL/pgSQL</h5>
+
+<ol>
+<li><a href="./plpgsql.html">結果の返し方</a><br></li>
+<li><a href="./plpgsql-01.html">ストアドプロシージャ</a><br></li>
+<li><a href="./plpgsql-02.html">ストアドプロシージャの定義</a><br></li>
+<li><a href="./plpgsql-03.html">変数宣言と値の代入</a><br></li>
+**** まとめる >>
+<li><a href="./plpgsql-04.html">SELECT INTO文</a><br></li>
+<li><a href="./plpgsql-05.html">結果ステータスの取得</a><br></li>
+<li><a href="./plpgsql-06.html">動的なSQL文の実行</a><br></li>
+<< ここまで****
+<li><a href="./plpgsql-07.html">IF 条件分岐</a><br></li>
+<li><a href="./plpgsql-08.html">ループ処理</a><br></li>
+*** >>>
+<li><a href="./plpgsql-09.html">RETURN</a><br></li>
+<<< ***
+<li><a href="./plpgsql-10.html">ループ処理　LOOP</a><br></li>
+<li><a href="./plpgsql-11.html">ループ処理　WHILE</a><br></li>
+<li><a href="./plpgsql-12.html">ループ処理　FOR </a><br></li>
+<li><a href="./plpgsql-13.html">ループ処理 (複数行の問い合わせ結果を扱う)</a><br></li>
+<li><a href="./plpgsql-14.html">カーソルの利用</a><br></li>
+<li><a href="./plpgsql-15.html">カーソル変数の宣言</a><br></li>
+<li><a href="./plpgsql-16.html">カーソルのオープンとクローズ	OPEN / CLOSE</a><br></li>
+<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得		FETCH</a><br></li>
+<li><a href="./plpgsql-18.html">カーソルを使った例</a><br></li>
+<li><a href="./plpgsql-19.html">例外</a><br></li>
+*** >>>
+<li><a href="./plpgsql-21.html">CASE</a><br></li>
+<li><a href="./plpgsql-22.html">FOREACH</a><br></li>
+<<< ***
+</ol>
+
+
+<h5>Appendix(付録)</h5>
+
+<ol>
+<li><a href="./app-01.html">pgpool-II</a><br></li>
+<li><a href="./app-02.html">Pacemaker</a><br></li>
+</ol>
+
+
+<h5>おまけ:ネット公開(ページ数の関係で書籍には載せない)</h5>
+
+<ol>
+[pgpool]<br>
+<li><a href="./ha-06.html">pgpool-II セットアップ</a><br></li>
+<li><a href="./ha-07.html">pgpool-II レプリケーションモード</a><br></li>
+<li><a href="./ha-08.html">pgpool-II マスタースレーブモード</a><br></li>
+[Pacemaker]<br>
+<li><a href="./ha-10.html">Pacemaker</a><br></li>
+</ol>
+
+</div>
+<hr class="full_hr">
+</div>
+
+  </td>
+  <td valign="top">
+   <div id="body">
+
+<h2>ログと統計情報の分析</h2>
+
+
+<div class="jumpmenu"></div><h3>スロークエリの捕捉</h3>
+
+<p>
+ログの収集はチューニングだけでなく、システムの状態把握のための第一歩です。
+</p>
+
+
+<p>
+処理に時間のかかるSQL文をスロークエリと呼びます。
+設定パラメータlog_min_duration_statementでスロークエリを捕捉できます。パラメータの設定方法は[<3-17>]のpgfouineの項を参照してください。
+<br>
+以下に、log_min_duration_statement = 80とした場合のログの出力例を示します。
+
+
+<pre>
+LOG:  duration: 161.371 ms  statement: vacuum pgbench_branches
+LOG:  duration: 121.393 ms  statement: UPDATE pgbench_branches 
+      SET bbalance = bbalance + 97 WHERE bid = 1;
+LOG:  duration: 118.580 ms  statement: UPDATE pgbench_tellers 
+      SET tbalance = tbalance + 2065 WHERE tid = 2;
+LOG:  duration: 193.489 ms  statement: UPDATE pgbench_branches 
+      SET bbalance = bbalance + -2631 WHERE bid = 1;
+</pre>
+
+<p>
+設定パラメータlog_min_duration_statementに0を設定すれば、実行したすべてのSQL文をログに書き出します。
+小さな値を設定するほど捕捉するSQL文は増えますが、ログファイルへの書き込みコストが膨大になり、DBMSの性能が劣化するという本末転倒な事態に陥ります。
+慎重に設定値を選んでください。
+</p>
+
+
+<p>
+スロークエリを捕捉したらEXPLAINで問い合わせプランを表示し、想定したインデックスが効いているか、どの処理に時間を費しているか、SQL文が複雑過ぎないかなど調べて対処してください。
+</p>
+
+<p>
+EXPLAIN文で特に問題が見つからない場合、サーバの高負荷やアクセス競合による並列処理の効率低下などが影響している可能性もあります。
+そのような場合は稼働統計情報の分析に進みます。
+</p>
+
+<div class="jumpmenu"></div><h3>稼働統計情報の分析</h3>
+
+<p>
+[<3-15>]で紹介した稼働統計情報でシステムの様々な情報を得られます。
+以下に有用な使いかたをいくつか紹介します。
+</p>
+
+<div class="jumpmenu"></div><h4>データベース毎の稼働状況</h4>
+
+<p>
+稼働統計情報pg_stat_databaseのxact_commitとxact_rollbackでデータベース毎の活動状況が、blks_readとblks_hitでブロックの読み込み数とキャッシュヒット数がわかります。
+blks_readとblks_hitからキャッシュのヒット率も計算できます。
+<br>
+以下に実行例を示します。
+</p>
+
+<pre>
+sampledb=# SELECT datname,xact_commit,xact_rollback,blks_read, blks_hit,
+sampledb-#        CASE WHEN blks_read = 0 THEN 0.00
+sampledb-#             ELSE round(100 * blks_hit/(blks_hit + blks_read), 2)
+sampledb-#        END AS hit_ratio
+sampledb-# FROM pg_stat_database;
+  datname  | xact_commit | xact_rollback | blks_read | blks_hit | hit_ratio 
+-----------+-------------+---------------+-----------+----------+-----------
+ template1 |           0 |             0 |         0 |        0 |      0.00
+ template0 |           0 |             0 |         0 |        0 |      0.00
+ postgres  |         184 |             0 |       442 |     4863 |     91.00
+ sampledb  |     1921632 |             6 |   1020775 |  8901197 |     89.00
+(4 rows)
+</pre>
+
+<div class="jumpmenu"></div><h4>テーブル毎の稼働状況</h4>
+
+<p>
+稼働統計情報pg_stat_user_tables、pg_stat_all_tablesは多くの有用な情報を提供します。
+</p>
+
+<div class="jumpmenu"></div><h5>SQL比率</h5>
+
+<p>
+pg_stat_user_tablesを使い、テーブル毎のSQL比率を表示できます。
+</p>
+
+<pre>
+SELECT 
+s.schemaname, s.relname, 
+CASE WHEN s.total = 0 THEN 0.00
+ ELSE round((100*cast(s.n_tup_ins AS numeric)/s.total) ,2) END AS ins_ratio,
+CASE WHEN s.total = 0 THEN 0.00
+ ELSE round((100*cast(s.n_tup_upd AS numeric)/s.total) ,2) END AS upd_ratio,
+CASE WHEN s.total = 0 THEN 0.00
+ ELSE round((100*cast(s.n_tup_del AS numeric)/s.total) ,2) END AS del_ratio
+FROM (SELECT schemaname,relname, 
+       n_tup_ins, n_tup_upd, n_tup_del,
+       cast((n_tup_ins + n_tup_upd + n_tup_del) AS numeric) AS total
+       FROM pg_stat_user_tables) AS s
+ORDER BY relname;
+ schemaname |     relname      | ins_ratio | upd_ratio | del_ratio 
+------------+------------------+-----------+-----------+-----------
+ public     | pgbench_accounts |     99.70 |      0.30 |      0.00
+ public     | pgbench_branches |      0.33 |     99.67 |      0.00
+ public     | pgbench_history  |     99.35 |      0.65 |      0.00
+ public     | pgbench_tellers  |      3.17 |     96.83 |      0.00
+ public     | userlist         |     50.04 |      0.25 |     49.71
+(5 rows)
+</pre>
+
+
+<div class="jumpmenu"></div><h5>キャッシュヒット</h5>
+
+<p>
+heap_blks_readとheap_blks_hitでテーブル毎のキャッシュのヒット率hit_ratioを計算できます。
+<br>
+データベースを起動した直後はすべてのブロックを読み込まなければならないのでhit_ratioは低いはずです。
+しかし、十分な時間稼働した後もhit_ratioが低いままなら、
+共有バッファshared_buffersの調整や、テーブルへのアクセスパターンを分析して対応を図ってください。
+<br>
+以下に実行例を示します。
+</p>
+
+<pre>
+sampledb=# SELECT relname, heap_blks_read, heap_blks_hit,
+sampledb-#  CASE WHEN heap_blks_read = 0 THEN 0.00
+sampledb-#   ELSE round(100 * heap_blks_read/(heap_blks_read+heap_blks_hit),2)
+sampledb-#  END AS hit_ratio
+sampledb-#   FROM pg_statio_all_tables WHERE relname LIKE 'pgbench%';
+     relname      | heap_blks_read | heap_blks_hit | hit_ratio 
+------------------+----------------+---------------+-----------
+ pgbench_accounts |        1011839 |       1315008 |     43.00
+ pgbench_history  |           5299 |        158040 |      3.00
+ pgbench_branches |            209 |        542398 |      0.00
+ pgbench_tellers  |            201 |        387035 |      0.00
+(4 rows)
+</pre>
+
+
+<div class="jumpmenu"></div><h5>インデックス利用率</h5>
+
+<p>
+seq_scanとidx_scanでテーブル毎のインデックスの利用率idx_scan_ratioを計算できます。
+<br>
+利用率が低いテーブルにアクセスしているSQL文をEXPLAINで分析し、適切なインデックスが張られているか確認してください。
+</p>
+
+<pre>
+sampledb=# SELECT relname, seq_scan, idx_scan,
+sampledb-#  CASE WHEN (seq_scan + idx_scan) = 0 THEN 0.00
+sampledb-#   ELSE round(100 * idx_scan/(seq_scan+idx_scan), 2)
+sampledb-#  END AS idx_scan_ratio
+sampledb-#   FROM pg_stat_all_tables WHERE relname LIKE 'pgbench%';
+     relname      | seq_scan | idx_scan | idx_scan_ratio 
+------------------+----------+----------+----------------
+ pgbench_branches |    66273 |   106659 |          61.00
+ pgbench_accounts |        1 |  2076832 |          99.00
+ pgbench_tellers  |    50955 |   106971 |          67.00
+ pgbench_history  |        0 |          |               
+(4 rows)
+</pre>
+
+<p>
+もっと詳細なインデックスの利用率を求めてみましょう。
+次に示すのは、pg_stat_user_indexesを使ったインデックス毎の統計情報です。
+</p>
+
+<pre>
+SELECT schemaname, relname, indexrelname, idx_scan, idx_tup_read, idx_tup_fetch
+   FROM pg_stat_user_indexes
+   ORDER BY relname;
+ schemaname |     relname      |     indexrelname      | idx_scan | idx_tup_read | idx_tup_fetch 
+------------+------------------+-----------------------+----------+--------------+---------------
+ public     | pgbench_accounts | pgbench_accounts_pkey |     2220 |         2919 |          2220
+ public     | pgbench_branches | pgbench_branches_pkey |        0 |            0 |             0
+ public     | pgbench_tellers  | pgbench_tellers_pkey  |        0 |            0 |             0
+ public     | userlist         | userlist_pkey         |    18611 |        18611 |         18611
+ public     | userlist         | userlist_attr_idx     |        0 |            0 |             0
+(5 rows)
+</pre>
+
+<p>
+userlistの２つのインデックスのうち、userlist_pkeyだけが使われて、userlist_attr_idxは一度も使われていないことがわかります。
+<br>
+この結果は、テーブル設計の見直し(indexの見直し)をする際に、重要な情報になるでしょう。
+</p>
+
+<div class="jumpmenu"></div><h5>HOTの効果確認</h5>
+
+<p>
+バージョン8.3からサポートされたn_tup_hot_updとn_tup_updから、UPDATE文でHOTが利用されている割合hot_upd_ratioが計算できます。
+<br>
+もしも狙ったほどの効果がない場合、SQL文の見直しやロングトランザクションの影響などを調べてください。
+<br>
+以下に実行例を示します。
+</p>
+
+
+<pre>
+sampledb=#  -- http://lets.postgresql.jp/documents/technical/statistics/2
+sampledb=#  -- 笠原氏のクエリを改変
+sampledb=# SELECT relname, n_tup_upd, n_tup_hot_upd,
+sampledb-#        round(100 * n_tup_hot_upd/n_tup_upd, 2) AS hot_upd_ratio
+sampledb-#      FROM pg_stat_user_tables WHERE n_tup_upd > 0;
+     relname      | n_tup_upd | n_tup_hot_upd | hot_upd_ratio 
+------------------+-----------+---------------+---------------
+ pgbench_branches |    413997 |        413780 |         99.00
+ pgbench_accounts |    413997 |        398581 |         96.00
+ pgbench_tellers  |    413997 |        412393 |         99.00
+(3 rows)
+</pre>
+
+
+<div class="jumpmenu"></div><h4>ロングトランザクションの確認</h4>
+
+<p>
+ロングトランザクションとは、長時間コミットもアボートもされずに残っているトランザクションのことです。
+ロングトランザクションはVACUUMやHOTの機能に悪影響を与えます。
+</p>
+
+<p>
+以下のSQL文でトランザクション毎に開始時刻からの経過時間が表示できます。
+コミット忘れしたまま放置された端末やアプリケーションプログラムなど見つける際に有用です。
+<br>
+以下に実行例を示します。
+</p>
+
+<pre>
+sampledb=# -- ver9.1までは"pid"を"procpid", "query"を"current_query"に変更すること
+sampledb=# SELECT pid, waiting, (current_timestamp - xact_start)::interval(3)
+ AS duration, query FROM pg_stat_activity
+    WHERE pid <> pg_backend_pid();
+   pid  | waiting |   duration   |                          query                      
+--------+---------+--------------+---------------------------------------------------------
+  21968 | f       | 00:27:21.195 | <IDLE> in transaction
+  21972 | t       | 00:26:50.01  | UPDATE pgbench_accounts SET abalance = 1 WHERE aid = 1;
+(2 rows)
+</pre>
+
+
+<div class="jumpmenu"></div><h4>ロック待ち処理の確認</h4>
+
+<p>
+[<3-16>]で説明したように、設定パラメータlog_lock_waitsを有効にすると、
+ログにdeadlock_timeout以上の待ちが発生したSQL文を表示できます。
+</p>
+
+<p>
+上記のロングトランザクションとして検出されたUPDATE文のログを示します。
+deadlock_timeout以上(ここでは1秒)の待ちが発生した段階で、ログに書き込まれたことがわかります。
+</p>
+
+<pre>
+LOG:  duration: 331.250 ms  statement: UPDATE pgbench_accounts SET abalance = 1 WHERE aid = 1;
+LOG:  process 21972 still waiting for ShareLock on transaction 1245305 after 1004.557 ms
+STATEMENT:  UPDATE pgbench_accounts SET abalance = 1 WHERE aid = 1;
+</pre>
+
+<p>
+しかし、膨大なログファイルを分析するのも手間がかかるので、簡単に現時点でのロック状態(のスナップショット)を表示するSELECT文を紹介します。
+</p>
+
+<pre>
+sampledb=#  -- http://lets.postgresql.jp/documents/technical/statistics/2
+sampledb=#  -- 笠原氏のクエリを改変
+sampledb=#  -- ver9.1までは"pid"を"procpid", "query"を"current_query"に変更すること
+sampledb=# SELECT l.locktype, c.relname, l.pid, l.mode, 
+　　　　　　substring(a.query, 1, 6) AS query,
+       　　　　　　　(current_timestamp - xact_start)::interval(3) AS duration
+　　　　    FROM pg_locks AS l
+       　　　　LEFT OUTER JOIN pg_stat_activity AS a ON l.pid = a.pid
+         　　　LEFT OUTER JOIN pg_class AS c ON l.relation = c.oid 
+　　　　　　WHERE  NOT l.granted ORDER BY l.pid;
+   locktype    |     relname      |  pid  |     mode      | query  |   duration   
+---------------+------------------+-------+---------------+--------+--------------
+ transactionid |                  | 21972 | ShareLock     | UPDATE | 00:26:54.681
+ transactionid |                  | 22073 | ShareLock     | UPDATE | 00:00:00.062
+ transactionid |                  | 22079 | ShareLock     | UPDATE | 00:00:00.061
+ tuple         | pgbench_branches | 22080 | ExclusiveLock | UPDATE | 00:00:00.057
+(4 rows)
+</pre>
+
+<p>
+合計４つのロックがかかっていますが、特に1行目に着目すると、UPDATE文は26分54秒以上ShareLockでブロックされた状態であることがわかります。
+</p>
+
+
+<div class="jumpmenu"></div><h4>セッション情報</h4>
+
+<p>
+ここではpg_stat_activityを使った有用なqueriesを紹介します。
+<br>
+なお、
+[<4-17>]でpg_stat_activityのデータをリアルタイムで表示するcommand line tool: pg_activityを紹介しているので、そちらも参照してください。
+</p>
+
+<div class="jumpmenu"></div><h5>現在アクセスしているRole</h5>
+
+<p>
+このクエリは、セッション毎にアクセスしているデータベースとロール名、処理しているbackendプロセスのpidとそのプロセスが起動した時刻、そしてloginしている時間を示します。
+</p>
+
+<pre>
+SELECT datname,usename, pid, backend_start, 
+(current_timestamp - backend_start)::interval(3) AS "login time"
+FROM pg_stat_activity;
+ datname  | usename  |  pid  |         backend_start         |  login time  
+----------+----------+-------+-------------------------------+--------------
+ postgres | postgres |  2385 | 2014-02-15 02:30:05.1476+09   | 00:22:00.204
+ sampledb | postgres | 30413 | 2014-02-15 01:53:39.242691+09 | 00:58:26.109
+ sampledb | postgres |  5549 | 2014-02-15 02:52:03.047571+09 | 00:00:02.304
+ sampledb | postgres |  5550 | 2014-02-15 02:52:03.056086+09 | 00:00:02.295
+ sampledb | postgres |  5551 | 2014-02-15 02:52:03.070362+09 | 00:00:02.281
+ sampledb | postgres |  5552 | 2014-02-15 02:52:03.090171+09 | 00:00:02.261
+(6 rows)
+</pre>
+
+<div class="jumpmenu"></div><h5>現在実行中の(自分以外の)SQL</h5>
+
+<p>
+このクエリは、上のクエリに加えて他のトランザクションによってwaitしているかどうか、実行しているSQLを示します。
+</p>
+
+<pre>
+SELECT datname, usename, pid,
+       (current_timestamp - xact_start)::interval(3) AS duration, 
+       waiting, query
+         FROM pg_stat_activity WHERE pid != pg_backend_pid();
+-[ RECORD 1 ]--------------------------------------------------------------------------
+datname  | postgres
+usename  | postgres
+pid      | 2385
+duration | 
+waiting  | f
+query    | SELECT statsinfo.sample()
+-[ RECORD 2 ]--------------------------------------------------------------------------
+datname  | postgres
+usename  | postgres
+pid      | 5649
+duration | 
+waiting  | f
+query    | INSERT INTO statsrepo.autoanalyze VALUES 
+	   	       ($1, $2::timestamptz - interval '1sec' * $6, $3, $4, $5, $6)
+-[ RECORD 3 ]--------------------------------------------------------------------------
+datname  | sampledb
+usename  | postgres
+pid      | 5728
+duration | 00:00:00.004
+waiting  | f
+query    | UPDATE pgbench_accounts SET abalance = abalance + 4944 WHERE aid = 61886;
+-[ RECORD 4 ]--------------------------------------------------------------------------
+datname  | sampledb
+usename  | postgres
+pid      | 5730
+duration | 00:00:00.008
+waiting  | f
+query    | UPDATE pgbench_branches SET bbalance = bbalance + -4699 WHERE bid = 1;
+-[ RECORD 5 ]--------------------------------------------------------------------------
+datname  | sampledb
+usename  | postgres
+pid      | 5731
+duration | 00:00:00.005
+waiting  | f
+query    | UPDATE pgbench_tellers SET tbalance = tbalance + 3034 WHERE tid = 7;
+</pre>
+
+<p>
+残念ながらPostgreSQLはこれよりも詳しいセッションに関する情報を得ることはできません。
+例えば、セッション毎にどれくらいのブロックをファイルシステムから読み込んだのか、どれくらいのブロックを書き込んだのかを知ることはできません。
+</p>
+
+
+<div class="jumpmenu"></div><h4>共有メモリに関する情報</h4>
+
+<p>
+PostgreSQLはshared_buffersに関する統計情報を知るためのviewや関数がありません。
+しかし、contirbuteモジュールpg_buffercacheを使えば、ある程度の情報を得られます。
+</p>
+
+<p>
+少し複雑ですが、shared_buffersのactivityを知るためのqueryを紹介します。
+</p>
+<p>
+このqueryは、接続したDatabaseのテーブルやインデックスのshared_buffers上の状態を知るためのものです。
+カタログpg_classのデータは接続したDatabaseの情報しか表示できないため、
+他のDatabaseのテーブルやインデックスの情報は表示しないので、注意してください。
+</p>
+
+<pre>
+WITH bs AS
+     (SELECT cast(current_setting('block_size') AS integer) AS block_size)
+SELECT 
+c.relname AS relation, 
+pg_size_pretty(pg_relation_size(c.oid)) AS "total size", 
+pg_size_pretty(count(*) * bs.block_size) AS "on memory", 
+CASE WHEN pg_relation_size(c.oid) = 0 THEN 0.00
+ELSE
+round(cast(cast(count(*) * bs.block_size as numeric)/ pg_relation_size(c.oid) as numeric), 2) 
+			   		    	      	END AS "on memory ratio",
+round(avg(usagecount), 2) AS "average usagecount"
+FROM pg_buffercache bc, pg_class c, bs
+WHERE bc.relfilenode IS NOT NULL  
+AND bc.relfilenode = pg_relation_filenode(c.oid)
+GROUP BY c.relname, c.oid, bs.block_size,
+bc.relfilenode, bc.reltablespace, bc.reldatabase
+ORDER BY count(*) DESC;
+        relation        | total size | on memory  | on memory ratio | average usagecount 
+------------------------+------------+------------+-----------------+--------------------
+ pgbench_accounts       | 13 MB      | 696 kB     |            0.05 |               2.22
+ pgbench_accounts_pkey  | 2208 kB    | 424 kB     |            0.19 |               2.51
+ pg_attribute           | 360 kB     | 200 kB     |            0.56 |               4.92
+....
+
+</pre>
+
+<p>
+shared_buffersに関連して知ることができるactivityはこれだけです。
+残念ながら、PostgreSQLはwork_memやtemp_buffersなど、メモリのactivityに関する統計情報を得ることができません。
+</p>
+
+
+
+<hr class="full_hr">
+<div id="lastmodified">
+Last-modified: 2018-9-8
+</div>
+</body>
+</html>
+

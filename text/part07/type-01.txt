@@ -1,0 +1,64 @@
+%FILE internal/type-01.html
+%LASTMOD
+%KEY pgsql-type01
+
+%TITLE PostgreSQLがサポートするデータ型
+
+<p>
+PostgreSQLは次のデータ型をサポートしています。
+</p>
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>データ型</th>		<th>参照</th>
+</tr><tr>
+<td>数値データ型</td>		<td>[<7-02>]</td>
+</tr><tr>
+<td>文字データ型</td>		<td>[<7-03>]</td>
+</tr><tr>
+<td>日付/時刻データ型</td>		<td>[<7-04>]</td>
+</tr><tr>
+<td>ブーリアン型</td>		<td>[<7-06>]</td>
+</tr><tr>
+<td>幾何データ型</td>		<td>省略</td>
+</tr><tr>
+<td>ネットワークアドレスデータ型</td>		<td>省略</td>
+</tr><tr>
+<td>ビット列型</td>		<td>[<7-07>]</td>
+</tr><tr>
+<td>通貨データ型</td>		<td>省略</td>		
+</tr><tr>
+<td>疑似データ型(Pseudo-Types)</td>		<td>[<7-08>]</td>
+</tr><tr>
+<td>バイナリ列データ型</td>		<td>[<7-09>]</td>
+
+</tr><tr>
+<td>文字列検索(Text Search)型</td>		<td>省略</td>
+
+</tr><tr>
+<td>XML型</td>		<td>省略</td>
+
+</tr><tr>
+<td>Range型</td>		<td>[<7-10>]</td>
+
+</tr></table>
+
+<br>
+
+<p>
+通貨に関するデータは数値データ型のnumeric、もしくはdecimalを使うことを推奨します。
+</p>
+
+
+<p>
+データ型の変換は、型変換関数([<7-25>])を利用する方法の他に、2重コロン::演算子でキャストすることでも可能です。
+</p>
+
+<pre>
+sampledb=# SELECT 'あ'::text, 'あ'::bytea;
+ text |  bytea   
+------+----------
+ あ   | \xe38182
+(1 row)
+</pre>
+

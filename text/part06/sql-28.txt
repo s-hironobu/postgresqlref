@@ -1,0 +1,356 @@
+%FILE internal/sql-28.html
+%LASTMOD
+%KEY pgsql-sql28
+
+%TITLE 選択したレコードに対するロック	FOR UPDATE /  FOR SHARE
+
+<pre>
+[<書式>]
+SELECT select_list 
+       FROM from_list 
+       FOR { UPDATE | SHARE } [ OF table_name [, ...] ] [ NOWAIT ] [...]
+
+==================================================================
+句		説明
+==================================================================
+FOR UPDATE	選択したレコードに排他的ロックをかける
+FOR SHARE	選択したレコードに共有ロックをかける。バージョン8.1から
+==================================================================
+
+==================================================================
+オプション	説明
+==================================================================
+NOWAIT		ロックが競合した場合、ブロックせずにすぐにエラーを返す
+==================================================================
+</pre>
+
+%CHAPTER 解説
+
+<p>
+FOR UPDATE句とFOR SHARE句について簡単に解説します。
+細かな注意点が多数あるので、使用にあたっては公式ドキュメントを参照してください。
+</p>
+
+<p>
+・FOR UPDATE
+<br>
+SELECT文で選択したレコードに対して"排他的ロック"をかけます。
+<br>
+FOR UPDATEで排他的ロックをかけたレコードに対し、他のトランザクションがUPDATE、DELETE、SELECT FOR UPDATE、およびSELECT FOR SHAREを実行しようとすると、ブロックされます。
+</p>
+
+<p>
+・FOR SHARE
+<br>
+バージョン8.1からサポートされたFOR SHARE句は、SELECT文で選択されたレコードに対して"共有ロック"をかけます。
+<br>
+FOR SHAREで共有ロックをかけたレコードに対し、他のトランザクションがUPDATE、DELETE、SELECT FOR UPDATEを実行しようとするとブロックされますが、SELECT FOR SHAREはブロックされません。
+</p>
+
+<p>
+・NOWAITオプション
+<br>
+バージョン8.1からNOWAITオプションがサポートされました。
+NOWAITオプションを設定するとロックが競合している場合、ブロックされずに即エラーを返します。
+</p>
+
+<p>
+・ロックの競合関係
+<br>
+SELECT FOR UPDATEとSELECT FOR SHARE、および基本的なSQL文(SELECT, UPDATE, DELETE, INSERT)の間のロックの競合関係を[<表6-07>]にまとめました。
+</p>
+
+
+<table border=1>
+<caption>[<表6-07>] ロックの競合関係</caption>
+<tr bgcolor="#cccccc">
+<th>＼トランザクションB<br>---------------<br>トランザクションA＼</th> <th>SELECT</th>	<th>UPDATE<br>DELETE<br>INSERT</th>	<th>FOR UPDATE</th> <th>FOR SHARE</th>	<th>FOR UPDATE<br>NOWAIT</th> <th>FOR SHARE<br>NOWAIT</th>
+</tr><tr>
+<td>FOR UPDATE              </td> <td>   ◎   </td> <td>   ×*1 </td> <td>    ×      </td> <td>    ×     </td> <td>   ERROR    </td> <td>    ERROR </td>
+</tr><tr>
+<td>FOR SHARE               </td> <td>   ◎   </td> <td>   ×*2 </td> <td>    ×      </td> <td>    △*2</td> <td>   ERROR    </td> <td>     △</td>
+</tr><tr>
+<td>FOR UPDATE NOWAIT       </td> <td>   ◎   </td> <td>   ×   </td> <td>    ×      </td> <td>    ×     </td> <td>   ERROR    </td> <td>    ERROR</td>
+</tr><tr>
+<td>FOR SHARE NOWAIT        </td> <td>   ◎   </td> <td>   ×   </td> <td>    ×      </td> <td>    △     </td> <td>   ERROR    </td> <td>     △</td>
+</tr></table>
+
+<table><tr>
+<td>　　</td><td>◎ </td><td>:</td><td>ブロックされない</td>
+</tr><tr>
+<td>　　</td><td>×</td><td>:</td> <td>ブロックされる</td>
+</tr><tr>
+<td>　　</td><td>△ </td><td>:</td><td>
+ "SELECT FOR SHARE"どうしならば、ブロックされない。ただし、共有ロック取得後の挙動はSQLと状況に依存</td>
+</tr><tr>
+<td>　　</td><td>ERROR</td><td>:</td><td> エラーを返す</td>
+</tr></table>
+<br>
+<table>
+<tr>
+<td>　　</td><td> *1 :説明(1)と[<図6-03>]参照</td>
+<td>　　</td><td> *2 :説明(2)と[<図6-04>]参照</td>
+</tr></table>
+<br>
+<br>
+
+<p>
+[<表6-07>]の"トランザクションA"や"トランザクションB"は、
+[<図6-02>]〜[<図6-04>]を想定しています。
+<br>
+以下、具体例を使ってロックの競合関係と、表の見方を同時に説明します。
+</p>
+
+
+%SECTION (1)SELECT FOR UPDATE
+
+<p>
+トランザクションAがSELECT FOR UPDATE文で検索したレコードを、
+トランザクションBが削除します([<図6-02>]参照)。
+しかし、トランザクションAがUPDATE文を実行しコミットするまで、
+トランザクションBの削除はブロックされます。
+</p>
+
+<font color="#ff0000">
+作図用データ
+</font>
+
+<pre>
+sampledb=# BEGIN;
+BEGIN
+
+sampledb=# SELECT price FROM itemlist WHERE id = 1 
+sampledb-#                         FOR UPDATE;
+ price
+-------
+   100
+(1 row)
+
+sampledb=# UPDATE itemlist SET price = 140 
+Sampledb-#                        WHERE id = 1;
+UPDATE 1
+
+
+
+
+
+
+sampledb=# COMMIT; 
+COMMIT
+
+
+
+
+sampledb=# BEGIN;
+ BEGIN
+
+sampledb=# SELECT price FROM itemlist  WHERE id = 1;
+  price
+ --------
+    100
+  (1 row) 
+
+sampledb=# DELETE FROM itemlist WHERE id = 1;
+
+
+	   DELETE,UPDATE, INSERT, 
+	   SELECT FOR UPDATEを実行すると
+	   セッションAのトランザクションが終了するまで
+	   更新はブロックされる
+
+
+
+DELETE 1
+ sampledb=# COMMIT;
+ COMMIT
+
+</pre>
+
+<table border=1>
+<caption>[図6-02>] SELECT FOR UPDATEの実行例</caption>
+<tr><td>
+<left>
+<img src="./fig-6-02.jpg"><br>
+</left>
+</td></tr></table>
+
+
+<p>
+これは[<表6-07>]中で"×*1"と示した部分に対応します。
+</p>
+
+
+
+%SECTION (2)SELECT FOR SHARE
+
+
+<p>
+トランザクションAがSELECT FOR SHARE文で検索したレコードに対して、トランザクションBもSELECT FOR SHARE文を実行します([<図6-03>]参照)。
+</p>
+
+
+<font color="#ff0000">
+作図用データ
+</font>
+
+<pre>
+sampledb=# BEGIN;
+BEGIN
+
+sampledb=# SELECT price FROM itemlist WHERE id = 1 
+sampledb-#                                 FOR SHARE;
+ price
+-------
+   100
+(1 row)
+
+sampledb=# UPDATE itemlist SET price = 140 WHERE id = 1;
+
+
+
+
+
+
+
+
+UPDATE 1
+
+
+sampledb=# COMMIT;
+COMMIT
+
+
+
+
+
+sampledb=# BEGIN;
+ BEGIN
+
+sampledb=# SELECT price FROM itemlist  WHERE id = 1
+sampledb-#                                       FOR SHARE;
+  price
+ --------
+    100
+  (1 row) 
+
+sampledb=# DELETE FROM itemlist WHERE id = 1;
+ERROR:  deadlock detected
+DETAIL:  Process 25490 waits for ExclusiveLock on 
+ tuple (0,28) of relation 16401 of database 16384; 
+ blocked by process 25488.
+    
+ROLLBACK
+
+</pre>
+
+<table border=1>
+<caption>[<図6-03>] SELECT FOR SHAREの実行例(競合しない場合)</caption>
+<tr><td>
+<left>
+<img src="./fig-6-03.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<p>
+SELECT FOR SHARE文どうしは競合しないので、ブロックされることなく実行できます。
+これは[<表6-07>]中で"△*2"と示した部分に対応します。
+</p>
+
+
+<p>
+しかし、次に何らかの操作(図中ではトランザクションAでUPDATE文)を実行しようとしても、
+その操作はブロックされます。
+これは[<表6-07>]中で"×*2"と示した部分に対応します。 
+</p>
+
+<p>
+さらに、他のトランザクションが何らかの操作を行なおうとするとデッドロックが発生し、
+そのトランザクションは自動的にアボートされます。
+</p>
+
+
+
+%SECTION (3)SELECT FOR SHAREの特殊なケース
+
+<p>
+最後に、SELECT FOR SHAREの特殊なケースを示します。
+</p>
+
+<p>
+トランザクションAがSELECT FOR SHARE文で検索し、
+直後にUPDATE文を実行したレコードに対して、
+トランザクションBもSELECT FOR SHARE文を実行します([<図6-04>]参照)。
+</p>
+
+
+<font color="#ff0000">
+作図用データ
+</font>
+
+<pre>
+sampledb=# BEGIN;
+BEGIN
+
+sampledb=# SELECT price FROM itemlist WHERE id = 1 
+sampledb-#                                 FOR SHARE;
+ price
+-------
+   100
+(1 row)
+
+sampledb=# UPDATE itemlist SET price = 140 
+Sampledb-#                 WHERE id = 1; UPDATE 1
+
+
+
+
+sampledb=# COMMIT;
+COMMIT
+
+
+
+sampledb=# BEGIN;
+ BEGIN
+
+
+
+
+sampledb=# SELECT price FROM itemlist  WHERE id = 1
+sampledb-#                             FOR SHARE;
+
+
+セッションAのUPDATE文により、
+SELECT FOR SHARE文がブロックされる
+
+
+sampledb=# COMMIT;
+COMMIT 
+
+
+</pre>
+
+<table border=1>
+<caption>[<図6-04>] SELECT FOR SHAREの実行例(競合する場合)</caption>
+<tr><td>
+<left>
+<img src="./fig-6-04.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+
+<p>
+すでに対象となるレコードがUPDATEされてしまったので、
+トランザクションBのSELECT FOR SHARE文はブロックされます。
+</p>
+
+
+<p>
+このようにSELECT FOR SHAREどうしであっても、
+ロック取得後に実行するSQLによってブロックされたり、デッドロックが発生したりします。
+</p>
+
+

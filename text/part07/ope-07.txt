@@ -1,0 +1,75 @@
+%FILE internal/ope-07.html
+%LASTMOD
+%KEY pgsql-ope-07
+
+%TITLE 日付・時刻演算子
+
+
+[<日付/時刻演算子>]
+
+<table><tr bgcolor="#cccccc">
+<th>演算子</th>	<th>説明</th>	<th>例</th>		<th>結果</th>
+</tr><tr>
+<td>+	</td>	<td>加算</td>	<td>timestamp '2001-09-28 01:00' + interval '23 hours'</td>	<td>timestamp '2001-09-29 00:00' </td>
+</tr><tr>
+<td>-	</td>	<td>減算</td>	<td>timestamp '2001-09-28 23:00' - interval '23 hours'</td>	<td>timestamp '2001-09-28' </td>
+</tr><tr>
+<td>*	</td>	<td>乗算</td>	<td>interval '1 hour' * int '3'			</td>	<td>interval '03:00' </td>
+</tr><tr>
+<td>/	</td>	<td>除算</td>	<td>interval '1 hour' / int '3'			</td>	<td>interval '00:20' </td>
+</tr></table><br>
+
+
+%CHAPTER 解説
+
+<p>
+・加算 +
+<br>
+日付/時刻演算子の加算(+)は、次の組合せ"以外"で使用できます。
+</p>
+
+<ol>
+<li> date + date, date + timestamp </li>
+<li> time + time</li>
+<li> timestamp + date, timestamp + timestamp</li>
+</ol>
+
+<p>
+日付/時刻演算子の加算(+)は非可換(加算順序は交換不可)であることに注意してください。
+</p>
+
+<p>
+・減算 -
+<br>
+日付/時刻演算子の減算(-)は、以下の組合せ"以外"で使用できます。
+</p>
+
+<ol>
+<li>time - date, time - timestamp</li>
+<li>interval - date, interval - timestamp </li>
+</ol>
+
+%CHAPTER 実行例
+
+<pre>
+sampledb=# SELECT date '2012-06-14' - date '1964-11-04';
+ ?column? 
+----------
+    17389
+(1 row)
+
+sampledb=# SELECT date '2013-01-01' - time '02:01:15';
+      ?column?       
+---------------------
+ 2012-12-31 21:58:45
+(1 row)
+
+sampledb=# SELECT date '2013-01-01' - interval '1 hour 54 minute 12 second';
+      ?column?       
+---------------------
+ 2012-12-31 22:05:48
+(1 row)
+</pre>
+
+
+

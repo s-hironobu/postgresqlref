@@ -1,0 +1,59 @@
+%FILE internal/admin-07.html
+%LASTMOD
+%KEY pgsql-admin07
+
+%TITLE 認証とアクセス制御
+
+<p>
+PostgreSQLでSQL文を実行する際に、
+クリアしなければならない各種認証とアクセス制御について整理します([<図3-02>])。
+<p>
+
+<table border=1>
+<caption>[<図3-02>]認証とアクセス制御</caption>
+<tr><td>
+<img src="./fig-3-02.png">
+</td></tr></table>
+
+<p>
+[<図3-02>]においてクライアントからのSQL文は、図の下から上に向かって各種認証とアクセス制御を受け、それらすべてをクリアしたものだけが実行されます。
+</p>
+
+<p>
+(1) OSによるアクセス制御([<3-08>]参照)
+<blockquote>
+最初にOSによるアクセス制御があります。Linuxならiptablesなどで外部からのアクセスを許可しなければなりません。
+</blockquote>
+</p>
+
+<p>
+(2) PostgreSQLサーバによるアクセス制御([<3-08>]参照)
+<blockquote>
+外部からの接続を許可するか否か、設定パラメータlisten_addressesに設定します。
+</blockquote>
+</p>
+
+<p>
+(3) ロールの認証([<3-09>]参照)
+<blockquote>
+接続してきたロールがアクセス可能か否か、pg_hba.confファイルの情報を基に検査します。
+</blockquote>
+</p>
+
+<p>
+(4) アクセス制御([<3-10>]参照)
+<blockquote>
+接続してきたロールがデータベースやテーブルなどのアクセス権限があるか否かを検査します。
+GRANT文とREVOKE文で権限を制御します。
+</blockquote>
+</p>
+
+<p>
+(5) 行レベルのアクセス制御([<3-10>]参照)
+<blockquote>
+バージョン9.5から、行レベルでアクセス制御ができるようになりました。
+CREATE POLICY文とALTER POLICY文で権限を制御します。
+</blockquote>
+</p>
+
+

@@ -1,0 +1,86 @@
+%FILE internal/sql-60.html
+%LASTMOD
+%KEY pgsql-sql60
+
+%TITLE 新しい機能
+
+
+
+
+%CHAPTER 日本語全文検索
+
+<p>
+日本語全文検索(テキスト検索)は、検索方式から形態素解析とN-グラムの二つに大別できます。
+PostgreSQLはどちらの方式もサポートしています。
+</p>
+
+<p>
+形態素解析方式はバージョン8.3でサポートされたTSearchと日本語全文検索モジュールtextsearch_ja、およびMeCabに代表される形態素分析エンジンを組み合わせます。
+</p>
+
+<p>
+N-グラム方式で代表的なものは全文検索エンジンSennaをベースとしたtextsearch_sennaです。また、全文検索エンジンGroongaをベースに開発中のtextsearch_groongaもあります。
+<br>
+バージョン9.1からコントリビュートされたcontrib/pg_trgmもありますが、そのままでは日本語の扱いに不具合がでます。
+</p>
+
+<p>
+textsearch_jaとtextsearch_sennaの比較表を示します([<表6-14>]参照)。
+</p>
+
+<table border=1>
+<caption>[<表6-14>] textsearch_jaとtextsearch_sennaの比較</caption>
+<tr bgcolor="#cccccc">
+<th>比較項目</th>		<th>textsearch_ja</th>				<th>textsearch_senna</th>
+</tr><tr>
+<td>方式</td>		<td>形態素解析</td>				<td>N-gram</td>
+</tr><tr>
+<td>書式</td>		<td>@@</td>					<td>@@,LIKE</td>
+</tr><tr>
+<td>類義語</td>		<td>OK</td>					<td>NG</td>
+</tr><tr>
+<td>ストップワード</td>	<td>OK</td>					<td>NG</td>
+</tr><tr>
+<td>リカバリ</td>	<td>OK</td>					<td>NG(リカバリできない:外部モジュールなのでWALログを生成しないため)</td>
+</tr><tr>
+<td>レプリケーション</td><td>OK</td>					<td>NG(レプリケーションでも使えない:外部モジュールなのでWALログを生成しないため)</td>
+</tr><tr>
+<td>N文字以下での検索</td><td>単語に依存</td>				<td>OK</td>
+</tr><tr>
+<td>更新削除</td>	<td>OK</td>					<td>NG</td>
+</tr>
+</table>
+
+
+<p>
+日本語全文検索は、分かち書きしない、エンコーディング(文字コード)、類似語検索など日本語固有のたくさんの問題があり、PostgreSQLに限らずまだ決定版といえる検索システムは存在しません。
+現在も様々なアプローチで開発が進められています。
+<br>
+ここでは各モジュールの紹介と情報へのポインタを示すにとどめます。
+</p>
+
+<ul>
+<li>日本語全文検索の解説記事</li>
+http://lets.postgresql.jp/documents/technical/text-processing/3/
+
+<li>ソフトウエアへのリンク</li>
+ <table><tr>
+ <td>textsearch_ja</td>	<td>http://textsearch-ja.projects.postgresql.org/textsearch_ja.html</td>
+ </tr><tr>
+ <td>MeCab</td>		<td>http://mecab.googlecode.com/svn/trunk/mecab/doc/index.html</td>
+ </tr><tr>
+ <td>textsearch_senna</td><td>http://textsearch-ja.projects.postgresql.org/textsearch_senna.html</td>
+ </tr><tr>
+ <td>Senna</td>		<td>http://qwik.jp/senna/senna_takahashi.html</td>
+ </tr><tr>
+ <td>textsearch_groonga</td>	<td>http://textsearch-ja.projects.postgresql.org/textsearch_groonga.html</td>
+ </tr><tr>
+ <td>Groonga</td>	<td>http://groonga.org/</td>
+ </tr></table>
+
+<li>開発者(板垣氏)の解説資料</li>
+　<ul>
+ <li>データベース組み込みの全文検索を使うには (前編)	http://bit.ly/HOBybn</li>
+ <li>データベース組み込みの全文検索を使うには (後編)	http://bit.ly/HOBwQY</li>
+ </ul>
+</ul>

@@ -1,0 +1,211 @@
+%FILE internal/sql-12.html
+%LASTMOD
+%KEY pgsql-sql12
+
+
+%TITLE テーブル属性の更新(3)		ALTER TABLE
+
+%SECTION 制約条件の更新
+
+<pre>
+[<書式>]
+
+● 制約条件の追加
+ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
+    ADD [ CONSTRAINT constraint_name ]
+    { CHECK ( expression ) |
+      UNIQUE ( column_name [, ... ] ) index_parameters |
+      PRIMARY KEY ( column_name [, ... ] ) index_parameters |
+      EXCLUDE [ USING index_method ] ( exclude_element WITH operator [, ... ] ) 
+	index_parameters [ WHERE ( predicate ) ] |
+      FOREIGN KEY ( column_name [, ... ] ) 
+      REFERENCES reftable [ ( refcolumn [, ... ] ) ]
+      [ MATCH FULL | MATCH PARTIAL | MATCH SIMPLE ] 
+            [ ON DELETE action ] [ ON UPDATE action ] }
+      [ DEFERRABLE | NOT DEFERRABLE ] 
+                             [ INITIALLY DEFERRED | INITIALLY IMMEDIATE ]
+
+● 制約条件の削除
+ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
+    DROP CONSTRAINT [ IF EXISTS ]  constraint_name [ RESTRICT | CASCADE ]
+
+● 制約の検査タイミングの更新
+ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
+      ALTER CONSTRAINT constraint_name 
+      [ DEFERRABLE | NOT DEFERRABLE ] [ INITIALLY DEFERRED | INITIALLY IMMEDIATE ]
+			    		(バージョン9.4から)
+
+==============================================================
+パラメータ		説明
+==============================================================
+table_name		制約条件を追加/削除するテーブル名
+constraint_name		追加/削除する制約名
+==============================================================
+
+==============================================================
+追加する制約		構文の説明
+==============================================================
+CHECK			[<6-04>]参照
+UNIQUE			[<6-04>]参照
+主キー			[<6-04>]参照
+EXCLUDE			[<6-04>]参照
+外部キー		[<6-05>]参照
+==============================================================
+
+==============================================================
+オプション	説明
+==============================================================
+CASCADE		この制約に依存するオブジェクトも一緒に削除
+RESTRICT	依存するオブジェクトがない制約のみ削除
+ALL. USER	全てのロールでトリガを有効/無効にするか、ALTER TABLEを実行したロールのみ有効/無効にするか
+IF EXISTS	制約が存在する場合のみ削除。エラーを返さない。9.0から
+==============================================================
+</pre>
+
+%CHAPTER 解説
+
+<p>
+・制約の追加と削除
+<br>
+ALTER TABLE文のADD CONSTRAINT形式でCHECK制約、UNIQUE制約、主キー制約、外部キー制約、EXCLUDE制約を追加できます。
+追加する制約条件はCREATE TABLE文と同じ構文を使って記述します。
+</p>
+
+<p>
+制約の削除はDROP CONSTRAINT形式を使います。
+</p>
+
+<p>
+上記以外の制約(DEFAULT値の設定とNOT NULL制約)は[<6-11>]を参照してください。
+またインデックスの追加と削除は[<6-35>]を参照してください。
+</p>
+
+<p>
+・制約の更新
+<br>
+バージョン9.4から制約の検査タイミングを変更できます。制約の検査タイミングについては[<6-04>]を参照してください。
+</p>
+
+%CHAPTER 実行例
+
+
+<p>
+・制約条件を付加してカラムを追加
+<br>
+追加するカラムにCHECK制約を付加します。
+</p>
+
+<pre>
+sampledb=# \d test_table
+  Table "public.test_table"
+ Column |  Type   | Modifiers 
+--------+---------+-----------
+ id     | integer | 
+
+sampledb=# ALTER TABLE test_table
+sampledb-#    ADD data int CHECK (0 <= data AND data < 100);
+ALTER TABLE
+
+sampledb=# \d test_table
+  Table "public.test_table"
+ Column |  Type   | Modifiers 
+--------+---------+-----------
+ id     | integer | 
+ data   | integer | 
+Check constraints:
+    "test_table_data_check" CHECK (0 <= data AND data < 100)
+</pre>
+
+
+<p>
+・CHECK制約の追加と削除
+<br>
+テーブルtest_tableのカラムidにCHECK制約を追加します。
+</p>
+
+<pre>
+sampledb=# \d test_table
+  Table "public.test_table"
+ Column |  Type   | Modifiers 
+--------+---------+-----------
+ id     | integer | 
+
+sampledb=# ALTER TABLE test_table
+   ADD CONSTRAINT  id_check  CHECK (0 <= id);
+ALTER TABLE
+
+sampledb=# \d test_table
+  Table "public.test_table"
+ Column |  Type   | Modifiers 
+--------+---------+-----------
+ id     | integer | 
+Check constraints:
+    "id_check" CHECK (0 <= id)
+</pre>
+
+<p>
+次に、このCHECK制約を削除します。
+</p>
+
+
+<pre>
+sampledb=# ALTER TABLE test_table
+sampledb-#     DROP CONSTRAINT id_check;
+ALTER TABLE
+
+sampledb=# \d test_table
+  Table "public.test_table"
+ Column |  Type   | Modifiers 
+--------+---------+-----------
+ id     | integer | 
+</pre>
+
+
+<p>
+・主キーの追加と削除
+<br>
+テーブルplain_tableのカラムidに主キーを設定します。
+予め、カラムidにはNOT NULL制約が必要です。
+</p>
+
+
+<pre>
+sampledb=# \d plain_table
+  Table "public.plain_table"
+ Column |  Type   | Modifiers 
+--------+---------+-----------
+ id     | integer | not null
+ data   | integer | 
+
+sampledb=# ALTER TABLE plain_table ADD PRIMARY KEY(id);
+ALTER TABLE
+</pre>
+
+<p>
+次に、設定した主キーを削除します。
+<br>
+主キーの制約名は、メタコマンド\dでわかります('plain_table_pkey')。
+</p>
+
+
+<pre>
+sampledb=# \d plain_table
+  Table "public.plain_table"
+ Column |  Type   | Modifiers 
+--------+---------+-----------
+ id     | integer | not null
+ data   | integer | 
+Indexes:
+    "plain_table_pkey" PRIMARY KEY, btree (id)
+
+sampledb=# ALTER TABLE plain_table DROP CONSTRAINT plain_table_pkey;
+ALTER TABLE
+
+sampledb=# \d plain_table
+  Table "public.plain_table"
+ Column |  Type   | Modifiers 
+--------+---------+-----------
+ id     | integer | not null
+ data   | integer | 
+</pre>
+

@@ -1,0 +1,622 @@
+%FILE internal/func-04.html
+%LASTMOD
+%KEY pgsql-func04
+
+%TITLE 文字列関数
+
+[<文字列関数一覧>]
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>文字列関数</th>	<th>返り値型　　　　</th>		<th>	説明</th>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>例</th>	<th>結果</th>
+
+
+</tr><tr>
+<td>ascii(text)	  </td>	<td>  int	</td>	<td>textの第1文字目のASCIIコード</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	ascii('abc')	</th>	<th align=left>	97</th>
+
+
+</tr><tr>
+<td>btrim(string, substring)</td>	<td>text</td>	<td>文字列stringから文字列substringを取り除く</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	btrim('abctrimabc','abc')</th>	<th align=left>'trim'</th>
+
+
+</tr><tr>
+<td>bit_length(string)</td>	<td>	int		</td>	<td>	文字列stringのビット数</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>bit_length('Alice')	</th>	<th align=left>	40</th>
+
+
+</tr><tr>
+<td>chr(ascii)		</td>	<td> text</td>	<td>アスキーコードasciiに対応する文字を返す</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	chr(97)	</th>	<th align=left>  'a'</th>
+
+
+</tr><tr>
+<td>char_length(string), character_length(string) </td>	<td>int	</td>	<td>文字列stringの文字数</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	char_length('Alice')	</th>	<th align=left>	5</th>
+
+
+</tr><tr>
+<td>concat(str "any" [, str "any" [, ...] ])</td>	<td>text</td>	<td>すべての引数を連結する。ただしNULLは無視。バージョン9.1から</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>concat('ab', 'cd', NULL, 'ef')</th>	<th align=left>'abcdef'</th>
+
+
+</tr><tr>
+<td>concat_ws(sep text, str "any" [, str "any" [, ...] ])</td>	<td>text</td>	<td>第一引数を区切り文字として、残りの引数を連結する。ただし、NULLは無視。バージョン9.1から</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> concat_ws(':', 'ab', 'cd', NULL, 'ef')</th>	<th align=left>'ab:cd:ef'</th>
+
+
+</tr><tr>
+<td>convert(string using conversion_name)</td>	<td>text</td>	<td>文字列stringを変換名conversion_name([<表7-21>]参照)で変換</td>
+
+
+</tr><tr>
+<td>convert(string, [src_encoding,] dest_encoding)</td>	<td>text</td>	<td>文字列stringを、エンコーディングdest_encodingに変換</td>
+
+
+</tr><tr>
+<td>convert_from(string bytea, src_encoding name)</td>	<td>text</td>	<td>エンコードsrc_encodingの文字列stringを、データベースのデフォルト文字エンコーディングに変換</td>
+
+
+</tr><tr>
+<td>decode(string, type)	</td>	<td>bytea	</td>	<td>文字列stringをtypeで指定したデータ型に変換する。ただし、bytea型として出力する</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>decode('44GCWuOCkw==', 'base64')</th>	<th align=left>'\xe381825ae38293'</th>
+
+
+</tr><tr>
+<td>encode(bytea, type)	</td>	<td>text</td>	<td>typeで指定したバイナリ形式のデータをテキストで表示</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> encode('あZん', 'base64')</th>	<th align=left> 44GCWuOCkw==</th>
+
+	 
+</tr><tr>
+<td>get_bit(string, offset)</td>	<td>int</td>	<td>文字列から1ビットを取り出す</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>get_bit('Th\\000omas'::bytea, 45)</th>	<th align=left>1</th>
+
+
+</tr><tr>
+<td>get_byte(string, offset)</td>	<td>int</td>	<td>文字列から1バイトを取り出す</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>get_byte('Th\\000omas'::bytea, 4)</th>	<th align=left>109</th>
+	
+
+
+</tr><tr>
+<td>initcap(text)	</td>	<td> text	</td>	<td>単語の第一文字を大文字に変換</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	initcap('hello world')	   </th>	<th align=left>'Hello World'</th>
+
+
+</tr><tr>
+<td>left(str text, n int)</td>	<td>text</td>	<td>文字列strの先頭からn文字返す。バージョン9.1から</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>left('abcde', 2)</th>	<th align=left>'ab'</th>
+
+
+
+</tr><tr>
+<td>length(string)		    </td>	<td>int</td>	<td>	文字列の長さ</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	length('Alice')	</th>	<th align=left>	5</th>
+
+</tr><tr>
+<td>length(stringbytea, encoding name)</td>	<td>	int</td>	<td>encodingによる文字列stringの長さ。バージョン8.3から</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>bit_length('Alice', 'UTF8')	</th>	<th align=left>	5</th>
+
+
+</tr><tr>
+<td>lower(string)	</td>	<td>text	</td>	<td>文字列stringを小文字に変換</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	lower('TOM')	</th>	<th align=left>'tom'</th>
+
+
+</tr><tr>
+<td>lpad(string, length [, text])</td>	<td>text</td>	<td>文字列stringが長さlengthになるまで、文字列の先頭(左側)からtextを追加</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	lpad('abc', 10, '123')	</th>	<th align=left>'1231231abc'</th>
+
+
+</tr><tr>
+<td>ltrim(string, substring)     </td>	<td> text	</td>	<td>文字列stringの先頭(左側)から文字列substringを取り除く</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	ltrim('abctrimabc','abc')</th>	<th align=left>'trimabc'</th>
+
+
+</tr><tr>
+<td>md5(string)	</td>	<td>text	</td>	<td>文字列stringをmd5で変換</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	md5('PostgreSQL')	</th>	<th align=left>399bd1ee587245ecac6f39beaa99886f</th>
+
+
+
+</tr><tr>
+<td>octet_length(string)</td>	<td>int	</td>	<td>文字列stringのバイト数</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	octet_length('Alice')	</th>	<th align=left>5</th>
+
+
+</tr><tr>
+<td>overlay(string placing substring from int [for int])</td>	<td>text</td>	<td>文字列stringのint番目から部分文字列substringを上書き	</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	 overlay ('abc---gh' placing 'def' from 4)  </th>	<th align=left>'abcdefgh'</th>
+
+
+</tr><tr>
+<td>pg_client_encoding()	</td>	<td>name</td>	<td>	クライアントのエンコーディング名</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	pg_client_encoding()	</th>	<th align=left>SQL_ASCII</th>
+
+
+</tr><tr>
+<td>position(substring in string)</td>	<td>int	</td>	<td>文字列stringでの、文字列substringの位置</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	position('cd' in 'abcdef')</th>	<th align=left>3</th>
+
+
+
+</tr><tr>
+<td>quote_indent(string)</td>	<td>	text	</td>	<td>文字列stringをSQL文で使えるように二重引用付で囲むなど、適切に変更</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	quote_ident('Tom\'s Dinner')</th>	<th align=left>"Tom's Dinner"</th>
+
+
+</tr><tr>
+<td>quote_literal(string)	</td>	<td>text	</td>	<td>文字列stringを文字列リテラルとして使えるように、適切に変更。例えば、引用符やバックスラッシュは適切に二重になる</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	quote_literal('Tom\'s Dinner')</th>	<th align=left>'Tom''s Dinner'</th>
+
+
+</tr><tr>
+<td>quote_nullable(string text)</td>	<td>text</td>	<td>stringに適切な引用符をつけて返す。バージョン8.4から</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>quote_nullable(NULL)</th>	<th align=left>NULL</th>
+
+</tr><tr>
+<td>quote_nullable(value anyelement)</td>	<td>text</td>	<td>適切な引用符をつけて返す。バージョン8.4から</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>quote_nullable(192.12)</th>	<th align=left>'192.12'</th>
+
+
+
+</tr><tr>
+<td>regexp_replace(string, pattern, replacement[, flags])</td>	<td>text</td>	<td>文字列string中のpatternに一致する部分をreplacemantで置換する。バージョン8.2から</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> regexp_replace ('abccccd', 'c{1,4}',  'C')</th>	<th align=left>'abCd'</th>
+
+
+</tr><tr>
+<td>regexp_matches(string, pattern [, flags])</td>	<td>setof text[]</td>	<td>文字列stringに一致するpatternの部分文字列を返す。バージョン8.3から</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>regexp_matches ('abcdef', '(ab)(cd)')</th>	<th align=left>{ab,cd}</th>
+
+
+</tr><tr>
+<td>regexp_split_to_array(string, delimiter [, flags])</td>	<td>text[]</td>	<td>区切り文字delimiterで文字列stringを分割する。バージョン8.3から</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>regexp_split_to_array('hello world', E'\\s+')</th> <th align=left>{hello,world}</th>
+
+
+</tr><tr>
+<td>regexp_split_to_table(string, delimiter [, flags])</td>	<td>setof text</td>	<td>区切り文字delimiterで文字列stringを分割する。バージョン8.3から</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>regexp_split_to_table('hello world', E'\\s+')</th><th align=left>hello<br>world</th>
+
+
+
+</tr><tr>
+<td>repeat(text, n)	</td>	<td>text</td>	<td>文字列textをn回繰り返す</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	repeat('Bye', 2)</th>	<th align=left>'ByeBye'</th>
+
+
+</tr><tr>
+<td>replace(string, from, to)</td>	<td>text</td>	<td>文字列string中の文字列fromをtoに置き換える</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	replace('abcdef', 'cd', 'CDCD')	</th>	<th align=left>'abCDCDef'</th>
+
+
+</tr><tr>
+<td>right(str text, n int)</td>	<td>text</td>	<td>文字列strの末尾からn文字返す。バージョン9.1から</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>right('abcde', 2)</th>	<th align=left>'de'</th>
+
+</tr><tr>
+<td>rpad(string, length [,text]) </td>	<td>text</td>	<td>文字列stringが長さlengthになるまで、文字列の末尾(右側)からtextを追加</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	rpad('abc', 10, '123')	</th>	<th align=left>'abc1231231'</th>
+
+
+</tr><tr>
+<td>rtrim(string, substring)       </td>	<td>text</td>	<td>文字列stringの末尾(右側)から文字列substringを取り除く</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	rtrim('abctrimabc','abc')</th>	<th align=left>'abctrim'</th>
+
+
+</tr><tr>
+<td>reverse(str)</td>	<td>text</td>	<td>文字列strを逆順にして返す。バージョン9.1から</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>reverse('abcde')</th>	<th align=left>'edcba'</th>
+
+
+</tr><tr>
+<td>set_bit(string, offset, newvalue)</td>	<td>bytea</td>	<td>文字列内の1ビットを設定する</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>set_bit('Th\\000omas'::bytea, 45, 0)</th>	<th align=left>\x54685c3030106f6d6173</th>
+
+
+</tr><tr>
+<td>set_byte(string, offset, newvalue)</td>	<td>bytea</td>	<td>文字列内の1バイトを設定する</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>set_byte('Th\\000omas'::bytea, 4, 64)</th>	<th align=left>\x54685c3040306f6d6173</th>
+
+
+</tr><tr>
+<td>split_part(string, delimiter, field)</td>	<td>text	</td>	<td>文字列stringを文字列delimiterで分割し、field番目の文字列を返す</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	 split_part('abc:def:ghi', ':', 2)	</th>	<th align=left>'def'</th>
+
+
+</tr><tr>
+<td>strpos(string, substring)	</td>	<td>int	</td>	<td>文字列string中、文字列substringの位置</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	strpos('abcdef','cd')	</th>	<th align=left>3</th>
+
+
+</tr><tr>
+<td>substr(string, from [, count])	     </td>	<td> text	</td>	<td>文字列stringからfrom番目以降の文字列を取り出す。countが指定してある場合、その文字数だけ取り出す</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	substr('abcdef', 3, 2)	     </th>	<th align=left> 'cd'</th>
+
+
+</tr><tr>
+<td>substring(string [from m] [for n])</td>	<td>text	</td>	<td>文字列stringのm文字目から文字数nを取り出す</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	substring('abcdef' from 3 for 2)</th>	<th align=left>'cd'</th>
+
+
+</tr><tr>
+<td>to_ascii(text [, encoding])	</td>	<td>text</td>	<td>文字列textを他のエンコーディングからASCIIに変換</td>
+
+
+
+</tr><tr>
+<td>to_hex(number)	</td>	<td>	text</td>	<td>数値numberを16進数に変換</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	to_hex(2353451)	</th>	<th align=left>'23e92b'</th>
+
+
+</tr><tr>
+<td>translate(string, from_char, to_char)</td>	<td>text</td>	<td>文字列string中の、文字from_charを文字to_charに置き換える</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	translate('abcdef', 'cd', 'CD')	</th>	<th align=left>'abCDef'</th>
+
+</tr><tr>
+<td>trim([leading | trailing | both] [substring] from string)</td>	<td>tex</td>	<td> 文字列stringから文字列substringを取り出す</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	trim(both 'abc' from 'abctrimabc')  </th>	<th align=left>'trim'</th>
+
+
+
+</tr><tr>
+<td>upper(string)	</td>	<td>text</td>	<td>	文字列stringを大文字に変換</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	upper('tom')	</th>	<th align=left>   'TOM'</th>
+
+
+
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+・char_length()、octet_length() 
+<br>
+関数char_length()と関数octet_length()は、character 型、varchar型、もしくはtext型のデータを引数とします。
+<br>
+関数char_length()は引数の文字数を返します。日本語などのマルチバイト文字であっても「文字数」を返すことに注意してください。
+<br>
+他方、関数octet_length()は引数を表現するために必要なバイト長を返します。
+
+<p>
+・trim()、btrim()、rtrim()、ltrim() 
+<br>
+関数trim()は、文字列stringから文字列substringを取り除きます。書式は次のとおりです。
+</p>
+
+[<書式>]
+<pre>
+	trim([leading | trailing | both] [substring] from string) 
+</pre>
+
+<p>
+引数として'leading'、'trailing'、'both'のいずれかを指定できます。各引数の意味は[<表7-20>]のとおりです。
+</p>
+
+<table border=1>
+<caption>[<表7-20>] trim関数引数一覧</caption>
+<tr bgcolor="#cccccc">
+<th align=left>引数</th>	<th>説明</th>
+</tr><tr>
+<td>leading	</td>	<td>stringの先頭からsubstringを取り除く。ltrimと等価</td>
+</tr><tr>
+<td>trailing	</td>	<td>stringの末尾からsubstringを取り除く。rtrimと等価</td>
+</tr><tr>
+<td>both	</td>	<td>stringの先頭と末尾、両側からsubstringを取り除く。btrimと等価</td>
+</tr></table>
+<br>
+
+<p>
+・to_ascii() 
+<br>
+関数to_ascii()がサポートするのは、エンコーディングLATIN1、LATIN2、WIN1250(CP1250)からの変換だけです。
+</p>
+
+
+<p>
+・変換名(conversion_name)
+<br>
+関数convert()で使う変換名の一部を[<表7-21>]に示します。メタコマンド\dcを実行すれば、全ての変換名を表示できます。
+</p>
+
+<table border=1>
+<caption>[<表7-21>] 組み込み済みの変換の一部</caption>
+<tr bgcolor="#cccccc">
+<th align=left>変換名</th>		<th align=left>変換前</th>		<th align=left>変換後</th>
+<th align=left>変換名</th>		<th align=left>変換前</th>		<th align=left>変換後</th>
+</tr><tr>
+<td>euc_jp_to_sjis	</td>	<td>EUC_JP	</td>	<td>SJIS</td>
+<td>iso_8859_7_to_utf_8	</td>	<td>ISO_8859_7</td>	<td>UNICODE</td>
+
+</tr><tr>
+<td>euc_jp_to_utf_8	</td>	<td>EUC_JP	</td>	<td>UNICODE</td>
+<td>iso_8859_8_to_utf_8	</td>	<td>ISO_8859_8</td>	<td>UNICODE</td>
+
+</tr><tr>
+<td>iso_8859_10_to_utf_8</td>	<td>LATIN6	</td>	<td>UNICODE</td>
+<td>iso_8859_9_to_utf_8	</td>	<td>LATIN5	</td>	<td>UNICODE</td>
+
+</tr><tr>
+<td>iso_8859_13_to_utf_8</td>	<td>LATIN7	</td>	<td>UNICODE</td>
+<td>sjis_to_euc_jp	</td>	<td>SJIS	</td>	<td>EUC_JP</td>
+
+</tr><tr>
+<td>iso_8859_14_to_utf_8</td>	<td>LATIN8	</td>	<td>UNICODE</td>
+<td>sjis_to_utf_8	</td>	<td>SJIS	</td>	<td>UNICODE</td>
+
+</tr><tr>
+<td>iso_8859_15_to_utf_8</td>	<td>LATIN9	</td>	<td>UNICODE</td>
+<td>utf_8_to_euc_jp	</td>	<td>UNICODE	</td>	<td>EUC_JP</td>
+
+</tr><tr>
+<td>iso_8859_16_to_utf_8</td>	<td>LATIN10	</td>	<td>UNICODE</td>
+<td>utf_8_to_sjis	</td>	<td>UNICODE	</td>	<td>SJIS</td>
+
+</tr><tr>
+<td>iso_8859_1_to_utf_8</td>	<td>LATIN1	</td>	<td>UNICODE</td>
+<td>utf_8_to_sjis	</td>	<td>UNICODE	</td>	<td>SJIS</td>
+
+</tr><tr>
+<td>iso_8859_2_to_utf_8	</td>	<td>LATIN2	</td>	<td>UNICODE</td>
+<td>windows_1250_to_utf_8</td>	<td>WIN1250	</td>	<td>UNICODE</td>
+
+</tr><tr>
+<td>iso_8859_3_to_utf_8	</td>	<td>LATIN3	</td>	<td>UNICODE</td>
+<td>windows_1251_to_utf_8</td>	<td>WIN	</td>	<td>UNICODE</td>
+
+</tr><tr>
+<td>iso_8859_4_to_utf_8	</td>	<td>LATIN4	</td>	<td>UNICODE</td>
+<td>windows_1256_to_utf_8</td>	<td>WIN1256		</td>	<td>UNICODE</td>
+
+</tr><tr>
+<td>iso_8859_5_to_utf_8	</td>	<td>ISO_8859_5</td>	<td>UNICODE</td>
+<td>windows_866_to_utf_8</td>	<td>ALT	</td>	<td>UNICODE</td>
+
+</tr><tr>
+<td>iso_8859_6_to_utf_8	</td>	<td>ISO_8859_6</td>	<td>UNICODE</td>
+<td>windows_874_to_utf_8</td>	<td>WIN874	</td>	<td>UNICODE</td>
+
+
+</tr></table>
+
+<br>
+
+<p>
+・convert() 
+<br>
+文字列を指定したエンコーディングに変換します。書式は次のとおりです。
+</p>
+
+[<書式>]
+<pre>
+	convert(string, [src_encoding,] dest_encoding) 
+</pre>
+
+
+<p>
+もとのエンコーディングはsrc_encodingに指定します。
+src_encodingを省略すると、データベースのデフォルトのエンコーディングを設定します。
+</p>
+
+<p>
+・lpad()、rpad() 
+<br>
+関数lpad()は文字列の先頭(左側)から、関数rpad()は文字列の末尾(右側)から、文字列stringが長さlengthになるまで文字列textを詰め込みます。書式は次のとおりです。
+</p>
+
+[<書式>]
+<pre>
+	lpad(string, length int [, text]) 
+	rpad(string, length int [,text]) 
+</pre>
+
+<p>
+・translate() 
+<br>
+関数translate()は文字列stringについて、文字列from_textに含まれる文字を文字列to_textに含まれる文字を置き換えます。
+"文字"の置き換えであることに注意してください("文字列"の置き換えではない)。書式は次のとおりです。
+</p>
+
+[<書式>]
+<pre>
+	translate(string, from_text, to_text) 
+</pre>
+
+
+<p>
+・encode()、decode() 
+<br>
+サポートする型はbase64、hex、escapeです。[<表7-22>]にエンコード、デコード方式を示します。
+</p>
+
+<table border=1>
+<caption>[<表7-22>] エンコード、デコード方式一覧</caption>
+<tr bgcolor="#cccccc">
+<th align=left>型</th>	<th>説明</th>
+</tr><tr>
+<td>base64</td>	<td>バイナリデータを文字列(テキスト)データに置換する方式の1つ。電子メールに添付する画像などに対して使われる</td>
+</tr><tr>
+<td>hex</td>	<td>文字コードの16進数表示</td>
+</tr><tr>
+<td>escape</td>	<td>エスケープ文字。'\001' が'^A'、'\101'が'A'、'\132'が'Z'、'\477'が'?'など</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 実行例
+
+<p>
+・文字数と文字バイト数を求める
+</p>
+
+<pre>
+sampledb=# SELECT char_length('Alice'), octet_length('Alice');
+ char_length | octet_length 
+-------------+--------------
+           5 |            5
+(1 row)
+
+sampledb=# SELECT char_length('アリス'), octet_length('アリス');
+ char_length | octet_length 
+-------------+--------------
+           3 |            6
+(1 row)
+</pre>
+
+
+<p>
+・文字列を取り除く
+<br>
+文字列'abctrimabc'から、文字列'abc'を取り除きます。
+</p>
+
+<pre>
+sampledb=# SELECT trim(both 'abc' from 'abctrimabc'),
+sampledb-#        trim(leading 'abc' from 'abctrimabc'),
+sampledb-#        trim(trailing 'abc' from 'abctrimabc');
+ btrim |  ltrim  |  rtrim  
+-------+---------+---------
+ trim  | trimabc | abctrim
+(1 row)
+</pre>
+
+<p>
+・文字列からスペースを取り除く
+<br>
+取り除く文字列を指定しない場合は、スペース(空白)を取り除きます。
+</p>
+
+<pre>
+sampledb=# SELECT trim(both ' trim ');
+ btrim 
+-------
+ trim
+(1 row)
+</pre>
+
+
+<p>
+・文字列の追加と削除(lpad, rpad)
+<br>
+関数lpad(), rpad()で文字列を追加します。
+</p>
+
+<pre>
+sampledb=#  SELECT lpad('abc', 10, '123'),
+sampledb-#         rpad('abc', 10, '123');
+    lpad    |    rpad    
+------------+------------
+ 1231231abc | abc1231231
+(1 row)
+</pre>
+
+<p>
+文字列stringが指定された長さlengthよりも長い場合、関数lpad()は末尾(右側)を、関数rpad()は先頭(左側)を切り捨てます。
+</p>
+
+<pre>
+sampledb=# SELECT lpad('abcdef', 3, 'xx');
+ lpad 
+------
+ abc
+(1 row)
+</pre>
+
+
+<p>
+・文字の置き換え
+<br>
+小文字'a'を大文字'A'に置き換えます。
+</p>
+
+<pre>
+sampledb=# SELECT translate('abcabc', 'a', 'A');
+ translate 
+-----------
+ AbcAbc
+(1 row)
+</pre>
+
+<p>
+・複数の文字の置き換え
+<br>
+文字'a'を文字'A'、文字'b'を文字'B'、文字'c'を文字'C'に置き換えます。
+</p>
+
+<pre>
+sampledb=# SELECT translate('abcedfac', 'abc', 'ABC');
+ translate 
+-----------
+ ABCedfAC
+(1 row)
+</pre>
+
+<p>
+・文字の削除
+<br>
+置き換え後の文字が指定されていない場合、置き換え前の文字は削除されます。
+<br>
+次の例では文字'a'を文字'A'、文字'b'を文字'B'に置き換え、文字'c'を削除します。
+</p>
+
+<pre>
+sampledb=# SELECT translate('abcedfac', 'abc', 'AB');
+ translate 
+-----------
+ ABedfA
+(1 row)
+</pre>
+

@@ -1,0 +1,128 @@
+%FILE internal/plpgsql-21.html
+%LASTMOD
+%KEY pgsql-plpgsql21
+
+%TITLE  CASE
+
+<pre>
+[<書式>]
+
+CASE search-expression
+    WHEN expression [, expression [ ... ]] THEN
+      statements
+  [ WHEN expression [, expression [ ... ]] THEN
+      statements
+    ... ]
+  [ ELSE
+      statements ]
+END CASE;
+
+検索付きCASE
+
+CASE
+    WHEN boolean-expression THEN
+      statements
+  [ WHEN boolean-expression THEN
+      statements
+    ... ]
+  [ ELSE
+      statements ]
+END CASE;
+
+======================================================================
+パラメータ		説明
+======================================================================
+search-expression	検索条件。一度だけ評価される。
+expression		検索条件seach-expressionと比較される条件式
+boolean-expression	条件式
+statements		SQL文など
+======================================================================
+</pre>
+
+[<解説>]
+
+<p>
+</p>
+
+<pre>
+CREATE OR REPLACE FUNCTION get_season(month integer) RETURNS text AS
+ $$
+  BEGIN
+  CASE month
+   WHEN 1, 2, 3 THEN
+      RETURN 'Winter';
+   WHEN 4, 5, 6 THEN
+      RETURN 'Spring';
+   WHEN 7, 8, 9 THEN
+      RETURN 'Summer';
+   ELSE
+      RETURN 'Autumn';
+  END CASE;
+END;
+$$
+LANGUAGE PLpgSQL;
+
+testdb=# CREATE OR REPLACE FUNCTION get_season(month integer) RETURNS text AS
+testdb-#  $$
+testdb$#   BEGIN
+testdb$#   CASE month
+testdb$#    WHEN 1, 2, 3 THEN
+testdb$#       RETURN 'Winter';
+testdb$#    WHEN 4, 5, 6 THEN
+testdb$#       RETURN 'Spring';
+testdb$#    WHEN 7, 8, 9 THEN
+testdb$#       RETURN 'Summer';
+testdb$#    ELSE
+testdb$#       RETURN 'Autumn';
+testdb$#   END CASE;
+testdb$# END;
+testdb$# $$
+testdb-# LANGUAGE PLpgSQL;
+CREATE FUNCTION
+testdb=# 
+testdb=# 
+testdb=# SELECT get_season(4) AS "season";
+ season 
+--------
+ Spring
+(1 row)
+</pre>
+
+
+</pre>
+CREATE OR REPLACE FUNCTION get_season(month integer) RETURNS text AS
+ $$
+  BEGIN
+  CASE
+   WHEN month BETWEEN 1 AND 3 THEN
+      RETURN 'Winter';
+   WHEN month BETWEEN 4 AND 6 THEN
+      RETURN 'Spring';
+   WHEN month BETWEEN 7 AND 9 THEN
+      RETURN 'Summer';
+   ELSE
+      RETURN 'Autumn';
+  END CASE;
+END;
+$$
+LANGUAGE PLpgSQL;
+
+
+testdb=# CREATE OR REPLACE FUNCTION get_season(month integer) RETURNS text AS
+testdb-#  $$
+testdb$#   BEGIN
+testdb$#   CASE
+testdb$#    WHEN month BETWEEN 1 AND 3 THEN
+testdb$#       RETURN 'Winter';
+testdb$#    WHEN month BETWEEN 4 AND 6 THEN
+testdb$#       RETURN 'Spring';
+testdb$#    WHEN month BETWEEN 7 AND 9 THEN
+testdb$#       RETURN 'Summer';
+testdb$#    ELSE
+testdb$#       RETURN 'Autumn';
+testdb$#   END CASE;
+testdb$# END;
+testdb$# $$
+testdb-# LANGUAGE PLpgSQL;
+CREATE FUNCTION
+</pre>

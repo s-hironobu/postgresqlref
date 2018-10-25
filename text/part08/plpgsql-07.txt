@@ -1,0 +1,100 @@
+%FILE internal/plpgsql-07.html
+%LASTMOD
+%KEY pgsql-plpgsql07
+
+%TITLE IF 条件分岐
+
+<pre>
+[<書式>]
+
+●IF-THEN, IF-THEN-ELSE 
+IF boolean-expression THEN 
+   statements-true 
+[ ELSE 
+  statements-false ] 
+END IF 
+
+●IF-THEN-ELSIF-ELSE 
+IF boolean-expression-1 THEN 
+   statements-1 
+[ ELSIF boolean-expression-2 THEN 
+  statements-2 
+[ ELSIF boolean-expression-3 THEN 
+  statements-3 
+...]] 
+[ ELSE 
+  statements-false ] 
+END IF 
+
+==========================================================================
+句     説明
+==========================================================================
+boolean-expression 条件式
+statements SQL文など
+==========================================================================
+</pre>
+
+[<解説>]
+
+<p>
+IF文は、指定された条件にもとづいて、SQL文を実行します。
+</p>
+<p>
+・IF-THEN <br>
+条件boolean-expressionが真の場合にのみ、statements文が実行されます。条件が偽の場合は何も実行されません。
+</p>
+<p>
+・IF-THEN-ELSE  <br>
+条件boolean-expressionが真の場合には、statements-true文が実行されます。条件が偽の場合には、statements-falseが実行されます。
+</p>
+<p>
+・IF-THEN-ELSIF-ELSE <br>
+最後のELSE節は省略可能です。
+IF-THEN-ELSIF-ELSE は、上から順に条件boolean-expression-1、条件booleanexpression-2，...と検査していき、一致した条件boolean-expression-Nのstatements-Nを実行します。多くの条件分岐がある場合に便利な記法です。
+</p>
+<p>
+
+[<実行例>]
+
+
+<p>
+・IF-THEN-ELSIF-ELSEの利用<br>
+関数get_season()は引数を"月"として受けとり、季節名を返します。
+</p>
+
+
+<pre> バージョン8.0以降の定義
+CREATE FUNCTION get_season(month integer) RETURNS text AS
+ $$
+  BEGIN
+   IF month BETWEEN 1 AND 3 THEN
+      RETURN 'Winter';
+   ELSIF month BETWEEN 4 AND 6 THEN
+      RETURN 'Spring';
+    ELSIF month BETWEEN 7 AND 9 THEN
+      RETURN 'Summer';
+    ELSE
+      RETURN 'Autumn';
+    END IF;
+  END;
+ $$
+LANGUAGE PLpgSQL;
+</pre>
+
+<p>
+関数get_season()の実行例です。
+</p>
+
+<pre>
+sampledb=#  SELECT get_season(4) AS "season";
+ season 
+--------
+ Spring
+(1 row)
+
+sampledb=#  SELECT get_season(11) AS "season";
+ season 
+--------
+ Autumn
+(1 row)
+</pre>

@@ -1,0 +1,24 @@
+%FILE internal/plpgsql-14.html
+%LASTMOD
+%KEY pgsql-plpgsql14
+
+%TITLE カーソルの利用
+
+<pre>
+[<書式>]
+
+	DECLEAR 
+	  cursor refcursor;		-- カーソル変数の宣言
+
+	BEGIN
+	  OPEN		-- カーソルのオープン
+	  FETCH		-- 行の取得
+	  CLOSE		-- カーソルのクローズ
+	END
+</pre>
+
+[<解説>]
+
+<p>
+PL/pgSQL内でカーソルを利用できます。「カーソル変数の宣言」([<8-17>])、「カーソルのオープン」([<8-18>])、「行の取得」([<8-19>])に関しての詳細は、以降の項目で解説します。
+</p>

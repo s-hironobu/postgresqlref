@@ -1,0 +1,188 @@
+%FILE internal/internal-01.html
+%LASTMOD
+%KEY pgsql-internal01
+
+%TITLE プロセスとメモリ構造
+%TITLE Process and Memory Structure
+
+%CHAPTER プロセス
+%CHAPTER Process structure
+
+<p>
+PostgreSQLサーバの本体はpostgresというデーモンプロセスです(以前はpostmasterと呼ばれていた)。postgresは、クライアントから接続要求を受けるとpostgresプロセス(バックエンドプロセスと呼ぶこともある)を生成(fork)し、
+そのプロセスがクライアントのSQL文を処理します。
+さらにさまざまな処理を行うバックグランドプロセスがあります[<図.2-01>])。
+</p>
+
+
+<table border=1>
+<caption>[<fig.2-01>] Process structure</caption>
+<tr><td>
+<left>
+<img src="./fig-2-01-01.jpg"><br>
+</left>
+</td></tr>
+<tr><td>
+<left>
+<img src="./fig-e-2-01-01.jpg"><br>
+</left>
+</td></tr>
+
+</table>
+
+<p>
+PostgreSQLサーバに接続できるクライアントの最大数は、設定ファイルpostgresql.confの設定パラメータmax_connectionsに設定します(デフォルトは100)。
+</p>
+
+
+<p>
+バージョン9.2のバックグランドプロセス一覧を示します([<表2-01>])。
+</p>
+
+
+<table border=1>
+<caption>[<table.2-01>] background processes</caption>
+<tr bgcolor="#cccccc">
+<th>background process</th>			<th>explain</th>
+</tr><tr>
+<td>background writer</td>	<td>共有バッファの変更内容をHDDに(同期)書き込みする。(バージョン9.1まではCHECKPOINT処理も担当していた。)[<2-05>]参照</td>
+</tr><tr>
+<td>checkpointer</td>	<td>CHECKPOINT処理を担い、共有バッファの変更内容をHDDに(同期)書き込みする。バージョン9.2でバックグランドライタから独立した。[<2-05>]参照</td>
+</tr><tr>
+<td>autovacuum</td>	<td>周期的にVACUUM処理を行うWORKERプロセスを起動する(より正確には、WORKERプロセスの起動をpostgresに依頼する)。[<2-07>]参照</td>
+</tr><tr>
+<td>WAL writer</td>	<td>周期的にWALバッファを監視し、まだ書き込まれていないWALログをHDDに(同期)書き込みする[<2-09>]参照</td>
+</tr><tr>
+<td>統計情報コレクタ</td>	<td>pg_stat_activity、pg_stat_database、pg_stat_all_tablesなど統計情報のデータを収集する。[<3-15>]参照</td>
+</tr><tr>
+<td>log writer</td>	<td>エラーメッセージなどのログを書き込む[<3-16>]参照</td>
+</tr><tr>
+<td>archiver</td>	<td>アーカイブロギングを行う[<2-10>]参照</td>
+</tr></table>
+
+
+<p>
+レプリケーション([<2-11>]参照)モードで運用している場合、マスタ側ではwalsender、スレーブ側ではwalreceiverとstartupが動いています。
+</p>
+
+
+%CHAPTER メモリ構造
+%CHAPTER Memory structure
+
+<p>
+起動時、メモリ上にいくつかのメモリ領域を確保します[<脚注1>])。
+また、postgresプロセス毎にワークメモリ領域(work_mem)、メンテナンスワークメモリ領域(maintenance_work_mem)、一時バッファ(temp_buffers)を確保します([<図.2-02>]参照)。
+</p>
+
+<p>
+起動時、メモリ上にいくつかのメモリ領域を確保します[<脚注1>])。
+また、postgresプロセス毎にワークメモリ領域(work_mem)、メンテナンスワークメモリ領域(maintenance_work_mem)、一時バッファ(temp_buffers)を確保します([<図.2-02>])。
+</p>
+
+
+<blockquote><table BORDER="1"><tr><td>脚注1</td><td>
+<p>
+システムカタログはpostgresプロセスが頻繁にアクセスするので、共有バッファ上だけでなくpostgresプロセスもコピーを保存しています(カタログキャッシュ)。
+システムカタログを更新すると、OSの低レイヤの通信機能(IPC)によって全postgresプロセスに伝わります。postgresプロセスはそれをトリガとしてカタログキャッシュのデータを更新します。
+</p>
+</td></tr></table></blockquote>
+
+
+<table border=1>
+<caption>[<図2-02>] メモリ構造</caption>
+<tr><td>
+<left>
+<img src="./fig-2-01-02.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<p>
+これらバッファとメモリ領域の大きさは設定ファイルpostgresql.confで設定します。詳細は[<4-04>]、[4-05]を参照してください。
+</p>
+
+%SECTION 共有メモリ上のメモリ領域
+
+<p>
+共有メモリ上に確保する重要なメモリ領域についてまとめます。
+</p>
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>メモリ領域</th>	<th>説明</th>
+</tr><tr>
+<td>共有バッファ(shared_buffers)</td>
+<td><p>
+PostgreSQLは共有バッファ上にデータを読み込み、更新や検索などのデータ操作を行う。バッファマネージャの詳細は[<2-05>]を参照。
+</p></td>
+
+</tr><tr>
+<td>WALバッファ(WAL buffer)</td>
+<td><p>
+PostgreSQLは障害に備えてトランザクションログを保存する機構：WAL(Write Ahead Logging)を実装している。WALバッファはWALログのバッファリング用である。WALの詳細は[<2-09>]を参照。
+</p></td>
+
+</tr><tr>
+<td>CLOG(コミットログ)</td>
+<td><p>
+CLOGはトランザクション毎の状態(実行中か、コミットしたか、アボートしたかなど)を保持している。詳細は[<2-06>]を参照。
+<br>
+なお、CLOGの内容はCHECKPOINT毎にデータベースクラスタのサブディレクトリpg_clog以下に書き込む。
+</p></td>
+
+
+</tr><tr>
+<td> 空き領域マップ(Free Space Map)</td>
+<td><p>
+テーブルデータを保存するファイルは8192[byte]毎にブロックとして区切られている。ブロック毎の空き領域情報を保持するのが空き領域マップ(FSM)である([<脚注2>])。詳細は[<2-02>]参照。
+<br>
+なお、空き領域マップの内容はVACUUM処理毎にデータベースクラスタに保存し、再起動時はこれらを読み込む。
+</p></td>
+
+</tr><tr>
+<td>ビジビリティマップ(Visibility Map) </td>
+<td><p>
+同時実行制御の効率化のため、バージョン8.4からテーブルのブロック毎に全タプルが可視か否かを保持するビジビリティマップが追加された。詳細は[<2-06>]を参照。
+<br>
+なお、ビジビリティマップの内容はVACUUM処理毎にデータベースクラスタに保存し、再起動時はこれらを読み込む。
+</p></td>
+
+</table>
+
+
+<blockquote><table BORDER="1"><tr><td>脚注2</td><td>
+<p>
+バージョン8.3までは固定サイズでしたが、バージョン8.4からは可変サイズとなり、自動で全テーブルの空き領域を記録するようになりました。
+</p>
+</td></tr></table></blockquote>
+
+
+%SECTION postgresプロセスが確保するメモリ領域
+
+<p>
+postgresプロセスが確保するメモリ領域についてまとめます。
+</p>
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>メモリ領域</th>	<th>説明</th>
+</tr><tr>
+<td>ワークメモリ領域(work_mem) </td>
+<td><p>
+エクゼキュータがテーブル結合やソートするためのメモリ領域。サイズの設定については[<3-19>]を参照。
+</p></td>
+
+</tr><tr>
+<td>メンテナンスワークメモリ領域(maintenance_work_mem) </td>
+<td><p>
+VACUUM処理やCREATE INDEX実行時に一時的に確保するメモリ領域。
+</p></td>
+
+</tr><tr>
+<td>一時バッファ(temp_buffers)</td>
+<td><p>
+一時テーブルにアクセスする時にのみ使用するメモリ領域。「ローカルバッファ」として使用する([<2-05>]参照)。
+</p></td>
+</table>
+

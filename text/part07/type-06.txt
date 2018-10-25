@@ -1,0 +1,42 @@
+%FILE internal/type-06.html
+%LASTMOD
+%KEY pgsql-type06
+
+%TITLE ブーリアン型
+
+[<ブーリアン型>]
+
+<table><tr bgcolor="#cccccc">
+<th>データ型名</th>		<th>説明</th>
+</tr><tr>
+<td>boolean</td>		<td>ブーリアン型(真理値型)</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+ブーリアン型は真(TRUE)と偽(FALSE)の2つの値をもつデータ型です。真偽に対する有効なリテラル値を[<表7-09>]に示します。
+</p>
+
+<table border=1>
+<caption>[<表7-09>] 真偽リテラル値一覧</caption>
+<tr bgcolor="#cccccc">
+<th>真</th>	<th>偽</th>		<th>不明(unknown)</th>
+</tr><tr>
+<td>TRUE</td>	<td>FALSE</td>	<td>NULL</td>
+</tr><tr>
+<td>'t'</td>	<td>'f'</td>	<td></td>
+</tr><tr>
+<td>'true'</td>	<td>'false'</td>	<td></td>
+</tr><tr>
+<td>'y'</td>	<td>'n'</td>	<td></td>
+</tr><tr>
+<td>'yes'</td>	<td>'no'</td>	<td></td>
+</tr><tr>
+<td>'1'</td>	<td>'0'</td>	<td></td>
+</tr></table>
+
+<br>
+

@@ -1,0 +1,182 @@
+%FILE internal/sql-55.html
+%LASTMOD
+%KEY pgsql-sql55
+
+%TITLE 外部テーブルの定義、変更、削除	CREATE FOREIGN TABLE / ALTER FOREIGN TABLE / DROP FOREIGN TABLE
+
+<pre>
+[<書式>]
+
+● 定義
+CREATE FOREIGN TABLE [ IF NOT EXISTS ] table_name ( [
+  { column_name data_type [ OPTIONS ( option 'value' [, ... ] ) ]
+  [ COLLATE collation ] [ column_constraint [ ... ] ] | table_constraint } [, ... ]
+] )
+[ INHERITS ( parent_table [, ... ] ) ]
+  SERVER server_name
+[ OPTIONS ( option 'value' [, ... ] ) ]
+
+
+・column_constraint:
+	[ CONSTRAINT constraint_name ]
+	{ NOT NULL |
+	  NULL |
+	    CHECK ( expression ) [ NO INHERIT ] |
+	    DEFAULT default_expr }
+
+・table_constraint:
+	[ CONSTRAINT constraint_name ]
+	  CHECK ( expression ) [ NO INHERIT ]
+
+  バージョン9.1から
+
+● 定義の読み込み
+
+IMPORT FOREIGN SCHEMA remote_schema
+    [ { LIMIT TO | EXCEPT } ( table_name [, ...] ) ]
+    FROM SERVER server_name
+    INTO local_schema
+    [ OPTIONS ( option 'value' [, ... ] ) ]
+
+  バージョン9.5から
+
+● 定義の変更
+ALTER FOREIGN TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
+    action [, ... ]
+ALTER FOREIGN TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
+    RENAME [ COLUMN ] column_name TO new_column_name
+ALTER FOREIGN TABLE [ IF EXISTS ] table_name
+    RENAME TO new_name
+ALTER FOREIGN TABLE [ IF EXISTS ] table_name
+    SET SCHEMA new_schema
+
+・actionは以下のいずれか:
+    ADD [ COLUMN ] column_name data_type [ COLLATE collation ] [ column_constraint [ ... ] ]
+    DROP [ COLUMN ] [ IF EXISTS ] column_name [ RESTRICT | CASCADE ]
+    ALTER [ COLUMN ] column_name [ SET DATA ] TYPE data_type [ COLLATE collation ]
+    ALTER [ COLUMN ] column_name SET DEFAULT expression
+    ALTER [ COLUMN ] column_name DROP DEFAULT
+    ALTER [ COLUMN ] column_name { SET | DROP } NOT NULL
+    ALTER [ COLUMN ] column_name SET STATISTICS integer
+    ALTER [ COLUMN ] column_name SET ( attribute_option = value [, ... ] )
+    ALTER [ COLUMN ] column_name RESET ( attribute_option [, ... ] )
+    ALTER [ COLUMN ] column_name SET STORAGE { PLAIN | EXTERNAL | EXTENDED | MAIN }
+    ALTER [ COLUMN ] column_name OPTIONS ( [ ADD | SET | DROP ] option ['value'] [, ... ])
+    ADD table_constraint [ NOT VALID ]
+    VALIDATE CONSTRAINT constraint_name
+    DROP CONSTRAINT [ IF EXISTS ]  constraint_name [ RESTRICT | CASCADE ]
+    DISABLE TRIGGER [ trigger_name | ALL | USER ]
+    ENABLE TRIGGER [ trigger_name | ALL | USER ]
+    ENABLE REPLICA TRIGGER trigger_name
+    ENABLE ALWAYS TRIGGER trigger_name
+    SET WITH OIDS
+    SET WITHOUT OIDS
+    INHERIT parent_table
+    NO INHERIT parent_table
+    OWNER TO { new_owner | CURRENT_USER | SESSION_USER }
+    OPTIONS ( [ ADD | SET | DROP ] option ['value'] [, ... ])
+
+  バージョン9.1から
+
+● 削除
+DROP FOREIGN TABLE [ IF EXISTS ] table_name [, ...] [ CASCADE | RESTRICT ]
+
+  バージョン9.1から
+
+
+=================================================================
+引数			説明
+=================================================================
+server_name		外部テーブルが存在する外部サーバ名
+remote_schema		外部サーバ上、接続するデータベースのスキーマ
+local_schema		外部テーブルを定義するローカルのスキーマ
+=================================================================
+
+=================================================================
+句			説明
+=================================================================
+option 'value'		オプションoptionの設定値valueを設定する。設定すべきoptionはextension毎に異なる。
+=================================================================
+
+注：これら以外の引数、句、オプションはCREATE TABLE, ALTER TABLE, DROP TABLEと同じなので省略する。
+
+</pre>
+
+%CHAPTER 解説
+
+<p>
+上記のSQL文はFDW(外部データラッパー)機能を利用する際に使います。具体的な使い方は[<4-24>]、[<4-25>]を参照してください。
+</p>
+
+<p>
+CREATE FOREIGN TABLE文で外部サーバ上のテーブルを外部テーブルとして定義します。
+ALTER FOREIGN TABLE文で定義した外部テーブルの定義を変更できます。
+DROP FOREIGN TABLE文で外部テーブルを削除します。
+これらのほとんどの引数、句、オプションはCREATE TABLE([<6-04>]), ALTER TABLE([<6-10>],[<6-11>],[<6-12>]), DROP TABLE([<6-08>])と同じなので、そちらを参照してください。
+</p>
+
+
+<p>
+CREATE FOREIGN TABLE文の実行例を一つ示します。
+外部サーバremote_server上のテーブルitem_listを定義します。
+</p>
+
+<pre>
+testdb=# CREATE FOREIGN TABLE item_list (id int, name text, price int, makercode int)
+testdb-#   SERVER remote_server;
+CREATE FOREIGN TABLE
+
+testdb=# \d+
+                  List of relations
+ Schema |     Name      |       Type        |  Owner  
+--------+---------------+-------------------+---------
+... 略 ...
+
+ public | item_list     | foreign table     | postgres
+
+... 略 ...
+</pre>
+
+<p>
+外部サーバのテーブルremote_member_listと同名のテーブル(remote_member_list)が、ローカルにも定義されたことになります。
+</p>
+
+<p>
+しかし、いちいち外部テーブルの定義を再定義するのも面倒です。
+バージョン9.5からIMPORT FOREIGN SCHEMA文によって、外部サーバにある(指定したスキーマに属する)テーブルの定義を一気に行うことができるようになりました。
+</p>
+
+<p>
+例えば、外部サーバremote_serverのpublicスキーマにあるテーブルをすべて、ローカルのpulicスキーマで定義する場合、以下のINPORT FOREIGN SCHEMA文を実行します。
+</p>
+
+<pre>
+testdb=# IMPORT FOREIGN SCHEMA public FROM SERVER remote_server INTO public;
+IMPORT FOREIGN SCHEMA
+</pre>
+
+
+<p>
+一部のテーブルのみ、例えばitem_listだけをローカルで定義するには、LIMIT TO句と共にIMPORT FOREIGN SCHEMA文を実行します。
+</p>
+
+<pre>
+testdb=# IMPORT FOREIGN SCHEMA public LIMIT TO (item_list) FROM SERVER remote_server INTO public;
+IMPORT FOREIGN SCHEMA
+</pre>
+
+<hr>
+<hr>
+
+
+    CHECK句では、外部テーブルの各行が満たすと期待されるブーリアン結果を生成する式を指定します。 つまり、式は外部テーブルのすべての行に対して、TRUEまたはUNKNOWNを生成し、決してFALSEにはなりません。 列制約として指定したチェック制約はその列の値だけを参照しますが、テーブル制約として使われる式は複数の列を参照することができます。
+
+    現在のところ、CHECKの式は副問い合わせを含むことや、現在の行の列以外の変数を参照することはできません。 システム列tableoidを参照することはできますが、それ以外のシステム列を参照することはできません。
+
+注釈
+
+外部テーブル上の制約（CHECK句やNOT NULL句など）はPostgreSQLのコアシステムによって強制されませんし、ほとんどの外部データラッパもそれを強制しようとはしません。 つまり、制約は単にそれが成り立つと仮定されるものです。 制約は外部テーブルの機能を使って行を挿入あるいは更新するときにのみ適用され、リモートサーバ上で直接更新するなど、他の手段による行の更新には適用されませんから、それを強制することにはあまり意味はありません。 その代わりに、外部テーブルに指定する制約は、リモートサーバによって強制される制約を表現するものであるべきです。
+
+PostgreSQLでは外部テーブルの制約を強制しませんが、問い合わせの最適化という目的のため、制約が正しいということを仮定します。 外部テーブルで、宣言された制約を満たさない行が可視の状態で存在する場合、そのテーブルに対する問い合わせは誤った結果をもたらすかもしれません。 制約の定義が現実に即したものであることを保証するのは、ユーザの責任です。
+例
+

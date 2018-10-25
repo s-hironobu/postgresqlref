@@ -1,0 +1,44 @@
+%FILE internal/psql-03.html
+%LASTMOD
+%KEY pgsql-psql03
+
+
+%TITLE データベース一覧表示
+
+<pre>
+[<書式>]
+psql [ options ] db_name 
+
+================================================================
+オプション		説明
+================================================================
+-l, --list		データベース一覧を表示
+================================================================
+</pre>
+
+%CHAPTER 解説
+
+<p>
+現在利用可能なデータベース名、所有者、エンコーディング、アクセス権限の一覧を表示します。
+</p>
+
+<pre>
+user> psql -U postgres -l 
+                                  List of databases
+   Name    |  Owner   | Encoding |   Collate   |    Ctype    |   Access privileges   
+-----------+----------+----------+-------------+-------------+-----------------------
+ postgres  | postgres | UTF8     | ja_JP.UTF-8 | ja_JP.UTF-8 | 
+ sampledb  | postgres | UTF8     | ja_JP.UTF-8 | ja_JP.UTF-8 | 
+ template0 | postgres | UTF8     | ja_JP.UTF-8 | ja_JP.UTF-8 | =c/postgres          +
+           |          |          |             |             | postgres=CTc/postgres
+ template1 | postgres | UTF8     | ja_JP.UTF-8 | ja_JP.UTF-8 | =c/postgres          +
+           |          |          |             |             | postgres=CTc/postgres
+(4 rows)
+</pre>
+
+
+<p>
+データベースユーザやテーブルの一覧など、より詳細な情報表示は\dメタコマンド群を使います。
+<br>
+テーブルごとのアクセス権限表示は\z メタコマンドを使います。詳しくは[<5-06>]を参照してください。
+</p>

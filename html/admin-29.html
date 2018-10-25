@@ -1,0 +1,958 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+ <title>PostgreSQLバイブル草稿</title>
+ <link rel="stylesheet" type="text/css" media="screen" href="./default.css"">
+</head>
+
+<body>
+
+<script language=javascript>
+<!--
+function show(inputData) {
+var objID=document.getElementById( "layer_" + inputData );
+var buttonID=document.getElementById( "category_" + inputData );
+if(objID.className=='close') {
+objID.style.display='block';
+objID.className='open';
+}else{
+objID.style.display='none';
+objID.className='close';
+}
+}
+//-->
+</script>
+
+<div id="header">
+<h1 class="title">PostgreSQLバイブル草稿</title></h1>
+    <span class="small">
+</span>
+</div>
+
+
+<hr class="full_hr">
+<table style="width: 100%;" border="0">
+ <tbody><tr>
+  <td class="menubar">
+   <div id="menubar">
+
+
+<h5>PostgreSQLとは</h5>
+
+<li><a href="./index.html">PostgreSQLとは</a><br></li>
+
+<h5>PostgreSQLの内部構造</h5>
+<ul>
+<li><a href="./internal.html">とびら</a><br></li>
+</ul>
+<ol>
+<li><a href="./internal-01.html">プロセスとメモリ構造</a><br></li>
+<li><a href="./internal-02.html">データベースクラスタ、テーブルの構造</a></li>
+<li><a href="./internal-03.html">SQLの実行</a></li>
+<li><a href="./internal-04.html">プラン処理</a></li>
+<li><a href="./internal-05.html">バッファマネージャとバックグランドライタ</a></li>
+<li><a href="./internal-06.html">トランザクションIDと同時実行制御</a></li>
+<li><a href="./internal-07.html">VACUUM</a></li>
+<li><a href="./internal-08.html">HOTとIndex Only Scan</a></li>
+<li><a href="./internal-09.html">WAL(Write Ahead Logging)</a></li>
+<li><a href="./internal-10.html">アーカイブログとPITR</a></li>
+<li><a href="./internal-11.html">レプリケーション(Streaming ReplicationとHotStandby)</a></li>
+</ol>
+
+
+<h5>PostgreSQLサーバ管理</h5>
+
+<ul>
+<li><a href="./admin.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[PostgreSQLの基礎]<br>
+<li><a href="./admin-01.html">オブジェクト、データベース、スキーマ</a><br></li>
+<li><a href="./admin-02.html">システムカタログ</a><br></li>
+<li><a href="./admin-03.html">文字コードの扱い</a><br></li>
+
+
+[インストールと起動、停止]<br>
+<li><a href="./admin-04.html">インストール</a><br></li>
+<li><a href="./admin-05.html">データベースシステムの初期化 initdb</a><br></li>
+<li><a href="./admin-06.html">PostgreSQLサーバの起動/停止</a><br></li>
+
+
+[認証とアクセス制御]<br>
+<li><a href="./admin-07.html">認証とアクセス制御</a><br></li>
+<li><a href="./admin-08.html">クライアントのアクセス制御</a><br></li>
+<li><a href="./admin-09.html">権限について</a><br></li>
+<li><a href="./admin-10.html">ロールの作成と権限制御</a><br></li>
+
+<HR>
+
+[バックアップとアップグレード]<br>
+<li><a href="./admin-11.html">バックアップとアップグレード</a><br></li>
+<li><a href="./admin-12.html">ダンプとリストア</a><br></li>
+<li><a href="./admin-13.html">アップグレード</a><br></li>
+
+[保守、監視とチューニング]<br>
+<li><a href="./admin-14.html">保守、監視とチューニング</a><br></li> 
+<li><a href="./admin-15.html">稼働統計情報</a><br></li>
+<li><a href="./admin-16.html">実行ログの取得</a><br></li>
+<li><a href="./admin-17.html">モニタリングツール</a><br></li>
+<li><a href="./admin-18.html">ログと統計情報の分析</a><br></li>
+<li><a href="./admin-19.html">パラメータチューニング</a><br></li>
+
+[耐障害性、高可用性]<br>
+<li><a href="./admin-20.html">耐障害性、高可用性</a><br></li>
+<li><a href="./admin-21.html">アーカイブログとPITR</a><br></li>
+<li><a href="./admin-22.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-23.html">レプリケーションの故障対応</a><br></li>
+
+
+[FDW]<br>
+<li><a href="./admin-24.html">FDW</a><br></li>
+<li><a href="./admin-25.html">postgres_fdw</a><br></li>
+</ol>
+
+[追加の文章(未完)]<br>
+<li><a href="./admin-26.html">ロギング</a><br></li>
+<li><a href="./admin-27.html">統計情報</a><br></li>
+<li><a href="./admin-28.html">モニタリング</a><br></li>
+<li><a href="./admin-29.html">メンテナンス</a><br></li>
+</ol>
+
+
+<h5>設定パラメータ</h5>
+
+<ol>
+<li><a href="./param-01.html">postgresql.confの設定</a><br></li>
+<li><a href="./param-02.html">ファイルの場所</a><br></li>
+<li><a href="./param-03.html">接続と認証</a><br></li>
+<li><a href="./param-04.html">資源の消費</a><br></li>
+<li><a href="./param-05.html">WAL</a><br></li>
+<li><a href="./param-06.html">レプリケーション</a><br></li>
+<li><a href="./param-07.html">問い合わせ計画</a><br></li>
+<li><a href="./param-08.html">エラー報告とログ取得</a><br></li>
+<li><a href="./param-09.html">稼働統計情報</a><br></li>
+<li><a href="./param-10.html">AUTOVACUUM</a><br></li>
+<li><a href="./param-11.html">クライアント接続デフォルト</a><br></li>
+<li><a href="./param-12.html">ロック管理/バージョンとプラットフォーム互換性</a><br></li>
+</ol>
+
+
+<h5>psql</h5>
+<ul>
+<li><a href="./psql.html">・対話型インタフェースpsqlの使い方</a><br></li>
+</ul>
+
+<ol>
+<li><a href="./psql-01.html">psqlとは</a><br></li>
+<li><a href="./psql-02.html">PostgreSQLサーバとの接続/切断/再接続</a><br></li>
+<li><a href="./psql-03.html">データベース一覧表示</a><br></li>
+<li><a href="./psql-04.html">コマンドラインからSQL実行</a><br></li>
+<li><a href="./psql-05.html">バッチファイルの実行(メタコマンド)</a><br></li>
+<li><a href="./psql-06.html">情報表示</a><br></li>
+<li><a href="./psql-07.html">表示の制御</a><br></li>
+<li><a href="./psql-08.html">ラージオブジェクトの扱い</a><br></li>
+<li><a href="./psql-09.html">データのコピー</a><br></li>
+<li><a href="./psql-10.html">その他のメタコマンド</a><br></li>
+
+</ol>
+
+
+<h5>SQL</h5>
+
+<ul>
+<li><a href="./sql.html">・とびら</a><br></li>
+</ul>
+
+<ol>
+[SQL]<br>
+
+<li><a href="./sql-01.html">SQL語彙</a><br></li>
+<li><a href="./sql-02.html">テーブルスペースの作成/削除/変更</a><br></li>
+<li><a href="./sql-03.html">データベースの作成/変更/削除</a><br></li>
+<li><a href="./sql-04.html">テーブルの作成</a><br></li>
+<li><a href="./sql-05.html">外部キー</a><br></li>
+<li><a href="./sql-06.html">オブジェクトの継承/LIKE句</a><br></li>
+<li><a href="./sql-07.html">問い合わせ結果から新しいテーブルを作成</a><br></li>
+<li><a href="./sql-08.html">テーブルの削除</a><br></li>
+<li><a href="./sql-09.html">スキーマの定義/変更/削除</a><br></li>
+
+<li><a href="./sql-10.html">ALTER TABLE(1)</a><br></li>
+<li><a href="./sql-11.html">ALTER TABLE(2)</a><br></li>
+<li><a href="./sql-12.html">ALTER TABLE(3)</a><br></li>
+
+<li><a href="./sql-13.html">ロール</a><br></li>
+<li><a href="./sql-14.html">GRANT REVOKE(1)</a><br></li>
+<li><a href="./sql-15.html">GRANT REVOKE(2)</a><br></li>
+<li><a href="./sql-16.html">INSERT</a><br></li>
+<li><a href="./sql-17.html">SELECT</a><br></li>
+<li><a href="./sql-18.html">FROM句</a><br></li>
+<li><a href="./sql-19.html">WHERE句</a><br></li>
+
+<li><a href="./sql-20.html">WINDOW句、OVER句</a><br></li>
+<li><a href="./sql-21.html">共通テーブル式(CTE)</a><br></li>
+
+
+<li><a href="./sql-22.html">グループ化</a><br></li>
+<li><a href="./sql-23.html">DISTINCT句</a><br></li>
+<li><a href="./sql-24.html">テーブル結合</a><br></li>
+<li><a href="./sql-25.html">問い合わせの結合</a><br></li>
+<li><a href="./sql-26.html">ORDER BY</a><br></li>
+<li><a href="./sql-27.html">LIMIT OFFSET</a><br></li>
+<li><a href="./sql-28.html">FOR UPDATE/ FOR SHARE</a><br></li>
+<li><a href="./sql-29.html">サブクエリ</a><br></li>
+<li><a href="./sql-30.html">CASE式</a><br></li>
+<li><a href="./sql-31.html">VALUES</a><br></li>
+<li><a href="./sql-32.html">UPDATE</a><br></li>
+<li><a href="./sql-33.html">DELETE</a><br></li>
+<li><a href="./sql-34.html">TRUNCATE</a><br></li>
+
+<li><a href="./sql-35.html">インデックス</a><br></li>
+
+<li><a href="./sql-36.html">VIEW</a><br></li>
+<li><a href="./sql-37.html">シーケンス</a><br></li>
+<li><a href="./sql-38.html">トリガ</a><br></li>
+<li><a href="./sql-39.html">カーソル</a><br></li>
+<li><a href="./sql-40.html">プリペアステートメント</a><br></li>
+<li><a href="./sql-41.html">トランザクション</a><br></li>
+<li><a href="./sql-42.html">セーブポイント</a><br></li>
+<li><a href="./sql-43.html">2相コミット</a><br></li>
+<li><a href="./sql-44.html">LOCK</a><br></li>
+<li><a href="./sql-45.html">SET/SHOW/RESET</a><br></li>
+<li><a href="./sql-46.html">VACUUM</a><br></li>
+<li><a href="./sql-47.html">ANALYZE</a><br></li>
+<li><a href="./sql-48.html">EXPLAIN</a><br></li>
+<li><a href="./sql-49.html">COPY/IMPORT</a><br></li>
+<li><a href="./sql-50.html">COPY/EXPORT</a><br></li>
+<li><a href="./sql-51.html">関数定義</a><br></li>
+<li><a href="./sql-52.html">エクステンション</a><br></li>
+<li><a href="./sql-53.html">外部サーバの定義、変更、削除</a><br></li>
+<li><a href="./sql-54.html">外部サーバのユーザマップ定義、変更、削除</a><br></li>
+<li><a href="./sql-55.html">外部テーブルの定義、変更、削除</a><br></li>
+<hr>
+<li><a href="./sql-56.html">イベントトリガ</a><br></li>
+<li><a href="./sql-57.html">行レベルセキュリティ</a><br></li>
+
+<hr>
+<li><a href="./sql-60.html">新しい機能</a><br></li>
+</ol>
+
+
+<h5>関数</h5>
+
+[関数]<br>
+<ul>
+<li><a href="./function.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[データ型]<br>
+<li><a href="./type-01.html">データ型</a><br></li>
+<li><a href="./type-02.html">数値データ型</a><br></li>
+<li><a href="./type-03.html">文字データ型</a><br></li>
+<li><a href="./type-04.html">日付/時刻データ型</a><br></li>
+<li><a href="./type-05.html">日付/時刻表示形式とタイムゾーンの設定</a><br></li>
+<li><a href="./type-06.html">ブーリアン型</a><br></li>
+<li><a href="./type-07.html">ビット列データ型</a><br></li>
+<li><a href="./type-08.html">疑似データ型</a><br></li>
+<li><a href="./type-09.html">バイナリ列データ型</a><br></li>
+<li><a href="./type-10.html">Range型</a><br></li>
+<li><a href="./type-11.html">配列</a><br></li>
+<hr>
+<li><a href="./type-12.html">JSON型</a><br></li>
+
+<hr>
+[演算子]<br>
+<li><a href="./ope-01.html">演算子</a><br></li>
+<li><a href="./ope-02.html">論理演算子</a><br></li>
+<li><a href="./ope-03.html">比較演算子</a><br></li>
+<li><a href="./ope-04.html">算術演算子</a><br></li>
+<li><a href="./ope-05.html">文字列演算子</a><br></li>
+<li><a href="./ope-06.html">パターンマッチング</a><br></li>
+<li><a href="./ope-07.html">日付/時刻演算子</a><br></li>
+<li><a href="./ope-08.html">Range型演算子</a><br></li>
+<hr>
+<li><a href="./ope-09.html">JSON型演算子</a><br></li>
+
+
+<hr>
+[関数]<br>
+<li><a href="./func-01.html">関数</a><br></li>
+<li><a href="./func-02.html">算術関数</a><br></li>
+<li><a href="./func-03.html">集約関数/統計関数</a><br></li>
+<li><a href="./func-04.html">文字列関数</a><br></li>
+<li><a href="./func-05.html">日付・時刻関数</a><br></li>
+<li><a href="./func-06.html">型変換関数</a><br></li>
+<li><a href="./func-07.html">Range型関数</a><br></li>
+<li><a href="./func-08.html">Window関数</a><br></li>
+<li><a href="./func-09.html">セッション情報関数</a><br></li>
+<li><a href="./func-10.html">アクセス権限とスキーマ可視性照会関数</a><br></li>
+<li><a href="./func-11.html">データベースオブジェクト関数</a><br></li>
+<li><a href="./func-12.html">バックアップとリカバリ制御関数</a><br></li>
+
+<li><a href="./func-13.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-15.html">構成設定関数</a><br></li>
+<li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-17.html">レプリケーションSQL関数</a><br></li>
+
+<hr>
+<li><a href="./func-18.html">JSON関数</a><br></li>
+
+</ol>
+
+<!--
+[削除するもの]<br>
+<li><a href="./type-07.html">幾何データ型</a><br></li>
+<li><a href="./type-08.html">ネットワークアドレス型型</a><br></li>
+<li><a href="./ope-08.html">幾何演算子</a><br></li>
+<li><a href="./ope-09.html">ネットワーク演算子</a><br></li>
+<li><a href="./func-06.html">幾何関数</a><br></li>
+<li><a href="./func-07.html">ネットワークアドレス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-16.html">トランザクションID関数</a><br></li>
+<li><a href="./func-17.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-18.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-19.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-20.html">勧告的ロック用関数</a><br></li>
+-->
+
+<h5>PL/pgSQL</h5>
+
+<ol>
+<li><a href="./plpgsql.html">結果の返し方</a><br></li>
+<li><a href="./plpgsql-01.html">ストアドプロシージャ</a><br></li>
+<li><a href="./plpgsql-02.html">ストアドプロシージャの定義</a><br></li>
+<li><a href="./plpgsql-03.html">変数宣言と値の代入</a><br></li>
+**** まとめる >>
+<li><a href="./plpgsql-04.html">SELECT INTO文</a><br></li>
+<li><a href="./plpgsql-05.html">結果ステータスの取得</a><br></li>
+<li><a href="./plpgsql-06.html">動的なSQL文の実行</a><br></li>
+<< ここまで****
+<li><a href="./plpgsql-07.html">IF 条件分岐</a><br></li>
+<li><a href="./plpgsql-08.html">ループ処理</a><br></li>
+*** >>>
+<li><a href="./plpgsql-09.html">RETURN</a><br></li>
+<<< ***
+<li><a href="./plpgsql-10.html">ループ処理　LOOP</a><br></li>
+<li><a href="./plpgsql-11.html">ループ処理　WHILE</a><br></li>
+<li><a href="./plpgsql-12.html">ループ処理　FOR </a><br></li>
+<li><a href="./plpgsql-13.html">ループ処理 (複数行の問い合わせ結果を扱う)</a><br></li>
+<li><a href="./plpgsql-14.html">カーソルの利用</a><br></li>
+<li><a href="./plpgsql-15.html">カーソル変数の宣言</a><br></li>
+<li><a href="./plpgsql-16.html">カーソルのオープンとクローズ	OPEN / CLOSE</a><br></li>
+<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得		FETCH</a><br></li>
+<li><a href="./plpgsql-18.html">カーソルを使った例</a><br></li>
+<li><a href="./plpgsql-19.html">例外</a><br></li>
+*** >>>
+<li><a href="./plpgsql-21.html">CASE</a><br></li>
+<li><a href="./plpgsql-22.html">FOREACH</a><br></li>
+<<< ***
+</ol>
+
+
+<h5>Appendix(付録)</h5>
+
+<ol>
+<li><a href="./app-01.html">pgpool-II</a><br></li>
+<li><a href="./app-02.html">Pacemaker</a><br></li>
+</ol>
+
+
+<h5>おまけ:ネット公開(ページ数の関係で書籍には載せない)</h5>
+
+<ol>
+[pgpool]<br>
+<li><a href="./ha-06.html">pgpool-II セットアップ</a><br></li>
+<li><a href="./ha-07.html">pgpool-II レプリケーションモード</a><br></li>
+<li><a href="./ha-08.html">pgpool-II マスタースレーブモード</a><br></li>
+[Pacemaker]<br>
+<li><a href="./ha-10.html">Pacemaker</a><br></li>
+</ol>
+
+</div>
+<hr class="full_hr">
+</div>
+
+  </td>
+  <td valign="top">
+   <div id="body">
+
+<h2>ROUTINE MAINTENANCE</h2>
+
+<p>
+DBMSを運用し続けるためには定期的なMaintenanceが必要です。それはPostgreSQLも例外ではありません。
+ほとんどのDBMSにとって必須のANALYZE処理は、PostgreSQLにとっても必須です。
+それ以外にPostgreSQLには、PostgreSQLの機構に起因する（より正確に言えばMVCCの実装方式とXIDの実装の２つに起因する）
+必須のmaintenance作業があります。
+</p>
+
+
+<table>
+<caption>[<表3-08>]必須の保守項目</caption>
+<tr bgcolor="#cccccc">
+<th>メンテナンス項目 (item)</th>
+<th>description</th>
+<th>どうやって処理するか</th>
+
+</tr><tr>
+
+<td>ANALYZE</td>
+<td>To update data statistics used by the PostgreSQL query planner. </td>
+<td>ANALYZE command, or AUTOVACUUMで自動実行</td>
+
+
+</tr><tr>
+
+<td><font color="#ff0000">remove dead tuples, and update the visibility map and free space map.</font></td>
+<td>To recover or reuse disk space occupied by updated or deleted rows.</td>
+<td>VACUUM and VACUUM FULL command, or AUTOVACUUMで自動実行</td>
+
+</tr><tr>
+
+<td>FREEZE</td>
+<td>To protect against loss of very old data due to transaction ID wraparound. </td>
+<td>FREEZE, VACUUM and VACUUM FULL command, or AUTOVACUUMで自動実行</td>
+
+
+</tr><tr>
+
+<td>REINDEX</td>
+<td>大量のデータを削除した場合に実行。テーブルファイルサイズを削減できる</td>
+<td>REINDEX command</td>
+
+
+</tr><tr>
+
+<td>truncate server log</td>
+<td></td>
+<td>Manual operation</td>
+
+</tr><tr>
+
+<td>truncate archiving WAL segments</td>
+<td></td>
+<td> See subsection 6.3.4. </td>
+
+</tr></table>
+
+<br>
+
+<p>
+バージョン8.1で導入されたAUTOVACUUMによって、それまでPostgreSQLの運用上大きな欠点であったVACUUM処理が自動で行われるようになりました。
+ANALYZEによる統計情報更新も行うので、日常的な保守はほぼすべてAUTOVACUUMに任せることができます。
+</p>
+
+
+<!--
+
+<table border=1>
+<caption>[<表3-12>] pg_stat_all_tables</caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>		<th>説明</th>
+</tr><tr>
+<td>relid</td>	<td>テーブルのOID</td>
+</tr><tr>
+<td>schemaname</td>	<td>テーブルの属するスキーマ名</td>
+</tr><tr>
+<td>relname</td>	<td>テーブル名</td>
+</tr><tr>
+<td>seq_scan</td>	<td>シーケンシャルスキャンされた回数</td>
+</tr><tr>
+<td>seq_tup_read</td>	<td>シーケンシャルスキャンされたレコード数</td>
+</tr><tr>
+<td>idx_scan</td>	<td>インデックススキャンされた回数</td>
+</tr><tr>
+<td>idx_tup_fetch</td>	<td>インデックススキャンされたレコード数</td>
+</tr><tr>
+<td>n_tup_ins</td>	<td>INSERTされたレコード数</td>
+</tr><tr>
+<td>n_tup_upd</td>	<td>UPDATEされたレコード数</td>
+</tr><tr>
+<td>n_tup_del</td>	<td>DELETEされたレコード数</td>
+</tr><tr>
+<td>n_tup_hot_upd</td>	<td>UPDATEでHOTが使われたレコード数。バージョン8.3から</td>
+</tr><tr>
+<td>n_live_tup</td>	<td>有効なタプル数。バージョン8.3から</td>
+</tr><tr>
+<td>n_dead_tup</td>	<td>削除や更新で無効になったタプル数(VACUUMの対象)。バージョン8.3から</td>
+</tr><tr>
+<td>last_vacuum</td>	<td>手動でVACUUMコマンドを実行した時刻。バージョン8.2から</td>
+</tr><tr>
+<td>last_autovacuum</td>	<td>AUTOVACUUMプロセスがVACUUM処理した時刻。バージョン8.2から</td>
+</tr><tr>
+<td>last_analyze</td>	<td>手動でANALYZEコマンドを実行した時刻。バージョン8.2から</td>
+</tr><tr>
+<td>last_autoanalyze</td>	<td>AUTOVACUUMプロセスがANALYZEを行った時刻。バージョン8.2から</td>
+</tr><tr>
+<td>vacuum_count</td>	<td>手動でVACUUMコマンドが実行された回数。バージョン9.1から</td>
+</tr><tr>
+<td>autovacuum_count</td>	<td>AUTOVACUUMプロセスでVACUUMされた回数。バージョン9.1から</td>
+</tr><tr>
+<td>analyze_count</td>	<td>手動でANALYZEコマンドが実行された回数。バージョン9.1から</td>
+</tr><tr>
+<td>autoanalyze_count</td>	<td>AUTOVACUUMプロセスでANALYZEされた回数。バージョン9.1から</td>
+</tr></table>
+-->
+
+
+
+<div class="jumpmenu"></div><h3>AUTOVACUUM</h3>
+
+<p>
+バージョン8.1から実装されたAUTOVACUUMは、PostgreSQLの日常的なメインテナンス作業のほとんどをカバーする大変優れた機能です。
+<br>
+AUTOVACUUMを機能させるために最低限必要なパラメータは次の2つです。この２つのパラメータは必ず有効にしておくべきです。
+</p>
+
+<ul>
+<li>autovacuum</li>
+<p>
+autovacuumを有効にするか。default on.
+</p>
+<li>track_counts</li>
+<p>
+テーブルとインデックスアクセスの稼働統計情報を収集するか。default on.
+</p>
+</ul>
+
+
+<p>
+以下のsubsubsectionでは、autovacuumに関するパラメータの紹介と、関連するstatistics viewによるmonitoringについて解説します。
+</p>
+
+
+<div class="jumpmenu"></div><h4>制御</h4>
+
+<p>
+autovacuumプロセスの動作は[< X-XX>]で解説しました。
+ここでは、autovacuumの動作に関連する4つのパラメータを説明します。
+</p>
+
+
+<ul>
+<li>autovacuum_naptime</li>
+<p>
+autovacuum_naptimeで設定された周期でworkerプロセスが起動し、VACUUM処理を行います。
+</p>
+
+
+<li>autovacuum_max_workers</li>
+<p>
+同時に起動するWorkerプロセスの最大数。default 3.
+</p>
+
+
+<li>autovacuum_vacuum_cost_delay, autovacuum_vacuum_cost_limit</li>
+<p>
+この２つのパラメータは、それぞれVACUUM処理の遅延機能([<2-07>]参照)における設定パラメータvacuum_cost_delayとvacuum_cost_limitの、AUTOVACUUM版です。
+<br>
+workerプロセスは、この２つのパラメータで指定された条件で、VACUUM処理やANALYZE処理を行うか否かを決め、
+バックグランドで実行するAUTOVACUUM処理が過負荷にならないように調整します。
+<br>
+VACUUM処理の遅延機能でのパラメータ値と同じでよければ'-1'を設定します。
+例えば、vacuum_cost_delayの値と同じでよければ、'autovacuum_vacuum_cost_delay = -1'とします。
+</p>
+
+</ul>
+
+
+
+<div class="jumpmenu"></div><h4>テーブル毎のVACUUMとFREEZE</h4>
+
+<p>
+AUTOVACUUMデーモンのVACUUM処理に関係するパラメータは次の２つです。
+</p>
+<ul>
+<li>autovacuum_vacuum_threshold (default 50)</li>
+<li>autovacuum_vacuum_scale_factor (default 0.2)</li>
+</ul>
+
+<p>
+VACUUM処理を行うか否かの閾値は、上の２つのパラメータを使った次の計算式で求めます。
+</p>
+<pre>
+vacuum threshold = autovacuum_vacuum_threshold + autovacuum_vacuum_scale_factor * number of tuples
+</pre>
+
+<p>
+テーブル毎に閾値を計算し、この値を超えたテーブルに対してVACUUM処理を行います。
+<br>
+例えば10,000レコードを持つテーブルは、以下の式で得られるレコード数 = 2050レコード以上の更新か削除が行なわれた場合に、VACUUM処理を行います。
+</p>
+
+<pre>
+vacuum threshold  = 50 + 0.2 * 10000 = 2050
+</pre>
+
+<p>
+稼働統計情報テーブルpg_stat_all_tablesのn_dead_tupで、テーブル毎の不要になったタプル数がわかります。
+次のクエリーは、テーブルの不要なタプル数n_dead_tupと、それが全体に占める割合dead_ratioを求めます。
+</p>
+
+<pre>
+sampledb=# SELECT relname, n_live_tup, n_dead_tup,
+           round(n_dead_tup*100/(n_dead_tup+n_live_tup), 2)  AS dead_ratio, 
+            pg_size_pretty(pg_relation_size(relid)) FROM pg_stat_user_tables
+            WHERE n_dead_tup > 0 ORDER BY dead_ratio DESC;
+     relname      | n_live_tup | n_dead_tup | dead_ratio | pg_size_pretty 
+------------------+------------+------------+------------+----------------
+ pgbench_branches |          1 |         30 |      96.00 | 8192 bytes
+ pgbench_tellers  |         10 |         30 |      75.00 | 8192 bytes
+ pgbench_accounts |     100000 |         30 |       0.00 | 13 MB
+(3 rows)
+</pre>
+
+<p>
+不要なタプルの割合dead_ratioが大きなテーブルは、VACUUM処理が行われているか否か確認しなければなりません。
+統計情報テーブルpg_stat_all_tablesで、最後にVACUUM処理を行った時刻と、これまでにVACUUM処理が実行された回数を表示できます。
+</p>
+
+<pre>
+sampledb=# SELECT current_timestamp; 
+             now              
+------------------------------
+ 2014-01-13 17:37:39.19773+09
+(1 row)
+
+sampledb=# SELECT relname,
+	   date_trunc('second', last_vacuum) AS last_vacuum, 
+	   date_trunc('second',last_autovacuum) AS last_autovacuum, 
+	   vacuum_count, autovacuum_count 
+	   FROM pg_stat_all_tables 
+	   WHERE relname = 'pgbench_branches' OR relname = 'pgbench_tellers';
+     relname      |      last_vacuum       |    last_autovacuum     | vacuum_count | autovacuum_count 
+------------------+------------------------+------------------------+--------------+------------------
+ pgbench_branches | 2014-01-13 17:03:09+09 | 2014-01-13 16:37:33+09 |           13 |                2
+ pgbench_tellers  | 2014-01-13 17:03:09+09 | 2014-01-13 16:45:34+09 |           13 |                1
+(2 rows)
+
+sampledb=# \x
+Expanded display is on.
+sampledb=# SELECT relname,
+	   date_trunc('second', last_vacuum) AS last_vacuum, 
+	   date_trunc('second',last_autovacuum) AS last_autovacuum, 
+	   vacuum_count, autovacuum_count 
+	   FROM pg_stat_all_tables 
+	   WHERE relname = 'pgbench_branches' OR relname = 'pgbench_tellers';
+-[ RECORD 1 ]----+-----------------------
+relname          | pgbench_branches
+last_vacuum      | 2014-01-13 17:03:09+09
+last_autovacuum  | 2014-01-13 16:37:33+09
+vacuum_count     | 13
+autovacuum_count | 2
+-[ RECORD 2 ]----+-----------------------
+relname          | pgbench_tellers
+last_vacuum      | 2014-01-13 17:03:09+09
+last_autovacuum  | 2014-01-13 16:45:34+09
+vacuum_count     | 13
+autovacuum_count | 1
+
+</pre>
+
+<p>
+もしも長時間、不要なタプルがVACUUM処理されない場合は、
+autovacuum_vacuum_scale_factorの値を小さくして、AUTOVACUUM処理の実行頻度を上げるとよいでしょう。
+</p>
+
+
+<p>
+最後に、FREEZE処理に関係するパラメータを一つ示します。詳細は[< X-XX> INTERNAL VACUUM]を参照してください。
+</p>
+
+<ul>
+<li>autovacuum_freeze_max_age</li>
+<blockquote>
+ Specifies the maximum age (in transactions) that a table's pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. Note that the system will launch autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled.
+</bockquote>
+
+</ul>
+
+
+
+<div class="jumpmenu"></div><h4>テーブル毎のANALYZE</h4>
+
+<p>
+AUTOVACUUMデーモンはテーブルのANALYZE処理も行います。
+
+
+<p>
+AUTOVACUUMデーモンのANALYZE処理に関係するパラメータは次の２つです。
+</p>
+<ul>
+<li>autovacuum_analyze_threshold (default 50)</li>
+<li>autovacuum_analyze_scale_factor (default 0.1)</li>
+</ul>
+
+<p>
+ANALYZE処理を行うか否かの閾値は、上の２つのパラメータを使った次の計算式で求めます。
+</p>
+
+<pre>
+analyze threshold = autovacuum_analyze_threshold + autovacuum_analyze_scale_factor * number of tuples
+</pre>
+
+<p>
+例えば10,000レコードを持つテーブルは以下の式で得られるレコード数 = 1050レコード以上の更新か削除が行なわれた場合に、ANALYZE処理を行います。
+</p>
+
+<pre>
+analyze threshold  = 50 + 0.1 * 10000  = 1050
+</pre>
+
+<p>
+VACUUM処理と同様、統計情報テーブルpg_stat_all_tablesで、最後にANALYZE処理を行った時刻と、これまでにANALYZE処理が実行された回数を表示できます。
+</p>
+
+<pre>
+sampledb=# SELECT relname, 
+	   date_trunc('second', last_analyze) AS last_analyze,
+	   date_trunc('second',last_autoanalyze) AS last_autoanalyze, 
+	   analyze_count, autoanalyze_count
+	   FROM pg_stat_all_tables WHERE relname LIKE 'pgbench_%';
+     relname      |      last_analyze      |    last_autoanalyze    | analyze_count | autoanalyze_count 
+------------------+------------------------+------------------------+---------------+-------------------
+ pgbench_accounts | 2014-01-13 16:30:04+09 |                        |             1 |                 0
+ pgbench_branches | 2014-01-13 16:30:03+09 | 2014-01-13 17:35:34+09 |             1 |                 4
+ pgbench_tellers  | 2014-01-13 16:30:03+09 | 2014-01-13 17:35:34+09 |             1 |                 4
+ pgbench_history  | 2014-01-13 16:30:04+09 | 2014-01-13 16:37:33+09 |             1 |                 3
+(4 rows)
+
+sampledb=# \x
+Expanded display is on.
+sampledb=# SELECT relname, 
+	   date_trunc('second', last_analyze) AS last_analyze,
+	   date_trunc('second',last_autoanalyze) AS last_autoanalyze, 
+	   analyze_count, autoanalyze_count
+	   FROM pg_stat_all_tables WHERE relname LIKE 'pgbench_%';
+-[ RECORD 1 ]-----+-----------------------
+relname           | pgbench_accounts
+last_analyze      | 2014-01-13 16:30:04+09
+last_autoanalyze  | 
+analyze_count     | 1
+autoanalyze_count | 0
+-[ RECORD 2 ]-----+-----------------------
+relname           | pgbench_branches
+last_analyze      | 2014-01-13 16:30:03+09
+last_autoanalyze  | 2014-01-13 17:35:34+09
+analyze_count     | 1
+autoanalyze_count | 4
+-[ RECORD 3 ]-----+-----------------------
+relname           | pgbench_tellers
+last_analyze      | 2014-01-13 16:30:03+09
+last_autoanalyze  | 2014-01-13 17:35:34+09
+analyze_count     | 1
+autoanalyze_count | 4
+-[ RECORD 4 ]-----+-----------------------
+relname           | pgbench_history
+last_analyze      | 2014-01-13 16:30:04+09
+last_autoanalyze  | 2014-01-13 16:37:33+09
+analyze_count     | 1
+autoanalyze_count | 3
+
+</pre>
+
+
+<div class="jumpmenu"></div><h4>VACUUM FULL</h4>
+
+<p>
+ほとんどの場合、autovacuumによるVACUUM処理でテーブルやインデックスのdead tupleを回収できます。
+しかし、一度に多くのtupleがdeleteされた場合、
+ほとんどのblockがfreesplaceにも関らず、テーブルが占めるファイルサイズが変わらないという状況が発生することがあります。
+</p>
+
+<p>
+具体的な例を示します。userlistには
+600000件のデータがあります。
+</p>
+
+
+<pre>
+sampledb=# SELECT count(*) FROM userlist;
+ count  
+--------
+ 600000
+(1 row)
+
+sampledb=# SELECT pg_size_pretty(pg_table_size('userlist'));
+ pg_size_pretty 
+----------------
+ 30 MB
+(1 row)
+</pre>
+
+<p>
+ここで、contributeされたmodules: pg_freespacemapとpg_stattupleを使って、
+テーブルuserlistのfreespaceを調べてみましょう。
+<br>
+pg_freespacemapを使ったqueryは、平均のfreespace size、テーブルのblock number, percentage of the free spaceを表示します。
+pg_stattupleは、９つのitemをひょうじできますが、
+ここではNumber of live tuplesとpercentage of the free spaceの２つのitemを表示しています。
+</p>
+
+<pre>
+sampledb=# SELECT pg_size_pretty(cast(avg(avail) as bigint)) as "Av. freespace size",
+sampledb-#        count(*) as "block number",
+sampledb-#        round(100 * avg(avail)/8192 ,2) as "free_percent"
+sampledb-#        FROM pg_freespace('userlist');
+ Av. freespace size | block number | free_percent 
+--------------------+--------------+--------------
+ 0 bytes            |         3822 |         0.00
+(1 row)
+
+sampledb=# SELECT tuple_count, free_percent FROM pgstattuple('userlist');
+ tuple_count | free_percent 
+-------------+--------------
+      600000 |         0.01
+(1 row)
+</pre>
+
+
+<p>
+さて、ここで99%のデータを削除してみましょう。
+100で割り切れるid以外を削除して、再びテーブルサイズを測ります。
+すると、削除前とテーブルサイズが変わっていないことがわかります。
+</p>
+
+<pre>
+sampledb=# DELETE FROM userlist WHERE id%100 != 0;
+DELETE 594000
+
+sampledb=# SELECT count(*) FROM userlist;
+ count 
+-------
+  6000
+(1 row)
+
+sampledb=# SELECT pg_size_pretty(pg_table_size('userlist'));
+ pg_size_pretty 
+----------------
+ 30 MB
+(1 row)
+</pre>
+
+
+<p>
+
+
+</p>
+
+
+<pre>
+sampledb=# SELECT pg_size_pretty(cast(avg(avail) as bigint)) as "Av. freespace size",
+       count(*) as "block number",
+       round(100 * avg(avail)/8192 ,2) as "free_percent"
+       FROM pg_freespace('userlist');
+ Av. freespace size | block number | free_percent 
+--------------------+--------------+--------------
+ 7452 bytes         |         3822 |        90.96
+(1 row)
+
+sampledb=# SELECT tuple_count, free_percent FROM pgstattuple('userlist');
+ tuple_count | free_percent 
+-------------+--------------
+        6000 |        91.07
+(1 row)
+</pre>
+
+
+
+<pre>
+sampledb=# VACUUM FULL userlist;
+VACUUM
+sampledb=# SELECT pg_size_pretty(pg_table_size('userlist'));
+ pg_size_pretty 
+----------------
+ 320 kB
+(1 row)
+
+sampledb=# SELECT pg_size_pretty(cast(avg(avail) as bigint)) as "Av. freespace size",
+       count(*) as "block number",
+       round(100 * avg(avail)/8192 ,2) as "free_percent"
+       FROM pg_freespace('userlist');
+ Av. freespace size | block number | free_percent 
+--------------------+--------------+--------------
+ 0 bytes            |           39 |         0.00
+(1 row)
+
+sampledb=# SELECT tuple_count, free_percent FROM pgstattuple('userlist');
+ tuple_count | free_percent 
+-------------+--------------
+        6000 |            2
+(1 row)
+</pre>
+
+
+
+<div class="jumpmenu"></div><h3>REINDEX</h3>
+
+
+
+<font color="#ff0000">
+<p>
+REINDEXを実行するキッカケ。
+</p>
+</font>
+参考；<a href="http://dqn.sakusakutto.jp/2011/11/postgresql-reindex.html">[PostgreSQL]本当は怖いREINDEX</a>
+
+
+<pre>
+postgres> cd contrib/pg_freespacemap
+postgres> make && make install
+
+postgres> cd contrib/pgstattuple
+postgres> make && make install
+
+</pre>
+
+<pre>
+sampledb=# CREATE EXTENSION pg_freespacemap;
+CREATE EXTENSION
+sampledb=# CREATE EXTENSION pgstattuple;
+CREATE EXTENSION
+</pre>
+
+
+
+<font color="#0000ff">
+
+<p>
+REINDEXは、インデックスのテーブルに保存されたデータを使用してインデックスを再構築し、古いインデックスのコピーと置き換えます。 以下にREINDEXが使用される状況を示します。
+</p>
+
+<ul>
+<li></li>
+<p>
+インデックスが破損してしまい、有効なデータがなくなった場合です。 理論的には決して起こらないはずですが、実際には、ソフトウェアのバグやハードウェアの障害によりインデックスが破損することがあります。 REINDEXはこの修復手段を提供します。
+</p>
+
+<li></li>
+<p>
+インデックスが"膨張状態"、つまり、多くの空、もしくは、ほとんど空のページを持つ状態になっている場合です。 この状況は、PostgreSQLのB-treeインデックスが特定のパターンでアクセスされた場合に起こり得ます。 REINDEXを使って、使用されないページを取り除いた新しいインデックス作成すると、インデックスの領域消費量を減少することができます。 詳細は項23.2を参照してください。
+</p>
+
+<li></li>
+<p>
+インデックスの格納パラメータ（フィルファクタなど）を変更し、この変更が有効かどうかを確認したい場合です。
+</p>
+
+<li></li>
+<p>
+ CONCURRENTLYオプションをつけたインデックス作成が失敗し、"無効な"インデックスが残った場合です。 こうしたインデックスは使用されませんが、REINDEXを使用して簡単に再作成することができます。 REINDEXでは同時構築ができないことに注意してください。 運用に影響を与えずにインデックスを作成するためには、インデックスを削除してからCREATE INDEX CONCURRENTLYコマンドを再発行しなければなりません。 
+</p>
+
+</ul>
+
+</font>
+
+
+
+<hr class="full_hr">
+<div id="lastmodified">
+Last-modified: 2018-9-8
+</div>
+</body>
+</html>
+

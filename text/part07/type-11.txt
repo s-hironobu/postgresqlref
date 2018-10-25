@@ -1,0 +1,135 @@
+%FILE internal/type-11.html
+%LASTMOD
+%KEY pgsql-type11
+
+%TITLE 配列
+
+<p>
+PostgreSQLは可変長多次元の配列を定義できます。
+可変長配列は事前に配列の大きさを指定する必要がありません。
+</p>
+
+<pre>
+text name[]; 
+name[1] = 'Alice'; 
+name[2] = 'Bobby'; 
+name[3] = 'Candy'; 
+name[4] = 'DUKE'; 
+... 
+</pre>
+
+
+%CHAPTER 配列の定義
+
+<p>
+データ型に括弧[]をつけることで、配列を定義します。
+</p>
+
+<pre>
+CREATE TABLE array_test ( 
+       name varchar(20), 
+       int_array integer[], 
+       text_array text[][] 
+); 
+</pre>
+
+%CHAPTER データの挿入
+
+<p>
+配列データは中括弧で囲み、(中括弧内の)それぞれの配列要素はカンマ,で区切ります。
+</p>
+
+<pre>
+INSERT INTO array_test 
+   VALUES ('Linus', 
+       '{1991}', 
+       '{{"os", "linux"}}'); 
+
+INSERT INTO array_test 
+   VALUES ('RMS', 
+	  '{1987, 1975}', 
+	  '{{"compiler", "gcc"}, {"editor", "emacs"}}'); 
+
+INSERT INTO array_test 
+   VALUES ('B Joy', 
+	  '{1979, 1980, 1980}', 
+	  '{{"os", "BSD"}, {"editor", "vi"}, {"shell", "csh"}}'); 
+</pre>
+
+%CHAPTER  データの検索
+
+<p>
+配列は1から数えます。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM array_test;
+ name  |    int_array     |             text_array             
+-------+------------------+------------------------------------
+ Linus | {1991}           | {{os,linux}}
+ RMS   | {1987,1975}      | {{compiler,gcc},{editor,emacs}}
+ B Joy | {1979,1980,1980} | {{os,BSD},{editor,vi},{shell,csh}}
+(3 rows)
+
+sampledb=# SELECT * FROM array_test WHERE text_array[1][1] = 'os';
+ name  |    int_array     |             text_array             
+-------+------------------+------------------------------------
+ Linus | {1991}           | {{os,linux}}
+ B Joy | {1979,1980,1980} | {{os,BSD},{editor,vi},{shell,csh}}
+(2 rows)
+</pre>
+
+<p>
+配列を切り出すことも可能です。
+配列を切り出す添字の書式と利用法は次のとおりです。
+</p>
+
+[<書式>]
+<pre>
+[lower : upper] 
+</pre>
+
+<p>
+使用例を以下に示します。
+</p>
+
+<pre>
+sampledb=# SELECT name, text_array[1:2][1:2] FROM array_test;
+ name  |           text_array            
+-------+---------------------------------
+ Linus | {{os,linux}}
+ RMS   | {{compiler,gcc},{editor,emacs}}
+ B Joy | {{os,BSD},{editor,vi}}
+(3 rows)
+
+sampledb=# -- 値が1つだけの場合、下限の添字は"[1]"
+sampledb=# SELECT name, text_array[1:2][1] FROM array_test;
+ name  |      text_array       
+-------+-----------------------
+ Linus | {{os}}
+ RMS   | {{compiler},{editor}}
+ B Joy | {{os},{editor}}
+(3 rows)
+</pre>
+
+%CHAPTER 配列の大きさを調べる
+
+<p>
+配列の大きさを調べるには関数array_dims()を使います。
+関数array_dims()の返り値はtext型です。
+</p>
+
+<pre>
+sampledb=# SELECT name, array_dims(int_array), array_dims(text_array) 
+sampledb-#    FROM array_test;
+ name  | array_dims | array_dims 
+-------+------------+------------
+ Linus | [1:1]      | [1:1][1:2]
+ RMS   | [1:2]      | [1:2][1:2]
+ B Joy | [1:3]      | [1:3][1:2]
+(3 rows)
+</pre>
+
+<p>
+その他、配列に関する詳細は「PostgreSQL ユーザガイド "配列"」を参照してください。
+</p>

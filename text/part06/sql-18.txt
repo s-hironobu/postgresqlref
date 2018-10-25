@@ -1,0 +1,55 @@
+%FILE internal/sql-18.html
+%LASTMOD
+%KEY pgsql-sql18
+
+%TITLE テーブルの指定	FROM句
+
+
+<pre>
+[<書式>]
+
+ FROM  [ ONLY ] table_name [ * ] [ [ AS ] alias [ ( column_alias [, ...] ) ] ]
+    ( sub_query ) [ AS ] alias [ ( column_alias [, ...] ) ]
+    with_query_name [ [ AS ] alias [ ( column_alias [, ...] ) ] ]
+    function_name ( [ argument [, ...] ] ) 
+		    [ AS ] alias 
+		      [ ( column_alias [, ...] | column_definition [, ...] ) ]
+    function_name ( [ argument [, ...] ] ) 
+		      AS ( column_definition [, ...] )
+    from_item [ NATURAL ] 
+       join_type from_item [ ON join_condition | USING ( join_column [, ...] ) ]
+
+=====================================================================
+パラメータ	説明
+=====================================================================
+table_name	検索を行う既存のテーブルかビューの名前
+alias		別名
+sub_query	サブクエリ、もしくはVALUES文
+with_query_name	WITH句で定義したCTE(共通テーブル式)。[<6-21>]参照
+function_name	関数名
+from_item	テーブル名など
+=====================================================================
+
+=====================================================================
+テーブルの結合		説明
+=====================================================================
+join_type		テーブルの結合形式
+join_condition		テーブル結合の制約条件
+join_column_list	USING句のカラムリスト
+=====================================================================
+</pre>
+
+%CHAPTER 解説
+
+<p>
+FROM句には1つ以上のテーブルだけでなく、
+CTE(共通テーブル式[<6-21>]参照)、サブクエリ(副問い合わせ[<6-29>]参照)を指定できます。
+</p>
+
+<p>
+・テーブルの結合
+<br>
+テーブルの結合(CROSS, INNER, OUTER)を指定できます。
+詳細は[<6-24>]を参照してください。
+</p>
+

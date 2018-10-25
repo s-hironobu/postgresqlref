@@ -1,0 +1,182 @@
+%FILE internal/psql-06.html
+%LASTMOD
+%KEY pgsql-psql06
+
+
+%TITLE 情報表示
+
+<pre>
+[<メタコマンド一覧>]
+
+================================================================
+メタコマンド		説明
+================================================================
+\list[+], \l[+]			データベースとその所有者、エンコーディングの一覧を表示
+\da[S] [ pattern ]		すべて、もしくはpatternに一致する集約関数とデータ型を表示
+\d[EistvS+] [ pattern ]	すべて、もしくはpatternに一致するE=外部テーブル、i=インデックス、s=シーケンス、t=テーブル、v=ビューを表示
+\dd[S] [ object ]		集約、関数、演算子、型、リレーション(テーブル、ビュー、インデックス、シーケンス、ラージオブジェクト)の解説を表示。引数がない場合、すべてのオブジェクトの解説を表示
+\d[S+] relation		relation(テーブル、ビュー、インデックス、または、シーケンス)の全レコード、データ型、制約などの属性を表示
+\db[+] [ pattern ]	テーブルスペースの一覧を表示。
+\dc[S] [ pattern ]	変換可能なエンコーディングの一覧を表示
+\dC			変換(cast)可能なデータ型の一覧を表示
+\dD[S] [ pattern ]		ドメインの一覧を表示
+\des[+] [ pattern ]	外部サーバの一覧を表示
+\det[+] [ pattern ]	外部テーブルの一覧を表示
+\deu[+] [ pattern ]	外部サーバのユーザマップの一覧を表示。\deu+でパスワードが表示される可能性があるので、使用に際しては注意すること
+\dew[+] [ pattern ]	外部データラッパーの一覧を表示
+\ddp [ pattern ]     デフォルトのアクセス権限設定を表示
+\df[antwS+] [ pattern ]		すべて、もしくはpatternに一致する関数の引数と戻り値を表示。a=集約関数、n=通常関数(normal)、t=トリガ関数、w=WINDOW関数を指定可能
+\dg[+] [ pattern ]		データベースロールの一覧を表示
+\dl			ラージオブジェクトの一覧を表示。\lo_listの別名
+\dL[S+] [ pattern ]	手続き言語を表示
+\dn[S+] [ pattern ]		スキーマの一覧を表示
+\do[S] [ name ]		演算子とその演算項目、戻り値を一覧表示
+\dT[S+] [ pattern ]		すべて、もしくはpatternに一致するデータ型を表示
+\du[+] [ pattern ]		すべて、もしくはpatternに一致するデータベースロールを表示
+\dy[+] [ pattern ]	イベントトリガの一覧を表示
+\z, \dp [ pattern ]		すべて、もしくはpatternに一致するテーブルとビューの権限を表示
+\dx[+] [ pattern ]	EXTENSIONの一覧表示
+================================================================
+
+	S:	システム情報も含む
+	+:	コメントなど詳細な情報を表示する
+
+</pre>
+
+%CHAPTER 解説
+
+<p>
+上記のメタコマンドでシステムカタログの情報などを使い易い形式で表示できます([<コラム5-1>])。
+</p>
+
+
+<blockquote><table BORDER="1"><tr><td>コラム5-1: メタコマンドの中身を知る</td><td>
+<p>
+psqlに-Eオプションをつけて起動すると、メタコマンドの実装を表示できます。
+<br>
+例えばテーブルのリストを表示する\dtで試してみましょう。
+</p>
+
+<pre>
+postgres> psql sampledb -q -E
+sampledb=# \dt
+********* QUERY **********
+SELECT n.nspname as "Schema",
+  c.relname as "Name",
+  CASE c.relkind WHEN 'r' THEN 'table' WHEN 'v' THEN 'view' 
+                 WHEN 'i' THEN 'index' WHEN 'S' THEN 'sequence' 
+                 WHEN 's' THEN 'special' WHEN 'f' THEN 'foreign table' END as "Type",
+  pg_catalog.pg_get_userbyid(c.relowner) as "Owner"
+FROM pg_catalog.pg_class c
+     LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+WHERE c.relkind IN ('r','')
+      AND n.nspname <> 'pg_catalog'
+      AND n.nspname <> 'information_schema'
+      AND n.nspname !~ '^pg_toast'
+  AND pg_catalog.pg_table_is_visible(c.oid)
+ORDER BY 1,2;
+**************************
+
+              List of relations
+ Schema |       Name       | Type  |  Owner   
+--------+------------------+-------+----------
+ public | array_test       | table | postgres
+ public | author_list      | table | postgres
+... 略 ...
+</pre>
+
+<p>
+メタコマンドの実装を研究することはPostgreSQLの理解に非常に役に立ちます。
+</p>
+
+
+</td></tr></table></blockquote>
+
+
+<p>
+・\list 
+<br>
+現在接続できるデータベース名、所有者、エンコーディングの一覧を表示します。
+</p>
+
+<p>
+・\du 
+<br>
+現在登録されているデータベースロール名、ロールID、および権限の一覧を表示します。
+</p>
+
+<p>
+・\d 
+<br>
+メタコマンド\dでテーブル、ビュー、シーケンスの一覧を表示します。
+</p>
+
+<pre>
+sampledb=# \d
+                List of relations
+ Schema |       Name        |   Type   |  Owner   
+--------+-------------------+----------+----------
+ public | companylist       | table    | postgres
+ public | customer_view     | view     | postgres
+ public | customerid        | sequence | postgres
+ public | customerlist      | table    | postgres
+ public | itemlist          | table    | postgres
+ public | makerlist         | table    | postgres
+ public | orderlist         | table    | user1
+(7 rows)
+</pre>
+
+
+<p>
+メタコマンド\dに続けて表示したいリレーションを表す記号([<表5-01>])を列挙すると、所望のリストが得られます。
+</p>
+
+<table border=1>
+<caption>[<表5-01>] メタコマンド\dに指定する記号一覧</caption>
+<tr bgcolor="#cccccc">
+<th>記号　　　　</th>	<th>説明　　　　　　　　　　　　　　　　</th>
+</tr><tr>
+<td>E</td>	<td>外部テーブル</td>
+</tr><tr>
+<td>i</td>	<td>インデックス</td>
+</tr><tr>
+<td>s</td>	<td>シーケンス</td>
+</tr><tr>
+<td>t</td>	<td>テーブル</td>
+</tr><tr>
+<td>v</td>	<td>ビュー</td>
+</tr></table>
+
+<br>
+
+<p>
+例として、データベースsampledbに属するインデックスとビューを表示します。
+</p>
+
+<pre>
+sampledb=# \div
+                          List of relations
+ Schema |          Name           | Type  |  Owner   |      Table       
+--------+-------------------------+-------+----------+------------------
+ public | pgbench_accounts_pkey   | index | postgres | pgbench_accounts
+ public | pgbench_branches_pkey   | index | postgres | pgbench_branches
+ public | pgbench_tellers_pkey    | index | postgres | pgbench_tellers
+ public | test_view               | view  | postgres | 
+(4 rows)
+</pre>
+
+
+<p>
+メタコマンド\dの引数にテーブル名、ビュー名、インデックス名、またはシーケンス名を設定すると、その定義を表示します。
+<br>
+具体例を示します。
+</p>
+
+<pre>
+sampledb=# \d book_list
+    Table "public.book_list"
+  Column   |  Type   | Modifiers 
+-----------+---------+-----------
+ title     | text    | 
+ author_id | integer | 
+</pre>

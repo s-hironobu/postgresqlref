@@ -1,0 +1,573 @@
+%FILE internal/admin-29.html
+%LASTMOD
+%KEY pgsql-admin29
+
+%TITLE ROUTINE MAINTENANCE
+
+<p>
+DBMSを運用し続けるためには定期的なMaintenanceが必要です。それはPostgreSQLも例外ではありません。
+ほとんどのDBMSにとって必須のANALYZE処理は、PostgreSQLにとっても必須です。
+それ以外にPostgreSQLには、PostgreSQLの機構に起因する（より正確に言えばMVCCの実装方式とXIDの実装の２つに起因する）
+必須のmaintenance作業があります。
+</p>
+
+
+<table>
+<caption>[<表3-08>]必須の保守項目</caption>
+<tr bgcolor="#cccccc">
+<th>メンテナンス項目 (item)</th>
+<th>description</th>
+<th>どうやって処理するか</th>
+
+</tr><tr>
+
+<td>ANALYZE</td>
+<td>To update data statistics used by the PostgreSQL query planner. </td>
+<td>ANALYZE command, or AUTOVACUUMで自動実行</td>
+
+
+</tr><tr>
+
+<td><font color="#ff0000">remove dead tuples, and update the visibility map and free space map.</font></td>
+<td>To recover or reuse disk space occupied by updated or deleted rows.</td>
+<td>VACUUM and VACUUM FULL command, or AUTOVACUUMで自動実行</td>
+
+</tr><tr>
+
+<td>FREEZE</td>
+<td>To protect against loss of very old data due to transaction ID wraparound. </td>
+<td>FREEZE, VACUUM and VACUUM FULL command, or AUTOVACUUMで自動実行</td>
+
+
+</tr><tr>
+
+<td>REINDEX</td>
+<td>大量のデータを削除した場合に実行。テーブルファイルサイズを削減できる</td>
+<td>REINDEX command</td>
+
+
+</tr><tr>
+
+<td>truncate server log</td>
+<td></td>
+<td>Manual operation</td>
+
+</tr><tr>
+
+<td>truncate archiving WAL segments</td>
+<td></td>
+<td> See subsection 6.3.4. </td>
+
+</tr></table>
+
+<br>
+
+<p>
+バージョン8.1で導入されたAUTOVACUUMによって、それまでPostgreSQLの運用上大きな欠点であったVACUUM処理が自動で行われるようになりました。
+ANALYZEによる統計情報更新も行うので、日常的な保守はほぼすべてAUTOVACUUMに任せることができます。
+</p>
+
+
+<!--
+
+<table border=1>
+<caption>[<表3-12>] pg_stat_all_tables</caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>		<th>説明</th>
+</tr><tr>
+<td>relid</td>	<td>テーブルのOID</td>
+</tr><tr>
+<td>schemaname</td>	<td>テーブルの属するスキーマ名</td>
+</tr><tr>
+<td>relname</td>	<td>テーブル名</td>
+</tr><tr>
+<td>seq_scan</td>	<td>シーケンシャルスキャンされた回数</td>
+</tr><tr>
+<td>seq_tup_read</td>	<td>シーケンシャルスキャンされたレコード数</td>
+</tr><tr>
+<td>idx_scan</td>	<td>インデックススキャンされた回数</td>
+</tr><tr>
+<td>idx_tup_fetch</td>	<td>インデックススキャンされたレコード数</td>
+</tr><tr>
+<td>n_tup_ins</td>	<td>INSERTされたレコード数</td>
+</tr><tr>
+<td>n_tup_upd</td>	<td>UPDATEされたレコード数</td>
+</tr><tr>
+<td>n_tup_del</td>	<td>DELETEされたレコード数</td>
+</tr><tr>
+<td>n_tup_hot_upd</td>	<td>UPDATEでHOTが使われたレコード数。バージョン8.3から</td>
+</tr><tr>
+<td>n_live_tup</td>	<td>有効なタプル数。バージョン8.3から</td>
+</tr><tr>
+<td>n_dead_tup</td>	<td>削除や更新で無効になったタプル数(VACUUMの対象)。バージョン8.3から</td>
+</tr><tr>
+<td>last_vacuum</td>	<td>手動でVACUUMコマンドを実行した時刻。バージョン8.2から</td>
+</tr><tr>
+<td>last_autovacuum</td>	<td>AUTOVACUUMプロセスがVACUUM処理した時刻。バージョン8.2から</td>
+</tr><tr>
+<td>last_analyze</td>	<td>手動でANALYZEコマンドを実行した時刻。バージョン8.2から</td>
+</tr><tr>
+<td>last_autoanalyze</td>	<td>AUTOVACUUMプロセスがANALYZEを行った時刻。バージョン8.2から</td>
+</tr><tr>
+<td>vacuum_count</td>	<td>手動でVACUUMコマンドが実行された回数。バージョン9.1から</td>
+</tr><tr>
+<td>autovacuum_count</td>	<td>AUTOVACUUMプロセスでVACUUMされた回数。バージョン9.1から</td>
+</tr><tr>
+<td>analyze_count</td>	<td>手動でANALYZEコマンドが実行された回数。バージョン9.1から</td>
+</tr><tr>
+<td>autoanalyze_count</td>	<td>AUTOVACUUMプロセスでANALYZEされた回数。バージョン9.1から</td>
+</tr></table>
+-->
+
+
+
+%CHAPTER  AUTOVACUUM
+
+<p>
+バージョン8.1から実装されたAUTOVACUUMは、PostgreSQLの日常的なメインテナンス作業のほとんどをカバーする大変優れた機能です。
+<br>
+AUTOVACUUMを機能させるために最低限必要なパラメータは次の2つです。この２つのパラメータは必ず有効にしておくべきです。
+</p>
+
+<ul>
+<li>autovacuum</li>
+<p>
+autovacuumを有効にするか。default on.
+</p>
+<li>track_counts</li>
+<p>
+テーブルとインデックスアクセスの稼働統計情報を収集するか。default on.
+</p>
+</ul>
+
+
+<p>
+以下のsubsubsectionでは、autovacuumに関するパラメータの紹介と、関連するstatistics viewによるmonitoringについて解説します。
+</p>
+
+
+%SECTION 制御
+
+<p>
+autovacuumプロセスの動作は[< X-XX>]で解説しました。
+ここでは、autovacuumの動作に関連する4つのパラメータを説明します。
+</p>
+
+
+<ul>
+<li>autovacuum_naptime</li>
+<p>
+autovacuum_naptimeで設定された周期でworkerプロセスが起動し、VACUUM処理を行います。
+</p>
+
+
+<li>autovacuum_max_workers</li>
+<p>
+同時に起動するWorkerプロセスの最大数。default 3.
+</p>
+
+
+<li>autovacuum_vacuum_cost_delay, autovacuum_vacuum_cost_limit</li>
+<p>
+この２つのパラメータは、それぞれVACUUM処理の遅延機能([<2-07>]参照)における設定パラメータvacuum_cost_delayとvacuum_cost_limitの、AUTOVACUUM版です。
+<br>
+workerプロセスは、この２つのパラメータで指定された条件で、VACUUM処理やANALYZE処理を行うか否かを決め、
+バックグランドで実行するAUTOVACUUM処理が過負荷にならないように調整します。
+<br>
+VACUUM処理の遅延機能でのパラメータ値と同じでよければ'-1'を設定します。
+例えば、vacuum_cost_delayの値と同じでよければ、'autovacuum_vacuum_cost_delay = -1'とします。
+</p>
+
+</ul>
+
+
+
+%SECTION テーブル毎のVACUUMとFREEZE
+
+<p>
+AUTOVACUUMデーモンのVACUUM処理に関係するパラメータは次の２つです。
+</p>
+<ul>
+<li>autovacuum_vacuum_threshold (default 50)</li>
+<li>autovacuum_vacuum_scale_factor (default 0.2)</li>
+</ul>
+
+<p>
+VACUUM処理を行うか否かの閾値は、上の２つのパラメータを使った次の計算式で求めます。
+</p>
+<pre>
+vacuum threshold = autovacuum_vacuum_threshold + autovacuum_vacuum_scale_factor * number of tuples
+</pre>
+
+<p>
+テーブル毎に閾値を計算し、この値を超えたテーブルに対してVACUUM処理を行います。
+<br>
+例えば10,000レコードを持つテーブルは、以下の式で得られるレコード数 = 2050レコード以上の更新か削除が行なわれた場合に、VACUUM処理を行います。
+</p>
+
+<pre>
+vacuum threshold  = 50 + 0.2 * 10000 = 2050
+</pre>
+
+<p>
+稼働統計情報テーブルpg_stat_all_tablesのn_dead_tupで、テーブル毎の不要になったタプル数がわかります。
+次のクエリーは、テーブルの不要なタプル数n_dead_tupと、それが全体に占める割合dead_ratioを求めます。
+</p>
+
+<pre>
+sampledb=# SELECT relname, n_live_tup, n_dead_tup,
+           round(n_dead_tup*100/(n_dead_tup+n_live_tup), 2)  AS dead_ratio, 
+            pg_size_pretty(pg_relation_size(relid)) FROM pg_stat_user_tables
+            WHERE n_dead_tup > 0 ORDER BY dead_ratio DESC;
+     relname      | n_live_tup | n_dead_tup | dead_ratio | pg_size_pretty 
+------------------+------------+------------+------------+----------------
+ pgbench_branches |          1 |         30 |      96.00 | 8192 bytes
+ pgbench_tellers  |         10 |         30 |      75.00 | 8192 bytes
+ pgbench_accounts |     100000 |         30 |       0.00 | 13 MB
+(3 rows)
+</pre>
+
+<p>
+不要なタプルの割合dead_ratioが大きなテーブルは、VACUUM処理が行われているか否か確認しなければなりません。
+統計情報テーブルpg_stat_all_tablesで、最後にVACUUM処理を行った時刻と、これまでにVACUUM処理が実行された回数を表示できます。
+</p>
+
+<pre>
+sampledb=# SELECT current_timestamp; 
+             now              
+------------------------------
+ 2014-01-13 17:37:39.19773+09
+(1 row)
+
+sampledb=# SELECT relname,
+	   date_trunc('second', last_vacuum) AS last_vacuum, 
+	   date_trunc('second',last_autovacuum) AS last_autovacuum, 
+	   vacuum_count, autovacuum_count 
+	   FROM pg_stat_all_tables 
+	   WHERE relname = 'pgbench_branches' OR relname = 'pgbench_tellers';
+     relname      |      last_vacuum       |    last_autovacuum     | vacuum_count | autovacuum_count 
+------------------+------------------------+------------------------+--------------+------------------
+ pgbench_branches | 2014-01-13 17:03:09+09 | 2014-01-13 16:37:33+09 |           13 |                2
+ pgbench_tellers  | 2014-01-13 17:03:09+09 | 2014-01-13 16:45:34+09 |           13 |                1
+(2 rows)
+
+sampledb=# \x
+Expanded display is on.
+sampledb=# SELECT relname,
+	   date_trunc('second', last_vacuum) AS last_vacuum, 
+	   date_trunc('second',last_autovacuum) AS last_autovacuum, 
+	   vacuum_count, autovacuum_count 
+	   FROM pg_stat_all_tables 
+	   WHERE relname = 'pgbench_branches' OR relname = 'pgbench_tellers';
+-[ RECORD 1 ]----+-----------------------
+relname          | pgbench_branches
+last_vacuum      | 2014-01-13 17:03:09+09
+last_autovacuum  | 2014-01-13 16:37:33+09
+vacuum_count     | 13
+autovacuum_count | 2
+-[ RECORD 2 ]----+-----------------------
+relname          | pgbench_tellers
+last_vacuum      | 2014-01-13 17:03:09+09
+last_autovacuum  | 2014-01-13 16:45:34+09
+vacuum_count     | 13
+autovacuum_count | 1
+
+</pre>
+
+<p>
+もしも長時間、不要なタプルがVACUUM処理されない場合は、
+autovacuum_vacuum_scale_factorの値を小さくして、AUTOVACUUM処理の実行頻度を上げるとよいでしょう。
+</p>
+
+
+<p>
+最後に、FREEZE処理に関係するパラメータを一つ示します。詳細は[< X-XX> INTERNAL VACUUM]を参照してください。
+</p>
+
+<ul>
+<li>autovacuum_freeze_max_age</li>
+<blockquote>
+ Specifies the maximum age (in transactions) that a table's pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. Note that the system will launch autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled.
+</bockquote>
+
+</ul>
+
+
+
+%SECTION テーブル毎のANALYZE
+
+<p>
+AUTOVACUUMデーモンはテーブルのANALYZE処理も行います。
+
+
+<p>
+AUTOVACUUMデーモンのANALYZE処理に関係するパラメータは次の２つです。
+</p>
+<ul>
+<li>autovacuum_analyze_threshold (default 50)</li>
+<li>autovacuum_analyze_scale_factor (default 0.1)</li>
+</ul>
+
+<p>
+ANALYZE処理を行うか否かの閾値は、上の２つのパラメータを使った次の計算式で求めます。
+</p>
+
+<pre>
+analyze threshold = autovacuum_analyze_threshold + autovacuum_analyze_scale_factor * number of tuples
+</pre>
+
+<p>
+例えば10,000レコードを持つテーブルは以下の式で得られるレコード数 = 1050レコード以上の更新か削除が行なわれた場合に、ANALYZE処理を行います。
+</p>
+
+<pre>
+analyze threshold  = 50 + 0.1 * 10000  = 1050
+</pre>
+
+<p>
+VACUUM処理と同様、統計情報テーブルpg_stat_all_tablesで、最後にANALYZE処理を行った時刻と、これまでにANALYZE処理が実行された回数を表示できます。
+</p>
+
+<pre>
+sampledb=# SELECT relname, 
+	   date_trunc('second', last_analyze) AS last_analyze,
+	   date_trunc('second',last_autoanalyze) AS last_autoanalyze, 
+	   analyze_count, autoanalyze_count
+	   FROM pg_stat_all_tables WHERE relname LIKE 'pgbench_%';
+     relname      |      last_analyze      |    last_autoanalyze    | analyze_count | autoanalyze_count 
+------------------+------------------------+------------------------+---------------+-------------------
+ pgbench_accounts | 2014-01-13 16:30:04+09 |                        |             1 |                 0
+ pgbench_branches | 2014-01-13 16:30:03+09 | 2014-01-13 17:35:34+09 |             1 |                 4
+ pgbench_tellers  | 2014-01-13 16:30:03+09 | 2014-01-13 17:35:34+09 |             1 |                 4
+ pgbench_history  | 2014-01-13 16:30:04+09 | 2014-01-13 16:37:33+09 |             1 |                 3
+(4 rows)
+
+sampledb=# \x
+Expanded display is on.
+sampledb=# SELECT relname, 
+	   date_trunc('second', last_analyze) AS last_analyze,
+	   date_trunc('second',last_autoanalyze) AS last_autoanalyze, 
+	   analyze_count, autoanalyze_count
+	   FROM pg_stat_all_tables WHERE relname LIKE 'pgbench_%';
+-[ RECORD 1 ]-----+-----------------------
+relname           | pgbench_accounts
+last_analyze      | 2014-01-13 16:30:04+09
+last_autoanalyze  | 
+analyze_count     | 1
+autoanalyze_count | 0
+-[ RECORD 2 ]-----+-----------------------
+relname           | pgbench_branches
+last_analyze      | 2014-01-13 16:30:03+09
+last_autoanalyze  | 2014-01-13 17:35:34+09
+analyze_count     | 1
+autoanalyze_count | 4
+-[ RECORD 3 ]-----+-----------------------
+relname           | pgbench_tellers
+last_analyze      | 2014-01-13 16:30:03+09
+last_autoanalyze  | 2014-01-13 17:35:34+09
+analyze_count     | 1
+autoanalyze_count | 4
+-[ RECORD 4 ]-----+-----------------------
+relname           | pgbench_history
+last_analyze      | 2014-01-13 16:30:04+09
+last_autoanalyze  | 2014-01-13 16:37:33+09
+analyze_count     | 1
+autoanalyze_count | 3
+
+</pre>
+
+
+%SECTION VACUUM FULL
+
+<p>
+ほとんどの場合、autovacuumによるVACUUM処理でテーブルやインデックスのdead tupleを回収できます。
+しかし、一度に多くのtupleがdeleteされた場合、
+ほとんどのblockがfreesplaceにも関らず、テーブルが占めるファイルサイズが変わらないという状況が発生することがあります。
+</p>
+
+<p>
+具体的な例を示します。userlistには
+600000件のデータがあります。
+</p>
+
+
+<pre>
+sampledb=# SELECT count(*) FROM userlist;
+ count  
+--------
+ 600000
+(1 row)
+
+sampledb=# SELECT pg_size_pretty(pg_table_size('userlist'));
+ pg_size_pretty 
+----------------
+ 30 MB
+(1 row)
+</pre>
+
+<p>
+ここで、contributeされたmodules: pg_freespacemapとpg_stattupleを使って、
+テーブルuserlistのfreespaceを調べてみましょう。
+<br>
+pg_freespacemapを使ったqueryは、平均のfreespace size、テーブルのblock number, percentage of the free spaceを表示します。
+pg_stattupleは、９つのitemをひょうじできますが、
+ここではNumber of live tuplesとpercentage of the free spaceの２つのitemを表示しています。
+</p>
+
+<pre>
+sampledb=# SELECT pg_size_pretty(cast(avg(avail) as bigint)) as "Av. freespace size",
+sampledb-#        count(*) as "block number",
+sampledb-#        round(100 * avg(avail)/8192 ,2) as "free_percent"
+sampledb-#        FROM pg_freespace('userlist');
+ Av. freespace size | block number | free_percent 
+--------------------+--------------+--------------
+ 0 bytes            |         3822 |         0.00
+(1 row)
+
+sampledb=# SELECT tuple_count, free_percent FROM pgstattuple('userlist');
+ tuple_count | free_percent 
+-------------+--------------
+      600000 |         0.01
+(1 row)
+</pre>
+
+
+<p>
+さて、ここで99%のデータを削除してみましょう。
+100で割り切れるid以外を削除して、再びテーブルサイズを測ります。
+すると、削除前とテーブルサイズが変わっていないことがわかります。
+</p>
+
+<pre>
+sampledb=# DELETE FROM userlist WHERE id%100 != 0;
+DELETE 594000
+
+sampledb=# SELECT count(*) FROM userlist;
+ count 
+-------
+  6000
+(1 row)
+
+sampledb=# SELECT pg_size_pretty(pg_table_size('userlist'));
+ pg_size_pretty 
+----------------
+ 30 MB
+(1 row)
+</pre>
+
+
+<p>
+
+
+</p>
+
+
+<pre>
+sampledb=# SELECT pg_size_pretty(cast(avg(avail) as bigint)) as "Av. freespace size",
+       count(*) as "block number",
+       round(100 * avg(avail)/8192 ,2) as "free_percent"
+       FROM pg_freespace('userlist');
+ Av. freespace size | block number | free_percent 
+--------------------+--------------+--------------
+ 7452 bytes         |         3822 |        90.96
+(1 row)
+
+sampledb=# SELECT tuple_count, free_percent FROM pgstattuple('userlist');
+ tuple_count | free_percent 
+-------------+--------------
+        6000 |        91.07
+(1 row)
+</pre>
+
+
+
+<pre>
+sampledb=# VACUUM FULL userlist;
+VACUUM
+sampledb=# SELECT pg_size_pretty(pg_table_size('userlist'));
+ pg_size_pretty 
+----------------
+ 320 kB
+(1 row)
+
+sampledb=# SELECT pg_size_pretty(cast(avg(avail) as bigint)) as "Av. freespace size",
+       count(*) as "block number",
+       round(100 * avg(avail)/8192 ,2) as "free_percent"
+       FROM pg_freespace('userlist');
+ Av. freespace size | block number | free_percent 
+--------------------+--------------+--------------
+ 0 bytes            |           39 |         0.00
+(1 row)
+
+sampledb=# SELECT tuple_count, free_percent FROM pgstattuple('userlist');
+ tuple_count | free_percent 
+-------------+--------------
+        6000 |            2
+(1 row)
+</pre>
+
+
+
+%CHAPTER REINDEX
+
+
+
+<font color="#ff0000">
+<p>
+REINDEXを実行するキッカケ。
+</p>
+</font>
+参考；<a href="http://dqn.sakusakutto.jp/2011/11/postgresql-reindex.html">[PostgreSQL]本当は怖いREINDEX</a>
+
+
+<pre>
+postgres> cd contrib/pg_freespacemap
+postgres> make && make install
+
+postgres> cd contrib/pgstattuple
+postgres> make && make install
+
+</pre>
+
+<pre>
+sampledb=# CREATE EXTENSION pg_freespacemap;
+CREATE EXTENSION
+sampledb=# CREATE EXTENSION pgstattuple;
+CREATE EXTENSION
+</pre>
+
+
+
+<font color="#0000ff">
+
+<p>
+REINDEXは、インデックスのテーブルに保存されたデータを使用してインデックスを再構築し、古いインデックスのコピーと置き換えます。 以下にREINDEXが使用される状況を示します。
+</p>
+
+<ul>
+<li></li>
+<p>
+インデックスが破損してしまい、有効なデータがなくなった場合です。 理論的には決して起こらないはずですが、実際には、ソフトウェアのバグやハードウェアの障害によりインデックスが破損することがあります。 REINDEXはこの修復手段を提供します。
+</p>
+
+<li></li>
+<p>
+インデックスが"膨張状態"、つまり、多くの空、もしくは、ほとんど空のページを持つ状態になっている場合です。 この状況は、PostgreSQLのB-treeインデックスが特定のパターンでアクセスされた場合に起こり得ます。 REINDEXを使って、使用されないページを取り除いた新しいインデックス作成すると、インデックスの領域消費量を減少することができます。 詳細は項23.2を参照してください。
+</p>
+
+<li></li>
+<p>
+インデックスの格納パラメータ（フィルファクタなど）を変更し、この変更が有効かどうかを確認したい場合です。
+</p>
+
+<li></li>
+<p>
+ CONCURRENTLYオプションをつけたインデックス作成が失敗し、"無効な"インデックスが残った場合です。 こうしたインデックスは使用されませんが、REINDEXを使用して簡単に再作成することができます。 REINDEXでは同時構築ができないことに注意してください。 運用に影響を与えずにインデックスを作成するためには、インデックスを削除してからCREATE INDEX CONCURRENTLYコマンドを再発行しなければなりません。 
+</p>
+
+</ul>
+
+</font>
+
+
+

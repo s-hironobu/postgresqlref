@@ -1,0 +1,1662 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+ <title>PostgreSQLバイブル草稿</title>
+ <link rel="stylesheet" type="text/css" media="screen" href="./default.css"">
+</head>
+
+<body>
+
+<script language=javascript>
+<!--
+function show(inputData) {
+var objID=document.getElementById( "layer_" + inputData );
+var buttonID=document.getElementById( "category_" + inputData );
+if(objID.className=='close') {
+objID.style.display='block';
+objID.className='open';
+}else{
+objID.style.display='none';
+objID.className='close';
+}
+}
+//-->
+</script>
+
+<div id="header">
+<h1 class="title">PostgreSQLバイブル草稿</title></h1>
+    <span class="small">
+</span>
+</div>
+
+
+<hr class="full_hr">
+<table style="width: 100%;" border="0">
+ <tbody><tr>
+  <td class="menubar">
+   <div id="menubar">
+
+
+<h5>PostgreSQLとは</h5>
+
+<li><a href="./index.html">PostgreSQLとは</a><br></li>
+
+<h5>PostgreSQLの内部構造</h5>
+<ul>
+<li><a href="./internal.html">とびら</a><br></li>
+</ul>
+<ol>
+<li><a href="./internal-01.html">プロセスとメモリ構造</a><br></li>
+<li><a href="./internal-02.html">データベースクラスタ、テーブルの構造</a></li>
+<li><a href="./internal-03.html">SQLの実行</a></li>
+<li><a href="./internal-04.html">プラン処理</a></li>
+<li><a href="./internal-05.html">バッファマネージャとバックグランドライタ</a></li>
+<li><a href="./internal-06.html">トランザクションIDと同時実行制御</a></li>
+<li><a href="./internal-07.html">VACUUM</a></li>
+<li><a href="./internal-08.html">HOTとIndex Only Scan</a></li>
+<li><a href="./internal-09.html">WAL(Write Ahead Logging)</a></li>
+<li><a href="./internal-10.html">アーカイブログとPITR</a></li>
+<li><a href="./internal-11.html">レプリケーション(Streaming ReplicationとHotStandby)</a></li>
+</ol>
+
+
+<h5>PostgreSQLサーバ管理</h5>
+
+<ul>
+<li><a href="./admin.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[PostgreSQLの基礎]<br>
+<li><a href="./admin-01.html">オブジェクト、データベース、スキーマ</a><br></li>
+<li><a href="./admin-02.html">システムカタログ</a><br></li>
+<li><a href="./admin-03.html">文字コードの扱い</a><br></li>
+
+
+[インストールと起動、停止]<br>
+<li><a href="./admin-04.html">インストール</a><br></li>
+<li><a href="./admin-05.html">データベースシステムの初期化 initdb</a><br></li>
+<li><a href="./admin-06.html">PostgreSQLサーバの起動/停止</a><br></li>
+
+
+[認証とアクセス制御]<br>
+<li><a href="./admin-07.html">認証とアクセス制御</a><br></li>
+<li><a href="./admin-08.html">クライアントのアクセス制御</a><br></li>
+<li><a href="./admin-09.html">権限について</a><br></li>
+<li><a href="./admin-10.html">ロールの作成と権限制御</a><br></li>
+
+<HR>
+
+[バックアップとアップグレード]<br>
+<li><a href="./admin-11.html">バックアップとアップグレード</a><br></li>
+<li><a href="./admin-12.html">ダンプとリストア</a><br></li>
+<li><a href="./admin-13.html">アップグレード</a><br></li>
+
+[保守、監視とチューニング]<br>
+<li><a href="./admin-14.html">保守、監視とチューニング</a><br></li> 
+<li><a href="./admin-15.html">稼働統計情報</a><br></li>
+<li><a href="./admin-16.html">実行ログの取得</a><br></li>
+<li><a href="./admin-17.html">モニタリングツール</a><br></li>
+<li><a href="./admin-18.html">ログと統計情報の分析</a><br></li>
+<li><a href="./admin-19.html">パラメータチューニング</a><br></li>
+
+[耐障害性、高可用性]<br>
+<li><a href="./admin-20.html">耐障害性、高可用性</a><br></li>
+<li><a href="./admin-21.html">アーカイブログとPITR</a><br></li>
+<li><a href="./admin-22.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-23.html">レプリケーションの故障対応</a><br></li>
+
+
+[FDW]<br>
+<li><a href="./admin-24.html">FDW</a><br></li>
+<li><a href="./admin-25.html">postgres_fdw</a><br></li>
+</ol>
+
+[追加の文章(未完)]<br>
+<li><a href="./admin-26.html">ロギング</a><br></li>
+<li><a href="./admin-27.html">統計情報</a><br></li>
+<li><a href="./admin-28.html">モニタリング</a><br></li>
+<li><a href="./admin-29.html">メンテナンス</a><br></li>
+</ol>
+
+
+<h5>設定パラメータ</h5>
+
+<ol>
+<li><a href="./param-01.html">postgresql.confの設定</a><br></li>
+<li><a href="./param-02.html">ファイルの場所</a><br></li>
+<li><a href="./param-03.html">接続と認証</a><br></li>
+<li><a href="./param-04.html">資源の消費</a><br></li>
+<li><a href="./param-05.html">WAL</a><br></li>
+<li><a href="./param-06.html">レプリケーション</a><br></li>
+<li><a href="./param-07.html">問い合わせ計画</a><br></li>
+<li><a href="./param-08.html">エラー報告とログ取得</a><br></li>
+<li><a href="./param-09.html">稼働統計情報</a><br></li>
+<li><a href="./param-10.html">AUTOVACUUM</a><br></li>
+<li><a href="./param-11.html">クライアント接続デフォルト</a><br></li>
+<li><a href="./param-12.html">ロック管理/バージョンとプラットフォーム互換性</a><br></li>
+</ol>
+
+
+<h5>psql</h5>
+<ul>
+<li><a href="./psql.html">・対話型インタフェースpsqlの使い方</a><br></li>
+</ul>
+
+<ol>
+<li><a href="./psql-01.html">psqlとは</a><br></li>
+<li><a href="./psql-02.html">PostgreSQLサーバとの接続/切断/再接続</a><br></li>
+<li><a href="./psql-03.html">データベース一覧表示</a><br></li>
+<li><a href="./psql-04.html">コマンドラインからSQL実行</a><br></li>
+<li><a href="./psql-05.html">バッチファイルの実行(メタコマンド)</a><br></li>
+<li><a href="./psql-06.html">情報表示</a><br></li>
+<li><a href="./psql-07.html">表示の制御</a><br></li>
+<li><a href="./psql-08.html">ラージオブジェクトの扱い</a><br></li>
+<li><a href="./psql-09.html">データのコピー</a><br></li>
+<li><a href="./psql-10.html">その他のメタコマンド</a><br></li>
+
+</ol>
+
+
+<h5>SQL</h5>
+
+<ul>
+<li><a href="./sql.html">・とびら</a><br></li>
+</ul>
+
+<ol>
+[SQL]<br>
+
+<li><a href="./sql-01.html">SQL語彙</a><br></li>
+<li><a href="./sql-02.html">テーブルスペースの作成/削除/変更</a><br></li>
+<li><a href="./sql-03.html">データベースの作成/変更/削除</a><br></li>
+<li><a href="./sql-04.html">テーブルの作成</a><br></li>
+<li><a href="./sql-05.html">外部キー</a><br></li>
+<li><a href="./sql-06.html">オブジェクトの継承/LIKE句</a><br></li>
+<li><a href="./sql-07.html">問い合わせ結果から新しいテーブルを作成</a><br></li>
+<li><a href="./sql-08.html">テーブルの削除</a><br></li>
+<li><a href="./sql-09.html">スキーマの定義/変更/削除</a><br></li>
+
+<li><a href="./sql-10.html">ALTER TABLE(1)</a><br></li>
+<li><a href="./sql-11.html">ALTER TABLE(2)</a><br></li>
+<li><a href="./sql-12.html">ALTER TABLE(3)</a><br></li>
+
+<li><a href="./sql-13.html">ロール</a><br></li>
+<li><a href="./sql-14.html">GRANT REVOKE(1)</a><br></li>
+<li><a href="./sql-15.html">GRANT REVOKE(2)</a><br></li>
+<li><a href="./sql-16.html">INSERT</a><br></li>
+<li><a href="./sql-17.html">SELECT</a><br></li>
+<li><a href="./sql-18.html">FROM句</a><br></li>
+<li><a href="./sql-19.html">WHERE句</a><br></li>
+
+<li><a href="./sql-20.html">WINDOW句、OVER句</a><br></li>
+<li><a href="./sql-21.html">共通テーブル式(CTE)</a><br></li>
+
+
+<li><a href="./sql-22.html">グループ化</a><br></li>
+<li><a href="./sql-23.html">DISTINCT句</a><br></li>
+<li><a href="./sql-24.html">テーブル結合</a><br></li>
+<li><a href="./sql-25.html">問い合わせの結合</a><br></li>
+<li><a href="./sql-26.html">ORDER BY</a><br></li>
+<li><a href="./sql-27.html">LIMIT OFFSET</a><br></li>
+<li><a href="./sql-28.html">FOR UPDATE/ FOR SHARE</a><br></li>
+<li><a href="./sql-29.html">サブクエリ</a><br></li>
+<li><a href="./sql-30.html">CASE式</a><br></li>
+<li><a href="./sql-31.html">VALUES</a><br></li>
+<li><a href="./sql-32.html">UPDATE</a><br></li>
+<li><a href="./sql-33.html">DELETE</a><br></li>
+<li><a href="./sql-34.html">TRUNCATE</a><br></li>
+
+<li><a href="./sql-35.html">インデックス</a><br></li>
+
+<li><a href="./sql-36.html">VIEW</a><br></li>
+<li><a href="./sql-37.html">シーケンス</a><br></li>
+<li><a href="./sql-38.html">トリガ</a><br></li>
+<li><a href="./sql-39.html">カーソル</a><br></li>
+<li><a href="./sql-40.html">プリペアステートメント</a><br></li>
+<li><a href="./sql-41.html">トランザクション</a><br></li>
+<li><a href="./sql-42.html">セーブポイント</a><br></li>
+<li><a href="./sql-43.html">2相コミット</a><br></li>
+<li><a href="./sql-44.html">LOCK</a><br></li>
+<li><a href="./sql-45.html">SET/SHOW/RESET</a><br></li>
+<li><a href="./sql-46.html">VACUUM</a><br></li>
+<li><a href="./sql-47.html">ANALYZE</a><br></li>
+<li><a href="./sql-48.html">EXPLAIN</a><br></li>
+<li><a href="./sql-49.html">COPY/IMPORT</a><br></li>
+<li><a href="./sql-50.html">COPY/EXPORT</a><br></li>
+<li><a href="./sql-51.html">関数定義</a><br></li>
+<li><a href="./sql-52.html">エクステンション</a><br></li>
+<li><a href="./sql-53.html">外部サーバの定義、変更、削除</a><br></li>
+<li><a href="./sql-54.html">外部サーバのユーザマップ定義、変更、削除</a><br></li>
+<li><a href="./sql-55.html">外部テーブルの定義、変更、削除</a><br></li>
+<hr>
+<li><a href="./sql-56.html">イベントトリガ</a><br></li>
+<li><a href="./sql-57.html">行レベルセキュリティ</a><br></li>
+
+<hr>
+<li><a href="./sql-60.html">新しい機能</a><br></li>
+</ol>
+
+
+<h5>関数</h5>
+
+[関数]<br>
+<ul>
+<li><a href="./function.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[データ型]<br>
+<li><a href="./type-01.html">データ型</a><br></li>
+<li><a href="./type-02.html">数値データ型</a><br></li>
+<li><a href="./type-03.html">文字データ型</a><br></li>
+<li><a href="./type-04.html">日付/時刻データ型</a><br></li>
+<li><a href="./type-05.html">日付/時刻表示形式とタイムゾーンの設定</a><br></li>
+<li><a href="./type-06.html">ブーリアン型</a><br></li>
+<li><a href="./type-07.html">ビット列データ型</a><br></li>
+<li><a href="./type-08.html">疑似データ型</a><br></li>
+<li><a href="./type-09.html">バイナリ列データ型</a><br></li>
+<li><a href="./type-10.html">Range型</a><br></li>
+<li><a href="./type-11.html">配列</a><br></li>
+<hr>
+<li><a href="./type-12.html">JSON型</a><br></li>
+
+<hr>
+[演算子]<br>
+<li><a href="./ope-01.html">演算子</a><br></li>
+<li><a href="./ope-02.html">論理演算子</a><br></li>
+<li><a href="./ope-03.html">比較演算子</a><br></li>
+<li><a href="./ope-04.html">算術演算子</a><br></li>
+<li><a href="./ope-05.html">文字列演算子</a><br></li>
+<li><a href="./ope-06.html">パターンマッチング</a><br></li>
+<li><a href="./ope-07.html">日付/時刻演算子</a><br></li>
+<li><a href="./ope-08.html">Range型演算子</a><br></li>
+<hr>
+<li><a href="./ope-09.html">JSON型演算子</a><br></li>
+
+
+<hr>
+[関数]<br>
+<li><a href="./func-01.html">関数</a><br></li>
+<li><a href="./func-02.html">算術関数</a><br></li>
+<li><a href="./func-03.html">集約関数/統計関数</a><br></li>
+<li><a href="./func-04.html">文字列関数</a><br></li>
+<li><a href="./func-05.html">日付・時刻関数</a><br></li>
+<li><a href="./func-06.html">型変換関数</a><br></li>
+<li><a href="./func-07.html">Range型関数</a><br></li>
+<li><a href="./func-08.html">Window関数</a><br></li>
+<li><a href="./func-09.html">セッション情報関数</a><br></li>
+<li><a href="./func-10.html">アクセス権限とスキーマ可視性照会関数</a><br></li>
+<li><a href="./func-11.html">データベースオブジェクト関数</a><br></li>
+<li><a href="./func-12.html">バックアップとリカバリ制御関数</a><br></li>
+
+<li><a href="./func-13.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-15.html">構成設定関数</a><br></li>
+<li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-17.html">レプリケーションSQL関数</a><br></li>
+
+<hr>
+<li><a href="./func-18.html">JSON関数</a><br></li>
+
+</ol>
+
+<!--
+[削除するもの]<br>
+<li><a href="./type-07.html">幾何データ型</a><br></li>
+<li><a href="./type-08.html">ネットワークアドレス型型</a><br></li>
+<li><a href="./ope-08.html">幾何演算子</a><br></li>
+<li><a href="./ope-09.html">ネットワーク演算子</a><br></li>
+<li><a href="./func-06.html">幾何関数</a><br></li>
+<li><a href="./func-07.html">ネットワークアドレス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-16.html">トランザクションID関数</a><br></li>
+<li><a href="./func-17.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-18.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-19.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-20.html">勧告的ロック用関数</a><br></li>
+-->
+
+<h5>PL/pgSQL</h5>
+
+<ol>
+<li><a href="./plpgsql.html">結果の返し方</a><br></li>
+<li><a href="./plpgsql-01.html">ストアドプロシージャ</a><br></li>
+<li><a href="./plpgsql-02.html">ストアドプロシージャの定義</a><br></li>
+<li><a href="./plpgsql-03.html">変数宣言と値の代入</a><br></li>
+**** まとめる >>
+<li><a href="./plpgsql-04.html">SELECT INTO文</a><br></li>
+<li><a href="./plpgsql-05.html">結果ステータスの取得</a><br></li>
+<li><a href="./plpgsql-06.html">動的なSQL文の実行</a><br></li>
+<< ここまで****
+<li><a href="./plpgsql-07.html">IF 条件分岐</a><br></li>
+<li><a href="./plpgsql-08.html">ループ処理</a><br></li>
+*** >>>
+<li><a href="./plpgsql-09.html">RETURN</a><br></li>
+<<< ***
+<li><a href="./plpgsql-10.html">ループ処理　LOOP</a><br></li>
+<li><a href="./plpgsql-11.html">ループ処理　WHILE</a><br></li>
+<li><a href="./plpgsql-12.html">ループ処理　FOR </a><br></li>
+<li><a href="./plpgsql-13.html">ループ処理 (複数行の問い合わせ結果を扱う)</a><br></li>
+<li><a href="./plpgsql-14.html">カーソルの利用</a><br></li>
+<li><a href="./plpgsql-15.html">カーソル変数の宣言</a><br></li>
+<li><a href="./plpgsql-16.html">カーソルのオープンとクローズ	OPEN / CLOSE</a><br></li>
+<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得		FETCH</a><br></li>
+<li><a href="./plpgsql-18.html">カーソルを使った例</a><br></li>
+<li><a href="./plpgsql-19.html">例外</a><br></li>
+*** >>>
+<li><a href="./plpgsql-21.html">CASE</a><br></li>
+<li><a href="./plpgsql-22.html">FOREACH</a><br></li>
+<<< ***
+</ol>
+
+
+<h5>Appendix(付録)</h5>
+
+<ol>
+<li><a href="./app-01.html">pgpool-II</a><br></li>
+<li><a href="./app-02.html">Pacemaker</a><br></li>
+</ol>
+
+
+<h5>おまけ:ネット公開(ページ数の関係で書籍には載せない)</h5>
+
+<ol>
+[pgpool]<br>
+<li><a href="./ha-06.html">pgpool-II セットアップ</a><br></li>
+<li><a href="./ha-07.html">pgpool-II レプリケーションモード</a><br></li>
+<li><a href="./ha-08.html">pgpool-II マスタースレーブモード</a><br></li>
+[Pacemaker]<br>
+<li><a href="./ha-10.html">Pacemaker</a><br></li>
+</ol>
+
+</div>
+<hr class="full_hr">
+</div>
+
+  </td>
+  <td valign="top">
+   <div id="body">
+
+<h2>プラン処理</h2>
+
+<p>
+プラン処理について説明します。
+<br>
+はじめに概略を述べ、いくつかのキーワードを説明します。その後、順を追って詳細に解説します。
+</p>
+
+
+<p>
+[<図2-07>](1)に単一テーブルのプラン処理フローを示します。
+</p>
+
+
+<table border=1>
+<caption>[<図2-07>]プラン処理の概要<br></caption>
+<tr><td>
+<left>
+<img src="./fig-2-04-01.jpg"><br>
+</left>
+</td></tr></table>
+
+
+<p>
+PostgreSQLのプラン処理はコストベースです。
+</p>
+
+<p>
+問い合わせツリーを受け取ったプランナは、
+対象となるテーブル毎にRelOptInfoというデータ構造のノードを準備します。
+ここではテーブルは一つなので、対応するRelOptInfoも一つです。
+<br>
+RelOptInfoにはテーブルの検索手段毎にコストを推定して保存します。
+<br>
+コスト計算のための最小単位を「アクセスパス」、または単に「パス」と呼びます。
+パスはプランナ内部でのみ利用します。
+[<表2-03>]にバージョン9.1のパスの一覧を示します。
+</p>
+
+
+<table><tr>
+<td>
+
+
+
+
+<table border=1>
+<caption>[<表2-03>](アクセス)パス一覧</caption>
+<tr bgcolor="#cccccc">
+<th>パス</th>	<th>処理　　　　　　　　　　　　　　　　　　　　</th>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2>テーブルスキャン</th>
+</tr><tr>
+<td>Path(SeqScan)</td>	<td>シーケンシャルスキャン</td>
+</tr><tr>
+<td>IndexPath</td>	<td>インデックススキャン</td>
+</tr><tr>
+<td>BitmapHeapPath</td>	<td rowspan=3 valign=top>ビットマップスキャン</td>
+</tr><tr>
+<td>BitmapAndPath</td>
+</tr><tr>
+<td>BitmapOrPath</td>	
+</tr><tr>
+<td>TidPath(TidScan)</td>	<td>TIDスキャン</td>
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2>その他のスキャン</th>
+</tr><tr>
+<td>ForeignPath</td>	<td>外部テーブルスキャン</td>
+
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2>他の処理を補助</th>
+</tr><tr>
+<td>MaterialPath</td>	<td>work_mem上に検索結果を保存</td>
+</tr></table>
+
+</td><td valign=top>
+
+
+<table border=1>
+<caption>　</caption>
+<tr bgcolor="#cccccc">
+<th>パス</th>	<th>処理　　　　　　　　　　　　　　　　　　　　</th>
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2>検索結果に対して作用</th>
+</tr><tr>
+<td>UniquePath</td>	<td>Unique処理(重複の削除など)</td>
+</tr><tr>
+<td>ResultPath</td>	<td>関数の実行など、結果のみ返す場合</td>
+
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2>テーブルの結合</th>
+</tr><tr>
+<td>NestedLoopPath</td>	<td>ネステッドループ結合</td>
+</tr><tr>
+<td>MergePath</td>	<td>マージソート結合</td>
+</tr><tr>
+<td>HashPath</td>	<td>ハッシュ結合</td>
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2>結果の結合</th>
+</tr><tr>
+<td>MergeAppendPath</td>	<td>パーティションで、子テーブルのパスを結合。バージョン9.1から</td>
+</tr><tr>
+<td>AppendPath</td>	<td>UNIONなど、結果を結合</td>
+</tr></table><br>
+
+</td></table>
+
+<br>
+
+
+<p>
+生成可能なパスから最小コストのパスを選び、それを基にエクゼキュータが利用する「問い合わせプラン」を生成します。
+</p>
+
+<p>
+問い合わせプランは「プランタイプ」を単位とする木構造で、エクゼキュータはその木構造を辿りながらプランタイプに
+対応した関数を実行します。
+[<図2-07>](2)に、LIMIT句とORDER BY句を含むSELECT文について、パス(この場合SeqScan)と生成される問い合わせプランを図示します。
+<br>
+パスとプランタイプは一対一に対応するわけではありません。
+(前記のように)パスはコスト計算のための内部情報であり、プランタイプはエクゼキュータが実際にデータ処理するための具体的な手順です。
+<br>
+[<表2-04>]にバージョン9.1のプランタイプの一覧を示します。
+</p>
+
+
+
+<table><tr><td>
+
+<table border=1>
+<caption>[<表2-04>]プランタイプ一覧</caption>
+<tr bgcolor="#cccccc">
+<th>プランタイプ</th>		<th>処理　　　　　　　　　　　　　　　　　　　　</th>
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2>テーブルスキャン</th>
+</tr></tr>
+<td>Seq Scan</td>	<td>シーケンシャルスキャン</td>
+</tr></tr>
+<td>Index Scan</td>	<td>インデックススキャン</td>
+</tr></tr>
+<td>Bitmap Heap Scan</td>	<td rowspan=4 valign=top>ビットマップスキャン</td>
+</tr></tr>
+<td>Bitmap Index Scan</td>
+</tr></tr>
+<td>BitmapAnd</td>
+</tr></tr>
+<td>BitmapOr</td>
+</tr></tr>
+<td>Tid Scan</td>	<td>Tidスキャン</td>
+
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2>その他のスキャン</th>
+</tr></tr>
+<td>SubqueryScan</td>	<td>副問い合わせ</td>
+</tr></tr>
+<td>FunctionScan</td>	<td>関数SCAN</td>
+</tr></tr>
+<td>ValuesScan</td>	<td>VALUES句スキャン</td>
+</tr></tr>
+<td>CteScan</td>	<td>CTE(共通テーブル式)スキャン</td>
+</tr></tr>
+<td>WorkTableScan</td>	<td>CTE(共通テーブル式)のうち、CTEの自己参照を伴うスキャン</td>
+</tr></tr>
+<td>ForeignScan</td>	<td>外部テーブルスキャン</td>
+
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2>他の処理を補助</th>
+</tr></tr>
+<td>Material</td>	<td>処理の効率化のため、途中経過をメモリ上に保存</td>
+</tr></tr>
+<td>Sort</td>		<td>並べ替え。ORDER BYやMergeJoinの前処理など</td>
+</tr></tr>
+<td>Hash</td>		<td>並べ替え。メモリ上にハッシュテーブルが生成できる場合は高速</td>
+</table>
+
+
+</td><td valign=top>
+
+
+<table border=1>
+<caption>　</caption>
+<tr bgcolor="#cccccc">
+<th>プランタイプ</th>		<th>処理　　　　　　　　　　　　　　　　　　　　</th>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2>検索結果に対して作用</th>
+</tr></tr>
+<td>Group</td>		<td>GROUP BY</td>
+</tr></tr>
+<td>Limit</td>		<td>LIMIT, OFFSET</td>
+</tr></tr>
+<td>Unique</td>		<td>UNIQUE</td>
+</tr></tr>
+<td>Aggregate</td>	<td rowspan=4 valign=top>集計関数</td>
+</tr></tr>
+<td>GroupAggregate</td>
+</tr></tr>
+<td>HashAggregate</td>
+</tr></tr>
+<td>WindowAgg</td>
+</tr></tr>
+<td>Result</td>		<td>非テーブル問い合わせ</td>
+
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2>テーブルの結合</th>
+</tr></tr>
+<td>NestLoop</td>	<td>Nested Loop</td>
+</tr></tr>
+<td>MergeJoin</td>	<td>Merge Join</td>
+</tr></tr>
+<td>HashJoin</td>	<td>Hash Join</td>
+
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2>結果の結合</th>
+</tr></tr>
+<td>Append</td>		<td>結果を他の結果に足しあわせる</td>
+</tr></tr>
+<td>SetOp</td>		<td>INTERSECTやEXCEPTで検索結果を結合する</td>
+</tr><tr>
+<td>Recursive Union</td>	<td>CTE(WITH RECURSIVE句)によるUNION</td>
+
+</tr></table>
+
+</td></tr></table><br>
+
+
+<p>
+複数テーブルのプラン処理の場合、テーブル毎にRelOptInfoを準備し、さらにテーブル結合毎にRelOptInfoを準備します([<図2-07>](3)参照)。
+テーブルの結合毎にパスツリーを作り、
+最終的にコスト最小のパスツリーを選んで問い合わせプランを生成します。
+</p>
+
+
+<p>
+以下、詳細にプラン処理を解説します。
+<br>
+最初に、
+単一テーブルの問い合わせプランを生成する過程を辿りながら、PostgreSQLのプラン処理を説明します。
+<br>
+次に複数テーブルの結合について、
+PostgreSQLがサポートする３種類のテーブル結合方式を解説した後、
+２テーブルと３テーブルのプラン生成を具体的に説明します。
+</p>
+
+
+
+<!--
+=========================================================================
+=========================================================================
+				単一テーブル
+=========================================================================
+=========================================================================
+-->
+
+
+<div class="jumpmenu"></div><h3>単一テーブルの問い合わせプラン生成</h3>
+
+
+<p>
+単一テーブルのプラン処理のフローを詳細に説明します。
+</p>
+
+
+<div class="jumpmenu"></div><h4>[1] 前処理</h4>
+
+
+<p>
+最適なパスを求める前に、問い合わせツリーにいくつかの前処理を施します。
+"2+2"を"4"に展開する、"NOT (NOT a)"を"a"とするなど論理式を正規化するような簡単なものから、
+サブクエリの最適化のように大規模なものまで、多くの前処理があります。
+</p>
+<p>
+例えば次のサブクエリは、テーブル結合形式に変更すれば検索効率が良くなります(実際は問い合わせツリーに変更を施す)。
+</p>
+
+<pre>
+SELECT tbl1.col FROM tbl1 WHERE col IN (SELECT col FROM tbl2)
+			  ↓
+SELECT tbl1.col FROM  tbl1, tabl2 WHERE tbl1.col = tbl2.col;
+</pre>
+
+
+
+<div class="jumpmenu"></div><h4>[2] 可能なテーブルスキャン方式のコストを計算</h4>
+
+<p>
+テーブルのスキャン方式にはシーケンシャルスキャン(SeqScan)、インデックススキャン(IndexScan)、ビットマップスキャン(BitmapScan)、
+およびTidスキャン(TidScan)があります。
+<br>
+テーブルスキャン方式毎にWHERE句の条件を考慮してコストを推定し、その方式とコストをパスとして保存します。
+<p>
+
+<p>
+以下、各スキャン方式とパスについて説明します。シーケンシャルスキャンとインデックススキャンは具体的なコスト推定式も示します。
+</p>
+
+<div class="jumpmenu"></div><h5>シーケンシャルスキャン(SeqScan)</h5>
+
+<p>
+シーケンシャルスキャンのコストを推定します。
+</p>
+
+<p>
+PostgreSQL内部では２つのコスト：初期コスト(startup cost)と総コスト(total cost)を保持しています。
+初期コストは並べ替えなどの事前処理のコスト、総コストは初期コストに実際の処理コスト(run cost)を加えたものです(total cost = startup cost + run cost)。
+<br>
+EXPLAIN文はこの2種類のコストを常に表示します。
+</p>
+
+<br>
+シーケンシャルスキャンは対象となるテーブルのレコードをすべて読み出します。初期コストは0で、総コストはそのテーブルのサイズに比例します。
+<br>
+以下に正確なコスト計算式を示します。コストはHDDからデータを読み出すI/Oコストと、CPU処理に必要なコストから推定します。
+</p>
+
+<pre>
+SeqScanのコスト = (DISK I/Oコスト) 
+                  + (CPUコスト)
+		= (デーブル全ページ数 * seq_page_cost) 
+                  + (テーブル全レコード数 * (cpu_tuple_cost + cpu_operator_cost))
+</pre>
+
+<p>
+ここで、"テーブル全ページ数"はシステムカタログpg_classのrelpages、"テーブル全レコード数"はreltuplesを使います。
+</p>
+
+<div class="jumpmenu"></div><h5>インデックススキャン(Index Scan)</h5>
+
+<p>
+次にインデックスを使った場合のコストを推定します。そのテーブルにインデックスが張ってない場合やインデックスを使った検索式がWHERE句に無い場合、この部分はスキップします。
+</p>
+
+<p>
+インデックススキャンのコスト計算はインデックス毎に行います。条件式が複数あればその数だけコスト計算を行います。つまり、インデックスと条件式の組み合わせでコスト計算を繰り返し、最小コストの組み合わせをパスとして保存することになります。
+</p>
+
+
+<p>
+インデックススキャンのコスト計算の概略を示します。
+</p>
+
+<p>
+インデックススキャンはインデックステーブルから検索対象となるタプルの位置を求め、それを基にテーブルからタプルを読み出します。
+初期コストは0で、総コストはインデックステーブルへのアクセスコストとテーブルへのアクセスコストの和になります。
+<br>
+以下に正確なコスト計算式を示します。
+</p>
+
+<pre>
+IndexScanのコスト = (インデックスI/Oコスト+テーブルI/Oコスト) 
+                   + (インデックスCPUコスト+テーブルCPUコスト)
+
+		  = (必要ページ数*sequential_page_cost + 必要レコード数*Const)
+		   + (必要レコード数*cpu_index_tuple_cost + 必要レコード数*cpu_tuple_cost)
+</pre>
+
+<p>
+必要ページ数や必要レコード数はWHERE句に記述する検索条件式に依存します。
+これらのコストの推定は選択度(Selectivity)を使います。選択度については[<コラム2-3>]を参照してください。
+<br>
+必要レコード数を例にとれば「必要レコード数 = 選択度 ×  テーブルレコード数」です。
+なお、必要レコード数はEXPLAIN文のrowに表示されています。
+</p>
+
+<table border=1><tr><td>コラム2-3:選択度</td><td>
+
+<p>
+選択度は統計情報pg_statsのMCV(Most Common Value)、もしくはヒストグラムから求めます。
+ここでMCVとはカーディナリティ(Cardinality)の代表的なものと考えてください。
+</p>
+
+<ol>
+<li>MCVが使える場合</li>
+<p>
+most_common_valueとmost_common_freqがわかる場合はそれを使います。
+<br>
+例として、都道府県名にインデックスを張ったテーブルのpg_statsの値を示します。
+</p>
+<pre>
+sampledb=# SELECT most_common_vals,most_common_freqs,histogram_bounds FROM pg_stats 
+sampledb-#      WHERE schemaname = 'public' AND tablename = 'pref' AND attname = 'prefname';
+most_common_vals  | {東京都,神奈川県,埼玉県,千葉県,静岡県,茨城県,新潟県,宮城県,長野県,福島県,
+群馬県,栃木県,三重県,青森県,岩手県,山形県,石川県,富山県,秋田県,山梨県}
+most_common_freqs | {0.202028,0.138885,0.110462,0.0954064,0.0577662,0.0454755,0.0364111,
+0.0359502,0.0330312,0.031034,0.0307267,0.0307267,0.0284222,0.0210478,0.0204332,0.0178215,
+0.0178215,0.016746,0.0165924,0.0132125}
+histogram_bounds  | 
+</pre>
+
+<p>
+most_common_valsとmost_common_freqsは対になっており、
+例えば"東京都"の出現頻度は0.202028=20.2%、"神奈川県"の出現頻度は0.138885=13.9%、などです。よってWHERE句に"prefname='神奈川県'"があれば、選択度は0.1388..となります。
+</p>
+
+<li>それ以外の場合</li>
+<p>
+カーディナリティが大きすぎてmost_common_valueが求められない場合や、範囲検索の場合はhistogram_boundsを利用します。
+<br>
+この値は登録された値がほぼ均等になるように値が選ばれています。
+例えばpgbench_accountsのカラムaidは、プライマリキーで1から100000までシーケンシャルに割り振られています。
+システムカタログpg_statsのhistogram_boundsを表示すると、ほぼ1000刻みで値が記録されているとわかります。
+</p>
+
+<pre>
+sampledb=# SELECT histogram_bounds FROM pg_stats 
+sampledb-#    WHERE schemaname = 'public' AND tablename = 'pgbench_accounts' AND attname = 'aid';
+histogram_bounds  | {4,1055,2082,3020,4001,4992,5952,6957,7909,8900,9950,10886,11867,12968,13942,
+14898,15879,16878,17877,18789,19770,20781,21794,22743,23720,24763,25795,26853,27899,28908,29949,
+... 略 ...
+85218,86213,87202,88144,89142,90133,91169,92181,93141,94149,95092,96085,97078,98104,99024,100000}
+</pre>
+
+<p>
+例えば、範囲検索で"WHERE aid BETWEEN 1000 TO 2000"ならば、histogram_boundsの分布から補間して計算することで、おおよそ全体の1%程度のデータが対象になると推測できます。
+</p>
+
+</ol>
+
+</td></tr></table>
+
+<br><br>
+
+<div class="jumpmenu"></div><h5>ビットマップスキャン(Bitmap Scan)</h5>
+
+<p>
+ビットマップスキャンが使える条件式がある場合は、そのコスト計算も行います。
+コスト計算式は繁雑なので本書では省略します。
+</p>
+
+<p>
+バージョン8,1からサポートされたビットマップスキャンは、
+検索条件からインデックスのビットマップを生成し、それをスキャンすることで効率的なテーブル検索を行います。
+<br>
+ビットマップどうしの論理演算もサポートしているので、
+条件式をORで結合した場合でもインデックスの利用が期待できます。
+</p>
+
+
+<p>
+[<図2-08>]にビットマップスキャンの例を示します([<脚注5>])。
+</p>
+
+<blockquote><table BORDER="1"><tr><td>脚注5</td><td>
+<p>
+これはEXPLAINの出力である問い合わせプランの図式化です。図中の"Bitmap Heap Scan"、"BitmapOr"、"Bitmap Index Scan"はパスでなくプランタイプです。
+実際、"Bitmap Index Scan"というパスはありません。
+</p>
+</td></tr></table></blockquote>
+
+
+<table border=1>
+<caption>[<図2-08>]ビットマップスキャンの例</caption>
+<tr><td>
+<left>
+<img src="./fig-2-04-02.jpg"><br>
+</left>
+</td></tr></table>
+
+<p>
+[<図2-08>]はインデックスaidの２つの検索条件をORで結合した場合の、ビットマップスキャンによる検索を示した図です。
+</p>
+
+<p>
+はじめに対象テーブルのTid毎に1[bit]を割り当てたビットマップを生成します。条件式が２つあればビットマップも２つ用意します。条件式毎に、その条件を満たすTidに対応するビットに'1'を設定します。
+</p>
+
+<p>
+次にビットマップ同士の論理演算を行います。ここではOR演算を行います。これは非常に高速に実行できます。
+</p>
+
+<p>
+最後にビットマップをスキャンしながら、'1'が設定されたTidをテーブルデータから読み出します。
+</p>
+
+<p>
+ビットマップ生成の初期コストが必要ですが、検索範囲によってはシーケンシャルスキャンよりも非常に高速に検索できます。
+</p>
+
+<div class="jumpmenu"></div><h5>TIDスキャン(tidscan)</h5>
+
+<p>
+TIDで直接ページをアクセスする場合のコストを計算します。
+WHERE句にTIDを使った条件式がなければ、この部分はスキップします。
+</p>
+
+
+<blockquote><table BORDER="1"><tr><td>コラム2-4:パス生成関数とコスト推定関数</td><td>
+
+<p>
+上で説明したスキャン方式について、実際にパスを生成する関数、およびコスト推定する関数の一覧を示します。
+</p>
+
+<table border=1>
+<caption></caption>
+<tr bgcolor="#cccccc">
+<th>スキャン方式</th>	<th>パス生成関数</th>	<th>コスト推定関数</th>
+</tr><tr>
+<td>シーケンシャルスキャン</td>	<td>create_seqscan_path()</td>	<td>cost_seqscan()</td>
+</tr><tr>
+<td>インデックススキャン</td>	<td>create_index_paths()</td>	<td>cost_index()</td>
+</tr><tr>
+<td valign=top>ビットマップスキャン</td>	<td>create_bitmap_heap_path()<br>create_bitmap_and_path()<br>create_bitmap_or_path()</td>  <td>cost_bitmap_heap_scan()<br>cost_bitmap_and_node()<br>cost_bitmap_or_node()</td>
+</tr><tr>
+<td>Tidスキャン</td>		<td>create_tidscan_path()</td>	<td>cost_tidscan()</td>
+</tr></table>
+
+<p>
+パス生成関数はcreate_index_paths()がsrc/backend/optimizer/path/idxpath.c、それ以外はsrc/backend/optimizer/util/pathnode.cで定義されています。
+<br>
+コスト推定関数はsrc/backend/optimizer/path/costsize.cで定義されています。
+</p>
+
+</td></tr></table></blockquote>
+
+<br>
+
+
+<div class="jumpmenu"></div><h4>[3] 最小コストのパスから実行プランを生成</h4>
+
+<p>
+パスとコストは、リレーション(この場合はテーブル)毎に
+<a href="javascript:void(0)" id="category_RelOptInfo" onclick="show('RelOptInfo');">構造体RelOptInfo</a>
+([<脚注6>])で定義されたデータ内に保存します。
+<div id="layer_RelOptInfo" style="display: none;position:relative;margin-left:15pt" class="close">
+<pre>
+src/include/nodes/relation.h
+
+typedef struct RelOptInfo
+{
+        NodeTag         type;
+
+        RelOptKind      reloptkind;
+
+        /* all relations included in this RelOptInfo */
+        Relids          relids;                 /* set of base relids (rangetable indexes) */
+
+        /* size estimates generated by planner */
+        double          rows;                   /* estimated number of result tuples */
+        int                     width;                  /* estimated avg width of result tuples */
+
+        /* materialization information */
+        List       *reltargetlist;      /* Vars to be output by scan of relation */
+        List       *pathlist;           /* Path structures */
+        struct Path *cheapest_startup_path;
+        struct Path *cheapest_total_path;
+        struct Path *cheapest_unique_path;
+
+        /* information about a base rel (not set for join rels!) */
+        Index           relid;
+        Oid                     reltablespace;  /* containing tablespace */
+        RTEKind         rtekind;                /* RELATION, SUBQUERY, or FUNCTION */
+        AttrNumber      min_attr;               /* smallest attrno of rel (often <0) */
+        AttrNumber      max_attr;               /* largest attrno of rel */
+        Relids     *attr_needed;        /* array indexed [min_attr .. max_attr] */
+        int32      *attr_widths;        /* array indexed [min_attr .. max_attr] */
+        List       *indexlist;          /* list of IndexOptInfo */
+        BlockNumber pages;
+        double          tuples;
+        struct Plan *subplan;           /* if subquery */
+        List       *subrtable;          /* if subquery */
+        List       *subrowmark;         /* if subquery */
+
+       /* used by various scans and joins: */
+        List       *baserestrictinfo;           /* RestrictInfo structures (if base
+                                                                                 * rel) */
+        QualCost        baserestrictcost;               /* cost of evaluating the above */
+        List       *joininfo;           /* RestrictInfo structures for join clauses
+                                                                 * involving this rel */
+        bool            has_eclass_joins;               /* T means joininfo is incomplete */
+
+        /* cached info about inner indexscan paths for relation: */
+        Relids          index_outer_relids;             /* other relids in indexable join
+                                                                                 * clauses */
+        List       *index_inner_paths;          /* InnerIndexscanInfo nodes */
+
+        /* 
+         * Inner indexscans are not in the main pathlist because they are not
+         * usable except in specific join contexts.  We use the index_inner_paths
+         * list just to avoid recomputing the best inner indexscan repeatedly for
+         * similar outer relations.  See comments for InnerIndexscanInfo. 
+         */
+} RelOptInfo;
+</pre>
+</div> 
+</p>
+
+<blockquote><table BORDER="1"><tr><td>脚注6</td><td>
+<p>
+構造体RelOptInfoの定義はsrc/include/nodes/relation.h。
+</p>
+</td></tr></table></blockquote>
+
+<p>
+PostgreSQLを"-DOPTIMIZER_DEBUG"付きでコンパイルすると、RelOptInfoに保存されたアクセスパスを実行ログに表示できます。
+<br>
+以下、具体例を通して、パスから実行プラン生成について簡単に説明します。　
+</p>
+
+<p>
+[例１] 
+</p>
+<blockquote>
+
+<p>
+次のSELECT文のプラン処理で、テーブルスキャンのパスとコストを求めた後の、RelOptInfoの内容を表示します。
+</p>
+
+<pre>
+SELECT * FROM pgbench_accounts WHERE (aid BETWEEN 1 AND 10);
+</pre>
+
+[< RELOPTINFOの内容>]
+<pre>
+RELOPTINFO (1): rows=8 width=97
+        baserestrictinfo: pgbench_accounts.aid >= 1, 
+			     pgbench_accounts.aid <= 10
+        path list:
+        IdxScan(1) rows=8 cost=0.00..24.07
+
+        cheapest startup path:
+        IdxScan(1) rows=8 cost=0.00..24.07
+
+        cheapest total path:
+        IdxScan(1) rows=8 cost=0.00..24.07
+</pre>
+
+
+<p>
+"path list"はIdxScanのみ保存しています。
+<br>
+RelOptInfo内部では、初期化コストが最も少ないパス(cheapest startup path)と総コストが最も少ないパス(cheapest total path)も明示的に保持しています。
+</p>
+
+<p>
+次に、パスから問い合わせプランを生成します。
+<br>
+この例ではコスト最小のインデックススキャン(IdxScan)から、問い合わせプランを生成します。
+</p>
+
+<p>
+生成された問い合わせプランをEXPLAIN文で表示すると以下のようになります。
+</p>
+
+<pre>
+sampledb=# EXPLAIN SELECT * FROM pgbench_accounts WHERE (aid BETWEEN 1 AND 10);
+                                           QUERY PLAN                                           
+----------------------------------------------------------------------------------------------
+ Index Scan using pgbench_accounts_pkey on pgbench_accounts (cost=0.00..24.07 rows=8 width=97)
+   Index Cond: ((aid >= 1) AND (aid <= 10))
+(2 rows)
+</pre>
+
+
+<p>
+この問い合わせプランの推定コストは初期コストが"0.0"、総コストが"24.07"です。
+</p>
+
+</blockquote>
+
+
+<p>
+[例２]
+</p>
+<blockquote>
+
+<p>
+[例１]より複雑な例を示します。このSELECT文はORDER BY句とLIMIT句があり、さらに２つの条件式をORで結合しています。
+</p>
+<pre>
+SELECT * FROM pgbench_accounts 
+    WHERE ((aid BETWEEN 1 AND 1000) OR (aid BETWEEN 5000 AND 6000)) 
+          ORDER BY bid LIMIT 100;
+</pre>
+
+<p>
+生成可能なパスとコストを求めた後のRelOptInfoを示します。
+</p>
+
+[< RELOPTINFOの内容>]
+<pre>
+RELOPTINFO (1): rows=1945 width=97
+        baserestrictinfo: unknown expr
+        path list:
+        BitmapHeapScan(1) rows=1945 cost=57.05..2052.15
+        SeqScan(1) rows=1945 cost=0.00..3883.00
+
+        cheapest startup path:
+        SeqScan(1) rows=1945 cost=0.00..3883.00
+
+        cheapest total path:
+        BitmapHeapScan(1) rows=1945 cost=57.05..2052.15
+</pre>
+
+
+<p>
+この例では、パスとしてビットマップスキャン(BitmapHeapScan)とシーケンシャルスキャン(SeqScan)を保存しています。
+</p>
+
+<p>
+ORDER BYによる並べ替えのコストも考慮し、
+最終的にコスト最小となるパスを選んで、そこから問い合わせプランを生成します。
+</p>
+
+
+<pre>
+sampledb=# EXPLAIN SELECT * FROM pgbench_accounts 
+sampledb-#        WHERE ((aid BETWEEN 1 AND 1000) OR (aid BETWEEN 5000 AND 6000)) 
+sampledb-#                                            ORDER BY bid LIMIT 100;
+                                                QUERY PLAN
+-----------------------------------------------------------------------------------------------
+Limit  (cost=2126.48..2126.73 rows=100 width=97)
+  ->  Sort  (cost=2126.48..2131.35 rows=1945 width=97)
+      Sort Key: bid
+      ->  Bitmap Heap Scan on pgbench_accounts  (cost=57.05..2052.15 rows=1945 width=97)
+          Recheck Cond: (((aid >= 1) AND (aid <= 1000)) OR ((aid >= 5000) AND (aid <= 6000)))
+          ->  BitmapOr  (cost=57.05..57.05 rows=1955 width=0)
+             ->  Bitmap Index Scan on pgbench_accounts_pkey (cost=0.00..25.61 rows=934 width=0)
+                 Index Cond: ((aid >= 1) AND (aid <= 1000))
+             ->  Bitmap Index Scan on pgbench_accounts_pkey (cost=0.00..30.48 rows=1021 width=0)
+                 Index Cond: ((aid >= 5000) AND (aid <= 6000))
+(10 rows)
+</pre>
+
+
+<p>
+冗長になりますが、EXPLAIN文の出力を図解します([<図2-09>])。
+</p>
+
+
+<table border=1>
+<caption>[<図2-09>]問い合わせプランの例<br></caption>
+<tr><td>
+<left>
+<img src="./fig-2-04-03.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<p>
+RelOptInfoに保存されたパスBitmapHeapScanから、プランタイプBitmapIndexScan、BitmapOr、BitmapHeapScanによる問い合わせプランを生成します。
+また、ORDER BY句とLIMIT句を処理するためにプランタイプSort([<コラム2-5>])とLimitを追加します。
+</p>
+
+</blockquote>
+
+<p>
+エグゼキュータは、プランナが生成した問い合わせプランをもとに問い合わせを実行します。
+<br>
+[例１]の問い合わせプランを受け取ったエクゼキュータは、プランタイプIndexScanに対応した関数ExecIndexScan()を実行します。
+<br>
+[例２]では、エクゼキュータは問い合わせプランを末尾から読み取り、プランタイプに対応した関数を実行します。
+例えばBitmapIndexScanならnodeBitmapIndexScan.cで定義された各種関数、BitmapOrならnodeBitmapOr.cで定義された各種関数などです。
+<br>
+これらの関数はsrc/backend/executor/以下にすべて定義されています。
+</p>
+
+
+
+<table border=1><tr><td>コラム2-5:プランタイプSort</td><td>
+
+
+<p>
+テーブルスキャンの後にSort処理が必要な場合があります。
+文字通りORDER BY句による並べ替え以外にも、
+グループ化(GROUP BY)や重複の削除(DISTINCT)など、Sort処理を必要とするプランタイプがあります。
+また、マージソート結合で並べ替えが必要になる場合もあります。
+</p>
+
+<p>
+実際の並べ替え処理はpostgresプロセスのwork_mem上で行います。
+よって、work_memで処理できるデータ量か否かで処理方式もコストも異なります。
+</p>
+
+<p>
+work_mem上で処理する場合はクイックソート、
+HDDとwork_memを使う場合はマージソートで、それぞれ並べ替えします。
+<br>
+コスト計算は関数cost_sort()で行います。work_mem上で並べ替える際のコスト推定式を以下に示します。
+</p>
+
+[< quicksort (CPUコストのみ)のコスト>]
+<pre>
+startup_cost = 2.0 * cpu_operator_cost * tuples * LOG2(2.0 * output_tuples)
+run_cost = cpu_operator_cost * tuples
+</pre>
+
+
+</td></tr></table><br>
+
+
+
+<!--
+=========================================================================
+=========================================================================
+				複数テーブル
+=========================================================================
+=========================================================================
+-->
+
+
+<div class="jumpmenu"></div><h3>複数テーブルの結合による問い合わせプラン生成</h3>
+
+<p>
+複数のテーブルを結合した問い合わせプランの求め方を説明します。
+<br>
+はじめに、テーブルの結合方式について説明します。
+次に、例を使って問い合わせプランの求め方を説明します。
+</p>
+
+<p>
+検索結果の結合は[<コラム2-6>]を参照してください。
+</p>
+
+
+<table border=1><tr><td>コラム2-6:検索結果の結合</td><td>
+
+<p>
+INTERSECTやEXCEPTなど、SELECT文の検索結果の結合はプランタイプAppendとSetOpが実行します。
+<br>
+次の例ではAppendが２つのSELECT文の結果を足し合わせ、SetOpがINTERSECTの演算を担当します。
+</p>
+
+<pre>
+sampledb=# EXPLAIN SELECT aid,bid FROM pgbench_accounts INTERSECT SELECT aid,bid 
+sampledb-#                                                   FROM pgbench_history;
+                                           QUERY PLAN                                           
+-----------------------------------------------------------------------------------------
+ SetOp Intersect  (cost=48555.87..51237.71 rows=74406 width=8)
+  ->  Sort  (cost=48555.87..49449.82 rows=357578 width=8)
+      Sort Key: "*SELECT* 2".aid, "*SELECT* 2".bid
+      ->  Append  (cost=0.00..10683.56 rows=357578 width=8)
+         ->  Subquery Scan on "*SELECT* 2"  (cost=0.00..6800.56 rows=257578 width=8)
+              ->  Seq Scan on pgbench_history  (cost=0.00..4224.78 rows=257578 width=8)
+          ->  Subquery Scan on "*SELECT* 1"  (cost=0.00..3883.00 rows=100000 width=8)
+              ->  Seq Scan on pgbench_accounts  (cost=0.00..2883.00 rows=100000 width=8)
+(8 rows)
+</pre>
+
+</td></tr></table>
+
+
+
+<div class="jumpmenu"></div><h4>テーブル結合方式</h4>
+
+<p>
+PostgreSQLがサポートするテーブルの結合方式は次の３つです。
+</p>
+
+<ul>
+<li>ネステッドループ結合(nested loop join) </li>
+<li>マージソート結合(merge join) </li>
+<li>ハッシュ結合(hash join) </li>
+</ul>
+
+<p>
+以下、順に説明します。
+</p>
+
+
+<div class="jumpmenu"></div><h5>ネステッドループ結合(Nested Loop Join)</h5>
+
+<p>
+ネステッドループ結合は最も単純な結合方式で、
+外側テーブルを1レコードづつ取り出し、その都度内側テーブルの全レコードとマッチングします([<図2-10>])。
+初期コストは0、総コストは結合するテーブルレコード数の積に比例します(O(M × N))。
+</p>
+
+
+<table border=1>
+<caption>[<図2-10>]ネステッドループ結合</caption>
+<tr><td>
+<left>
+<img src="./fig-2-04-04.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<p>
+ネステッドループ結合による問い合わせプランを示します。
+</p>
+
+<pre>
+sampledb=# EXPLAIN SELECT * FROM pgbench_accounts AS a, pgbench_branches AS b;
+                                   QUERY PLAN                                    
+---------------------------------------------------------------------------------
+ Nested Loop  (cost=0.00..3894.01 rows=100000 width=461)
+   ->  Seq Scan on pgbench_branches b  (cost=0.00..11.01 rows=1 width=364)
+   ->  Seq Scan on pgbench_accounts a  (cost=0.00..2883.00 rows=100000 width=97)
+(3 rows)
+</pre>
+
+
+<br>
+<div class="jumpmenu"></div><h5>マージソート結合(Merge Join)</h5>
+
+<p>
+マージソート結合はソート済みのテーブル同士を結合します([<図2-11>])。
+予めソートしているので、外側テーブルは内側テーブルの一部だけスキャンし、次の結合では直前に取り出したタプルの次からスキャンします。
+</p>
+
+
+<table border=1>
+<caption>[<図2-11>]マージソート結合</caption>
+<tr><td>
+<left>
+<img src="./fig-2-04-05.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<p>
+マージソート結合の初期コストはソート処理です。
+インデックスをキーとする結合条件であればインデックススキャンすればよいので、ソートは不要です([<脚注7>])。
+<br>
+Merge Joinの実行コストは、ソートと比較のコストの和です。
+両テーブルともソートが必要なら実行コストのオーダはソートが支配的です(O(MlogM + NlogN))。
+例えばテーブルNのみソートするなら実行コストのオーダはO(M+NlogN)となります。
+ソートが不要なら実行コストは各テーブルのレコード数の和に比例します(O(M+N))。
+</p>
+
+<blockquote><table BORDER="1"><tr><td>脚注7</td><td>
+<p>
+バージョン8.2以前はインデックスの有無に関係無く、必ずソートを行っていました。
+</p>
+</td></tr></table></blockquote>
+
+
+<p>
+次の例は、内側テーブルpgbench_tellersをソートし、外側テーブルpgbench_accountsをインデックススキャンしながら、ソート済みの内側テーブルを必要なタプルのみ結合していくものです。
+</p>
+
+<font color="#ff0000">
+編集用のデータ。書籍では以下の図で示したように、　下部を点線長方形で囲み、青字で文章「シーケンシャルスキャンでソート」を入れる 。
+</font>
+
+<pre>
+sampledb=# EXPLAIN SELECT * FROM pgbench_accounts AS a, pgbench_tellers AS t WHERE a.aid = t.tid;
+                                                  QUERY PLAN                                           
+-------------------------------------------------------------------------------------------------------
+ Merge Join  (cost=31.29..32.09 rows=10 width=449)
+   Merge Cond: (a.aid = t.tid)
+   ->  Index Scan using pgbench_accounts_pkey on pgbench_accounts a  
+                                                          (cost=0.00..8140.42 rows=100000 width=97)
+   ->  Sort  (cost=31.27..31.29 rows=10 width=352)
+         Sort Key: t.tid
+         ->  Seq Scan on pgbench_tellers t  (cost=0.00..31.10 rows=10 width=352)
+(6 rows)
+</pre>
+
+
+<img src="./fig-2-04-06.jpg"><br>
+
+<br>
+
+<div class="jumpmenu"></div><h5>ハッシュ結合(Hash Join)</h5>
+
+<p>
+内側テーブルからハッシュテーブルを作り、外側テーブルをスキャンしながらハッシュテーブルを検索して、
+内側テーブルのタプルを取り出します([<図2-12>])。
+</p>
+
+
+<table border=1>
+<caption>[<図2-12>]ハッシュ結合</caption>
+<tr><td>
+<left>
+<img src="./fig-2-04-07.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<p>
+初期コストはハッシュテーブルの生成コストです。実行コストは外側と内側両テーブルの和に比例します(O(M+N))。
+</p>
+
+<p>
+次の例は、内側テーブルpgbench_tellersからHashテーブルをつくり、外側テーブルpgbench_accountsをシーケンシャルスキャンしながら、
+ハッシュテーブルを経由して内側テーブルと結合していくものです。
+</p>
+
+
+<font color="#ff0000">
+(*  編集用のデータ。書籍では以下の図で示したように、　下部を点線長方形で囲み、青字で文章「シーケンシャルスキャンでHASHテーブル生成」を入れる  *)
+</font>
+
+<pre>
+sampledb=# EXPLAIN SELECT * FROM pgbench_accounts AS a, pgbench_tellers AS t WHERE a.bid = t.bid;
+                                   QUERY PLAN                                    
+---------------------------------------------------------------------------------
+ Hash Join  (cost=31.23..14414.23 rows=1000000 width=449)
+   Hash Cond: (a.bid = t.bid)
+   ->  Seq Scan on pgbench_accounts a  (cost=0.00..2883.00 rows=100000 width=97)
+   ->  Hash  (cost=31.10..31.10 rows=10 width=352)
+         ->  Seq Scan on pgbench_tellers t  (cost=0.00..31.10 rows=10 width=352)
+(5 rows)
+</pre>
+
+<left>
+<img src="./fig-2-04-08.jpg"><br>
+</left>
+
+
+<div class="jumpmenu"></div><h4>複数テーブルを結合する問い合わせ(Join Query) </h4>
+
+<p>
+複数のテーブルを結合する場合の、問い合わせプランの求め方を簡単に説明します([<図2-13>])。
+</p>
+
+
+<table border=1>
+<caption>[<図2-13>]テーブル結合</caption>
+<tr><td>
+<left>
+<img src="./fig-2-04-09.jpg"><br>
+</left>
+</td></tr></table>
+
+<ol>
+<li>テーブル毎のパスを求める</li>
+<p>
+テーブル毎に、単一テーブルと同様の処理を行う。 説明のため、このレベルを１とする。
+</p>
+
+<li>2つのテーブルの結合によるパスツリーを求める</li>
+<p>
+次に全テーブルから２つを取り出す組み合わせについて、
+テーブル間の結合によるパスツリーとそのコストを推定する。このレベルを２とする。
+</p> 
+
+<li>同様に3つ、4つとテーブルの組み合わせを生成し、それぞれパスツリーを求める</li>
+
+<li>最後のレベルにおいて最小コストのパスツリーを選択し、問い合わせプランを生成する</li>
+
+</ol>
+
+
+<p>
+以降、2つのテーブルの結合、3つのテーブルの結合について説明します。
+</p>
+
+<div class="jumpmenu"></div><h5>2テーブルの結合</h5>
+
+<p>
+2つのテーブル、AとBの結合を示します([図2-14])。
+</p>
+
+<table border=1>
+<caption>[<図2-14>]2テーブルの結合<br></caption>
+<tr><td>
+<left>
+<img src="./fig-2-04-10.jpg"><br>
+</left>
+</td></tr></table>
+
+<p>
+通常の結合は、テーブルAとBに関して(A join B)と(B join A)を同時に調べます。
+常に3つの結合方式によるコストを推定するのでなく、テーブルの大きさや結合条件などによって結合方式を選びます([脚注8])。
+<br>
+結合の条件式が複数ある場合はそれぞれについて同様にコスト推定し、
+最終的に最小コストの実行パスを保存します。
+</p>
+
+<blockquote><table BORDER="1"><tr><td>脚注8</td><td>
+<p>
+結合方式を選ぶのは関数add_paths_to_joinrel()@optimizer/path/joinpath.cです。
+</p>
+</td></tr></table></blockquote>
+
+
+
+<p>
+次のSELECT文を例に、レベル1とレベル2のRelOptInfoを示します。
+</p>
+
+<pre>
+SELECT * FROM tb1, tb2 WHERE tb1.b = tb2.b; 
+</pre>
+
+<p>
+[レベル１]
+<blockquote>
+テーブル毎に可能なアクセスパスを求める。
+</p>
+
+<table><tr>
+
+<td>
+(1)テーブルtb1の問い合わせ計画
+<pre>
+RELOPTINFO (1): rows=9 width=8
+	joininfo: tb1.b = tb2.b
+	path list:
+	SeqScan(1) rows=9 cost=0.00..1.09
+
+	cheapest startup path:
+	SeqScan(1) rows=9 cost=0.00..1.09
+
+	cheapest total path:
+	SeqScan(1) rows=9 cost=0.00..1.09
+</pre>
+
+</td><td>
+
+(2)テーブルtb2の問い合わせ計画
+<pre>
+RELOPTINFO (2): rows=8 width=8
+	joininfo: tb1.b = tb2.b
+	path list:
+	SeqScan(2) rows=8 cost=0.00..1.08
+
+	cheapest startup path:
+	SeqScan(2) rows=8 cost=0.00..1.08
+
+	cheapest total path:
+	SeqScan(2) rows=8 cost=0.00..1.08
+</pre>
+
+</td>
+</tr></table>
+
+</blockquote>
+
+
+<p>
+[レベル2]
+<blockquote>
+レベル1の結果をもとに、テーブルの結合方式毎のコストを推定し、最小コストのパスツリーを選ぶ。
+</p>
+
+<pre>
+RELOPTINFO (1 2): rows=8 width=8
+	path list:
+	HashJoin(1 2) rows=8 cost=1.10..2.32
+	  clauses: tb1.b = tb2.b
+		SeqScan(1) rows=9 cost=0.00..1.09
+		SeqScan(2) rows=8 cost=0.00..1.08
+	NestLoop(1 2) rows=8 cost=1.09..3.80
+	  clauses: tb1.b = tb2.b
+		SeqScan(1) rows=9 cost=0.00..1.09
+		Material(2) rows=8 cost=1.09..1.17
+			SeqScan(2) rows=8 cost=0.00..1.08
+	NestLoop(1 2) rows=8 cost=0.00..10.70
+	  clauses: tb1.b = tb2.b
+		SeqScan(2) rows=8 cost=0.00..1.08
+		SeqScan(1) rows=9 cost=0.00..1.09
+
+	cheapest startup path:
+	NestLoop(1 2) rows=8 cost=0.00..10.70
+	  clauses: tb1.b = tb2.b
+		SeqScan(2) rows=8 cost=0.00..1.08
+		SeqScan(1) rows=9 cost=0.00..1.09
+
+	cheapest total path:
+	HashJoin(1 2) rows=8 cost=1.10..2.32
+	  clauses: tb1.b = tb2.b
+		SeqScan(1) rows=9 cost=0.00..1.09
+		SeqScan(2) rows=8 cost=0.00..1.08
+</pre>
+
+</blockquote>
+
+
+<p>
+プランナは列挙した3つのアクセスパスのうち、ハッシュ結合(Hash Join)のコスト(2.32)と
+ネステッドループ結合(Nested Loop)のコスト(3.80と10.70)を比較してハッシュ結合を選択します。
+</p>
+
+<br>
+
+<div class="jumpmenu"></div><h5>3テーブルの結合</h5>
+
+<p>
+次に3テーブル、AとBとCの結合を示します([図2-15])。
+<br>
+説明の都合上、
+SELECT文はテーブルAとBの結合条件だけを持ち、テーブルCに関する結合条件が無いものを選びました。
+</p>
+
+<pre>
+	SELECT * FROM A,B,C WHERE A.col = B.col;
+</pre>
+
+
+
+<table border=1>
+<caption>[<図2-15>]3テーブルの結合</caption>
+<tr><td>
+<left>
+<img src="./fig-2-04-11.jpg"><br>
+</left>
+</td></tr></table>
+
+<p>
+テーブル毎の処理からボトムアップでテーブルの結合数を増やし、
+最終的に全テーブル結合した場合の最小コストのパスツリーを求めます。
+</p>
+
+<p>
+[レベル1]
+</p>
+<blockquote>
+<p>
+各テーブル毎にパスを求める。
+</p>
+</blockquote>
+
+<p>
+[レベル2]
+</p>
+<blockquote>
+<p>
+全テーブルの処理が終ったら、次に２つのテーブルの結合の組み合わせを求める。
+[<図2-15>]において、テーブルAとBについては先の説明と同様である。
+<br>
+テーブルAとCを結合するパスツリーも求める。ここで、テーブルAとCの間に条件式はないが、
+処理中のレベル(ここではレベル2)において、テーブルCが初出なので条件式の有無にかかわらず結合する。
+このように最低1回は処理中のレベルに結合することで、テーブルが孤児になることを避ける。
+<br>
+次の組み合わせはテーブルBとCの結合であるが、これらのテーブルを結ぶ条件式は無く、
+且つ既にテーブルCは登場しているので、この結合処理は省略される。
+</p>
+</blockquote>
+
+<p>
+[レベル3]
+</p>
+<blockquote>
+<p>
+3テーブルなのでレベル３が最終レベルである。テーブルA,B,Cの組み合わせでコストを推定する。
+<br>
+まず、すでにパスツリーが求まった{AB}とテーブルCの結合でコストを推定する。
+次に{AC}とテーブルBの結合でコストを推定する。
+<br>
+これで最終的にコスト最小のパスツリーが求まる。　
+</p>
+
+</blockquote>
+
+</font>
+
+<p>
+以降は単一テーブルのときと同様、求めた最小コストのパスツリーから、適宜プランタイプを外挿して問い合わせプランを生成します。
+</p>
+
+
+
+<div class="jumpmenu"></div><h3>参考文献</h3>
+
+<ol>
+<li>Explaining EXPLAIN 第２回	中西氏</li>
+http://bit.ly/JgmDs9
+</ol>
+
+<p>
+本書が省略したプランタイプについて、詳細な説明があります。
+</p>
+
+
+
+
+<hr class="full_hr">
+<div id="lastmodified">
+Last-modified: 2018-9-8
+</div>
+</body>
+</html>
+

@@ -1,0 +1,108 @@
+%FILE internal/type-05.html
+%LASTMOD
+%KEY pgsql-type05
+
+%TITLE 日付/時刻表示形式とタイムゾーンの設定
+
+%CHAPTER 日付/時刻表示形式の切り替え
+
+<p>
+SET datestyle文で日付/時刻表示形式を切替えます。書式は次のとおりです。
+</p>
+
+[<書式>]
+<pre>
+SET datestyle TO 'DATESTYLE[, DATESTYLE, ...]' 
+</pre>
+
+<table><tr bgcolor="#cccccc">
+<th>DATESTYLE</th>	<th>説明　　　　　　　　　　　　　　　　　　　　　</th>
+</tr><tr>
+<td>ISO</td>	<td>ISO 8601 形式(yyyy-mm-dd HH:MM:SS)。デフォルト</td>
+</tr><tr>
+<td>SQL	</td>	<td>Oracle/Ingres 様式</td>
+</tr><tr>
+<td>PostgreSQL</td>	<td>PostgreSQL独自形式(Ex.The 4 Nov 12:15:01 2011 JST) </td>
+</tr><tr>
+<td>German</td>	<td>dd.mm.yyyy 形式</td>
+</tr><tr>
+<td>European</td>	<td>dd/mm/yyyy形式。"DMY"</td>
+</tr><tr>
+<td>NonEuropean, US</td>	<td>mm/dd/yyyy 形式。"MDY"</td>
+</tr></table>
+<br>
+
+
+<p>
+・日付表示形式の切り替え
+<br>
+ヨーロッパ式、米国式に切り替えます。現在の日付/時間表示形式はSHOW datestyle文でわかります。
+</p>
+
+<pre>
+sampledb=# SHOW datestyle;
+ DateStyle 
+-----------
+ ISO, YMD
+(1 row)
+
+sampledb=# SELECT DATE '2012-11-04';
+    date    
+------------
+ 2012-11-04
+(1 row)
+
+sampledb=# SET datestyle TO SQL,European;  SELECT DATE '2012-11-04';
+SET
+    date    
+------------
+ 04/11/2012
+(1 row)
+
+sampledb=# SET datestyle TO SQL,DMY;       SELECT DATE '2012-11-04';
+SET
+    date    
+------------
+ 04/11/2012
+(1 row)
+</pre>
+
+
+
+%CHAPTER  タイムゾーンの切り替え
+
+<p>
+SET TIME ZONE文でタイムゾーンを設定します。書式は次のとおりです。
+</p>
+
+[<書式>]
+<pre>
+SET TIME ZONE TIMEZONE_STYLE 
+</pre>
+
+<p>
+TIMEZONE_STYLEに設定できる値はOSやディストリビューションによって異なります。
+Linux、MacOSX、FreeBSD は/usr/share/zoneinfo以下にタイムゾーンのデータベースがあります。
+</p>
+
+<p>
+・タイムゾーンの設定
+<br>
+タイムゾーン"GMT+9"を設定します。現在のタイムゾーンはSHOW TIME ZONE文でわかります。
+</p>
+
+<pre>
+sampledb=# SHOW TIME ZONE;
+ TimeZone 
+----------
+ Japan
+(1 row)
+
+sampledb=# SET TIME ZONE 'GMT+9';              SHOW TIME ZONE;
+SET
+ TimeZone 
+----------
+ GMT+9
+(1 row)
+</pre>
+

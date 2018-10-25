@@ -1,0 +1,245 @@
+%FILE internal/sql-49.html
+%LASTMOD
+%KEY pgsql-sql49
+
+%TITLE ファイルからテーブルへ	COPY FROM(インポート) 
+
+<pre>
+[<書式>]
+
+COPY table_name [ ( column [, ...] ) ]
+    FROM { 'file_name' | PROGRAM 'command' | STDIN }
+    [ [ WITH ] 
+      [ BINARY ]
+      [ OIDS boolean ]
+      [ FREEZE boolean ]
+      [ DELIMITER [ AS ] 'delimiter' ]
+      [ NULL [ AS ] 'null_string' ]
+      [ CSV [ HEADER [boolean] ]
+            [ QUOTE [ AS ] 'quote' ] 
+            [ ESCAPE [ AS ] 'escape' ]
+            [ FORCE NOT NULL column [, ...] ]
+	    [ ENCODING 'encoding_name' ]
+</pre>
+
+<table>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>table_name</td>	<td>コピー先のテーブル名</td>
+</tr><tr>
+<td>column</td>	<td>コピーするカラム名。設定しない場合はすべてのカラム</td>
+</tr><tr>
+<td>file_name</td>	<td>絶対パス表示によるデータファイル名</td>
+</tr><tr>
+<td>PROGRAM 'command'	</td>	<td>指定したUNIX commandの標準出力からのデータを入力する。バージョン9.3から</td>
+</tr><tr>
+<td>STDIN	</td>	<td>標準入力から入力</td>
+
+
+</tr><tr><td></td><td></td>
+</tr><tr><td></td><td></td>
+
+</tr><tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>BINARY</td>	<td>データをバイナリデータとして読み込む</td>
+</tr><tr>
+<td>OIDS</td>	<td>OIDをコピーする</td>
+</tr><tr>
+<td>HEADER</td>	<td> 第1行目を無視する。CSV形式で、第1行目にヘッダ情報(カラム名)がある場合に設定する。バージョン8.1から</td>
+
+
+</tr><tr><td></td><td></td>
+</tr><tr><td></td><td></td>
+
+</tr><tr bgcolor="#cccccc">
+<th>句　　　　　　　　　　　　　　　　</th>	<th>説明[デフォルト値] </th>
+</tr><tr>
+<td>DELIMITER [ AS ] 'delimiter'</td>	<td>入力ファイルのレコードの区切り文字を指定。[タブスペースか、任意の数の空白文字列]</td>
+</tr><tr>
+<td>NULL [ AS ] 'null_string' ]</td>	<td>NULLをあらわす文字列を指定。[テキスト形式は\N、CSV形式は引用符のない空文字] </td>
+</tr><tr>
+<td>QUOTE [ AS ] 'quote'</td>	<td>CSV形式の引用符を指定。["]</td>
+</tr><tr>
+<td>ESCAPE [ AS ] 'escape'</td>	<td>CSV形式でのエスケープ文字を指定。[\]</td>
+</tr><tr>
+<td>FORCE NOT NULL column [, ...]</td>	<td>CSV形式で、NULLがないものとしてデータをcolumnに読み込む。この場合、NULLは空文字として読み込まれる</td>
+</tr><tr>
+<td>ENCODING 'encoding_name'</td>	<td>ファイルのエンコーディングencoding_nameを指定。バージョン9.1から</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+COPY FROM文で、(サーバ上の)ファイルからテーブルへデータを読み込みます。
+</p>
+
+<p>
+COPY FROM文の実行には次の点に注意してください。
+<ol>
+<li>データファイルとそのファイルのあるディレクトリは、PostgreSQLサーバの所有者(postgres)が読み込み可能でなければならない</li>
+<li>データファイルは(サーバ上の)絶対パスで指定</li>
+</ol>
+
+<p>
+・ 読み込み形式
+<br>
+COPY FROM文の出力形式は以下の3種類です。
+</p>
+
+<ol>
+<li>テキスト形式</li>
+<p>
+読み込む際は、個々のデータファイルに合わせて、区切り文字(デフォルトはタブスペースなど)やNULL値(デフォルトは\N)を指定する。
+NULLの他に、COPY FROM文は[<表6-13>]に示すバックスラッシュを含む特殊文字を読み込める。
+</p>
+
+<table border=1>
+<caption>[<表6-13>] COPY FROM文が読み込み可能なバックスラッシュを含む特殊文字</caption>
+<tr bgcolor="#cccccc">
+<th>文字の並び</th>	<th>説明</th>
+</tr><tr>
+<td>\b	</td>	<td>バックスペース(ASCII 8)</td>
+</tr><tr>
+<td>\f	</td>	<td>改ページ(ASCII 12)</td>
+</tr><tr>
+<td>\n	</td>	<td>改行(ASCII 10)</td>
+</tr><tr>
+<td>\r	</td>	<td>復帰(ASCII 13)</td>
+</tr><tr>
+<td>\t	</td>	<td>タブ(ASCII 9)</td>
+</tr><tr>
+<td>\v	</td>	<td>垂直タブ(ASCII 11)</td>
+</tr><tr>
+<td>\8進数	</td>	<td>文字コード番号を直接指定。例:\101 = "A", \102 = "B"</td>
+</tr><tr>
+<td>\x16進数</td>	<td>文字コード番号を直接指定。例:\x41 = "A", \x42 = "B"</td>
+</tr></table>
+
+<br>
+
+
+<li>バイナリ形式</li>
+<p>
+(COPY TO文で書き出した)バイナリ形式のデータを読み込める。
+フォーマットの詳細はPostgreSQL付属のドキュメント「SQLコマンド COPY」参照。
+</p>
+
+
+<li>CSV形式</li>
+<p>
+CSV形式のファイルを読み込める。
+</p>
+
+</ol>
+
+<p>
+・ PROGRAMオプション
+<br>
+バージョン9.3から、PROGRAMオプションによって、指定したUNIXコマンドの出力を読み込むことができます。
+使い方は実行例を参照してください。
+</p>
+
+<p>
+・ メタコマンド\copyとの違い
+<br>
+メタコマンド\copyでもデータのコピーが可能です([<5-09>]参照)。
+\copyとCOPY文の違いは、\copyがpsqlを起動したホスト上のファイルを操作するのに対し、COPY文はPostgreSQLサーバ上のファイルを操作することです。
+</p>
+
+%CHAPTER 実行例
+
+<p>
+・テキスト形式のデータ読み込み
+<br>
+以下に示すデータファイル'/home/postgres/customerlist.txt'を、テーブルcustomerlistにコピーします。
+<br>
+データの不備などによってコピー中にエラーが発生すると処理が止まります。
+その場合、COPY文はロールバックされ、テーブルにデータは入りません。
+</p>
+
+<pre>
+postgres> cat /home/postgres/customerlist.txt 
+1       デューク東郷    1
+2       アーネスト東郷  2
+3       アランサイジョー        4
+4       ダグラストウゴウ        5
+5       宗経民  6
+6       周雷峰  1
+</pre>
+
+<pre>
+sampledb=# COPY customerlist FROM '/home/postgres/customerlist.txt';
+COPY
+</pre>
+
+<p>
+・バイナリ形式のデータ読み込み
+<br>
+バイナリ形式のデータファイル'/home/postgres/customerlist.bin'を、テーブルcustomerlistにコピーします。
+</p>
+
+<pre>
+postgres> od -c /home/postgres/customerlist.bin 
+0000000   P   G   C   O   P   Y  \n 377  \r  \n  \0  \0  \0  \0  \0  \0
+0000020  \0  \0  \0  \0 003  \0  \0  \0 004  \0  \0  \0 001  \0  \0  \0
+0000040  \f 245 307 245 345 241 274 245 257 305 354 266 277  \0  \0  \0
+.... 略 ....
+</pre>
+
+<pre>
+sampledb=# COPY customerlist FROM '/home/postgres/customerlist.bin' BINARY; 
+COPY
+
+sampledb=# SELECT * FROM customerlist;
+ id |       name       | companycode 
+----+------------------+-------------
+  1 | デューク東郷     |           1
+  2 | アーネスト東郷   |           2
+  3 | アランサイジョー |           4
+  4 | ダグラストウゴウ |           5
+  5 | 宗経民           |           6
+  6 | 周雷峰           |           1
+(6 rows)
+</pre>
+
+<p>
+・CSV形式のデータ読み込み
+<br>
+以下に示す、ヘッダ情報(第1行がカラム名)付きのCSV形式のファイル'/home/postgres/literature.csv'をテーブルliteratureに読み込みます。
+</p>
+
+<pre>
+postgres> cat /home/postgres/literature.csv
+title,author,context
+"Oscar Wilde","The Happy Prince","High above the city, on a tall column,.." 
+"夏目漱石","我輩は猫である","我輩は猫である。名前はまだ無い。"
+</pre>
+
+<pre>
+sampledb=# COPY literature FROM '/home/postgres/literature.csv' CSV HEADER;
+COPY
+
+sampledb=# SELECT * FROM  literature ;
+    title    |      author      |                      context
+-------------+------------------+-------------------------------------------
+ Oscar Wilde | The Happy Prince | High above the city, on a tall column,... 
+ 夏目漱石    | 我輩は猫である   | 我輩は猫である。名前はまだ無い。
+(2 rows)
+</pre>
+
+
+<p>
+・PROGRAMオプションの使用例
+<br>
+PROGRAMオプションにgzipコマンドを設定し、圧縮されたデータファイル"customerlist.gz"を直接読み込む方法を示します。
+</p>
+
+<pre>
+sampledb=# COPY customerlist FROM PROGRAM 'gunzip -c /home/postgres/customerlist.gz';
+COPY 6
+</pre>
+

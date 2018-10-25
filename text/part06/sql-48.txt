@@ -1,0 +1,123 @@
+%FILE internal/sql-48.html
+%LASTMOD
+%KEY pgsql-sql48
+
+%TITLE 問い合わせプランの表示	EXPLAIN 
+
+<pre>
+[<書式>]
+EXPLAIN [ (option [, ...]) ] query 
+EXPLAIN [ ANALYZE ] [ VERBOSE ] query 
+</pre>
+
+<table>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>query</td>	<td>問い合わせプランを表示するSQL文</td>
+
+</tr><tr><td></td><td></td>
+</tr><tr><td></td><td></td>
+
+</tr><tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>ANALYZE [true|false]</td>	<td>問い合わせを実行し、実際の実行時間を表示。論理値オプションはバージョン9.0から。デフォルトはfalse</td>
+</tr><tr>
+<td>VERBOSE	[true|false]</td>	<td>問い合わせプランの詳細表示。論理値オプションはバージョン9.0から。デフォルトはfalse</td>
+</tr><tr>
+<td>COSTS   [true|false]</td>	<td>問い合わせプランのコストを表示。デフォルトはtrue。バージョン9.0から</td>
+</tr><tr>
+<td>BUFFERS [true|false]</td>	<td>バッファの利用状況を表示。ANALYZEも設定しなければならない</td>
+</tr><tr>
+<td>TIMING [true|false]</td>	<td>実行時間を表示。ANALYZEも設定しなければならない。デフォルトはtrue。(よってANALYZE指定時は自動的に実行時間も表示される。)
+バージョン9.2から</td>
+</tr><tr>
+<td>FORMAT { TEXT | XML | JSON | YAML }	</td>	<td>出力形式を設定。デフォルトはTEXT。バージョン9.0から</td>
+
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+EXPLAIN文でSQL文の問い合わせプランを表示します。
+<br>
+プランタイプやプランナの動作は[<2-04>]を参照してください。ここではEXPLAIN文のオプションについて説明します。
+</p>
+
+%CHAPTER 実行例
+
+<p>
+・FORMAT
+<br>
+通常の出力と、XMLでの出力例を示します。
+</p>
+
+<font color="#ff0000">
+以下の出力、XMLの記号とHTMLがバッティングしてが表示がおかしいので、直接ソースをコピペしてください。
+</font>
+
+<pre>
+sampledb=# EXPLAIN SELECT * FROM pgbench_accounts WHERE (aid BETWEEN 1 AND 1000);
+                                            QUERY PLAN                                            
+--------------------------------------------------------------------------------------------------
+ Index Scan using pgbench_accounts_pkey on pgbench_accounts  (cost=0.00..50.74 rows=970 width=97)
+   Index Cond: ((aid >= 1) AND (aid <= 1000))
+(2 rows)
+
+sampledb=# EXPLAIN (FORMAT XML) SELECT * FROM pgbench_accounts WHERE (aid BETWEEN 1 AND 1000);
+                             QUERY PLAN                              
+---------------------------------------------------------------------
+ <explain xmlns="http://www.postgresql.org/2009/explain">           +
+   <Query>                                                          +
+     <Plan>                                                         +
+       <Node-Type>Index Scan</Node-Type>                            +
+       <Scan-Direction>Forward</Scan-Direction>                     +
+       <Index-Name>pgbench_accounts_pkey</Index-Name>               +
+       <Relation-Name>pgbench_accounts</Relation-Name>              +
+       <Alias>pgbench_accounts</Alias>                              +
+       <Startup-Cost>0.00</Startup-Cost>                            +
+       <Total-Cost>50.74</Total-Cost>                               +
+       <Plan-Rows>970</Plan-Rows>                                   +
+       <Plan-Width>97</Plan-Width>                                  +
+       <Index-Cond>((aid &gt;= 1) AND (aid &lt;= 1000))</Index-Cond>+
+     </Plan>                                                        +
+   </Query>                                                         +
+ </explain>
+(1 row)
+</pre>
+
+<p>
+・ANALYZE、BUFFERS
+<br>
+ANALYZEオプションとBUFFERSオプションの例を示します。
+</p>
+
+<pre>
+sampledb=# EXPLAIN ANALYZE SELECT * FROM pgbench_accounts WHERE (aid BETWEEN 1 AND 1000);
+                                            QUERY PLAN                         
+--------------------------------------------------------------------------------------------------
+ Index Scan using pgbench_accounts_pkey on pgbench_accounts  (cost=0.00..50.74 rows=970 width=97) 
+(actual time=0.056..1.033 rows=1000 loops=1)
+   Index Cond: ((aid >= 1) AND (aid <= 1000))
+ Total runtime: 1.587 ms
+(3 rows)
+
+sampledb=# EXPLAIN (ANALYZE true, BUFFERS) SELECT * FROM pgbench_accounts 
+sampledb-#                                                     WHERE (aid BETWEEN 1 AND 1000);
+                                               QUERY PLAN
+-----------------------------------------------------------------------------------------------------
+ Index Scan using pgbench_accounts_pkey on pgbench_accounts  (cost=0.00..50.74 rows=970 width=97) 
+(actual time=0.057..1.030 rows=1000 loops=1)
+   Index Cond: ((aid >= 1) AND (aid <= 1000))
+   Buffers: shared hit=20
+ Total runtime: 1.622 ms
+(4 rows)
+</pre>
+
+<p>
+ANALYZEでは実行時間が表示され、BUFFERSと併用することでヒットしたバッファのページ数も表示されます。
+</p>
+

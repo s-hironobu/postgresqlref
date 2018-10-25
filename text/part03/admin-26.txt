@@ -1,0 +1,658 @@
+%FILE internal/admin-26.html
+%LASTMOD
+%KEY pgsql-admin26
+
+%TITLE LOGGING SYSTEM
+
+<p>
+PostgreSQLは稼働している間に、多くのメッセージやエラー情報を出力し、
+それらをログファイル(database server log)に書き込みます。
+PostgreSQLのログシステム(logging system)はとても柔軟で、
+ユーザが望むほとんどの情報を記録できるでしょう。
+<br>
+PostgreSQLのログシステムの特徴をまとめて、以下に示します。
+</p>
+
+
+<ul>
+<li>様々な種類のログ(many types of log messages)を保存する。</li>
+<p>
+PostgreSQLが出力するlog messagesの種類を以下に列挙します。
+<ul>
+<li>サーバの起動メッセージ (server messages)</li>
+<li>エラーメッセージ(error messages)</li>
+<li>実行されたすべてのQuery (all queries)</li>
+<li>実行に時間がかかったQuery(slow queries)</li>
+<li>デッドロックによってアボートされたQuery (abort queries by deadlock)</li>
+<li>Checkpoint、およびrestartポイント</li>
+<li>クライアントの認証や切断など、セッションに関する情報(session information)</li>
+<li>使われた一時ファイルの容量</li>
+</ul>
+</p>
+
+
+<li>ログ行(log line)のprefixを自由に設定できる。</li>
+<p>
+例えば接続したデータベース名、接続したユーザ名、接続したクライアントのIPアドレスなど、log messagesのprefixを自由に設定できます。
+</p>
+
+
+<li>log messagesの出力先を選択できる。</li>
+<p>
+PostgreSQLはsyslogや(Windowsの)eventlogだけでなく、
+PostgreSQLが生成するserver logにメッセージやエラー情報を書き込むことができます。
+server logを置くディレクトリやserver log名も指定できます。
+</p>
+
+<li>server logをローテートする。</li>
+<p>
+server logのローテーション期間を指定すると、PostgreSQLが自動的にserver logを切り替えます(rotate)。
+これによって、例えば毎日新しいserver logに切り替えることができます。
+server logの最大サイズを指定すれば、server logが巨大化することを避けることもできます。
+</p>
+</ul>
+
+<p>
+ただし、運用を続けるには、ユーザが注意しなければならない点が２つあります。
+</p>
+
+<ul>
+<li>log messagesの種別(type)によってファイルを分割できない</li>
+
+<p>
+PostgreSQLのログシステムは、すべてのlog messagesを一つのファイルに書き込みます。
+たとえば、SLOW QUERYもアクセスエラーも同じserver logに書き込むので、
+log messgesの分析にはツールが必要になるでしょう。
+<br>
+幸い、いくつかのログ分析ツール(log analyzer)がリリースされています。これらのツールについてはsubsection 4.2.3で解説します。
+</p>
+
+<li>古いserver logの削除をしない</li>
+<p>
+PostgreSQLのログシステムは、ログローテートされた古いserver logを削除しません。
+古いserver logはユーザ自身で削除しなければなりません。
+<br>
+ただし、syslogを使ってログを記録する場合は、logrotateシステムによって古いserver logを削除できます。
+</p>
+</ul>
+
+
+<p>
+以下、
+subsection 4.2.1で、最小限のロギングの方法、
+subsection 4.2.2で、いくつかの有用な設定例(recipes)、
+subsection 4.2.3で、ログ分析ツールpgBadgerの使い方を説明します。
+</p>
+
+
+%CHAPTER Quick Start
+
+<p>
+Offical Documentにはログシステムを使うためのすべてのパラメータが解説されています。
+ここではパラメータの説明を繰り返すことを避け、実際の使い方を簡単に説明します。
+</p>
+
+
+<p>
+PostgreSQLのログシステムは、デフォルトでは無効です。
+ここではログシステムを使うために必要な最低限度の設定方法を示します。
+</p>
+
+
+%SECTION PostgreSQLのserver logへの出力
+
+<ul>
+<li>log_destination = 'stderr'</li>
+<li>logging_collector = on</li>
+</ul>
+
+
+<p>
+PostgreSQL独自のserver logに出力する場合、log_destinationに'stderr'を設定し、logging_collectorを有効(on)にします。
+この２つのパラメータに値を設定をするだけで、必要最小限度のlog messageがserver logに書き込まれます。
+</p>
+
+<ul>
+<li>log_directory</li>
+<li>log_filename</li>
+<li>log_file_mode</li>
+</ul>
+
+<p>
+デフォルトでは、データベースクラスタのあるディレクトリ$PGDATAの下に、
+パラメータlog_directoryに設定したサブディレクトリにserver logが保存されます。
+</p>
+
+<p>
+server log名はパラメータlog_filenameで設定します。
+log_filenameのデフォルト値は'postgresql-%Y-%m-%d_%H%M%S.log'です。
+ファイル名には[<表3-19>]に示す日時時刻に関する特殊文字が使えます。
+</p>
+
+<table border=1>
+<caption>[<表3-19>] log_filenameに使用できる特殊文字</caption>
+<tr bgcolor="#cccccc">
+<th>Escape　　　　</th>		<th>Effect　　　　　　　　　　</th>
+</tr><tr>
+<td>%Y</td>		<td>Replaced by the year as a decimal number (for example, 2015)</td>
+</tr><tr>
+
+<td>%m</td>		<td>Replaced by the month as a decimal number [01,12]</td>
+</tr><tr>
+<td>%d</td>		<td>Replaced by the day of the month as a decimal number [01,31]</td>
+</tr><tr>
+<td>%H</td>		<td>Replaced by the hour (24-hour clock) as a decimal number [00,23]</td>
+</tr><tr>
+<td>%M</td>		<td>Replaced by the minute as a decimal number [00,59]</td>
+</tr><tr>
+<td>%S</td>		<td>Replaced by the second as a decimal number [00,60]</td>
+</tr></table>
+
+<br>
+
+<p>
+デフォルトの設定では、以下のようなserver logが生成されます。
+</p>
+
+<pre>
+postgres> ls -1 $PGDATA/pg_log
+postgresql-2014-02-15_111316.log
+postgresql-2014-02-15_173000.log
+postgresql-2014-02-15_233000.log
+postgresql-2014-02-16_000000.log
+postgresql-2014-02-16_060036.log
+... snip ...
+</pre>
+
+
+%SECTION syslogへのログ出力
+
+
+<ul>
+<li>log_destination = 'syslog'</li>
+</ul>
+
+<p>
+syslogにlog messagesを出力する場合は、log_destinationに'syslog'を設定します。
+</p>
+
+<p>
+log_destinationにはstdout,stderr,syslog,eventlog(win32のみ)を複数指定することができます。
+例えば'stderr,syslog'と設定すれば、標準エラーとsyslogの両方にlog messagesを書き込みます。
+</p>
+
+
+<ul>
+<li>syslog_facility</li>
+</ul>
+
+<p>
+syslogファシリティ(facility)とはsyslogの出力を分類するための名称で、
+LOCAL0からLOCAL7 の中から選びます。デフォルトはLOCAL0です。
+<br>
+syslogの出力は、Linux系ディストリビューションなら/etc/syslog.confファイルで制御できます。
+</p>
+
+
+<p>
+log messagesの書込みがどれほど多くても、
+PostgreSQLのlogging_collectorはlog messagesを取りこぼしませんが(never unexpected drop log messages)、
+syslogは取りこぼす可能性があります。
+<br>
+From the point of view of conservation of log messages,
+syslogではなくPostgreSQLのlogging_collectorの利用を勧めます。
+</p>
+
+
+%CHAPTER レシピ (recipe)
+
+<p>
+簡単な例を使って、ログシステムの調理方法をいくつか説明します。
+</p>
+
+%SECTION log_line_prefix
+
+<p>
+log_line_prefixによって、log messagesの先頭にさまざなな情報を付加できます。
+log_line_prefixに使用できる特殊文字を[<表3-20>]に示します。
+</p>
+
+
+<table border="1">
+<caption>[<表3-20>]　log_line_prefixに使用できる特殊文字 <font color="#ff0000">(excerpt from official document)</font></caption>
+   <tr bgcolor="#cccccc">
+     <th>Escape</th>
+     <th>Effect</th>
+   </tr>
+   <tr>
+     <td>%a</td>
+     <td>Application name</td>
+   </tr>
+   <tr>
+     <td>%u</td>
+     <td>User name</td>
+   </tr>
+   <tr>
+     <td>%d</td>
+     <td>Database name</td>
+   </tr>
+   <tr>
+     <td>%r</td>
+     <td>Remote host name or IP address, and remote
+     port</td>
+   </tr>
+   <tr>
+     <td>%h</td>
+     <td>Remote host name or IP address</td>
+   </tr>
+   <tr>
+     <td>%p</td>
+     <td>Process ID</td>
+   </tr>
+   <tr>
+     <td>%t</td>
+     <td>Time stamp without milliseconds</td>
+   </tr>
+   <tr>
+     <td>%m</td>
+     <td>Time stamp with milliseconds</td>
+   </tr>
+   <tr>
+     <td>%i</td>
+     <td>Command tag: type of session's current
+     command</td>
+   </tr>
+   <tr>
+     <td>%e</td>
+     <td>SQLSTATE error code</td>
+   </tr>
+   <tr>
+     <td>%c</td>
+     <td>Session ID: see below</td>
+   </tr>
+   <tr>
+     <td>%l</td>
+     <td>Number of the log line for each session or
+     process, starting at 1</td>
+   </tr>
+   <tr>
+     <td>%s</td>
+     <td>Process start time stamp</td>
+   </tr>
+   <tr>
+     <td>%v</td>
+     <td>Virtual transaction ID
+     (backendID/localXID)</td>
+   </tr>
+   <tr>
+     <td>%x</td>
+     <td>Transaction ID (0 if none is assigned)</td>
+   </tr>
+   <tr>
+     <td>%q</td>
+     <td>Produces no output, but tells non-session
+     processes to stop at this point in the string;
+     ignored by session processes</td>
+   </tr>
+   <tr>
+     <td>%%</td>
+     <td>Literal %</td>
+   </tr>
+</table>
+
+<br>
+
+<p>
+例えば、次のlog_line_prefixを設定すると、
+</p>
+
+<pre>
+log_line_prefix = '%t [%p]: [%l-1] user=%u,db=%d '
+</pre>
+
+<p>
+以下のようなログが得られます。
+</p>
+
+<pre>
+2014-02-12 11:15:14 JST [4100]: [7-1] user=postgres,db=sampledb LOG:  ...snip....
+</pre>
+
+<p>
+いうまでもなく、prefixに付与された情報は、後からlog messagesを分析する時に役に立ちます。
+例えば%uでユーザ名を付与しておけば、ユーザ毎のactivityを分析できます。
+<br>
+よってほとんどの場合、log_line_prefixはログ分析ツール(log analyzer)や監視ツール(monitoring tool)の要求に添って設定することになります。
+</p>
+
+
+%SECTION Slow queryの捕捉 (slow query catch)
+
+<ul>
+<li>log_duration</li>
+<li>log_min_duration_statement</li>
+</ul>
+
+<p>
+log_durationを有効(on)にして、log_min_duration_statementに処理時間のしきい値(threshold)をミリ秒単位で設定すると、
+そのしきい値よりも処理に時間を要したSQL文をserver logに書き込みます。
+<br>
+以下に示すのは、log_min_duration_statementに1000[msec]=1[sec]を設定したときのlog messagesの例です。
+</p>
+
+<pre>
+2014-01-29 03:04:49 JST LOG:  duration: 1085.940 ms  statement: SELECT pg_sleep(1);
+</pre>
+
+<p>
+この２つのパラメータはslow queriesの捕捉に必須ですが、
+あまり低いしきい値を設定すると、ログ書き込みの負荷でサーバ処理が重くなる可能性もあるので注意してください。
+</p>
+
+
+%SECTION TCPコネクションと切断と補足
+
+<ul>
+<li>log_connections</li>
+<li>log_disconnections</li>
+</ul>
+
+<p>
+log_connectionsを有効(on)にすると、PostgreSQLサーバに接続したroleとデータベースを書き込みます。
+log_disconnectionsを有効(on)にすると、セッション終了時にセッションの接続時間を書き込みます。
+log_line_prefixと組み合わせれば、セッション情報を保存できます。
+</p>
+
+<p>
+以下の設定をした場合の、ログの例を示します。
+</p>
+
+<pre>
+log_connections = on
+log_disconnections = on
+log_line_prefix = '%t [%p]: %h '
+</pre>
+
+
+<pre>
+2014-01-29 11:06:20 JST [13166]:   LOG:  connection received: host=192.168.1.100 port=59029
+2014-01-29 11:06:20 JST [13166]: 192.168.1.100 LOG:  connection authorized: user=postgres database=sampledb
+2014-01-29 11:06:59 JST [13166]: 192.168.1.100 LOG:  disconnection: session time: 0:00:38.780 user=postgres \
+	   database=sampledb host=192.168.1.100 port=59029
+</pre>
+
+
+<p>
+log messagesを読むと、
+「外部ホスト192.168.1.100からrole=postgresがデータベースsampledbに接続して、約38秒後にコネクションを切断した」ことが分かります。
+</p>
+
+%SECTION 長時間、lockされたセッションの補足
+
+
+
+<p>
+log_lock_waitsを有効(on)にすると、deadlock_timeoutよりもロック待ち時間が長くなった場合にログを書き出します。
+</p>
+
+<p>
+設定例と実例を以下に示します。
+</p>
+
+<pre>
+log_lock_waits = on
+deadlock_timeout = 1s
+</pre>
+
+<p>
+以下のlog messagesは、192.168.1.100から接続したユーザのUPDATEステートメントが、1秒以上ロックされた例です。
+</p>
+
+
+<pre>
+2014-01-29 11:54:33 JST [13855]: 192.168.1.100 LOG:  process 13855 still waiting for ShareLock on transaction 93557 \
+	   after 1000.990 ms
+2014-01-29 11:54:33 JST [13855]: 192.168.1.100 STATEMENT:  UPDATE userlist SET name = 'steve jobs' WHERE id = 0;
+</pre>
+
+
+%SECTION ログローテーション
+
+<ul>
+<li>log_rotation_age</li>
+<li>log_rotation_size</li>
+</ul>
+
+<p>
+PostgreSQLのserver logについて、設定パラメータlog_rotation_ageとlog_rotation_sizeに適当な値を設定すれば定期的にログローテーションできます。
+<br>
+例えば、log_rotation_ageのデフォルト値は1440[分] = 24[時間] = 1[日]なので、毎日新しいserver logが作成されます。
+<br>
+ログローテーションしない場合は、設定パラメータlog_rotation_ageかlog_rotation_sizeに'0'を設定します。
+</p>
+
+
+%CHAPTER log analyzer
+
+<p>
+このsectionの最後に、log analyzer toolを一つ、紹介します。
+
+<br>
+pgBadgerはPerlで作られたPostgreSQLのserver logの分析ツールで、
+似たようなログ分析ツールであるpgFouineの代替を目指して開発されています。
+</p>
+
+<ul>
+<li><a href="http://dalibo.github.io/pgbadger/">http://dalibo.github.io/pgbadger/</a></li>
+</ul>
+
+
+<p>
+後発のpgBagderはpgFouineと比較して次の長所があります。
+</p>
+
+<ol>
+<li>分析できる項目が多い</li>
+<p>
+pgBadgerの機能紹介を兼ねて、pgBadgerが分析できる項目をリストアップします。比較のためにpgFouineの分析項目も併記します。
+ご覧のように、pgBadgerは多くの役に立つ分析ができます。
+</p>
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>分析項目</th>　　　<th>pgBadger</th><th>pgFouine</th>
+</tr><tr>
+<td>Overall statistics </td>	<td>X</td>	<td>X</td>
+</tr><tr>
+<td>Hourly statistics	</td>	<td>X</td>	<td></td>
+</tr><tr>
+<td>Queries by type </td>	<td>X</td>	<td>X</td>
+</tr><tr>
+<td>Sessions per database	</td>	<td>X</td>	<td></td>
+</tr><tr>
+<td>Sessions per user 		</td>	<td>X</td>	<td></td>
+</tr><tr>
+<td>Sessions per host 	</td>	<td>X</td>	<td></td>
+</tr><tr>
+<td>Connections per database 	</td>	<td>X</td>	<td></td>
+</tr><tr>
+<td>Connections per user 	</td>	<td>X</td>	<td></td>
+</tr><tr>
+<td>Connections per host 	</td>	<td>X</td>	<td></td>
+</tr><tr>
+<td>Queries that took up the most time (N)  	</td>	<td>X</td>	<td>X</td>
+</tr><tr>
+<td>Most frequent queries (N) 	</td>	<td>X</td>	<td>X</td>
+</tr><tr>
+<td>Slowest queries (N) </td>	<td>X</td>	<td>X</td>
+</tr><tr>
+<td>Most frequent events (N) </td>	<td>X</td>	<td>X</td>
+</tr><tr>
+<td>Logs per type </td>	<td>X</td>		<td></td>
+</tr><tr>
+</table>
+
+<br>
+
+
+<li>グラフィカルな表示ができる</li>
+<p>
+結果をpie chartsやtime based chartsで表示できます。
+</p>
+
+<li>log_line_prefixの制約が少ない。</li>
+<p>
+pgFouineはlog_line_prefixに特定の値を設定しなければなりませんが、
+pgBadgerは自由にlog_line_prefixを設定できます。
+</p>
+
+
+<li>file formatを自動検出(autodetect)する</li>
+
+<p>
+syslog, csvlog, server logの違いを自動検出します。
+<br>
+また、gzipで圧縮されたfileを、圧縮されたまま分析できます。
+server logは巨大になり易いので、この機能はとても有用です。
+</p>
+
+<li>incremental mode</li>
+<p>
+Incremental modeはversion 5.0からサポートされた機能で、
+ログを分析した結果を、日別に表示できます。
+この機能によって、log messagesの分析がより便利になるでしょう。
+</p>
+<blockquote>
+It is possible to run pgbadger each days or even more, each hours, and have cumulative reports per day and per week. A top index page allow you to go directly to the weekly and daily reports. 
+</blockquote>
+
+
+<table border=1>
+<caption>[< fig 4-XX>] pgBadger<br></caption>
+<tr><td>
+<left>
+<img src="./pgBadger3.jpg"><br>
+</left>
+</td></tr>
+</table>
+
+
+</ol>
+
+<p>
+pgBadgerは上記のような長所を持つので、
+これまでpgFouineを使っていたユーザも、pgBadgerの使用を検討するとよいでしょう。
+</p>
+
+
+%SECTION Download and Install
+
+<p>
+以下のサイトからpgBadgerのアーカイブをダウンロードします。
+</p>
+
+<pre>
+http://sourceforge.net/projects/pgbadger/files/latest/download
+</pre>
+
+<p>
+ダウンロードしたアーカイブを、PostgreSQLのcontribディレクトリで展開し、
+make とmake installを実行します。
+</p>
+
+<pre>
+cd postgresql-9.3.2/contrib
+tar xvfz pgbadger-5.0.tar.gz
+
+cd pgbadger-5.0
+perl Makefile.PL
+make
+sudo make install
+
+# make install
+Installing /usr/local/share/man/man1/pgbadger.1
+Installing /usr/local/bin/pgbadger
+Appending installation info to /Library/Perl/Updates/5.16.2/darwin-thread-multi-2level/perllocal.pod
+</pre>
+
+
+%SECTION Seeting up
+
+<p>
+potgresql.confにいくつかのパラメータを設定します。
+詳細はpgBadgerのREADMEを参照してください。
+ここでは参考値(reference values)を示します。
+</p>
+
+<pre>
+#------------------------------------------------------------------------------
+# ERROR REPORTING AND LOGGING
+#------------------------------------------------------------------------------
+# - Where to Log -
+log_destination = 'stderr'
+logging_collector = on
+
+# - What to Log -
+log_checkpoints = on
+log_connections = on
+log_disconnections = on
+log_line_prefix = '%t [%p]: [%l-1] user=%u,db=%d '
+log_lock_waits = on
+log_temp_files = 0
+
+# - When to Log -
+log_min_duration_statement=500
+
+#------------------------------------------------------------------------------
+# RUNTIME STATISTICS
+#------------------------------------------------------------------------------
+# - Query/Index Statistics Collector -
+track_io_timing = on
+track_functions = all 
+# - Statistics Monitoring -
+log_statement_stats = on
+
+#------------------------------------------------------------------------------
+# CLIENT CONNECTION DEFAULTS
+#------------------------------------------------------------------------------
+# - Locale and Formatting -
+lc_messages='C'
+
+</pre>
+
+
+%SECTION ログ分析
+
+<p>
+ログの分析はpgbadgerコマンドで行います。
+例として、2014年2月14日のログの分析を行いましょう。
+次のコマンドを実行すると、out.htmlというHTMLフォーマットのファイルが生成されます。
+</p>
+
+<pre>
+postgre> pgbadger --prefix '%t [%p]: [%l-1] user=%u,db=%d ' \
+>   $PGDATA/pg_log/postgresql-2014-02-17_*.log
+</pre>
+
+<p>
+ブラウザでout.htmlにアクセスしてください。
+分析結果が多くのグラフと共に表示されます。
+</p>
+
+<table border=1>
+<caption>[< fig 4-XX>] pgBadger<br></caption>
+<tr><td>
+<left>
+<img src="./pgBadger1.jpg" width="400" height="300"><br>
+</left>
+</td>
+<td>
+<left>
+<img src="./pgBadger2.jpg" width="400" height="300"><br>
+</left>
+</td></tr>
+
+
+</table>
+
+<br>
+

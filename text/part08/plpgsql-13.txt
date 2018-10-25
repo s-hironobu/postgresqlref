@@ -1,0 +1,96 @@
+%FILE internal/plpgsql-13.html
+%LASTMOD
+%KEY pgsql-plpgsql13
+
+%TITLE ループ処理 (複数行の問い合わせ結果を扱う)
+
+<pre>
+[<書式>]
+
+[<<label>>] 
+  FOR record | row IN select_query LOOP 
+    statements 
+  END LOOP 
+
+[<<label>>] 
+  FOR { record | row } IN EXECUTE text_expression LOOP 
+    statements 
+  END LOOP 
+
+
+==================================================================
+句			説明
+==================================================================
+record			record変数
+row			テーブルの行と同じ構造の変数
+select_query		SELECT文
+text_expression		SELECT文を記述した文字列
+statements		繰り返しするSQL文など
+==================================================================
+</pre>
+
+[<解説>]
+<p>
+FOR IN LOOP文またはFOR IN EXECUTE LOOP文で、複数行の問い合わせ結果を扱うことができます。
+</p>
+
+<p>
+・FOR IN LOOP <br>
+レコード変数または行変数に、SELECT文の結果が順次代入され、1行ごとにループ内のstatementsが実行されます。
+</p>
+
+<p>
+実行例で示す関数item_names()の書き換えをみてもわかるように、この形式を利用すると、非常に簡単に関数が記述できます。さらに、ループの廻る回数を[<8-12>]から[<8-14>]で定義した関数群と比較すれば、この形式が最も効率良く処理を行なうことがわかると思います。
+</p>
+
+<p>
+1つだけ、
+「ループ変数は、テーブルの行と同じかrecord型の変数だけ」
+---under-line---under-line---under-line---under-line---
+という制約があります。しかし、この制約が関数の実装に大きな困難をもたらすことはないでしょう。
+</p>
+
+[<実行例>]
+
+<p>
+・FOR IN LOOP文<br>
+FOR IN LOOP構文を使って、テーブルitemlistの列nameを列挙する関数item_names()を定義します。
+<p>
+
+<pre>
+CREATE FUNCTION item_names () RETURNS SETOF text AS
+ $$ 
+   DECLARE
+     myname text;		/* 商品名を格納 */
+     myrow  itemlist%ROWTYPE;
+   BEGIN
+
+     /* SELECT文の結果を順次、変数myrowに代入 */
+     FOR myrow IN SELECT * FROM itemlist  LOOP
+
+	 /* 変数myrowから、商品名を変数mynameに格納 */
+	 myname := myrow.name;
+	 RETURN NEXT myname;
+     END LOOP;
+
+     /* 保存された値を返し、関数を終了 */
+     RETURN;
+   END;
+ $$ 
+LANGUAGE PLpgSQL;
+</pre>
+
+<p>
+関数item_names()はRETURN NEXT文を使っているので、"SELECT * FROM 関数()"形式で実行しなければなりません([<8-11>]参照)。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM item_names ();
+ item_names 
+------------
+ pen
+ notebook
+ eraser
+(3 rows)
+</pre>
+

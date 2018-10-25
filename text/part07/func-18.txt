@@ -1,0 +1,566 @@
+%FILE internal/func-18.html
+%LASTMOD
+%KEY pgsql-func18
+
+%TITLE JSON関数
+
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>JSON作成関数</th>	<th>返り値型　　　　</th>		<th>	説明</th>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>例</th>	<th>結果</th>
+
+</tr><tr>
+<td>to_json(anyelement) </td>	<td>  json	</td>	<td>設定された値をJSON型として返す。詳細は本文を参照</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>to_json('Fred said "Hi."'::text)	</th>	<th align=left>"Fred said \"Hi.\""</th>
+</tr><tr>
+
+<td>to_jsonb(anyelement) </td>	<td>  jsonb	</td>	<td>設定された値をJSONB型として返す。詳細は本文を参照</td>
+</tr><tr>
+
+<td>array_to_json(anyarray [, pretty_bool]) </td>	<td>  json	</td>	<td>指定した配列をJSON配列として返す</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>array_to_json('{{1,5},{99,100}}'::int[])</th>	<th align=left>[[1,5],[99,100]]</th>
+</tr><tr>
+
+<td>row_to_json(record [, pretty_bool]) </td>	<td>  json	</td>	<td>行をJSONオブジェクトとして返す</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>row_to_json(row(1,'foo'))</th>	<th align=left>{"f1":1,"f2":"foo"}</th>
+</tr><tr>
+
+
+<td>json_build_array(VARIADIC "any")</td>	<td>  json	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>json_build_array(1,2,'3',4,5)</th>	<th align=left> [1, 2, "3", 4, 5]</th>
+</tr><tr>
+
+<td> jsonb_build_array(VARIADIC "any")</td>	<td>  jsonb	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> json_build_object('foo',1,'bar',2)</th>	<th align=left>  {"foo": 1, "bar": 2}</th>
+</tr><tr>
+
+<td> json_build_object(VARIADIC "any")</td>	<td>  json	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+<td>jsonb_build_object(VARIADIC "any") </td>	<td>  jsonb	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+
+<td> json_object(text[])</td>	<td>  json	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> json_object('{a, 1, b, "def", c, 3.5}')</th>	<th align=left> {"a" : "1", "b" : "def", "c" : "3.5"} </th>
+</tr><tr>
+
+
+<td> jsonb_object(text[])</td>	<td>  jsonb	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+
+<td> json_object(keys text[], values text[])</td>	<td>  json	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> json_object('{a, b}', '{1,2}')</th>	<th align=left>  {"a": "1", "b": "2"}</th>
+</tr><tr>
+
+<td>jsonb_object(keys text[], values text[]) </td>	<td>  jsonb	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr>
+</table>
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>JSON処理関数</th>	<th>返り値型　　　　</th>		<th>	説明</th>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>例</th>	<th>結果</th>
+
+</tr><tr>
+<td> json_array_length(json)</td>	<td> int	</td>	<td>JSON配列の最も外側の要素の数を返す</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> json_array_length('[1,2,3,{"f1":1,"f2":[5,6]},4]')</th>	<th align=left> 5</th>
+</tr><tr>
+
+
+</tr><tr>
+<td>jsonb_array_length(json) </td>	<td> int	</td>	<td>JSON配列の最も外側の要素の数を返す</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+
+</tr><tr>
+<td>json_each(json) </td>	<td> setof key text, value json	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>  </th>	<th align=left>
+ </th>
+</tr><tr>
+
+</tr><tr>
+<td> jsonb_each(jsonb)</td>	<td> setof key text, value jsonb	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+
+</tr><tr>
+<td> json_each_text(json)</td>	<td> setof key text, value text	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+</tr><tr>
+<td>jsonb_each_text(jsonb) </td>	<td> setof key text, value text	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+</tr><tr>
+<td> json_extract_path(from_json json, VARIADIC path_elems text[])</td>	<td> json	</td>	<td>path_elemsで示されたJSONオブジェクトを返す(#>と同じ)。</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> json_extract_path('{"f2":{"f3":1},"f4":{"f5":99,"f6":"foo"}}','f4')</th>	<th align=left>  {"f5":99,"f6":"foo"}</th>
+</tr><tr>
+
+
+</tr><tr>
+<td> jsonb_extract_path(from_json json, VARIADIC path_elems text[])</td>	<td> jsonb	</td>	<td>path_elemsで示されたJSONオブジェクトを返す(#>と同じ)。</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+
+</tr><tr>
+<td>json_extract_path_text(from_json json, VARIADIC path_elems text[]) </td>	text<td> 	</td>	<td>  path_elemsで示されたJSONオブジェクトをtextとして返す(#>>演算子と同じ)</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> json_extract_path_text('{"f2":{"f3":1},"f4":{"f5":99,"f6":"foo"}}','f4', 'f6')</th>	<th align=left> foo</th>
+</tr><tr>
+
+</tr><tr>
+<td> jsonb_extract_path_text(from_json json, VARIADIC path_elems text[])</td>	<td> 	text</td>	<td>  path_elemsで示されたJSONオブジェクトをtextとして返す(#>>演算子と同じ)</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+</tr><tr>
+<td> json_object_keys(json)</td>	<td> setof text	</td>	<td>最も外側のJSONオブジェクトの中のキーの集合を返す</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+</tr><tr>
+<td>jsonb_object_keys(jsonb) </td>	<td> setof text	</td>	<td>最も外側のJSONオブジェクトの中のキーの集合を返す</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+
+</tr><tr>
+<td>json_populate_record(base anyelement, from_json json) </td>	<td> anyelement	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+</tr><tr>
+<td>jsonb_populate_record(base anyelement, from_json jsonb) </td>	anyelement<td> 	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+</tr><tr>
+<td>json_populate_recordset(base anyelement, from_json json) </td>	<td> setof anyelement	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+</tr><tr>
+<td> jsonb_populate_recordset(base anyelement, from_json jsonb)</td>	<td> setof anyelement	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+</tr><tr>
+<td> json_array_elements(json)</td>	<td> setof json	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+
+</tr><tr>
+<td> jsonb_array_elements(jsonb)</td>	<td> setof jsonb	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+</tr><tr>
+<td>json_array_elements_text(json) </td>	<td> setof text	</td>	<td>JSON配列をtext値の集合に展開する</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+</tr><tr>
+<td> jsonb_array_elements_text(jsonb)</td>	<td> setof text	</td>	<td>JSON配列をtext値の集合に展開する</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+</tr><tr>
+<td> json_typeof(json)</td>	<td> text	</td>	<td>最も外側のJSON値の型をテキスト文字列として返す</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+
+</tr><tr>
+<td>jsonb_typeof(jsonb) </td>	<td> text	</td>	<td>最も外側のJSON値の型をテキスト文字列として返す</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+
+</tr><tr>
+<td> json_to_record(json)</td>	<td> record	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+
+
+</tr><tr>
+<td> jsonb_to_record(jsonb)</td>	<td> record	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+
+</tr><tr>
+<td>json_to_recordset(json) </td>	<td> setof record	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+
+
+</tr><tr>
+<td>jsonb_to_recordset(jsonb) </td>	<td> setof record	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+</tr><tr>
+<td>json_strip_nulls(from_json json) </td>	<td> json	</td>	<td>NULL値を持つオブジェクトフィールドを削除したfrom_jsonを返す。配列などのNULL値はそのまま残る</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> json_strip_nulls('[{"f1":1,"f2":null},2,null,3]')</th>	<th align=left>  [{"f1":1},2,null,3]</th>
+</tr><tr>
+
+</tr><tr>
+<td>jsonb_strip_nulls(from_json jsonb) </td>	<td> jsonb	</td>	<td>NULL値を持つオブジェクトフィールドを削除したfrom_jsonを返す。配列などのNULL値はそのまま残る</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+
+</tr><tr>
+<td>jsonb_set(target jsonb, path text[], new_value jsonb[, create_missing boolean]) </td>	<td> jsonb	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr><tr>
+
+
+</tr><tr>
+<td>jsonb_pretty(from_json jsonb) </td>	<td> text	</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> </th>	<th align=left> </th>
+</tr>
+</table>
+
+
+%CHAPTER 解説
+
+
+%SECTION JSON作成関数
+
+<p>
+文字列や配列などからJSONやJSONB型のデータを生成する関数が用意されています。以下、主要な関数について解説します。
+</p>
+
+
+<p>
+・to_json(anyelement),to_jsonb(anyelement)
+<br>
+</p>
+<pre>
+jsonあるいはjsonbとして値を返す。 配列と複合型は（再帰的に）配列とオブジェクトに変換される。 
+あるいは、その型からjsonにキャストがあれば、キャスト関数が変換のために用いられる。 
+そうでなければ、スカラ値が生成される。 
+数値、論理値、またはNULL値以外のスカラ型に対しては、有効なjson値あるいはjsonb値となる形式の文字列表現が使用される。  
+</pre>
+
+
+<p>
+・array_to_json
+<br>
+これらの関数は指定した配列をjson型の配列にして返します。
+配列の値の型は任意で、例えばintやtextなど設定できます。配列の値の数も任意です。
+しかし、配列の値の次元はすべて同じでなければなりません。
+</p>
+
+<pre>
+SELECT array_to_json('{{1,2,3},{99,100,101}}'::int[]);
+SELECT array_to_json('{{1,2},{99,100},{999,1000}}'::int[]);
+SELECT array_to_json('{{abc,zyz},{good,bad}}'::text[]);
+SELECT array_to_json('{{1,2,3},{99,100}}'::int[]);
+
+
+testdb=# SELECT array_to_json('{{1,2,3},{99,100,101}}'::int[]);
+     array_to_json      
+------------------------
+ [[1,2,3],[99,100,101]]
+(1 row)
+
+testdb=# SELECT array_to_json('{{1,2},{99,100},{999,1000}}'::int[]);
+        array_to_json        
+-----------------------------
+ [[1,2],[99,100],[999,1000]]
+(1 row)
+
+testdb=# SELECT array_to_json('{{abc,zyz},{good,bad}}'::text[]);
+         array_to_json          
+--------------------------------
+ [["abc","zyz"],["good","bad"]]
+(1 row)
+
+testdb=# SELECT array_to_json('{{1,2,3},{99,100}}'::int[]);
+ERROR:  malformed array literal: "{{1,2,3},{99,100}}"
+LINE 1: SELECT array_to_json('{{1,2,3},{99,100}}'::int[]);
+                             ^
+DETAIL:  Multidimensional arrays must have sub-arrays with matching dimensions.
+</pre>
+
+
+<p>
+・json_build_array(),jsonb_build_array()
+<br>
+
+</p>
+
+
+
+%SECTION JSON処理関数
+
+
+
+<pre>
+row_to_json(record [, pretty_bool])
+	  行をJSONオブジェクトとして返す。 pretty_boolが真の場合、レベル-1の要素の間に改行が加えられる。
+
+json_build_array(VARIADIC "any")
+jsonb_build_array(VARIADIC "any")
+ 異なる型から構成される可能性のあるJSON配列をvariadic引数リストから作成。
+
+
+json_build_object(VARIADIC "any")
+jsonb_build_object(VARIADIC "any")
+ variadic引数リストからJSONオブジェクトを作成。 慣例により引数リストはキーと値が交互に並んだもの。 
+
+json_object(text[])
+jsonb_object(text[])
+テキスト配列からJSONオブジェクトを作成。 
+配列は、偶数個の要素からなる1次元（キー／値の対が交互に並んでいるものと扱われる)）
+あるいは内側の配列が2つの要素を持つ2次元（2つの要素がキー／値の対として扱われる）のいずれかでなければならない。  
+
+json_object('{a, 1, b, "def", c, 3.5}') {"a" : "1", "b" : "def", "c" : "3.5"}
+json_object('{{a, 1},{b, "def"},{c, 3.5}}')
+		  {"a": "1", "b": "def", "c": "3.5"}
+
+
+json_object(keys text[], values text[])
+jsonb_object(keys text[], values text[])
+この形のjson_objectは2つの別々の配列からキーと値の対を取る。 他の点ではすべて、引数1つの形と同じ。
+
+
+</pre>
+
+
+<pre>
+json_array_length(json)
+jsonb_array_length(jsonb)
+	int	JSON配列の最も外側の要素の数を返す。
+
+
+json_each(json)
+jsonb_each(jsonb)
+setof key text, value json
+setof key text, value jsonb
+      JSONオブジェクトの最も外側をkey/valueの組み合わせに拡張する。
+
+ select * from json_each('{"a":"foo", "b":"bar"}')
+
+ key | value
+-----+-------
+ a   | "foo"
+ b   | "bar"
+
+
+json_each_text(json)
+jsonb_each_text(jsonb)
+JSONオブジェクトの最も外側をkey/valueの組み合わせに拡張する。
+返り値は型text。	select * from json_each_text('{"a":"foo", "b":"bar"}') 
+
+ key | value
+-----+-------
+ a   | foo
+ b   | bar
+
+json_extract_path(from_json json, VARIADIC path_elems text[])
+jsonb_extract_path(from_json jsonb, VARIADIC path_elems text[])
+			     
+json
+jsonb
+path_elemsで示されたJSONオブジェクトを返す(#>と同じ)。
+
+
+
+json_extract_path_text(from_json json, VARIADIC path_elems text[])
+jsonb_extract_path_text(from_json jsonb, VARIADIC path_elems text[])
+  text
+  path_elemsで示されたJSONオブジェクトをtextとして返す(#>>演算子と同じ)
+json_extract_path_text('{"f2":{"f3":1},"f4":{"f5":99,"f6":"foo"}}','f4', 'f6') foo
+
+
+
+json_object_keys(json)
+jsonb_object_keys(jsonb)
+最も外側のJSONオブジェクトの中のキーの集合を返す。
+json_object_keys('{"f1":"abc","f2":{"f3":"a", "f4":"b"}}') 
+
+ json_object_keys
+------------------
+ f1
+ f2
+
+
+json_populate_record(base anyelement, from_json json)
+jsonb_populate_record(base anyelement, from_json jsonb)
+   anyelement  from_json内のオブジェクトを行をbaseで定義されたレコード型に一致する列に拡張する(以下の注意書きを参照)。
+  select * from json_populate_record(null::myrowtype, '{"a":1,"b":2}') 
+
+ a | b
+---+---
+ 1 | 2
+
+
+json_populate_recordset(base anyelement, from_json json)
+jsonb_populate_recordset(base anyelement, from_json jsonb)
+   from_jsonにおけるオブジェクトの最も外側の配列をbaseで定義されたレコード型に
+一致する列を持つ行の集合に展開する(以下の注意書き参照)。 
+ select * from json_populate_recordset(null::myrowtype, '[{"a":1,"b":2},{"a":3,"b":4}]') 
+
+ a | b
+---+---
+ 1 | 2
+ 3 | 4
+
+
+json_array_elements(json)
+jsonb_array_elements(jsonb)
+
+JSON配列をJSON値の集合に展開する。	
+select * from json_array_elements('[1,true, [2,false]]')	
+
+   value
+-----------
+ 1
+ true
+ [2,false]
+
+
+
+json_array_elements_text(json)
+jsonb_array_elements_text(jsonb)
+
+JSON配列をtext値の集合に展開する。
+select * from json_array_elements_text('["foo", "bar"]') 
+
+   value
+-----------
+ foo
+ bar
+
+
+json_typeof(json)
+jsonb_typeof(jsonb)
+	text	
+最も外側のJSON値の型をテキスト文字列として返す。 
+取りうる型はobject、 array、 string、 number、boolean、nullである。  
+json_typeof('-123.4') number
+
+json_to_record(json)
+jsonb_to_record(jsonb)
+
+JSONオブジェクトから任意のレコードを作成する（下記の注釈を参照）。 
+recordを返す関数すべてと同様、呼び出し側がAS句でレコードの構造を明示的に決める必要がある。
+  select * from json_to_record('{"a":1,"b":[1,2,3],"c":"bar"}') as x(a int, b text, d text)  
+
+ a |    b    | d
+---+---------+---
+ 1 | [1,2,3] |
+
+
+json_to_recordset(json)
+jsonb_to_recordset(jsonb)
+オブジェクトの配列のJSONから任意のレコードの集合を作成する（下記の注釈を参照）。 
+recordを返す関数すべてと同様、呼び出し側がAS句でレコードの構造を明示的に決める必要がある。  
+select * from json_to_recordset('[{"a":1,"b":"foo"},{"a":"2","c":"bar"}]') as x(a int, b text); 
+
+ a |  b
+---+-----
+ 1 | foo
+ 2 |
+
+
+json_strip_nulls(from_json json)
+jsonb_strip_nulls(from_json jsonb)
+			    
+json
+jsonb
+NULL値を持つオブジェクトフィールドを削除したfrom_jsonを返す。配列などのNULL値はそのまま残る
+	json_strip_nulls('[{"f1":1,"f2":null},2,null,3]') [{"f1":1},2,null,3]
+
+
+
+
+jsonb_set(target jsonb, path text[], new_value jsonb[, create_missing boolean])		 
+jsonb
+pathで指定した部分をnew_valueで置換、 あるいはcreate_missingが真（デフォルトはtrue）で
+pathで指定した項目が存在しないならnew_valueを追加して、 targetを返す。 
+パスの位置についての演算子について、pathの中にある負の整数はJSON配列の終わりから数える。  
+
+jsonb_set('[{"f1":1,"f2":null},2,null,3]', '{0,f1}','[2,3,4]', false)
+					   [{"f1":[2,3,4],"f2":null},2,null,3]
+
+jsonb_set('[{"f1":1,"f2":null},2]', '{0,f3}','[2,3,4]') 
+				    [{"f1": 1, "f2": null, "f3": [2, 3, 4]}, 2]
+
+
+jsonb_pretty(from_json jsonb)		       
+text
+	from_jsonをインデントしたJSON文字列にして返す。		jsonb_pretty('[{"f1":1,"f2":null},2,null,3]')	
+
+[
+    {
+        "f1": 1,
+        "f2": null
+    },
+    2,
+    null,
+    3
+]
+
+</pre>
+

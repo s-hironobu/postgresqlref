@@ -1,0 +1,56 @@
+%FILE internal/type-03.html
+%LASTMOD
+%KEY pgsql-type03
+
+%TITLE 文字データ型
+
+[<文字データ型一覧>]
+
+<table>
+<tr bgcolor="#cccccc">
+<th>データ型名</th>	<th>格納サイズ</th>	<th>説明</th>
+</tr><tr>
+<td>character(n), char(n)</td>	 <td>(4+n)バイト</td>	 <td>固定長文字列。空白可</td>
+</tr><tr>
+<td>character varying(n)</td>	 <td>(4+n)バイト以下</td>	 <td>可変長文字列。最大文字列長nを指定</td>
+</tr><tr>
+<td>varchar(n)</td>	 <td>(4+n)バイト以下</td>	 <td>character varying(n)の別名</td>
+</tr><tr>
+<td>text</td>	 <td>(4+n)バイト以下</td>	 <td>可変長文字列。文字列長に制限無し</td>
+
+</tr><tr>
+<td>char</td>	 <td>1 バイト</td>	 <td>1文字を記録する内部データ型</td>
+</tr><tr>
+<td>name</td>	 <td>64 バイト</td>	 <td>名前を記録する内部データ型</td>
+</tr></table>
+
+%CHAPTER 解説
+
+<p>
+PostgreSQLは3つの文字データ型をサポートしています。
+character型とcharacter varying型はSQL92,99 準拠の文字データ型です。
+text型はSQL92,99で定義されていませんが、多くのDBMSがサポートしています。
+<br>
+charやnameは関数名をあらわす変数などの型として利用します。
+</p>
+
+<p>
+・character型
+<br>
+character型は固定長の文字列を扱います。
+長さがnに満たない場合、残りの部分は空白文字列で埋めます(パディングする)。
+</p>
+
+<p>
+・character varying型, varchar型
+<br>
+character varying型は最大n文字までの可変長の文字列を扱います。
+PostgreSQL内部ではtext型と区別がなく、データの格納や操作はtext型と同じです。
+唯一、データ入力時に文字長を確認する点だけが異なります。
+</p>
+
+<p>
+・text型
+<br>
+text型は定義上、長さに制限なく文字列を扱えます(物理的制約「1行に納めることのできる最大byte数＝1[Gbyte]」は存在する)。
+</p>

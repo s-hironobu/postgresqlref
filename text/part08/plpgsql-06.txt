@@ -1,0 +1,201 @@
+%FILE internal/plpgsql-06.html
+%LASTMOD
+%KEY pgsql-plpgsql06
+
+%TITLE 動的なSQL文の実行
+
+<pre>
+[<書式>]
+
+	EXECUTE query-string [ INTO ret ]
+			(バージョン8.1から)
+
+	EXECUTE query-string
+			(バージョン8.0まで)
+
+============================================================
+パラメータ	説明
+============================================================
+query-string	実行するSQL文を記述した文字列
+ret		実行したSQL文や関数の結果を保存する変数
+============================================================
+</pre>
+
+
+[<解説>]
+
+<font color="#ff0000">
+<ul>
+<li>format()の説明</li>
+<li>quote_ident()、quote_literal()、quote_nullable()</li>
+<li>USINGの使い方</li>
+<li>INTOの使い方</li>
+<li>複数行の扱いなど、説明が嘘っぽい</li>
+</ul>
+</font>
+
+<p>
+EXECUTE文を使い、文字列として記述したSQL文を実行できます。ただし現時点では、SELECT INTO文は実行できません。
+</p>
+
+<p>
+バージョン8.0まで、EXECUTE文の制約として「実行結果を保存できない」というものがありました。バージョン8.1でINTO句がサポートされたことにより、1行だけの結果ならば保存可能となりましたが、複数行の結果は(PL/pgSQLの制約から)依然として保存できません。
+</p>
+
+<p>
+複数行の結果を保存したり、利用したい場合には、[<8-15>]のFOR IN EXECUTE LOOP文や、[<8-18>]のOPEN FOR EXECUTE文によるカーソルを利用してください。
+</p>
+
+<p>
+・INTO句<br>
+バージョン8.1から機能が拡張され、EXECUTE文にINTO句を設定することで、(結果を1行だけ返す)SELECT文や関数の実行結果を保存できます。
+</p>
+
+[<実行例>]
+
+<p>
+・動的なSQL文を実行<br>
+引数で指定したテーブルの列priceに対して、引数で指定した倍率を乗算する関数change_all_price()を定義します。
+</p>
+
+<pre> バージョン8.0以降の定義
+CREATE FUNCTION change_all_price(table_name text, fact double precision) 
+RETURNS bigint AS
+ $$
+  DECLARE
+    counter   bigint;
+    query     text;
+  BEGIN
+    query := 'UPDATE ' ||  table_name || ' SET price = price * ' || fact;  
+
+    /* 問い合わせを実行*/
+    EXECUTE query;
+    GET DIAGNOSTICS counter = ROW_COUNT;
+    RETURN counter;
+  END;
+ $$
+LANGUAGE PLpgSQL;
+</pre>
+
+<p>
+テーブルitemlistに対して、関数change_all_price()を実行した結果を示します。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM itemlist;
+ id |   name   | price | makercode 
+----+----------+-------+-----------
+  1 | pen      |   100 |        10
+  2 | notebook |   120 |        20
+  3 | eraser   |    72 |        10
+(3 rows)
+
+sampledb=# SELECT change_all_price('itemlist', 1.05);
+ change_all_price 
+------------------
+                3
+(1 row)
+
+sampledb=# SELECT * FROM itemlist;
+ id |   name   | price | makercode 
+----+----------+-------+-----------
+  1 | pen      |   105 |        10
+  2 | notebook |   126 |        20
+  3 | eraser   |    76 |        10
+(3 rows)
+</pre>
+
+<p>
+・結果を保存する<br>
+テーブル名を引数として、そのテーブルの行数を数える関数count_rows()を定義します。
+</p>
+
+<pre> バージョン8.1以降の定義
+CREATE FUNCTION count_rows(table_name text) RETURNS bigint AS
+ $$
+  DECLARE
+    ret   bigint;
+    query text;
+  BEGIN
+    query := 'SELECT count(*) FROM ' || table_name;
+
+    /* 問い合わせを実行*/
+    EXECUTE query INTO ret;
+    RETURN ret;
+  END;
+ $$
+LANGUAGE PLpgSQL;
+</pre>
+
+<p>
+関数count_rows()の実行結果を、以下に示します。
+</p>
+
+<pre>
+sampledb=# SELECT count_rows('itemlist');
+ count_rows 
+------------
+          3
+(1 row)
+
+sampledb=# SELECT count_rows('customerlist');
+ count_rows 
+------------
+          6
+(1 row)
+</pre>
+
+
+
+<pre>
+CREATE TABLE itemlist (id int, name text, price int, makercode int);
+INSERT INTO itemlist VALUES (1,'pen', 100, 10);
+INSERT INTO itemlist VALUES (2,'notebook', 120, 20);
+INSERT INTO itemlist VALUES (3,'eraser', 72, 10);
+
+
+
+CREATE OR REPLACE FUNCTION change_all_price(table_name text, fact double precision) 
+RETURNS bigint AS
+ $$
+  DECLARE
+    counter   bigint;
+  BEGIN
+    EXECUTE format('UPDATE %I SET price = price * $1', table_name) USING fact;
+    GET DIAGNOSTICS counter = ROW_COUNT;
+    RETURN counter;
+  END;
+ $$
+LANGUAGE PLpgSQL;
+
+
+
+testdb=# CREATE OR REPLACE FUNCTION change_all_price(table_name text, fact double precision)
+testdb-# RETURNS bigint AS
+testdb-#  $$
+testdb$#   DECLARE
+testdb$#     counter   bigint;
+testdb$#   BEGIN
+testdb$#     EXECUTE format('UPDATE %I SET price = price * $1', table_name) USING fact;
+testdb$#     GET DIAGNOSTICS counter = ROW_COUNT;
+testdb$#     RETURN counter;
+testdb$#   END;
+testdb$#  $$
+testdb-# LANGUAGE PLpgSQL;
+CREATE FUNCTION
+testdb=# 
+testdb=# SELECT change_all_price('itemlist', 1.05);
+ change_all_price 
+------------------
+                3
+(1 row)
+
+testdb=# SELECT * FROM itemlist;
+ id |   name   | price | makercode 
+----+----------+-------+-----------
+  1 | pen      |   105 |        10
+  2 | notebook |   126 |        20
+  3 | eraser   |    76 |        10
+(3 rows)
+
+</pre>

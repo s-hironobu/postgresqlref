@@ -1,0 +1,1073 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+ <title>PostgreSQLバイブル草稿</title>
+ <link rel="stylesheet" type="text/css" media="screen" href="./default.css"">
+</head>
+
+<body>
+
+<script language=javascript>
+<!--
+function show(inputData) {
+var objID=document.getElementById( "layer_" + inputData );
+var buttonID=document.getElementById( "category_" + inputData );
+if(objID.className=='close') {
+objID.style.display='block';
+objID.className='open';
+}else{
+objID.style.display='none';
+objID.className='close';
+}
+}
+//-->
+</script>
+
+<div id="header">
+<h1 class="title">PostgreSQLバイブル草稿</title></h1>
+    <span class="small">
+</span>
+</div>
+
+
+<hr class="full_hr">
+<table style="width: 100%;" border="0">
+ <tbody><tr>
+  <td class="menubar">
+   <div id="menubar">
+
+
+<h5>PostgreSQLとは</h5>
+
+<li><a href="./index.html">PostgreSQLとは</a><br></li>
+
+<h5>PostgreSQLの内部構造</h5>
+<ul>
+<li><a href="./internal.html">とびら</a><br></li>
+</ul>
+<ol>
+<li><a href="./internal-01.html">プロセスとメモリ構造</a><br></li>
+<li><a href="./internal-02.html">データベースクラスタ、テーブルの構造</a></li>
+<li><a href="./internal-03.html">SQLの実行</a></li>
+<li><a href="./internal-04.html">プラン処理</a></li>
+<li><a href="./internal-05.html">バッファマネージャとバックグランドライタ</a></li>
+<li><a href="./internal-06.html">トランザクションIDと同時実行制御</a></li>
+<li><a href="./internal-07.html">VACUUM</a></li>
+<li><a href="./internal-08.html">HOTとIndex Only Scan</a></li>
+<li><a href="./internal-09.html">WAL(Write Ahead Logging)</a></li>
+<li><a href="./internal-10.html">アーカイブログとPITR</a></li>
+<li><a href="./internal-11.html">レプリケーション(Streaming ReplicationとHotStandby)</a></li>
+</ol>
+
+
+<h5>PostgreSQLサーバ管理</h5>
+
+<ul>
+<li><a href="./admin.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[PostgreSQLの基礎]<br>
+<li><a href="./admin-01.html">オブジェクト、データベース、スキーマ</a><br></li>
+<li><a href="./admin-02.html">システムカタログ</a><br></li>
+<li><a href="./admin-03.html">文字コードの扱い</a><br></li>
+
+
+[インストールと起動、停止]<br>
+<li><a href="./admin-04.html">インストール</a><br></li>
+<li><a href="./admin-05.html">データベースシステムの初期化 initdb</a><br></li>
+<li><a href="./admin-06.html">PostgreSQLサーバの起動/停止</a><br></li>
+
+
+[認証とアクセス制御]<br>
+<li><a href="./admin-07.html">認証とアクセス制御</a><br></li>
+<li><a href="./admin-08.html">クライアントのアクセス制御</a><br></li>
+<li><a href="./admin-09.html">権限について</a><br></li>
+<li><a href="./admin-10.html">ロールの作成と権限制御</a><br></li>
+
+<HR>
+
+[バックアップとアップグレード]<br>
+<li><a href="./admin-11.html">バックアップとアップグレード</a><br></li>
+<li><a href="./admin-12.html">ダンプとリストア</a><br></li>
+<li><a href="./admin-13.html">アップグレード</a><br></li>
+
+[保守、監視とチューニング]<br>
+<li><a href="./admin-14.html">保守、監視とチューニング</a><br></li> 
+<li><a href="./admin-15.html">稼働統計情報</a><br></li>
+<li><a href="./admin-16.html">実行ログの取得</a><br></li>
+<li><a href="./admin-17.html">モニタリングツール</a><br></li>
+<li><a href="./admin-18.html">ログと統計情報の分析</a><br></li>
+<li><a href="./admin-19.html">パラメータチューニング</a><br></li>
+
+[耐障害性、高可用性]<br>
+<li><a href="./admin-20.html">耐障害性、高可用性</a><br></li>
+<li><a href="./admin-21.html">アーカイブログとPITR</a><br></li>
+<li><a href="./admin-22.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-23.html">レプリケーションの故障対応</a><br></li>
+
+
+[FDW]<br>
+<li><a href="./admin-24.html">FDW</a><br></li>
+<li><a href="./admin-25.html">postgres_fdw</a><br></li>
+</ol>
+
+[追加の文章(未完)]<br>
+<li><a href="./admin-26.html">ロギング</a><br></li>
+<li><a href="./admin-27.html">統計情報</a><br></li>
+<li><a href="./admin-28.html">モニタリング</a><br></li>
+<li><a href="./admin-29.html">メンテナンス</a><br></li>
+</ol>
+
+
+<h5>設定パラメータ</h5>
+
+<ol>
+<li><a href="./param-01.html">postgresql.confの設定</a><br></li>
+<li><a href="./param-02.html">ファイルの場所</a><br></li>
+<li><a href="./param-03.html">接続と認証</a><br></li>
+<li><a href="./param-04.html">資源の消費</a><br></li>
+<li><a href="./param-05.html">WAL</a><br></li>
+<li><a href="./param-06.html">レプリケーション</a><br></li>
+<li><a href="./param-07.html">問い合わせ計画</a><br></li>
+<li><a href="./param-08.html">エラー報告とログ取得</a><br></li>
+<li><a href="./param-09.html">稼働統計情報</a><br></li>
+<li><a href="./param-10.html">AUTOVACUUM</a><br></li>
+<li><a href="./param-11.html">クライアント接続デフォルト</a><br></li>
+<li><a href="./param-12.html">ロック管理/バージョンとプラットフォーム互換性</a><br></li>
+</ol>
+
+
+<h5>psql</h5>
+<ul>
+<li><a href="./psql.html">・対話型インタフェースpsqlの使い方</a><br></li>
+</ul>
+
+<ol>
+<li><a href="./psql-01.html">psqlとは</a><br></li>
+<li><a href="./psql-02.html">PostgreSQLサーバとの接続/切断/再接続</a><br></li>
+<li><a href="./psql-03.html">データベース一覧表示</a><br></li>
+<li><a href="./psql-04.html">コマンドラインからSQL実行</a><br></li>
+<li><a href="./psql-05.html">バッチファイルの実行(メタコマンド)</a><br></li>
+<li><a href="./psql-06.html">情報表示</a><br></li>
+<li><a href="./psql-07.html">表示の制御</a><br></li>
+<li><a href="./psql-08.html">ラージオブジェクトの扱い</a><br></li>
+<li><a href="./psql-09.html">データのコピー</a><br></li>
+<li><a href="./psql-10.html">その他のメタコマンド</a><br></li>
+
+</ol>
+
+
+<h5>SQL</h5>
+
+<ul>
+<li><a href="./sql.html">・とびら</a><br></li>
+</ul>
+
+<ol>
+[SQL]<br>
+
+<li><a href="./sql-01.html">SQL語彙</a><br></li>
+<li><a href="./sql-02.html">テーブルスペースの作成/削除/変更</a><br></li>
+<li><a href="./sql-03.html">データベースの作成/変更/削除</a><br></li>
+<li><a href="./sql-04.html">テーブルの作成</a><br></li>
+<li><a href="./sql-05.html">外部キー</a><br></li>
+<li><a href="./sql-06.html">オブジェクトの継承/LIKE句</a><br></li>
+<li><a href="./sql-07.html">問い合わせ結果から新しいテーブルを作成</a><br></li>
+<li><a href="./sql-08.html">テーブルの削除</a><br></li>
+<li><a href="./sql-09.html">スキーマの定義/変更/削除</a><br></li>
+
+<li><a href="./sql-10.html">ALTER TABLE(1)</a><br></li>
+<li><a href="./sql-11.html">ALTER TABLE(2)</a><br></li>
+<li><a href="./sql-12.html">ALTER TABLE(3)</a><br></li>
+
+<li><a href="./sql-13.html">ロール</a><br></li>
+<li><a href="./sql-14.html">GRANT REVOKE(1)</a><br></li>
+<li><a href="./sql-15.html">GRANT REVOKE(2)</a><br></li>
+<li><a href="./sql-16.html">INSERT</a><br></li>
+<li><a href="./sql-17.html">SELECT</a><br></li>
+<li><a href="./sql-18.html">FROM句</a><br></li>
+<li><a href="./sql-19.html">WHERE句</a><br></li>
+
+<li><a href="./sql-20.html">WINDOW句、OVER句</a><br></li>
+<li><a href="./sql-21.html">共通テーブル式(CTE)</a><br></li>
+
+
+<li><a href="./sql-22.html">グループ化</a><br></li>
+<li><a href="./sql-23.html">DISTINCT句</a><br></li>
+<li><a href="./sql-24.html">テーブル結合</a><br></li>
+<li><a href="./sql-25.html">問い合わせの結合</a><br></li>
+<li><a href="./sql-26.html">ORDER BY</a><br></li>
+<li><a href="./sql-27.html">LIMIT OFFSET</a><br></li>
+<li><a href="./sql-28.html">FOR UPDATE/ FOR SHARE</a><br></li>
+<li><a href="./sql-29.html">サブクエリ</a><br></li>
+<li><a href="./sql-30.html">CASE式</a><br></li>
+<li><a href="./sql-31.html">VALUES</a><br></li>
+<li><a href="./sql-32.html">UPDATE</a><br></li>
+<li><a href="./sql-33.html">DELETE</a><br></li>
+<li><a href="./sql-34.html">TRUNCATE</a><br></li>
+
+<li><a href="./sql-35.html">インデックス</a><br></li>
+
+<li><a href="./sql-36.html">VIEW</a><br></li>
+<li><a href="./sql-37.html">シーケンス</a><br></li>
+<li><a href="./sql-38.html">トリガ</a><br></li>
+<li><a href="./sql-39.html">カーソル</a><br></li>
+<li><a href="./sql-40.html">プリペアステートメント</a><br></li>
+<li><a href="./sql-41.html">トランザクション</a><br></li>
+<li><a href="./sql-42.html">セーブポイント</a><br></li>
+<li><a href="./sql-43.html">2相コミット</a><br></li>
+<li><a href="./sql-44.html">LOCK</a><br></li>
+<li><a href="./sql-45.html">SET/SHOW/RESET</a><br></li>
+<li><a href="./sql-46.html">VACUUM</a><br></li>
+<li><a href="./sql-47.html">ANALYZE</a><br></li>
+<li><a href="./sql-48.html">EXPLAIN</a><br></li>
+<li><a href="./sql-49.html">COPY/IMPORT</a><br></li>
+<li><a href="./sql-50.html">COPY/EXPORT</a><br></li>
+<li><a href="./sql-51.html">関数定義</a><br></li>
+<li><a href="./sql-52.html">エクステンション</a><br></li>
+<li><a href="./sql-53.html">外部サーバの定義、変更、削除</a><br></li>
+<li><a href="./sql-54.html">外部サーバのユーザマップ定義、変更、削除</a><br></li>
+<li><a href="./sql-55.html">外部テーブルの定義、変更、削除</a><br></li>
+<hr>
+<li><a href="./sql-56.html">イベントトリガ</a><br></li>
+<li><a href="./sql-57.html">行レベルセキュリティ</a><br></li>
+
+<hr>
+<li><a href="./sql-60.html">新しい機能</a><br></li>
+</ol>
+
+
+<h5>関数</h5>
+
+[関数]<br>
+<ul>
+<li><a href="./function.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[データ型]<br>
+<li><a href="./type-01.html">データ型</a><br></li>
+<li><a href="./type-02.html">数値データ型</a><br></li>
+<li><a href="./type-03.html">文字データ型</a><br></li>
+<li><a href="./type-04.html">日付/時刻データ型</a><br></li>
+<li><a href="./type-05.html">日付/時刻表示形式とタイムゾーンの設定</a><br></li>
+<li><a href="./type-06.html">ブーリアン型</a><br></li>
+<li><a href="./type-07.html">ビット列データ型</a><br></li>
+<li><a href="./type-08.html">疑似データ型</a><br></li>
+<li><a href="./type-09.html">バイナリ列データ型</a><br></li>
+<li><a href="./type-10.html">Range型</a><br></li>
+<li><a href="./type-11.html">配列</a><br></li>
+<hr>
+<li><a href="./type-12.html">JSON型</a><br></li>
+
+<hr>
+[演算子]<br>
+<li><a href="./ope-01.html">演算子</a><br></li>
+<li><a href="./ope-02.html">論理演算子</a><br></li>
+<li><a href="./ope-03.html">比較演算子</a><br></li>
+<li><a href="./ope-04.html">算術演算子</a><br></li>
+<li><a href="./ope-05.html">文字列演算子</a><br></li>
+<li><a href="./ope-06.html">パターンマッチング</a><br></li>
+<li><a href="./ope-07.html">日付/時刻演算子</a><br></li>
+<li><a href="./ope-08.html">Range型演算子</a><br></li>
+<hr>
+<li><a href="./ope-09.html">JSON型演算子</a><br></li>
+
+
+<hr>
+[関数]<br>
+<li><a href="./func-01.html">関数</a><br></li>
+<li><a href="./func-02.html">算術関数</a><br></li>
+<li><a href="./func-03.html">集約関数/統計関数</a><br></li>
+<li><a href="./func-04.html">文字列関数</a><br></li>
+<li><a href="./func-05.html">日付・時刻関数</a><br></li>
+<li><a href="./func-06.html">型変換関数</a><br></li>
+<li><a href="./func-07.html">Range型関数</a><br></li>
+<li><a href="./func-08.html">Window関数</a><br></li>
+<li><a href="./func-09.html">セッション情報関数</a><br></li>
+<li><a href="./func-10.html">アクセス権限とスキーマ可視性照会関数</a><br></li>
+<li><a href="./func-11.html">データベースオブジェクト関数</a><br></li>
+<li><a href="./func-12.html">バックアップとリカバリ制御関数</a><br></li>
+
+<li><a href="./func-13.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-15.html">構成設定関数</a><br></li>
+<li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-17.html">レプリケーションSQL関数</a><br></li>
+
+<hr>
+<li><a href="./func-18.html">JSON関数</a><br></li>
+
+</ol>
+
+<!--
+[削除するもの]<br>
+<li><a href="./type-07.html">幾何データ型</a><br></li>
+<li><a href="./type-08.html">ネットワークアドレス型型</a><br></li>
+<li><a href="./ope-08.html">幾何演算子</a><br></li>
+<li><a href="./ope-09.html">ネットワーク演算子</a><br></li>
+<li><a href="./func-06.html">幾何関数</a><br></li>
+<li><a href="./func-07.html">ネットワークアドレス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-16.html">トランザクションID関数</a><br></li>
+<li><a href="./func-17.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-18.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-19.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-20.html">勧告的ロック用関数</a><br></li>
+-->
+
+<h5>PL/pgSQL</h5>
+
+<ol>
+<li><a href="./plpgsql.html">結果の返し方</a><br></li>
+<li><a href="./plpgsql-01.html">ストアドプロシージャ</a><br></li>
+<li><a href="./plpgsql-02.html">ストアドプロシージャの定義</a><br></li>
+<li><a href="./plpgsql-03.html">変数宣言と値の代入</a><br></li>
+**** まとめる >>
+<li><a href="./plpgsql-04.html">SELECT INTO文</a><br></li>
+<li><a href="./plpgsql-05.html">結果ステータスの取得</a><br></li>
+<li><a href="./plpgsql-06.html">動的なSQL文の実行</a><br></li>
+<< ここまで****
+<li><a href="./plpgsql-07.html">IF 条件分岐</a><br></li>
+<li><a href="./plpgsql-08.html">ループ処理</a><br></li>
+*** >>>
+<li><a href="./plpgsql-09.html">RETURN</a><br></li>
+<<< ***
+<li><a href="./plpgsql-10.html">ループ処理　LOOP</a><br></li>
+<li><a href="./plpgsql-11.html">ループ処理　WHILE</a><br></li>
+<li><a href="./plpgsql-12.html">ループ処理　FOR </a><br></li>
+<li><a href="./plpgsql-13.html">ループ処理 (複数行の問い合わせ結果を扱う)</a><br></li>
+<li><a href="./plpgsql-14.html">カーソルの利用</a><br></li>
+<li><a href="./plpgsql-15.html">カーソル変数の宣言</a><br></li>
+<li><a href="./plpgsql-16.html">カーソルのオープンとクローズ	OPEN / CLOSE</a><br></li>
+<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得		FETCH</a><br></li>
+<li><a href="./plpgsql-18.html">カーソルを使った例</a><br></li>
+<li><a href="./plpgsql-19.html">例外</a><br></li>
+*** >>>
+<li><a href="./plpgsql-21.html">CASE</a><br></li>
+<li><a href="./plpgsql-22.html">FOREACH</a><br></li>
+<<< ***
+</ol>
+
+
+<h5>Appendix(付録)</h5>
+
+<ol>
+<li><a href="./app-01.html">pgpool-II</a><br></li>
+<li><a href="./app-02.html">Pacemaker</a><br></li>
+</ol>
+
+
+<h5>おまけ:ネット公開(ページ数の関係で書籍には載せない)</h5>
+
+<ol>
+[pgpool]<br>
+<li><a href="./ha-06.html">pgpool-II セットアップ</a><br></li>
+<li><a href="./ha-07.html">pgpool-II レプリケーションモード</a><br></li>
+<li><a href="./ha-08.html">pgpool-II マスタースレーブモード</a><br></li>
+[Pacemaker]<br>
+<li><a href="./ha-10.html">Pacemaker</a><br></li>
+</ol>
+
+</div>
+<hr class="full_hr">
+</div>
+
+  </td>
+  <td valign="top">
+   <div id="body">
+
+<h2>アーカイブログとPITR(Point In Time Recovery)</h2>
+
+<p>
+バージョン8.0からサポートされたPITR(Point In Time Recovery)は、
+ある時点でのデータベースクラスタとそれ以降のアーカイブログを使って、別サーバ上でデータベースを再構築する機能です。
+</p>
+
+<p>
+以下、アーカイブログについて説明した後、バックアップの取得方法とリカバリの機構を解説します。
+</p>
+
+<div class="jumpmenu"></div><h3>アーカイブログとWALの切り替え</h3>
+
+<p>
+アーカイブログは、物理的にはWALログそのものです。
+</p>
+
+<table border=1>
+<caption>[<図2-57>] WALログとアーカイブログ</caption>
+<tr><td>
+<left>
+<img src="./fig-2-10-01.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<p>
+WALログは、
+データベースクラスタのpg_xlogディレクトリに予めいくつか用意された16[Mbyte]のファイルです。
+</p>
+
+<p>
+通常、WALログの全領域にデータを書き込むと、書き込み先が次のWALログに換わります[<脚注29>]。
+書き込み終了したWALログは(renameで)ファイル名が変更され、次の書き込みに備えます。
+</p>
+
+<p>
+アーカイブログは、書き込み終ったWALログを別の領域にコピーしたもので、
+WALログそのものはコピー後にファイル名を変更します。
+<br>
+WALログをどこにコピーするかは、設定パラメータarchive_commandに指定します。
+</p>
+
+
+<blockquote><table BORDER="1"><tr><td>脚注29</td><td>
+<p>
+設定パラメータwal_keep_segmentsで、pg_xlogに残すWALログセグメント数を設定できます。
+<br>
+デフォルトでは0で直ちにファイル名を変更しますが、
+整数値を設定した場合はその数だけ過去のWALログを残します。
+よって、pg_xlog以下のWALログ数も増えます。
+[<3-22>]の[<コラム3-6>]も参照してください。
+<br>
+なお、pg_xlog以下のWALログセグメント数は運用状況によって変動します。最大数はバージョンによって異なります。
+バージョン9.2では(3*checkpoint_segments+1)です。詳細は公式ドキュメントを参照してください。
+</p>
+</td></tr></table></blockquote>
+
+
+
+
+<div class="jumpmenu"></div><h4>WALログ切り替えのタイミング</h4>
+
+<p>
+WALログが切り替わるタイミングは、次の3つです。
+</p>
+
+<ol>
+<li>WALログを使いきったとき</li>
+<li>関数pg_switch_xlog()を実行したとき</li>
+<li>アーカイブログモード(archive_mode=on)で、設定パラメータarchive_timeoutに設定した時間が過ぎたとき</li>
+</ol>
+
+<p>
+関数pg_switch_xlog()の実行やarchive_modeの設定で、明示的にWALログを切り替えることができます。
+どちらもアーカイブログの運用管理に関係する機能です。
+</p>
+
+
+
+<div class="jumpmenu"></div><h3>ベースバックアップ</h3>
+
+<p>
+データベースクラスタのスナップショットを「ベースバックアップ」といいます。
+ベースバックアップをとる手順は次のとおりです。
+</p>
+
+<ol>
+<li>関数pg_start_backup()を実行</li>
+<p>
+ベースバックアップをとるための下準備を行う。
+</p>
+
+<li>データベースクラスタ領域を他のサーバやストレージにコピー</li>
+<p>
+scpなど任意のコマンドで、データベースクラスタ領域を別サーバ上や別ストレージにすべてコピーする。
+</p>
+
+<li>関数pg_stop_backup()を実行</li>
+<p>
+関数pg_start_backup()で行った下準備の後始末を行う。
+</p>
+
+</ol>
+
+<p>
+[<図2-58>]にベースバックアップとリカバリの概要を示します。
+</p>
+
+<table border=1>
+<caption>[<図2-58>] ベースバックアップの取得とリカバリ</caption>
+<tr><td>
+<left>
+<img src="./fig-2-10-02.jpg"><br>
+</left>
+</td></tr></table>
+
+<p>
+PostgreSQLは<u>ベースバックアップのコピー中でも、データベースの検索や更新が可能</u>です。もちろん、テーブルのLOCKなども不要です。
+詳細は後述しますが、巨大なデータ領域のコピーに長い時間がかかっても、PITRには何の影響もありません。
+</p>
+
+<p>
+しばらく運用した後、保存されたアーカイブログもすべて他のサーバやストレージにコピーします。
+</p>
+
+
+<p>
+PITRで再構築するサーバでは、ベースバックアップに対してアーカイブログを再実行(REDO)しながらリカバリします。
+[<図2-58>]の例では、時刻Tまでの更新を含むアーカイブログ(WAL_2)を使うので、リカバリ側のサーバは時刻Tまでリカバリモードで再構築されます。再構築が完了すると、その後は通常の稼働モードに移行します。
+</p>
+
+
+
+<p>
+以下、ベースバックアップ取得に必須の関数であるpg_start_backup()とpg_stop_backup()の動作を説明します。
+</p>
+
+<div class="jumpmenu"></div><h4>関数pg_start_backup()</h4>
+
+<p>
+関数pg_start_backup()はベースバックアップからリカバリするための下準備を行います。
+以下、関数pg_start_backup()の動作を示します([<脚注30>])。
+</p>
+
+<blockquote><table BORDER="1"><tr><td>脚注30</td><td>
+関数pg_start_backup()はsrc/backend/access/transam/xlog.cで定義されています。
+</td></tr></table></blockquote>
+
+<ol>
+<li>WALログ切り替え(バージョン8.4から)</li>
+ <p>
+関数RequestXlogSwitch()でWALログの切り替えと、アーカイブログ領域へのコピーを行います。
+ </p>
+
+<li>CHECKPOINT実行</li>
+ <p>
+共有バッファ上のdirtyページをすべてデータベースクラスタに書き込みます。
+また、このCHECKPOINTはリカバリの開始地点であるREDOポイントを、明示的に打ち込む役割も果たします。
+ </p>
+
+<li>backup_label生成</li>
+
+<p>
+ベースバックアップ取得の基礎データを記録したファイルbackup_labelを作成します。
+リカバリする際は、このbackup_labelからリカバリのREDOポイントを得ます。
+</p>
+
+</ol>
+
+<p>
+backup_labelに記録するデータを以下に示します。
+</p>
+
+ <table border=1><tr bgcolor="#cccccc">
+ <th>データ</th>	<th>説明</th>
+ </tr><tr>
+ <td>START WAL LOCATION</td>	<td>関数pg_start_backup()を実行したときのWALログのLSN</td>
+ </tr><tr>
+ <td>CHECKPOINT LOCATION</td>	<td>上で実行したCHECKPOINTのWALログを書き込んだLSN。通常のリカバリにおける、pg_controlファイルのlastCheckPointに当たる</td>
+ </tr><tr>
+ <td>BACKUP METHOD</td>	<td>ベースバックアップを取得する方法。関数pg_start_backup()かツールpg_basebackupか</td>
+ </tr><tr>
+ <td>START TIME</td>	<td>関数pg_start_backup()を実行した時刻</td>
+ </tr><tr>
+ <td>LABEL</td>	<td>関数pg_start_backup()で指定したラベル</td>
+ </tr></table>
+
+
+<p>
+実際のbackup_labelファイルを示します。
+</p>
+
+<pre>
+postgres> cat /usr/local/pgsql/data/backup_label
+START WAL LOCATION: 0/6000020 (file 000000010000000000000006)
+CHECKPOINT LOCATION: 0/6000050
+BACKUP METHOD: pg_start_backup
+BACKUP FROM: pg_start_backup
+START TIME: 2011-03-11 11:00:00 JST
+LABEL: Weekly Backup
+</pre>
+
+
+<p>
+関数pg_start_backup()の肝は、CHECKPOINTによる明示的なREDOポイントの設定と、backup_labelファイルの生成です。
+<br>
+これらによって、別サーバ上でベースバックアップを基にアーカイブログを再実行(REDO)する手筈が整います。
+</p>
+
+
+<div class="jumpmenu"></div><h4>関数pg_stop_backup()</h4>
+
+<p>
+関数pg_stop_backup()はpg_start_backup()の後始末を行います。
+以下、関数pg_stop_backup()の動作を示します([<脚注31>])。
+</p>
+
+<blockquote><table BORDER="1"><tr><td>脚注31</td><td>
+関数pg_stop_backup()はsrc/backend/access/transam/xlog.cで定義されています。
+</td></tr></table></blockquote>
+
+<ol>
+<li>バックアップ終了のWALログを書き込む</li>
+<li>WALログ切り替え</li>
+関数RequestXlogSwitch()でWALログの切り替えと、アーカイブログ領域へのコピーを行います。
+<li>バックアップヒストリーファイルを作成</li>
+<p>
+バックアップヒストリーファイルの命名規則を次に示します。内容はbackup_labelにpg_stop_backup()関数の実行時刻を追加したものです。
+</p>
+
+[<バックアップヒストリーファイルの命名規則>]
+<pre>
+WALログセグメント. (ベースバックアップを開始した)オフセット値 . 'backup'
+</pre>
+
+<p>
+バックアップヒストリーファイルをみれば、どのタイミングでベースバックアップがとられたかがわかります。
+</p>
+
+<li>backup_label削除</li>
+<p>
+backup_labelはベースバックアップからリカバリする際に必要なファイルなので、元のデータベースクラスタには不要です。
+よって、削除します。
+</p>
+</ol>
+
+
+<div class="jumpmenu"></div><h3>PITR (Point In Time Recovery)とTimeLine</h3>
+
+<p>
+PITRはベースバックアップに対して、アーカイブログを再実行(REDO)することで行います。
+</p>
+
+<p>
+PostgreSQLは起動時、データベースクラスタにbackup_labelとrecovery.confを見つけると、PITRモードに入ります。
+<br>
+通常のリカバリとの違いは次の2点です。
+</p>
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th></th>	<th>通常のリカバリ　　　　　　　　　</th>	<th>PITR</th>
+</tr><tr>
+<td>どこからログを読み込むか</td>	<td>pg_xlog以下のWALログ</td>	<td>recovery_commandでアーカイブログをcopyして使う</td>
+</tr><tr>
+<td>何からREDOポイントを知るか</td>	<td>pg_controlファイル</td>	<td>backup_label</td>
+</tr></table>
+
+<br>
+
+<p>
+以下、リカバリの概略を説明します。
+</p>
+
+<ol>
+<li>backup_labelを読み込む</li>
+<p>
+関数read_backup_label()がbackup_labelから
+"START WAL LOCATION"と"CHECKPOINT LOCATION"の値を読み込みます([<脚注32>])。
+</p>
+
+<blockquote><table BORDER="1"><tr><td>脚注32</td><td>
+<p>
+関数read_backup_label()はsrc/backend/access/transam/xlog.cで定義されています。
+</p>
+</td></tr></table></blockquote>
+
+
+
+<li>recovery.confを読み込む</li>
+<p>
+recovery.confには各種設定パラメータによってアーカイブファイルを読み込む方法や、
+どこまでリカバリするかなどを記述します。
+<br>
+バージョンが進む毎に設定パラメータも増えていますが、
+最も基本的なのは次の2種類です。
+</p>
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>restore_command</td>	<td>アーカイブファイルを読み込む方法を記述する。</td>
+</tr><tr>
+<td>recovery_target_name,<br>recovery_target_time, <br>recovery_target_xid</td>	<td valign=top>リカバリを終了して、通常稼働に移行するトリガを設定。[<3-21>]参照。</td>
+</tr></table><br>
+
+
+
+<li>リカバリを開始する</li>
+<p>
+backup_labelから得たCHECKPOINTのLSNでREDOポイントを求め、
+該当するアーカイブログから再実行(REDO)を始めます。
+<br>
+リカバリ機構は通常のリカバリと同様ですが、
+パラメータrecovery_target_timeやrecovery_target_xidで、リカバリする範囲を指定できます。
+<br>
+どのアーカイブログをどこまで読み込むかなど、具体的なリカバリ手順の詳細は後述します。
+</p>
+
+<p>
+リカバリが完了すると、WALログを保存するディレクトリpg_xlogと(設定していれば)アーカイブログを保存するディレクトリに
+"00000002.history"というファイルが置かれます。
+このファイル(historyファイル)の役割はリカバリ手順と共に説明します。
+</p>
+
+</ol>
+
+
+
+<br>
+
+<p>
+一般にベースバックアップのコピーには長い時間が費やされます。
+最初にコピーしたテーブルと最後にコピーしたテーブルは、
+コピーされた時刻にかなりの時間差が生じる場合もあります。
+<br>
+しかし、リカバリを開始するとアーカイブログの再実行で必ずバックアップブロックが上書きされ、
+すべてのブロックはpg_start_backup()実行直後の時刻にまで巻戻ってからリカバリされます。
+<br>
+よって、ベースバックアップのコピーにどんなに時間がかかっても、どんな順序でテーブルデータをコピーしても、問題なくリカバリできます。
+</p>
+
+<div class="jumpmenu"></div><h4>TimeLineIDとリカバリの範囲指定</h4>
+
+<p>
+PostgreSQLは「TimeLineID」という概念で、ベースバックアップを取られた元のシステムと、リカバリ後のシステムを区別します。
+TimeLineIDは1から始まる整数で、initdbで生成するデータベースクラスタのTimeLineIDは1です。
+</p>
+
+<p>
+[<図2-59>]の例では、元のデータベースクラスタのTimeLineIDは1、リカバリ後新たに稼働するデータベースクラスタのTimeLineIDは2です。
+そしてリカバリ後は、元のシステムと論理的に別システムとして稼働しつづけます。
+</p>
+
+
+<table border=1>
+<caption>[<図2-59>] リカバリとTimeLineIDの関係</caption>
+<tr><td>
+<left>
+<img src="./fig-2-10-03.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<p>
+PostgreSQLは(前記のように)recovery.confにリカバリ範囲を指定できます。
+例えばrecovery_target_timeに時刻を設定すれば、
+その時刻までリカバリして、その後は論理的に別のデータベースシステムとして稼働します。
+[<図2-60>]はrecovery_target_timeに"12:00:00"を指定した例です。
+</p>
+
+
+<table border=1>
+<caption>[<図2-60>] リカバリ範囲の指定例</caption>
+<tr><td>
+<left>
+<img src="./fig-2-10-04.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<p>
+[<図2-60>]のリカバリについて、WALログセグメントとTimeLineIDに注目して説明し直します([<図2-61>])。
+</p>
+
+
+<table border=1>
+<caption>[<図2-61>] TimeLineIDとWALログセグメントのファイル名</caption>
+<tr><td>
+<left>
+<img src="./fig-2-10-05.jpg"><br>
+</left>
+</td></tr></table>
+
+<p>
+TimeLineID=1のアーカイブログを使ってリカバリが終了すると、
+再構築されたデータベースシステムのTimeLineIDは+1されて2になります。
+そしてTimeLineIDに応じたWALログセグメント(この例では0000000<font color="#0000ff">2</font>000000000000000<font color="#0000ff">7</font>)が用意され、書き込みが始まります。
+</p>
+
+<br>
+
+<div class="jumpmenu"></div><h3>historyファイルとリカバリ手順の詳細</h3>
+
+
+<div class="jumpmenu"></div><h4>historyファイル</h4>
+
+<p>
+リカバリが完了するとpg_xlog以下(およびアーカイブログ領域)に"00000002.history"のような名前のファイルが置かれます。
+ここで、ファイル名の8桁の数値はTimeLineIDです。
+便宜上、これらを「historyファイル」と呼ぶことにします。
+</p>
+
+[< historyファイルの命名規則>]
+<pre>
+	"8桁のTimeLineID".history
+</pre>
+
+
+<p>
+historyファイルには、そのTimeLineIDのデータベースクラスタをリカバリした際の履歴を記録します。
+<br>
+以下に実例と、ファイルフォーマットを示します([表2-07]参照)。
+</p>
+
+<pre>
+postgres> cat /home/postgres/archivelogs/00000002.history
+1       000000010000000000000007        before 2011-03-11 12:00:00.861324+09
+</pre>
+
+
+<table border=1>
+<caption>[<表2-07>] historyファイルのフォーマット</caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>	<th>説明</th>
+</tr><tr>
+<td>リカバリ元のTimeLineID</td>	<td>ベースバックアップを取得したデータベースクラスタのTimeLineID。上の例では"1"。</td>
+</tr><tr>
+<td>アーカイブログ名</td>	<td>(TimeLineID毎の)リカバリに使った最後のアーカイブログ名。</td>
+</tr><tr>
+<td>リカバリターゲット</td>
+<td>パラメータ(recovery_target_name、recovery_target_time、recovery_target_xid)でリカバリ範囲を指定した場合、それを書き込む。
+設定しなかった場合、"no recovery target specified"を書き込む。
+</td>
+</tr></table>
+
+<br>
+
+<p>
+上に示したhistoryファイル"00000002.history"から次のことが分かります。
+</p>
+
+<blockquote>
+TimeLineID = 2のデータベースクラスタは:
+<ul>
+<li>TimeLineID = 1のデータベースクラスタを基に、</li>
+<li>アーカイブログ000000010000000000000006と000000010000000000000007を使って</li>
+<li>時刻"2011-03-11 12:00:00.861324+09"直前までリカバリしたもの</li>
+</ul>
+である。
+</blockquote>
+
+
+
+
+<p>
+リカバリ後、最初のアーカイブが保存された状態のアーカイブログ領域を示します。
+<br>
+ここでは、アーカイブログの読み込みと書き出しを同じディレクトリ/home/postgres/archivelogsに指定しています。
+具体的なセットアップ方法は[<3-21>]を参照してください。
+</p>
+
+<pre>
+postgres> ls /home/postgres/archivelogs/
+000000010000000000000006                  000000010000000000000009
+000000010000000000000006.00000020.backup  00000002.history
+000000010000000000000007                  000000020000000000000007
+000000010000000000000008
+</pre>
+
+
+<p>
+この例では、TimeLineID=1のアーカイブログは合計4つあります。
+パラメータrecovery_target_timeに指定した時刻に応じて、リカバリに使用するアーカイブログは異なります。
+<br>
+また、
+historyファイル00000002.historyとTimeLineID=2の
+最初のアーカイブログ000000020000000000000007も保存されています。
+</p>
+
+
+<div class="jumpmenu"></div><h4>リカバリ手順の詳細</h4>
+
+<p>
+PITRはTimeLineIDを制御して、
+試行錯誤しながらリカバリできます。
+</p>
+
+<p>
+例えば[<図2-62>]に示すように、
+先のTimeLineID=2のリカバリを破棄して、
+もう一度TimeLineID=1を遡り、時刻13:00までリカバリしなおすことができます。
+</p>
+
+<table border=1>
+<caption>[<図2-62>] TimeLineID=1を遡り、13:00までリカバリする</caption>
+<tr><td>
+<left>
+<img src="./fig-2-10-06.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<p>
+データベースクラスタを削除して、改めてベースバックアップを展開し、次に示すrecovery.confで再起動します。
+<br>
+ここで、アーカイブログ領域は何もする必要がないことに注意してください。
+TimeLineID=2のhistoryファイルやアーカイブログも、そのまま保存しておきます。
+</p>
+
+[< recovery.confの設定例>]
+<pre>
+restore_command = 'cp /home/postgres/archivelogs/%f %p'
+
+# リカバリする範囲を指定
+recovery_target_time = '2011-03-11 13:00:00 JST'
+
+# TimeLineID = 1 を遡ってリカバリする
+recovery_target_timeline = 1
+</pre>
+
+<p>
+リカバリプロセスを説明します。
+<br>
+"recovery_target_timeline=1"なので、
+TimeLineID=1のアーカイブログからリカバリします。
+今回はrecovery_target_timeに時刻を指定したので、その時刻直前までリカバリします。
+</p>
+
+<p>
+新規のTimeLineIDは、アーカイブログ領域のhistoryファイルから決定します。
+historyファイルが存在しなければTimeLineID=2、
+存在するならば最も大きなTimeLineIDに1を加えたものになります。
+<br>
+この例では、00000002.historyが最も大きなTimeLineIDのhistoryファイルなので、
+新規のTimeLineIDは3になります(3=2+1)。
+</p>
+
+<p>
+この設定でリカバリが完了すると、
+TimeLineID=3のhistoryファイル"00000003.history"が作られます。
+</p>
+
+<pre>
+postgres> cat /home/postgres/archivelogs/00000003.history
+1       000000010000000000000008        before 2011-03-11 13:00:00.652314+09
+</pre>
+
+
+
+<br>
+<br>
+
+<p>
+次に、3度目のリカバリを行います([<図2-63>])。
+今度はTimeLineID=3について、時刻14:46:00までリカバリします。
+</p>
+
+
+<table border=1>
+<caption>[<図2-63>] TimeLineID=3を遡り、14:46までリカバリする</caption>
+<tr><td>
+<left>
+<img src="./fig-2-10-07.jpg"><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<p>
+データベースクラスタを削除して、改めてベースバックアップを展開し直し、
+次のrecovery.confを配置します。
+</p>
+
+[< recovery.confの設定例>]
+<pre>
+restore_command = 'cp /home/postgres/archivelogs/%f %p'
+
+# リカバリする範囲を指定
+recovery_target_time = '2011-03-11 14:46:00 JST'
+
+# TimeLineID = 3 の履歴を遡ってリカバリする
+recovery_target_timeline = 3 
+</pre>
+
+<p>
+リカバリ前のアーカイブログ領域を以下に示します。
+3つのTimeLineIDのアーカイブログやhistoryファイルなどが混在しています。
+</p>
+
+<pre>
+postgres> ls /home/postgres/archivelogs/
+000000010000000000000006                  000000020000000000000008
+000000010000000000000006.00000020.backup  000000020000000000000009
+000000010000000000000007                  00000003.history
+000000010000000000000008                  000000030000000000000008
+000000010000000000000009                  000000030000000000000009
+00000002.history                          00000003000000000000000A
+000000020000000000000007                  00000003000000000000000B
+</pre>
+
+
+<p>
+リカバリプロセスは次のようになります。
+</p>
+
+<ol>
+<li>historyファイル"00000003.history"を捜す</li>
+<p>
+"recovery_target_timeline=3"なので、
+アーカイブログ領域のhistoryファイル"00000003.history"を捜す。
+</p>
+
+<li>"00000003.history"からリカバリ条件を得る</li>
+<p>
+TimeLineIDとリカバリに使用するアーカイブログ、およびリカバリする範囲など、リカバリに関する情報を得る。
+</p>
+
+<pre>
+postgres> cat /usr/local/pgsql/data/pg_xlog/00000003.history
+1       000000010000000000000008        before 2011-03-11 13:00:00.652314+09
+</pre>
+
+<li>TimeLineIDを決定する</li>
+<p>
+この例では、TimeLineIDの最も大きなhistoryファイルは00000003.historyなので、直近のTimeLineIDは3である。
+よってリカバリ後のTimeLineIDは4になる。
+</p>
+
+<li>リカバリ条件に基づき、リカバリを開始する</li>
+
+<p>
+次の手順でTimeLineID=4のデータベースクラスタを構築する。
+<br>
+はじめに、historyファイルの内容どおりにリカバリする。
+</p>
+<ul>
+<li>TimeLineID = 1のデータベースクラスタを基に、</li>
+<li>アーカイブログ000000010000000000000006から000000010000000000000008を使って、</li>
+<li>時刻"2011-03-11 13:00:00"直前までリカバリする。</li>
+</ul>
+
+次に、TimeLineID = 3のアーカイブログを基にリカバリする。
+
+<ul>
+<li>アーカイブログ000000030000000000000008から00000003000000000000000Aを使って、</li>
+<li>recovery_target_timeに設定された時刻"2011-03-11 14:46:00"直前までリカバリする。</li>
+</ul>
+
+</ol>
+
+<p>
+リカバリ完了後、historyファイル00000004.historyを生成します。
+</p>
+
+<pre>
+postgres> cat /usr/local/pgsql/data/pg_xlog/00000004.history
+1       000000010000000000000008        before 2011-03-11 13:00:00.652314+09
+3       00000003000000000000000A        before 2011-03-11 14:46:00.152342+09
+</pre>
+
+
+<p>
+このように、historyファイルはデータベースクラスタの履歴書であると同時に、
+新たなTimeLineIDでリカバリする際の"手順書"の役割も果たします。
+<br>
+そして現実の世界と異なり、破局的な事態を避け、何度でも新しい世界を創造できます。
+</p>
+<hr class="full_hr">
+<div id="lastmodified">
+Last-modified: 2018-9-8
+</div>
+</body>
+</html>
+

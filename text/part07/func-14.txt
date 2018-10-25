@@ -1,0 +1,104 @@
+
+%FILE internal/func-14.html
+%LASTMOD
+%KEY pgsql-func14
+
+%TITLE システムカタログ情報関数
+
+[<システムカタログ情報関数一覧>]
+
+<pre>
+関数   戻り型	説明
+format_type(type_oid, typemod)	text	データ型のSQL名を取得
+
+###
+pg_get_constraintdef(constraint_oid)	text	制約の定義を取得
+pg_get_constraintdef(constraint_oid, pretty_bool)	text	制約の定義を取得
+
+pg_get_expr(pg_node_tree, relation_oid)			text	式中のすべてのVarが２番目のパラメータによって指定されるリレーションを参照すると仮定して、式の内部形式を逆コンパイル
+pg_get_expr(pg_node_tree, relation_oid, pretty_bool)	text	式中のすべてのVarが２番目のパラメータによって指定されるリレーションを参照すると仮定して、式の内部形式を逆コンパイル
+
+
+pg_get_functiondef(func_oid)		text		関数定義の取得
+pg_get_function_arguments(func_oid)	text		関数定義の引数リスト（デフォルト値付き）を取得
+pg_get_function_identity_arguments(func_oid)		text	関数を特定するための引数リスト（デフォルト値なし）を取得
+pg_get_function_result(func_oid)			text	関数に対するRETURNS句の取得
+
+
+pg_get_indexdef(index_oid)				text	インデックスに対するCREATE INDEXコマンドの取得
+pg_get_indexdef(index_oid, column_no, pretty_bool)	text	インデックスに対するCREATE INDEXコマンドの取得、またはcolumn_noが非ゼロの場合は、１つのインデックス列のみの定義の取得
+
+
+pg_get_keywords()	   setof record			SQLキーワードとそれらの種類のリストを取得
+
+pg_get_ruledef(rule_oid)   text	 ルールに対するCREATE RULEコマンドを取得
+pg_get_ruledef(rule_oid, pretty_bool)		      text	ルールに対するCREATE RULEコマンドを取得
+
+
+pg_get_serial_sequence(table_name, column_name)	      text	serial、smallserial、またはbigserial列が使用するシーケンス名の取得
+
+
+pg_get_triggerdef(trigger_oid)	   text		      トリガに対するCREATE [ CONSTRAINT ] TRIGGERコマンドの取得
+pg_get_triggerdef(trigger_oid, pretty_bool)	      text		   トリガに対するCREATE [ CONSTRAINT ] TRIGGERコマンドの取得
+
+
+pg_get_userbyid(role_oid)      name		      与えられたOIDでロール名を取得
+
+####
+pg_get_viewdef(view_name)      text		      ビューまたはマテリアライズドビューの元になるSELECTコマンドを取得（廃止予定）
+pg_get_viewdef(view_name, pretty_bool)		      text	ビューまたはマテリアライズドビューの元になるSELECTコマンドを取得（廃止予定）
+pg_get_viewdef(view_oid)  text			      ビューまたはマテリアライズドビューの元になるSELECTコマンドを取得
+pg_get_viewdef(view_oid, pretty_bool)		      text	ビューまたはマテリアライズドビューの元になるSELECTコマンドを取得
+pg_get_viewdef(view_oid, wrap_column_int)	      text	ビューまたはマテリアライズドビューの元になるSELECTコマンドを取得。 フィールドを含む行は指定された列数で折り返され、成形された表示が行われます。
+
+
+pg_options_to_table(reloptions)			      setof record								   格納オプションの名前/値のペアのセットを取得 バージョン9.1から
+
+
+pg_tablespace_databases(tablespace_oid)		      setof oid									   テーブル空間内にオブジェクトを所有するデータベースOID集合を取得
+pg_tablespace_location(tablespace_oid)		      text  指定したテーブル空間が実際に配置されているファイルシステム上のパスを取得 バージョン9.2から
+
+
+pg_typeof(any)					      regtype	指定した値のデータ型を取得
+
+collation for (any)				      text	引数の照合順序を取得
+
+to_regclass(rel_name)				      regclass	指定のリレーションのOIDを取得。バージョン9.4から
+to_regproc(func_name)				      regproc	指定の関数のOIDを取得。バージョン9.4から
+to_regprocedure(func_name)			      regprocedure	指定の関数のOIDを取得。バージョン9.4から
+to_regoper(operator_name)			      regoper		指定の演算子のOIDを取得。バージョン9.4から
+to_regoperator(operator_name)			      regoperator	指定の演算子のOIDを取得。バージョン9.4から
+to_regtype(type_name)				      regtype		指定の型のOIDを取得。バージョン9.4から
+to_regnamespace(schema_name)			      regnamespace	指定のスキーマのOIDを取得。バージョン9.5から
+to_regrole(role_name)				      regrole		指定のロールのOIDを取得。バージョン9.5から
+</pre>
+
+
+
+<p>
+・pg_get_constraintdef()
+<br>
+pg_get_constraintdef()は制約の定義を取得します。
+</p>
+
+<pre>
+SELECT pg_get_constraintdef(to_regclass(''));
+
+</pre>
+constraint_oid)	text	制約の定義を取得
+pg_get_constraintdef(constraint_oid, pretty_bool)	text	制約の定義を取得
+
+
+<p>
+・pg_get_viewdef()
+<br>
+pg_get_viewdef()はビューやマテリアライズドビューの定義を返します。
+</p>
+
+
+      text		      ビューまたはマテリアライズドビューの元になるSELECTコマンドを取得（廃止予定）
+pg_get_viewdef(view_name, pretty_bool)		      text	ビューまたはマテリアライズドビューの元になるSELECTコマンドを取得（廃止予定）
+pg_get_viewdef(view_oid)  text			      ビューまたはマテリアライズドビューの元になるSELECTコマンドを取得
+pg_get_viewdef(view_oid, pretty_bool)		      text	ビューまたはマテリアライズドビューの元になるSELECTコマンドを取得
+pg_get_viewdef(view_oid, wrap_column_int)	      text	ビューまたはマテリアライズドビューの元になるSELECTコマンドを取得。 フィールドを含む行は指定された列数で折り返され、成形された表示が行われます。
+

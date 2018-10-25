@@ -1,0 +1,1409 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+ <title>PostgreSQLバイブル草稿</title>
+ <link rel="stylesheet" type="text/css" media="screen" href="./default.css"">
+</head>
+
+<body>
+
+<script language=javascript>
+<!--
+function show(inputData) {
+var objID=document.getElementById( "layer_" + inputData );
+var buttonID=document.getElementById( "category_" + inputData );
+if(objID.className=='close') {
+objID.style.display='block';
+objID.className='open';
+}else{
+objID.style.display='none';
+objID.className='close';
+}
+}
+//-->
+</script>
+
+<div id="header">
+<h1 class="title">PostgreSQLバイブル草稿</title></h1>
+    <span class="small">
+</span>
+</div>
+
+
+<hr class="full_hr">
+<table style="width: 100%;" border="0">
+ <tbody><tr>
+  <td class="menubar">
+   <div id="menubar">
+
+
+<h5>PostgreSQLとは</h5>
+
+<li><a href="./index.html">PostgreSQLとは</a><br></li>
+
+<h5>PostgreSQLの内部構造</h5>
+<ul>
+<li><a href="./internal.html">とびら</a><br></li>
+</ul>
+<ol>
+<li><a href="./internal-01.html">プロセスとメモリ構造</a><br></li>
+<li><a href="./internal-02.html">データベースクラスタ、テーブルの構造</a></li>
+<li><a href="./internal-03.html">SQLの実行</a></li>
+<li><a href="./internal-04.html">プラン処理</a></li>
+<li><a href="./internal-05.html">バッファマネージャとバックグランドライタ</a></li>
+<li><a href="./internal-06.html">トランザクションIDと同時実行制御</a></li>
+<li><a href="./internal-07.html">VACUUM</a></li>
+<li><a href="./internal-08.html">HOTとIndex Only Scan</a></li>
+<li><a href="./internal-09.html">WAL(Write Ahead Logging)</a></li>
+<li><a href="./internal-10.html">アーカイブログとPITR</a></li>
+<li><a href="./internal-11.html">レプリケーション(Streaming ReplicationとHotStandby)</a></li>
+</ol>
+
+
+<h5>PostgreSQLサーバ管理</h5>
+
+<ul>
+<li><a href="./admin.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[PostgreSQLの基礎]<br>
+<li><a href="./admin-01.html">オブジェクト、データベース、スキーマ</a><br></li>
+<li><a href="./admin-02.html">システムカタログ</a><br></li>
+<li><a href="./admin-03.html">文字コードの扱い</a><br></li>
+
+
+[インストールと起動、停止]<br>
+<li><a href="./admin-04.html">インストール</a><br></li>
+<li><a href="./admin-05.html">データベースシステムの初期化 initdb</a><br></li>
+<li><a href="./admin-06.html">PostgreSQLサーバの起動/停止</a><br></li>
+
+
+[認証とアクセス制御]<br>
+<li><a href="./admin-07.html">認証とアクセス制御</a><br></li>
+<li><a href="./admin-08.html">クライアントのアクセス制御</a><br></li>
+<li><a href="./admin-09.html">権限について</a><br></li>
+<li><a href="./admin-10.html">ロールの作成と権限制御</a><br></li>
+
+<HR>
+
+[バックアップとアップグレード]<br>
+<li><a href="./admin-11.html">バックアップとアップグレード</a><br></li>
+<li><a href="./admin-12.html">ダンプとリストア</a><br></li>
+<li><a href="./admin-13.html">アップグレード</a><br></li>
+
+[保守、監視とチューニング]<br>
+<li><a href="./admin-14.html">保守、監視とチューニング</a><br></li> 
+<li><a href="./admin-15.html">稼働統計情報</a><br></li>
+<li><a href="./admin-16.html">実行ログの取得</a><br></li>
+<li><a href="./admin-17.html">モニタリングツール</a><br></li>
+<li><a href="./admin-18.html">ログと統計情報の分析</a><br></li>
+<li><a href="./admin-19.html">パラメータチューニング</a><br></li>
+
+[耐障害性、高可用性]<br>
+<li><a href="./admin-20.html">耐障害性、高可用性</a><br></li>
+<li><a href="./admin-21.html">アーカイブログとPITR</a><br></li>
+<li><a href="./admin-22.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-23.html">レプリケーションの故障対応</a><br></li>
+
+
+[FDW]<br>
+<li><a href="./admin-24.html">FDW</a><br></li>
+<li><a href="./admin-25.html">postgres_fdw</a><br></li>
+</ol>
+
+[追加の文章(未完)]<br>
+<li><a href="./admin-26.html">ロギング</a><br></li>
+<li><a href="./admin-27.html">統計情報</a><br></li>
+<li><a href="./admin-28.html">モニタリング</a><br></li>
+<li><a href="./admin-29.html">メンテナンス</a><br></li>
+</ol>
+
+
+<h5>設定パラメータ</h5>
+
+<ol>
+<li><a href="./param-01.html">postgresql.confの設定</a><br></li>
+<li><a href="./param-02.html">ファイルの場所</a><br></li>
+<li><a href="./param-03.html">接続と認証</a><br></li>
+<li><a href="./param-04.html">資源の消費</a><br></li>
+<li><a href="./param-05.html">WAL</a><br></li>
+<li><a href="./param-06.html">レプリケーション</a><br></li>
+<li><a href="./param-07.html">問い合わせ計画</a><br></li>
+<li><a href="./param-08.html">エラー報告とログ取得</a><br></li>
+<li><a href="./param-09.html">稼働統計情報</a><br></li>
+<li><a href="./param-10.html">AUTOVACUUM</a><br></li>
+<li><a href="./param-11.html">クライアント接続デフォルト</a><br></li>
+<li><a href="./param-12.html">ロック管理/バージョンとプラットフォーム互換性</a><br></li>
+</ol>
+
+
+<h5>psql</h5>
+<ul>
+<li><a href="./psql.html">・対話型インタフェースpsqlの使い方</a><br></li>
+</ul>
+
+<ol>
+<li><a href="./psql-01.html">psqlとは</a><br></li>
+<li><a href="./psql-02.html">PostgreSQLサーバとの接続/切断/再接続</a><br></li>
+<li><a href="./psql-03.html">データベース一覧表示</a><br></li>
+<li><a href="./psql-04.html">コマンドラインからSQL実行</a><br></li>
+<li><a href="./psql-05.html">バッチファイルの実行(メタコマンド)</a><br></li>
+<li><a href="./psql-06.html">情報表示</a><br></li>
+<li><a href="./psql-07.html">表示の制御</a><br></li>
+<li><a href="./psql-08.html">ラージオブジェクトの扱い</a><br></li>
+<li><a href="./psql-09.html">データのコピー</a><br></li>
+<li><a href="./psql-10.html">その他のメタコマンド</a><br></li>
+
+</ol>
+
+
+<h5>SQL</h5>
+
+<ul>
+<li><a href="./sql.html">・とびら</a><br></li>
+</ul>
+
+<ol>
+[SQL]<br>
+
+<li><a href="./sql-01.html">SQL語彙</a><br></li>
+<li><a href="./sql-02.html">テーブルスペースの作成/削除/変更</a><br></li>
+<li><a href="./sql-03.html">データベースの作成/変更/削除</a><br></li>
+<li><a href="./sql-04.html">テーブルの作成</a><br></li>
+<li><a href="./sql-05.html">外部キー</a><br></li>
+<li><a href="./sql-06.html">オブジェクトの継承/LIKE句</a><br></li>
+<li><a href="./sql-07.html">問い合わせ結果から新しいテーブルを作成</a><br></li>
+<li><a href="./sql-08.html">テーブルの削除</a><br></li>
+<li><a href="./sql-09.html">スキーマの定義/変更/削除</a><br></li>
+
+<li><a href="./sql-10.html">ALTER TABLE(1)</a><br></li>
+<li><a href="./sql-11.html">ALTER TABLE(2)</a><br></li>
+<li><a href="./sql-12.html">ALTER TABLE(3)</a><br></li>
+
+<li><a href="./sql-13.html">ロール</a><br></li>
+<li><a href="./sql-14.html">GRANT REVOKE(1)</a><br></li>
+<li><a href="./sql-15.html">GRANT REVOKE(2)</a><br></li>
+<li><a href="./sql-16.html">INSERT</a><br></li>
+<li><a href="./sql-17.html">SELECT</a><br></li>
+<li><a href="./sql-18.html">FROM句</a><br></li>
+<li><a href="./sql-19.html">WHERE句</a><br></li>
+
+<li><a href="./sql-20.html">WINDOW句、OVER句</a><br></li>
+<li><a href="./sql-21.html">共通テーブル式(CTE)</a><br></li>
+
+
+<li><a href="./sql-22.html">グループ化</a><br></li>
+<li><a href="./sql-23.html">DISTINCT句</a><br></li>
+<li><a href="./sql-24.html">テーブル結合</a><br></li>
+<li><a href="./sql-25.html">問い合わせの結合</a><br></li>
+<li><a href="./sql-26.html">ORDER BY</a><br></li>
+<li><a href="./sql-27.html">LIMIT OFFSET</a><br></li>
+<li><a href="./sql-28.html">FOR UPDATE/ FOR SHARE</a><br></li>
+<li><a href="./sql-29.html">サブクエリ</a><br></li>
+<li><a href="./sql-30.html">CASE式</a><br></li>
+<li><a href="./sql-31.html">VALUES</a><br></li>
+<li><a href="./sql-32.html">UPDATE</a><br></li>
+<li><a href="./sql-33.html">DELETE</a><br></li>
+<li><a href="./sql-34.html">TRUNCATE</a><br></li>
+
+<li><a href="./sql-35.html">インデックス</a><br></li>
+
+<li><a href="./sql-36.html">VIEW</a><br></li>
+<li><a href="./sql-37.html">シーケンス</a><br></li>
+<li><a href="./sql-38.html">トリガ</a><br></li>
+<li><a href="./sql-39.html">カーソル</a><br></li>
+<li><a href="./sql-40.html">プリペアステートメント</a><br></li>
+<li><a href="./sql-41.html">トランザクション</a><br></li>
+<li><a href="./sql-42.html">セーブポイント</a><br></li>
+<li><a href="./sql-43.html">2相コミット</a><br></li>
+<li><a href="./sql-44.html">LOCK</a><br></li>
+<li><a href="./sql-45.html">SET/SHOW/RESET</a><br></li>
+<li><a href="./sql-46.html">VACUUM</a><br></li>
+<li><a href="./sql-47.html">ANALYZE</a><br></li>
+<li><a href="./sql-48.html">EXPLAIN</a><br></li>
+<li><a href="./sql-49.html">COPY/IMPORT</a><br></li>
+<li><a href="./sql-50.html">COPY/EXPORT</a><br></li>
+<li><a href="./sql-51.html">関数定義</a><br></li>
+<li><a href="./sql-52.html">エクステンション</a><br></li>
+<li><a href="./sql-53.html">外部サーバの定義、変更、削除</a><br></li>
+<li><a href="./sql-54.html">外部サーバのユーザマップ定義、変更、削除</a><br></li>
+<li><a href="./sql-55.html">外部テーブルの定義、変更、削除</a><br></li>
+<hr>
+<li><a href="./sql-56.html">イベントトリガ</a><br></li>
+<li><a href="./sql-57.html">行レベルセキュリティ</a><br></li>
+
+<hr>
+<li><a href="./sql-60.html">新しい機能</a><br></li>
+</ol>
+
+
+<h5>関数</h5>
+
+[関数]<br>
+<ul>
+<li><a href="./function.html">とびら</a><br></li>
+</ul>
+
+<ol>
+[データ型]<br>
+<li><a href="./type-01.html">データ型</a><br></li>
+<li><a href="./type-02.html">数値データ型</a><br></li>
+<li><a href="./type-03.html">文字データ型</a><br></li>
+<li><a href="./type-04.html">日付/時刻データ型</a><br></li>
+<li><a href="./type-05.html">日付/時刻表示形式とタイムゾーンの設定</a><br></li>
+<li><a href="./type-06.html">ブーリアン型</a><br></li>
+<li><a href="./type-07.html">ビット列データ型</a><br></li>
+<li><a href="./type-08.html">疑似データ型</a><br></li>
+<li><a href="./type-09.html">バイナリ列データ型</a><br></li>
+<li><a href="./type-10.html">Range型</a><br></li>
+<li><a href="./type-11.html">配列</a><br></li>
+<hr>
+<li><a href="./type-12.html">JSON型</a><br></li>
+
+<hr>
+[演算子]<br>
+<li><a href="./ope-01.html">演算子</a><br></li>
+<li><a href="./ope-02.html">論理演算子</a><br></li>
+<li><a href="./ope-03.html">比較演算子</a><br></li>
+<li><a href="./ope-04.html">算術演算子</a><br></li>
+<li><a href="./ope-05.html">文字列演算子</a><br></li>
+<li><a href="./ope-06.html">パターンマッチング</a><br></li>
+<li><a href="./ope-07.html">日付/時刻演算子</a><br></li>
+<li><a href="./ope-08.html">Range型演算子</a><br></li>
+<hr>
+<li><a href="./ope-09.html">JSON型演算子</a><br></li>
+
+
+<hr>
+[関数]<br>
+<li><a href="./func-01.html">関数</a><br></li>
+<li><a href="./func-02.html">算術関数</a><br></li>
+<li><a href="./func-03.html">集約関数/統計関数</a><br></li>
+<li><a href="./func-04.html">文字列関数</a><br></li>
+<li><a href="./func-05.html">日付・時刻関数</a><br></li>
+<li><a href="./func-06.html">型変換関数</a><br></li>
+<li><a href="./func-07.html">Range型関数</a><br></li>
+<li><a href="./func-08.html">Window関数</a><br></li>
+<li><a href="./func-09.html">セッション情報関数</a><br></li>
+<li><a href="./func-10.html">アクセス権限とスキーマ可視性照会関数</a><br></li>
+<li><a href="./func-11.html">データベースオブジェクト関数</a><br></li>
+<li><a href="./func-12.html">バックアップとリカバリ制御関数</a><br></li>
+
+<li><a href="./func-13.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-15.html">構成設定関数</a><br></li>
+<li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-17.html">レプリケーションSQL関数</a><br></li>
+
+<hr>
+<li><a href="./func-18.html">JSON関数</a><br></li>
+
+</ol>
+
+<!--
+[削除するもの]<br>
+<li><a href="./type-07.html">幾何データ型</a><br></li>
+<li><a href="./type-08.html">ネットワークアドレス型型</a><br></li>
+<li><a href="./ope-08.html">幾何演算子</a><br></li>
+<li><a href="./ope-09.html">ネットワーク演算子</a><br></li>
+<li><a href="./func-06.html">幾何関数</a><br></li>
+<li><a href="./func-07.html">ネットワークアドレス関数</a><br></li>
+<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-16.html">トランザクションID関数</a><br></li>
+<li><a href="./func-17.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-18.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-19.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-20.html">勧告的ロック用関数</a><br></li>
+-->
+
+<h5>PL/pgSQL</h5>
+
+<ol>
+<li><a href="./plpgsql.html">結果の返し方</a><br></li>
+<li><a href="./plpgsql-01.html">ストアドプロシージャ</a><br></li>
+<li><a href="./plpgsql-02.html">ストアドプロシージャの定義</a><br></li>
+<li><a href="./plpgsql-03.html">変数宣言と値の代入</a><br></li>
+**** まとめる >>
+<li><a href="./plpgsql-04.html">SELECT INTO文</a><br></li>
+<li><a href="./plpgsql-05.html">結果ステータスの取得</a><br></li>
+<li><a href="./plpgsql-06.html">動的なSQL文の実行</a><br></li>
+<< ここまで****
+<li><a href="./plpgsql-07.html">IF 条件分岐</a><br></li>
+<li><a href="./plpgsql-08.html">ループ処理</a><br></li>
+*** >>>
+<li><a href="./plpgsql-09.html">RETURN</a><br></li>
+<<< ***
+<li><a href="./plpgsql-10.html">ループ処理　LOOP</a><br></li>
+<li><a href="./plpgsql-11.html">ループ処理　WHILE</a><br></li>
+<li><a href="./plpgsql-12.html">ループ処理　FOR </a><br></li>
+<li><a href="./plpgsql-13.html">ループ処理 (複数行の問い合わせ結果を扱う)</a><br></li>
+<li><a href="./plpgsql-14.html">カーソルの利用</a><br></li>
+<li><a href="./plpgsql-15.html">カーソル変数の宣言</a><br></li>
+<li><a href="./plpgsql-16.html">カーソルのオープンとクローズ	OPEN / CLOSE</a><br></li>
+<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得		FETCH</a><br></li>
+<li><a href="./plpgsql-18.html">カーソルを使った例</a><br></li>
+<li><a href="./plpgsql-19.html">例外</a><br></li>
+*** >>>
+<li><a href="./plpgsql-21.html">CASE</a><br></li>
+<li><a href="./plpgsql-22.html">FOREACH</a><br></li>
+<<< ***
+</ol>
+
+
+<h5>Appendix(付録)</h5>
+
+<ol>
+<li><a href="./app-01.html">pgpool-II</a><br></li>
+<li><a href="./app-02.html">Pacemaker</a><br></li>
+</ol>
+
+
+<h5>おまけ:ネット公開(ページ数の関係で書籍には載せない)</h5>
+
+<ol>
+[pgpool]<br>
+<li><a href="./ha-06.html">pgpool-II セットアップ</a><br></li>
+<li><a href="./ha-07.html">pgpool-II レプリケーションモード</a><br></li>
+<li><a href="./ha-08.html">pgpool-II マスタースレーブモード</a><br></li>
+[Pacemaker]<br>
+<li><a href="./ha-10.html">Pacemaker</a><br></li>
+</ol>
+
+</div>
+<hr class="full_hr">
+</div>
+
+  </td>
+  <td valign="top">
+   <div id="body">
+
+
+<h2>同期レプリケーションの故障対応</h2>
+
+<p>
+同期レプリケーションでの故障対応について、
+先に結論をまとめます([<表3-25>])。
+</p>
+
+<table border=1>
+<caption>[<表3-25>] 同期レプリケーションの故障対応</caption>
+<tr bgcolor="#cccccc">
+<th>＼故障箇所<br>-------<br>構成　　＼ </th>
+<th>マスタ故障　　　　　　　　　　　</th>
+<th>スレーブ故障　　　　　　　　　　　　　　　　　　　　</th>
+</tr><tr>
+<td>1:1 <br>(1マスタ1スレーブ)</td>	
+
+<td>
+<ul>
+ <li>スレーブを新マスタに昇格(promote)。</li>
+ <li>マスタ故障から新マスタ昇格の期間、データ更新ができない。</li>
+ <li>故障の瞬間に開いていたトランザクションは不定(COMMITかABORTか状況依存)になる。</li>
+</ul>
+</td>
+
+<td>
+<ul>
+ <li>マスタの更新ができなくなる。<br>ただし、非同期レプリケーションに移行すれば、稼働し続けることができる。</li>
+ <li>スレーブ故障から非同期に移行する期間、データ更新ができない。</li>
+</ul>
+</td>
+
+</tr><tr>
+<td>1:N <br>(1マスタNスレーブ)</td>	
+
+<td>
+<ul>
+ <li>スレーブを新マスタに昇格(promote)。</li>
+ <li>マスタ故障から新マスタ昇格の期間、データが更新できない。</li>
+ <li>残りのスレーブを新マスタに再接続しなければならない
+<sup><font color="#0000ff">
+※ 
+</font></sup>。</li>
+
+ <li>故障の瞬間に開いていたトランザクションは不定(COMMITかABORTか状況依存)になる。</li>
+</ul>
+</td>
+
+<td>
+<ul>
+<li>(N-1台までのスレーブ故障は)マスタの動作に影響しない。
+<br>
+ただし、同期モード(sync_state=sync)のスレーブが故障した場合、マスタがその故障を検出して他のスレーブに切り替える期間、データ更新ができない。
+</li>
+</ul>
+
+
+</td>
+</tr></table>
+<font color="#0000ff">※  </font>
+新マスタ昇格から1台のスレーブの再接続までの期間、同期モードならばマスタのデータ更新ができない、非同期モードならば新マスタ故障によるデータロストの可能性が生じる。
+<br>
+<br>
+
+<p>
+ここで「(マスタの)データ更新ができない」との記述について補足します。
+<br>
+厳密に言えば更新系SQLが実行できないだけでなく、WALログを書き込むSQLの実行もできません。
+よって、検索系SQLでも実行できない場合があります。
+例えば、SELECT文の実行中にHOTの不要なタプルを削除すると、WALログ書き込みが発生するからです。
+</p>
+
+
+<p>
+次にマスタ故障の対応について、注意点を示します。
+</p>
+
+<ol>
+<li>Streaming Replicationはマスタ故障時、スレーブを新マスタにpromote(昇格)させることができます。
+ただし、故障の瞬間に開いていたトランザクションは不定(COMMITかABORTか状況依存)になります。
+</li>
+
+<li>
+Nスレーブ構成でマスタ故障した場合、
+スレーブを新マスタに昇格した後に残りのスレーブを新マスタに再接続しなければなりません。
+</li>
+
+</ol>
+
+
+<p>
+以下、故障対応について詳細に解説します。
+<br>
+はじめにマスタが故障した瞬間の挙動と問題点について分析します。
+<br>
+次に、マスタによるスレーブの故障検出と影響、
+および同期モードから非同期モードに切り替える方法について簡単に述べます。
+<br>
+最後に[<表3-25>]で示した構成毎に、故障対応の手順を詳細に解説します。
+</p>
+
+
+<div class="jumpmenu"></div><h3>マスタ故障の分析</h3>
+
+
+<p>
+マスタが故障した瞬間の挙動と、問題点について分析します。
+</p>
+
+
+<div class="jumpmenu"></div><h4>トランザクションの不定性</h4>
+
+
+<p>
+マスタが故障すると、その瞬間にセッションが切断し、実行中のトランザクションのレスポンスは返りません。
+<u>ユーザからみると、トランザクションの結果は不定</u>になります。
+<br>
+問題は、新しいマスタに改めてユーザやアプリケーションがアクセスする時です。
+<br>
+スレーブからpromote(昇格)した新マスタ上では、そのトランザクションがCOMMITかABORTか確定していますが、
+どちらであるかはユーザやアプリケーションが確認しなければなりません。
+</p>
+
+<p>
+以下、もう少し詳細にマスタ故障時の状況を分析します。
+</p>
+
+<p>
+トランザクションのレスポンスが返る直前にマスタが故障した場合、
+[<図3-07>]に示す2つのシナリオが考えられます。
+マスタ故障時、どちらのシナリオになるかは状況次第です。
+</p>
+
+
+<table BORDER="1">
+<caption>[<図3-07>] 1:1 マスタ故障時に発生し得る、2つのシナリオ</caption>
+<tr><td><center>
+<img src="./fig-3-23-01.jpg"><br>
+</center></td></tr>
+</table>
+
+<br>
+
+<ul>
+
+<li>シナリオ[1]</li>
+<p>
+(1)slave1がWALログを受信する前に、マスタが故障
+<br>
+(2)ユーザにトランザクションの応答をしないまま、セッションが切断
+</p>
+
+<li>シナリオ[2]</li>
+<p>
+(1)slave1はWALログを受信してHDDに書き込み
+<br>
+(2)返答(ACK)が戻る前に、マスタが故障
+<br>
+(3)ユーザにトランザクションの応答をしないまま、セッションが切断
+</p>
+
+</ul>
+
+<br>
+
+<p>
+ここで、slave1を新マスタにpromote(昇格)した場合の状況を説明します。
+</p>
+
+<ol>
+<li>シナリオ[1]の場合</li>
+<p>
+promote(昇格)した新マスタslave1には、旧マスタで開いていたトランザクションの結果は反映されていません。
+ユーザやアプリケーションからは、ABORTされたようにみえます。
+</p>
+
+<li>シナリオ[2]の場合</li>
+<p>
+リソースマネージャRM_XACTのXLOG_XACT_COMMITが書き込んだWALログが新マスタslave1に届いていれば、
+そのトランザクションはCOMMITしたものとして結果が反映されます。
+<br>
+しかし、一般的には
+WALログを書き込んだからといって、旧マスタで開いていたトランザクションの結果が反映されているとは限りません。
+<br>
+[<2-09>]の「WALログの書き込みタイミングと注意点」と[<2-11>]の[<脚注33>]で説明したように、
+WALログの送信タイミングはトランザクションのCOMMIT以外にもあります。
+また複数トランザクションが開いている場合、一つのトランザクションがCOMMIT、
+他のトランザクションは開いた状態でマスタ故障した可能性も残ります。
+</p>
+
+</ol>
+
+<br>
+
+<p>
+以上の議論から、
+ユーザやアプリケーションが新マスタに再接続する際、
+<u>マスタ故障時に喪失したトランザクションの結果を確認しなければならない</u>ことがわかります。
+</p>
+
+<div class="jumpmenu"></div><h5>トランザクションの不定性を解消する</h5>
+<br>
+
+<p>
+マスタ故障に起因するトランザクションの不定性は、
+PostgreSQLだけでは解消できないので、
+ユーザやアプリケーションレベルで対策しなければなりません([<コラム3-7>]参照)。
+</p>
+
+<p>
+ここでは、最も単純な方法を示します([<図3-08>]参照)。
+</p>
+
+
+<table BORDER="1">
+<caption>[<図3-08>] トランザクションの不定性を解消する</caption>
+<tr><td><center>
+<img src="./fig-3-23-02.jpg"><br>
+</center></td></tr>
+</table>
+
+<br>
+
+<p>
+PostgreSQLにはテーブルpseudoCLOGと、関数insert_xid()を準備します。
+<br>
+テーブルpseudoCLOGにはトランザクションのXIDと、そのトランザクションの開始時刻を保存します。
+関数insert_xid()は、自身が実行されたトランザクションのXIDと開始時刻を、テーブルpseudoCLOGに挿入すると共に、結果として返します。
+</p>
+
+<pre>
+sampledb=# CREATE TABLE pseudoCLOG (XID bigint, 
+sampledb(#                          TIME timestamp DEFAULT transaction_timestamp());
+CREATE TABLE
+
+sampledb=#  CREATE FUNCTION insert_xid() RETURNS pseudoCLOG AS
+sampledb-#    $$
+sampledb$#    DECLARE
+sampledb$#       ret public.pseudoCLOG%ROWTYPE;
+sampledb$#       query text;
+sampledb$#    BEGIN
+sampledb$#       /* txid_current()はこのトランザクションのXIDを返す */
+sampledb$#       /* transaction_timestamp()はこのトランザクションを開始した時刻を返す */
+sampledb$#       query := 'INSERT INTO pseudoCLOG VALUES '
+sampledb$#             || ' (txid_current(), transaction_timestamp()) RETURNING *';
+sampledb$#       EXECUTE query INTO ret;
+sampledb$# 
+sampledb$#       RETURN ret;
+sampledb$#    END;
+sampledb$#    $$
+sampledb-#  LANGUAGE PLpgSQL;
+CREATE FUNCTION
+</pre>
+
+<p>
+ユーザが何らかの更新を行う場合、
+トランザクションブロック内でinsert_xid()を実行してテーブルpseudoCLOGにデータを追加すると共に、
+そのXIDと開始時刻を得ます。
+</p>
+
+<p>
+例としてAliceの実行例を示します([<図3-08>](1)参照)。
+<br>
+関数insert_xid()の結果はユーザかアプリケーションが保存し、
+マスタ故障時のエラーハンドリングに利用します。
+</p>
+
+<pre>
+sampledb=# -- Aliceの実行例
+sampledb=# BEGIN;
+sampledb=# SELECT * FROM insert_xid();
+ xid  |            time            
+------+----------------------------
+ 1741 | 20YY-MM-DD 12:34:56               ← この出力を保存する (この出力はダミー)
+(1 row)
+sampledb=# UPDATE ..... -- 更新処理本体
+sampledb=# COMMIT;
+</pre>
+
+
+<p>
+マスタが故障してslave1を新マスタにpromote(昇格)した直後、
+ユーザやアプリケーションは直近のトランザクションがCOMMITしたか否か確認しなければなりません([<図3-08>](2)参照)。
+</p>
+
+<p>
+例えば、ユーザAliceが保持しているXID=1741とそのトランザクションの開始時刻は、新マスタslave1のテーブルpseudoCLOGに存在するので、
+直近のトランザクションはCOMMITされたと判定できます。
+<br>
+一方、ユーザBobが保持しているXID=1742は存在しないので、
+マスタ故障時のトランザクションはABORTされたと判定できます。
+</p>
+
+<p>
+ここでトランザクションの状態をXIDだけで判断しないのは、新マスタが旧マスタでCOMMITしなかったXIDから使い始める可能性があるためです。
+<br>
+この例で言えば、promote(昇格)後に新マスタはXID=1742から使いはじめます。
+Bobが検査する前に、
+別のユーザが新マスタで関数insert_xid()を実行すると、
+XID=1742に関するデータをテーブルpseudoCLOGにINSERTしてしまいます。
+<br>
+よって、XIDだけでは旧マスタのBobのトランザクションがCOMMITしていたのか、
+新マスタで別ユーザがトランザクションをCOMMITしたのか判断できなくなります。
+<br>
+このような事態を避けるため、
+XIDとそのトランザクションの開始時刻で検索するのです。
+</p>
+
+
+
+<p>
+テーブルpseudoCLOGの操作はほぼ全てINSERTなので、INDEXは不要です。
+<br>
+テーブルpseudoCLOGのデータは際限なく増えていくので、<u>適当な間隔で古いデータを削除してください</u>。
+</p>
+
+
+<blockquote><table BORDER="1"><tr><td>コラム3-7:PostgreSQLを改造する</td><td>
+
+<p>
+仕組みから考えれば、(PostgreSQLを改造し)直接CLOGの値を使ってトランザクションの状態を知ることも可能です。
+</p>
+
+<p>
+スレーブのCLOGは、WALログの再生に合わせてリアルタイムで更新されています。
+よって、
+スレーブをマスタにpromote(昇格)する瞬間、スレーブのCLOGデータを内部に保存すればよいわけです。
+<br>
+正確に言えば、受信したWALログを全て再生した直後からトランザクション処理を開始する直前までの間のどこかのタイミングで、CLOGのスナップショットを保存します。
+保存したCLOGのスナップショットからXIDの状態を取り出すことは容易です。
+</p>
+
+<p>
+このような機能が公式に実装される可能性は低いですが、
+「原理的には、PostgreSQL自身がトランザクションの不定性を解決する仕組みを提供できる」ことを指摘しておきます。
+</p>
+
+</td></tr></table></blockquote>
+
+
+
+<div class="jumpmenu"></div><h4>新マスタ選択の任意性</h4>
+
+<p>
+複数のスレーブがあると、どのスレーブを新マスタにpromote(昇格)すべきか決定しなければなりません。
+</p>
+
+<p>
+スレーブの数をnとすると、マスタ故障時のシナリオ数は2<sup>n</sup>となりますが、
+それらは3つのパターンに分類できます。
+</p>
+
+<ul>
+<li>パターン[1]</li>
+<p>
+すべてのスレーブがWALログデータを受信しない。
+</p>
+
+<li>パターン[2]</li>
+<p>
+すべてのスレーブがWALログデータを受信してHDDに書き込む。
+</p>
+
+<li>パターン[3]</li>
+<p>
+スレーブによって受信したWALログデータが異なる。
+[<図3-09>]は、パターン[3]に属するシナリオのひとつである。
+
+</p>
+</ul>
+
+
+<br>
+
+
+<table BORDER="1">
+<caption>[<図3-09>] 1:N マスタ故障時、スレーブ間の受信WALログに差違が生じるシナリオ</caption>
+<tr><td><center>
+<img src="./fig-3-23-03.jpg"><br>
+</center></td></tr>
+</table>
+
+<br>
+
+
+
+<p>
+パターン[1]とパターン[2]の場合、
+すべてのスレーブは同じ状態にあるので、どのスレーブを新マスタに選択しても違いはありません。
+<br>
+パターン[3]の場合、どのスレーブをマスタにpromote(昇格)すべきか決めなければなりません。
+
+<p>
+ほとんどのユーザは、次に示すどちらかの戦略を採用しています。
+それぞれ一長一短があります。
+</p>
+
+<ul>
+<li>戦略1: LSNが最も進んでいるスレーブを新マスタに昇格(promote)</li>
+<p>
+データロストの可能性を最小限にとどめるという立場からすると、合理的な戦略です。
+<br>
+受信したWALログのLSNは関数pg_last_xlog_receive_location()などが使えます([<7-31>]参照)。
+ただし、関数の実行タイミングによっては正確な値を返さない可能性があります。
+</p>
+
+<li>戦略2: sync_priority=1のスレーブを新マスタに昇格(promote)</li>
+<p>
+SRの実装上、マスタと同期しているのはsync_state=syncのスレーブなので、
+sync_priority=1のスレーブはsync_state=syncであると仮定すれば、合理的な戦略です。
+<br>
+ただし、マスタ故障の瞬間にどのスレーブがsync_state=syncだったのかを知る術はありません。
+例えば、ネットワークの不調でsync_priority=1のスレーブを切り離した１秒後に、マスタが故障したとします。
+このスレーブを新マスタにpromote(昇格)すると、切り離されていた1秒間のデータは失われます。
+</p>
+
+</ul>
+
+<br>
+
+<p>
+筆者の意見としては、データロストの可能性を最小にする戦略1が望ましいと考えます。
+戦略2は(説明でも述べたように)データロストの可能性があります。
+<br>
+実際、実運用では戦略1が多いようです。
+[< A-02>]で説明するPacemakerのリソースエージェントも戦略1を採用しています。
+</p>
+
+<p>
+どちらの戦略を選んでも、アプリケーションレイヤのデータ不整合を防ぐために、
+ユーザやアプリケーションレベルでトランザクションの不定性解消が必須です。
+</p>
+
+<br>
+
+<blockquote><table BORDER="1"><tr><td>コラム3-8:マスタスレーブ間でトランザクションの原子性を確保するには</td><td>
+
+<p>
+マスタ故障時に開いていたトランザクションが不定になると、
+アプリケーションレイヤでデータの不整合を引き起こす可能性があるので、
+可能ならば排除したい現象です。
+複数スレーブの場合はなおさらです。
+</p>
+
+<p>
+ユーザの観点から言えば、
+マスタが故障したときに開いていたトランザクションは、すべてABORTするのが理想です。
+<br>
+しかし、マスタと(複数)スレーブ間で、このようなトランザクションの「原子性」を確保するのは非常に難しいことです。
+</p>
+
+
+<p>
+コーディネータなどを用いずに高い耐障害性を持つレプリケーションシステムを構築するため([<脚注10>])、
+高信頼マルチキャスト(reliable multicast)を基にしたプロトコルやアルゴリズムの研究が数多く公開されています。
+<br>
+ここでは以下の文献を示します。
+</p>
+
+<ol>
+<li>R.Guerraoui, A.Schiper, "Software-based replication for fault tolerance," IEEE Computer, 30(4):64-74, 1997</li>
+http://gsd.di.uminho.pt/Library/sod2bib/guerraoui-sw-based-replication.pdf
+<li>米田, 梶原, 土屋,"ディペンダブルシステム", 共立出版, 2005、ISBN4-320-12152-X</li>
+83-86p, 受動的多重化、仮想同期
+</ol>
+
+<p>
+Streaming Replicationは形式的に文献1の"Primary Backup Replication"、
+もしくは文献2の"受動的多重化"を簡略化したものに分類できます
+(SRは1つのスレーブの応答を待ち、文献の方式は全スレーブの応答を待つ)。
+<br>
+これらの文献にはマスタ故障の問題点と、
+対策として仮想同期(Virtual Synchrony)を満たすビュー同期マルチキャスト(View Synchronous Multicast)の利用が示されています。
+</p>
+
+<p>
+一般に、高信頼マルチキャストを使ったアルゴリズムやプロトコルは非常に重い処理になります。
+Streaming Replicationに限らず、パフォーマンスの観点からRDBMSのレプリケーションで使うのは実用的ではありません
+(実用に耐えるレベルのオープンソースのプロトコルスタックも存在しない)。
+</p>
+
+<p>
+よって、現実的にはユーザやアプリケーションレベルでの対策が不可避です。
+</p>
+
+
+</td></tr></table></blockquote>
+
+
+
+
+<blockquote><table BORDER="1"><tr><td>脚注10</td><td>
+<p>
+分散コミット(distributed commit)の手法として2相コミット(Two Phase Commit)がありますが、
+これはStreaming Replicationには適当でないだけでなく、
+コーディネータ(この場合はマスタ)の障害に脆いことが知られています。
+よって、ここでは考察対象から外しています。
+</p>
+</td></tr></table></blockquote>
+
+
+
+
+<div class="jumpmenu"></div><h3>マスタによるスレーブの故障検出と、故障の影響</h3>
+
+
+
+<p>
+マスタがスレーブの故障を検出するタイミングを列挙します。
+</p>
+
+<ol>
+<li>libpqの内部関数が異常が検出した場合</li>
+<p>
+Streaming Replicationを司るwalsenderプロセスとwalreceiverプロセスは、libpqという(PostgreSQLの)通信ライブラリの内部関数を使ってデータ通信しています。
+<br>
+libpqは高機能で、
+walreceiverプロセスがクラッシュしてコネクションが切断したりスレーブが終了した場合、
+その旨を通知します。
+スレーブの異常を通知されたwalsenderプロセスは<u>即座にスレーブ故障と判断</u>します。
+<br>
+また、walreceiverプロセスへの(socket)読み書きが失敗したりEOFを返すなど、
+libpqの内部関数がエラーを返した場合も、<u>即座にスレーブ故障と判断</u>します。
+</p>
+
+
+<li>ネットワークやスレーブが稼働しているサーバに異常が発生した場合</li>
+<p>
+レスポンス(ACK、もしくはwal_receiver_status_interval毎のheartbeat)が
+パラメータreplication_timeoutに設定した時間(デフォルト60[秒])内に返ってこなければ、故障と判断します。
+故障の発生から検出まで<u>最大でreplication_timeoutのタイムラグが発生</u>します。
+</p>
+
+</ol>
+
+
+<p>
+このように、状況によって故障発生の直後に検出できる場合もあれば、
+発生から検出までにタイムラグが生じる場合もあります。
+<br>
+このタイムラグがシステムに影響を及ぼす一例を示します。
+</p>
+
+<p>
+同期モード(sync_state=sync)のスレーブが故障し、その故障を検出して対処するまでの間、
+マスタの更新はできなくなります。
+<br>
+複数スレーブで冗長性を持たせたシステム構成であっても、
+同期モードのスレーブ故障によってシステムの可用性が低下する場合があるのです。
+</p>
+
+
+
+<div class="jumpmenu"></div><h3>同期/非同期の切り替え</h3>
+
+<p>
+レプリケーションを同期から非同期に切り替えるのは、非常に簡単です。
+<br>
+設定パラメータsynchronous_standby_namesをコメントアウトして無効にし、再読み込み(reload)するだけです。
+</p>
+
+<p>
+逆も同様で、
+非同期から同期に切り替えるには、
+設定パラメータsynchronous_standby_namesを有効にして、再読み込み(reload)するだけです。
+</p>
+
+<p>
+postgresql.confの再読み込み(reload)は、クライアントには直接影響せず、
+<u>セッションもトランザクションも保持したまま行われます</u>。
+</p>
+
+
+<div class="jumpmenu"></div><h3>故障対応 (マスタ:スレーブ = 1:1の場合)</h3>
+
+<p>
+マスタ1台、スレーブ1台構成について、PostgreSQLの操作方法を説明します。
+</p>
+
+<div class="jumpmenu"></div><h4>スレーブ故障:スレーブが1台の場合</h4>
+
+<p>
+同期レプリケーションは、1台しかないスレーブが故障すると、マスタの更新もできなくなります。
+<br>
+この場合、マスタを非同期レプリケーションに切り替えて運用を続けます。
+</p>
+
+
+<table BORDER="1">
+<caption>[<図3-10>] 1:1  スレーブ故障</caption>
+<tr><td><center>
+<img src="./fig-3-23-04.jpg"><br>
+</center></td></tr>
+</table>
+
+<br>
+
+<p>
+同期/非同期レプリケーション切り替えの手順を示します。
+</p>
+
+<ol>
+<li>postgresql.confファイルを編集し、synchronous_standby_namesをコメントアウトする。</li>
+
+[< postgresql.confの設定例>]
+<pre>
+# コメントアウトして、非同期モードにする
+# synchronous_standby_names = 'slave1'
+</pre>
+
+<li>編集後、再読み込み(reload)する。</li>
+
+<pre>
+master> pg_ctl -D /usr/local/pgsql/data reload
+</pre>
+
+</ol>
+
+<p>
+再読み込み(reload)を実行しても、クライアントのセッションやトランザクションは継続しています。
+よって、ユーザは切り替わったことに気づきません。
+</p>
+
+
+
+<div class="jumpmenu"></div><h4>マスタ故障:スレーブが1台の場合</h4>
+
+<p>
+マスタが故障した場合の対処を説明します。
+[<2-11>]の[<図2-69>]を参照してください。
+</p>
+
+<p>
+バージョン9.0ではスレーブのマスタ昇格にはtriggerファイルの設定が必要でしたが、
+バージョン9.1ではpg_ctlコマンドで実行できるようになりました。
+</p>
+
+
+<p>
+今、マスタをimmediateモードでshutdownし(マスタ故障をシミュレート)、slave1サーバ上でpg_ctl promoteコマンドを実行します。
+</p>
+
+<pre>
+slave1> pg_ctl -D /usr/local/pgsql/data/ promote
+</pre>
+
+<p>
+これで、slave1は検索だけでなく更新も実行できるようになりました。
+</p>
+
+<pre>
+slave1> psql sampledb -q
+sampledb=# SELECT pg_is_in_recovery();
+ pg_is_in_recovery 
+-------------------
+ f
+(1 row)
+</pre>
+
+<p>
+なお、slave1のpostgresql.confは、設定パラメータsynchronous_standby_namesが無効になっていることを確認してください(なんらかの値が設定されていると、同期レプリケーションのマスタになってしまい、データ更新ができない)。
+</p>
+
+<pre>
+sampledb=# SHOW synchronous_standby_names;
+ synchronous_standby_names 
+---------------------------
+ 
+(1 row)
+</pre>
+
+<p>
+もしも同期モードでpromoteしてしまった場合は、上記の非同期レプリケーションへの切り替え手順を実行してください。
+</p>
+
+<div class="jumpmenu"></div><h3>故障対応 (マスタ:スレーブ = 1:Nの場合)</h3>
+
+<p>
+スレーブが2台の場合について、PostgreSQLの操作方法を説明します。
+</p>
+
+
+<div class="jumpmenu"></div><h4>スレーブ故障:スレーブが2台の場合</h4>
+
+<p>
+それぞれのスレーブが故障した場合の動作を示します。
+</p>
+
+<blockquote>
+(1)sync_state=potential のスレーブが故障がした場合([<図3-11>(1)])<br>
+<p>
+sync_state=syncのスレーブは同期レプリケーションを続ける。スレーブ故障はユーザからは完全にマスクされる。
+</p>
+
+(2)sync_state=sync のスレーブが故障した場合([<図3-11(2)>])<br>
+<p>
+sync_state=potentialのスレーブが昇格して 同期レプリケーションを続ける。
+スレーブ故障が発生してから、その故障を検出し他のスレーブを昇格する間、マスタの更新はできない。
+</p>
+
+</blockquote>
+
+<font color="#ff0000">
+作図用の文章
+</font>
+<pre>
+sync_state = potentialのslave2がクラッシュしても、
+slave1は同期レプリケーションを続ける
+
+
+sync_state = syncのslave1がクラッシュすると、
+slave2がsync_state=syncに昇格して、
+同期レプリケーションを続ける
+</pre>
+
+
+<table BORDER=1>
+<caption>[<図3-11>] 1:2  スレーブ故障</caption>
+<tr><td><center>
+<img src="./fig-3-23-05.jpg"><br>
+</center></td></tr>
+</table>
+
+<br>
+
+<p>
+(2)の状況をマスタ側で確認してみます。
+<br>
+はじめはスレーブが2台稼働しています。
+</p>
+
+<pre>
+sampledb=# SELECT application_name,state,sync_priority,sync_state
+sampledb-#                                     FROM pg_stat_replication;
+ application_name |   state   | sync_priority | sync_state 
+------------------+-----------+---------------+------------
+ slave1           | streaming |             1 | sync
+ slave2           | streaming |             2 | potential
+(2 rows)
+</pre>
+
+<p>
+ここで、同期レプリケーションをしていたslave1が故障したとします。
+<br>
+すると、slave2が昇格して同期レプリケーションを続けます。
+<br>
+ただし、前記の「マスタによるスレーブの故障検出と、故障の影響」で説明したように、
+状況によっては故障検出に時間がかかり、その間はマスタの更新ができないこともあります。
+</p>
+
+<pre>
+sampledb=# SELECT application_name,state,sync_priority,sync_state 
+sampledb-#                                     FROM pg_stat_replication;
+ application_name |   state   | sync_priority | sync_state 
+------------------+-----------+---------------+------------
+ slave2           | streaming |             2 | sync
+(1 row)
+</pre>
+
+<p>
+slave1が復旧できた場合、slave2は予備(potential)に降格します。
+</p>
+
+<pre>
+sampledb=# SELECT application_name,state,sync_priority,sync_state 
+sampledb-#                                     FROM pg_stat_replication;
+ application_name |   state   | sync_priority | sync_state 
+------------------+-----------+---------------+------------
+ slave1           | streaming |             1 | sync
+ slave2           | streaming |             2 | potential
+(2 rows)
+</pre>
+
+
+
+<div class="jumpmenu"></div><h4>マスタ故障：スレーブが2台の場合</h4>
+
+<p>
+マスタが故障し、2台体制の縮退運転に移行する手順を説明します([<図3-12>])。
+<br>
+なお、ここでは解説を簡略化するため、マスタに昇格(promote)するスレーブはslave1とします。
+また、早急に新マスタでのデータ更新を可能にするため、スレーブの再接続中は非同期モードで運用します。
+</p>
+
+
+<table BORDER=1>
+<caption>[<図3-12>] 1:2  マスタ故障</caption>
+<tr><td><center>
+<img src="./fig-3-23-06.jpg"><br>
+</center></td></tr>
+</table>
+
+
+<br>
+
+
+<p>
+再接続の手順が繁雑なのは、
+新マスタ(slave1)のTimeLineIDがマスタ昇格(promote)によって1つ繰り上がること、
+および、スレーブ間でWALログの再生状況が異なるからです。
+<br>
+そのため、
+再接続するスレーブは新マスタのベースバックアップかアーカイブログを取得し、
+リカバリモードで再起動しなければなりません。
+</p>
+
+
+<p>
+再接続には2つの方式があります([<脚注11>])。
+ここでは便宜的に[A]と[B]と呼ぶことにします。
+</p>
+
+<blockquote>
+[A]: pg_basebackupコマンドでデータベースクラスタを再構築する。
+<br>
+[B]: 手動でベースバックアップを取得し、スレーブ側でリカバリする。
+</blockquote>
+
+<p>
+どちらの方式も、スレーブのデータベースクラスタをゼロから再構築します。
+例えばテラバイト級の巨大なデータベースの場合、
+データベースクラスタのコピーと再構築には非常に長い時間がかかります。
+運用上、この時間と労力は無視できない負担になるでしょう。
+また、スレーブの再構築完了まで新マスタは非同期モードで運用するので、
+この間に新マスタに障害が発生するとデータロストの危険性があります。
+<br>
+少なくともバージョン9.2の時点で、この問題に対する決定的な解決方法はないので、
+運用に際して十分に注意してください。
+</p>
+
+<p>
+以下、マスタ故障対応の概略を示し、次に方式別の再接続の実行手順を説明します。
+</p>
+
+
+
+<blockquote><table BORDER="1"><tr><td>脚注11</td><td>
+<p>
+新スレーブのアーカイブログとhistoryファイルを使う方法もありますが、ここでは説明を省略します。
+</p>
+</td></tr></table></blockquote>
+
+
+
+<p>
+[0] slave1の事前準備/マスタ故障
+</p>
+
+<blockquote>
+
+<p>
+[B]を選択する場合、アーカイブログの設定も必要です。
+<br>
+この設定により、マスタ昇格後にアーカイブログ機構が有効になります。
+</p>
+
+[< postgresql.confの設定例>]
+<pre>
+archive_mode = on
+archive_command = 'cp %p /home/postgres/archivelogs/%f'
+</pre>
+
+
+</blockquote>
+
+
+<p>
+[1] slave1をマスタに昇格(promote)
+</p>
+
+<blockquote>
+<p>
+マスタに故障が発生したら、slave1サーバ上でpg_ctl promoteコマンドを実行して、新マスタに昇格させます。
+</p>
+
+<pre>
+slave1> pg_ctl -D /usr/local/pgsql/data/ promote
+</pre>
+
+</blockquote>
+
+
+<p>
+[2] slave2を新マスタ(slave1)に再接続
+</p>
+
+<blockquote>
+<p>
+概略のみ示します。スレーブのリカバリ準備は後述します。
+</p>
+
+<ol>
+<li>postgresql.conf、pg_hba.confを退避</li>
+<p>
+適当なディレクトリにpostgresql.conf、pg_hba.confを退避しておきます。
+</p>
+
+<pre>
+slave2> cp /usr/local/pgsql/data/postgresql.conf /usr/local/pgsql
+slave2> cp /usr/local/pgsql/data/pg_hba.conf /usr/local/pgsql
+</pre>
+
+<li>リカバリの準備</li>
+<p>
+手順は後述します。
+</p>
+
+
+<li> postgresql.conf, pg_hba.confをデータベースクラスタに戻す</li>
+
+<pre>
+slave2> cp /usr/local/pgsql/postgresql.conf /usr/local/pgsql/data
+slave2> cp /usr/local/pgsql/pg_hba.conf /usr/local/pgsql/data
+</pre>
+
+<li> 再起動</li>
+
+</ol>
+
+</blockquote>
+
+
+
+<p>
+[3] 新マスタ(slave1)を同期レプリケーションに切り替え
+</p>
+
+<blockquote>
+<p>
+slave1のpostgresql.conf:synchronous_standby_nameに'slave2'を設定し、
+reloadします。
+</p>
+
+[< postgresql.confの設定例>]
+<pre>
+synchronous_standby_names = 'slave2'
+</pre>
+
+<pre>
+slave1> pg_ctl -D /usr/local/pgsql/data reload
+</pre>
+
+</blockquote>
+
+<br>
+<br>
+
+
+
+<div class="jumpmenu"></div><h3>再接続におけるスレーブのリカバリ準備</h3>
+
+<p>
+以下、方式別に手順を説明します。
+</p>
+
+<div class="jumpmenu"></div><h4>[A] pg_basebackupを使う</h4>
+
+<p>
+アーカイブログ機能を使わない場合はこの方式を使います。
+</p>
+
+<ol>
+<li> 新マスタのベースバックアップ</li>
+ <p>
+新マスタslave1のデータベースクラスタをslave2にベースバックアップします。
+ </p>
+
+<pre>
+slave2> rm -rf /usr/local/pgsql/data
+slave2> pg_basebackup -h slave1 -p 5432 -D /usr/local/pgsql/data \
+>                                        --xlog --progress --verbose
+</pre>
+
+<p>
+ここでは、旧データベースクラスタを削除していますが、
+HDDに余裕があるならバックアップとして残しておくと良いでしょう。
+</p>
+
+
+<li> recovery.conf編集</li>
+ <p>
+primary_conninfo の接続hostを"master"から"slave1"に変更します。
+ </p>
+[< recovery.confの設定例>]
+<pre>
+primary_conninfo = 'host=slave1 port=5432 application_name=slave2'
+</pre>
+</ol>
+
+
+<div class="jumpmenu"></div><h4>[B]手動でベースバックアップとアーカイブログを取得する</h4>
+
+<p>
+pg_basebackupコマンドが使えない場合に利用します。
+</p>
+
+<ol>
+<li> 新マスタのベースバックアップ</li>
+ <p>
+新マスタslave1のデータベースクラスタをslave2にベースバックアップします。
+ベースバックアップの取得方法は[<3-21>]を参照してください。
+ </p>
+
+<li> recovery.conf編集</li>
+ <p>
+primary_conninfo の接続hostを"master"から"slave1"に変更します。
+ </p>
+
+[< recovery.confの設定例>]
+<pre>
+primary_conninfo = 'host=slave1 port=5432 application_name=slave2'
+</pre>
+</ol>
+
+<p>
+アーカイブログやrestore_commandの設定は不要です。
+<br>
+何故ならレプリケーションを開始する際、
+必要なWALログをwalsenderプロセスから受け取れるからです。
+</p>
+<hr class="full_hr">
+<div id="lastmodified">
+Last-modified: 2018-9-8
+</div>
+</body>
+</html>
+
