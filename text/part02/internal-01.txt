@@ -1,0 +1,9 @@
+%FILE internal/internal-01.html
+%LASTMOD
+%KEY pgsql-internal01
+
+%TITLE プロセスとメモリ構造
+
+<p>
+The Internals of PostgreSQL <a href="https://www.interdb.jp/pg/pgsql02.html" target="_blank" rel="noopener noreferrer">Chapter 2: Process and Memory Architecture</a>
+</p>

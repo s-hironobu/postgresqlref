@@ -1,0 +1,124 @@
+%FILE internal/param-13.html
+%LASTMOD
+%KEY pgsql-param13
+
+%TITLE <a href="https://www.postgresql.org/docs/current/runtime-config-compatible.html" target="_blank" rel="noopener noreferrer">バージョンとプラットフォーム互換性		VERSION/PLATFORM COMPATIBILITY</a>
+
+
+<table>
+<caption>[<設定項目一覧>]</caption>
+<tr bgcolor="#cccccc">
+<th><sup>変更<br>可能性</sup></th> <th>設定項目</th>	<th>パラメータ<br>[デフォルト]</th>		<th>説明</th>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>Previous Postgres Versions</th>
+</tr><tr>
+<td>◎</td>	<td>array_nulls	</td>	<td>	on/off[on]	</td>	<td>	配列型において、(引用符のない)NULLをNULL値として扱うか否か。バージョン8.1まではNULL'と引用符が必要だった。このパラメータは後方互換性のため。バージョン8.2から </td>
+</tr><tr>
+<td>◎</td>	<td>	backslash_quote	</td>	<td>	on/off/safe_encoding[safe_encoding]	</td>	<td>文字列リテラルの中で引用符を(PostgreSQLがサポートしていた旧式の)\'で表現するか否か </td>
+</tr><tr>
+<td>◎</td>	<td>	default_with_oids</td>	<td>	on/off[off]</td>	<td>	CREATE TABLE文などでOID列を含めるか否か </td>
+</tr><tr>
+<td>◎</td>	<td>	escape_string_warning	</td>	<td>on/off[on]		</td>	<td>通常の文字列内にバックスラッシュが存在した場合に警告するか否か。バージョン8.1から </td>
+</tr><tr>
+<td>○</td>	<td>	lo_compat_privileges	</td>	<td>on/off[off]	</td>	<td>ラージオブジェクトのアクセス権限チェックを無効にするか否か。offなら権限チェックが有効。onならバージョン8.4までと同様、権限チェックが無効となる。バージョン9.0から </td>
+</tr><tr>
+<td>◎</td>	<td>	quote_all_identifiers	</td>	<td>on/off[off]	</td>	<td>	SQL文において、テーブル名やカラム名などの識別子を全て強制的に二重引用符で囲むか否か。バージョン9.1から </td>
+</tr><tr>
+<td>◎</td>	<td>	sql_inheritance	</td>	<td>	on/off[on]	</td>	<td>	オブジェクトの継承を有効とするか否か。詳細は[<X-XX>]参照 </td>
+</tr><tr>
+<td>◎</td>	<td>	standard_conforming_strings	</td>	<td>on/off[on(ver9.0まではoff)]	</td>	<td>バックスラッシュを文字として扱うか否か。offならエスケープ文字として扱う。バージョン8.2から </td>
+</tr><tr>
+<td>◎</td>	<td>	asynchronize_seqscans	</td>	<td>on/off[on]	</td>	<td>他に同じテーブルをシーケンシャルスキャンしているトランザクションがあれば、先行するトランザクションが読み取っているブロックからシーケンシャルスキャンを開始する。詳細は[<2-XX>]参照。バージョン8.3から </td>
+</tr><tr>
+<td>◎</td>	<td>	regex_flavor	</td>	<td>	advanced[advanced,extended,basic]	</td>	<td>正規表現の拡張レベル。バージョン8.0から8.4まで </td>
+
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>Other Platforms & Clients</th>
+
+</tr><tr>
+<td>◎</td>	<td>	transform_null_equals	</td>	<td>on/off[off]		</td>	<td>"expr = NULL"(または"NULL = expr")という形の式を"expr IS NULL"という形の式として扱うか否か </td>
+</tr></table>
+
+<br>
+
+
+<table><tr bgcolor="#cccccc">
+<th>記号</th>  <th>意味</th> 
+</tr><tr>
+<td> ◎ </td>	<td>一般ユーザ/ロールが変更可能</td>
+</tr><tr>
+<td> ○ </td>	<td>スーパーユーザだけが変更可能</td>
+</tr><tr>
+<td> △ </td>	<td>設定ファイルを書き換え、pg_ctlをreloadモードで実行すれば変更可能(セッションやトランザクションは保持したまま、パラメータ値が変更できる)</td>
+</tr><tr>
+<td> × </td>	<td>再起動しないと変更できない</td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER 解説
+
+
+・ backslash_quote
+on/off/safe_encoding[safe_encoding]	文字列リテラルの中で引用符が\'で表現されるか否か
+
+引用符の表現としてSQL準拠の方式では二重化（''）ですが、PostgreSQLは歴史的に\'も受け付けます。 
+とは言っても、いくつかのクライアント文字集合符号化方式において、
+最終バイトが数値的にASCIIの\に等しいマルチバイト文字があり、\'を使用するとセキュリティ上問題を引き起こす可能性があります。 
+クライアント側のコードが事実上エスケープを正しく扱わない場合、SQLインジェクション攻撃が可能になります。
+
+この危険性の回避は、サーバが逆スラッシュでエスケープされた引用符を含む問い合わせを拒絶するようにします。 
+許可されるbackslash_quoteの値は、
+on （常に \' を許可）, off （常に拒否）、および safe_encoding （クライアント符号化方式がASCIIの\を許可しないときのみ、マルチバイト文字内で許可）。 
+
+標準に従った文字列リテラルでは、\は単に\を意味するものです。このパラメータのみが、エスケープ文字列構文（E'...'）を含む標準に従わないリテラルの取り扱いに影響します。 
+
+
+
+・standard_conforming_strings
+標準SQLで規定されたように、通常の文字列リテラル（'...'）がバックスラッシュをそのまま取り扱うか否かを制御します。 
+
+エスケープ文字列構文 (項4.1.2.2)は、アプリケーションでバックスラッシュをエスケープ文字として扱いたい場合に使用すべきです。 
+
+standard_conforming_strings = on がデフォルトになりました。
+E'...' 形式でない文字列内の \ は、エスケープとしては扱われなくなります。具体的には：
+
+WARNING:  nonstandard use of \\ in a string literal at character
+
+の警告が出たものの無視しているか、escape_string_warning = off で無理やり黙らせていたケースで問題になります。
+
+SQL文字列中では ' (シングルクォート) や \ (バックスラッシュ, 円記号) はエスケープが必要なため、\ を使ってしまったことがあるのではないでしょうか。
+こういったアプリケーションは、9.1 のデフォルト設定だと動作しなくなる恐れがあります。ただ、互換性を維持するオプションも用意されています。
+
+
+9.1 のデフォルト設定では、文字列中にエスケープが必要な場合は、E'...' の形式の文字列 (先頭に E) を使わなければなりません。E のつかない文字列は、バックスラッシュは単にバックスラッシュ1文字として扱われます。また、シングルクォートは2つ重ねて '' とエスケープします。
+
+本来はきちんと '' と E'' 文字列を使い分けて欲しいのですが、どうしても SQL の改修が難しい場合には、設定パラメータ standard_conforming_strings = off に変更することで、9.0 までと互換性のある動作になります。 9.1 のデフォルトの動作は標準SQLで規定されたものなのですが、残念ながら準拠している DBMS 製品が少なすぎるため、あまり作法として定着していないのは否めません。(個人的には、そこまでストイックにならなくても、互換性を重視して欲しいと思うのですが……。) 
+
+
+
+・lo_compat_privileges
+バージョン8.4まではラージオブジェクトのアクセス権限チェックがなく、バージョン9.0以降アクセス権限チェックが導入された。lo_compat_privilegesを有効(on)にすると旧バージョンと同様にラージオブジェクトのアクセス権限チェックを行わない。
+
+
+・regex_flavor
+advanced正規表現に対応し、バージョン8.0から正規表現の拡張レベルを選択するregex_flavorがサポートされた。デフォルトはadvancedで、これはPerlの正規表現に似たものである。extendedとbasicとはPOSIXの2つの正規表現(EREとBRE)のことである([<7-18>]参照)。
+
+
+==============================================
+
+
+
+
+[8.4] #cursor_tuple_fraction = 0.1          # range 0.0-1.0
+
+[8.4] #intervalstyle = 'postgres'
+
+
+[9.0] #enable_material = on
+
+
+[9.1] #exit_on_error = off                          # terminate session on any error?
+[9.1] #restart_after_crash = on                     # reinitialize after backend crash?

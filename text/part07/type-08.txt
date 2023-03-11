@@ -1,0 +1,43 @@
+%FILE internal/type-08.html
+%LASTMOD
+%KEY pgsql-type08
+
+%TITLE <a href="https://www.postgresql.org/docs/current/datatype-pseudo.html" target="_blank" rel="noopener noreferrer">疑似データ型(Pseudo-Types)</a>
+
+
+[<擬似データ型>]
+
+<table><tr bgcolor="#cccccc">
+<th>データ型</th>	<th>説明</th>
+</tr><tr>
+<td>record</td>		<td>テーブルのレコード(行)を返す型</td>
+</tr><tr>
+<td>any</td>		<td>どのような入力データであっても受け取る、または返す型</td>
+</tr><tr>
+<td>anyarray</td>	<td>どのような配列のデータであっても受け取る、または返す型</td>
+</tr><tr>
+<td>anyelement	</td>	<td>どのようなデータであっても受け取る、または返す型</td>
+</tr><tr>
+<td>anyenum</td>	<td>何らかの列挙データ型を受け取る、または返す型。バージョン8.3から</td>
+</tr><tr>
+<td>anynonarray	</td>	<td>何らかの非配列データ型を受け取る、または返す型。バージョン8.3から</td>
+</tr><tr>
+<td>void</td>		<td>返り値を返さない関数の型</td>
+</tr><tr>
+<td>trigger</td>	<td>トリガを返す関数の型</td>
+</tr><tr>
+<td>language_handler</td><td>呼び出しハンドラ関数であることを示す型(言語の定義などで使う)</td>
+</tr><tr>
+<td>cstring</td>	<td>C言語のNULL終了バイト文字列("\0"で終る文字列)を受け取る、または返す関数の型</td>
+</tr><tr>
+<td>internal</td>	<td>PostgreSQLの内部データ型を受け取る、または返す関数の型</td>
+</tr></table>
+
+
+%CHAPTER 解説
+
+<p>
+特殊な目的のために使用する疑似データ型がサポートされています。
+<br>
+具体的な疑似データ型の使用方法は、例えばトリガ関数の作成([<6-38>])でのtrigger型を参照してください。
+</p>

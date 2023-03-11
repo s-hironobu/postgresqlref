@@ -1,0 +1,92 @@
+%FILE internal/sql-30.html
+%LASTMOD
+%KEY pgsql-sql30
+
+%TITLE <a href="https://www.postgresql.org/docs/current/functions-conditional.html#FUNCTIONS-CASE" target="_blank" rel="noopener noreferrer">CASE式</a>
+
+<pre>
+[<書式>]
+
+CASE WHEN condition THEN result
+     [WHEN ...]
+     [ELSE result]
+END
+
+</pre>
+<br>
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>condition</td>	<td>条件式</td>
+</tr><tr>
+<td>result</td>	<td>条件式が真の場合に代入する値、または式</td>
+</tr><tr>
+
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+CASE式は他の言語のIF/ELSE構文に類似した条件式です。
+すべてのresultは、条件式のカラムと同じデータ型でなければなりません。
+</p>
+
+%CHAPTER 実行例
+
+<p>
+・表示する値を指定テキストに変換
+<br>
+テーブルitemlistについて、カラムnameの値に応じて表示する値を設定します。
+ここでresultにはカラムnameと同じtext型の値しか設定できないので注意してください。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM itemlist;
+ id |   name   | price | makercode
+----+----------+-------+-----------
+  1 | pen      |   100 |        10
+  2 | notebook |   120 |        20
+  3 | eraser   |    72 |        10
+(3 rows)
+
+sampledb=# SELECT id, CASE WHEN name = 'notebook' THEN 'ノート'
+sampledb-#                  WHEN name = 'pen' THEN 'ペン'
+sampledb-#                  WHEN name = 'eraser' THEN '消しゴム'
+sampledb-#                  ELSE 'その他'
+sampledb-#             END AS 品名
+sampledb-#  FROM itemlist;
+ id |   品名
+----+----------
+  1 | ペン
+  2 | ノート
+  3 | 消しゴム
+(3 rows)
+</pre>
+<br>
+
+<p>
+・計算を行い結果表示
+<br>
+resultには式を設定できます。
+価格が100円未満の場合は90%に値引き、それ以外は80%に値引きして表示します。
+</p>
+
+<pre>
+sampledb=# SELECT name, CASE WHEN price < 100 THEN floor(price * 0.9)
+sampledb-#    ELSE floor(price * 0.8)
+sampledb-#  END AS 本日の価格
+sampledb-#  FROM itemlist;
+   name   | 本日の価格
+----------+------------
+ pen      |         80
+ notebook |         96
+ eraser   |         64
+(3 rows)
+</pre>
+<br>
+

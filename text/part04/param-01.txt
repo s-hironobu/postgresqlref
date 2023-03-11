@@ -1,0 +1,177 @@
+%FILE internal/param-01.html
+%LASTMOD
+%KEY pgsql-param01
+
+
+%TITLE <a href="https://www.postgresql.org/docs/current/config-setting.html" target="_blank" rel="noopener noreferrer">postgresql.confの設定</a>
+
+<p>
+PostgreSQLの設定パラメータは設定ファイルpostgresql.confにまとめて設定します。
+postgresql.confはベースディレクトリにあります(本書の場合'/usr/local/pgsql/data')。
+</p>
+
+<p>
+いくつかの設定パラメータは、PostgreSQLサーバの稼働中に(SET文で)設定値をそのセッションの間だけ変更できます。
+<br>
+以降の説明において、設定パラメータの変更可能性を次の記号で表記します。
+</p>
+
+<table><tr bgcolor="#cccccc">
+<th>記号</th>  <th>意味</th>
+</tr><tr>
+<td> ◎ </td>	<td>一般ユーザ/ロールが変更可能</td>
+</tr><tr>
+<td> ○ </td>	<td>スーパーユーザだけが変更可能</td>
+</tr><tr>
+<td> △ </td>	<td>設定ファイルを書き換え、pg_ctlをreloadモードで実行すれば変更可能(セッションやトランザクションは保持したまま、パラメータ値が変更できる)</td>
+</tr><tr>
+<td> × </td>	<td>再起動しないと変更できない</td>
+</tr></table>
+
+<br>
+
+%CHAPTER postgresql.confの設定方法
+
+<p>
+PostgreSQLインストール直後のpostgresql.confは、すべての設定パラメータがシャープ"#"でコメントアウトしてあります。
+コメントアウトされたパラメータにはデフォルト値が設定されます。
+</p>
+
+[< postgresql.conf(の一部分)>]
+<pre>
+#port = 5432
+</pre>
+
+<br>
+
+<p>
+postgresql.confでパラメータを設定するには、"#"を削除して(コメントアウトを外して)値を設定します。
+<br>
+例えば、設定パラメータportの値を3306に変えるには、postgresql.confのportの部分を次のように編集します。
+</p>
+
+<pre>
+port = 3306
+</pre>
+
+<br>
+
+%SECTION 設定ファイルの分割配置
+
+<p>
+バージョン9.3からpostgresql.confを分割配置するための、3つの設定パラメータが追加されました。
+</p>
+
+<p>
+•include_dir
+<br>
+include_dirのコメントアウトを外してディレクトリを指定すると、
+サーバ起動時にそのディレクトリにある.confファイルを読み込みます。
+ファイル名はpostgresql.confに限らず、ファイル拡張子がconfならどんな名前でもかまいません。
+<br>
+複数の.confファイルがある場合はアルファベット順に読み込みます。
+最後に読み込んだ設定パラメータの値が有効になります。
+</p>
+
+<p>
+例えば同一サーバ上に複数のPostgreSQLサーバを稼働させる場合、
+サーバ毎のデータベースクラスタではport番号とinclude_dirなど最低限の設定だけが書かれたpostgresql.confを置き、
+共通の設定ファイルはinclude_dirに置いて集中管理する運用が可能です。
+</p>
+
+<p>
+具体例を示します。
+<br>
+ディレクトリ/usr/local/pgsql以下にデータベースクラスタdata1とdata2を作成し、サブディレクトリconf.dも作成します。
+</p>
+
+<pre>
+postgres> initdb -D /usr/local/pgsql/data1
+postgres> initdb -D /usr/local/pgsql/data2
+postgres> mkdir /usr/local/pgsql/conf.d
+</pre>
+
+<br>
+
+<p>
+生成されたpostgresql.confをconf.dに移動し、common.confと改名します(改名は必須ではありません)。
+そして、両データベースクラスタのpostgresql.confは一旦、削除します。
+</p>
+
+<pre>
+postgres> mv /usr/local/pgsql/data1/postgresql.conf \
+>             /usr/local/pgsql/conf.d/common.conf
+postgres> rm -f /usr/local/pgsql/data2/postgresql.conf
+</pre>
+
+<br>
+
+<p>
+新たにpostgresql.confを作成します。ここではport番号とinclude_dirのみ設定します。
+</p>
+
+<pre>
+postgres> cat >> /usr/local/pgsql/data1/postgresql.conf << EOF
+port = 3333
+include_dir = '/usr/local/pgsql/conf.d'
+EOF
+
+postgres> cat >> /usr/local/pgsql/data2/postgresql.conf << EOF
+port = 4444
+include_dir = '/usr/local/pgsql/conf.d'
+EOF
+</pre>
+
+<br>
+
+<p>
+念のため、conf.d/common.confの設定パラメータportがコメントアウトされていることを確認します(コメントアウトされていないと、この値が有効になってしまう)。
+</>
+
+<p>
+以降は通常の運用が可能となります。
+</p>
+
+
+<p>
+•include、include_if_exists
+<br>
+設定パラメータincludeは、指定した設定ファイルを読み込みます。
+ <br>
+設定パラメータinclude_if_existsは(文字通り)指定したファイルが存在すれば、そのファイルを読み込みます。
+</p>
+
+
+
+%CHAPTER 単位について
+
+<p>
+バージョン8.2から、メモリ容量と時間について、下記の単位が利用できます。
+</p>
+
+<table><tr bgcolor="#cccccc">
+<th>Memory容量　　</th>	<th>説明　　　　　　　　</th>	<th></th>	<th>時間　　　　　　</th>	<th>説明　　　　　　　　　</th>
+</tr><tr>
+<td>kB</td>	<td>キロバイト</td>	<td></td>	<td> ms</td>	<td>ミリ秒</td>
+</tr><tr>
+<td>MB</td>	<td>メガバイト</td>	<td></td>	<td>s</td>	<td>秒</td>
+</tr><tr>
+<td>GB</td>	<td>ギガバイト</td>	<td></td>	<td>min</td>	<td>分</td>
+</tr><tr>
+<td> </td>	<td> </td>		<td> </td>	<td>h</td>	<td>時	</td>
+</tr><tr>
+<td> </td>	<td> </td>		<td> </td>	<td>d</td>	<td>日	</td>
+</tr></table>
+
+<br>
+
+<p>
+例えば設定パラメータauthentication_timeoutは"1min"と"60s"どちらも設定可能です。
+<br>
+なお、各パラメータの設定可能な値の範囲は、postgresql.confにコメントされています。
+</p>
+
+<pre>
+authentication_timeout = 1min          # 1s-600s
+</pre>
+<br>

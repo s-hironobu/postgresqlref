@@ -1,0 +1,351 @@
+%FILE internal/sql-07.html
+%LASTMOD
+%KEY pgsql-sql07
+
+%TITLE <a href="https://www.postgresql.org/docs/current/ddl-partitioning.html" target="_blank" rel="noopener noreferrer">パーティション</a>
+
+<pre>
+
+[ PARTITION BY { RANGE | LIST | HASH } ( { column_name | ( expression ) }
+PARTITION OF parent_table { FOR VALUES partition_bound_spec | DEFAULT }
+
+
+・partition_bound_spec:
+
+IN ( partition_bound_expr [, ...] ) |
+FROM ( { partition_bound_expr | MINVALUE | MAXVALUE } [, ...] )
+  TO ( { partition_bound_expr | MINVALUE | MAXVALUE } [, ...] ) |
+WITH ( MODULUS numeric_literal, REMAINDER numeric_literal )
+
+</pre>
+<br>
+
+
+%CHAPTER 解説
+
+<p>
+基本的な分割方法は大きく分けて3種類あります。
+</p>
+
+<pre>
+1) RANGE分割
+2) LIST分割
+3) HASH分割
+</pre>
+<br>
+
+<p>
+パーティションを追加することでサブパーティショニングも可能で、FDWでも利用できるようです。
+</p>
+
+<p>
+ただし、主キーやユニークキーの設定については制約がある。詳細は末尾で説明します。
+</p>
+
+
+%CHAPTER 分割方法
+
+%SECTION RANGE分割
+<p>
+RANGE分割は、パーティション毎にカラムの値の取る範囲を指定する分割法です。
+</p>
+
+<p>
+以下に示すのは、個人情報を持つテーブルt_rangeです。
+<br>
+氏名name、身長hight、誕生日birthdayを記録します。
+<br>
+ここで身長が150センチ未満のデータはパーティションt_range_p0へ、170センチ未満はt_range_p1、1890センチ未満はt_range_p2、それ以上の場合は'MAXVALUE'を指定し、t_range_p3に保存します。
+</p>
+
+<pre>
+postgres=# CREATE TABLE t_range (name text, hight int, birthday date)PARTITION BY RANGE (hight);
+CREATE TABLE
+postgres=# CREATE TABLE t_range_p0 PARTITION OF t_range FOR VALUES FROM (MINVALUE) TO ('150');
+CREATE TABLE
+postgres=# CREATE TABLE t_range_p1 PARTITION OF t_range FOR VALUES FROM ('150') TO ('170');
+CREATE TABLE
+postgres=# CREATE TABLE t_range_p2 PARTITION OF t_range FOR VALUES FROM ('170') TO ('190');
+CREATE TABLE
+postgres=# CREATE TABLE t_range_p3 PARTITION OF t_range FOR VALUES FROM ('190') TO (MAXVALUE);
+CREATE TABLE
+</pre>
+<br>
+
+<p>
+データベースディレクトリ内のテーブルt_rangeに関するファイルを表示すると、以下に示すように、パーティション毎に各種ファイルが生成されていることが確認できます。
+</p>
+
+<pre>
+postgres=# \d+ t_range
+                                    Partitioned table "public.t_range"
+  Column  |  Type   | Collation | Nullable | Default | Storage  | Compression | Stats target | Description
+----------+---------+-----------+----------+---------+----------+-------------+--------------+-------------
+ name     | text    |           |          |         | extended |             |              |
+ hight    | integer |           |          |         | plain    |             |              |
+ birthday | date    |           |          |         | plain    |             |              |
+Partition key: RANGE (hight)
+Partitions: t_range_p0 FOR VALUES FROM (MINVALUE) TO (150),
+            t_range_p1 FOR VALUES FROM (150) TO (170),
+            t_range_p2 FOR VALUES FROM (170) TO (190),
+            t_range_p3 FOR VALUES FROM (190) TO (MAXVALUE)
+</pre>
+<br>
+
+<p>
+分割のキーは、テーブルのカラムを直接指定するだけでなく、複数のカラムを設定できます。どのパーティションにも入らないデータがある場合、DEFAULTパーティションを設定するとよいでしょう。
+</p>
+
+<pre>
+postgres=# CREATE TABLE t_range2 (name text, hight int, birthday date, math int, english int)
+	   PARTITION BY RANGE (math, english);
+CREATE TABLE
+postgres=# CREATE TABLE t_range2_p0 PARTITION OF t_range2 FOR VALUES FROM ('0','0') TO ('50', '60');
+CREATE TABLE
+postgres=# CREATE TABLE t_range2_p1 PARTITION OF t_range2 FOR VALUES FROM ('50','60') TO ('75', '80');
+CREATE TABLE
+postgres=# CREATE TABLE t_range2_p2 PARTITION OF t_range2 FOR VALUES FROM ('75','80') TO ('100', '100');
+CREATE TABLE
+postgres=# CREATE TABLE t_range2_default PARTITION OF t_range2 DEFAULT;
+CREATE TABLE
+</pre>
+<br>
+
+<p>
+GENERATEDカラムは分割キーに設定できないので、
+結果的に例えば分割する複数のキーを直接演算することもできないようです。
+</p>
+
+<pre>
+postgres=# CREATE TABLE t_range3 (name text, hight int, birthday date, math int, english int,
+        total int GENERATED ALWAYS AS (math + english) STORED) PARTITION BY RANGE (total);
+ERROR:  cannot use generated column in partition key
+LINE 2: ...WAYS AS (math + english) STORED) PARTITION BY RANGE (total);
+                                                                ^
+DETAIL:  Column "total" is a generated column.
+</pre>
+<br>
+
+
+%SECTION LIST分割
+
+<p>
+LIST分割は、パーティション毎にカラムの値を直接指定する分割法です。
+</p>
+
+
+<p>
+前述と同様のデータを保持するテーブルt_listは、誕生月MONTH(birthday)によって1〜3月はパーティションp0、4〜6月はp1、7〜9月はp2、10〜12月はp3にデータを保存します。
+</p>
+
+<pre>
+postgres=# CREATE TABLE t_list (name text, hight int, birthday date) PARTITION BY LIST (date_part('month', birthday));
+CREATE TABLE
+postgres=# CREATE TABLE t_list_p0 PARTITION OF t_list FOR VALUES IN (1, 2, 3);
+CREATE TABLE
+postgres=# CREATE TABLE t_list_p1 PARTITION OF t_list FOR VALUES IN (4, 5, 6);
+CREATE TABLE
+postgres=# CREATE TABLE t_list_p2 PARTITION OF t_list FOR VALUES IN (7, 8, 9);
+CREATE TABLE
+postgres=# CREATE TABLE t_list_p3 PARTITION OF t_list FOR VALUES IN (10, 11, 12);
+CREATE TABLE
+
+postgres=# INSERT INTO t_list VALUES ('alice', 160, '1964-01-01');
+INSERT 0 1
+postgres=# SELECT * FROM t_list;
+ name  | hight |  birthday
+-------+-------+------------
+ alice |   160 | 1964-01-01
+(1 row)
+
+postgres=# SELECT * FROM t_list_p0;
+ name  | hight |  birthday
+-------+-------+------------
+ alice |   160 | 1964-01-01
+(1 row)
+
+postgres=# SELECT * FROM t_list_p1;
+ name | hight | birthday
+------+-------+----------
+(0 rows)
+
+postgres=# SELECT * FROM t_list_p2;
+ name | hight | birthday
+------+-------+----------
+(0 rows)
+</pre>
+<br>
+
+
+%SECTION HASH分割
+
+<p>
+HASH分割によるパーティションの割り当ては、カラム値を関数mod()"剰余(modulo)"で計算した結果を使います。
+<br>
+例えば、以下では、1月から12月までのカラム値(MONTH(birthday))を4で割った余りでパーティションが割り当てられます。パーティション0には12月と4月と8月、パーティション1には1月と5月と9月、パーティション2には2月と6月と10月、パーティション3には3月と7月と11月のデータが割り当てられます。
+</p>
+
+<pre>
+postgres=# CREATE TABLE t_hash (name text, hight int, birthday date) PARTITION BY HASH (date_part('month', birthday));
+CREATE TABLE
+postgres=# CREATE TABLE t_hash_p0 PARTITION OF t_hash FOR VALUES WITH(MODULUS 4,REMAINDER 0);
+CREATE TABLE
+postgres=# CREATE TABLE t_hash_p1 PARTITION OF t_hash FOR VALUES WITH(MODULUS 4,REMAINDER 1);
+CREATE TABLE
+postgres=# CREATE TABLE t_hash_p2 PARTITION OF t_hash FOR VALUES WITH(MODULUS 4,REMAINDER 2);
+CREATE TABLE
+postgres=# CREATE TABLE t_hash_p3 PARTITION OF t_hash FOR VALUES WITH(MODULUS 4,REMAINDER 3);
+CREATE TABLE
+</pre>
+<br>
+
+%CHAPTER パーティション追加
+
+<p>
+具体例を使ってパーティション追加について説明します。
+</p>
+
+
+<p>
+テーブルt_listのパーティションt_list_p0をさらに2分割することを考えます。
+</p>
+
+
+<p>
+(1)パーティションをデタッチする
+<br>
+</p>
+
+<pre>
+postgres=# ALTER TABLE t_list DETACH PARTITION t_list_p0;
+ALTER TABLE
+</pre>
+<br>
+
+
+<p>
+(2)データの一時保存のため、パーティション名を変更する
+<br>
+</p>
+
+<pre>
+postgres=# ALTER TABLE t_list_p0 RENAME TO t_list_p0_back;
+ALTER TABLE
+</pre>
+<br>
+
+<p>
+(3)新しいパーティションを作成する
+<br>
+</p>
+
+<pre>
+postgres=# CREATE TABLE t_list_p0_0 PARTITION OF t_list FOR VALUES IN (1);
+CREATE TABLE
+postgres=# CREATE TABLE t_list_p0_1 PARTITION OF t_list FOR VALUES IN (2, 3);
+CREATE TABLE
+</pre>
+<br>
+
+<p>
+(4)一時保存してあるパーティションのデータを新しいパーティションに入れ直す。
+<br>
+</p>
+
+<pre>
+postgres=# INSERT INTO t_list SELECT * FROM t_list_p0_back;
+</pre>
+<br>
+
+
+<p>
+(5)一時保存に使った古いパーティションを削除する。
+<br>
+</p>
+
+<pre>
+postgres=# DROP TABLE t_list_p0_back;
+DROP TABLE
+</pre>
+<br>
+
+
+%CHAPTER インデックス、主キー、一意キーのあるテーブルの場合
+
+%SECTION パーティションテーブル毎に制約を設定できる場合
+
+<p>
+パーティションテーブル毎にインデックスや一意性制約を設定できる場合は、そのようにするほうが設定が楽です。
+以下に、パーティションテーブル毎にインデックスと一意性制約を設定する例を示します。
+</p>
+
+<pre>
+CREATE TABLE t_range2 (name text, id int, id2 int)PARTITION BY RANGE (id);
+CREATE TABLE t_range2_p0 PARTITION OF t_range2 FOR VALUES FROM (MINVALUE) TO ('150');
+CREATE TABLE t_range2_p1 PARTITION OF t_range2 FOR VALUES FROM ('150') TO ('170');
+CREATE TABLE t_range2_p2 PARTITION OF t_range2 FOR VALUES FROM ('170') TO ('190');
+CREATE TABLE t_range2_p3 PARTITION OF t_range2 FOR VALUES FROM ('190') TO (MAXVALUE);
+
+CREATE INDEX t_range2_p0_idx ON t_range2_p0 (id);
+CREATE INDEX t_range2_p1_idx ON t_range2_p1 (id);
+CREATE INDEX t_range2_p2_idx ON t_range2_p2 (id);
+CREATE INDEX t_range2_p3_idx ON t_range2_p3 (id);
+
+ALTER TABLE t_range2_p0 ADD CONSTRAINT t_range2_p0_unique UNIQUE (id2);
+ALTER TABLE t_range2_p1 ADD CONSTRAINT t_range2_p1_unique UNIQUE (id2);
+ALTER TABLE t_range2_p2 ADD CONSTRAINT t_range2_p2_unique UNIQUE (id2);
+ALTER TABLE t_range2_p3 ADD CONSTRAINT t_range2_p3_unique UNIQUE (id2);
+</pre>
+<br>
+
+<p>
+当然ですがこの場合、テーブル全体の一意性を確保することはできません。
+</p>
+
+
+%SECTION 親テーブルに主キーを設定する場合
+
+<p>
+主キーをパーティションの分割キーにすることができます。
+</p>
+
+<pre>
+postgres=# CREATE TABLE t_range2 (name text, id int primary key, id2 int)PARTITION BY RANGE (id);
+CREATE TABLE
+postgres=# CREATE TABLE t_range2_p0 PARTITION OF t_range2 FOR VALUES FROM (MINVALUE) TO ('150');
+CREATE TABLE
+postgres=# CREATE TABLE t_range2_p1 PARTITION OF t_range2 FOR VALUES FROM ('150') TO ('170');
+CREATE TABLE
+postgres=# CREATE TABLE t_range2_p2 PARTITION OF t_range2 FOR VALUES FROM ('170') TO ('190');
+CREATE TABLE
+postgres=# CREATE TABLE t_range2_p3 PARTITION OF t_range2 FOR VALUES FROM ('190') TO (MAXVALUE);
+CREATE TABLE
+</pre>
+<br>
+
+%SECTION 親テーブルに一意キーを設定する場合
+
+<p>
+一意キーをパーティションの分割キーに設定できます。
+</p>
+
+<pre>
+CREATE TABLE t_range3 (name text, id int, id2 int, unique(id,name))PARTITION BY RANGE (id);
+
+CREATE TABLE t_range3_p0 PARTITION OF t_range3 FOR VALUES FROM (MINVALUE) TO ('150');
+CREATE TABLE t_range3_p1 PARTITION OF t_range3 FOR VALUES FROM ('150') TO ('170');
+CREATE TABLE t_range3_p2 PARTITION OF t_range3 FOR VALUES FROM ('170') TO ('190');
+CREATE TABLE t_range3_p3 PARTITION OF t_range3 FOR VALUES FROM ('190') TO (MAXVALUE);
+</pre>
+<br>
+
+<p>
+一意キーが分割キーに含まれないとエラーが発生してテーブルを生成できません。
+</p>
+
+<pre>
+postgres=# CREATE TABLE t_range3 (name text, id int, id2 int, unique(id,name))PARTITION BY RANGE (id2);
+ERROR:  unique constraint on partitioned table must include all partitioning columns
+DETAIL:  UNIQUE constraint on table "t_range3" lacks column "id2" which is part of the partition key.
+</pre>
+<br>

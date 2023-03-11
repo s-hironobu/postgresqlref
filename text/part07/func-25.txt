@@ -1,0 +1,48 @@
+%FILE internal/func-25.html
+%LASTMOD
+%KEY pgsql-func25
+
+%TITLE <a href="https://www.postgresql.org/docs/current/functions-statistics.html" target="_blank" rel="noopener noreferrer">統計情報関数</a>
+
+
+<table>
+<caption>MCVリスト表示</caption>
+<tr bgcolor="#cccccc">
+<th>関数</th>							<th>返り値型</th>	<th>説明</th>
+
+</tr><tr>
+<td>pg_mcv_list_items(pg_mcv_list)</td>	<td>setof record</td>	<td></td>
+</tr></table>
+
+<br>
+
+<table>
+<caption>pg_mcv_list_itemsの項目</caption>
+<tr bgcolor="#cccccc">
+<th>item</th>							<th>型</th>	<th>説明</th>
+
+</tr><tr>
+<td>index</td>	<td>int</td>	<td></td>
+
+</tr><tr>
+<td>values</td>	<td>text[]</td>	<td></td>
+
+</tr><tr>
+<td>nulls</td>	<td>bool[]</td>	<td></td>
+
+</tr><tr>
+<td>frequency</td>	<td>double precision</td>	<td></td>
+
+</tr><tr>
+<td>base_frequency</td>	<td>double precision</td>	<td></td>
+
+
+</tr></table>
+
+<br>
+
+
+%CHAPTER 解説
+
+<a href="https://www.postgresql.org/docs/current/sql-createstatistics.html" target="_blank" rel="noopener noreferrer">CREATE STATISTICS</a>で作った統計情報の情報を表示する。
+

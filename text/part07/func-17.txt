@@ -1,0 +1,118 @@
+%FILE internal/func-17.html
+%LASTMOD
+%KEY pgsql-func17
+
+%TITLE <a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADMIN-BACKUP" target="_blank" rel="noopener noreferrer">バックアップ制御関数</a>
+
+
+<table><tr bgcolor="#cccccc">
+<th>関数</th>							<th>返り値型</th>	<th>説明</th>	<th>実行側</th>
+
+</tr><tr>
+<td>pg_create_restore_point(name text)</td>	<td>pg_lsn</td>	<td>この関数を実行したLSNまでリカバリする。詳細は[<5-02>]参照。</td> <td>マスタ</td>
+</tr><tr>
+
+<td>pg_current_wal_flush_lsn()</td>	<td>pg_lsn</td>	<td>現在のWALログの書き込み位置</td> <td>マスタ</td>
+</tr><tr>
+
+<td>pg_current_wal_insert_lsn()</td>	<td>pg_lsn</td>	<td>現在のWALログの挿入位置</td> <td>マスタ</td>
+</tr><tr>
+
+<td>pg_current_wal_lsn()</td>	<td>pg_lsn</td>	<td></td> <td>マスタ</td>
+</tr><tr>
+
+<td>pg_backup_start(label text [,fast boolean ])</td>	<td>pg_lsn</td>	<td>バージョン15から</td> <td>マスタ</td>
+</tr><tr>
+
+<td>pg_start_backup(label text [,fast boolean ])</td>	<td>pg_lsn</td>	<td>オンラインバックアップ開始前に実行。バージョン14まで</td> <td>マスタ</td>
+</tr><tr>
+
+
+<td>pg_backup_stop([wait_for_archive boolean])</td>	<td>record(lsn, labelfile, spcmapfile)</td>	<td>バージョン15から</td> <td>マスタ</td>
+</tr><tr>
+
+<td>pg_stop_backup([wait_for_archive boolean])</td>	<td>record(lsn, labelfile, spcmapfile)</td>	<td>バージョン14まで</td> <td>マスタ</td>
+</tr><tr>
+
+<td>pg_stop_backup()</td>	<td>pg_lsn</td>	<td>オンラインバックアップ終了後に実行。バージョン13まで</td> <td>マスタ</td>
+</tr><tr>
+
+
+<td>pg_is_in_backup()</td>	<td>bool</td>	<td>バージョン14まで</td> <td>マスタ</td>
+</tr><tr>
+
+<td>pg_backup_start_time()</td>	<td>timestamp</td>	<td>バージョン14まで</td> <td>マスタ</td>
+</tr><tr>
+
+
+<td>pg_switch_wal()</td>	<td>pg_lsn</td>	<td>新しいWALログファイルに切り替え</td> <td>マスタ</td>
+</tr><tr>
+
+<td>pg_walfile_name(lsn pg_lsn)</td>	<td>text</td>	<td>WALログの位置を表す文字列をファイル名に変換</td> <td>マスタ</td>
+</tr><tr>
+
+<td>pg_walfile_name_offset(lsn pg_lsn)</td>	<td>record(ile_name, file_offset)</td>	<td>WALログの位置を表す文字列を、ファイル名とファイル内の10進のバイトオフセットに変換</td> <td>マスタ</td>
+</tr><tr>
+
+<td>pg_wal_lsn_diff(lsn1 pg_lsn, lsn2 pg_lsn)</td>	<td>numeric</td>	<td>LSNの差を返す</td> <td>マスタ</td>
+
+</tr></table>
+
+<br>
+
+
+
+%CHAPTER 解説
+
+
+<p>
+・pg_start_backup()、pg_stop_backup()、pg_create_restore_point()
+<br>
+ベースバックアップを取得するための関数である。使い方は[<2-10>]、[<5-02>]を参照。
+</p>
+
+
+<p>
+・pg_xlogfile_name_offset()、pg_xlogfile_name()、pg_xlog_location_diff()
+<br>
+LSN(Log Sequence Number)からWALログのファイル名やオフセットを得る。
+これらはWALログの管理用関数である。
+</p>
+
+<pre>
+sampledb=# SELECT pg_xlogfile_name_offset('0/F000074');
+    pg_xlogfile_name_offset
+--------------------------------
+ (00000001000000000000000F,116)
+(1 row)
+
+sampledb=# SELECT pg_xlogfile_name('0/F000074');
+     pg_xlogfile_name
+--------------------------
+ 00000001000000000000000F
+(1 row)
+
+sampledb=# SELECT pg_xlog_location_diff('0/F0001B0', '0/F000074');
+ pg_xlog_location_diff
+-----------------------
+                   316
+(1 row)
+</pre>
+
+
+<p>
+・pg_last_xlog_receive_location()
+<br>
+pg_last_xlog_receive_location()は受信してHDDに書き込んだWALログのLSNを返す。"receive"という関数名と異なるので注意。
+<br>
+
+</p>
+
+
+<p>
+・pg_xlog_replay_pause()、pg_xlog_replay_resume()
+<br>
+これらの関数を使うと、スレーブ側で明示的に再生(replay)を停止できる。
+</p>
+
+

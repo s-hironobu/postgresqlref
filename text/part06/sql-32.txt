@@ -1,0 +1,181 @@
+%FILE internal/sql-32.html
+%LASTMOD
+%KEY pgsql-sql32
+
+%TITLE データの更新 <a href="https://www.postgresql.org/docs/current/sql-update.html" target="_blank" rel="noopener noreferrer">UPDATE</a>
+
+<pre>
+[<書式>]
+
+UPDATE [ ONLY ] table [ [ AS ] alias ]
+    SET { column = { expression | DEFAULT } |
+          ( column [, ...] ) = ( { expression | DEFAULT } [, ...] ) } [, ...]
+    [ FROM fromlist ]
+    [ WHERE condition | WHERE CURRENT OF cursor_name ]
+    [ RETURNING * | output_expression [ AS output_name ] [, ...] ]
+
+</pre>
+<br>
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>table_name</td>	<td>データを更新するテーブル名</td>
+</tr><tr>
+<td>alias</td>	<td>テーブルの別名を指定</td>
+</tr><tr>
+<td>column</td>	<td>テーブルのカラム名</td>
+</tr><tr>
+<td>expression</td>	<td>カラムに代入する値、または式</td>
+</tr></table>
+
+<br>
+
+
+<table>
+<caption>句</caption>
+<tr bgcolor="#cccccc">
+<th>句</th>	<th>説明</th>
+</tr><tr>
+<td>FROM from_list</td>	<td>FROM句で利用するテーブル名</td>
+</tr><tr>
+<td>WHERE condition</td>	<td>WHERE句による更新レコード指定の条件。サブクエリも使用可</td>
+</tr><tr>
+<td>WHERE CURRENT OF cursor_name</td>	<td>カーソルcursor_nameから最近取り出した1レコードを更新する</td>
+</tr><tr>
+<td>RETURNING　output_expression</td>	<td>更新結果を表示する</td>
+</tr></table>
+
+<br>
+
+
+<table>
+<caption>オプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>ONLY</td>	<td>継承先のデータを削除しない。詳細は<a href="./sql-06.html">[<6-06>]</a>「データ操作の継承を無効にする」を参照</td>
+</tr><tr>
+<td></td>	<td>そのカラムのデフォルト値に更新する。デフォルト値が設定されていない場合はNULL</td>
+
+</tr></table>
+
+<br>
+
+
+%CHAPTER 解説
+
+<p>
+UPDATE文でテーブルのデータを更新します。現在のところ、ビューのデータは更新できません。
+<br>
+UPDATE文の実行にはそのテーブルのUPDATE権限が必要です(権限表示はメタコマンド\z)。
+</p>
+
+<p>
+バージョン8.2からRETURNING句で更新結果を表示できます。使い方は実行例を参照してください。
+</p>
+
+<p>
+バージョン8.3から、カーソルで最近取り出した1レコードを更新できます。
+使用例はカーソル<a href="./sql-39.html">[<6-39>]</a>を参照してください。
+</p>
+
+%CHAPTER 実行例
+
+<p>
+次の条件「価格(price) が100円未満、もしくは商品名(name)が'pen' の場合、価格を100円に」を満たすレコードを更新します。
+</p>
+
+<pre>
+sampledb=# SELECT name, price FROM itemlist;
+   name   | price
+----------+-------
+ pen      |   100
+ notebook |   120
+ eraser   |    72
+(3 rows)
+
+sampledb=# UPDATE itemlist SET price = 100 WHERE price < 100 OR name = 'pen';
+UPDATE 2
+
+sampledb=# SELECT name, price FROM itemlist;
+   name   | price
+----------+-------
+ notebook |   120
+ pen      |   100
+ eraser   |   100
+(3 rows)
+</pre>
+<br>
+
+<p>
+・サブクエリ
+<br>
+UPDATE文のWHERE句にはサブクエリ(<a href="./sql-29.html">[<6-29>]</a>参照)が使えます。
+<br>
+例として、テーブルmakerlistに含まれるデータをもとに、テーブルitemlistのデータを更新します。
+具体的にはSmythson社製品の価格を10%値上げします。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM itemlist;
+ id |   name   | price | makercode
+----+----------+-------+-----------
+  1 | pen      |   100 |        10
+  2 | notebook |   120 |        20
+  3 | eraser   |    72 |        10
+(3 rows)
+
+sampledb=# SELECT * FROM makerlist;
+ id |   name
+----+----------
+ 10 | Smythson
+ 20 | Rotring
+(2 rows)
+</pre>
+<br>
+
+<p>
+ここで次のUPDATE文を実行すると、Smythson社の製品のみ、価格を10%値上げされます。
+</p>
+
+<pre>
+sampledb=# UPDATE itemlist SET price = price * 1.1
+sampledb-#         WHERE makercode IN
+sampledb-#         (SELECT id FROM makerlist WHERE name = 'Smythson');
+UPDATE 2
+
+sampledb=# SELECT * FROM itemlist;
+ id |   name   | price | makercode
+----+----------+-------+-----------
+  2 | notebook |   120 |        20
+  1 | pen      |   110 |        10
+  3 | eraser   |    79 |        10
+(3 rows)
+</pre>
+<br>
+
+<p>
+・FROM句
+<br>
+前述のサブクエリを使ったUPDATE文を、FROM句を使って書き換えます。
+</p>
+
+<pre>
+sampledb=# UPDATE itemlist SET price = price * 1.1
+sampledb-#     FROM makerlist
+sampledb-#          WHERE makerlist.id = itemlist.makercode
+sampledb-#          AND makerlist.name = 'Smythson';
+UPDATE 2
+
+sampledb=# SELECT * FROM itemlist;
+ id |   name   | price | makercode
+----+----------+-------+-----------
+  2 | notebook |   120 |        20
+  1 | pen      |   110 |        10
+  3 | eraser   |    79 |        10
+(3 rows)
+</pre>
+<br>

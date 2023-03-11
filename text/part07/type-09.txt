@@ -1,0 +1,83 @@
+%FILE internal/type-09.html
+%LASTMOD
+%KEY pgsql-type09
+
+%TITLE <a href="https://www.postgresql.org/docs/current/datatype-binary.html" target="_blank" rel="noopener noreferrer">バイナリ列データ型</a>
+
+
+[<バイナリ列データ型>]
+
+<table><tr bgcolor="#cccccc">
+<th>データ型名</th>	<th>説明</th>
+</tr><tr>
+<td>bytea</td>		<td>可変長のバイナリ文字列。最大1[G byte]まで</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+バイナリ列データ型はデータをバイナリ形式として扱います。
+文字データ型との違いは、文字コードに含まれないデータ(表示できない文字など)も扱えることです。
+<br>
+従来、PostgreSQLでバイナリデータを扱う場合は"ラージオブジェクト"として扱っていました。
+ラージオブジェクトはテーブル定義に含めることができませんが、bytea型はテーブル定義に含めることができます。
+</p>
+
+<p>
+・入出力形式:escape形式、hex形式
+<br>
+バージョン8.4まではPostgreSQL独自の入出力形式("escape形式"と呼ぶ)が使われていました。
+これは、数字やアルファベットはそのまま、それ以外の文字(日本語など)は"\(バックスラッシュ)"と数字を使う混成型でした。
+</p>
+
+<pre>
+sampledb=# SHOW bytea_output;
+ bytea_output
+--------------
+ escape
+(1 row)
+
+sampledb=# SELECT '123ABC'::bytea AS "123ABC",
+sampledb-#           'あZん'::bytea AS "あZん";
+ 123ABC |           あZん
+--------+---------------------------
+ 123ABC | \343\201\202Z\343\202\223
+(1 row)
+</pre>
+<br>
+
+<p>
+バージョン9.0から、全てを16進数で表現するhex形式がデフォルトになりました。
+形式を明示的に表すため、先頭に"\x"がつきます。
+</p>
+
+<pre>
+sampledb=# SHOW bytea_output;
+ bytea_output
+--------------
+ hex
+(1 row)
+
+sampledb=# SELECT '123ABC'::bytea AS "123ABC",
+sampledb-#         'あZん'::bytea AS "あZん";
+     123ABC     |      あZん
+----------------+------------------
+ \x313233414243 | \xe381825ae38293
+(1 row)
+</pre>
+<br>
+
+<p>
+バージョン9.0から、入出力形式は設定パラメータbytea_outで制御できます。
+</p>
+
+<p>
+・演算子と関数
+<br>
+バイナリ列データ型は文字列の結合演算子'||'を使用できます(<a href="./ope-05.html">[<7-16>]</a>参照)。
+<br>
+また関数position()、substring()、trim()、decode()、encode()などが使用できます(<a href="./func-04.html">[<7-25>]</a>参照)。
+</p>
+

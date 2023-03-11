@@ -1,0 +1,130 @@
+%FILE internal/plpgsql-17.html
+%LASTMOD
+%KEY pgsql-plpgsql17
+
+
+%TITLE <a href="https://www.postgresql.org/docs/current/plpgsql-cursors.html#PLPGSQL-CURSOR-USING" target="_blank" rel="noopener noreferrer">FETCH文によるカーソル行の取得	FETCH / MOVE / UPDATE / DELETE</a>
+
+<pre>
+[<書式>]
+
+● カーソルの取り出し
+FETCH [ direction { FROM | IN } ] cursor INTO target
+
+● カーソル移動
+MOVE [ direction { FROM | IN } ] cursor;
+
+
+● 取り出した行の更新
+UPDATE table SET ... WHERE CURRENT OF cursor
+
+
+● 取り出した行の削除
+DELETE FROM table WHERE CURRENT OF cursor
+
+</pre>
+
+<br>
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>cursor</td>	<td>カーソル変数</td>
+</tr><tr>
+<td>target</td>	<td>取り出したデータを格納する変数</td>
+</tr></table>
+
+<br>
+
+<table>
+<caption>direction</caption>
+<tr bgcolor="#cccccc">
+<th>direction</th>	<th>説明</th>
+</tr><tr>
+<td>NEXT</td>	<td>次の行(countに1を指定することと同じ) 。デフォルト</td>
+</tr><tr>
+<td>PRIOR</td>	<td>前の行(countに−1を指定することと同じ</td>
+</tr><tr>
+<td>FIRST</td>	<td>先頭行(ABSOLUTE 1を指定することと同じ)</td>
+</tr><tr>
+<td>LAST</td>	<td>最終行(ABSOLUTE -1を指定することと同じ)</td>
+</tr><tr>
+<td>ABSOLUTE count</td>	<td>先頭からcount番目の行を取り出す</td>
+</tr><tr>
+<td>RELATIVE count</td>	<td>先頭からcount番目以降の行を取り出す</td>
+</tr><tr>
+<td>FORWARD</td>	<td>NEXTと同じ。次の行を取り出す。(countに1を指定することと同じ) </td>
+</tr><tr>
+<td>BACKWARD</td>	<td>PRIORと同じ。前の行(countに-1を指定することと同じ) </td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+FETCH文を使ってカーソルから行を取り出します。
+</p>
+
+<p>
+FETCHはSELECT INTOと同様に、カーソルから次の行を抽出し、対象に格納します。対象とは、行変数、レコード変数、または単純な変数をカンマで区切ったリストです。 SELECT INTOの場合と同様、特殊なFOUND変数を検査することで、行が入手できたかどうかを確認することができます。
+</p>
+
+<p>
+direction句は複数行を取り出すことができるコマンドを除き、SQL FETCHで許可されたどのようなコマンドも可能です。すなわち、以下のものです。 NEXT、 PRIOR、 FIRST、 LAST、 ABSOLUTE count、 RELATIVE count、 FORWARDまたは BACKWARD。 direction句の省略は、NEXTの指定と同じです。 SCROLLオプションを用いてカーソルを宣言または開かないと、directionの値による逆方向への移動の要求は失敗します。
+</p>
+
+<p>
+cursor名は、開いているカーソルのポータルを参照するrefcursor変数名でなければなりません。
+</p>
+
+<pre>
+例：
+
+FETCH curs1 INTO rowvar;
+FETCH curs2 INTO foo, bar, baz;
+FETCH LAST FROM curs3 INTO x, y;
+FETCH RELATIVE -2 FROM curs4 INTO x;
+</pre>
+
+<br>
+
+
+<p>
+<font color="#ff0000">boundカーソルからデータを連続して取得する場合、<a href="./plpgsql-18.html">[<8-18>]</a>のFOR IN LOOPを利用するとよいでしょう。</font>
+</p>
+
+%CHAPTER プログラム例
+
+<p>
+・カーソルにより取り出した行を行変数に代入
+<br>
+カーソルcursorから取り出した行を、行変数customer_dataに代入します。
+</p>
+
+<pre>
+FETCH cursor INTO customer_data;
+</pre>
+<br>
+
+<p>
+・カーソルにより取り出した行を複数の変数に代入
+<br>
+カーソルcursorから取り出した行のデータを、変数id,name,companycodeに代入します。各変数は適当なデータ型で定義されているものとします([<補足 1>])。
+</p>
+
+<pre>
+FETCH cursor INTO id, name, companycode;
+</pre>
+
+<br>
+
+%CHAPTER 補足
+
+<p>
+(1)
+SELECT INTO 文(<a href="./plpgsql-04.html">[<8-04>]</a>)と同様、boolean型変数FOUNDを検査することで、FETCH文が変数に値を代入できたか否かを知ることができます。
+</p>
+

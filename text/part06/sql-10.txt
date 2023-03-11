@@ -1,0 +1,197 @@
+%FILE internal/sql-10.html
+%LASTMOD
+%KEY pgsql-sql10
+
+
+%TITLE テーブル属性の更新(1) <a href="https://www.postgresql.org/docs/current/sql-altertable.html" target="_blank" rel="noopener noreferrer">ALTER TABLE</a>
+
+<pre>
+[<書式>]
+
+● テーブル名の変更
+ALTER TABLE table_name
+    RENAME TO new_table_name
+
+● スキーマの変更
+ALTER TABLE table_name
+    SET SCHEMA new_schema
+
+● テーブルスペースの変更
+ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
+  SET TABLESPACE new_tablespace
+
+● テーブル所有者の変更
+ALTER TABLE [ ONLY ] table_name [ * ]
+      OWNER TO { new_owner | CURRENT_ROLE | CURRENT_USER | SESSION_USER }
+
+● ストレージパラメータの変更
+ALTER TABLE [ ONLY ] table_name [ * ]
+    SET ( storage_parameter = value [, ... ] )
+
+ALTER TABLE [ ONLY ] table_name [ * ]
+    RESET ( storage_parameter [, ... ] )
+
+● 継承テーブルの変更
+ALTER TABLE [ ONLY ] table_name [ * ]
+    INHERIT parent_table
+
+ALTER TABLE [ ONLY ] table_name [ * ]
+    NO INHERIT parent_table
+
+●アクセスメソッドの設定
+ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
+    SET ACCESS METHOD new_access_method
+
+●LOGGED、UNLOGGEDの設定
+ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
+    SET { LOGGED | UNLOGGED }
+
+● テーブルスペース
+ALTER TABLE ALL IN TABLESPACE table_name [ OWNED BY role_name [, ... ] ]
+    SET TABLESPACE new_tablespace [ NOWAIT ]
+
+●クラスタ関連の変更
+ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
+      CLUSTER ON index_name
+
+ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
+      SET WITHOUT CLUSTER
+
+●OIDを外す
+ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
+      SET WITHOUT OIDS
+
+●型付きテーブルの宣言
+ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
+      OF type_name
+
+ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
+      NOT OF
+
+●IDENTITYをレプリケーションでも
+ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
+      REPLICA IDENTITY { DEFAULT | USING INDEX index_name | FULL | NOTHING }
+
+
+●パーティショニングの変更
+ALTER TABLE [ IF EXISTS ] table_name
+    ATTACH PARTITION partition_name { FOR VALUES partition_bound_spec | DEFAULT }
+
+ALTER TABLE [ IF EXISTS ] table_name
+    DETACH PARTITION partition_name [ CONCURRENTLY | FINALIZE ]
+
+where partition_bound_spec is:
+
+      IN ( partition_bound_expr [, ...] ) |
+      FROM ( { partition_bound_expr | MINVALUE | MAXVALUE } [, ...] )
+        TO ( { partition_bound_expr | MINVALUE | MAXVALUE } [, ...] ) |
+      WITH ( MODULUS numeric_literal, REMAINDER numeric_literal )
+
+</pre>
+
+
+<br>
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>table_name</td>	<td>各種属性を変更するテーブル名</td>
+</tr><tr>
+<td>tablespace_name</td>	<td>新しいテーブルスペース名</td>
+</tr><tr>
+<td>new_schema</td>	<td>新しいスキーマ名</td>
+</tr><tr>
+<td>new_owner</td>	<td>テーブルの新しい所有者名</td>
+</tr><tr>
+<td>new_table_name</td>	<td>テーブルの新しい名前</td>
+</tr><tr>
+<td>parent_table</td>	<td>継承する/継承を削除する親テーブル</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+・テーブルスペースとインデックス
+<br>
+テーブルを保存するテーブルスペースを変更しても、
+<u>テーブルのインデックステーブルは移動しません</u>。
+インデックステーブルのテーブルスペースを変更するには、ALTER INDEX文([<6-35>]参照)を使います。
+</p>
+
+<p>
+・ストレージパラメータ
+<br>
+テーブルのストレージパラメータは[<6-04>]のWITH句を参照してください。
+</p>
+
+<p>
+・パーティション関連
+<br>
+パーティション関連のALTER文の使い方は[<6-07>]を参照。
+</p>
+
+
+%CHAPTER 実行例
+
+<p>
+・テーブル名の変更
+<br>
+テーブルtemp_tableの名前をsample_tableに変更します。
+</p>
+
+<pre>
+sampledb=# ALTER TABLE temp_table RENAME TO sample_table;
+</pre>
+
+<p>
+・所有者の変更
+<br>
+テーブルの所有者をロールmasterからwebuserへ変更します。
+</p>
+
+<pre>
+sampledb=# \dt customerlist
+           List of relations
+ Schema |     Name     | Type  | Owner
+--------+--------------+-------+--------
+ public | customerlist | table | master
+(1 row)
+
+sampledb=# ALTER TABLE customerlist OWNER TO webuser;
+ALTER TABLE
+
+sampledb=# \dt customerlist
+           List of relations
+ Schema |     Name     | Type  |  Owner
+--------+--------------+-------+---------
+ public | customerlist | table | webuser
+(1 row)
+</pre>
+
+<br>
+
+<p>
+・型付きテーブル
+<br>
+OF type_nameで型付きテーブル化できます。これはCREATE TYPEで作成した型と一致したテーブル定義を行なっている場合のみ可能です。
+</p>
+
+<pre>
+postgres=# CREATE TYPE employee_type AS (name text, salary numeric);
+CREATE TYPE
+postgres=# CREATE TABLE t_type (name text, salary numeric);
+CREATE TABLE
+postgres=# ALTER TABLE t_type OF  employee_type;
+ALTER TABLE
+postgres=# ALTER TABLE t_type NOT OF;
+ALTER TABLE
+
+postgres=# CREATE TABLE t_type2 (name text, salary int);
+CREATE TABLE
+postgres=# ALTER TABLE t_type2 OF employee_type;
+ERROR:  table "t_type2" has different type for column "salary"
+</pre>

@@ -1,0 +1,10 @@
+%FILE internal/intro.html
+%LASTMOD
+%KEY pgsql-intro
+
+%TITLE PostgreSQLとは
+
+<ol>
+<li><a href="http://www.postgresql.org/" target="_blank" rel="noopener noreferrer">PostgreSQL本家</a></li>
+<li><a href="http://www.interdb.jp/pg/" target="_blank" rel="noopener noreferrer">The Internals of PostgreSQL</a></li>
+</ol>

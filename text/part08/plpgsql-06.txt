@@ -1,0 +1,169 @@
+%FILE internal/plpgsql-06.html
+%LASTMOD
+%KEY pgsql-plpgsql06
+
+%TITLE <a href="https://www.postgresql.org/docs/current/plpgsql-statements.html#PLPGSQL-STATEMENTS-EXECUTING-DYN" target="_blank" rel="noopener noreferrer">動的なSQL文の実行</a>
+
+<pre>
+[<書式>]
+
+	EXECUTE command-string [ INTO [STRICT] target ] [ USING expression [, ... ] ];
+
+</pre>
+
+<br>
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>command-string</td>	<td>実行するSQL文を記述した文字列</td>
+</tr><tr>
+<td>target</td>	<td>実行したSQL文や関数の結果を保存する変数</td>
+</tr></table>
+
+<br>
+
+
+<table>
+<caption>句</caption>
+<tr bgcolor="#cccccc">
+<th>句</th>	<th>説明</th>
+</tr><tr>
+<td>USING expression [, ... ]</td>	<td>記述したSQL文内のパラメータ値$1,$2,...に対して、実際の値expressionを与える。<br><font color="#0000ff">が、思ったように動かないので、今回は追求しない。使う必要に迫られたらその時に調べる。</font></td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+EXECUTE文を使い、文字列として記述したSQL文を実行できます。ただし現時点では、SELECT INTO文は実行できません。
+</p>
+
+<p>
+バージョン8.0まで、EXECUTE文の制約として「実行結果を保存できない」というものがありました。バージョン8.1でINTO句がサポートされたことにより、1行だけの結果ならば保存可能となりましたが、複数行の結果は(PL/pgSQLの制約から)依然として保存できません。
+</p>
+
+<p>
+複数行の結果を保存したり、利用したい場合には、
+FOR IN LOOP文、FOR IN EXECUTE LOOP文を使う(<a href="./plpgsql-10.html">[<8-10>]</a>,<a href="./plpgsql-11.html">[<8-11>]</a>,<a href="./plpgsql-12.html">[<8-12>]</a>,<a href="./plpgsql-13.html">[<8-13>]</a>)、PL/pgSQLのカーソルを利用する(<a href="./plpgsql-14.html">[<8-16>]</a>)を参照してください。
+</p>
+
+<p>
+・INTO句
+<br>
+EXECUTE文にINTO句を設定することで、(結果を1行だけ返す)SELECT文や関数の実行結果を保存できます。
+</p>
+
+<p>
+・USING句
+<br>
+<font color="#0000ff">今回、説明はパスする。</font>
+</p>
+
+
+
+%CHAPTER 実行例
+
+<p>
+・動的なSQL文を実行
+<br>
+引数で指定したテーブルの列priceに対して、引数で指定した倍率を乗算する関数change_all_price()を定義します。
+</p>
+
+<pre>
+CREATE FUNCTION change_all_price(table_name text, fact double precision)
+RETURNS bigint AS
+ $$
+  DECLARE
+    counter   bigint;
+    query     text;
+  BEGIN
+    query := 'UPDATE ' ||  table_name || ' SET price = price * ' || fact;
+
+    /* 問い合わせを実行*/
+    EXECUTE query;
+    GET DIAGNOSTICS counter = ROW_COUNT;
+    RETURN counter;
+  END;
+ $$
+LANGUAGE PLpgSQL;
+</pre>
+
+<br>
+
+<p>
+テーブルitemlistに対して、関数change_all_price()を実行した結果を示します。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM itemlist;
+ id |   name   | price | makercode
+----+----------+-------+-----------
+  1 | pen      |   100 |        10
+  2 | notebook |   120 |        20
+  3 | eraser   |    72 |        10
+(3 rows)
+
+sampledb=# SELECT change_all_price('itemlist', 1.05);
+ change_all_price
+------------------
+                3
+(1 row)
+
+sampledb=# SELECT * FROM itemlist;
+ id |   name   | price | makercode
+----+----------+-------+-----------
+  1 | pen      |   105 |        10
+  2 | notebook |   126 |        20
+  3 | eraser   |    76 |        10
+(3 rows)
+</pre>
+
+<br>
+
+<p>
+・結果を保存する
+<br>
+テーブル名を引数として、そのテーブルの行数を数える関数count_rows()を定義します。
+</p>
+
+<pre>
+CREATE FUNCTION count_rows(table_name text) RETURNS bigint AS
+ $$
+  DECLARE
+    ret   bigint;
+    query text;
+  BEGIN
+    query := 'SELECT count(*) FROM ' || table_name;
+
+    /* 問い合わせを実行*/
+    EXECUTE query INTO ret;
+    RETURN ret;
+  END;
+ $$
+LANGUAGE PLpgSQL;
+</pre>
+<br>
+
+<p>
+関数count_rows()の実行結果を、以下に示します。
+</p>
+
+<pre>
+sampledb=# SELECT count_rows('itemlist');
+ count_rows
+------------
+          3
+(1 row)
+
+sampledb=# SELECT count_rows('customerlist');
+ count_rows
+------------
+          6
+(1 row)
+</pre>
+
+<br>

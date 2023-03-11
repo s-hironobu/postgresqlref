@@ -2,12 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
- <title>PostgreSQLバイブル草稿</title>
- <link rel="stylesheet" type="text/css" media="screen" href="./default.css"">
-</head>
-
-<body>
+ <meta http-equiv="content-style-type" content="text/css">
+ <title>自分用PostgreSQLマニュアル</title>
+ <link rel="stylesheet" type="text/css" media="screen" href="./default.css" charset="UTF-8">
+ </head>
+ <body>
 
 <script language=javascript>
 <!--
@@ -26,11 +25,10 @@ objID.className='close';
 </script>
 
 <div id="header">
-<h1 class="title">PostgreSQLバイブル草稿</title></h1>
+<h1 class="title">自分用PostgreSQLマニュアル</title></h1>
     <span class="small">
 </span>
 </div>
-
 
 <hr class="full_hr">
 <table style="width: 100%;" border="0">
@@ -38,15 +36,16 @@ objID.className='close';
   <td class="menubar">
    <div id="menubar">
 
-
 <h5>PostgreSQLとは</h5>
 
-<li><a href="./index.html">PostgreSQLとは</a><br></li>
+<li><a href="./intro.html">PostgreSQLとは</a><br></li>
+
 
 <h5>PostgreSQLの内部構造</h5>
 <ul>
 <li><a href="./internal.html">とびら</a><br></li>
 </ul>
+
 <ol>
 <li><a href="./internal-01.html">プロセスとメモリ構造</a><br></li>
 <li><a href="./internal-02.html">データベースクラスタ、テーブルの構造</a></li>
@@ -58,7 +57,7 @@ objID.className='close';
 <li><a href="./internal-08.html">HOTとIndex Only Scan</a></li>
 <li><a href="./internal-09.html">WAL(Write Ahead Logging)</a></li>
 <li><a href="./internal-10.html">アーカイブログとPITR</a></li>
-<li><a href="./internal-11.html">レプリケーション(Streaming ReplicationとHotStandby)</a></li>
+<li><a href="./internal-11.html">Streaming ReplicationとHotStandby</a></li>
 </ol>
 
 
@@ -69,56 +68,46 @@ objID.className='close';
 </ul>
 
 <ol>
-[PostgreSQLの基礎]<br>
-<li><a href="./admin-01.html">オブジェクト、データベース、スキーマ</a><br></li>
-<li><a href="./admin-02.html">システムカタログ</a><br></li>
-<li><a href="./admin-03.html">文字コードの扱い</a><br></li>
-
 
 [インストールと起動、停止]<br>
-<li><a href="./admin-04.html">インストール</a><br></li>
-<li><a href="./admin-05.html">データベースシステムの初期化 initdb</a><br></li>
-<li><a href="./admin-06.html">PostgreSQLサーバの起動/停止</a><br></li>
+<li><a href="./admin-01.html">インストール</a><br></li>
+<li><a href="./admin-02.html">データベースシステムの初期化 initdb</a><br></li>
+<li><a href="./admin-03.html">PostgreSQLサーバの起動/停止</a><br></li>
 
+<hr>
+[PostgreSQLの基礎]<br>
+<li><a href="./admin-04.html">オブジェクト、データベース、スキーマ</a><br></li>
+<li><a href="./admin-05.html">システムカタログ</a><br></li>
+<li><a href="./admin-06.html">文字コードの扱い</a><br></li>
 
+  <hr>
 [認証とアクセス制御]<br>
 <li><a href="./admin-07.html">認証とアクセス制御</a><br></li>
 <li><a href="./admin-08.html">クライアントのアクセス制御</a><br></li>
 <li><a href="./admin-09.html">権限について</a><br></li>
 <li><a href="./admin-10.html">ロールの作成と権限制御</a><br></li>
 
-<HR>
-
+<hr>
 [バックアップとアップグレード]<br>
 <li><a href="./admin-11.html">バックアップとアップグレード</a><br></li>
 <li><a href="./admin-12.html">ダンプとリストア</a><br></li>
 <li><a href="./admin-13.html">アップグレード</a><br></li>
 
+  <hr>
 [保守、監視とチューニング]<br>
 <li><a href="./admin-14.html">保守、監視とチューニング</a><br></li> 
 <li><a href="./admin-15.html">稼働統計情報</a><br></li>
 <li><a href="./admin-16.html">実行ログの取得</a><br></li>
-<li><a href="./admin-17.html">モニタリングツール</a><br></li>
-<li><a href="./admin-18.html">ログと統計情報の分析</a><br></li>
-<li><a href="./admin-19.html">パラメータチューニング</a><br></li>
+<li><a href="./admin-17.html">ログと統計情報の分析</a><br></li>
+<li><a href="./admin-18.html">パラメータチューニング</a><br></li>
 
+  <hr>
 [耐障害性、高可用性]<br>
-<li><a href="./admin-20.html">耐障害性、高可用性</a><br></li>
-<li><a href="./admin-21.html">アーカイブログとPITR</a><br></li>
-<li><a href="./admin-22.html">レプリケーションの設定</a><br></li>
-<li><a href="./admin-23.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-19.html">アーカイブログとPITR</a><br></li>
+<li><a href="./admin-20.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-21.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-22.html">ロジカルレプリケーション</a><br></li>
 
-
-[FDW]<br>
-<li><a href="./admin-24.html">FDW</a><br></li>
-<li><a href="./admin-25.html">postgres_fdw</a><br></li>
-</ol>
-
-[追加の文章(未完)]<br>
-<li><a href="./admin-26.html">ロギング</a><br></li>
-<li><a href="./admin-27.html">統計情報</a><br></li>
-<li><a href="./admin-28.html">モニタリング</a><br></li>
-<li><a href="./admin-29.html">メンテナンス</a><br></li>
 </ol>
 
 
@@ -138,6 +127,7 @@ objID.className='close';
 <li><a href="./param-11.html">クライアント接続デフォルト</a><br></li>
 <li><a href="./param-12.html">ロック管理/バージョンとプラットフォーム互換性</a><br></li>
 </ol>
+
 
 
 <h5>psql</h5>
@@ -160,6 +150,7 @@ objID.className='close';
 </ol>
 
 
+
 <h5>SQL</h5>
 
 <ul>
@@ -167,15 +158,14 @@ objID.className='close';
 </ul>
 
 <ol>
-[SQL]<br>
 
 <li><a href="./sql-01.html">SQL語彙</a><br></li>
 <li><a href="./sql-02.html">テーブルスペースの作成/削除/変更</a><br></li>
 <li><a href="./sql-03.html">データベースの作成/変更/削除</a><br></li>
-<li><a href="./sql-04.html">テーブルの作成</a><br></li>
+<li><a href="./sql-04.html">テーブルの作成 CREATE TABLE / CREATE TABLE AS</a><br></li>
 <li><a href="./sql-05.html">外部キー</a><br></li>
 <li><a href="./sql-06.html">オブジェクトの継承/LIKE句</a><br></li>
-<li><a href="./sql-07.html">問い合わせ結果から新しいテーブルを作成</a><br></li>
+<li><a href="./sql-07.html">パーティション</a><br></li>
 <li><a href="./sql-08.html">テーブルの削除</a><br></li>
 <li><a href="./sql-09.html">スキーマの定義/変更/削除</a><br></li>
 
@@ -201,7 +191,7 @@ objID.className='close';
 <li><a href="./sql-25.html">問い合わせの結合</a><br></li>
 <li><a href="./sql-26.html">ORDER BY</a><br></li>
 <li><a href="./sql-27.html">LIMIT OFFSET</a><br></li>
-<li><a href="./sql-28.html">FOR UPDATE/ FOR SHARE</a><br></li>
+<li><a href="./sql-28.html">FOR [NO KEY] UPDATE/ FOR [KEY] SHARE</a><br></li>
 <li><a href="./sql-29.html">サブクエリ</a><br></li>
 <li><a href="./sql-30.html">CASE式</a><br></li>
 <li><a href="./sql-31.html">VALUES</a><br></li>
@@ -227,18 +217,12 @@ objID.className='close';
 <li><a href="./sql-49.html">COPY/IMPORT</a><br></li>
 <li><a href="./sql-50.html">COPY/EXPORT</a><br></li>
 <li><a href="./sql-51.html">関数定義</a><br></li>
-<li><a href="./sql-52.html">エクステンション</a><br></li>
-<li><a href="./sql-53.html">外部サーバの定義、変更、削除</a><br></li>
-<li><a href="./sql-54.html">外部サーバのユーザマップ定義、変更、削除</a><br></li>
-<li><a href="./sql-55.html">外部テーブルの定義、変更、削除</a><br></li>
-<hr>
-<li><a href="./sql-56.html">イベントトリガ</a><br></li>
-<li><a href="./sql-57.html">行レベルセキュリティ</a><br></li>
+<li><a href="./sql-52.html">FDW(Foreign Data Wrapper)</a><br></li>
 
-<hr>
-<li><a href="./sql-60.html">新しい機能</a><br></li>
+<li><a href="./sql-53.html">PUBLICATION</a><br></li>
+<li><a href="./sql-54.html">SUBSCRIPTION</a><br></li>
+  
 </ol>
-
 
 <h5>関数</h5>
 
@@ -260,8 +244,6 @@ objID.className='close';
 <li><a href="./type-09.html">バイナリ列データ型</a><br></li>
 <li><a href="./type-10.html">Range型</a><br></li>
 <li><a href="./type-11.html">配列</a><br></li>
-<hr>
-<li><a href="./type-12.html">JSON型</a><br></li>
 
 <hr>
 [演算子]<br>
@@ -273,9 +255,6 @@ objID.className='close';
 <li><a href="./ope-06.html">パターンマッチング</a><br></li>
 <li><a href="./ope-07.html">日付/時刻演算子</a><br></li>
 <li><a href="./ope-08.html">Range型演算子</a><br></li>
-<hr>
-<li><a href="./ope-09.html">JSON型演算子</a><br></li>
-
 
 <hr>
 [関数]<br>
@@ -287,89 +266,73 @@ objID.className='close';
 <li><a href="./func-06.html">型変換関数</a><br></li>
 <li><a href="./func-07.html">Range型関数</a><br></li>
 <li><a href="./func-08.html">Window関数</a><br></li>
-<li><a href="./func-09.html">セッション情報関数</a><br></li>
-<li><a href="./func-10.html">アクセス権限とスキーマ可視性照会関数</a><br></li>
-<li><a href="./func-11.html">データベースオブジェクト関数</a><br></li>
-<li><a href="./func-12.html">バックアップとリカバリ制御関数</a><br></li>
+  <hr>
 
-<li><a href="./func-13.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-09.html">セッション情報関数</a><br></li>
+<li><a href="./func-10.html">アクセス権限照会関数</a><br></li>
+<li><a href="./func-11.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-12.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-13.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
+<li><a href="./func-14.html">制御データ関数</a><br></li>
+  <hr>
 <li><a href="./func-15.html">構成設定関数</a><br></li>
 <li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-17.html">レプリケーションSQL関数</a><br></li>
-
-<hr>
-<li><a href="./func-18.html">JSON関数</a><br></li>
+<li><a href="./func-17.html">バックアップ制御関数</a><br></li>
+<li><a href="./func-18.html">リカバリ制御関数</a><br></li>
+<li><a href="./func-19.html">スナップショット同期関数</a><br></li>	
+<li><a href="./func-20.html">レプリケーション管理関数</a><br></li>	
+<li><a href="./func-21.html">データベースオブジェクト管理関数</a><br></li>
+<li><a href="./func-22.html">インデックス保守関数</a><br></li>	
+<li><a href="./func-23.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-24.html">勧告的ロック用関数</a><br></li>
+<li><a href="./func-25.html">統計情報関数</a><br></li>	
 
 </ol>
-
-<!--
-[削除するもの]<br>
-<li><a href="./type-07.html">幾何データ型</a><br></li>
-<li><a href="./type-08.html">ネットワークアドレス型型</a><br></li>
-<li><a href="./ope-08.html">幾何演算子</a><br></li>
-<li><a href="./ope-09.html">ネットワーク演算子</a><br></li>
-<li><a href="./func-06.html">幾何関数</a><br></li>
-<li><a href="./func-07.html">ネットワークアドレス関数</a><br></li>
-<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
-<li><a href="./func-16.html">トランザクションID関数</a><br></li>
-<li><a href="./func-17.html">スキーマ可視性照会関数</a><br></li>
-<li><a href="./func-18.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-19.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-20.html">勧告的ロック用関数</a><br></li>
--->
 
 <h5>PL/pgSQL</h5>
 
 <ol>
-<li><a href="./plpgsql.html">結果の返し方</a><br></li>
-<li><a href="./plpgsql-01.html">ストアドプロシージャ</a><br></li>
-<li><a href="./plpgsql-02.html">ストアドプロシージャの定義</a><br></li>
+<li><a href="./plpgsql-01.html">PL/pgSQLによるストアドプロシージャ</a><br></li>
+
+  <hr>[定義]
+    <br>
+
+<li><a href="./plpgsql-02.html">PL/pgSQLによるストアドプロシージャの定義</a><br></li>
+
+  <hr>[基本的な使い方]
+    <br>
 <li><a href="./plpgsql-03.html">変数宣言と値の代入</a><br></li>
-**** まとめる >>
+
 <li><a href="./plpgsql-04.html">SELECT INTO文</a><br></li>
 <li><a href="./plpgsql-05.html">結果ステータスの取得</a><br></li>
 <li><a href="./plpgsql-06.html">動的なSQL文の実行</a><br></li>
-<< ここまで****
+
+  <hr>[制御構造]
+    <br>
 <li><a href="./plpgsql-07.html">IF 条件分岐</a><br></li>
-<li><a href="./plpgsql-08.html">ループ処理</a><br></li>
-*** >>>
-<li><a href="./plpgsql-09.html">RETURN</a><br></li>
-<<< ***
+<li><a href="./plpgsql-08.html">EXIT</a><br></li>
+
+<li><a href="./plpgsql-09.html">RETURN NEXT / RETURN QUERY</a><br></li>
+
 <li><a href="./plpgsql-10.html">ループ処理　LOOP</a><br></li>
 <li><a href="./plpgsql-11.html">ループ処理　WHILE</a><br></li>
-<li><a href="./plpgsql-12.html">ループ処理　FOR </a><br></li>
+<li><a href="./plpgsql-12.html">ループ処理　FOR</a><br></li>
 <li><a href="./plpgsql-13.html">ループ処理 (複数行の問い合わせ結果を扱う)</a><br></li>
+
+<hr>[カーソル]
+    <br>
 <li><a href="./plpgsql-14.html">カーソルの利用</a><br></li>
 <li><a href="./plpgsql-15.html">カーソル変数の宣言</a><br></li>
 <li><a href="./plpgsql-16.html">カーソルのオープンとクローズ	OPEN / CLOSE</a><br></li>
-<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得		FETCH</a><br></li>
-<li><a href="./plpgsql-18.html">カーソルを使った例</a><br></li>
-<li><a href="./plpgsql-19.html">例外</a><br></li>
-*** >>>
-<li><a href="./plpgsql-21.html">CASE</a><br></li>
-<li><a href="./plpgsql-22.html">FOREACH</a><br></li>
-<<< ***
-</ol>
+<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得	FETCH</a><br></li>
+  <li><a href="./plpgsql-18.html">FOR IN LOOPにカーソル行の取得</a><br></li>
+<li><a href="./plpgsql-19.html">カーソルを使った例</a><br></li>
+
+  <hr>[例外]
+    <br>
+<li><a href="./plpgsql-20.html">例外処理</a><br></li>
 
 
-<h5>Appendix(付録)</h5>
-
-<ol>
-<li><a href="./app-01.html">pgpool-II</a><br></li>
-<li><a href="./app-02.html">Pacemaker</a><br></li>
-</ol>
-
-
-<h5>おまけ:ネット公開(ページ数の関係で書籍には載せない)</h5>
-
-<ol>
-[pgpool]<br>
-<li><a href="./ha-06.html">pgpool-II セットアップ</a><br></li>
-<li><a href="./ha-07.html">pgpool-II レプリケーションモード</a><br></li>
-<li><a href="./ha-08.html">pgpool-II マスタースレーブモード</a><br></li>
-[Pacemaker]<br>
-<li><a href="./ha-10.html">Pacemaker</a><br></li>
 </ol>
 
 </div>
@@ -378,15 +341,18 @@ objID.className='close';
 
   </td>
   <td valign="top">
-   <div id="body">
+    <div id="body">
+      
 
-<h2>文字列関数</h2>
+<h2><a href="https://www.postgresql.org/docs/current/functions-string.html" target="_blank" rel="noopener noreferrer">文字列関数</a></h2>
+
 
 [<文字列関数一覧>]
 
+
 <table border=1>
 <tr bgcolor="#cccccc">
-<th>文字列関数</th>	<th>返り値型　　　　</th>		<th>	説明</th>
+<th>文字列関数</th>	<th>返り値　　　　</th>		<th>	説明</th>
 </tr><tr bgcolor="#eeeeee">
 <th colspan=2 align=left>例</th>	<th>結果</th>
 
@@ -422,13 +388,13 @@ objID.className='close';
 
 
 </tr><tr>
-<td>concat(str "any" [, str "any" [, ...] ])</td>	<td>text</td>	<td>すべての引数を連結する。ただしNULLは無視。バージョン9.1から</td>
+<td>concat(str "any" [, str "any" [, ...] ])</td>	<td>text</td>	<td>すべての引数を連結する。ただしNULLは無視。</td>
 </tr><tr bgcolor="#eeeeee">
 <th colspan=2 align=left>concat('ab', 'cd', NULL, 'ef')</th>	<th align=left>'abcdef'</th>
 
 
 </tr><tr>
-<td>concat_ws(sep text, str "any" [, str "any" [, ...] ])</td>	<td>text</td>	<td>第一引数を区切り文字として、残りの引数を連結する。ただし、NULLは無視。バージョン9.1から</td>
+<td>concat_ws(sep text, str "any" [, str "any" [, ...] ])</td>	<td>text</td>	<td>第一引数を区切り文字として、残りの引数を連結する。ただし、NULLは無視。</td>
 </tr><tr bgcolor="#eeeeee">
 <th colspan=2 align=left> concat_ws(':', 'ab', 'cd', NULL, 'ef')</th>	<th align=left>'ab:cd:ef'</th>
 
@@ -456,7 +422,6 @@ objID.className='close';
 </tr><tr bgcolor="#eeeeee">
 <th colspan=2 align=left> encode('あZん', 'base64')</th>	<th align=left> 44GCWuOCkw==</th>
 
-	 
 </tr><tr>
 <td>get_bit(string, offset)</td>	<td>int</td>	<td>文字列から1ビットを取り出す</td>
 </tr><tr bgcolor="#eeeeee">
@@ -467,8 +432,6 @@ objID.className='close';
 <td>get_byte(string, offset)</td>	<td>int</td>	<td>文字列から1バイトを取り出す</td>
 </tr><tr bgcolor="#eeeeee">
 <th colspan=2 align=left>get_byte('Th\\000omas'::bytea, 4)</th>	<th align=left>109</th>
-	
-
 
 </tr><tr>
 <td>initcap(text)	</td>	<td> text	</td>	<td>単語の第一文字を大文字に変換</td>
@@ -477,10 +440,9 @@ objID.className='close';
 
 
 </tr><tr>
-<td>left(str text, n int)</td>	<td>text</td>	<td>文字列strの先頭からn文字返す。バージョン9.1から</td>
+<td>left(str text, n int)</td>	<td>text</td>	<td>文字列strの先頭からn文字返す。</td>
 </tr><tr bgcolor="#eeeeee">
 <th colspan=2 align=left>left('abcde', 2)</th>	<th align=left>'ab'</th>
-
 
 
 </tr><tr>
@@ -489,7 +451,7 @@ objID.className='close';
 <th colspan=2 align=left>	length('Alice')	</th>	<th align=left>	5</th>
 
 </tr><tr>
-<td>length(stringbytea, encoding name)</td>	<td>	int</td>	<td>encodingによる文字列stringの長さ。バージョン8.3から</td>
+<td>length(stringbytea, encoding name)</td>	<td>	int</td>	<td>encodingによる文字列stringの長さ。</td>
 </tr><tr bgcolor="#eeeeee">
 <th colspan=2 align=left>bit_length('Alice', 'UTF8')	</th>	<th align=left>	5</th>
 
@@ -498,6 +460,10 @@ objID.className='close';
 <td>lower(string)	</td>	<td>text	</td>	<td>文字列stringを小文字に変換</td>
 </tr><tr bgcolor="#eeeeee">
 <th colspan=2 align=left>	lower('TOM')	</th>	<th align=left>'tom'</th>
+
+
+</tr><tr>
+<td>normalize ( text [, form ] )</td>	<td>text	</td>	<td>説明省略。本家ドキュメント参照</td>
 
 
 </tr><tr>
@@ -518,7 +484,6 @@ objID.className='close';
 <th colspan=2 align=left>	md5('PostgreSQL')	</th>	<th align=left>399bd1ee587245ecac6f39beaa99886f</th>
 
 
-
 </tr><tr>
 <td>octet_length(string)</td>	<td>int	</td>	<td>文字列stringのバイト数</td>
 </tr><tr bgcolor="#eeeeee">
@@ -531,11 +496,18 @@ objID.className='close';
 <th colspan=2 align=left>	 overlay ('abc---gh' placing 'def' from 4)  </th>	<th align=left>'abcdefgh'</th>
 
 
+
+</tr><tr>
+<td>parse_ident(qualified_identifier text)</td>	<td>text[]</td>	<td>引用符をうまく削除する。</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>parse_ident('"SomeSchema".someTable')</th>	<th align=left>{SomeSchema,sometable}</th>
+
+
+
 </tr><tr>
 <td>pg_client_encoding()	</td>	<td>name</td>	<td>	クライアントのエンコーディング名</td>
 </tr><tr bgcolor="#eeeeee">
 <th colspan=2 align=left>	pg_client_encoding()	</th>	<th align=left>SQL_ASCII</th>
-
 
 </tr><tr>
 <td>position(substring in string)</td>	<td>int	</td>	<td>文字列stringでの、文字列substringの位置</td>
@@ -557,39 +529,62 @@ objID.className='close';
 
 
 </tr><tr>
-<td>quote_nullable(string text)</td>	<td>text</td>	<td>stringに適切な引用符をつけて返す。バージョン8.4から</td>
+<td>quote_nullable(string text)</td>	<td>text</td>	<td>stringに適切な引用符をつけて返す。</td>
 </tr><tr bgcolor="#eeeeee">
 <th colspan=2 align=left>quote_nullable(NULL)</th>	<th align=left>NULL</th>
 
 </tr><tr>
-<td>quote_nullable(value anyelement)</td>	<td>text</td>	<td>適切な引用符をつけて返す。バージョン8.4から</td>
+<td>quote_nullable(value anyelement)</td>	<td>text</td>	<td>適切な引用符をつけて返す。</td>
 </tr><tr bgcolor="#eeeeee">
 <th colspan=2 align=left>quote_nullable(192.12)</th>	<th align=left>'192.12'</th>
 
 
 
 </tr><tr>
-<td>regexp_replace(string, pattern, replacement[, flags])</td>	<td>text</td>	<td>文字列string中のpatternに一致する部分をreplacemantで置換する。バージョン8.2から</td>
+<td>regexp_count(string text, pattern text [,start int [,flags text]])</td>	<td>int</td>	<td>指定した文字列string中、正規表現patternに一致する回数を返す</td>
 </tr><tr bgcolor="#eeeeee">
-<th colspan=2 align=left> regexp_replace ('abccccd', 'c{1,4}',  'C')</th>	<th align=left>'abCd'</th>
-
+<th colspan=2 align=left>regexp_count('123456789012', '\d\d\d')  </th>	<th align=left>4</th>
 
 </tr><tr>
-<td>regexp_matches(string, pattern [, flags])</td>	<td>setof text[]</td>	<td>文字列stringに一致するpatternの部分文字列を返す。バージョン8.3から</td>
+<td>regexp_instr( string text, pattern text [,start int [,N int [,endoption int [,flags text [,subexpr int]]]]])</td>	<td>int</td>	<td>指定した文字列stringで、(startからN番めに)正規表現patternが現れる位置を返す。</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> SELECT regexp_instr('A1B23C45DEF', '\d\d',1,2);</th>	<th align=left>7</th>
+
+</tr><tr>
+<td>regexp_matches(string, pattern [, flags])</td>	<td>setof text[]</td>	<td>文字列stringに一致するpatternの部分文字列を返す。</td>
 </tr><tr bgcolor="#eeeeee">
 <th colspan=2 align=left>regexp_matches ('abcdef', '(ab)(cd)')</th>	<th align=left>{ab,cd}</th>
 
 
 </tr><tr>
-<td>regexp_split_to_array(string, delimiter [, flags])</td>	<td>text[]</td>	<td>区切り文字delimiterで文字列stringを分割する。バージョン8.3から</td>
+<td>regexp_replace(string, pattern, replacement[, flags])</td>	<td>text</td>	<td>文字列string中のpatternに一致する部分をreplacemantで置換する。</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> regexp_replace ('abccccd', 'c{1,4}',  'C')</th>	<th align=left>'abCd'</th>
+
+
+
+</tr><tr>
+<td>regexp_split_to_array(string, delimiter [, flags])</td>	<td>text[]</td>	<td>区切り文字delimiterで文字列stringを分割する。</td>
 </tr><tr bgcolor="#eeeeee">
 <th colspan=2 align=left>regexp_split_to_array('hello world', E'\\s+')</th> <th align=left>{hello,world}</th>
 
 
 </tr><tr>
-<td>regexp_split_to_table(string, delimiter [, flags])</td>	<td>setof text</td>	<td>区切り文字delimiterで文字列stringを分割する。バージョン8.3から</td>
+<td>regexp_split_to_table(string, delimiter [, flags])</td>	<td>setof text</td>	<td>区切り文字delimiterで文字列stringを分割する。</td>
 </tr><tr bgcolor="#eeeeee">
 <th colspan=2 align=left>regexp_split_to_table('hello world', E'\\s+')</th><th align=left>hello<br>world</th>
+
+
+</tr><tr>
+<td>regexp_substr(string text, pattern text [, start int [, N int [, flags text [, subexpr int ]]]])</td>	<td>text</td>	<td>指定したstring中、(startからN番目の)正規表現patternに一致する文字列を返す。</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left> regexp_substr('A1B234C567DEF', '\d\d\d',1,2)</th>	<th align=left>'567'</th>
+
+
+</tr><tr>
+<td>regexp_like(string text, pattern text [, flags text])</td>	<td>bool</td>	<td>指定したstring中、正規表現patternに一致か否かを返す。</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>regexp_like('A1B234C567DEF', '\d\d')</th>	<th align=left>True</th>
 
 
 
@@ -606,7 +601,7 @@ objID.className='close';
 
 
 </tr><tr>
-<td>right(str text, n int)</td>	<td>text</td>	<td>文字列strの末尾からn文字返す。バージョン9.1から</td>
+<td>right(str text, n int)</td>	<td>text</td>	<td>文字列strの末尾からn文字返す。</td>
 </tr><tr bgcolor="#eeeeee">
 <th colspan=2 align=left>right('abcde', 2)</th>	<th align=left>'de'</th>
 
@@ -623,7 +618,7 @@ objID.className='close';
 
 
 </tr><tr>
-<td>reverse(str)</td>	<td>text</td>	<td>文字列strを逆順にして返す。バージョン9.1から</td>
+<td>reverse(str)</td>	<td>text</td>	<td>文字列strを逆順にして返す。</td>
 </tr><tr bgcolor="#eeeeee">
 <th colspan=2 align=left>reverse('abcde')</th>	<th align=left>'edcba'</th>
 
@@ -644,6 +639,27 @@ objID.className='close';
 <td>split_part(string, delimiter, field)</td>	<td>text	</td>	<td>文字列stringを文字列delimiterで分割し、field番目の文字列を返す</td>
 </tr><tr bgcolor="#eeeeee">
 <th colspan=2 align=left>	 split_part('abc:def:ghi', ':', 2)	</th>	<th align=left>'def'</th>
+
+
+</tr><tr>
+<td>starts_with(string text, prefix text)</td>	<td>bool	</td>	<td>文字列stringがprefixで始まっているならTrueを返す。</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>starts_with('abcdefg', 'ab')</th>	<th align=left>True</th>
+
+
+</tr><tr>
+<td>string_to_array(string text, delimiter text [, null_string text])</td>text[]<td>	</td>	<td>文字列stringについて、区切り文字delmiterで区切った文字列を返す。null_stringに一致する場合はNULLに変更して返す。</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>string_to_array('xx-yy-zz', '-', 'yy')</th>	<th align=left>{xx,NULL,zz}</th>
+
+
+</tr><tr>
+<td>string_to_table(string text, delimiter text [,null_string text])</td>	<td>setof text</td>	<td>string_to_array()と同じで、返す値がsetof text</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>string_to_table('xx-yy-zz', '-', 'yy')</th>	<th align=left> xx<br>
+ <br>
+ zz
+</th>
 
 
 </tr><tr>
@@ -685,23 +701,23 @@ objID.className='close';
 </tr><tr bgcolor="#eeeeee">
 <th colspan=2 align=left>	trim(both 'abc' from 'abctrimabc')  </th>	<th align=left>'trim'</th>
 
-
-
 </tr><tr>
 <td>upper(string)	</td>	<td>text</td>	<td>	文字列stringを大文字に変換</td>
 </tr><tr bgcolor="#eeeeee">
 <th colspan=2 align=left>	upper('tom')	</th>	<th align=left>   'TOM'</th>
 
 
-
+</tr><tr>
+<td>unistr(string)	</td>	<td>text</td>	<td>説明省略。本家ドキュメント参照</td>
 </tr></table>
 
 <br>
 
+
 <div class="jumpmenu"></div><h3>解説</h3>
 
 <p>
-・char_length()、octet_length() 
+・char_length()、octet_length()
 <br>
 関数char_length()と関数octet_length()は、character 型、varchar型、もしくはtext型のデータを引数とします。
 <br>
@@ -710,15 +726,16 @@ objID.className='close';
 他方、関数octet_length()は引数を表現するために必要なバイト長を返します。
 
 <p>
-・trim()、btrim()、rtrim()、ltrim() 
+・trim()、btrim()、rtrim()、ltrim()
 <br>
 関数trim()は、文字列stringから文字列substringを取り除きます。書式は次のとおりです。
 </p>
 
 [<書式>]
 <pre>
-	trim([leading | trailing | both] [substring] from string) 
+	trim([leading | trailing | both] [substring] from string)
 </pre>
+<br>
 
 <p>
 引数として'leading'、'trailing'、'both'のいずれかを指定できます。各引数の意味は[<表7-20>]のとおりです。
@@ -738,7 +755,7 @@ objID.className='close';
 <br>
 
 <p>
-・to_ascii() 
+・to_ascii()
 <br>
 関数to_ascii()がサポートするのは、エンコーディングLATIN1、LATIN2、WIN1250(CP1250)からの変換だけです。
 </p>
@@ -813,15 +830,16 @@ objID.className='close';
 <br>
 
 <p>
-・convert() 
+・convert()
 <br>
 文字列を指定したエンコーディングに変換します。書式は次のとおりです。
 </p>
 
 [<書式>]
 <pre>
-	convert(string, [src_encoding,] dest_encoding) 
+	convert(string, [src_encoding,] dest_encoding)
 </pre>
+<br>
 
 
 <p>
@@ -830,19 +848,20 @@ src_encodingを省略すると、データベースのデフォルトのエン�
 </p>
 
 <p>
-・lpad()、rpad() 
+・lpad()、rpad()
 <br>
 関数lpad()は文字列の先頭(左側)から、関数rpad()は文字列の末尾(右側)から、文字列stringが長さlengthになるまで文字列textを詰め込みます。書式は次のとおりです。
 </p>
 
 [<書式>]
 <pre>
-	lpad(string, length int [, text]) 
-	rpad(string, length int [,text]) 
+	lpad(string, length int [, text])
+	rpad(string, length int [,text])
 </pre>
+<br>
 
 <p>
-・translate() 
+・translate()
 <br>
 関数translate()は文字列stringについて、文字列from_textに含まれる文字を文字列to_textに含まれる文字を置き換えます。
 "文字"の置き換えであることに注意してください("文字列"の置き換えではない)。書式は次のとおりです。
@@ -850,12 +869,13 @@ src_encodingを省略すると、データベースのデフォルトのエン�
 
 [<書式>]
 <pre>
-	translate(string, from_text, to_text) 
+	translate(string, from_text, to_text)
 </pre>
+<br>
 
 
 <p>
-・encode()、decode() 
+・encode()、decode()
 <br>
 サポートする型はbase64、hex、escapeです。[<表7-22>]にエンコード、デコード方式を示します。
 </p>
@@ -882,17 +902,18 @@ src_encodingを省略すると、データベースのデフォルトのエン�
 
 <pre>
 sampledb=# SELECT char_length('Alice'), octet_length('Alice');
- char_length | octet_length 
+ char_length | octet_length
 -------------+--------------
            5 |            5
 (1 row)
 
 sampledb=# SELECT char_length('アリス'), octet_length('アリス');
- char_length | octet_length 
+ char_length | octet_length
 -------------+--------------
            3 |            6
 (1 row)
 </pre>
+<br>
 
 
 <p>
@@ -905,11 +926,12 @@ sampledb=# SELECT char_length('アリス'), octet_length('アリス');
 sampledb=# SELECT trim(both 'abc' from 'abctrimabc'),
 sampledb-#        trim(leading 'abc' from 'abctrimabc'),
 sampledb-#        trim(trailing 'abc' from 'abctrimabc');
- btrim |  ltrim  |  rtrim  
+ btrim |  ltrim  |  rtrim
 -------+---------+---------
  trim  | trimabc | abctrim
 (1 row)
 </pre>
+<br>
 
 <p>
 ・文字列からスペースを取り除く
@@ -919,11 +941,12 @@ sampledb-#        trim(trailing 'abc' from 'abctrimabc');
 
 <pre>
 sampledb=# SELECT trim(both ' trim ');
- btrim 
+ btrim
 -------
  trim
 (1 row)
 </pre>
+<br>
 
 
 <p>
@@ -935,11 +958,12 @@ sampledb=# SELECT trim(both ' trim ');
 <pre>
 sampledb=#  SELECT lpad('abc', 10, '123'),
 sampledb-#         rpad('abc', 10, '123');
-    lpad    |    rpad    
+    lpad    |    rpad
 ------------+------------
  1231231abc | abc1231231
 (1 row)
 </pre>
+<br>
 
 <p>
 文字列stringが指定された長さlengthよりも長い場合、関数lpad()は末尾(右側)を、関数rpad()は先頭(左側)を切り捨てます。
@@ -947,11 +971,12 @@ sampledb-#         rpad('abc', 10, '123');
 
 <pre>
 sampledb=# SELECT lpad('abcdef', 3, 'xx');
- lpad 
+ lpad
 ------
  abc
 (1 row)
 </pre>
+<br>
 
 
 <p>
@@ -962,11 +987,12 @@ sampledb=# SELECT lpad('abcdef', 3, 'xx');
 
 <pre>
 sampledb=# SELECT translate('abcabc', 'a', 'A');
- translate 
+ translate
 -----------
  AbcAbc
 (1 row)
 </pre>
+<br>
 
 <p>
 ・複数の文字の置き換え
@@ -976,11 +1002,12 @@ sampledb=# SELECT translate('abcabc', 'a', 'A');
 
 <pre>
 sampledb=# SELECT translate('abcedfac', 'abc', 'ABC');
- translate 
+ translate
 -----------
  ABCedfAC
 (1 row)
 </pre>
+<br>
 
 <p>
 ・文字の削除
@@ -992,15 +1019,16 @@ sampledb=# SELECT translate('abcedfac', 'abc', 'ABC');
 
 <pre>
 sampledb=# SELECT translate('abcedfac', 'abc', 'AB');
- translate 
+ translate
 -----------
  ABedfA
 (1 row)
 </pre>
+<br>
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2018-9-8
+Last-modified: 2023-3-11
 </div>
 </body>
 </html>

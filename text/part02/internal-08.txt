@@ -1,0 +1,12 @@
+%FILE internal/internal-08.html
+%LASTMOD
+%KEY pgsql-internal08
+
+%TITLE HOT(Heap Only Tuple) とIndex-only Scan
+
+
+<p>
+The Internals of PostgreSQL <a href="https://www.interdb.jp/pg/pgsql07.html" target="_blank" rel="noopener noreferrer">Chapter 7: Heap Only Tuple (HOT) and Index-Only Scans</a>
+</p>
+
+

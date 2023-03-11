@@ -2,12 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
- <title>PostgreSQLバイブル草稿</title>
- <link rel="stylesheet" type="text/css" media="screen" href="./default.css"">
-</head>
-
-<body>
+ <meta http-equiv="content-style-type" content="text/css">
+ <title>自分用PostgreSQLマニュアル</title>
+ <link rel="stylesheet" type="text/css" media="screen" href="./default.css" charset="UTF-8">
+ </head>
+ <body>
 
 <script language=javascript>
 <!--
@@ -26,11 +25,10 @@ objID.className='close';
 </script>
 
 <div id="header">
-<h1 class="title">PostgreSQLバイブル草稿</title></h1>
+<h1 class="title">自分用PostgreSQLマニュアル</title></h1>
     <span class="small">
 </span>
 </div>
-
 
 <hr class="full_hr">
 <table style="width: 100%;" border="0">
@@ -38,15 +36,16 @@ objID.className='close';
   <td class="menubar">
    <div id="menubar">
 
-
 <h5>PostgreSQLとは</h5>
 
-<li><a href="./index.html">PostgreSQLとは</a><br></li>
+<li><a href="./intro.html">PostgreSQLとは</a><br></li>
+
 
 <h5>PostgreSQLの内部構造</h5>
 <ul>
 <li><a href="./internal.html">とびら</a><br></li>
 </ul>
+
 <ol>
 <li><a href="./internal-01.html">プロセスとメモリ構造</a><br></li>
 <li><a href="./internal-02.html">データベースクラスタ、テーブルの構造</a></li>
@@ -58,7 +57,7 @@ objID.className='close';
 <li><a href="./internal-08.html">HOTとIndex Only Scan</a></li>
 <li><a href="./internal-09.html">WAL(Write Ahead Logging)</a></li>
 <li><a href="./internal-10.html">アーカイブログとPITR</a></li>
-<li><a href="./internal-11.html">レプリケーション(Streaming ReplicationとHotStandby)</a></li>
+<li><a href="./internal-11.html">Streaming ReplicationとHotStandby</a></li>
 </ol>
 
 
@@ -69,56 +68,46 @@ objID.className='close';
 </ul>
 
 <ol>
-[PostgreSQLの基礎]<br>
-<li><a href="./admin-01.html">オブジェクト、データベース、スキーマ</a><br></li>
-<li><a href="./admin-02.html">システムカタログ</a><br></li>
-<li><a href="./admin-03.html">文字コードの扱い</a><br></li>
-
 
 [インストールと起動、停止]<br>
-<li><a href="./admin-04.html">インストール</a><br></li>
-<li><a href="./admin-05.html">データベースシステムの初期化 initdb</a><br></li>
-<li><a href="./admin-06.html">PostgreSQLサーバの起動/停止</a><br></li>
+<li><a href="./admin-01.html">インストール</a><br></li>
+<li><a href="./admin-02.html">データベースシステムの初期化 initdb</a><br></li>
+<li><a href="./admin-03.html">PostgreSQLサーバの起動/停止</a><br></li>
 
+<hr>
+[PostgreSQLの基礎]<br>
+<li><a href="./admin-04.html">オブジェクト、データベース、スキーマ</a><br></li>
+<li><a href="./admin-05.html">システムカタログ</a><br></li>
+<li><a href="./admin-06.html">文字コードの扱い</a><br></li>
 
+  <hr>
 [認証とアクセス制御]<br>
 <li><a href="./admin-07.html">認証とアクセス制御</a><br></li>
 <li><a href="./admin-08.html">クライアントのアクセス制御</a><br></li>
 <li><a href="./admin-09.html">権限について</a><br></li>
 <li><a href="./admin-10.html">ロールの作成と権限制御</a><br></li>
 
-<HR>
-
+<hr>
 [バックアップとアップグレード]<br>
 <li><a href="./admin-11.html">バックアップとアップグレード</a><br></li>
 <li><a href="./admin-12.html">ダンプとリストア</a><br></li>
 <li><a href="./admin-13.html">アップグレード</a><br></li>
 
+  <hr>
 [保守、監視とチューニング]<br>
 <li><a href="./admin-14.html">保守、監視とチューニング</a><br></li> 
 <li><a href="./admin-15.html">稼働統計情報</a><br></li>
 <li><a href="./admin-16.html">実行ログの取得</a><br></li>
-<li><a href="./admin-17.html">モニタリングツール</a><br></li>
-<li><a href="./admin-18.html">ログと統計情報の分析</a><br></li>
-<li><a href="./admin-19.html">パラメータチューニング</a><br></li>
+<li><a href="./admin-17.html">ログと統計情報の分析</a><br></li>
+<li><a href="./admin-18.html">パラメータチューニング</a><br></li>
 
+  <hr>
 [耐障害性、高可用性]<br>
-<li><a href="./admin-20.html">耐障害性、高可用性</a><br></li>
-<li><a href="./admin-21.html">アーカイブログとPITR</a><br></li>
-<li><a href="./admin-22.html">レプリケーションの設定</a><br></li>
-<li><a href="./admin-23.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-19.html">アーカイブログとPITR</a><br></li>
+<li><a href="./admin-20.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-21.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-22.html">ロジカルレプリケーション</a><br></li>
 
-
-[FDW]<br>
-<li><a href="./admin-24.html">FDW</a><br></li>
-<li><a href="./admin-25.html">postgres_fdw</a><br></li>
-</ol>
-
-[追加の文章(未完)]<br>
-<li><a href="./admin-26.html">ロギング</a><br></li>
-<li><a href="./admin-27.html">統計情報</a><br></li>
-<li><a href="./admin-28.html">モニタリング</a><br></li>
-<li><a href="./admin-29.html">メンテナンス</a><br></li>
 </ol>
 
 
@@ -138,6 +127,7 @@ objID.className='close';
 <li><a href="./param-11.html">クライアント接続デフォルト</a><br></li>
 <li><a href="./param-12.html">ロック管理/バージョンとプラットフォーム互換性</a><br></li>
 </ol>
+
 
 
 <h5>psql</h5>
@@ -160,6 +150,7 @@ objID.className='close';
 </ol>
 
 
+
 <h5>SQL</h5>
 
 <ul>
@@ -167,15 +158,14 @@ objID.className='close';
 </ul>
 
 <ol>
-[SQL]<br>
 
 <li><a href="./sql-01.html">SQL語彙</a><br></li>
 <li><a href="./sql-02.html">テーブルスペースの作成/削除/変更</a><br></li>
 <li><a href="./sql-03.html">データベースの作成/変更/削除</a><br></li>
-<li><a href="./sql-04.html">テーブルの作成</a><br></li>
+<li><a href="./sql-04.html">テーブルの作成 CREATE TABLE / CREATE TABLE AS</a><br></li>
 <li><a href="./sql-05.html">外部キー</a><br></li>
 <li><a href="./sql-06.html">オブジェクトの継承/LIKE句</a><br></li>
-<li><a href="./sql-07.html">問い合わせ結果から新しいテーブルを作成</a><br></li>
+<li><a href="./sql-07.html">パーティション</a><br></li>
 <li><a href="./sql-08.html">テーブルの削除</a><br></li>
 <li><a href="./sql-09.html">スキーマの定義/変更/削除</a><br></li>
 
@@ -201,7 +191,7 @@ objID.className='close';
 <li><a href="./sql-25.html">問い合わせの結合</a><br></li>
 <li><a href="./sql-26.html">ORDER BY</a><br></li>
 <li><a href="./sql-27.html">LIMIT OFFSET</a><br></li>
-<li><a href="./sql-28.html">FOR UPDATE/ FOR SHARE</a><br></li>
+<li><a href="./sql-28.html">FOR [NO KEY] UPDATE/ FOR [KEY] SHARE</a><br></li>
 <li><a href="./sql-29.html">サブクエリ</a><br></li>
 <li><a href="./sql-30.html">CASE式</a><br></li>
 <li><a href="./sql-31.html">VALUES</a><br></li>
@@ -227,18 +217,12 @@ objID.className='close';
 <li><a href="./sql-49.html">COPY/IMPORT</a><br></li>
 <li><a href="./sql-50.html">COPY/EXPORT</a><br></li>
 <li><a href="./sql-51.html">関数定義</a><br></li>
-<li><a href="./sql-52.html">エクステンション</a><br></li>
-<li><a href="./sql-53.html">外部サーバの定義、変更、削除</a><br></li>
-<li><a href="./sql-54.html">外部サーバのユーザマップ定義、変更、削除</a><br></li>
-<li><a href="./sql-55.html">外部テーブルの定義、変更、削除</a><br></li>
-<hr>
-<li><a href="./sql-56.html">イベントトリガ</a><br></li>
-<li><a href="./sql-57.html">行レベルセキュリティ</a><br></li>
+<li><a href="./sql-52.html">FDW(Foreign Data Wrapper)</a><br></li>
 
-<hr>
-<li><a href="./sql-60.html">新しい機能</a><br></li>
+<li><a href="./sql-53.html">PUBLICATION</a><br></li>
+<li><a href="./sql-54.html">SUBSCRIPTION</a><br></li>
+  
 </ol>
-
 
 <h5>関数</h5>
 
@@ -260,8 +244,6 @@ objID.className='close';
 <li><a href="./type-09.html">バイナリ列データ型</a><br></li>
 <li><a href="./type-10.html">Range型</a><br></li>
 <li><a href="./type-11.html">配列</a><br></li>
-<hr>
-<li><a href="./type-12.html">JSON型</a><br></li>
 
 <hr>
 [演算子]<br>
@@ -273,9 +255,6 @@ objID.className='close';
 <li><a href="./ope-06.html">パターンマッチング</a><br></li>
 <li><a href="./ope-07.html">日付/時刻演算子</a><br></li>
 <li><a href="./ope-08.html">Range型演算子</a><br></li>
-<hr>
-<li><a href="./ope-09.html">JSON型演算子</a><br></li>
-
 
 <hr>
 [関数]<br>
@@ -287,89 +266,73 @@ objID.className='close';
 <li><a href="./func-06.html">型変換関数</a><br></li>
 <li><a href="./func-07.html">Range型関数</a><br></li>
 <li><a href="./func-08.html">Window関数</a><br></li>
-<li><a href="./func-09.html">セッション情報関数</a><br></li>
-<li><a href="./func-10.html">アクセス権限とスキーマ可視性照会関数</a><br></li>
-<li><a href="./func-11.html">データベースオブジェクト関数</a><br></li>
-<li><a href="./func-12.html">バックアップとリカバリ制御関数</a><br></li>
+  <hr>
 
-<li><a href="./func-13.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-09.html">セッション情報関数</a><br></li>
+<li><a href="./func-10.html">アクセス権限照会関数</a><br></li>
+<li><a href="./func-11.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-12.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-13.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
+<li><a href="./func-14.html">制御データ関数</a><br></li>
+  <hr>
 <li><a href="./func-15.html">構成設定関数</a><br></li>
 <li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-17.html">レプリケーションSQL関数</a><br></li>
-
-<hr>
-<li><a href="./func-18.html">JSON関数</a><br></li>
+<li><a href="./func-17.html">バックアップ制御関数</a><br></li>
+<li><a href="./func-18.html">リカバリ制御関数</a><br></li>
+<li><a href="./func-19.html">スナップショット同期関数</a><br></li>	
+<li><a href="./func-20.html">レプリケーション管理関数</a><br></li>	
+<li><a href="./func-21.html">データベースオブジェクト管理関数</a><br></li>
+<li><a href="./func-22.html">インデックス保守関数</a><br></li>	
+<li><a href="./func-23.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-24.html">勧告的ロック用関数</a><br></li>
+<li><a href="./func-25.html">統計情報関数</a><br></li>	
 
 </ol>
-
-<!--
-[削除するもの]<br>
-<li><a href="./type-07.html">幾何データ型</a><br></li>
-<li><a href="./type-08.html">ネットワークアドレス型型</a><br></li>
-<li><a href="./ope-08.html">幾何演算子</a><br></li>
-<li><a href="./ope-09.html">ネットワーク演算子</a><br></li>
-<li><a href="./func-06.html">幾何関数</a><br></li>
-<li><a href="./func-07.html">ネットワークアドレス関数</a><br></li>
-<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
-<li><a href="./func-16.html">トランザクションID関数</a><br></li>
-<li><a href="./func-17.html">スキーマ可視性照会関数</a><br></li>
-<li><a href="./func-18.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-19.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-20.html">勧告的ロック用関数</a><br></li>
--->
 
 <h5>PL/pgSQL</h5>
 
 <ol>
-<li><a href="./plpgsql.html">結果の返し方</a><br></li>
-<li><a href="./plpgsql-01.html">ストアドプロシージャ</a><br></li>
-<li><a href="./plpgsql-02.html">ストアドプロシージャの定義</a><br></li>
+<li><a href="./plpgsql-01.html">PL/pgSQLによるストアドプロシージャ</a><br></li>
+
+  <hr>[定義]
+    <br>
+
+<li><a href="./plpgsql-02.html">PL/pgSQLによるストアドプロシージャの定義</a><br></li>
+
+  <hr>[基本的な使い方]
+    <br>
 <li><a href="./plpgsql-03.html">変数宣言と値の代入</a><br></li>
-**** まとめる >>
+
 <li><a href="./plpgsql-04.html">SELECT INTO文</a><br></li>
 <li><a href="./plpgsql-05.html">結果ステータスの取得</a><br></li>
 <li><a href="./plpgsql-06.html">動的なSQL文の実行</a><br></li>
-<< ここまで****
+
+  <hr>[制御構造]
+    <br>
 <li><a href="./plpgsql-07.html">IF 条件分岐</a><br></li>
-<li><a href="./plpgsql-08.html">ループ処理</a><br></li>
-*** >>>
-<li><a href="./plpgsql-09.html">RETURN</a><br></li>
-<<< ***
+<li><a href="./plpgsql-08.html">EXIT</a><br></li>
+
+<li><a href="./plpgsql-09.html">RETURN NEXT / RETURN QUERY</a><br></li>
+
 <li><a href="./plpgsql-10.html">ループ処理　LOOP</a><br></li>
 <li><a href="./plpgsql-11.html">ループ処理　WHILE</a><br></li>
-<li><a href="./plpgsql-12.html">ループ処理　FOR </a><br></li>
+<li><a href="./plpgsql-12.html">ループ処理　FOR</a><br></li>
 <li><a href="./plpgsql-13.html">ループ処理 (複数行の問い合わせ結果を扱う)</a><br></li>
+
+<hr>[カーソル]
+    <br>
 <li><a href="./plpgsql-14.html">カーソルの利用</a><br></li>
 <li><a href="./plpgsql-15.html">カーソル変数の宣言</a><br></li>
 <li><a href="./plpgsql-16.html">カーソルのオープンとクローズ	OPEN / CLOSE</a><br></li>
-<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得		FETCH</a><br></li>
-<li><a href="./plpgsql-18.html">カーソルを使った例</a><br></li>
-<li><a href="./plpgsql-19.html">例外</a><br></li>
-*** >>>
-<li><a href="./plpgsql-21.html">CASE</a><br></li>
-<li><a href="./plpgsql-22.html">FOREACH</a><br></li>
-<<< ***
-</ol>
+<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得	FETCH</a><br></li>
+  <li><a href="./plpgsql-18.html">FOR IN LOOPにカーソル行の取得</a><br></li>
+<li><a href="./plpgsql-19.html">カーソルを使った例</a><br></li>
+
+  <hr>[例外]
+    <br>
+<li><a href="./plpgsql-20.html">例外処理</a><br></li>
 
 
-<h5>Appendix(付録)</h5>
-
-<ol>
-<li><a href="./app-01.html">pgpool-II</a><br></li>
-<li><a href="./app-02.html">Pacemaker</a><br></li>
-</ol>
-
-
-<h5>おまけ:ネット公開(ページ数の関係で書籍には載せない)</h5>
-
-<ol>
-[pgpool]<br>
-<li><a href="./ha-06.html">pgpool-II セットアップ</a><br></li>
-<li><a href="./ha-07.html">pgpool-II レプリケーションモード</a><br></li>
-<li><a href="./ha-08.html">pgpool-II マスタースレーブモード</a><br></li>
-[Pacemaker]<br>
-<li><a href="./ha-10.html">Pacemaker</a><br></li>
 </ol>
 
 </div>
@@ -378,85 +341,336 @@ objID.className='close';
 
   </td>
   <td valign="top">
-   <div id="body">
+    <div id="body">
+      
 
-<h2>データベースシステムの初期化</h2>
+
+<h2><a href="https://www.postgresql.org/docs/current/catalogs.html" target="_blank" rel="noopener noreferrer">システムカタログ</a> / <a href="https://www.postgresql.org/docs/current/views.html" target="_blank" rel="noopener noreferrer">システムビュー</a></h2>
+
+
+<!--
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-available-extensions.html" target="_blank" rel="noopener noreferrer">pg_available_extensions</a></td>		<td>ビュー</td>		<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-available-extension-versions.html" target="_blank" rel="noopener noreferrer">pg_extension_versions</a></td>		<td>ビュー</td>		<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-backend-memory-contexts.html" target="_blank" rel="noopener noreferrer">pg_backend_memory_contexts</a></td>		<td>ビュー</td>		<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-config.html" target="_blank" rel="noopener noreferrer">pg_ocnfig</a></td>		<td>ビュー</td>		<td></td>
+
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-file-settings.html" target="_blank" rel="noopener noreferrer">pg_file_settings</a></td>		<td>ビュー</td>		<td></td>
+
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-hba-file-rules.html" target="_blank" rel="noopener noreferrer">pg_hba_file_rules</a></td>		<td>ビュー</td>		<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-ident-file-mappings.html" target="_blank" rel="noopener noreferrer">pg_ident_file_mappings</a></td>		<td>ビュー</td>		<td></td>
+
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-policies.html" target="_blank" rel="noopener noreferrer">pg_policies</a></td>		<td>ビュー</td>		<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-publication-tables.html" target="_blank" rel="noopener noreferrer">pg_publication_tables</a></td>		<td>ビュー</td>		<td></td>
+
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-shmem-allocations.html" target="_blank" rel="noopener noreferrer">pg_shmem_allocations</a></td>		<td>ビュー</td>		<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-stats-ext.html" target="_blank" rel="noopener noreferrer">pg_stats_ext</a></td>		<td>ビュー</td>		<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-stats-ext-exprs.html" target="_blank" rel="noopener noreferrer">pg_stats_ext_exprs</a></td>		<td>ビュー</td>		<td></td>
+
+
+
+-->
+
+
+<p>
+他の多くのデータベースシステムと同様、PostgreSQLは"システムカタログ"を使ってテーブルやカラムの情報などのメタデータ、システムの内部情報などを管理しています。
+</p>
+
+<p>
+[<表3-01>]にシステムカタログと、使い易いように定義されたビューの一覧を示します。
+</p>
+
+<table border=1>
+<caption>[<表3-01>] システムカタログ一覧</caption>
+<tr bgcolor="#cccccc">
+<th>システムカタログ名</th>	<th>用途</th>						<th>備考</th>
+<!-- ========================================================== -->
+</tr><tr>
+<th colspan=3 bgcolor="#eeeeee" align=left>ユーザ/ロール</th>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-authid.html" target="_blank" rel="noopener noreferrer">pg_authid</a></td>		<td>ロールの各種権限</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-auth-members.html" target="_blank" rel="noopener noreferrer">pg_auth_members</a></td>		<td>ロールのメンバー間の関係を記録</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-db-role-setting.html" target="_blank" rel="noopener noreferrer">pg_db_role_setting</a></td>		<td>データベースとロールの組み合わせ毎に設定パラメータのデフォルト値記録</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-shadow.html" target="_blank" rel="noopener noreferrer">pg_shadow</a></td>		<td>ロールの一覧を表示するビュー</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-roles.html" target="_blank" rel="noopener noreferrer">pg_roles</a></td>		<td>ロールに関する情報を表示するビュー</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-user.html" target="_blank" rel="noopener noreferrer">pg_user</a></td>		<td>ユーザ/ロールに関する情報を表示するビュー</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-init-privs.html" target="_blank" rel="noopener noreferrer">pg_init_privs</a></td>		<td></td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-group.html" target="_blank" rel="noopener noreferrer">pg_group</a></td>		<td>ビュー</td>		<td></td>
+
+
+</tr><tr>
+<!-- ========================================================== -->
+<th colspan=3 bgcolor="#eeeeee" align=left>テーブルスペース/データベース/テーブル/関数/演算</th>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-aggregate.html" target="_blank" rel="noopener noreferrer">pg_aggregate</a></td>		<td>集約関数</td>		<td></td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/catalog-pg-am.html" target="_blank" rel="noopener noreferrer">pg_am</a></td>		<td>インデックスのアクセスメソッド</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-amop.html" target="_blank" rel="noopener noreferrer">pg_amop</a></td>		<td>アクセスメソッドの演算子</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-amproc.html" target="_blank" rel="noopener noreferrer">pg_amproc</a></td>		<td>アクセスメソッドのサポートプロシージャ</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-attrdef.html" target="_blank" rel="noopener noreferrer">pg_attrdef</a></td>		<td>カラムのデフォルト値</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-attribute.html" target="_blank" rel="noopener noreferrer">pg_attribute</a></td>		<td>テーブルのカラム ("属性", "フィールド")</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-cast.html" target="_blank" rel="noopener noreferrer">pg_cast</a></td>		<td>キャスト</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-class.html" target="_blank" rel="noopener noreferrer">
+pg_class</a></td>		<td>テーブル、インデックス、シーケンス ("リレーション")</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-constraint.html" target="_blank" rel="noopener noreferrer">
+pg_constraint</a></td>		<td>制約</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-database.html" target="_blank" rel="noopener noreferrer">
+pg_database</a></td>		<td>データベースクラスタ毎のデータベース</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-default-acl.html" target="_blank" rel="noopener noreferrer">
+pg_default_acl</a></td>		<td>新規作成したオブジェクト</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-depend.html" target="_blank" rel="noopener noreferrer">
+pg_depend</a></td>		<td>データベースオブジェクト間の依存関係</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-description.html" target="_blank" rel="noopener noreferrer">
+pg_description</a></td>		<td>データベースオブジェクト</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-enum.html" target="_blank" rel="noopener noreferrer">
+pg_enum</a></td>		<td>列挙型</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-index.html" target="_blank" rel="noopener noreferrer">
+pg_index</a></td>		<td>追加インデックス情報</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-inherits.html" target="_blank" rel="noopener noreferrer">
+pg_inherits</a></td>		<td>テーブルの継承関係</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-language.html" target="_blank" rel="noopener noreferrer">
+pg_language</a></td>		<td>関数記述言語</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-largeobject.html" target="_blank" rel="noopener noreferrer">
+pg_largeobject</a></td>		<td>ラージオブジェクト</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-largeobject-metadata.html" target="_blank" rel="noopener noreferrer">
+pg_largeobject_metadata</a></td>		<td>ラージオブジェクトのアクセス権限</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-namespace.html" target="_blank" rel="noopener noreferrer">
+pg_namespace</a></td>		<td>スキーマ</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-opclass.html" target="_blank" rel="noopener noreferrer">
+pg_opclass</a></td>		<td>インデックスのアクセスメソッド演算子クラス</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-operator.html" target="_blank" rel="noopener noreferrer">
+pg_operator</a></td>		<td>演算子</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-opfamily.html" target="_blank" rel="noopener noreferrer">pg_opfamily</a></td>		<td>演算子の族</td>		<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-parameter-acl.html" target="_blank" rel="noopener noreferrer">pg_parameter_acl</a></td>		<td></td>		<td>バージョン15から</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-partitioned-table.html" target="_blank" rel="noopener noreferrer">pg_partitioned_table</a></td>		<td></td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-policy.html" target="_blank" rel="noopener noreferrer">pg_policy</a></td>		<td></td>		<td></td>
+
+</tr><tr>
+<td>pg_pltemplate</td>		<td>手続き言語のテンプレート</td>		<td>バージョン12まで</td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-proc.html" target="_blank" rel="noopener noreferrer">pg_proc</a></td>		<td>関数とプロシージャ</td>		<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-publication.html" target="_blank" rel="noopener noreferrer">pg_publication</a></td>		<td></td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-publication-namespace.html" target="_blank" rel="noopener noreferrer">pg_publication_namespace</a></td>		<td></td>		<td>バージョン15から</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-publication-rel.html" target="_blank" rel="noopener noreferrer">pg_publication_rel</a></td>		<td></td>		<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-range.html" target="_blank" rel="noopener noreferrer">pg_range</a></td>		<td>レンジ型</td>			<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-replication-origin.html" target="_blank" rel="noopener noreferrer">pg_replication_origin</a></td>		<td></td>		<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-rewrite.html" target="_blank" rel="noopener noreferrer">pg_rewrite</a></td>		<td>問い合わせ書き換えルール</td>		<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-seclabel.html" target="_blank" rel="noopener noreferrer">pg_seclablel</a></td>		<td></td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-sequence.html" target="_blank" rel="noopener noreferrer">pg_sequence</a></td>		<td></td>		<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-shdepend.html" target="_blank" rel="noopener noreferrer">pg_shdepend</a></td>		<td>共有オブジェクト間の依存関係</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-shdescription.html" target="_blank" rel="noopener noreferrer">pg_shdescription</a></td>	<td>共有オブジェクトのコメント</td>		<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-shseclabel.html" target="_blank" rel="noopener noreferrer">pg_shseclabel</a></td>	<td></td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-subscription.html" target="_blank" rel="noopener noreferrer">pg_subscription</a></td>	<td></td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-subscription-rel.html" target="_blank" rel="noopener noreferrer">pg_subscription_rel</a></td>	<td></td>		<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-tablespace.html" target="_blank" rel="noopener noreferrer">pg_tablespace</a></td>		<td>テーブルスペース</td>		<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-transform.html" target="_blank" rel="noopener noreferrer">pg_transform</a></td>	<td></td>		<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-trigger.html" target="_blank" rel="noopener noreferrer">pg_trigger</a></td>		<td>トリガ</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-type.html" target="_blank" rel="noopener noreferrer">pg_type</a></td>		<td>データ型</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-cursors.html" target="_blank" rel="noopener noreferrer">pg_cursors</a></td>		<td>カーソルに関する情報を表示するビュー</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-tables.html" target="_blank" rel="noopener noreferrer">pg_tables</a></td>		<td>テーブルに関する情報を表示するビュー</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-views.html" target="_blank" rel="noopener noreferrer">pg_views</a></td>		<td>ビューに関する情報を表示するビュー</td>		<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-matviews.html" target="_blank" rel="noopener noreferrer">pg_matviews</a></td>		<td>マテリアライズドビューに関する情報を表示するビュー</td>		<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-indexes.html" target="_blank" rel="noopener noreferrer">pg_indexes</a></td>		<td>インデックス定義などを表示するビュー</td>		<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-sequences.html" target="_blank" rel="noopener noreferrer">pg_sequences</a></td>		<td>ビュー</td>		<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-rules.html" target="_blank" rel="noopener noreferrer">pg_rules</a></td>		<td>書き換えルールに関する情報を表示するビュー</td>		<td></td>
+</tr><tr>
+<!-- ========================================================== -->
+<th colspan=3 bgcolor="#eeeeee" align=left>統計情報</th>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-statistic.html" target="_blank" rel="noopener noreferrer">pg_statistic</a></td>		<td>オプティマイザ統計値</td>		<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-statistic-ext.html" target="_blank" rel="noopener noreferrer">pg_statistic_ext</a></td>		<td></td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-statistic-ext-data.html" target="_blank" rel="noopener noreferrer">pg_statistic_ext_data</a></td>		<td></td>		<td>バージョン12から</td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-stats.html" target="_blank" rel="noopener noreferrer">pg_stats</a></td>		<td>pg_statisticのうち、ユーザ/ロールが読み取り可能なデータのみ表示するビュー</td>		<td></td>
+</tr><tr>
+<!-- ========================================================== -->
+<th colspan=3 bgcolor="#eeeeee" align=left>各種機能</th>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-seclabel.html" target="_blank" rel="noopener noreferrer">pg_seclabel</a></td>		<td>セキュリティラベル	</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-event-trigger.html" target="_blank" rel="noopener noreferrer">pg_event_trigger</a></td>		<td></td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-extension.html" target="_blank" rel="noopener noreferrer">pg_extension</a></td>		<td>EXTENSION</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-seclabels.html" target="_blank" rel="noopener noreferrer">pg_seclabels</a></td>		<td>セキュリティラベルに関する情報を表示するビュー</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-settings.html" target="_blank" rel="noopener noreferrer">pg_settings</a></td>		<td>設定パラメータの値や上限/下限などを表示するビュー</td>		<td></td>
+</tr><tr>
+<!-- ========================================================== -->
+<th colspan=3 bgcolor="#eeeeee" align=left>トランザクション、ロック</th>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-locks.html" target="_blank" rel="noopener noreferrer">pg_locks</a></td>		<td>トランザクションのLOCKに関する情報を表示するビュー</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-prepared-statements.html" target="_blank" rel="noopener noreferrer">pg_prepared_statements</a></td>	<td>プリペアステートメントに関する情報を表示するビュー</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-prepared-xacts.html" target="_blank" rel="noopener noreferrer">pg_prepared_xacts</a></td>	<td>2相コミットに関する情報を表示するビュー</td>		<td></td>
+</tr><tr>
+<!-- ========================================================== -->
+<th colspan=3 bgcolor="#eeeeee" align=left>エンコーディング、テキスト検索、timezone</th>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-collation.html" target="_blank" rel="noopener noreferrer">pg_collation</a></td>		<td>Collation</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-conversion.html" target="_blank" rel="noopener noreferrer">pg_conversion</a></td>		<td>エンコーディング変換</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-ts-config.html" target="_blank" rel="noopener noreferrer">pg_ts_config</a></td>		<td>テキスト検索の設定	</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-ts-config-map.html" target="_blank" rel="noopener noreferrer">pg_ts_config_map</a></td>	<td>参照すべきテキスト検索辞書</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-ts-dict.html" target="_blank" rel="noopener noreferrer">pg_ts_dict</a></td>		<td>テキスト検索辞書</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-ts-parser.html" target="_blank" rel="noopener noreferrer">pg_ts_parser</a></td>		<td>テキスト検索パーサ定義</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-ts-template.html" target="_blank" rel="noopener noreferrer">pg_ts_template</a></td>		<td>テキスト検索テンプレート</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-timezone-abbrevs.html" target="_blank" rel="noopener noreferrer">pg_timezone_abbrevs</a></td>	<td>timezoneのUTCからの時差と夏時間の有無を表示するビュー</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-timezone-names.html" target="_blank" rel="noopener noreferrer">pg_timezone_names</a></td>	<td>timezoneを表示するビュー</td>		<td></td>
+</tr><tr>
+<!-- ========================================================== -->
+<th colspan=3 bgcolor="#eeeeee" align=left>FDW(外部データラッパー)</th>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-foreign-data-wrapper.html" target="_blank" rel="noopener noreferrer">pg_foreign_data_wrapper</a></td><td>外部データラッパー</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-foreign-server.html" target="_blank" rel="noopener noreferrer">pg_foreign_server</a></td>	<td>外部サーバ</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-foreign-table.html" target="_blank" rel="noopener noreferrer">pg_foreign_table</a></td>	<td>外部テーブル</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-user-mapping.html" target="_blank" rel="noopener noreferrer">pg_user_mapping</a></td>	<td>ユーザマッピング</td>		<td></td>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-replication-origin-status.html" target="_blank" rel="noopener noreferrer">pg_replication_origin_status</a></td>		<td>ビュー</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-replication-slots.html" target="_blank" rel="noopener noreferrer">pg_replication_slots</a></td>		<td>ビュー</td>		<td></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-user-mappings.html" target="_blank" rel="noopener noreferrer">pg_user_mappings</a></td>		<td>ビュー</td>		<td></td>
+</tr></table>
+
+<br>
+
+<p>
+各システムカタログの定義は公式ドキュメントを参照してください。
+</p>
+
+<p>
+システムカタログの内容はSELECT文で表示できます。
+例えば、システムカタログpg_shadowを表示すればロールの各種情報を得ることができます。
+</p>
 
 <pre>
-[<書式>]
-	initdb [options...] -D dbdir 
-
-====================================================================
-引数			説明[デフォルト]
-====================================================================
--D dbdir データベースクラスタを作成するベースディレクトリ(dbdir)を指定
-====================================================================
-
-====================================================================
-主なオプション		説明[デフォルト]
-===================================================================
--A authmethod		pg_hba.confでOSのローカルユーザに使用する認証方法を指定
--U superuser		データベースのスーパーユーザ名を指定[initdbを実行したユーザ名]
--E=encoding		デフォルトのエンコーディングencodingを設定[SQL_ASCII]
--L templatedir		各種設定ファイルのテンプレートがあるディレクトリ(templatedir)を設定
---locale=locale		ロケールlocaleを設定
---no-locale		ロケールを無効にする
-====================================================================
+sampledb=# SELECT usename,usesysid,usecreatedb,usesuper,usecatupd,userepl 
+sampledb-#      FROM pg_shadow;
+ usename  | usesysid | usecreatedb | usesuper | usecatupd | userepl 
+----------+----------+-------------+----------+-----------+---------
+ postgres |       10 | t           | t        | t         | t
+ admin    |      100 | t           | t        | t         | t
+ webrole1 |      101 | f           | f        | f         | f
+ webrole2 |      102 | f           | f        | f         | f
+ webrole3 |      103 | f           | f        | f         | f
+(5 rows)
 </pre>
 
-<div class="jumpmenu"></div><h3>解説</h3>
-
-<p>
-PostgreSQLのインストール後、initdbコマンドでデータベースシステムを初期化します。
-初期化とは、具体的には-D(もしくは--pgdata)オプションで指定したディレクトリにデータベースクラスタを作成することです。
-<br>
-initdbコマンドは、PostgreSQLをインストールしたユーザが実行します(本書ではユーザpostgres)。
-</p>
-
-<p>
-・ロケールについて
-<br>
-ロケール(locale)とは地域や国毎に異なる単位や記号、通貨などの標記などに関する情報です([<脚注3>])。
-しかし、日本語を対象としたデータベースを構築する限り、ロケール設定は不要なので"--no-locale"オプションを設定します。
-</p>
-
-
-<blockquote><table BORDER="1"><tr><td>脚注3</td><td>
-例えば日付について、欧州では'04/11/2016'と"日月年"の順なのに対し、U.S.では'11/4/2016'と"月日年"の順になります。
-</td></tr></table></blockquote>
-
-
-<p>
-・-Eオプション
-<br>
--Eオプションにはデフォルトのエンコーディングを指定します。
-ただし、データベース作成時にもエンコーディングを設定できるので、デフォルトのエンコーディングを設定しなくても支障はありません。
-<br>
-指定できるエンコーディングの一覧、および文字コードの扱いと日本語利用は[<3-03>]を参照してください。
-</p>
-
-<p>
-・-Lオプション
-<br>
-データベースクラスタの各種設定ファイルは、
-デフォルトではPostgreSQLをインストールしたディレクトリの下、
-サブディレクトリshareのテンプレートファイル群(postgresql.conf.sampleなど)をもとに作成します。
-<br>
-別のディレクトリにあるテンプレートファイル群を利用する場合は、-Lオプションにそのディレクトリを設定します。
-</p>
-
-<div class="jumpmenu"></div><h3>実行例</h3>
-
-<p>
-ディレクトリ'/usr/local/pgsql/data'にデータベースクラスタを作成します。
-</p>
-
-<pre>
-postgres> initdb --no-locale -D /usr/local/pgsql/data
-</pre>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2018-9-8
+Last-modified: 2023-3-11
 </div>
 </body>
 </html>

@@ -1,0 +1,12 @@
+%FILE internal/internal-04.html
+%LASTMOD
+%KEY pgsql-internal04
+
+%TITLE プラン処理
+
+
+<p>
+The Internals of PostgreSQL <a href="https://www.interdb.jp/pg/pgsql03.html" target="_blank" rel="noopener noreferrer">Chapter 3: Query Processing</a>
+<br>
+The Internals of PostgreSQL <a href="https://www.interdb.jp/pg/pgsql04.html" target="_blank" rel="noopener noreferrer">Chapter 4: Foreign Data Wrappers (FDW)</a>
+</p>

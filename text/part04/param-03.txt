@@ -1,0 +1,150 @@
+%FILE internal/param-03.html
+%LASTMOD
+%KEY pgsql-param03
+
+%TITLE <a href="https://www.postgresql.org/docs/current/runtime-config-connection.html" target="_blank" rel="noopener noreferrer">接続と認証		CONNECTIONS AND AUTHENTICATION</a>
+
+
+<table border=1>
+<caption>[<設定項目一覧>]</caption>
+<tr bgcolor="#cccccc">
+<th><sup>変更<br>可能性</sup></th> <th>設定項目</th>	<th>パラメータ<br>[デフォルト]</th>		<th>説明</th>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>Connection Settings</th>
+
+</tr><tr>
+<td>×	</td> <td>listen_addresses</td> <td>文字列['localhost']	</td> <td>接続を許可する(サーバの)IPアドレスを列挙する(列挙はコンマ,で区切る)。"*"はすべて</td>
+</tr><tr>
+<td>×</td> <td>port	</td> <td>整数[5432]	</td> <td>サーバ接続用のTCP/IPポート番号</td>
+</tr><tr>
+<td>×</td> <td>max_connections	</td> <td>整数[100]	</td> <td>サーバに同時に接続するクライアントの最大数</td>
+</tr><tr>
+<td>×	</td> <td>superuser_reserved_connections</td> <td>整数[3]</td> <td>スーパーユーザの接続用に予約しておく接続数</td>
+
+</tr><tr>
+<td>x</td> <td>unix_socket_directories</td> <td>文字列['/tmp']</td> <td>リモートホストからの接続を監視するUNIXドメインソケットのディレクトリを指定。ファイル".s.PGSQL.5432"を置く。複数の場合はコンマ,で連結する。通常は変更不要。</td>
+
+</tr><tr>
+<td>×	</td> <td>unix_socket_group</td> <td>文字列[''(空文字列)]</td> <td>UNIXドメインソケットのグループ所有者を設定</td>
+
+</tr><tr>
+<td>×	</td> <td>unix_socket_permissions</td> <td>整数[0777]		</td> <td>UNIXドメインソケットのアクセス権限を設定</td>
+
+</tr><tr>
+<td></td> <td>bonjour</td> <td>on/off [off]</td> <td>Bonjourでサーバを公表するか否か</td>
+
+</tr><tr>
+<td></td> <td>bonjour_name</td> <td>''[空文字]</td> <td>Bonjourのサービス名</td>
+
+
+</tr><tr>
+<td>◎</td> <td>	tcp_keepalives_idle</td> <td>整数[0]	</td> <td>TCPソケットのTCP_KEEPIDLEオプションに設定する値。[<表4-01>]参照</td>
+</tr><tr>
+<td>◎</td> <td>	tcp_keepalives_interval	</td> <td>整数[0]	</td> <td>TCPソケットのTCP_KEEPINVLオプションに設定する値。[<表4-01>]参照</td>
+</tr><tr>
+<td>◎	</td> <td>tcp_keepalives_count</td> <td>整数[0]</td> <td>	TCPソケットのTCP_KEEPCNTオプションに設定する値。[<表4-01>]参照</td>
+
+
+</tr><tr>
+<td>	</td> <td>tcp_user_timeout</td> <td>整数[0]</td> <td>TCP接続のタイムアウト。0の場合はOSのデフォルトを使用する。単位はms</td>
+
+</tr><tr>
+<td>	</td> <td>client_connection_check_interval</td> <td>整数[0]</td> <td>クライアントが接続しているかどうかチェックする時間間隔。0の場合はチェックしない。単位はms</td>
+
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>Security & Authentication</th>
+
+</tr><tr>
+<td>△	</td> <td>authentication_timeout</td> <td>整数(1s-600s)[1m]	</td> <td>クライアント認証完了までの最大待ち時間。この時間以内に認証が完了しなかった場合、PostgreSQLサーバは接続を中止する。単位は[秒]、[分]など</td>
+</tr><tr>
+<td>◎</td> <td>	password_encryption	</td> <td>on/off[on]	</td> <td>CREATE ROLE文、ALTER ROLE文にパスワードが指定された場合、そのパスワードを暗号化するか否か</td>
+
+
+</tr><tr>
+<td></td> <td>krb_server_keyfile</td> <td>FILE名</td> <td>Kerberosサーバーキーファイルの場所</td>
+
+</tr><tr>
+<td></td> <td>krb_caseins_users</td> <td>on/off [off]</td> <td>KerberosのGSSAPIユーザ名の大文字小文字を区別するか否か。offの場合は区別する。</td>
+
+
+</tr><tr>
+<td>△	</td> <td>db_user_namespace	</td> <td>	on/off[off]		</td> <td>データベース毎にロールを定義するか否か</td>
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>SSL</th>
+
+</tr><tr>
+<td>×</td> <td>ssl	</td> <td>on/off[off]</td> <td>SSLによる接続を行うか否か</td>
+
+</tr><tr>
+<td></td> <td>ssl_ca_file	</td> <td>文字列[''空文字]</td> <td>SSLサーバ認証局（CA）が入っているファイル名を設定</td>
+</tr><tr>
+<td></td> <td>ssl_cert_file	</td> <td>文字列['server.crt']</td> <td>SSLサーバ認証局（CA）が入っているファイル名を設定</td>
+</tr><tr>
+<td></td> <td>ssl_crl_file	</td> <td>文字列列[''空文字]</td> <td>SSLクライアント証明書失効リスト（CRL）が入っているファイル名を設定</td>
+</tr><tr>
+<td></td> <td>ssl_crl_dir	</td> <td>文字列列[''空文字]</td> <td>SSLクライアント証明書失効リスト（CRL）が入っているディレクトリ名を設定</td>
+</tr><tr>
+<td></td> <td>ssl_key_file	</td> <td>文字列列['server.key']</td> <td>SSLサーバの秘密鍵が入っているファイル名を設定</td>
+</tr><tr>
+<td></td> <td>ssl_ciphers	</td> <td>文字列</td> <td>SSL接続で使うことのできるSSL暗号スイートのリストを指定</td>
+
+
+</tr></table>
+
+<br>
+
+
+<table><tr bgcolor="#cccccc">
+<th>記号</th>  <th>意味</th>
+</tr><tr>
+<td> ◎ </td>	<td>一般ユーザ/ロールが変更可能</td>
+</tr><tr>
+<td> ○ </td>	<td>スーパーユーザだけが変更可能</td>
+</tr><tr>
+<td> △ </td>	<td>設定ファイルを書き換え、pg_ctlをreloadモードで実行すれば変更可能(セッションやトランザクションは保持したまま、パラメータ値が変更できる)</td>
+</tr><tr>
+<td> × </td>	<td>再起動しないと変更できない</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+・listen_addresses
+<br>
+listen_addressesについては[<3-08>]を参照してください。
+</p>
+
+<p>
+・db_user_namespace
+<br>
+このパラメータが有効ならば、データベースごとにデータベースユーザを定義できます。
+詳しくはPostgreSQLのドキュメント「管理者ガイドサーバー実行時環境実行時の設定」におけるdb_user_namespaceの解説を参照してください。
+</p>
+
+<p>
+・tcp_keepalives_idle, tcp_keepalives_interval, tcp_keepalives_count
+<br>
+TCPソケットのオプション(TCP_KEEPIDLE, TCP_KEEPINVL, TCP_KEEPCNT)に値を設定します。詳細は[<表4-01>]を参照してください。
+</p>
+
+<table border=1>
+<caption>[<表4-01>] TCPソケットのオプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>TCP_KEEPIDLE</td>	<td>設定された時間[秒]以上、接続がアイドル状態の場合、 keepaliveプローブを送り始める。</td>
+</tr><tr>
+<td>TCP_KEEPINVL</td>	<td>各keepaliveプローブ送信の時間間隔[秒]</td>
+</tr><tr>
+<td>TCP_KEEPCNT</td>	<td>keepaliveプローブの最大送信回数</td>
+</tr></table>
+
+<br>
+
+<p>
+これらのオプションをサポートしていないプラットフォームでは、パラメータ値は0のままにしてください。
+</p>

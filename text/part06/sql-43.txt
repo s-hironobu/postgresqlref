@@ -1,0 +1,143 @@
+%FILE internal/sql-43.html
+%LASTMOD
+%KEY pgsql-sql43
+
+%TITLE 2相コミット <a href="https://www.postgresql.org/docs/current/sql-prepare-transaction.html" target="_blank" rel="noopener noreferrer">PREPARE TRANSACTION</a> / <a href="https://www.postgresql.org/docs/current/sql-commit-prepared.html" target="_blank" rel="noopener noreferrer">COMMIT PREPARED</a> / <a href="https://www.postgresql.org/docs/current/sql-rollback-prepared.html" target="_blank" rel="noopener noreferrer">ROLLBACK PREPARED</a>
+
+
+<pre>
+[<書式>]
+
+● ２相コミットの開始
+PREPARE TRANSACTION transaction_id
+
+● 2相コミットのコミット
+COMMIT PREPARED transaction_id
+
+● 2相コミットのロールバック
+ROLLBACK PREPARED transaction_id
+</pre>
+<br>
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>transaction_id</td>	<td>2相コミットの識別子。200文字まで</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+2相コミットは、複数のデータベースシステム間で一つのトランザクション処理を行なう、分散トランザクションのための機能です。
+</p>
+
+<p>
+<font color="#ff0000">
+作図用のSQL
+</font>
+</p>
+
+<pre>
+bank_a=# BEGIN;
+BEGIN
+bank_a=# UPDATE account SET acount = acount - 1000
+bank-a-#                        WHERE id = 10013;
+UPDATE 1
+
+
+
+
+bank_a=# PREPARE TRANSACTION 'mission-13';
+PREPARE TRANSACTION
+
+
+
+
+
+
+bank_a=# COMMIT PREPARED  'mission-13';
+COMMIT PREPARED
+</pre>
+<br>
+
+<pre>
+bank_b=# BEGIN;
+BEGIN
+
+
+
+bank_b=# UPDATE account SET acount = acount + 1000
+bank_b-#    　　　　　　　　　　WHERE id = 56513;
+ UPDATE 1
+
+bank_b=# PREPARE TRANSACTION 'mission';
+PREPARE TRANSACTION
+
+
+
+
+
+
+bank_b=# COMMIT PREPARED  'mission';
+COMMIT PREPARED
+</pre>
+<br>
+
+<table border=1>
+<caption>[<図6-06>] 分散トランザクションの例</caption>
+<tr><td>
+<left>
+<img src="./fig-6-06.png" width=800><br>
+</left>
+</td></tr></table>
+
+
+<p>
+[<図6-06>]において、PREPARE TRANSACTION文の実行以降はセキュア状態になり、
+トランザクションの情報はデータベースクラスタのサブディレクトリpg_twophase/以下に記録されます。
+<br>
+よって、セキュア状態以降にプロセス障害によるサーバクラッシュが発生しても、再起動すればそのままセキュア状態に復帰できます。
+</p>
+
+<p>
+・設定パラメータmax_prepared_transactions
+<br>
+2相コミットの最大数は、設定パラメータmax_prepared_transactions(<a href="./param-04.html">[<4-04>]</a>)に設定します。
+デフォルト値は0(無効)なので、利用するなら適宜大きめの値を設定します。
+</p>
+
+
+<p>
+・２相コミットの状態表示
+<br>
+システムカタログpg_prepared_xactsで、現在のセキュア状態にあるトランザクション一覧が表示できます。
+</p>
+
+<pre>
+bank_a=# BEGIN;
+BEGIN
+
+bank_a=# PREPARE TRANSACTION 'mission-02';
+PREPARE TRANSACTION			← この時点で先のトランザクションは閉じている
+
+bank_a=# SELECT * FROM pg_prepared_xacts;
+ transaction |    gid     |           prepared            |  owner   | database
+-------------+------------+-------------------------------+----------+----------
+      498324 | mission-01 | 2006-03-14 14:27:41.550884+09 | postgres | bank_a
+      498328 | mission-02 | 2006-03-14 14:29:27.004734+09 | postgres | bank_a
+(2 rows)
+
+bank_a=# COMMIT PREPARED 'mission-01';	← 他のセッションの準備されたトランザクションもコミットできる
+COMMIT PREPARED
+
+bank_a=# SELECT * FROM pg_prepared_xacts;
+ transaction |    gid     |           prepared            |  owner   | database
+-------------+------------+-------------------------------+----------+----------
+      498328 | mission-02 | 2006-03-14 14:29:27.004734+09 | postgres | bank_a
+(1 row)
+</pre>
+<br>

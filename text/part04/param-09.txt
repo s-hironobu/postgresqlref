@@ -1,0 +1,98 @@
+%FILE internal/param-09.html
+%LASTMOD
+%KEY pgsql-param09
+
+%TITLE <a href="https://www.postgresql.org/docs/current/runtime-config-statistics.html" target="_blank" rel="noopener noreferrer">稼働統計情報			RUNTIME STATISTICS</a>
+
+
+<table border=1>
+<caption>[<設定項目一覧>]</caption>
+<tr bgcolor="#cccccc">
+<th><sup>変更<br>可能性</sup></th> <th>設定項目</th>	<th>パラメータ<br>[デフォルト]</th>		<th>説明</th>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>Query/Index Statistics Collector</th>
+
+</tr><tr>
+<td>○</td>	<td>track_activities	</td>	<td>	on/off[on]	</td>	<td>	すべてのサーバプロセスで現在実行されているコマンドを監視するか否か</td>
+</tr><tr>
+<td>○ </td>	<td>     track_counts	</td>	<td>		on/off[on]	</td>	<td>	テーブルとインデックスアクセスの稼働統計情報を収集するか否か</td>
+
+</tr><tr>
+<td>○ </td>	<td>    track_io_timing	</td>	<td>		on/off[off]	</td><td>共有バッファに対するデータ読み込みや書き込みの総時間を集計するか否か</td>
+
+</tr><tr>
+<td> </td>	<td>     track_wal_io_timing	</td>	<td>	on/off[off]</td>	<td>WALバッファに対するデータ読み込みや書き込みの総時間を集計するか否か。バージョン14から</td>
+
+</tr><tr>
+<td>○</td>	<td>	track_function		</td>	<td>	none/pl/all[none]	</td>	<td>ユーザ定義関数の稼働統計情報を収集するか否か。表示はビューpg_user_functionsで行う。noneは収集しない。plはPL/pgSQLなどで定義した関数のみ。allはSQLやCで定義したユーザ定義関数すべて</td>
+
+
+</tr><tr>
+<td></td>	<td>stats_fetch_consistency</td>	<td>none/cache/snapshot [cache]	</td>	<td>バージョン15から</td>
+
+
+</tr><tr>
+<td>△</td>	<td>	stats_temp_directory	</td>	<td>	ディレクトリ名[ 'pg_stat_tmp']	</td>	<td>稼働統計情報のデータを保存するディレクトリ。バージョン14まで</td>
+
+
+
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>Statistics Monitoring</th>
+
+</tr><tr>
+<td></td>	<td>compute_query_id</td>	<td>	auto/on/off[auto]</td>	<td>queryIDを計算するか否か</td>
+
+</tr><tr>
+<td>○</td>	<td>	log_parser_stats</td>	<td>	on/off[off]</td>	<td>	パーサの統計情報を出力するか否か</td>
+
+</tr><tr>
+<td>○</td>	<td>	log_planner_stats	</td>	<td>on/off[off]	</td>	<td>プランナの統計情報を出力するか否か</td>
+</tr><tr>
+<td>○</td>	<td>	log_executor_stats</td>	<td>	on/off[off]</td>	<td>	エクゼキュータの統計情報を出力するか否か</td>
+</tr><tr>
+<td>○</td>	<td>	log_statement_stats</td>	<td>	on/off[off]	</td>	<td>問い合わせの統計情報を出力するか否か</td>
+</tr></table>
+
+<br>
+
+
+<table><tr bgcolor="#cccccc">
+<th>記号</th>  <th>意味</th>
+</tr><tr>
+<td> ◎ </td>	<td>一般ユーザ/ロールが変更可能</td>
+</tr><tr>
+<td> ○ </td>	<td>スーパーユーザだけが変更可能</td>
+</tr><tr>
+<td> △ </td>	<td>設定ファイルを書き換え、pg_ctlをreloadモードで実行すれば変更可能(セッションやトランザクションは保持したまま、パラメータ値が変更できる)</td>
+</tr><tr>
+<td> × </td>	<td>再起動しないと変更できない</td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER 解説
+
+<p>
+"Query/Index Statistics Collector"で設定するパラメータはバージョン8.2前後で全面的に変更されました。収集する情報の表示と利用方法は、[<3-15>]を参照してください。
+</p>
+
+<p>
+バージョン8.3以降は主要なパラメータはデフォルトで有効(on)です。設定が必要なのはtrack_functionとtrack_activity_query_sizeだけです。
+</p>
+<p>
+バージョン8.2以前では、stats_block_levelとstats_row_levelを有効(on)にしなければ、ブロックレベルのアクセス数など、詳細な情報を得ることができませんでした。
+</p>
+
+
+
+<p>
+・stats_fetch_consistency
+<br>
+トランザクション内で累積的統計に複数回アクセスする場合の動作を決定します。 noneに設定すると、各アクセスは共有メモリからカウンタを再フェッチします。 cacheに設定すると、オブジェクトの統計への最初のアクセスは、pg_stat_clear_snapshot()が呼び出されない限り、トランザクションが終了するまでこれらの統計をキャッシュします。 snapshotに設定すると、最初の統計アクセスは、pg_stat_clear_snapshot()が呼び出されない限り、トランザクションが終了するまで現在のデータベースでアクセス可能なすべての統計をキャッシュします。 デフォルトはcacheです。
+</p>
+
+<p>
+noneは、システムの監視に最も適しています。 値が一度しかアクセスされない場合、最も効率的です。 cacheは、繰り返しアクセスによって同じ値が生成されることを保証します。 これは、自己結合などを含むクエリで重要です。 snapshotは、統計情報を対話的に検査する場合に便利ですが、特に多くのデータベースオブジェクトが存在する場合にはオーバーヘッドが高くなります。
+</p>

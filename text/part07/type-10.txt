@@ -1,0 +1,38 @@
+%FILE internal/type-10.html
+%LASTMOD
+%KEY pgsql-type10
+
+%TITLE <a href="https://www.postgresql.org/docs/current/rangetypes.html" target="_blank" rel="noopener noreferrer">Range型</a>
+
+[< Range型>]
+
+<table><tr bgcolor="#cccccc">
+<th>データ型名</th>	<th>説明</th>
+</tr><tr>
+<td>int4range</td>		<td>int4の範囲</td>
+</tr><tr>
+<td>int8range</td>		<td>int8の範囲</td>
+</tr><tr>
+<td>numrange</td>		<td>numericの範囲</td>
+</tr><tr>
+<td>tsrange</td>		<td>timestampの範囲</td>
+</tr><tr>
+<td>tstzrange</td>		<td>タイムゾーン付きtimestampの範囲</td>
+</tr><tr>
+<td>daterange</td>		<td>dateの範囲</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 範囲
+
+<p>
+バージョン9.2からRange型がサポートされました。
+使用方法はRange型演算子<a href="./ope-08.html">[<7-19>]</a>、Range型関数<a href="./func-07.html">[<7-26>]</a>を参照してください。
+</p>
+
+<p>
+一般にRange型の範囲は、指定した範囲の<u>下限値を含み、上限値は含まない</u>ので注意してください。
+<br>
+例えば「int4range(1, 10)」の範囲を明示的に記述すると「'[1, 10)'::int4range'」です。
+</p>

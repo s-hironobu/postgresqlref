@@ -1,0 +1,138 @@
+%FILE internal/ope-01.html
+%LASTMOD
+%KEY pgsql-ope-01
+
+%TITLE 演算子
+
+<p>
+PostgreSQLは次の演算子をサポートしています。
+</p>
+
+<table border=1>
+<caption>PostgreSQLがサポートする演算子一覧</caption>
+<tr bgcolor="#cccccc">
+<th>演算子</th>			<th>参照</th>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/functions-logical.html" target="_blank" rel="noopener noreferrer">
+論理演算子</a></td>		<td><a href="./ope-02.html">[<7-13>]</a></td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/functions-comparison.html" target="_blank" rel="noopener noreferrer">
+比較演算子</a></td>		<td><a href="./ope-03.html">[<7-14>]</a></td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/functions-math.html" target="_blank" rel="noopener noreferrer">
+算術演算子</a></td>		<td><a href="./ope-04.html">[<7-15>]</a></td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/functions-string.html" target="_blank" rel="noopener noreferrer">
+文字列演算子</a></td>		<td><a href="./ope-05.html">[<7-16>]</a></td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/functions-datetime.html" target="_blank" rel="noopener noreferrer">
+日付・時刻演算子</a></td>		<td><a href="./ope-07.html">[<7-18>]</a></td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/functions-geometry.html" target="_blank" rel="noopener noreferrer">
+幾何演算子</a></td>		<td>省略</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/functions-net.html" target="_blank" rel="noopener noreferrer">
+ネットワークアドレス型演算子</a></td>		<td>省略</td>
+
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/functions-textsearch.html" target="_blank" rel="noopener noreferrer">
+文字列検索(Text Search)演算子</a></td>		<td>省略</td>
+
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/functions-range.html" target="_blank" rel="noopener noreferrer">
+Range型演算子</a></td>		<td><a href="./ope-08.html">[<7-19>]</a></td>
+
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/functions-json.html" target="_blank" rel="noopener noreferrer">
+JSON型演算子</a></td>		<td>省略</td>
+
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/functions-binarystring.html" target="_blank" rel="noopener noreferrer">
+バイナリ文字列演算子</a></td>		<td>省略</td>
+
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/functions-bitstring.html" target="_blank" rel="noopener noreferrer">
+ビット文字列演算子</a></td>		<td>省略</td>
+
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/functions-array.html" target="_blank" rel="noopener noreferrer">
+配列演算子</a></td>		<td>省略</td>
+
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/functions-info.html" target="_blank" rel="noopener noreferrer">
+システム情報演算子</a></td>		<td>省略</td>
+
+
+</tr></table>
+
+<br>
+
+<p>
+文字列のパターンマッチングについては<a href="./ope-06.html">[<7-17>]</a>を参照してください。
+</p>
+
+<p>
+・演算子の優先順位
+<br>
+演算子の優先順位について、高いものから順に[<表7-10>]に示します。
+</p>
+
+<table border=1>
+<caption>[<表7-10>] 演算子の優先順位</caption>
+<tr bgcolor="#cccccc">
+<th>演算子/要素</th>	<th>結合性</th>		<th>説明</th>
+</tr><tr>
+<td>::	</td>		<td>左	</td>		<td>PostgreSQL方式の型キャスト</td>
+</tr><tr>
+<td>[]	</td>		<td>左	</td>		<td>配列要素選択</td>
+</tr><tr>
+<td>.	</td>		<td>左	</td>		<td>テーブル/列名の区切り</td>
+</tr><tr>
+<td>-	</td>		<td>右	</td>		<td>単項減算</td>
+</tr><tr>
+<td>^	</td>		<td>左	</td>		<td>べき乗</td>
+</tr><tr>
+<td>* / %	</td>		<td>左	</td>		<td>積算、割算、剰余</td>
+</tr><tr>
+<td>+ -	</td>		<td>左	</td>		<td>加算、減算</td>
+</tr><tr>
+<td>IS	</td>		<td>-	</td>		<td>TRUE, FALSE, UNKNOWN, NULLかどうかを試す</td>
+</tr><tr>
+<td>ISNULL	</td>		<td>-	</td>		<td>NULLかどうかを試す</td>
+</tr><tr>
+<td>NOTNULL	</td>		<td>-	</td>		<td>NOT NULLかどうかを試す</td>
+</tr><tr>
+<td>その他の演算子</td>		<td>左	</td>		<td>その他すべての組み込み、あるいはユーザ定義の演算子</td>
+</tr><tr>
+<td>IN	</td>		<td>-	</td>		<td>値を列挙する</td>
+</tr><tr>
+<td>BETWEEN	</td>		<td>-	</td>		<td>範囲を設定</td>
+</tr><tr>
+<td>OVERLAPS</td>		<td>-	</td>		<td>時間間隔の重複</td>
+</tr><tr>
+<td>LIKE</td>		<td>-	</td>		<td>文字列のパターンマッチング</td>
+</tr><tr>
+<td>< >	</td>		<td>-	</td>		<td>大小比較</td>
+</tr><tr>
+<td>=	</td>		<td>右	</td>		<td>等しい、代入</td>
+</tr><tr>
+<td>NOT	</td>		<td>右	</td>		<td>論理否定</td>
+</tr><tr>
+<td>AND	</td>		<td>左	</td>		<td>論理積</td>
+</tr><tr>
+<td>OR	</td>		<td>左	</td>		<td>論理和</td>
+</tr></table>

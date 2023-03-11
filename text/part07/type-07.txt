@@ -1,0 +1,41 @@
+%FILE internal/type-07.html
+%LASTMOD
+%KEY pgsql-type07
+
+%TITLE <a href="https://www.postgresql.org/docs/current/datatype-bit.html" target="_blank" rel="noopener noreferrer">ビット列型</a>
+
+[<ビット列データ型>]
+
+<table><tr bgcolor="#cccccc">
+<th>データ型名</th>		<th>説明</th>
+</tr><tr>
+<td>bit(n)</td>		<td>固定長ビット列</td>
+</tr><tr>
+<td>bit	</td>		<td>bit(1)と等価</td>
+</tr><tr>
+<td>bit varying(n), varbit(n)</td>		<td>可変長ビット列(最大ビット列長nを指定)</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+PostgreSQLはビット列型として、bit(n)型とbit varying(n)型をサポートしています。
+</p>
+
+<pre>
+sampledb=# CREATE TABLE bit_sample (bit bit(8), varbit bit varying(12));
+CREATE TABLE
+sampledb=# INSERT INTO bit_sample VALUES (B'01101101', B'1011');
+INSERT 0 1
+sampledb=# INSERT INTO bit_sample VALUES (B'10010010', B'101101110');
+INSERT 0 1
+sampledb=# SELECT * FROM bit_sample;
+   bit    |  varbit
+----------+-----------
+ 01101101 | 1011
+ 10010010 | 101101110
+(2 rows)
+</pre>
+<br>

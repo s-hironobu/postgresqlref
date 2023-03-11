@@ -2,12 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
- <title>PostgreSQLバイブル草稿</title>
- <link rel="stylesheet" type="text/css" media="screen" href="./default.css"">
-</head>
-
-<body>
+ <meta http-equiv="content-style-type" content="text/css">
+ <title>自分用PostgreSQLマニュアル</title>
+ <link rel="stylesheet" type="text/css" media="screen" href="./default.css" charset="UTF-8">
+ </head>
+ <body>
 
 <script language=javascript>
 <!--
@@ -26,11 +25,10 @@ objID.className='close';
 </script>
 
 <div id="header">
-<h1 class="title">PostgreSQLバイブル草稿</title></h1>
+<h1 class="title">自分用PostgreSQLマニュアル</title></h1>
     <span class="small">
 </span>
 </div>
-
 
 <hr class="full_hr">
 <table style="width: 100%;" border="0">
@@ -38,15 +36,16 @@ objID.className='close';
   <td class="menubar">
    <div id="menubar">
 
-
 <h5>PostgreSQLとは</h5>
 
-<li><a href="./index.html">PostgreSQLとは</a><br></li>
+<li><a href="./intro.html">PostgreSQLとは</a><br></li>
+
 
 <h5>PostgreSQLの内部構造</h5>
 <ul>
 <li><a href="./internal.html">とびら</a><br></li>
 </ul>
+
 <ol>
 <li><a href="./internal-01.html">プロセスとメモリ構造</a><br></li>
 <li><a href="./internal-02.html">データベースクラスタ、テーブルの構造</a></li>
@@ -58,7 +57,7 @@ objID.className='close';
 <li><a href="./internal-08.html">HOTとIndex Only Scan</a></li>
 <li><a href="./internal-09.html">WAL(Write Ahead Logging)</a></li>
 <li><a href="./internal-10.html">アーカイブログとPITR</a></li>
-<li><a href="./internal-11.html">レプリケーション(Streaming ReplicationとHotStandby)</a></li>
+<li><a href="./internal-11.html">Streaming ReplicationとHotStandby</a></li>
 </ol>
 
 
@@ -69,56 +68,46 @@ objID.className='close';
 </ul>
 
 <ol>
-[PostgreSQLの基礎]<br>
-<li><a href="./admin-01.html">オブジェクト、データベース、スキーマ</a><br></li>
-<li><a href="./admin-02.html">システムカタログ</a><br></li>
-<li><a href="./admin-03.html">文字コードの扱い</a><br></li>
-
 
 [インストールと起動、停止]<br>
-<li><a href="./admin-04.html">インストール</a><br></li>
-<li><a href="./admin-05.html">データベースシステムの初期化 initdb</a><br></li>
-<li><a href="./admin-06.html">PostgreSQLサーバの起動/停止</a><br></li>
+<li><a href="./admin-01.html">インストール</a><br></li>
+<li><a href="./admin-02.html">データベースシステムの初期化 initdb</a><br></li>
+<li><a href="./admin-03.html">PostgreSQLサーバの起動/停止</a><br></li>
 
+<hr>
+[PostgreSQLの基礎]<br>
+<li><a href="./admin-04.html">オブジェクト、データベース、スキーマ</a><br></li>
+<li><a href="./admin-05.html">システムカタログ</a><br></li>
+<li><a href="./admin-06.html">文字コードの扱い</a><br></li>
 
+  <hr>
 [認証とアクセス制御]<br>
 <li><a href="./admin-07.html">認証とアクセス制御</a><br></li>
 <li><a href="./admin-08.html">クライアントのアクセス制御</a><br></li>
 <li><a href="./admin-09.html">権限について</a><br></li>
 <li><a href="./admin-10.html">ロールの作成と権限制御</a><br></li>
 
-<HR>
-
+<hr>
 [バックアップとアップグレード]<br>
 <li><a href="./admin-11.html">バックアップとアップグレード</a><br></li>
 <li><a href="./admin-12.html">ダンプとリストア</a><br></li>
 <li><a href="./admin-13.html">アップグレード</a><br></li>
 
+  <hr>
 [保守、監視とチューニング]<br>
 <li><a href="./admin-14.html">保守、監視とチューニング</a><br></li> 
 <li><a href="./admin-15.html">稼働統計情報</a><br></li>
 <li><a href="./admin-16.html">実行ログの取得</a><br></li>
-<li><a href="./admin-17.html">モニタリングツール</a><br></li>
-<li><a href="./admin-18.html">ログと統計情報の分析</a><br></li>
-<li><a href="./admin-19.html">パラメータチューニング</a><br></li>
+<li><a href="./admin-17.html">ログと統計情報の分析</a><br></li>
+<li><a href="./admin-18.html">パラメータチューニング</a><br></li>
 
+  <hr>
 [耐障害性、高可用性]<br>
-<li><a href="./admin-20.html">耐障害性、高可用性</a><br></li>
-<li><a href="./admin-21.html">アーカイブログとPITR</a><br></li>
-<li><a href="./admin-22.html">レプリケーションの設定</a><br></li>
-<li><a href="./admin-23.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-19.html">アーカイブログとPITR</a><br></li>
+<li><a href="./admin-20.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-21.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-22.html">ロジカルレプリケーション</a><br></li>
 
-
-[FDW]<br>
-<li><a href="./admin-24.html">FDW</a><br></li>
-<li><a href="./admin-25.html">postgres_fdw</a><br></li>
-</ol>
-
-[追加の文章(未完)]<br>
-<li><a href="./admin-26.html">ロギング</a><br></li>
-<li><a href="./admin-27.html">統計情報</a><br></li>
-<li><a href="./admin-28.html">モニタリング</a><br></li>
-<li><a href="./admin-29.html">メンテナンス</a><br></li>
 </ol>
 
 
@@ -138,6 +127,7 @@ objID.className='close';
 <li><a href="./param-11.html">クライアント接続デフォルト</a><br></li>
 <li><a href="./param-12.html">ロック管理/バージョンとプラットフォーム互換性</a><br></li>
 </ol>
+
 
 
 <h5>psql</h5>
@@ -160,6 +150,7 @@ objID.className='close';
 </ol>
 
 
+
 <h5>SQL</h5>
 
 <ul>
@@ -167,15 +158,14 @@ objID.className='close';
 </ul>
 
 <ol>
-[SQL]<br>
 
 <li><a href="./sql-01.html">SQL語彙</a><br></li>
 <li><a href="./sql-02.html">テーブルスペースの作成/削除/変更</a><br></li>
 <li><a href="./sql-03.html">データベースの作成/変更/削除</a><br></li>
-<li><a href="./sql-04.html">テーブルの作成</a><br></li>
+<li><a href="./sql-04.html">テーブルの作成 CREATE TABLE / CREATE TABLE AS</a><br></li>
 <li><a href="./sql-05.html">外部キー</a><br></li>
 <li><a href="./sql-06.html">オブジェクトの継承/LIKE句</a><br></li>
-<li><a href="./sql-07.html">問い合わせ結果から新しいテーブルを作成</a><br></li>
+<li><a href="./sql-07.html">パーティション</a><br></li>
 <li><a href="./sql-08.html">テーブルの削除</a><br></li>
 <li><a href="./sql-09.html">スキーマの定義/変更/削除</a><br></li>
 
@@ -201,7 +191,7 @@ objID.className='close';
 <li><a href="./sql-25.html">問い合わせの結合</a><br></li>
 <li><a href="./sql-26.html">ORDER BY</a><br></li>
 <li><a href="./sql-27.html">LIMIT OFFSET</a><br></li>
-<li><a href="./sql-28.html">FOR UPDATE/ FOR SHARE</a><br></li>
+<li><a href="./sql-28.html">FOR [NO KEY] UPDATE/ FOR [KEY] SHARE</a><br></li>
 <li><a href="./sql-29.html">サブクエリ</a><br></li>
 <li><a href="./sql-30.html">CASE式</a><br></li>
 <li><a href="./sql-31.html">VALUES</a><br></li>
@@ -227,18 +217,12 @@ objID.className='close';
 <li><a href="./sql-49.html">COPY/IMPORT</a><br></li>
 <li><a href="./sql-50.html">COPY/EXPORT</a><br></li>
 <li><a href="./sql-51.html">関数定義</a><br></li>
-<li><a href="./sql-52.html">エクステンション</a><br></li>
-<li><a href="./sql-53.html">外部サーバの定義、変更、削除</a><br></li>
-<li><a href="./sql-54.html">外部サーバのユーザマップ定義、変更、削除</a><br></li>
-<li><a href="./sql-55.html">外部テーブルの定義、変更、削除</a><br></li>
-<hr>
-<li><a href="./sql-56.html">イベントトリガ</a><br></li>
-<li><a href="./sql-57.html">行レベルセキュリティ</a><br></li>
+<li><a href="./sql-52.html">FDW(Foreign Data Wrapper)</a><br></li>
 
-<hr>
-<li><a href="./sql-60.html">新しい機能</a><br></li>
+<li><a href="./sql-53.html">PUBLICATION</a><br></li>
+<li><a href="./sql-54.html">SUBSCRIPTION</a><br></li>
+  
 </ol>
-
 
 <h5>関数</h5>
 
@@ -260,8 +244,6 @@ objID.className='close';
 <li><a href="./type-09.html">バイナリ列データ型</a><br></li>
 <li><a href="./type-10.html">Range型</a><br></li>
 <li><a href="./type-11.html">配列</a><br></li>
-<hr>
-<li><a href="./type-12.html">JSON型</a><br></li>
 
 <hr>
 [演算子]<br>
@@ -273,9 +255,6 @@ objID.className='close';
 <li><a href="./ope-06.html">パターンマッチング</a><br></li>
 <li><a href="./ope-07.html">日付/時刻演算子</a><br></li>
 <li><a href="./ope-08.html">Range型演算子</a><br></li>
-<hr>
-<li><a href="./ope-09.html">JSON型演算子</a><br></li>
-
 
 <hr>
 [関数]<br>
@@ -287,89 +266,73 @@ objID.className='close';
 <li><a href="./func-06.html">型変換関数</a><br></li>
 <li><a href="./func-07.html">Range型関数</a><br></li>
 <li><a href="./func-08.html">Window関数</a><br></li>
-<li><a href="./func-09.html">セッション情報関数</a><br></li>
-<li><a href="./func-10.html">アクセス権限とスキーマ可視性照会関数</a><br></li>
-<li><a href="./func-11.html">データベースオブジェクト関数</a><br></li>
-<li><a href="./func-12.html">バックアップとリカバリ制御関数</a><br></li>
+  <hr>
 
-<li><a href="./func-13.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-09.html">セッション情報関数</a><br></li>
+<li><a href="./func-10.html">アクセス権限照会関数</a><br></li>
+<li><a href="./func-11.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-12.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-13.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
+<li><a href="./func-14.html">制御データ関数</a><br></li>
+  <hr>
 <li><a href="./func-15.html">構成設定関数</a><br></li>
 <li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-17.html">レプリケーションSQL関数</a><br></li>
-
-<hr>
-<li><a href="./func-18.html">JSON関数</a><br></li>
+<li><a href="./func-17.html">バックアップ制御関数</a><br></li>
+<li><a href="./func-18.html">リカバリ制御関数</a><br></li>
+<li><a href="./func-19.html">スナップショット同期関数</a><br></li>	
+<li><a href="./func-20.html">レプリケーション管理関数</a><br></li>	
+<li><a href="./func-21.html">データベースオブジェクト管理関数</a><br></li>
+<li><a href="./func-22.html">インデックス保守関数</a><br></li>	
+<li><a href="./func-23.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-24.html">勧告的ロック用関数</a><br></li>
+<li><a href="./func-25.html">統計情報関数</a><br></li>	
 
 </ol>
-
-<!--
-[削除するもの]<br>
-<li><a href="./type-07.html">幾何データ型</a><br></li>
-<li><a href="./type-08.html">ネットワークアドレス型型</a><br></li>
-<li><a href="./ope-08.html">幾何演算子</a><br></li>
-<li><a href="./ope-09.html">ネットワーク演算子</a><br></li>
-<li><a href="./func-06.html">幾何関数</a><br></li>
-<li><a href="./func-07.html">ネットワークアドレス関数</a><br></li>
-<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
-<li><a href="./func-16.html">トランザクションID関数</a><br></li>
-<li><a href="./func-17.html">スキーマ可視性照会関数</a><br></li>
-<li><a href="./func-18.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-19.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-20.html">勧告的ロック用関数</a><br></li>
--->
 
 <h5>PL/pgSQL</h5>
 
 <ol>
-<li><a href="./plpgsql.html">結果の返し方</a><br></li>
-<li><a href="./plpgsql-01.html">ストアドプロシージャ</a><br></li>
-<li><a href="./plpgsql-02.html">ストアドプロシージャの定義</a><br></li>
+<li><a href="./plpgsql-01.html">PL/pgSQLによるストアドプロシージャ</a><br></li>
+
+  <hr>[定義]
+    <br>
+
+<li><a href="./plpgsql-02.html">PL/pgSQLによるストアドプロシージャの定義</a><br></li>
+
+  <hr>[基本的な使い方]
+    <br>
 <li><a href="./plpgsql-03.html">変数宣言と値の代入</a><br></li>
-**** まとめる >>
+
 <li><a href="./plpgsql-04.html">SELECT INTO文</a><br></li>
 <li><a href="./plpgsql-05.html">結果ステータスの取得</a><br></li>
 <li><a href="./plpgsql-06.html">動的なSQL文の実行</a><br></li>
-<< ここまで****
+
+  <hr>[制御構造]
+    <br>
 <li><a href="./plpgsql-07.html">IF 条件分岐</a><br></li>
-<li><a href="./plpgsql-08.html">ループ処理</a><br></li>
-*** >>>
-<li><a href="./plpgsql-09.html">RETURN</a><br></li>
-<<< ***
+<li><a href="./plpgsql-08.html">EXIT</a><br></li>
+
+<li><a href="./plpgsql-09.html">RETURN NEXT / RETURN QUERY</a><br></li>
+
 <li><a href="./plpgsql-10.html">ループ処理　LOOP</a><br></li>
 <li><a href="./plpgsql-11.html">ループ処理　WHILE</a><br></li>
-<li><a href="./plpgsql-12.html">ループ処理　FOR </a><br></li>
+<li><a href="./plpgsql-12.html">ループ処理　FOR</a><br></li>
 <li><a href="./plpgsql-13.html">ループ処理 (複数行の問い合わせ結果を扱う)</a><br></li>
+
+<hr>[カーソル]
+    <br>
 <li><a href="./plpgsql-14.html">カーソルの利用</a><br></li>
 <li><a href="./plpgsql-15.html">カーソル変数の宣言</a><br></li>
 <li><a href="./plpgsql-16.html">カーソルのオープンとクローズ	OPEN / CLOSE</a><br></li>
-<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得		FETCH</a><br></li>
-<li><a href="./plpgsql-18.html">カーソルを使った例</a><br></li>
-<li><a href="./plpgsql-19.html">例外</a><br></li>
-*** >>>
-<li><a href="./plpgsql-21.html">CASE</a><br></li>
-<li><a href="./plpgsql-22.html">FOREACH</a><br></li>
-<<< ***
-</ol>
+<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得	FETCH</a><br></li>
+  <li><a href="./plpgsql-18.html">FOR IN LOOPにカーソル行の取得</a><br></li>
+<li><a href="./plpgsql-19.html">カーソルを使った例</a><br></li>
+
+  <hr>[例外]
+    <br>
+<li><a href="./plpgsql-20.html">例外処理</a><br></li>
 
 
-<h5>Appendix(付録)</h5>
-
-<ol>
-<li><a href="./app-01.html">pgpool-II</a><br></li>
-<li><a href="./app-02.html">Pacemaker</a><br></li>
-</ol>
-
-
-<h5>おまけ:ネット公開(ページ数の関係で書籍には載せない)</h5>
-
-<ol>
-[pgpool]<br>
-<li><a href="./ha-06.html">pgpool-II セットアップ</a><br></li>
-<li><a href="./ha-07.html">pgpool-II レプリケーションモード</a><br></li>
-<li><a href="./ha-08.html">pgpool-II マスタースレーブモード</a><br></li>
-[Pacemaker]<br>
-<li><a href="./ha-10.html">Pacemaker</a><br></li>
 </ol>
 
 </div>
@@ -378,195 +341,17 @@ objID.className='close';
 
   </td>
   <td valign="top">
-   <div id="body">
+    <div id="body">
+      
 
 <h2>プロセスとメモリ構造</h2>
-<h2>Process and Memory Structure</h2>
-
-<div class="jumpmenu"></div><h3>プロセス</h3>
-<div class="jumpmenu"></div><h3>Process structure</h3>
 
 <p>
-PostgreSQLサーバの本体はpostgresというデーモンプロセスです(以前はpostmasterと呼ばれていた)。postgresは、クライアントから接続要求を受けるとpostgresプロセス(バックエンドプロセスと呼ぶこともある)を生成(fork)し、
-そのプロセスがクライアントのSQL文を処理します。
-さらにさまざまな処理を行うバックグランドプロセスがあります[<図.2-01>])。
+The Internals of PostgreSQL <a href="https://www.interdb.jp/pg/pgsql02.html" target="_blank" rel="noopener noreferrer">Chapter 2: Process and Memory Architecture</a>
 </p>
-
-
-<table border=1>
-<caption>[<fig.2-01>] Process structure</caption>
-<tr><td>
-<left>
-<img src="./fig-2-01-01.jpg"><br>
-</left>
-</td></tr>
-<tr><td>
-<left>
-<img src="./fig-e-2-01-01.jpg"><br>
-</left>
-</td></tr>
-
-</table>
-
-<p>
-PostgreSQLサーバに接続できるクライアントの最大数は、設定ファイルpostgresql.confの設定パラメータmax_connectionsに設定します(デフォルトは100)。
-</p>
-
-
-<p>
-バージョン9.2のバックグランドプロセス一覧を示します([<表2-01>])。
-</p>
-
-
-<table border=1>
-<caption>[<table.2-01>] background processes</caption>
-<tr bgcolor="#cccccc">
-<th>background process</th>			<th>explain</th>
-</tr><tr>
-<td>background writer</td>	<td>共有バッファの変更内容をHDDに(同期)書き込みする。(バージョン9.1まではCHECKPOINT処理も担当していた。)[<2-05>]参照</td>
-</tr><tr>
-<td>checkpointer</td>	<td>CHECKPOINT処理を担い、共有バッファの変更内容をHDDに(同期)書き込みする。バージョン9.2でバックグランドライタから独立した。[<2-05>]参照</td>
-</tr><tr>
-<td>autovacuum</td>	<td>周期的にVACUUM処理を行うWORKERプロセスを起動する(より正確には、WORKERプロセスの起動をpostgresに依頼する)。[<2-07>]参照</td>
-</tr><tr>
-<td>WAL writer</td>	<td>周期的にWALバッファを監視し、まだ書き込まれていないWALログをHDDに(同期)書き込みする[<2-09>]参照</td>
-</tr><tr>
-<td>統計情報コレクタ</td>	<td>pg_stat_activity、pg_stat_database、pg_stat_all_tablesなど統計情報のデータを収集する。[<3-15>]参照</td>
-</tr><tr>
-<td>log writer</td>	<td>エラーメッセージなどのログを書き込む[<3-16>]参照</td>
-</tr><tr>
-<td>archiver</td>	<td>アーカイブロギングを行う[<2-10>]参照</td>
-</tr></table>
-
-
-<p>
-レプリケーション([<2-11>]参照)モードで運用している場合、マスタ側ではwalsender、スレーブ側ではwalreceiverとstartupが動いています。
-</p>
-
-
-<div class="jumpmenu"></div><h3>メモリ構造</h3>
-<div class="jumpmenu"></div><h3>Memory structure</h3>
-
-<p>
-起動時、メモリ上にいくつかのメモリ領域を確保します[<脚注1>])。
-また、postgresプロセス毎にワークメモリ領域(work_mem)、メンテナンスワークメモリ領域(maintenance_work_mem)、一時バッファ(temp_buffers)を確保します([<図.2-02>]参照)。
-</p>
-
-<p>
-起動時、メモリ上にいくつかのメモリ領域を確保します[<脚注1>])。
-また、postgresプロセス毎にワークメモリ領域(work_mem)、メンテナンスワークメモリ領域(maintenance_work_mem)、一時バッファ(temp_buffers)を確保します([<図.2-02>])。
-</p>
-
-
-<blockquote><table BORDER="1"><tr><td>脚注1</td><td>
-<p>
-システムカタログはpostgresプロセスが頻繁にアクセスするので、共有バッファ上だけでなくpostgresプロセスもコピーを保存しています(カタログキャッシュ)。
-システムカタログを更新すると、OSの低レイヤの通信機能(IPC)によって全postgresプロセスに伝わります。postgresプロセスはそれをトリガとしてカタログキャッシュのデータを更新します。
-</p>
-</td></tr></table></blockquote>
-
-
-<table border=1>
-<caption>[<図2-02>] メモリ構造</caption>
-<tr><td>
-<left>
-<img src="./fig-2-01-02.jpg"><br>
-</left>
-</td></tr></table>
-
-<br>
-
-<p>
-これらバッファとメモリ領域の大きさは設定ファイルpostgresql.confで設定します。詳細は[<4-04>]、[4-05]を参照してください。
-</p>
-
-<div class="jumpmenu"></div><h4>共有メモリ上のメモリ領域</h4>
-
-<p>
-共有メモリ上に確保する重要なメモリ領域についてまとめます。
-</p>
-
-<table border=1>
-<tr bgcolor="#cccccc">
-<th>メモリ領域</th>	<th>説明</th>
-</tr><tr>
-<td>共有バッファ(shared_buffers)</td>
-<td><p>
-PostgreSQLは共有バッファ上にデータを読み込み、更新や検索などのデータ操作を行う。バッファマネージャの詳細は[<2-05>]を参照。
-</p></td>
-
-</tr><tr>
-<td>WALバッファ(WAL buffer)</td>
-<td><p>
-PostgreSQLは障害に備えてトランザクションログを保存する機構：WAL(Write Ahead Logging)を実装している。WALバッファはWALログのバッファリング用である。WALの詳細は[<2-09>]を参照。
-</p></td>
-
-</tr><tr>
-<td>CLOG(コミットログ)</td>
-<td><p>
-CLOGはトランザクション毎の状態(実行中か、コミットしたか、アボートしたかなど)を保持している。詳細は[<2-06>]を参照。
-<br>
-なお、CLOGの内容はCHECKPOINT毎にデータベースクラスタのサブディレクトリpg_clog以下に書き込む。
-</p></td>
-
-
-</tr><tr>
-<td> 空き領域マップ(Free Space Map)</td>
-<td><p>
-テーブルデータを保存するファイルは8192[byte]毎にブロックとして区切られている。ブロック毎の空き領域情報を保持するのが空き領域マップ(FSM)である([<脚注2>])。詳細は[<2-02>]参照。
-<br>
-なお、空き領域マップの内容はVACUUM処理毎にデータベースクラスタに保存し、再起動時はこれらを読み込む。
-</p></td>
-
-</tr><tr>
-<td>ビジビリティマップ(Visibility Map) </td>
-<td><p>
-同時実行制御の効率化のため、バージョン8.4からテーブルのブロック毎に全タプルが可視か否かを保持するビジビリティマップが追加された。詳細は[<2-06>]を参照。
-<br>
-なお、ビジビリティマップの内容はVACUUM処理毎にデータベースクラスタに保存し、再起動時はこれらを読み込む。
-</p></td>
-
-</table>
-
-
-<blockquote><table BORDER="1"><tr><td>脚注2</td><td>
-<p>
-バージョン8.3までは固定サイズでしたが、バージョン8.4からは可変サイズとなり、自動で全テーブルの空き領域を記録するようになりました。
-</p>
-</td></tr></table></blockquote>
-
-
-<div class="jumpmenu"></div><h4>postgresプロセスが確保するメモリ領域</h4>
-
-<p>
-postgresプロセスが確保するメモリ領域についてまとめます。
-</p>
-
-<table border=1>
-<tr bgcolor="#cccccc">
-<th>メモリ領域</th>	<th>説明</th>
-</tr><tr>
-<td>ワークメモリ領域(work_mem) </td>
-<td><p>
-エクゼキュータがテーブル結合やソートするためのメモリ領域。サイズの設定については[<3-19>]を参照。
-</p></td>
-
-</tr><tr>
-<td>メンテナンスワークメモリ領域(maintenance_work_mem) </td>
-<td><p>
-VACUUM処理やCREATE INDEX実行時に一時的に確保するメモリ領域。
-</p></td>
-
-</tr><tr>
-<td>一時バッファ(temp_buffers)</td>
-<td><p>
-一時テーブルにアクセスする時にのみ使用するメモリ領域。「ローカルバッファ」として使用する([<2-05>]参照)。
-</p></td>
-</table>
-
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2018-9-8
+Last-modified: 2023-3-11
 </div>
 </body>
 </html>

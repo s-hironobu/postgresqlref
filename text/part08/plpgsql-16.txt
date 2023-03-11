@@ -1,0 +1,112 @@
+%FILE internal/plpgsql-16.html
+%LASTMOD
+%KEY pgsql-plpgsql16
+
+
+%TITLE <a href="https://www.postgresql.org/docs/current/plpgsql-cursors.html#PLPGSQL-CURSOR-USING" target="_blank" rel="noopener noreferrer">カーソルのオープンとクローズ  OPEN / CLOSE</a>
+
+
+<pre>
+[<書式>]
+
+● カーソルのオープン
+OPEN [ [NO] SCROLL ] unbound-cursor FOR SELECT ...
+OPEN [ [NO] SCROLL ] unbound-cursor FOR EXECUTE query-string [ USING expression [, ... ] ]
+
+OPEN bound-cursor [ ( argument_values ) ]
+
+● カーソルのクローズ
+CLOSE cursor
+
+</pre>
+
+<br>
+
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>unbound-cursor</td>	<td>unboundカーソル変数</td>
+</tr><tr>
+<td>bound-cursor</td>	<td>boundカーソル変数</td>
+</tr><tr>
+<td>query-string</td>	<td>実行するSQL文を記述した文字列</td>
+</tr><tr>
+<td>argument_values</td>	<td>boundカーソル変数に与える引数</td>
+</tr><tr>
+<td>cursor</td>	<td>カーソル変数</td>
+</tr></table>
+
+<br>
+
+
+<table>
+<caption>句</caption>
+<tr bgcolor="#cccccc">
+<th>句</th>	<th>説明</th>
+</tr><tr>
+<td>USING expression [, ... ]</td>	<td></td>
+</tr></table>
+
+<br>
+
+<table>
+<caption>オプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>SCROLL</td>	<td>逆方向に取り出す</td>
+</tr><tr>
+<td>NO SCROLL</td>	<td>順方向に取り出す。デフォルト</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+カーソル変数をオープンするにはOPEN文を利用します。
+</p>
+
+<p>
+・unboundカーソル変数
+<br>
+unbound カーソル変数のオープンはOPEN FOR SELECT 文、もしくはOPEN FOR EXECUTE文で行います。OPEN FOR EXECUTE文では、問い合わせは文字列式として指定します。
+</p>
+
+<p>
+・boundカーソル変数
+<br>
+boundカーソル変数のオープンは、OPEN文にカーソル変数を設定することで行います。
+</p>
+
+<p>
+・CLOSE
+<br>
+CLOSE文でカーソルをクローズします。
+</p>
+
+
+%CHAPTER プログラム例
+
+<p>
+・unboundカーソル変数の場合
+</p>
+
+<pre>
+OPEN unbound_cursor1 FOR SELECT * FROM customerlist;
+OPEN unbound_cursor2 FOR EXECUTE 'SELECT * FROM ' || quote_ident($1);
+</pre>
+<br>
+
+<p>
+・boundカーソル変数の場合
+</p>
+
+<pre>
+OPEN bound_cursor1;
+OPEN bound_cursor2(1, 5);
+</pre>
+<br>

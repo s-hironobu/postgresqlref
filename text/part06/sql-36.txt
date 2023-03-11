@@ -1,0 +1,518 @@
+%FILE internal/sql-36.html
+%LASTMOD
+%KEY pgsql-sql36
+
+%TITLE VIEW(ビュー)とマテリアライズドビューの定義と削除 <a href="https://www.postgresql.org/docs/current/sql-createview.html" target="_blank" rel="noopener noreferrer">CREATE VIEW</a> / <a href="https://www.postgresql.org/docs/current/sql-creatematerializedview.html" target="_blank" rel="noopener noreferrer">CREATE MATERIALIZED VIEW</a> / <a href="https://www.postgresql.org/docs/current/sql-dropview.html" target="_blank" rel="noopener noreferrer">DROP  VIEW</a> / <a href="https://www.postgresql.org/docs/current/sql-dropmaterializedview.html" target="_blank" rel="noopener noreferrer">DROP MATERIALIZED VIEW</a> / <a href="https://www.postgresql.org/docs/current/sql-refreshmaterializedview.html" target="_blank" rel="noopener noreferrer">REFRESH MATERIALIZED VIEW</a>
+
+
+<pre>
+[<書式>]
+● ビューの定義
+CREATE [ OR REPLACE ] [ TEMP | TEMPORARY ] [ RECURSIVE ] VIEW view_name [ ( column_name [, ...] ) ]
+    [ WITH ( view_option_name [= view_option_value] [, ... ] ) ]
+    AS query
+    [ WITH [ CASCADED | LOCAL ] CHECK OPTION ]
+
+● ビューの削除
+DROP VIEW [ IF EXISTS ] view_name [, ...] [ CASCADE | RESTRICT ]
+
+● マテリアライズドビューの定義
+CREATE MATERIALIZED VIEW [ IF NOT EXISTS ] view_name
+    [ (column_name [, ...] ) ]
+    [ USING method ]
+    [ WITH ( storage_parameter [= value] [, ... ] ) ]
+    [ TABLESPACE tablespace_name ]
+    AS query
+    [ WITH [ NO ] DATA ]
+
+
+● マテリアライズドビューの更新
+REFRESH MATERIALIZED VIEW [ CONCURRENTLY ] view_name
+    [ WITH [ NO ] DATA ]
+
+
+● マテリアライズドビューの削除
+DROP MATERIALIZED VIEW [ IF EXISTS ] view_name [, ...] [ CASCADE | RESTRICT ]
+
+</pre>
+
+<br>
+
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>    <th>説明</th>
+</tr><tr>
+<td>view_name</td>	<td>定義、または削除するビューの名前</td>
+</tr><tr>
+<td>column_name</td>	<td>ビューのカラム</td>
+</tr><tr>
+<td>view_column_name</td>	<td>ビューのカラム名</td>
+</tr><tr>
+<td>query</td>	<td>ビューのもとになるSELECT文</td>
+</tr></table>
+
+<br>
+
+
+<table>
+<caption>オプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>    <th>説明</th>
+</tr><tr>
+<td>OR REPLACE</td>	<td>すでに同名のビューが存在する場合、新たに再定義する</td>
+</tr><tr>
+<td>TEMP, TEMPORARY</td>	<td>一時的なビューとして作成する</td>
+</tr><tr>
+<td>RECURSIVE</td>	<td>CTEのRECURSIVE定義を簡略表記する。詳細は本文</td>
+</tr><tr>
+<td>IF EXISTS</td>	<td>削除するビューが存在しなくともエラーを返さない。</td>
+</tr><tr>
+<td>CASCADE</td>	<td>ビューに依存するオブジェクト(関数など)も一緒に削除</td>
+</tr><tr>
+<td>RESTRICT</td>	<td>依存するオブジェクトのないビューのみ削除</td>
+</tr><tr>
+<td></td>	<td></td>
+</tr><tr>
+<td></td>	<td></td>
+</tr></table>
+
+<br>
+
+
+<table>
+<caption>句</caption>
+<tr bgcolor="#cccccc">
+<th>句</th>    <th>説明</th>
+</tr><tr>
+<td>WITH [ CASCADED | LOCAL ] CHECK OPTION</td>	<td></td>
+</tr><tr>
+<td>WITH ( view_option_name [= view_option_value]</td>	<td>view_option_nameは security_barrier (bool), security_invoker (bool), check_option。</td>
+</tr><tr>
+<td>WITH ( storage_parameter [= value]</td>	<td>テーブルの格納パラメータを設定。詳細はCREATE TABLE([<6-04>])参照</td>
+</tr><tr>
+<td>WITH DATA</td>	<td>データも引き継ぐ。デフォルト</td>
+</tr><tr>
+<td>WITH NO DATA</td>	<td>データを引き継がない。制約のないテーブル定義のみ</td>
+</tr><tr>
+<td>TABLESPACE tablespace</td>	<td>テーブルスペースtablespaceにテーブルを作成する。</td>
+</tr><tr>
+<td></td>	<td></td>
+</tr><tr>
+<td></td>	<td></td>
+</tr></table>
+
+<br>
+
+			セキュリティバリア(SECURITY_BARRIER)を設定する。バージョン9.2から
+<br>
+
+%CHAPTER 解説
+
+<p>
+CREATE VIEW文でビューを定義します。
+</p>
+
+
+<p>
+•更新
+<br>
+バージョン9.2までのPostgreSQLのビューは読み取り専用でしたが、バージョン9.3から単一テーブルから生成した単純なビューに限り、更新(INSERT, UPDATE, DELETE)が可能になりました。
+<br>
+具体的な条件を列挙します。
+</p>
+
+<ol>
+<li>FROM句にはテーブル一つのみ。</li>
+<li>WITH句, DISTINCT句, GROUP BY句, HAVING句, LIMIT句, OFFSET句を含まない。</li>
+<li>UNION, INTERSECT, EXCEPTを含まないSELECT文で生成する。</li>
+<li>SELECT文のカラムに関数や式を使わない。また同じカラムを１回以上使わない。</li>
+<li>SECURITY_BARRIERを設定しない。</li>
+</ol>
+
+<br>
+
+<p>
+生成したビューが更新可能か否かは、インフォメーションスキーマ(information_schema)のviewsから知ることができます。
+<br>
+例えばビュー"my_view"が更新/挿入可能か否かは次のSELECT文で知ることができます。
+</p>
+
+
+
+<pre>
+SELECT table_name, is_updatable, is_insertable_into
+     FROM information_schema.views WHERE table_name = 'my_view';
+</pre>
+
+<br>
+
+
+<p>
+•RECURSIVE
+<br>
+バージョン9.3から共通テーブル式[<6-21>]を簡略化して表記できるようになりました。
+<br>
+例えば、以下の2つの定義は同等です。
+</p>
+
+
+<pre>
+CREATE RECURSIVE VIEW name (columns) AS select_query;
+
+CREATE VIEW name AS WITH RECURSIVE name (columns)
+       AS (select_query) SELECT columns FROM name;
+</pre>
+
+<br>
+
+
+<p>
+•マテリアライズドビュー
+<br>
+バージョン9.3からマテリアライズドビュー(MATERIALIZED VIEW)がサポートされました。
+</p>
+
+<p>
+[<2-03>]の[<コラム2-1>]で述べたように、通常のビューはRuleを使った仮想的な存在です。
+それに対してマテリアライズドビューは実際にテーブルスペースにテーブルが作られます。
+よってCREATE MATERIALIZED VIEWの構文はCREATE TABLE AS([<6-07>]参照)によく似ています。
+<br>
+バージョン9.3のマテリアライズドビューは、元になるテーブルの更新が反映されません。
+更新を反映するにはREFRESH MATERIALIZED VIEW文を明示的に実行しなければなりません。
+</p>
+
+
+
+%CHAPTER 実行例
+
+<p>
+・ビューの作成
+<br>
+多数のカラムを持つテーブルのうち、必要な部分のみ表示するビューを定義します。
+</p>
+
+<pre>
+sampledb=# CREATE VIEW mini_customerlist (id, customer_name)
+sampledb-#           AS SELECT id, name FROM customerlist;
+CREATE VIEW
+</pre>
+
+<br>
+
+<p>
+・複数のテーブルからビューを定義
+</p>
+
+<pre>
+sampledb=# CREATE VIEW customer_view (id, name, companyname)
+sampledb-#   AS SELECT a.id, a.name, b.company
+sampledb-#     FROM customerlist AS a, companylist AS b
+sampledb-#       WHERE a.companycode = b.companycode;
+CREATE VIEW
+
+sampledb=# SELECT * FROM customer_view WHERE id < 4;
+ id |       name       |        companyname
+----+------------------+----------------------------
+  1 | デューク東郷     | トーゴー・コーポレーション
+  2 | アーネスト東郷   | グラスゴー探鉱
+  3 | アランサイジョー | ルモンド
+(3 rows)
+</pre>
+
+<br>
+
+<p>
+・ビューの一覧と定義の表示
+<br>
+ビューの一覧はメタコマンド\dv、ビューの定義はメタコマンド\dで表示できます。
+</p>
+
+<pre>
+sampledb=# \dv
+              List of relations
+ Schema |       Name        | Type |  Owner
+--------+-------------------+------+----------
+ public | customer_view     | view | postgres
+ public | mini_customerlist | view | postgres
+(2 rows)
+
+sampledb=# \d customer_view
+    View "public.customer_view"
+   Column    |  Type   | Modifiers
+-------------+---------+-----------
+ id          | integer |
+ name        | text    |
+ companyname | text    |
+View definition:
+ SELECT a.id, a.name, b.company AS companyname
+   FROM customerlist a, companylist b
+  WHERE a.companycode = b.companycode;
+</pre>
+
+<br>
+
+
+•更新
+<br>
+バージョン9.3以降は単純なビューに限り、更新や挿入ができます。
+<br>
+テーブルitemlistからビューmy_itemlistを定義します。
+
+
+<pre>
+sampledb=# SELECT * FROM itemlist;
+ id |   name   | price | makercode
+----+----------+-------+-----------
+  1 | pen      |   100 |        10
+  2 | notebook |   120 |        20
+  3 | eraser   |    72 |        10
+(3 rows)
+
+sampledb=# CREATE VIEW my_itemlist (id, name, price)
+sampledb-#   AS SELECT id, name, price FROM itemlist;
+CREATE VIEW
+
+sampledb=# SELECT table_name, is_updatable, is_insertable_into
+sampledb-#     FROM information_schema.views WHERE table_name = 'my_itemlist';
+ table_name  | is_updatable | is_insertable_into
+-------------+--------------+--------------------
+ my_itemlist | YES          | YES
+(1 row)
+</pre>
+
+<br>
+
+
+ビューmy_itemlistに対して更新を実行した結果を示します。
+
+
+<pre>
+sampledb=# SELECT * FROM my_itemlist;
+ id |   name   | price
+----+----------+-------
+  1 | pen      |   100
+  2 | notebook |   120
+  3 | eraser   |    72
+(3 rows)
+
+sampledb=# UPDATE my_itemlist SET price = 80 WHERE id = 3;
+UPDATE 1
+
+sampledb=# SELECT * FROM my_itemlist;
+ id |   name   | price
+----+----------+-------
+  1 | pen      |   100
+  2 | notebook |   120
+  3 | eraser   |    80
+(3 rows)
+</pre>
+
+<br>
+
+
+
+次に、ビューmy_itemlistにデータを挿入してみます。
+<br>
+ビューmy_itemlistと、元になったテーブルitemlistを表示します。テーブルitemlistのカラムmakercodeは(デフォルトの)NULLになっています。
+
+
+<pre>
+sampledb=# INSERT INTO my_itemlist VALUES(4, 'book', 1200);
+INSERT 0 1
+sampledb=# SELECT * FROM my_itemlist;
+ id |   name   | price
+----+----------+-------
+  1 | pen      |   100
+  2 | notebook |   120
+  3 | eraser   |    80
+  4 | book     |  1200
+(4 rows)
+
+sampledb=# SELECT * FROM itemlist;
+ id |   name   | price | makercode
+----+----------+-------+-----------
+  1 | pen      |   100 |        10
+  2 | notebook |   120 |        20
+  3 | eraser   |    80 |        10
+  4 | book     |  1200 |
+(4 rows)
+</pre>
+
+<br>
+
+%SECTION マテリアライズドビュー
+
+
+<p>
+テーブルpgbench_accountsとpgbench_branchesを結合し、abalanceの上位３件を求めることを考えます。
+なお説明の都合上、pgbenchのテーブルpgbench_branchesにカラム支店名(name)を追加しました。
+</p>
+
+
+<pre>
+sampledb=# SELECT a.aid, b.name, a.abalance
+sampledb-#    FROM pgbench_accounts AS a, pgbench_branches AS b
+sampledb-#    WHERE a.bid = b.bid
+sampledb-#  　　　　　　ORDER BY a.abalance DESC LIMIT 3;
+  aid   |   name   | abalance
+--------+----------+----------
+  61393 | yokohama |     4997
+ 216753 | spain    |     4829
+ 350088 | tokyo    |     4669
+(3 rows)
+</pre>
+
+<br>
+
+
+<p>
+同等の結果を得るためのマテリアライズドビューmv_abalanceを定義し、
+その実体ファイルをpg_relation_filepath()で求めます。
+</p>
+
+
+<pre>
+sampledb=# CREATE MATERIALIZED VIEW mv_abalance AS
+sampledb-#      SELECT a.aid, b.name, a.abalance
+sampledb-#        FROM pgbench_accounts AS a, pgbench_branches AS b
+sampledb-#            WHERE a.bid = b.bid;
+SELECT 400000
+
+sampledb=# SELECT pg_relation_filepath('mv_abalance');
+ pg_relation_filepath
+----------------------
+ base/16384/16416
+(1 row)
+</pre>
+
+<br>
+
+
+<p>
+実際にファイルの情報を表示してみます。
+</p>
+
+
+<pre>
+$ ls -la data/base/16384/16416
+-rw-------. 1 postgres:postgres 18505728 Sep 10 06:29 data/base/16384/16416
+</pre>
+
+<br>
+
+
+<p>
+生成したマテリアライズドビューmv_abalanceを検索すると、先のSELECT文と同じ結果が得られます。
+</p>
+
+
+<pre>
+sampledb=# SELECT * FROM mv_abalance ORDER BY abalance DESC LIMIT 3;
+  aid   |   name   | abalance
+--------+----------+----------
+  61393 | yokohama |     4997
+ 216753 | spain    |     4829
+ 350088 | tokyo    |     4669
+(3 rows)
+</pre>
+
+<br>
+
+
+<p>
+ここで元テーブルpgbanch_accountsのデータを更新した後、マテリアライズドビューmv_abalanceを検索します。
+<br>
+PostgreSQLのマテリアライズドビューは元データの更新が反映されないので、
+テーブルpgbench_accountsのaid=61393のデータを更新した後も、検索結果には反映されていません。
+</p>
+
+
+<pre>
+sampledb=# --- テーブルpgbench_accountsの、aid =61393のデータを更新する。
+sampledb=# UPDATE pgbench_accounts SET abalance = 5000 WHERE aid = 61393;
+UPDATE 1
+
+sampledb=# SELECT * FROM mv_abalance ORDER BY abalance DESC LIMIT 3;
+  aid   |   name   | abalance
+--------+----------+----------
+  61393 | yokohama |     4997	← 値が更新されていない
+ 216753 | spain    |     4829
+ 350088 | tokyo    |     4669
+(3 rows)
+</pre>
+
+<br>
+
+
+<p>
+マテリアライズドビューのデータを更新するには、REFRESH MATERIALIZED VIEW文を実行します。
+</p>
+
+
+
+<pre>
+sampledb=# REFRESH MATERIALIZED VIEW mv_abalance;
+REFRESH MATERIALIZED VIEW
+
+sampledb=# SELECT * FROM mv_abalance ORDER BY abalance DESC LIMIT 3;
+  aid   |   name   | abalance
+--------+----------+----------
+  61393 | yokohama |     5000	← REFRESH MATERIALIZED VIEWでデータが更新された
+ 216753 | spain    |     4829
+ 350088 | tokyo    |     4669
+(3 rows)
+</pre>
+
+<br>
+
+
+<p>
+マテリアライズドビューを使用するにあたって、気になるのは実行効率です。効率的なアクセスを求めてマテリアライズドビューを定義したにも関らず、検索が遅くては話になりません。
+<br>
+単にマテリアライズドビューを定義しただけではインデックスは定義されないので、検索は常にシーケンシャルスキャンになります。
+</p>
+
+
+<pre>
+sampledb=# \d mv_abalance
+Materialized view "public.mv_abalance"
+  Column  |  Type   | Modifiers
+----------+---------+-----------
+ aid      | integer |
+ name     | text    |
+ abalance | integer |
+
+sampledb=# EXPLAIN SELECT * FROM mv_abalance ORDER BY abalance DESC LIMIT 3;
+                                   QUERY PLAN
+--------------------------------------------------------------------------------
+ Limit  (cost=8266.31..8266.32 rows=3 width=40)
+   ->  Sort  (cost=8266.31..8921.42 rows=262044 width=40)
+         Sort Key: abalance
+         ->  Seq Scan on mv_abalance  (cost=0.00..4879.44 rows=262044 width=40)
+(4 rows)
+</pre>
+
+<br>
+
+
+<p>
+マテリアライズドビューは物理的な実体があるので、CREATE INDEX文([<6-35>]参照)でインデックスを定義できます。
+<br>
+マテリアラズドビューmv_abalanceのカラムabalanceにインデックスを定義すると、
+以降はインデックススキャンが使われます。
+</p>
+
+
+<pre>
+sampledb=# CREATE INDEX mv_abalance_idx ON mv_abalance (abalance);
+CREATE INDEX
+sampledb=#  EXPLAIN SELECT * FROM mv_abalance ORDER BY abalance DESC LIMIT 3;
+                                                 QUERY PLAN
+------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.42..0.52 rows=3 width=14)
+   ->  Index Scan Backward using mv_abalance_idx on mv_abalance  (cost=0.42..12666.55 rows=400000 width=14)
+(2 rows)
+</pre>
+

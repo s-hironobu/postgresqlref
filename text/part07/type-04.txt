@@ -1,0 +1,584 @@
+%FILE internal/type-04.html
+%LASTMOD
+%KEY pgsql-type04
+
+%TITLE <a href="https://www.postgresql.org/docs/current/datatype-datetime.html" target="_blank" rel="noopener noreferrer">日付/時刻データ型</a>
+
+
+[<日付/時刻データ型一覧>]
+
+<table><tr bgcolor="#cccccc">
+<th>データ型名</th>			<th>格納サイズ</th>	<th>説明</th>		<th>範囲</th>	<th>精度</th>
+</tr><tr>
+<td>date</td>		<td>4バイト</td>	<td>日付</td>	<td>BC 4713 〜 AD 32767</td>	<td>1日</td>
+</tr><tr>
+<td>time [(p)] [without time zone]</td>	<td>8バイト</td>	<td>タイムゾーンなし時刻</td>	<td>00:00:00 〜 24:00:00</td>	<td>1マイクロ秒/14桁</td>
+</tr><tr>
+<td>time [(p)] with time zone</td>	<td>12バイト</td>	<td>タイムゾーン付き時刻</td>	<td>00:00:00+1459 〜 24:00:00-1459</td><td>1マイクロ秒/14桁</td>
+</tr><tr>
+<td>timestamp [(p)] [without time zone]	</td>	<td>8バイト</td><td>年月日時分秒</td>		<td>BC 4713 〜 AD 5874897</td>		<td>1マイクロ秒/14桁</td>
+</tr><tr>
+<td>timestamp [(p)] with time zone</td>		<td>8バイト</td><td>タイムゾーン付き年月日時分秒 </td>	<td>BC 4713 〜 AD 5874897</td>	<td>1マイクロ秒/14桁</td>
+</tr><tr>
+<td>interval [(p)]</td>		<td>12バイト</td>		<td>日付/時刻の差</td>		<td>-178000000年 〜 178000000年</td>	<td>1マイクロ秒/14桁</td>
+</tr></table
+
+<p>
+[(p)] : pは0〜6の整数。表示精度を指定。
+</p>
+
+%CHAPTER 解説
+
+
+%SECTION 日付データ型
+
+<p>
+・入力形式
+<br>
+date型は[<表7-01>]に示す形式が使用可能です。
+<br>
+ただし、U.S.形式とヨーロッパ形式の使用の可否は設定パラメータdatestyle(<a href="param-11.html">[<3-11>]</a>参照)に依存します。
+具体的には、U.S.形式を使うならdatestyleに"MDY"を設定、ヨーロッパ形式を使うなら"DMY"を設定しなければなりません。
+<br>
+なお、datestyleには"YMD"、"MDY"、"DMY"はいずれか一つしか設定できません。
+</p>
+
+<table border=1>
+<caption> [<表7-01>] date型入力形式一覧</caption>
+<tr bgcolor="#cccccc">
+<th>入力形式の例　　　　　　　</th>	<th>説明　　　　　　　　　　　　　　　　　　</th>
+</tr><tr>
+<td>'2012-11-04'</td>	<td>ISO-8601フォーマット。SQL92 </td>
+</tr><tr>
+<td>'November 4, 2012'</td>	<td>月名、日、年</td>
+</tr><tr>
+<td>'11/4/2012'	</td>	<td>U.S.形式。datestyleがMDYの場合に使用可</td>
+</tr><tr>
+<td>'04/11/2012'</td>	<td>ヨーロッパ形式。datestyleがDMYの場合に使用可</td>
+</tr><tr>
+<td>'20121104'</td>	<td>ISO-8601の年、月、日</td>
+</tr><tr>
+<td>'121104'</td>	<td>ISO-8601の年、月、日</td>
+</tr><tr>
+<td>'2012.309'</td>	<td>年とその日までの累計</td>
+</tr><tr>
+<td>'12.309'</td>	<td>年とその日までの累計</td>
+</tr><tr>
+<td>'J2451187'</td>	<td>ユリウス日</td>
+</tr><tr>
+<td>'January 8, 99 BC'</td>	<td>西暦紀元前99年1月8日</td>
+</tr></table>  <br>
+
+<br>
+
+<p>
+月と曜日の略称を[<表7-02>]、[<表7-03>]に示します。
+</p>
+
+<table><tr><td>
+
+
+<table border=1>
+<caption>[<表7-02>] 月の略称一覧</caption>
+<tr bgcolor="#cccccc">
+<th>月　　　　</th>		<th>略称　　　　</th>	<th></th>	<th>月　　　　</th>	<th>略称　　　　</th>
+</tr><tr>
+<td>January</td>	<td>Jan</td>	<td></td>	<td>July</td>	<td>Jul
+</tr><tr>
+<td>February</td>	<td>Feb</td>	<td></td>	<td>August</td>	<td>Aug
+</tr><tr>
+<td>March</td>	<td>Mar</td>	<td></td>	<td>September</td>	<td>Sep, Sept
+</tr><tr>
+<td>April</td>	<td>Apr</td>	<td></td>	<td>October</td>	<td>Oct
+</tr><tr>
+<td>May</td>	<td>May	</td>	<td></td>	<td>November</td>	<td>Nov
+</tr><tr>
+<td>June</td>	<td>Jun	</td>	<td></td>	<td>December</td>	<td>Dec
+</tr></table>  <br>
+
+</td><td></td><td>
+
+<table border=1>
+<caption> [<表7-03>] 曜日の略称一覧</caption>
+<tr bgcolor="#cccccc">
+<th>曜日　　　　</th>	<th>略称　　　　　　　</th>
+</tr><tr>
+<td>Sunday</td>		<td>Sun </td>
+</tr><tr>
+<td>Monday</td>		<td>Mon</td>
+</tr><tr>
+<td>Tuesday</td>	<td>Tue, Tues</td>
+</tr><tr>
+<td>Wednesday</td>	<td>Wed, Weds</td>
+</tr><tr>
+<td>Thursday</td>	<td>Thu, Thur, Thurs</td>
+</tr><tr>
+<td>Friday</td>		<td>Fri</td>
+</tr><tr>
+<td>Saturday</td>	<td>Sat</td>
+</tr></table>
+
+</td></tr></table>
+
+  <br>
+
+
+<p>
+・定数　　　　　　　
+<br>
+日付を参照する特殊定数を[<表7-04>]に示します。
+</p>
+
+<table border=1>
+<caption> [<表7-04>] 日付参照特殊定数一覧</caption>
+<tr bgcolor="#cccccc">
+<th>定数　　　　　　　</th>	<th>説明　　　　　　　　　　</th>
+</tr><tr>
+<td>'NOW'</td>	<td>本日</td>
+</tr><tr>
+<td>'TODAY'</td>	<td>本日</td>
+</tr><tr>
+<td>'TOMORROW'</td>	<td>翌日</td>
+</tr><tr>
+<td>'YESTERDAY'</td>	<td>昨日</td>
+</tr><tr>
+<td>'EPOCH'</td>	<td>1970-01-01(UNIX経時基準時刻の日付)</td>
+</tr><tr>
+<td>'INFINITY'</td>	<td>有効な時間よりも大きい日付(無限の未来)</td>
+</tr><tr>
+<td>'-INFINITY'</td>	<td>有効な時間よりも小さい日付(無限の過去)</td>
+</tr></table>  <br>
+
+
+%SECTION 時刻データ型
+
+
+<p>
+time型は時刻データを扱います。
+精度はマイクロ秒です。
+タイムゾーンの設定は<a href="./type-05.html">[<7-05>]</a>を参照してください。
+</p>
+
+<p>
+・入力形式
+<br>
+time型の入力形式を[<表7-05>]に示します。
+</p>
+
+<table border=1>
+<caption>[<表7-05>] time型入力形式一覧</caption>
+<tr bgcolor="#cccccc">
+<th>入力形式の例</th>	<th>説明</th>
+</tr><tr>
+<td>04:05:06.789</td>	<td>ISO 8601 </td>
+</tr><tr>
+<td>04:05:06</td>	<td>ISO 8601 </td>
+</tr><tr>
+<td>04:05</td>	<td>ISO 8601 </td>
+</tr><tr>
+<td>040506</td>	<td>ISO 8601 </td>
+</tr><tr>
+<td>04:05 AM</td>	<td>04:05 と同じ。'AM'は値に影響しない</td>
+</tr><tr>
+<td>04:05 PM</td>	<td>16:05 と同じ。時間の指定範囲は[00〜12]</td>
+</tr></table>  <br>
+
+
+<p>
+・定数
+<br>
+時刻を参照するための特殊定数を[<表7-06>]に示します。
+</p>
+
+<table border=1>
+<caption> [<表7-06>] time型定数</caption>
+<tr bgcolor="#cccccc">
+<th>定数　　　　　　　</th>	<th>説明　　　　　　　　　　</th>
+</tr><tr>
+<td>'NOW'</td>		<td>今現在(精度はマイクロ秒) </td>
+</tr>
+</table>  <br>
+
+<p>
+・表示精度の指定
+</p>
+
+<p>
+以下の書式により、表示する時刻の精度を明示的に指定できます。
+</p>
+
+[<書式>]
+<pre>
+time (p) 'value'
+</pre>
+<br>
+
+<p>
+ここで'p'は0〜6までの整数です。0を指定すると秒単位、1を指定すると0.1秒単位、2を指定すると0.01秒単位など、設定できます。
+</p>
+
+<pre>
+sampledb=# SELECT time(0) 'NOW' AS "time(0)",
+sample-#          time(1) 'NOW' AS "time(1)",
+sampledb-#        time(2) 'NOW' AS "time(2)";
+ time(0)  |  time(1)   |   time(2)
+----------+------------+-------------
+ 15:45:06 | 15:45:06.2 | 15:45:06.18
+(1 row)
+</pre>
+<br>
+
+
+%SECTION 日時データ型
+
+
+<p>
+・入力形式
+<br>
+timestamp型の入力形式は[<表7-07>]に示す形式が使用可能です。
+</p>
+
+
+<table border=1>
+<caption> [<表7-07>] timestamp型入力形式一覧</caption>
+<tr bgcolor="#cccccc">
+<th>例　　　　　　　　　　</th>				<th>説明　　　　　　　　　　</th>
+</tr><tr>
+<td>'2012-11-04 12:43:01'</td>		<td>ISO-8601フォーマット。SQL92 </td>
+</tr><tr>
+<td>'November 4, 2012 12:34:01'</td>	<td>月名、日、年時:分:秒</td>
+</tr><tr>
+<td>'11/4/2012 12:34:01'</td>		<td>U.S. 形式</td>
+</tr><tr>
+<td>'04/11/2012 03:12:43 PM'</td>		<td>dd/mm/yyyy 形式(ヨーロッパ形式)</td>
+</tr><tr>
+<td>'20121104 12:34:01'	</td>		<td>ISO-8601 の年、月、日</td>
+</tr><tr>
+<td>'121104 12:34:01'	</td>		<td>ISO-8601 の年、月、日</td>
+</tr><tr>
+<td>'2012.309 12:34:01'	</td>		<td>年とその日までの累計</td>
+</tr><tr>
+<td>'12.309 12:34:01'	</td>		<td>年とその日までの累計</td>
+</tr><tr>
+<td>'J2451187 12:34:01'	</td>		<td>ユリウス日</td>
+</tr><tr>
+<td>'January 8, 99 BC'	</td>		<td>西暦紀元前99 年</td>
+</tr></table>  <br>
+
+<p>
+・定数
+<br>
+日時を参照するための特殊定数を[<表7-08>]に示します。
+</p>
+
+<table border=1>
+<caption>[<表7-08>] timestamp型日時参照特殊定数</caption>
+<tr bgcolor="#cccccc">
+<th>定数　　　　　　　</th>		<th>説明　　　　　　　　　　</th>
+</tr><tr>
+<td>'NOW'</td>		<td>現在の時刻</td>
+</tr><tr>
+<td>'TODAY'</td>	<td>本日の0時0分0秒</td>
+</tr><tr>
+<td>'TOMORROW'</td>	<td>翌日の0時0分0秒</td>
+</tr><tr>
+<td>'YESTERDAY'</td>	<td>昨日の0時0分0秒</td>
+</tr><tr>
+<td>'EPOCH'</td>	<td>1970-01-01 00:00:00+00 UNIX経時基準時刻</td>
+</tr><tr>
+<td>'INFINITY'</td>	<td>有効な時間よりも大きい時刻(無限の未来)</td>
+</tr><tr>
+<td>'-INFINITY'</td>	<td>有効な時間よりも小さい時刻(無限の過去)</td>
+</tr></table>  <br>
+
+
+<p>
+・表示精度の指定
+<br>
+time型同様、timestamp型でも以下の書式により、表示する時刻の精度を明示的に指定できます。
+</p>
+
+
+[<書式>]
+<pre>
+timestamp (p)  'value'
+</pre>
+<br>
+
+<pre>
+sampledb=# SELECT timestamp(0) 'NOW' AS "timestamp(0)",
+sampledb-#        timestamp(1) 'NOW' AS "timestamp(1)",
+sampledb-#        timestamp(2) 'NOW' AS "timestamp(2)";
+    timestamp(0)     |     timestamp(1)      |      timestamp(2)
+---------------------+-----------------------+------------------------
+ 2011-05-20 15:47:17 | 2011-05-20 15:47:16.7 | 2011-05-20 15:47:16.74
+(1 row)
+</pre>
+<br>
+
+
+%SECTION 時間間隔(インターバル)
+
+<p>
+interval型は時間間隔を扱います。
+SQL92,99のinterval型と異なり、PostgreSQLのinterval型はdate型とtime型を混在できます。
+</p>
+
+ [<書式>]
+<pre>
+	Quantity Unit [Quantity Unit...] [Direction]
+</pre>
+<br>
+
+<table>
+<tr bgcolor="#cccccc">
+<th>指定できる時間単位(Unit)　　　　</th>	<th>説明　　</th>
+</tr><tr>
+<td>millennium</td>	<td>1000年　　　　　　　　　</td>
+</tr><tr>
+<td>century</td>	<td>100年</td>
+</tr><tr>
+<td>decade</td>		<td>10年</td>
+</tr><tr>
+<td>year(s)</td>	<td>年</td>
+</tr><tr>
+<td>month(s)</td>	<td>月</td>
+</tr><tr>
+<td>week(s)</td>	<td>週</td>
+</tr><tr>
+<td>day(s)</td>		<td>日</td>
+</tr><tr>
+<td>hour(s)</td>	<td>時</td>
+</tr><tr>
+<td>minute(s)</td>	<td>分</td>
+</tr><tr>
+<td>second(s)</td>	<td>秒</td>
+</tr></table>
+<br>
+
+<table>
+<tr bgcolor="#cccccc">
+<th>Direction</th>	<th>説明　　　　　　　　　　　　　　　　　　　　　</th>
+</tr><tr>
+<td>ago</td>		<td>設定時間だけ昔を表す</td>
+</tr></table>  <br>
+<br>
+
+<p>
+例えば次のように表記します。
+</p>
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>表記　　　　　　　　　　</th>	<th>意味　　　　　　　　　　</th>
+</tr><tr>
+<td>1 year</td>		<td> 1年</td>
+</tr><tr>
+<td>2 months 3 weeks</td>		<td> 2ヵ月と3週間</td>
+</tr><tr>
+<td>1 year 2 months 3 weeks 4 days</td>		<td> 1年2ヵ月3週間と4日</td>
+</tr></table>  <br>
+
+<br>
+
+<p>
+・表示精度の指定
+<br>
+interval型もまた、以下の書式により、表示する時刻の精度を明示的に指定できます。
+</p>
+
+
+[<書式>]
+<pre>
+interval (p) 'value'
+</pre>
+<br>
+
+%CHAPTER 実行例
+
+<p>
+・さまざまな入力形式による日付データ型の利用
+<br>
+"西暦2012年11月4日"をいくつかの入力形式でテーブルにINSERTします。
+datestyleはデフォルトの{ISO,YMD}です。
+</p>
+
+<pre>
+sampledb=# SHOW datestyle;
+ DateStyle
+-----------
+ ISO, YMD
+(1 row)
+
+sampledb=# INSERT INTO date_sample VALUES  (1, '2012-11-04'),
+sampledb-#                                 (2, 'November 4, 2012'),
+sampledb-#                                 (3, '20121104');
+INSERT 0 3
+sampledb=# SELECT id, date_sample AS "date" FROM date_sample;
+ id |    date
+----+------------
+  1 | 2012-11-04
+  2 | 2012-11-04
+  3 | 2012-11-04
+(3 rows)
+</pre>
+<br>
+
+<p>
+デフォルトのdatestyleでは'04/11/2012'のような形式は使えませんが、
+SET文でdatestyleに"DMY"を設定すれば使用できます。
+</p>
+
+<pre>
+sampledb=# INSERT INTO date_sample VALUES(4, '04/11/2012');
+ERROR:  date/time field value out of range: "04/11/2012" at character 35
+
+sampledb=# SET datestyle=DMY;
+SET
+sampledb=# SHOW datestyle;
+ DateStyle
+-----------
+ ISO, DMY
+(1 row)
+
+sampledb=# INSERT INTO date_sample VALUES(4, '04/11/2012');
+INSERT 0 1
+</pre>
+<br>
+
+<p>
+・日付を参照する特殊定数を利用
+</p>
+
+<pre>
+sampledb=# SELECT 'NOW'::date AS NOW,
+sampledb-#        'TODAY'::date AS TODAY,
+sampledb-#        'TOMORROW'::date AS TOMORROW,
+sampledb-#        'YESTERDAY'::date AS YESTERDAY;
+    now     |   today    |  tomorrow  | yesterday
+------------+------------+------------+------------
+ 2011-03-11 | 2011-03-11 | 2011-03-12 | 2011-03-10
+(1 row)
+</pre>
+<br>
+
+<p>
+・time型
+<br>
+時刻"12時23分45秒56"を表示します。
+</p>
+
+<pre>
+sampledb=# SELECT time '12:23:45.56';
+    time
+------------
+ 12:23:45.56
+(1 row)
+</pre>
+<br>
+
+<p>
+・特殊定数'NOW'
+<br>
+'NOW'で現時刻を表示します。
+</p>
+
+<pre>
+sampledb=# SELECT time 'NOW';
+      time
+-----------------
+ 21:04:49.889399
+(1 row)
+</pre>
+<br>
+
+<p>
+・さまざまな入力形式によるtimestamp型の利用
+<br>
+"西暦2012年11月4日12時43分01秒"をいくつかの入力形式でテーブルに挿入します。デフォルトの表示形式はISO-8600です。
+</p>
+
+<pre>
+sampledb=# INSERT INTO timestamp_sample VALUES (1, '2012-11-04 12:43:01'),
+sampledb-#                                     (2, 'November 4, 2012 12:43:01'),
+sampledb-#                                     (3, '20121104 12:43:01');
+INSERT 0 3
+sampledb=# SELECT id, timestamp_sample AS timestamp FROM timestamp_sample;
+ id |      timestamp
+----+---------------------
+  1 | 2012-11-04 12:43:01
+  2 | 2012-11-04 12:43:01
+  3 | 2012-11-04 12:43:01
+(3 rows)
+</pre>
+<br>
+
+<p>
+・日時を参照する特殊定数を利用
+<br>
+特殊変数'NOW'と'TODAY'の違いは時刻の扱いです。
+</p>
+
+<pre>
+sampledb=# SELECT 'NOW'::timestamp, 'TODAY'::timestamp;
+         timestamp          |      timestamp
+----------------------------+---------------------
+ 2012-06-13 11:39:28.946462 | 2012-06-13 00:00:00
+(1 row)
+</pre>
+<br>
+
+<p>
+特殊変数'TODAY'、'TOMORROW'、'YESTERDAY'を比較します。
+</p>
+
+<pre>
+sampledb=# SELECT 'TODAY'::timestamp,
+sampledb-#        'TOMORROW'::timestamp,
+sampledb-#        'YESTERDAY'::timestamp;
+      timestamp      |      timestamp      |      timestamp
+---------------------+---------------------+---------------------
+ 2012-06-13 00:00:00 | 2012-06-14 00:00:00 | 2012-06-12 00:00:00
+(1 row)
+</pre>
+<br>
+
+<p>
+・interval型
+<br>
+interval型の利用法と演算例を表示します。
+</p>
+
+<pre>
+sampledb=# SELECT interval '1year 2 months 4 days';
+       interval
+----------------------
+ 1 year 2 mons 4 days
+(1 row)
+
+sampledb=# SELECT interval '1year 2 months 4 days 30 minutes 12 seconds';
+           interval
+-------------------------------
+ 1 year 2 mons 4 days 00:30:12
+(1 row)
+
+sampledb=# SELECT interval '1year 2 months 4 days ago';
+         interval
+--------------------------
+ -1 years -2 mons -4 days
+(1 row)
+
+
+sampledb=#  SELECT date 'now' - date '1964-11-04' AS "interval";
+ interval
+----------
+    16998
+(1 row)
+
+sampledb=# SELECT date 'now' - timestamp '1964-11-04 05:25:00' AS "interval";
+      interval
+---------------------
+ 16997 days 18:35:00
+(1 row)
+</pre>
+<br>

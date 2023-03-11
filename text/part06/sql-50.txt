@@ -1,0 +1,211 @@
+%FILE internal/sql-50.html
+%LASTMOD
+%KEY pgsql-sql50
+
+%TITLE <a href="https://www.postgresql.org/docs/current/sql-copy.html" target="_blank" rel="noopener noreferrer">テーブルからファイルへ	COPY TO(エクスポート)</a>
+
+<pre>
+[<書式>]
+
+COPY { table_name [ ( column_name [, ...] ) ] | ( query ) }
+    TO { 'filename' | PROGRAM 'command' | STDOUT }
+    [ [ WITH ] ( option [, ...] ) ]
+
+where option can be one of:
+
+    FORMAT format_name
+    FREEZE [ boolean ]
+    DELIMITER 'delimiter_character'
+    NULL 'null_string'
+    QUOTE 'quote_character'
+    ESCAPE 'escape_character'
+    FORCE_QUOTE { ( column_name [, ...] ) | * }
+    ENCODING 'encoding_name'
+</pre>
+<br>
+
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>table_name</td>	<td>コピー先のテーブル名</td>
+</tr><tr>
+<td>column_name</td>	<td>コピーするカラム名。設定しない場合はすべてのカラム</td>
+</tr><tr>
+<td>filename</td>	<td>絶対パス表示によるデータファイル名</td>
+</tr><tr>
+<td>STDOUT	</td>	<td>標準出力への出力</td>
+</tr></table>
+
+<br>
+
+
+<table>
+<caption>オプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>FORMAT format_name</td>	<td>text,csv,binary [text]</td>
+
+</tr><tr>
+<td>FREEZE [ boolean ]</td>	<td>VACUUM FREEZE後にデータを読み込む</td>
+</tr><tr>
+<td>DELIMITER [ AS ] 'delimiter'</td>	<td>入力ファイルのレコードの区切り文字を指定。[タブスペースか、任意の数の空白文字列]</td>
+</tr><tr>
+<td>NULL [ AS ] 'null_string' ]</td>	<td>NULLをあらわす文字列を指定。[テキスト形式は\N、CSV形式は引用符のない空文字] </td>
+</tr><tr>
+<td>QUOTE [ AS ] 'quote'</td>	<td>CSV形式の引用符を指定。["]</td>
+</tr><tr>
+<td>ESCAPE [ AS ] 'escape'</td>	<td>CSV形式でのエスケープ文字を指定。[\]</td>
+
+</tr><tr>
+<td>FORCE_QUOTE { ( column_name [, ...] ) | * }</td>	<td>NULL以外を全て引用符で囲む。</td>
+
+</tr><tr>
+<td>ENCODING 'encoding_name'</td>	<td>ファイルのエンコーディングencoding_nameを指定</td>
+
+</tr></table>
+
+<br>
+
+
+%CHAPTER 解説
+
+<p>
+COPY TO文でテーブルのデータを(サーバ上の)ファイルへ書き出します。
+</p>
+
+
+<p>
+COPY TO文を実行する際は次の点に注意してください。
+</p>
+
+<ol>
+<li>データを書き出すディレクトリは、PostgreSQLサーバの所有者(postgres)が書き込み可能でなければならない</li>
+<li>データファイル名は(サーバ上の)絶対パスで指定</li>
+</ol>
+
+<p>
+・出力形式
+<br>
+COPY TO文の出力形式は以下の3種類です。
+</p>
+
+<ol>
+<li>テキスト形式</li>
+<p>
+指定したテーブルのデータを、任意の区切り文字(デフォルトはタブスペース)で区切ったテキストファイルを書き出す。
+</p>
+
+<li>バイナリ形式</li>
+<p>
+バイナリ形式でもデータを書き出せる。フォーマットの詳細はPostgreSQL付属のドキュメント「SQLコマンド COPY」参照。
+</p>
+
+<li>CSV形式</li>
+<p>
+CSV形式による書き出しで注意すべき点は、NULLと空文字列の区別である。
+NULLは引用符のない空文字で表し、空文字そのものは引用符の連続(デフォルトなら"")で表す。
+</p>
+
+</ol>
+
+<p>
+・ メタコマンド\copyとの違い
+<br>
+メタコマンド\copyとCOPY文の違いは、\copyがpsqlを起動したホスト上のファイルを操作するのに対し、COPY文はPostgreSQLサーバ上のファイルを操作することです。
+</p>
+
+<p>
+・ SELECT文で出力を記述
+<br>
+バージョン8.2から、テーブル名を記述するだけでなく、出力したいデータをSELECT文で記述できるようになりました。
+</p>
+
+%CHAPTER 実行例
+
+<p>
+・テキスト形式のデータ書き出し
+<br>
+テーブルcustomerlistの内容を、デフォルトの区切り文字(タブスペース)で区切ったテキスト形式で書き出します。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM customerlist;
+ id |       name       | companycode
+----+------------------+-------------
+  1 | デューク東郷     |           1
+  2 | アーネスト東郷   |           2
+  3 | アランサイジョー |           4
+  4 | ダグラストウゴウ |           5
+  5 | 宗経民           |           6
+  6 | 周雷峰           |           1
+(6 rows)
+
+sampledb=# COPY customerlist TO '/home/postgres/customerlist.txt';
+COPY
+</pre>
+<br>
+
+<p>
+書き出された内容を以下に示します。
+</p>
+
+<pre>
+postgres> cat /home/postgres/customerlist.txt
+1       デューク東郷    1
+2       アーネスト東郷  2
+3       アランサイジョー        4
+4       ダグラストウゴウ        5
+5       宗経民  6
+6       周雷峰  1
+</pre>
+<br>
+
+<p>
+・バイナリ形式のデータ書き出し
+<br>
+テーブルcustomerlistの内容をバイナリ形式で書き出します。
+</p>
+
+<pre>
+sampledb=# COPY customerlist TO '/home/postgres/customerlist.bin' BINARY;
+COPY
+</pre>
+<br>
+
+
+<p>
+・CSV形式のデータ書き出し
+<br>
+テーブルliteratureのデータを、ヘッダ情報を含むCSV形式でファイル'/home/postgres/literature.csv'に書き出します。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM  literature;
+    title    |      auther      |                  context
+-------------+------------------+-------------------------------------------
+ Oscar Wilde | The Happy Prince | High above the city, on a tall column,...
+ 夏目漱石    | 我輩は猫である   | 我輩は猫である。名前はまだ無い。
+(2 rows)
+
+sampledb=# COPY literature TO '/home/postgres/literature.csv' CSV HEADER
+sampledb-#                               FORCE QUOTE title, auther, context;
+COPY
+</pre>
+<br>
+
+<p>
+書き出された内容を以下に示します。
+</p>
+
+<pre>
+postgres> cat /home/postgres/literature.csv
+title,auther,context
+"Oscar Wilde","The Happy Prince","High above the city, on a tall column,..."
+"夏目漱石","我輩は猫である","我輩は猫である。名前はまだ無い。"
+</pre>
+<br>
+

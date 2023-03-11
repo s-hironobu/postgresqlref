@@ -1,0 +1,431 @@
+%FILE internal/sql-51.html
+%LASTMOD
+%KEY pgsql-sql51
+
+%TITLE (SQL文による)関数の定義と削除 <a href="https://www.postgresql.org/docs/current/sql-createfunction.html" target="_blank" rel="noopener noreferrer">CREATE FUNCTION</a> / <a href="https://www.postgresql.org/docs/current/sql-dropfunction.html" target="_blank" rel="noopener noreferrer">DROP FUNCTION</a>
+
+<pre>
+[<書式>]
+
+● 作成
+CREATE [ OR REPLACE ] FUNCTION
+    func_name ( [ [ argmode ] [ argname ] argtype [ { DEFAULT | = } default_expr ] [, ...] ] )
+    [ RETURNS rettype
+      | RETURNS TABLE ( column_name column_type [, ...] ) ]
+  { LANGUAGE lang_name
+    | TRANSFORM { FOR TYPE type_name } [, ... ]
+    | WINDOW
+    | { IMMUTABLE | STABLE | VOLATILE }
+    | [ NOT ] LEAKPROOF
+    | { CALLED ON NULL INPUT | RETURNS NULL ON NULL INPUT | STRICT }
+    | { [ EXTERNAL ] SECURITY INVOKER | [ EXTERNAL ] SECURITY DEFINER }
+    | PARALLEL { UNSAFE | RESTRICTED | SAFE }
+    | COST execution_cost
+    | ROWS result_rows
+    | SUPPORT support_function
+    | SET configuration_parameter { TO value | = value | FROM CURRENT }
+    | AS 'definition'
+    | AS 'obj_file', 'link_symbol'
+    | sql_body
+  } ...
+
+
+● 削除
+DROP FUNCTION [ IF EXISTS ] func_name [ ( [ [ argmode ] [ argname ] argtype [, ...] ] ) ] [, ...]
+    [ CASCADE | RESTRICT ]
+
+</pre>
+<br>
+
+<table>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>    <th>説明</th>
+</tr><tr>
+<td>func_name</td>	<td>定義、または削除する関数名。引数が異なれば同名関数を作成可能(オーバーロード可能) </td>
+</tr><tr>
+<td>argmode</td>	<td>引数のモード。IN,OUT,INOUTのいずれか。省略時はIN</td>
+</tr><tr>
+<td>argtype</td>	<td>引数のデータ型</td>
+</tr><tr>
+<td>rettype	</td>	<td>返り値のデータ型</td>
+</tr><tr>
+<td>definition</td>	<td>関数を定義する文字列</td>
+</tr><tr>
+<td>type</td>	<td>削除する関数の引数の型</td>
+</tr></table>
+
+<br>
+
+
+<table>
+<tr bgcolor="#cccccc">
+<th>オプション　　　　　　　　　　　</th>    <th>説明</th>
+</tr><tr>
+<td>OR REPLACE	</td>	<td>関数が定義済みであっても、新たに再定義する</td>
+<!---------------------------------------------------------------------------------->
+</tr><tr>
+<td>VOLATILE	</td>	<td>オプティマイザへの指示。random()、currval()、timeofday()のように、テーブルスキャン中に毎回、関数の値を評価する。デフォルト</td>
+</tr><tr>
+<td>STABLE	</td>	<td>テーブルスキャン中は同じ値を返す</td>
+</tr><tr>
+<td>IMMUTABLE	</td>	<td>(同じ引数値を与えた場合)新たに関数を評価することなく、キャッシュされた値を返す</td>
+<!---------------------------------------------------------------------------------->
+</tr><tr>
+<td>CALLED ON NULL INPUT</td>	<td>引数にNULLがある場合でも、通常通り関数を実行する。デフォルト</td>
+</tr><tr>
+<td>STRICT	</td>	<td>引数にNULLがある場合、NULLを返す</td>
+</tr><tr>
+<td>RETURNS NULL ON NULL INPUT</td>	<td>STRICTと同じ</td>
+<!---------------------------------------------------------------------------------->
+</tr><tr>
+<td>[EXTERNAL] SECURITY INVOKER </td>	<td>関数を呼び出したデータベースロールの権限で関数を実行</td>
+</tr><tr>
+<td>[EXTERNAL] SECURITY DEFINER  </td>	<td>関数を作成したデータベースロールの権限で関数を実行</td>
+<!---------------------------------------------------------------------------------->
+</tr><tr>
+<td>RESTRICT</td>	<td>依存するオブジェクト(トリガなど)がない場合のみ削除</td>
+</tr><tr>
+<td>CASCADE</td>	<td>依存するオブジェクトも一緒に削除</td>
+
+
+
+</tr></table>
+
+<br>
+
+
+%CHAPTER 解説
+
+<p>
+CREATE FUNCTION 文で新しい関数を定義します。
+PostgreSQLは次の4種類の関数を定義できます。
+</p>
+
+<ol>
+<li>問い合わせ言語関数(SQLで書かれた関数) </li>
+<li>手続き型言語関数(PL/pgSQLなどで書かれた関数) </li>
+<li>内部(internal)関数</li>
+<li>C言語関数</li>
+</ol>
+
+<p>
+ここでは、問い合わせ言語関数(以降SQL関数)を説明します。
+</p>
+
+
+<p>
+・ 返り値のデータ型
+<br>
+関数の定義時に、返り値のデータ型をRETURNS句に明示的に指定しなければなりません。
+指定できるデータ型は次のとおりです。
+</p>
+<blockquote>
+<p>
+(1) 通常のデータ型すべて
+<br>
+数値型、論理型、文字列型、幾何型など、通常のデータ型すべて
+</p>
+<p>
+(2) テーブルのレコード
+<br>
+データ型だけでなく、テーブルのレコードそのもの
+</p>
+<p>
+(3) 疑似型
+<br>
+void, record, triggerのみ
+</p>
+</blockquote>
+
+<p>
+疑似型は3種類のデータ型しか設定できません。返り値が不要なら、void型を使用します。
+<br>
+record型は複数のフィールドを返したい場合に指定します。
+<br>
+trigger型はトリガ関数の定義に使用します。トリガは<a href="./sql-38.html">[<6-38>]</a>を参照してください。
+</p>
+
+<p>
+void型以外のデータ型は、1レコードのみ返す場合に使用します。
+<br>
+SELECT文の全結果(複数レコード)を得るには、データ型の前に"SETOF"を指定します。
+たとえばinteger型の複数のデータが返る場合は"SETOF integer"とします。
+</p>
+
+<p>
+・関数の引数
+<br>
+関数に渡した引数は内部で$1,$2,...という識別子が付きます。
+PL/pgSQLと異なるので注意してください。
+</p>
+
+<p>
+・引数のモード
+<br>
+バージョン8.1から"引数のモード"、つまり標準SQLに準拠した引数の与え方と返り値の与え方がサポートされました。
+<br>
+引数には'IN'を、返り値には'OUT'を設定します。
+引数と返り値のデータ型が同じ場合は'INOUT'を設定できます。
+引数のモードを設定した場合はRETURNS句は不要です。
+<br>
+以下に、互いに等価な関数定義の例を示します。
+</p>
+
+<ol>
+<li>INを使った例</li>
+<p>
+返り型がvoidの場合、'OUT'は不要です。
+</p>
+
+<pre>
+CREATE FUNCTION change_price (integer, integer) RETURNS void AS …
+CREATE FUNCTION change_price (IN integer, IN integer) AS …
+</pre>
+<br>
+
+
+<li> IN, OUTを使った例</li>
+<p>
+引数はinteger型、返り値はテーブルitemlistと同じ型です。
+</p>
+
+<pre>
+CREATE FUNCTION print_item (integer) RETURNS itemlist AS …
+CREATE FUNCTION print_item (IN integer, OUT itemlist) AS …
+</pre>
+<br>
+
+<li>INOUTを使った例</li>
+<p>
+引数と返り値のデータ型が共にintegerなので、'INOUT'が使えます。
+</p>
+
+<pre>
+CREATE FUNCTION double_num (integer) RETURNS integer AS …
+CREATE FUNCTION double_num (INOUT integer) AS …
+</pre>
+<br>
+
+</ol>
+
+
+<p>
+・オーバーロード
+<br>
+PostgreSQLの関数はオーバーロード可能です。
+よって、引数の数やデータ型が異なっていれば、同名の関数を定義できます。
+</p>
+
+<p>
+・関数のオプション情報
+<br>
+関数のオプションとしてIMMUTABLEを設定すると、一度評価した引数による関数値はキャッシュされて、次回以降はキャッシュされた値を返します。
+<br>
+例えば、ユーザIDを引数に与えて名前を返す関数など、与える引数と関数値がいつも一致する場合は、IMMUTABLEを設定して問い合わせ処理を効率化できます。
+</p>
+
+
+<p>
+・関数定義の表示
+<br>
+メタコマンド\df+に関数名を指定すると、定義した関数の中身を表示します。
+</p>
+
+
+%CHAPTER 実行例
+
+<p>
+・関数定義の例
+<br>
+テーブルitemlistの登録アイテム数を数える関数count_item()を定義します。
+</p>
+
+<pre>
+sampledb=# CREATE FUNCTION count_item ()  RETURNS bigint AS
+sampledb-#    $$ SELECT count(*) FROM itemlist; $$
+sampledb-# LANGUAGE SQL;
+CREATE FUNCTION
+
+sampledb=# SELECT count_item();
+ count_item
+------------
+          3
+(1 row)
+</pre>
+<br>
+
+<p>
+バージョン8.1からは次の定義も可能です。
+</p>
+
+<pre>
+sampledb=# CREATE FUNCTION count_item (OUT bigint) AS
+sampledb-#     $$ SELECT count(*) FROM itemlist; $$
+sampledb-# LANGUAGE SQL;
+CREATE FUNCTION
+</pre>
+<br>
+
+<p>
+・引数を持つ関数の定義
+<br>
+テーブルitemlistの指定されたidの価格を変更する関数change_price()の定義を示します。
+この関数は引数を2つ取ります。第一引数$1はid、第二引数$2は新しい価格です。
+<br>
+なお、この関数はUPDATE文を実行するだけで返り値を持たないので、返り値型として'void'を指定します。
+</p>
+
+<pre>
+sampledb=# CREATE FUNCTION change_price (integer, integer) RETURNS void AS
+sampledb-#    $$   /* $1 = id        */
+sampledb$#         /* $2 = new_price */
+sampledb$#         UPDATE itemlist SET price = $2 WHERE id = $1;  $$
+sampledb-# LANGUAGE SQL;
+CREATE FUNCTION
+
+sampledb=# SELECT change_price (1, 120);
+ change_price
+--------------
+
+(1 row)
+</pre>
+<br>
+
+<p>
+・ %TYPE表記(notation)によるデータ型指定
+<br>
+関数min_price()はテーブルitemlistの中で最低価格を返します。
+カラムpriceのデータ型を明示的には指定せず、「itemlist.price%TYPE  = "テーブルitemlistのカラムpriceと同じデータ型"」と指定しています。
+</p>
+
+<pre>
+sampledb=# CREATE FUNCTION min_price () RETURNS itemlist.price %TYPE AS
+sampledb-#    $$ SELECT min(price) FROM itemlist; $$
+sampledb-# LANGUAGE SQL;
+CREATE FUNCTION
+
+sampledb=# SELECT min_price ();
+ min_price
+-----------
+        72
+(1 row)
+</pre>
+<br>
+
+<p>
+・テーブルのカラムを返す
+<br>
+関数print_item()は1レコードだけ返します。
+関数の返り値型としてテーブル名'itemlist'そのものを記述していることに注意してください。
+</p>
+
+<pre>
+sampledb=# CREATE FUNCTION print_item (int) RETURNS itemlist AS
+sampledb-#    $$   /* $1 = id */
+sampledb$#         SELECT * FROM itemlist WHERE id = $1; $$
+sampledb-# LANGUAGE SQL;
+CREATE FUNCTION
+
+sampledb=# SELECT print_item (2);
+     print_item
+---------------------
+ (2,notebook,120,20)
+(1 row)
+
+sampledb=# SELECT * FROM print_item (2);
+ id |   name   | price | makercode
+----+----------+-------+-----------
+  2 | notebook |   120 |        20
+(1 row)
+</pre>
+<br>
+
+
+<p>
+関数を実行する際、SELECT文で直接実行すると"(2,notebook,120,20)"のように、(データ型不定の)record型で結果が返ります。
+</p>
+
+<p>
+・record型の返り値
+<br>
+テーブルのレコードそのものはいらないが、複数のカラムのデータは必要という場合があります。
+たとえば商品テーブルの商品名と価格だけを表示させたいとき、などです。
+<br>
+このような場合は返り値のデータ型にrecord型を指定します。
+record型はどんなデータ型のデータでも格納できる特殊な型です。
+</p>
+
+<pre>
+sampledb=# CREATE FUNCTION print_itemname_and_price (int) RETURNS record AS
+sampledb-#    $$   /* $1 = id */
+sampledb$#         SELECT name, price FROM itemlist WHERE id = $1;  $$
+sampledb-# LANGUAGE SQL;
+CREATE FUNCTION
+
+sampledb=# SELECT print_itemname_and_price (2);
+ print_itemname_and_price
+--------------------------
+ (notebook,120)
+(1 row)
+
+sampledb=# SELECT * FROM print_itemname_and_price (2)
+sampledb-#     AS (name text, price integer);
+   name   | price
+----------+-------
+ notebook |   120
+(1 row)
+</pre>
+<br>
+
+<p>
+・SELECT文の結果すべてを返す関数の定義
+<br>
+SELECT文の結果をすべて返すにはデータ型を'SETOF'で修飾します。
+関数print_all_items()はテーブルitemlistのデータすべてを返します。
+</p>
+
+<pre>
+sampledb=# CREATE FUNCTION print_all_items ()  RETURNS SETOF itemlist AS
+sampledb-#    $$   SELECT * FROM itemlist;  $$
+sampledb-# LANGUAGE SQL;
+CREATE FUNCTION
+
+sampledb=# SELECT print_all_items();
+   print_all_items
+---------------------
+ (1,pen,100,10)
+ (2,notebook,120,20)
+ (3,eraser,72,10)
+(3 rows)
+
+sampledb=# SELECT * FROM print_all_items();
+ id |   name   | price | makercode
+----+----------+-------+-----------
+  1 | pen      |   100 |        10
+  2 | notebook |   120 |        20
+  3 | eraser   |    72 |        10
+(3 rows)
+</pre>
+<br>
+
+<p>
+・関数のオーバーロード
+<br>
+前述の関数change_price()と同名ですが、引数としてidではなく、名前nameを指定する関数を定義します。
+</p>
+
+<pre>
+sampledb=# CREATE FUNCTION change_price (text, integer) RETURNS void AS
+sampledb-#     $$   /* $1 = name      */
+sampledb$#          /* $2 = new_price */
+sampledb$#          UPDATE itemlist SET price = $2 WHERE name LIKE $1;  $$
+sampledb-#  LANGUAGE SQL;
+CREATE FUNCTION
+
+sampledb=# SELECT change_price ('pen', 120);
+ change_price
+--------------
+
+(1 row)
+</pre>
+<br>

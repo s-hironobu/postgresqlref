@@ -1,0 +1,9 @@
+%FILE internal/internal-10.html
+%LASTMOD
+%KEY pgsql-internal10
+
+%TITLE アーカイブログとPITR(Point In Time Recovery)
+
+<p>
+The Internals of PostgreSQL <a href="https://www.interdb.jp/pg/pgsql10.html" target="_blank" rel="noopener noreferrer">Chapter 10: Base Backup and Point-In-Time Recovery (PITR)</a>
+</p>

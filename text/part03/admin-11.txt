@@ -1,0 +1,55 @@
+%FILE internal/admin-11.html
+%LASTMOD
+%KEY pgsql-admin11
+
+%TITLE <a href="https://www.postgresql.org/docs/current/backup.html" target="_blank" rel="noopener noreferrer">バックアップ</a>と<a href="https://www.postgresql.org/docs/current/upgrading.html" target="_blank" rel="noopener noreferrer">アップグレード</a>
+
+
+%CHAPTER バックアップ
+
+<p>
+PostgreSQLは論理バックアップと物理バックアップ、どちらもサポートしています。
+<br>
+他のオープンソースRDBMS(MySQLなど)と異なり、
+PostgreSQLは
+<u>論理物理どちらのバックアップもテーブルのLOCKなどで他の処理を邪魔しません</u>。
+通常の検索や更新を行いつつ、それらに全く影響を与えずにバックアップできます。これは運用上大きなアドバンテージです。
+</p>
+
+%SECTION 論理バックアップ
+
+<p>
+PostgreSQLは標準のダンプコマンドpg_dumpとpg_dumpall、およびリストアコマンドpg_restoreをサポートしています。
+<br>
+pg_dumpはデータベース単位のデータをダンプ、pg_dumpallは全データベースのデータを一度にダンプする違いがありますが、それ以外はほぼ同様の使い方をするので、本書ではpg_dumpコマンドのみ説明します(<a href="./admin-12.html">[<3-12>]</a>参照)。
+</p>
+
+
+<p>
+リストアは比較的時間がかかる作業です。
+本書では説明しませんが、高速にデータを読み込むツール<a href="https://github.com/ossc-db/pg_bulkload" target="_blank" rel="noopener noreferrer">pg_bulkload</a>が公開されています。
+</p>
+
+
+%SECTION 物理バックアップ
+
+<p>
+PostgreSQLの物理バックアップ手段であるベースバックアップとアーカイブログは、<a href="./admin-19.html">[<3-19>]</a>と<a href="./admin-20.html">[<3-20>]</a>で詳しく解説しています。
+</p>
+
+
+%CHAPTER アップグレード
+<p>
+PostgreSQLのバージョンアップで、問題になるのがデータベースクラスタのアップグレードです。
+アップグレードは<a href="./admin-13.html">[<3-13>]</a>で詳しく解説しています。
+</p>
+
+<p>
+PostgreSQLは比較的バージョン間の互換性が保たれているので、pg_dumpとpg_restoreでほぼ問題なくアップグレードできます。
+しかし、巨大なデータベースクラスタのダンプやリストアは、非常に長い時間がかかる場合があります。
+</p>
+
+<p>
+バージョン9.0から、非常に手軽かつ短時間でアップグレードを行うpg_upgradeコマンドが提供されました。
+pg_upgradeはバージョン8.3以降のデータベースクラスタをバージョン9.0以降のPostgreSQLで使えるようにアップグレードします。
+</p>

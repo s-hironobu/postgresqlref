@@ -1,0 +1,165 @@
+%FILE internal/admin-03.html
+%LASTMOD
+%KEY pgsql-admin03
+
+%TITLE <a href="https://www.postgresql.org/docs/current/app-pg-ctl.html" target="_blank" rel="noopener noreferrer">PostgreSQLサーバの起動/停止</a>
+
+
+<pre>
+[<書式>]
+● 起動
+pg_ctl start   [-w] [-t SECS] [-D dbdir] [-s] [-l file_name]
+					      [-o "OPTIONS"] [-p path]
+
+● 停止
+pg_ctl stop    [-W] [-t SECS] [-D dbdir] [-s] [-m SHUTDOWN-MODE]
+
+● 再起動
+pg_ctl restart [-w] [-t SECS] [-D dbdir] [-s] [-m SHUTDOWN-MODE]
+					      [-o "OPTIONS"]
+
+● 設定ファイルの再読み込み
+pg_ctl reload  [-D dbdir] [-s]
+
+● 状態の表示
+pg_ctl status  [-D dbdir]
+
+● リカバリモード終了
+pg_ctl promote [-D dbdir] [-s]
+
+● ログローテート
+pg_ctl logrotate [-D dbdir] [-s]
+				(バージョン12から)
+
+</pre>
+
+<br>
+
+<table>
+<caption>主なオプション</caption>
+<tr bgcolor="#cccccc">
+<th>主なオプション</th>	<th>説明</th>
+</tr><tr>
+<td>-w</td>	<td>起動処理が終了するのを待つ。60秒でタイムアウト。デフォルトで有効</td>
+</tr><tr>
+<td>-t SEC</td>	<td>-wもしくは-Wオプイションでタイムアウトする時間SECを設定</td>
+</tr><tr>
+<td>-D dbdir</td>	<td>データベースクラスタのあるベースディレクトリ(dbdir)を設定。環境変数PGDATAに設定すれば省略可能</td>
+</tr><tr>
+<td>-s</td>	<td>エラーメッセージのみを表示</td>
+</tr><tr>
+<td>-l file_name</td>	<td>file_nameにサーバログを出力</td>
+</tr><tr>
+<td>-o OPTIONS</td>	<td>postmasterへ直接オプション(options)を渡す</td>
+</tr><tr>
+<td>-m SHUTDOWN-MODE</td>	<td>停止モードmodeを指定。本文参照</td>
+</tr><tr>
+<td>-p path</td>	<td>起動するpostmasterがあるディレクトリ(path)を指定。バージョンやコンパイルオプションが異なるpostmasterが存在する場合に使える。通常は不要</td>
+</tr><tr>
+<td>-W</td>	<td>終了を待たない</td>
+</tr></table>
+<br>
+
+%CHAPTER 解説
+
+<p>
+pg_ctlコマンドでPostgreSQLの起動や停止など行います。
+バージョン9.0からはinitdbの機能も取り込んでいますが、ここでは説明を割愛します。
+</p>
+
+<p>
+・reload
+<br>
+postmasterにSIGHUPシグナルを送り、postgresql.confやpg_hba.confなどの設定ファイルを再読み込みします。
+クライアントとの接続を切ることなく、設定ファイルの変更を反映できます。
+ただし、すべてのパラメータが変更できるわけではないので注意してください。
+</p>
+
+<p>
+・promote
+<br>
+レプリケーションモードで稼働しているスレーブに対してpromoteで実行すると、リカバリモードを終了して通常の書き込み可能なモードに移行します。
+詳細は<a href="./admin-21.html">[<3-21>]</a>を参照してください。
+</p>
+
+<p>
+・-lオプション
+<br>
+サーバログファイルにはプロセスがどのような状態で起動したかなど、サーバプロセスの動作情報が書き込まれます。
+<br>
+サーバログファイルを置くディレクトリは、pg_ctlを実行したOSユーザ(postgres)が書き込み可能でなければなりません。
+</p>
+
+<p>
+・-mオプションと停止モード
+<br>
+停止モードを設定します。停止モードの概略を以下に示します。
+</p>
+
+<ol>
+<li>smartモード</li>
+ <p>
+全クライアントの接続が切れた後にサーバ停止。60秒待って接続が残っている場合は停止を諦める。
+UNIX系OSでのデフォルト。
+<br>
+具体的な動作を示す。
+<br>
+pg_ctlがpostmasterにSIGTERMシグナルを送る。
+SIGTERMシグナルを受け取ったpostmasterは新しい接続を禁止し、全postgresプロセスが時間内に終了するのを待つ。
+すべてのpostgresプロセスが終了すればpostmaster自身も終了する。
+ </p>
+
+<li>fastモード</li>
+ <p>
+全クライアントとの接続を切断して即座にサーバは各種終了処理を行ってから停止。
+実行中のトランザクションはロールバックする。
+<br>
+具体的な動作を示す。
+pg_ctlがpostmasterにSIGINTシグナルを送る。
+SIGINTシグナルを受け取ったpostmasterは新しい接続を禁止し、
+すべてのpostgresプロセスにSIGTERMを送る。
+各postgresプロセスは現在のトランザクションをアボートして即座に終了し、
+postmasterは全postgresプロセス終了後に終了する。
+ </p>
+
+<li>immediateモード</li>
+ <p>
+各種終了処理を行わず即座にサーバを停止。
+<br>
+具体的な動作を示す。
+<br>
+pg_ctlがpostmasterにSIGQUITシグナルを送る。
+SIGQUITシグナルを受け取ったpostmasterはすべてのpostgresプロセスにSIGQUITを送る。
+そしてpostmaster、postgresプロセス共々、即刻終了する。
+CHECKPOINTすら行わずに強制終了するので緊急時にのみ使う。
+ </p>
+</ol>
+
+
+%CHAPTER 実行例
+
+<p>
+・起動
+<br>
+OSユーザpostgresがPostgreSQLを起動します。
+</p>
+<pre>
+postgres> pg_ctl start -D /usr/local/pgsql/data
+</pre>
+<br>
+
+<p>
+・smartモードによる停止
+</p>
+<pre>
+postgres> pg_ctl stop -D /usr/local/pgsql/data
+</pre>
+<br>
+
+<p>
+・fastモードによる停止
+</p>
+<pre>
+postgres> pg_ctl stop -D /usr/local/pgsql/data -m fast
+</pre>
+<br>

@@ -1,0 +1,78 @@
+%FILE internal/func-08.html
+%LASTMOD
+%KEY pgsql-func08
+
+%TITLE <a href="https://www.postgresql.org/docs/current/functions-window.html" target="_blank" rel="noopener noreferrer">WINDOW関数</a>
+
+[< WINDOW関数>]
+
+<table border=1><tr bgcolor="#cccccc">
+<th align=left>関数　　　　　　　　　　　　　　　　　　　　　　</th>			<th>返り値型</th>	<th>説明</th>
+</tr><tr>
+<td>row_number()</td>	<td>bigint</td>	<td>パーティション内のレコード番号。１から単調増加する</td>
+
+</tr><tr>
+<td>rank()</td>	<td>bigint</td>	<td>パーティション内のランキング。同位があれば、以降の順位を飛ばす。例えば同率3位が二組あれば、次は５位から</td>
+
+</tr><tr>
+<td>dense_rank()</td>	<td>bigint</td>	<td>パーティション内のランキング。同位があっても順位を飛ばさない。例えば同率3位が二組あっても、次は4位から</td>
+
+</tr><tr>
+<td>percent_rank()</td>	<td>double precision</td>	<td>相対順位。 (rank - 1) / (総レコード数 - 1)</td>
+
+</tr><tr>
+<td>cume_dist()</td>	<td>double precision</td>	<td>相対順位。 (row_number) / (総レコード数)</td>
+
+</tr><tr>
+<td>ntile(num_buckets int)	</td>	<td>int</td>	<td>該当レコードが、num_backetsで分割したヒストグラムのどのバケットに入るか</td>
+
+
+</tr><tr>
+<td>lag(value any [,offset int [,default any]])	 </td>	<td>valueと同じ型</td>	<td>パーティション内のoffsetレコード前の値を返す。offsetのデフォルトは1で直前のレコードの値を返す。値が存在しない場合defaultを返す。defaultを設定しない場合はNULLが返る</td>
+
+</tr><tr>
+<td>lead(value any [, offset int [, default any ]])	</td>	<td>valueと同じ型</td>	<td>パーティション内のoffsetレコード後の値を返す。offsetのデフォルトは1で直後のレコードの値を返す。値が存在しない場合defaultを返す。defaultを設定しない場合はNULLが返る</td>
+
+</tr><tr>
+<td>first_value(value any)</td>	<td> valueと同じ型</td>		<td>そのパーティションの最初のカラムvalueの値が返る</td>
+
+
+</tr><tr>
+<td>last_value(value any)</td>	<td> valueと同じ型</td>		<td>そのパーティションの最後のカラムvalueの値が返る</td>
+
+</tr><tr>
+<td>nth_value(value any, nth int)</td>	<td>	valueと同じ型</td>	<td>そのパーティションのnth番目のカラムvalueの値が返る</td>
+
+</tr></table>
+<br>
+
+
+%CHAPTER 解説
+
+<p>
+WINDOW関数はWINDOW句やOVER句とともに使用します。
+<br>
+
+<p>
+・row_number()、rank()、dense_rank()
+<br>
+rank()の使用方法は<a href="./sql-20.html">[<6-20>]</a>の実行例を参照してください。
+<br>
+row_number()は一意な順位を連続して割り振ります。rank()とdense_rank()は同率同位の処理が異なります。
+</p>
+
+<p>
+・lag()、lead()
+<br>
+lag()は自身よりも前の値を、lead()は後の値を返します。
+<br>
+lag()の使用方法は<a href="./sql-20.html">[<6-20>]</a>の実行例を参照してください。
+</p>
+
+<p>
+・first_value()、last_value()、nth_value()
+<br>
+それぞれパーティションの最初、最後、n番目の値を返します。
+<br>
+first_value()の使用方法は<a href="./sql-20.html">[<6-20>]</a>の実行例を参照してください。
+</p>

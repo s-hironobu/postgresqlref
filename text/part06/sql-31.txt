@@ -1,0 +1,135 @@
+%FILE internal/sql-31.html
+%LASTMOD
+%KEY pgsql-sql31
+
+%TITLE レコードの計算 <a href="https://www.postgresql.org/docs/current/sql-values.html" target="_blank" rel="noopener noreferrer">VALUES</a>
+
+<pre>
+[<書式>]
+VALUES ( expression [, ...] ) [, ...]
+    [ ORDER BY sort_expression [ ASC | DESC | USING operator ] [, ...] ]
+    [ LIMIT { count | ALL } ]
+    [ OFFSET start [ ROW | ROWS ] ]
+    [ FETCH { FIRST | NEXT } [ count ] { ROW | ROWS } ONLY ]
+
+</pre>
+
+
+<br>
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>expression</td>	<td>定数、または式</td>
+</tr></table>
+
+<br>
+
+<table>
+<caption>句</caption>
+<tr bgcolor="#cccccc">
+<th>句</th>	<th>説明</th>
+</tr><tr>
+<td>ORDER BY</td>	<td>並べかえ</td>
+</tr><tr>
+<td>LIMIT</td>	<td>表示数の制限</td>
+</tr><tr>
+<td>OFFSET</td>	<td>オフセット</td>
+</tr><tr>
+<td>FETCH</td>	<td>LIMIT句と等価</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+バージョン8.2からVALUES文がサポートされました。
+</p>
+
+<p>
+文法上はSELECT文とVALUES文は同じ扱いをしますが、効率の観点から多量の式をVALUES文で扱うことは推奨しません。
+少数の式にとどめるべきです。
+</p>
+
+
+%CHAPTER 実行例
+
+<p>
+・VALUES文と、等価なSELECT文
+</p>
+
+<pre>
+sampledb=# VALUES (1, 'uno'), (2, 'dos'), (3, 'tres');
+ column1 | column2
+---------+---------
+       1 | uno
+       2 | dos
+       3 | tres
+(3 rows)
+
+sampledb=# SELECT 1 AS column1, 'uno' AS column2
+sampledb-#   UNION ALL SELECT 2, 'dos'
+sampledb-#   UNION ALL SELECT 3, 'tres';
+ column1 | column2
+---------+---------
+       1 | uno
+       2 | dos
+       3 | tres
+(3 rows)
+</pre>
+<br>
+
+<p>
+・ORDER BY句とLIMIT句の例
+</p>
+
+<pre>
+sampledb=# VALUES (1, 'uno'), (2, 'dos'), (3, 'tres')
+sampledb-#                 ORDER BY column1 DESC LIMIT 2;
+ column1 | column2
+---------+---------
+       3 | tres
+       2 | dos
+(2 rows)
+</pre>
+<br>
+
+<p>
+・LIMIT句と等価なFETCH句
+<br>
+VALUES文におけるFETCH句はLIMIT句と等価です。
+</p>
+
+<pre>
+sampledb=# VALUES (1, 'uno'), (2, 'dos'), (3, 'tres') LIMIT 2;
+ column1 | column2
+---------+---------
+       1 | uno
+       2 | dos
+(2 rows)
+
+sampledb=# VALUES (1, 'uno'), (2, 'dos'), (3, 'tres')
+sampledb-#                          FETCH FIRST 2 ROWS ONLY;
+ column1 | column2
+---------+---------
+       1 | uno
+       2 | dos
+(2 rows)
+</pre>
+<br>
+
+<p>
+・INSERT文で使う
+</p>
+
+<pre>
+sampledb=# CREATE TABLE num (id int, num text);
+CREATE TABLE
+sampledb=# INSERT INTO num
+sampledb-#         VALUES  (1, 'uno'), (2, 'dos'), (3, 'tres');
+INSERT 0 3
+</pre>
+<br>

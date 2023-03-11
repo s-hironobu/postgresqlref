@@ -1,0 +1,236 @@
+%FILE internal/ope-11.html
+%LASTMOD
+%KEY pgsql-ope-11
+
+%TITLE 幾何演算子
+
+[<幾何演算子>]
+
+
+● 操作
+<table><tr bgcolor="#cccccc">
+<th>幾何演算子</th>	<th>説明</th>		<th>例</th>		<th>結果</th>
+</tr><tr>
+<td>+	</td>	<td>平行移動</td>	<td>box '((0,0),(1,1))' + point '(2.0,0)'</td>	<td>(3,1),(2,0)</td>
+</tr><tr>
+<td>-	</td>	<td>平行移動</td>	<td>box '((0,0),(1,1))' - point '(2.0,0)'</td>	<td>(-1,1),(-2,0)</td>
+</tr><tr>
+<td>*	</td>	<td>拡大縮小/回転</td>	<td>box '((0,0),(1,1))' * point '(2.0,0)'</td>	<td>(2,2),(0,0)</td>
+</tr><tr>
+<td>/	</td>	<td>拡大縮小/回転</td>	<td>box '((0,0),(2,2))' / point '(2.0,0)'</td>	<td>(1,1),(0,0)</td>
+</tr></table>
+
+<br>
+
+
+● 演算
+<table><tr bgcolor="#cccccc">
+<th>幾何演算子</th>	<th>説明</th>		<th>例</th>		<th>結果</th>
+</tr><tr>
+<td>#	</td>	<td>多角形内の点の数</td>	<td># polygon'((1,0),(0,1),(-1,0))'		</td>	<td>3</td>
+</tr><tr>
+<td>@@	</td>	<td>中心		</td>	<td>@@ circle '((0,0),10)'			</td>	<td>(0,0)</td>
+</tr><tr>
+<td>#	</td>	<td>交わり		</td>	<td>box '((2,-1),(-1,2))' # '((1,1),(-2,-2))'</td>	<td>(1,1),(-1,-1)</td>
+</tr><tr>
+<td>##	</td>	<td>最も近接した点	</td>	<td>point'(0,0)' ## lseg '((2,0),(0,2))'	</td>	<td>(1,1)</td>
+</tr><tr>
+<td><->	</td>	<td>距離		</td>	<td>circle '((0,0),1)' <-> circle '((5,0),1)'</td>	<td>3</td>
+</tr><tr>
+<td>@-@	</td>	<td>長さ、または円周	</td>	<td>@-@ lseg '((0,0),(1,1))'		</td>	<td>1.4142135623731</td>
+</tr></table>
+
+<br>
+
+● 判定
+<table><tr bgcolor="#cccccc">
+<th>幾何演算子</th>	<th>説明</th>		<th>例</th>		<th>結果</th>
+</tr><tr>
+<td>?#	</td>	<td>交わり、または重なり	</td>	<td>lseg'((-1,0),(1,0))' ?# box '((-2,-2),(2,2))'	</td>	<td>TRUE</td>
+</tr><tr>
+<td>&&	</td>	<td>重なるか否か		</td>	<td>box'((0,0),(1,1))' && box '((0,0),(2,2))'	</td>	<td>TURE</td>
+</tr><tr>
+<td>&<	</td>	<td>左重なるか否か		</td>	<td>box'((0,0),(2,2))' &< box '((1,1),(3,3))'	</td>	<td>TRUE</td>
+</tr><tr>
+<td>&>	</td>	<td>右重なるか否か		</td>	<td>box'((0,0),(2,2))' &> box '((1,1),(3,3))'	</td>	<td>FALSE</td>
+</tr><tr>
+<td><<	</td>	<td>左か否か		</td>	<td>circle '((1,1),1)' << circle '((5,0),1)'	</td>	<td>TRUE</td>
+</tr><tr>
+<td><^	</td>	<td>下か否か		</td>	<td>circle '((1,1),1)' <^ circle '((5,0),1)'	</td>	<td>FLASE</td>
+</tr><tr>
+<td>>>	</td>	<td>右か否か		</td>	<td>circle '((1,1),1)' >> circle '((5,0),1)'	</td>	<td>FLASE</td>
+</tr><tr>
+<td>>^	</td>	<td>上か否か		</td>	<td>circle '((1,1),1)' >^ circle '((5,0),1)'	</td>	<td>FLASE</td>
+</tr><tr>
+<td>?-	</td>	<td>2点を通る直線が水平か否か</td>	<td>point '(1,0)' ?- point '(0,0)'	</td>	<td>TRUE</td>
+</tr><tr>
+<td>?|	</td>	<td>2点を通る直線が垂直か否か</td>	<td>point '(1,0)' ?| point '(0,0)'	</td>	<td>FLASE</td>
+</tr><tr>
+<td>?-|	</td>	<td>垂直か否か		</td>	<td>lseg '((0,0),(0,1))' ?-| lseg '((0,0),(1,0))'	</td>	<td>TRUE</td>
+</tr><tr>
+<td>?||	</td>	<td>並行か否か		</td>	<td>lseg '((0,0),(0,1))' ?|| lseg '((0,0),(1,0))'	</td>	<td>FLASE</td>
+</tr><tr>
+<td>@	</td>	<td>含まれる		</td>	<td>point '(1,1)' @ circle '((0,0),2)'		</td>	<td>TRUE</td>
+</tr><tr>
+<td>~=	</td>	<td>等しい		</td>	<td>polygon '((0,0),(1,1))' ~= polygon '((1,1),(0,0))'</td>	<td>TRUE</td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER 解説
+
+<p>
+PostgreSQLは幾何データを扱う幾何演算子をサポートしている。
+PostgreSQLにはGIS(地理情報システム)を扱うPostGIS(http://postgis.refractions.net/)があるが、幾何演算子と直接の関係はないので混同しないように。
+</p>
+
+<p>
+・点の数(#)
+<br>
+内点の数を得る演算子(#)は(当然ながら)path型とpolygon型のみ使用できる。なお、関数npoints()でも点の数を得られる([<7-27>]参照)。
+</p>
+
+<p>
+・平行移動(+、-)と拡大縮小(*、/) 
+<br>
+平行移動(+、-)演算子と拡大縮小(*、/)演算子は、point型、box型、path型、circle型に対してpoint型を作用させる。それ以外の組合せはエラーになる。特にpath型どうしに対して平行移動演算子を使うと、有意な結果が返らない(結果がNULL)。
+</p>
+
+<pre>
+sampledb=# SELECT point'(1.0, 1.0)' + point'(2.0, 2.0)';
+ ?column? 
+----------
+ (3,3)
+(1 row)
+</pre>
+
+<p>
+・交わり(#) 
+<br>
+交わりを求める演算子(#)は、box型データのみ使用できる。
+</p>
+
+<p>
+・最も近接した点を求める演算子(##) 
+<br>
+最も近接した点を求める演算子(##)は、次のデータ型の組合せで使用できる。
+</p>
+
+<pre>
+(1)lseg 型どうし	(2)lseg型とbox型	(3)point型とlseg型	(4)point型とbox型
+</pre>
+
+<pre>
+sampledb=# SELECT point'(1.0, 1.0)' ## box'((0.0, 0.0), (2.0, 2.0))';
+ ?column? 
+----------
+ (1,1)
+(1 row)
+</pre>
+
+<p>
+・距離を求める演算子(<->) 
+<br>
+距離を求める演算子(<->)は、次のデータ型の組合せで使用できる。
+</p>
+
+<pre>
+(1)point型とpoint型、lseg型、box型、path型、circle型　	(2)lseg型どうし		(3)lseg型とbox型
+(4)box型どうし						(5)path型どうし		(6)circle型どうし
+(7)circle型とpolygon型
+</pre>
+
+<pre>
+sampledb=# SELECT point'(0.0, 0.0)' <-> path'((1.0, 1.0), (2.0, 2.0),(4.0,2.0))';
+    ?column?     
+-----------------
+ 1.4142135623731
+(1 row)
+</pre>
+
+<p>
+・多角形内の点の数を得る演算子(#) 
+<br>
+多角形内の点の数を得る演算子(#)は、path型とpolygon型のデータのみ使用できる。
+</p>
+
+<p>
+・中心を求める演算子(@@)
+<br>
+中心を求める演算子(@@)は、path型とpoint型を除くすべての幾何データ型に対して使用できる。
+</p>
+
+<p>
+・長さを求める演算子(@-@)
+<br>
+長さを求める演算子(@-@)は、lseg型とpath型に対してのみ使用できる。なお、関数length()でも長さを求めることができる([<7-27>]参照)。
+</p>
+
+<p>
+・交わりと重なり(?#) 
+<br>
+交わりと重なりを判定する演算子(?#)は、次のデータ型の組合せで使用できる。
+</p>
+
+<pre>
+(1)lseg型どうし		(2)box型どうし		(3)lseg型とbox型	(4)path型
+</pre>
+
+<pre>
+sampledb=# SELECT box'((0.0, 0.0), (1.0, 1.0))' ?# box'((0.0, 0.0), (2.0, 2.0))';
+ ?column? 
+----------
+ t
+(1 row)
+</pre>
+
+<p>
+・重なりを判定する演算子(&&, &<, &>) 
+<br>
+重なり判定演算子(&&, &<, &>)は、次のデータ型の組合せで使用できる。
+</p>
+
+<pre>
+(1)box 型どうし		(2)polygon 型どうし	(3)circle型どうし
+</pre>
+
+<p>
+・上下左右を判定する演算子(<<、<^、>>、>^)
+<br>
+上下左右判定演算子(<<、<^、>>、>^)は、次のデータ型の組合せで使用できる。
+</p>
+
+<pre>
+(1)point 型どうし	(2)box 型どうし		(3)polygon 型どうし	(4)circle型どうし
+</pre>
+
+<p>
+・水平直立を判定する演算子(?-、?|)
+<br>
+2点を通る直線が水平/直立か否かを判定する演算子(?-、?|)は、point型どうしのみ使用できる。
+</p>
+
+<p>
+・平行垂直を判定する演算子(?||、?-|) 
+<br>
+垂直判定演算子(?-|)と平行判定演算子(?||)は、lseg型どうしのみ使用できる。
+</p>
+
+<p>
+・含まれるか否かを判定する演算子(@) 
+<br>
+含まれるか否かを判定する演算子(@)は、次に示す幾何データ型の組合せでのみ使用できる。
+</p>
+
+<pre>
+(1)point型とlseg型、box型、path型、polygon型、circle型		(2)lseg型とbox型	(3)box型どうし
+(4)polygon型どうし						(5)circle型どうし
+</pre>
+
+<p>
+・等しいか否かを判定する演算子(~=)
+<br>
+等しいか否かを判定する演算子(~=)は、同じ幾何データ型どうし(point 型どうし、lseg型どうし、など)で使用できる。違う型のデータを比較するとエラーになる。
+</p>
+

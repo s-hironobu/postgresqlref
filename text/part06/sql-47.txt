@@ -1,0 +1,63 @@
+%FILE internal/sql-47.html
+%LASTMOD
+%KEY pgsql-sql47
+
+%TITLE <a href="https://www.postgresql.org/docs/current/sql-analyze.html" target="_blank" rel="noopener noreferrer">データベースの統計情報集計	ANALYZE</a>
+
+<pre>
+
+ANALYZE [ ( option [, ...] ) ] [ table_and_columns [, ...] ]
+ANALYZE [ VERBOSE ] [ table_and_columns [, ...] ]
+
+where option can be one of:
+
+    VERBOSE [ boolean ]
+    SKIP_LOCKED [ boolean ]
+
+and table_and_columns is:
+
+    table_name [ ( column_name [, ...] ) ]
+
+</pre>
+<br>
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>table_name</td>	<td>テーブルtableの統計情報のみ集計</td>
+
+</tr></table>
+
+<br>
+
+<table>
+<caption>オプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>VERBOSE</td>	<td>処理の詳細表示</td>
+</tr><tr>
+<td>SKIP_LOCKED</td>	<td>対象テーブルのロックが即座にリリースされない場合、対象テーブルのANALYZE処理をスキップする。バージョン12から</td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER 解説
+
+<p>
+ANALYZE文はテーブルの統計情報を集計します。
+<br>
+集計した統計情報はプランナがコスト計算の際に利用します。
+テーブルを指定せずにANALYZE文を実行すると、データベース内の全テーブルの統計情報を集計します。
+</p>
+
+<p>
+バージョン8.1で導入されたAUTO VACUUMが定期的にANALYZE処理を行うので、
+日常管理でANALYZE文を実行する機会はほとんどありません。
+<br>
+しかし、大量データの挿入/削除や、インデックスを設定した直後など、テーブルやインデックスに大きな変動が発生した場合は、明示的にANALYZE文を実行して統計情報を更新するとよいでしょう。
+</p>
+

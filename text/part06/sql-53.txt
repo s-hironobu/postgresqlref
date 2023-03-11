@@ -1,0 +1,314 @@
+%FILE internal/sql-53.html
+%LASTMOD
+%KEY pgsql-sql53
+
+
+%TITLE <a href="https://www.postgresql.org/docs/current/sql-createpublication.html" target="_blank" rel="noopener noreferrer">CREATE PUBLICATION</a> / <a href="https://www.postgresql.org/docs/current/sql-droppublication.html" target="_blank" rel="noopener noreferrer">DROP PUBLICATION</a> / <a href="https://www.postgresql.org/docs/current/sql-alterpublication.html" target="_blank" rel="noopener noreferrer">ALTER PUBLICATION</a>
+
+
+<pre>
+●パブリケーションの作成
+CREATE PUBLICATION name
+    [ FOR ALL TABLES
+      | FOR publication_object [, ... ] ]
+    [ WITH ( publication_parameter [= value] [, ... ] ) ]
+
+●パブリケーションの変更
+ALTER PUBLICATION name ADD publication_object [, ...]
+ALTER PUBLICATION name SET publication_object [, ...]
+ALTER PUBLICATION name DROP publication_object [, ...]
+ALTER PUBLICATION name SET ( publication_parameter [= value] [, ... ] )
+ALTER PUBLICATION name OWNER TO { new_owner | CURRENT_ROLE | CURRENT_USER | SESSION_USER }
+ALTER PUBLICATION name RENAME TO new_name
+
+●パブリケーションの削除
+DROP PUBLICATION [ IF EXISTS ] name [, ...] [ CASCADE | RESTRICT ]
+
+
+・publication_object is one of:
+
+    TABLE [ ONLY ] table_name [ * ] [ ( column_name [, ... ] ) ] [ WHERE ( expression ) ] [, ... ]
+    TABLES IN SCHEMA { schema_name | CURRENT_SCHEMA } [, ... ]
+
+</pre>
+
+<br>
+
+<table>
+<caption>主なパラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>name</td>	<td>作成/削除/変更するパブリケーション名</td>
+</tr><tr>
+<td>new_name</td>	<td>変更するパブリケーション名</td>
+</tr><tr>
+<td>new_owner</td>	<td>新しい所有者名</td>
+</tr><tr>
+<td>table_name</td>	<td>作成/変更するパブリケーションのテーブル名</td>
+</tr><tr>
+<td>column_name</td>	<td>作成/変更するパブリケーションのテーブルのカラム名</td>
+</tr><tr>
+<td>schema_name</td>	<td>作成/変更するパブリケーションのテーブルのスキーマ名</td>
+</tr></table>
+
+<br>
+
+<table>
+<caption>主なオプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>CASCADE</td>	<td>関係するオブジェクトも削除する</td>
+</tr><tr>
+<td>RESTRICT</td>	<td>関係するオブジェクトが存在する場合は削除できない。デフォルト</td>
+</tr></table>
+
+<br>
+
+
+<table>
+<caption>publish_parameter</caption>
+<tr bgcolor="#cccccc">
+<th>publish_parameter</th>	<th>説明</th>
+</tr><tr>
+<td>publish</td>	<td>レプリケーションする操作。設定可能値は"insert", "update", "delete", "truncate"。コンマで連結できる。<br>デフォルトは"insert,update,delete,truncate"</td>
+
+</tr><tr>
+<td>publish_via_partition_root</td>	<td>設定値はbool。</td>
+</tr></table>
+
+<br>
+
+
+
+%CHAPTER 解説
+
+
+<ul>
+<li>DELETE,UPDATEにはINDEXが必要</li>
+<li>INDEXが不要な場合、擬似的にシーケンスで代用</li>
+<li>シーケンスをSUBSCRIPUTION側でどう対処するか？</li>
+<li>後からインデックスを追加する場合、ALTER　REPLICA　IDENTITYを使う？</li>
+<li>now()の扱いは？</li>
+<li></li>
+<li>PUBRICATION SUBSRCIPTIONは両立できるか？</li>
+<li></li>
+
+</ul>
+
+<br>
+
+<ul>
+<li>コピーを明示的に行うには？</li>
+<li>スロットを明示的に作成するには？</li>
+<li></li>
+<li></li>
+
+</ul>
+
+
+%CHAPTER 実行例
+
+
+<p>
+・一般的なパブリケーション
+<br>
+以下に一般的なパブリケーションの設定を示します。
+</p>
+
+<pre>
+pubdb=# CREATE TABLE logical_tbl (id int PRIMARY KEY, data int);
+CREATE TABLE
+
+pubdb=# CREATE PUBLICATION pub_logical_tbl FOR TABLE logical_tbl;
+CREATE PUBLICATION
+</pre>
+<br>
+
+<p>
+上記のテーブルをロジカルレプリケーションするサブスクリプションの設定を以下に示します。
+</p>
+
+<pre>
+subscribedb=# CREATE TABLE logical_tbl (id int PRIMARY KEY, data int);
+CREATE TABLE
+subscribedb=# CREATE SUBSCRIPTION sub_logical_tbl CONNECTION 'host=primary port=5432 dbname=pubdb' PUBLICATION pub_logical_tbl;
+NOTICE:  created replication slot "sub_logical_tbl" on publisher
+CREATE SUBSCRIPTION
+</pre>
+<br>
+
+
+<p>
+・INSERTのみレプリケーションするパブリケーション
+<br>
+INSERTのみレプリケーションするパブリケーションを以下に示します。
+</p>
+
+<pre>
+pubdb=# CREATE TABLE logical_insert_only_tbl (id int PRIMARY KEY, data int);
+CREATE TABLE
+
+pubdb=# CREATE PUBLICATION pub_logical_insert_only_tbl FOR TABLE logical_insert_only_tbl WITH (publish = 'insert');
+CREATE PUBLICATION
+</pre>
+<br>
+
+<p>
+上記のテーブルをロジカルレプリケーションするサブスクリプションの設定を以下に示します。
+</p>
+
+
+<pre>
+subscribedb=# CREATE TABLE logical_insert_only_tbl (id int PRIMARY KEY, data int);
+CREATE TABLE
+
+subscribedb=# CREATE SUBSCRIPTION sub_logical_insert_only_tbl CONNECTION 'host=primary port=5432 dbname=pubdb'
+	   PUBLICATION pub_logical_insert_only_tbl;
+NOTICE:  created replication slot "sub_logical_insert_only_tbl" on publisher
+CREATE SUBSCRIPTION
+</pre>
+<br>
+
+<p>
+パブリケーション側でINSERTとDELETEを実行します。こちらはDELETEも問題なく実行できます。
+</p>
+
+<pre>
+pubdb=# INSERT INTO logical_insert_only_tbl VALUES (1,1),(2,2);
+INSERT 0 2
+pubdb=# DELETE FROM logical_insert_only_tbl WHERE id = 2;
+DELETE 1
+pubdb=# SELECT * FROM logical_insert_only_tbl;
+ id | data
+----+------
+  1 |    1
+(1 row)
+</pre>
+<br>
+
+<p>
+一方、サブスクリプション側ではDELETEがレプリケーションされないので、INSERTされた2行がそのまま残ります。
+</p>
+
+<pre>
+subscribedb=# SELECT * FROM logical_insert_only_tbl;
+ id | data
+----+------
+  1 |    1
+  2 |    2
+(2 rows)
+</pre>
+<br>
+
+
+<p>
+・WHERE句で装飾したパブリケーション
+<br>
+WHERE句を使って偶数のidのみレプリケーションするパブリケーションを以下に示します。
+</p>
+
+<pre>
+pubdb=# CREATE TABLE logical_even_number_tbl (id int PRIMARY KEY, data int);
+CREATE TABLE
+
+pubdb=# CREATE PUBLICATION pub_logical_even_number_tbl FOR TABLE logical_even_number_tbl WHERE (id % 2 = 0);
+CREATE PUBLICATION
+</pre>
+<br>
+
+<p>
+上記のテーブルをロジカルレプリケーションするサブスクリプションの設定を以下に示します。
+</p>
+
+<pre>
+subscribedb=# CREATE TABLE logical_even_number_tbl (id int PRIMARY KEY, data int);
+CREATE TABLE
+
+subscribedb=# CREATE SUBSCRIPTION sub_logical_even_number_tbl CONNECTION 'host=primary port=5432 dbname=pubdb'
+	   PUBLICATION pub_logical_even_number_tbl;
+NOTICE:  created replication slot "sub_logical_even_number_tbl" on publisher
+CREATE SUBSCRIPTION
+</pre>
+<br>
+
+
+<p>
+idが1から4までのデータをINSERTします。
+</p>
+
+
+<pre>
+pubdb=# INSERT INTO logical_even_number_tbl VALUES (1,1),(2,2),(3,3),(4,4);
+INSERT 0 4
+pubdb=# SELECT * FROM logical_even_number_tbl;
+ id | data
+----+------
+  1 |    1
+  2 |    2
+  3 |    3
+  4 |    4
+(4 rows)
+</pre>
+<br>
+
+<p>
+サブスクリプション側では、idが偶数の2と4の行しかレプリケーションされません。
+</p>
+
+<pre>
+subscribedb=# SELECT * FROM logical_even_number_tbl;
+ id | data
+----+------
+  2 |    2
+  4 |    4
+(2 rows)
+</pre>
+<br>
+
+
+<p>
+・パーティションに対するパブリケーション
+<br>
+</p>
+
+<pre>
+pubdb=# CREATE TABLE logical_partition_tbl (id int, hight int, birthday date, PRIMARY KEY (id, hight)) PARTITION BY RANGE (hight);
+CREATE TABLE
+
+pubdb=# CREATE TABLE logical_partition_p0 PARTITION OF logical_partition_tbl FOR VALUES FROM (MINVALUE) TO ('150');
+CREATE TABLE
+pubdb=# CREATE TABLE logical_partition_p1 PARTITION OF logical_partition_tbl FOR VALUES FROM ('150') TO ('170');
+CREATE TABLE
+pubdb=# CREATE TABLE logical_partition_p2 PARTITION OF logical_partition_tbl FOR VALUES FROM ('170') TO ('190');
+CREATE TABLE
+pubdb=# CREATE TABLE logical_partition_p3 PARTITION OF logical_partition_tbl FOR VALUES FROM ('190') TO (MAXVALUE);
+CREATE TABLE
+
+pubdb=# CREATE PUBLICATION pub_logical_partition_tbl FOR TABLE logical_partition_tbl;
+CREATE PUBLICATION
+</pre>
+<br>
+
+
+<pre>
+subsribedb=# CREATE TABLE logical_partition_tbl (id int, hight int, birthday date, PRIMARY KEY (id, hight)) PARTITION BY RANGE (hight);
+CREATE TABLE
+
+subsribedb=# CREATE TABLE logical_partition_p0 PARTITION OF logical_partition_tbl FOR VALUES FROM (MINVALUE) TO ('150');
+CREATE TABLE
+subsribedb=# CREATE TABLE logical_partition_p1 PARTITION OF logical_partition_tbl FOR VALUES FROM ('150') TO ('170');
+CREATE TABLE
+subsribedb=# CREATE TABLE logical_partition_p2 PARTITION OF logical_partition_tbl FOR VALUES FROM ('170') TO ('190');
+CREATE TABLE
+subsribedb=# CREATE TABLE logical_partition_p3 PARTITION OF logical_partition_tbl FOR VALUES FROM ('190') TO (MAXVALUE);
+CREATE TABLE
+
+subscribedb=# CREATE SUBSCRIPTION sub_logical_partition_tbl CONNECTION 'host=primary port=5432 dbname=pubdb'
+	   PUBLICATION pub_logical_partition_tbl;
+NOTICE:  created replication slot "sub_logical_partition_tbl" on publisher
+CREATE SUBSCRIPTION
+</pre>
+<br>
+

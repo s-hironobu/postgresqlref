@@ -1,0 +1,800 @@
+%FILE internal/admin-15.html
+%LASTMOD
+%KEY pgsql-admin15
+
+
+%TITLE 稼働統計情報
+
+<p>
+稼働統計情報を表示するビューの一覧を示します。稼働統計情報に関する設定パラメータは<a href="./param-09.html">[<4-09>]</a>を参照してください。
+</p>
+
+
+<table border=1>
+<caption>[<表3-09>] Dynamic Statistics Views</caption>
+<tr bgcolor="#cccccc">
+<th>ビュー名</th>		<th>説明</th>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-ACTIVITY-VIEW" target="_blank" rel="noopener noreferrer">pg_stat_activity</a>
+</td>	<td>postgresプロセスのPID、データベース、データベースユーザ/ロール、現在の問い合わせを表示</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-REPLICATION-VIEW" target="_blank" rel="noopener noreferrer">pg_stat_replication</a>
+</td>	<td>レプリケーションしているスレーブの状態を表示。マスタのみ利用可能(スレーブでは表示されない)。</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-WAL-RECEIVER-VIEW" target="_blank" rel="noopener noreferrer">pg_stat_wal_receiver</a>
+</td>	<td>受信サーバが接続したサーバからWAL受信サーバに関する統計情報を表示。</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-RECOVERY-PREFETCH" target="_blank" rel="noopener noreferrer">pg_stat_recovery_prefetch</a>
+</td>	<td>リカバリ中にプリフェッチされたブロックに関する統計情報を表示。バージョン15から</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-SUBSCRIPTION" target="_blank" rel="noopener noreferrer">pg_stat_subscription</a>
+</td>	<td>1つのサブスクリプションにつき少なくとも1行の形式で、サブスクリプションワーカに関する情報を表示。</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-SSL-VIEW" target="_blank" rel="noopener noreferrer">pg_stat_ssl</a>
+</td>	<td>接続（通常およびレプリケーション）あたり1行の形式で、接続に使われるSSLの情報を表示。</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-GSSAPI-VIEW" target="_blank" rel="noopener noreferrer">pg_stat_gssapi</a>
+</td>	<td>接続（通常およびレプリケーション）あたり1行の形式で、接続に使われるGSSAPI認証と暗号化に関する情報を表示。バージョン12から</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/progress-reporting.html#ANALYZE-PROGRESS-REPORTING" target="_blank" rel="noopener noreferrer">pg_stat_progress_analyze</a>
+</td>	<td>ANALYZEを実行している（自動バキュームワーカプロセスを含んだ）各バックエンドごとに1行の形式で、現在の進捗を表示。バージョン13から</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/progress-reporting.html#CREATE-INDEX-PROGRESS-REPORTING" target="_blank" rel="noopener noreferrer">pg_stat_progress_create_index</a>
+</td>	<td>CREATE INDEXまたはREINDEXを実行している各バックエンドごとに1行の形式で、現在の進捗を表示。バージョン12から</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/progress-reporting.html#VACUUM-PROGRESS-REPORTING" target="_blank" rel="noopener noreferrer">pg_stat_progress_vacuum</a>
+</td>	<td>VACUUMを実行している（自動バキュームワーカプロセスを含んだ）各バックエンドごとに１行の形式で、現在の進捗を表示。</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/progress-reporting.html#CLUSTER-PROGRESS-REPORTING" target="_blank" rel="noopener noreferrer">pg_stat_progress_cluster</a>
+</td>	<td>CLUSTERまたはVACUUM FULLを実行している各バックエンドごとに1行の形式で、現在の進捗を表示。バージョン12から</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/progress-reporting.html#BASEBACKUP-PROGRESS-REPORTING" target="_blank" rel="noopener noreferrer">pg_stat_progress_basebackup</a>
+</td>	<td>ベースバックアップをストリームしている各WAL送信プロセスごとに1行の形式で、現在の進捗を表示。バージョン13から</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/progress-reporting.html#COPY-PROGRESS-REPORTING" target="_blank" rel="noopener noreferrer">pg_stat_progress_copy</a>
+</td>	<td>COPYを実行している各バックエンドごとに1行の形式で、現在の進捗を表示。バージョン14から</td>
+</tr></table>
+
+
+
+<table border=1>
+<caption>[<表3-09>] Collected Statistics Views</caption>
+<tr bgcolor="#cccccc">
+<th>ビュー名</th>		<th>説明</th>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-ARCHIVER-VIEW" target="_blank" rel="noopener noreferrer">
+pg_stat_archiver</a></td>	<td>WALアーカイバプロセスの活動状況に関する統計情報を１行のみで表示。</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-BGWRITER-VIEW" target="_blank" rel="noopener noreferrer">
+pg_stat_bgwriter</a></td>	<td>バックグランドライタの稼働統計情報を表示。</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-WAL-VIEW" target="_blank" rel="noopener noreferrer">
+pg_stat_wal</td>	<td>WALの活動状況に関する統計情報を1行のみで表示。バージョン14から</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-DATABASE-VIEW" target="_blank" rel="noopener noreferrer">
+pg_stat_database</a></td>	<td>データベース毎のpostgresプロセス数、コミットされたトランザクションの総数、ロールバックされたトランザクションの総数などを表示。</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-DATABASE-CONFLICTS-VIEW" target="_blank" rel="noopener noreferrer">
+pg_stat_database_conflicts</a></td>	<td>レプリケーション実行時、データベースのコンフリクト状態を表示。コンフリクトはスレーブでのみ発生するので、スレーブでのみ表示。</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-ALL-TABLES-VIEW" target="_blank" rel="noopener noreferrer">
+pg_stat_all_tables</a></td>	<td>テーブルに関する、シーケンシャルスキャン、インデックススキャンの総数、各種スキャンによって返されたレコードの総数、挿入、更新、削除されたレコードの総数を表示。</td>
+</tr><tr>
+<td>
+pg_stat_sys_tables</td>	<td>システムカタログのみ表示される点を除き、pg_stat_all_tables と同じ。</td>
+</tr><tr>
+<td>
+pg_stat_user_tables</td>	<td>一般のテーブルのみが表示される点を除き、pg_stat_all_tables と同じ。</td>
+</tr><tr>
+<td>
+pg_stat_xact_all_tables</td>	<td>pg_stat_all_tablesとほぼ同じ項目を表示。ただし、現在のトランザクション内での処理結果のみ(ここで表示されている情報はまだ、pg_stat_all_tablesには反映されない)。</td>
+</tr><tr>
+<td>
+pg_stat_xact_sys_tables</td>	<td>システムテーブルのみが表示される点を除き、pg_stat_xact_all_tablesと同じ。</td>
+</tr><tr>
+<td>
+pg_stat_xact_user_tables</td>	<td>ユーザテーブルのみが表示される点を除き、pg_stat_xact_all_tablesと同じ。</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-ALL-INDEXES-VIEW" target="_blank" rel="noopener noreferrer">
+pg_stat_all_indexes</a></td>	<td>各インデックスに関する、インデックススキャン数、読みとられたインデックス数などを表示。</td>
+</tr><tr>
+<td>
+pg_stat_sys_indexes</td>	<td>システムカタログのインデックスのみ表示される点を除き、pg_stat_all_indexes と同じ。</td>
+</tr><tr>
+<td>
+pg_stat_user_indexes</td>	<td>一般のテーブルのインデックスのみが表示される点を除き、pg_stat_all_indexes と同じ。</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STATIO-ALL-TABLES-VIEW" target="_blank" rel="noopener noreferrer">
+pg_statio_all_tables</a></td>	<td>テーブル毎の読み取られたディスクブロックの総数、バッファヒット数などを表示。</td>
+</tr><tr>
+<td>
+pg_statio_sys_tables</td>	<td>システムカタログのみが表示される点を除き、pg_statio_all_tables と同じ。</td>
+</tr><tr>
+<td>
+pg_statio_user_tables</td>	<td>一般のテーブルのみが表示される点を除き、pg_statio_all_tables と同じ。</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STATIO-ALL-INDEXES-VIEW" target="_blank" rel="noopener noreferrer">
+pg_statio_all_indexes</a></td>	<td>各インデックスに関する、そのインデックスの読みとられたディスクブロック数とバッファヒット数を表示。</td>
+</tr><tr>
+<td>
+pg_statio_sys_indexes</td>	<td>システムテーブルのインデックスのみが表示される点を除き、pg_statio_all_indexes と同じ。</td>
+</tr><tr>
+<td>
+pg_statio_user_indexes</td>	<td>ユーザテーブルのインデックスのみが表示される点を除き、pg_statio_all_indexes と同じ。</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STATIO-ALL-SEQUENCES-VIEW" target="_blank" rel="noopener noreferrer">
+pg_statio_all_sequences</a></td>	<td>各シーケンスに関する、読みとられたディスクブロック数とバッファヒット数を表示。</td>
+</tr><tr>
+<td>
+pg_statio_sys_sequences</td>	<td>システムカタログのシーケンスのみが表示される点を除き、pg_statio_all_sequences と同じ。</td>
+</tr><tr>
+<td>
+pg_statio_user_sequences</td>	<td>一般のシーケンスのみが表示される点を除き、pg_statio_all_sequences と同じ。</td>
+</tr><tr>
+<td>
+pg_stat_user_functions</td>	<td>ユーザ定義関数の稼働統計情報を表示。設定パラメータtrack_functionの値によって表示する関数の範囲が異なる。noneなら表示しない、plならPL/pgSQLなどで定義された関数のみ、allならSQLやCで定義したユーザ定義関数すべて。</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-USER-FUNCTIONS-VIEW" target="_blank" rel="noopener noreferrer">
+pg_stat_xact_user_functions</a></td>	<td>ユーザ定義関数の稼働統計情報を表示。設定パラメータtrack_functionの値によって表示する関数の範囲が異なる。noneなら表示しない、plならPL/pgSQLなどで定義された関数のみ、allならSQLやCで定義したユーザ定義関数すべて。</td>
+</tr><tr>
+<td>
+pg_stat_slru</td>	<td>SLRUごとに1行の形で、操作に関する統計情報を表示。バージョン13から</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-REPLICATION-SLOTS-VIEW" target="_blank" rel="noopener noreferrer">
+pg_stat_replication_slots</a></td>	<td>レプリケーションスロット毎に1行の形式で、レプリケーションスロットの使用状況に関する統計情報を表示。バージョン14から</td>
+</tr><tr>
+<td>
+pg_stat_subscription_stats</td>	<td>サブスクリプションごとに1行で、エラーに関する統計を表示。バージョン15から</td>
+</tr></table>
+
+<br>
+
+<table border=1>
+<caption>[<表3-09>]<a href="https://www.postgresql.org/docs/current/views.html" target="_blank" rel="noopener noreferrer">System Views</a></caption>
+<tr bgcolor="#cccccc">
+<th>ビュー名</th>		<th>説明</th>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-available-extensions.html" target="_blank" rel="noopener noreferrer">pg_available_extensions</a></td>	<td>available extensions</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-available-extension-versions.html" target="_blank" rel="noopener noreferrer">pg_available_extension_versions</a></td>	<td>available versions of extensions</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-backend-memory-contexts.html" target="_blank" rel="noopener noreferrer">pg_backend_memory_contexts</a></td>	<td>backend memory contexts</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-config.html" target="_blank" rel="noopener noreferrer">pg_config</a></td>	<td>compile-time configuration parameters</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-cursors.html" target="_blank" rel="noopener noreferrer">pg_cursors</a></td>	<td>open cursors</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-file-settings.html" target="_blank" rel="noopener noreferrer">pg_file_settings</a></td>	<td>summary of configuration file contents</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-group.html" target="_blank" rel="noopener noreferrer">pg_group</a></td>	<td>groups of database users</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-hba-file-rules.html" target="_blank" rel="noopener noreferrer">pg_hba_file_rules</a></td>	<td>summary of client authentication configuration file contents</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-ident-file-mappings.html" target="_blank" rel="noopener noreferrer">pg_ident_file_mappings</a></td>	<td>summary of client user name mapping configuration file contents</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-indexes.html" target="_blank" rel="noopener noreferrer">pg_indexes</a></td>	<td>indexes</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-locks.html" target="_blank" rel="noopener noreferrer">pg_locks</a></td>	<td>locks currently held or awaited</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-matviews.html" target="_blank" rel="noopener noreferrer">pg_matviews</a></td>	<td>materialized views</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-policies.html" target="_blank" rel="noopener noreferrer">pg_policies</a></td>	<td>policies</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-prepared-statements.html" target="_blank" rel="noopener noreferrer">pg_prepared_statements</a></td>	<td>prepared statements</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-prepared-xacts.html" target="_blank" rel="noopener noreferrer">pg_prepared_xacts</a></td>	<td>prepared transactions</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-publication-tables.html" target="_blank" rel="noopener noreferrer">pg_publication_tables</a></td>	<td>publications and information of their associated tables</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-replication-origin-status.html" target="_blank" rel="noopener noreferrer">pg_replication_origin_status</a></td>	<td>information about replication origins, including replication progress</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-replication-slots.html" target="_blank" rel="noopener noreferrer">pg_replication_slots</a></td>	<td>replication slot information</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-roles.html" target="_blank" rel="noopener noreferrer">pg_roles</a></td>	<td>database roles</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-rules.html" target="_blank" rel="noopener noreferrer">pg_rules</a></td>	<td>rules</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-seclabels.html" target="_blank" rel="noopener noreferrer">pg_seclabels</a></td>	<td>security labels</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-sequences.html" target="_blank" rel="noopener noreferrer">pg_sequences</a></td>	<td>sequences</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-settings.html" target="_blank" rel="noopener noreferrer">pg_settings</a></td>	<td>parameter settings</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-shadow.html" target="_blank" rel="noopener noreferrer">pg_shadow</a></td>	<td>database users</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-shmem-allocations.html" target="_blank" rel="noopener noreferrer">pg_shmem_allocations</a></td>	<td>shared memory allocations</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-stats.html" target="_blank" rel="noopener noreferrer">pg_stats</a></td>	<td>planner statistics</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-stats-ext.html" target="_blank" rel="noopener noreferrer">pg_stats_ext</a></td>	<td>extended planner statistics</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-stats-ext-exprs.html" target="_blank" rel="noopener noreferrer">pg_stats_ext_exprs</a></td>	<td>extended planner statistics for expressions</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-tables.html" target="_blank" rel="noopener noreferrer">pg_tables</a></td>	<td>tables</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-timezone-abbrevs.html" target="_blank" rel="noopener noreferrer">pg_timezone_abbrevs</a></td>	<td>time zone abbreviations</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-timezone-names.html" target="_blank" rel="noopener noreferrer">pg_timezone_names</a></td>	<td>time zone names</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-user.html" target="_blank" rel="noopener noreferrer">pg_user</a></td>	<td> database users</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-user-mappings.html" target="_blank" rel="noopener noreferrer">pg_user_mappings</a></td>	<td> user mappings</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-views.html" target="_blank" rel="noopener noreferrer">pg_views</a></td>	<td>views</td>
+</tr></table>
+
+
+
+<br>
+
+<p>
+以下、主要なものを解説します。
+</p>
+
+
+
+%CHAPTER データベースユーザ/ロールの稼働統計情報
+
+<p>
+ビューpg_stat_activityは、現在接続中のデータベースユーザ/ロール毎に接続しているデータベース名や接続した時刻などを表示します。
+</p>
+
+<table border=1>
+<caption>[<表3-10>] pg_stat_activity</caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>		<th>説明</th>
+</tr><tr>
+<td>datid</td>		<td>接続しているデータベースのOID。</td>
+</tr><tr>
+<td>datname</td>	<td>接続しているデータベース名。</td>
+</tr><tr>
+<td>pid</td>	<td>このバックエンドのプロセス番号。</td>
+</tr><tr>
+<td>leader_pid</td>	<td>Parallel Queryのワーカプロセスの場合、グループリーダーPIDを表示。ワーカプロセスでない場合はNULL。バージョン13から</td>
+</tr><tr>
+<td>usesysid</td>	<td>データベースユーザ/ロールのID。</td>
+</tr><tr>
+<td>usename</td>	<td>データベースユーザ/ロール名。</td>
+</tr><tr>
+<td>application_name</td>	<td>接続しているアプリケーション名。</td>
+</tr><tr>
+<td>client_addr</td>	<td>接続しているクライアントのIPアドレス。</td>
+</tr><tr>
+<td>client_hostname</td>	<td>接続しているクライアントのhostname。IP接続かつ設定パラメータlog_hostnameが有効の場合のみ有効。</td>
+</tr><tr>
+<td>client_port</td>	<td>接続しているクライアントのport番号。</td>
+</tr><tr>
+<td>backend_start</td>	<td>接続してpostgresプロセスが起動した時刻。</td>
+</tr><tr>
+<td>xact_start</td>	<td>現在のトランザクションの開始時刻。</td>
+</tr><tr>
+<td>query_start</td>	<td>最近のSQL文を実行した時刻。</td>
+</tr><tr>
+<td>state_change</td>	<td>stateが最後に変更された時刻。</td>
+</tr><tr>
+<td>wait_event_type</td>	<td>バックエンドが待機しているイベントの型。なければNULL。
+<blockquote>
+
+</blockquote>
+
+</td>
+</tr><tr>
+<td>wait_event</td>	<td>バックエンドが待機しているイベントの方の名前。なければNULL。</td>
+</tr><tr>
+<td>state</td>
+<td>postgresプロセスの状態。
+<blockquote>
+active:				問い合わせ実行中。<br>
+idle:				クライアントからの問い合わせ待ち。<br>
+idle in transaction:		BEGIN実行後(トランザクション内で)問い合わせを待っている状態。<br>
+idle in transaction (aborted):	トランザクション内でエラーが発生し、ABORTすることが確定している状態。<br>
+fastpath function call:		fastpath関数を実行中。
+disabled:			設定パラメータ track_activities が無効の場合。
+</blockquote>
+</td>
+</tr><tr>
+<td>backend_xid</td>	<td>このバックエンドの最上位のXID。</td>
+</tr><tr>
+<td>backend_xmin</td>	<td>このバックエンドのxmin。</td>
+</tr><tr>
+<td>query_id</td>	<td>実行している、もしくは最後に実行されたSQL文のID。
+設定パラメータcompute_query_idがonの場合のみ有効。
+<font color="#ff0000">注意:型はbigintだが内部では符号なしで計算されるため、負号で表示される場合がある。</font>バージョン14から</td>
+</tr><tr>
+<td>query</td>	<td>実行しているSQL文、もしくは最後に実行されたSQL文。</td>
+</tr><tr>
+<td>backend_type</td>	<td>バックエンドの型。現時点でサポートしている型は以下：
+<blockquote>
+autovacuum launcher<br>
+autovacuum worker<br>
+logical replication launcher<br>
+logical replication worker<br>
+parallel worker<br>
+background writer<br>
+client backend<br>
+checkpointer<br>
+archiver<br>
+startup<br>
+walreceiver<br>
+walsender<br>
+walwriter
+</blockquote>
+</td>
+</tr></table>
+
+<br>
+
+%CHAPTER データベースの稼働統計情報
+
+<p>
+ビューpg_stat_databaseは、データベース毎に接続しているデータベースユーザ/ロール数や実行されたSQL文の総数、読み込まれたブロック数などを表示します([<表3-11>])。
+</p>
+
+<table border=1>
+<caption>[<表3-11>] pg_stat_database</cation>
+<tr bgcolor="#cccccc">
+<th>項目</th>		<th>説明</th>
+</tr><tr>
+<td>datid</td>		<td>データベースのOID</td>
+</tr><tr>
+<td>datname	</td>		<td>データベース名</td>
+</tr><tr>
+<td>numbackends</td>		<td>現在、接続しているデータベースユーザ/ロール数</td>
+</tr><tr>
+<td>xact_commit</td>		<td>今までにSQL文がコミットされた回数</td>
+</tr><tr>
+<td>xact_rollback</td>		<td>今までにSQL文がロールバックされた回数</td>
+</tr><tr>
+<td>blks_read</td>		<td>今までに読み込まれたブロックの総数</td>
+</tr><tr>
+<td>blks_hit</td>		<td>今までにヒットしたブロックの総数</td>
+</tr><tr>
+<td>tup_returned</td>		<td>今までに返されたレコード数。</td>
+</tr><tr>
+<td>tup_fetched</td>		<td>今までにFETCHされたレコード数。</td>
+</tr><tr>
+<td>tup_inserted</td>		<td>今までにINSERTされたレコード数。</td>
+</tr><tr>
+<td>tup_updated</td>		<td>今までにUPDATEされたレコード数。</td>
+</tr><tr>
+<td>tup_deleted</td>		<td>今までにDELETEされたレコード数。</td>
+</tr><tr>
+<td>	conflicts	</td>	<td>(レプリケーションで)Conflictが発生してキャンセルした問い合わせの数。</td>
+</tr><tr>
+<td>temp_files	</td>		<td>生成した一時ファイルの数。</td>
+</tr><tr>
+<td>temp_bytes	</td>		<td>一時ファイルに書き込んだデータのバイト数。</td>
+</tr><tr>
+<td>deadlocks	</td>		<td>発生したデッドロックの数。</td>
+
+</tr><tr>
+<td>checksum_failures	</td>		<td>データベース内で検知されたデータページチェックサムの検査失敗数。バージョン12から</td>
+</tr><tr>
+<td>checksum_last_failure	</td>		<td>データベース内で最後に検知されたデータページチェックサム検査失敗の時刻。バージョン12から</td>
+
+</tr><tr>
+<td>blk_read_time	</td>		<td>共有バッファにデータを読み込むために要した時間の総計。単位は[ミリ秒]。この集計を有効にするには設定パラメータtrack_io_timingをonにする。</td>
+</tr><tr>
+<td>blk_write_time	</td>		<td>共有バッファにデータを書き込むために要した時間の総計。単位は[ミリ秒]。この集計を有効にするには設定パラメータtrack_io_timingをonにする。</td>
+
+</tr><tr>
+<td>session_time	</td>		<td>このデータベースでデータベースセッションに費やされたミリ秒単位の時間。バージョン14から</td>
+
+</tr><tr>
+<td>active_time	</td>		<td>このデータベースでSQL文実行に費やされたミリ秒単位の時間(pg_stat_activityのactiveとfastpath function call状態の和)。バージョン14から</td>
+
+</tr><tr>
+<td>idle_in_transaction_time	</td>		<td>このデータベースでトランザクション中にアイドル状態であったミリ秒単位の時間(pg_stat_activityのidle in transactionとidle in transaction (aborted)状態の和)。バージョン14から</td>
+
+</tr><tr>
+<td>sessions	</td>		<td>このデータベースに対して確立されたセッションの総数。バージョン14から</td>
+
+
+</tr><tr>
+<td>sessions_abandoned	</td>		<td>クライアントとの接続が切断したために終了したセッションの数。バージョン14から</td>
+
+</tr><tr>
+<td>sessions_fatal	</td>		<td>致命的なエラーによって終了したセッションの数。バージョン14から</td>
+
+</tr><tr>
+<td>sessions_killed	</td>		<td>オペレータによって終了したセッションの数。バージョン14から</td>
+
+</tr><tr>
+<td>stats_reset</td>		<td>稼働統計情報をリセットした時刻。</td>
+</tr></table>
+
+<br>
+
+
+
+%CHAPTER テーブルやインデックスの稼働統計情報
+
+<p>
+ビューpg_stat_all_tablesは、シーケンシャルスキャンとインデックススキャンされた総数、
+各種スキャンによって返されたレコードの総数、挿入、更新、削除された行の総数などを表示します([<表3-12>])。
+バージョンが進むにつれてVACUUMやANALYZEした回数や、有効なタプル数や削除対象のタプル数など有用な情報が取得できるようになりました。
+<br>
+ブロックの読み込み数とキャッシュヒット数などはビューpg_statio_all_tablesで表示できます([<表3-13>])。
+</p>
+
+<table border=1>
+<caption>[<表3-12>] pg_stat_all_tables</caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>		<th>説明</th>
+</tr><tr>
+<td>relid</td>	<td>テーブルのOID</td>
+</tr><tr>
+<td>schemaname</td>	<td>テーブルの属するスキーマ名</td>
+</tr><tr>
+<td>relname</td>	<td>テーブル名</td>
+</tr><tr>
+<td>seq_scan</td>	<td>シーケンシャルスキャンされた回数</td>
+</tr><tr>
+<td>seq_tup_read</td>	<td>シーケンシャルスキャンされたレコード数</td>
+</tr><tr>
+<td>idx_scan</td>	<td>インデックススキャンされた回数</td>
+</tr><tr>
+<td>idx_tup_fetch</td>	<td>インデックススキャンされたレコード数</td>
+</tr><tr>
+<td>n_tup_ins</td>	<td>INSERTされたレコード数</td>
+</tr><tr>
+<td>n_tup_upd</td>	<td>UPDATEされたレコード数</td>
+</tr><tr>
+<td>n_tup_del</td>	<td>DELETEされたレコード数</td>
+</tr><tr>
+<td>n_tup_hot_upd</td>	<td>UPDATEでHOTが使われたレコード数。</td>
+</tr><tr>
+<td>n_live_tup</td>	<td>有効なタプル数。</td>
+</tr><tr>
+<td>n_dead_tup</td>	<td>削除や更新で無効になったタプル数(VACUUMの対象)。</td>
+</tr><tr>
+<td>n_mod_since_analyze</td>	<td>このテーブルが最後にanalyzeされてから変更された行数の推定値。バージョン13から</td>
+</tr><tr>
+<td>n_ins_since_vacuum</td>	<td>このテーブルが最後にvacuumされてから挿入された行数の推定値。バージョン13から</td>
+</tr><tr>
+<td>last_vacuum</td>	<td>手動でVACUUMコマンドを実行した時刻。</td>
+</tr><tr>
+<td>last_autovacuum</td>	<td>AUTOVACUUMプロセスがVACUUM処理した時刻。</td>
+</tr><tr>
+<td>last_analyze</td>	<td>手動でANALYZEコマンドを実行した時刻。</td>
+</tr><tr>
+<td>last_autoanalyze</td>	<td>AUTOVACUUMプロセスがANALYZEを行った時刻。</td>
+</tr><tr>
+<td>vacuum_count</td>	<td>手動でVACUUMコマンドが実行された回数。</td>
+</tr><tr>
+<td>autovacuum_count</td>	<td>AUTOVACUUMプロセスでVACUUMされた回数。</td>
+</tr><tr>
+<td>analyze_count</td>	<td>手動でANALYZEコマンドが実行された回数。</td>
+</tr><tr>
+<td>autoanalyze_count</td>	<td>AUTOVACUUMプロセスでANALYZEされた回数。</td>
+</tr></table>
+
+<br>
+
+<table border=1>
+<caption>[<表3-13>] pg_statio_all_tables</caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>		<th>説明</th>
+</tr><tr>
+<td>relid</td>		<td>テーブルのOID</td>
+</tr><tr>
+<td>schemaname</td>		<td>テーブルの属するスキーマ名</td>
+</tr><tr>
+<td>relname</td>		<td>テーブル名</td>
+</tr><tr>
+<td>heap_blks_read</td>		<td>ディスクからのブロック読み込み数</td>
+</tr><tr>
+<td>heap_blks_hit</td>		<td>ブロックのキャッシュヒット数</td>
+</tr><tr>
+<td>idx_blks_read</td>		<td>(テーブルの)全インデックスのブロック読み込み数</td>
+</tr><tr>
+<td>idx_blks_hit</td>		<td>インデックスブロックのキャッシュヒット数</td>
+</tr><tr>
+<td>toast_blks_read</td>		<td>(TOASTテーブルの)ブロック読み込み数</td>
+</tr><tr>
+<td>toast_blks_hit</td>		<td>(TOASTテーブルの)ブロックのキャッシュヒット数</td>
+</tr><tr>
+<td>tidx_blks_read</td>		<td>(TOASTテーブルの)全インデックスのブロック読み込み数</td>
+</tr><tr>
+<td>tidx_blks_hit</td>		<td>(TOASTテーブルの)インデックスブロックのキャッシュヒット数</td>
+</tr></table>
+
+
+<br>
+
+
+<p>
+ビューpg_stat_all_indexesは、テーブルのインデックス毎にスキャンした回数や読み取ったタプル数などを表示します([<表3-14>])。
+ブロックの読み込み数やキャッシュヒット数などはビューpg_statio_all_indexesで表示できます([<表3-15>])。
+</p>
+
+<table border=1>
+<caption>[<表3-14>] pg_stat_all_indexes</caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>		<th>説明</th>
+</tr><tr>
+<td>relid</td>		<td>テーブルのOID</td>
+</tr><tr>
+<td>indexrelid</td>	<td>インデックスのIOD</td>
+</tr><tr>
+<td>schemaname</td>	<td>テーブルの属するスキーマ名</td>
+</tr><tr>
+<td>relname</td>	<td>テーブル名</td>
+</tr><tr>
+<td>indexrelname</td>		<td>インデックス名</td>
+</tr><tr>
+<td>idx_scan</td>	<td>インデックススキャンされた回数</td>
+</tr><tr>
+<td>idx_tup_read</td>		<td>読み取られたタプル数</td>
+</tr><tr>
+<td>idx_tup_fetch</td>		<td>読み取られたうち、実際に使われたタプル数</td>
+</tr></table>
+
+<br>
+
+<table border=1>
+<caption>[<表3-15>] pg_statio_all_indexes</caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>		<th>説明</th>
+</tr><tr>
+<td>relid</td>		<td>テーブルのOID</td>
+</tr><tr>
+<td>indexrelid</td>		<td>インデックスのIOD</td>
+</tr><tr>
+<td>schemaname</td>		<td>テーブルの属するスキーマ名</td>
+</tr><tr>
+<td>relname</td>		<td>テーブル名</td>
+</tr><tr>
+<td>indexrelname</td>		<td>インデックス名</td>
+</tr><tr>
+<td>idx_blks_read</td>		<td>インデックスのブロック読み取り回数</td>
+</tr><tr>
+<td>idx_blks_hit</td>		<td>インデックスブロックのキャッシュヒット回数</td>
+</tr></table>
+
+<br>
+
+%CHAPTER バックグランドライタの稼働状況
+
+<p>
+バージョン8.3からサポートされたビューpg_stat_bgwriterで、バックグランドライタの稼働統計情報を表示できます([<表3-16>])。
+</p>
+
+
+<table border=1>
+<caption>[<表3-16>] pg_stat_bgwriter</caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>		<th>説明</th>
+</tr><tr>
+<td>checkpoints_timed</td>	<td>(checkpoint_timeout時間経過したことによって)実行されたCHECKPOINTの回数</td>
+</tr><tr>
+<td>checkpoints_req</td>	<td>(CHECKPOINT文の手動実行など)明示的に実行された、もしくはcheckpoint_segmentsを超えたことによって実行されたCHECKPOINTの回数</td>
+</tr><tr>
+
+<td>checkpoint_write_time</td>	<td>CHECKPOINTでデータの書き込み(write())に要した時間の総計。単位は[ミリ秒]。バージョン9.2から</td>
+
+</tr><tr>
+<td>checkpoint_sync_time</td><td>CHECKPOINTでデータの同期(fsync())に要した時間の総計。単位は[ミリ秒]。バージョン9.2から</td>
+
+</tr><tr>
+<td>buffers_checkpoint</td>	<td>バックグランドライタがCHECKPOINTで書き込んだページ数</td>
+</tr><tr>
+<td>buffers_clean</td>		<td>(CHECKPOINT以外で)ダーティページの処理のためにバックグランドライタが書き込んだページ数</td>
+</tr><tr>
+<td>maxwritten_clean</td>	<td>設定パラメータbgwriter_lru_maxpagesで指定した数以上のページ書き込みをしたため、書き込みを中断した回数</td>
+</tr><tr>
+<td>buffers_backend</td>	<td>postgresプロセス(バックグランドライタとCHEKCPOINTER以外)がページ入れ替えなどで書き込んだページ数</td>
+</tr><tr>
+<td>buffers_backend_fsync</td>	<td>postgresプロセス(バックグランドライタとCHECKPOINTER以外)がページ入れ替えなどでfsync()を呼び出した回数。バージョン9.1から</td>
+</tr><tr>
+<td>buffers_alloc</td>	<td>これまでに読み込んだバッファの総数。積算していく。</td>
+</tr><tr>
+<td>stats_reset	</td>	<td>直近の稼働統計情報をリセットした時刻。バージョン9.1から</td>
+</tr></table>
+
+<br>
+
+%CHAPTER WAL関連の統計情報
+
+<p>
+</p>
+
+
+
+<table border=1>
+<caption>[<表3-16>] pg_stat_archiver</caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>		<th>説明</th>
+</tr><tr>
+<td>archived_count</td>	<td>アーカイブに成功したWALファイル数。</td>
+</tr><tr>
+<td>last_archived_wal</td>	<td>最後にアーカイブに成功したWALファイル名。</td>
+</tr><tr>
+<td>last_archived_time</td>	<td>最後にアーカイブに成功した時刻。</td>
+</tr><tr>
+<td>failed_count</td>	<td>WALファイルのアーカイブに失敗した回数。</td>
+</tr><tr>
+<td>last_failed_wal</td>	<td>最後にアーカイブ操作に失敗したWALファイル名。</td>
+</tr><tr>
+<td>last_failed_time</td>	<td>最後にアーカイブ操作に失敗した時刻。</td>
+</tr><tr>
+<td>stats_reset </td>	<td>稼働統計情報をリセットした時刻。</td>
+</tr></table>
+
+
+<br>
+
+
+<table border=1>
+<caption>[<表3-16>] pg_stat_wal</caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>		<th>説明</th>
+</tr><tr>
+<td>wal_records</td>	<td>生成されたWALレコードの総数。</td>
+</tr><tr>
+<td>wal_fpi</td>	<td>生成されたWALフルページイメージの総数。</td>
+</tr><tr>
+<td>wal_bytes</td>	<td>生成されたWALのバイト単位の総量。</td>
+</tr><tr>
+<td>wal_buffers_full</td>	<td>WALバッファが溢れたためにWALデータがディスクに書き込まれた回数。</td>
+</tr><tr>
+<td>wal_write</td>	<td>WALバッファがXLogWrite要求によりディスクに書き出された回数。</td>
+</tr><tr>
+<td>wal_sync</td>	<td>WALファイルがissue_xlog_fsync要求によりディスクに同期された回数。</td>
+</tr><tr>
+<td>wal_write_time</td>	<td>XLogWriteの要求を介してWALバッファをディスクに書き込むのに費やされたミリ秒単位の合計時間。設定パラメータtrack_wal_io_timingがonの場合のみ有効。</td>
+</tr><tr>
+<td>wal_sync_time</td>	<td>issue_xlog_fsync要求を介してWALファイルのディスクへの同期に費やされたミリ秒単位の合計時間。設定パラメータtrack_wal_io_timingがonの場合のみ有効。</td>
+</tr><tr>
+<td>stats_reset </td>	<td>稼働統計情報をリセットした時刻。</td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER レプリケーション
+
+
+<!--
+pg_stat_wal_receiver
+pg_stat_recovery_prefetch
+pg_stat_subscription
+===
+-->
+
+
+<p>
+バージョン9.1からレプリケーションに関連する２つのビューがサポートされました。
+</p>
+
+<p>
+ビューpg_stat_replicationはスレーブの状態を表示します([<表3-17>])。このデータはマスタのみ保持しています。
+<br>
+ビューpg_stat_database_conflictsはデータベースの衝突に関する情報を表示します([<表3-18>])。
+このデータはスレーブのみ保持しています。
+</p>
+
+<table border=1>
+<caption>[<表3-17>] pg_stat_replication</cation>
+<tr bgcolor="#cccccc">
+ <th>項目</th> <th>説明</th>
+</tr><tr>
+<td>usename</td>  <td>接続してきたスレーブのユーザ名</td>
+</tr><tr>
+<td>application_name</td>  <td>recovery.conf/primary_conninfoのapplication_nameに記述したスレーブ名
+</td>
+</tr><tr>
+<td>client_addr</td>  <td>スレーブのIPアドレス</td>
+</tr><tr>
+<td>client_hostname</td>  <td>スレーブのホスト名</td>
+</tr><tr>
+<td>client_port</td>  <td>スレーブのport番号</td>
+</tr><tr>
+<td>backend_start</td>  <td>スレーブの起動開始時刻</td>
+</tr><tr>
+<td>state</td>  <td>スレーブの状態<br>
+
+<blockquote>
+idle:　　　　プロセス初期状態<br>
+backup:　　　pg_basebackupから接続要求<br>
+catchup:　　スレーブから接続要求<br>
+streaming:　ストリーミング中<br>
+</blockquote>
+
+</td>
+</tr><tr>
+<td>sent_location</td>  <td>マスタが送ったWALログの最新LSN</td>
+</tr><tr>
+<td>write_location</td>  <td>スレーブが(受信して)書き込んだ最新のLSN</td>
+</tr><tr>
+<td>flush_location</td>  <td>スレーブが(受信し書き込んで)Flushした最新のLSN</td>
+</tr><tr>
+<td>replay_location</td>  <td>スレーブがHotStandbyで再生した最新のLSN</td>
+</tr><tr>
+<td>sync_priority</td>  <td>同期レプリケーションの優先順位。1は同期で稼働中。0は非同期</td>
+</tr><tr>
+<td>sync_state</td>  <td>レプリケーションの状態。sync=同期、potential=同期レプリケーションの候補(非同期で稼働中)、async=非同期。本文の説明参照</td>
+</tr>
+</table>
+<br>
+
+<table border=1>
+<caption>[<表3-18>] pg_stat_database_conflicts</caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>		<th>説明</th>
+</tr><tr>
+<td>datid</td>			<td>データベースのOID</td>
+</tr><tr>
+<td>datname</td>		<td>データベース名</td>
+</tr><tr>
+<td>confl_tablespace</td>		<td>テーブルスペースの削除が原因でキャンセルされたConflictの数</td>
+</tr><tr>
+<td>confl_lock</td>			<td>LOCKのタイムアウトが原因でキャンセルされたConflictの数</td>
+</tr><tr>
+<td>confl_snapshot</td>		<td>トランザクションの可視性が原因でキャンセルされたConflictの数</td>
+</tr><tr>
+<td>confl_bufferpin	</td>	<td>(スレーブ側のpostgresプロセスが)バッファをPINし続けたことが原因でキャンセルされたConflictの数</td>
+</tr><tr>
+<td>confl_deadlock	</td>	<td>デッドロックが原因でキャンセルされたConflictの数</td>
+
+</tr></table>
+

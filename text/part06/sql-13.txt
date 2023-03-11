@@ -1,0 +1,178 @@
+%FILE internal/sql-13.html
+%LASTMOD
+%KEY pgsql-sql13
+
+%TITLE ロールの作成/変更/削除 <a href="https://www.postgresql.org/docs/current/sql-createrole.html" target="_blank" rel="noopener noreferrer">CREATE ROLE</a> / <a href="https://www.postgresql.org/docs/current/sql-alterrole.html" target="_blank" rel="noopener noreferrer">ALTER ROLE</a> / <a href="https://www.postgresql.org/docs/current/sql-droprole.html" target="_blank" rel="noopener noreferrer">DROP ROLE</a>
+
+<pre>
+[<書式>]
+
+● ロールの作成
+CREATE ROLE name [ [ WITH ] option [ ... ] ]
+
+where option can be:
+
+      SUPERUSER | NOSUPERUSER
+    | CREATEDB | NOCREATEDB
+    | CREATEROLE | NOCREATEROLE
+    | INHERIT | NOINHERIT
+    | LOGIN | NOLOGIN
+    | REPLICATION | NOREPLICATION
+    | BYPASSRLS | NOBYPASSRLS
+    | CONNECTION LIMIT connlimit
+    | [ ENCRYPTED ] PASSWORD 'password' | PASSWORD NULL
+    | VALID UNTIL 'timestamp'
+    | IN ROLE role_name [, ...]
+    | IN GROUP role_name [, ...]
+    | ROLE role_name [, ...]
+    | ADMIN role_name [, ...]
+    | USER role_name [, ...]
+    | SYSID uid
+
+
+● ロールの権限/属性の変更
+ALTER ROLE role_specification [ WITH ] option [ ... ]
+
+where option can be:
+
+      SUPERUSER | NOSUPERUSER
+    | CREATEDB | NOCREATEDB
+    | CREATEROLE | NOCREATEROLE
+    | INHERIT | NOINHERIT
+    | LOGIN | NOLOGIN
+    | REPLICATION | NOREPLICATION
+    | BYPASSRLS | NOBYPASSRLS
+    | CONNECTION LIMIT connlimit
+    | [ ENCRYPTED ] PASSWORD 'password' | PASSWORD NULL
+    | VALID UNTIL 'timestamp'
+
+
+● ロール名の変更
+ALTER ROLE name RENAME TO new_name
+
+● 設定パラメータの変更
+ALTER ROLE { role_specification | ALL } [ IN DATABASE database_name ]
+      SET configuration_parameter { TO | = } { value | DEFAULT }
+
+ALTER ROLE { role_specification | ALL } [ IN DATABASE database_name ]
+      SET configuration_parameter FROM CURRENT
+
+ALTER ROLE { role_specification | ALL } [ IN DATABASE database_name ]
+      RESET configuration_parameter
+
+ALTER ROLE { role_specification | ALL } [ IN DATABASE database_name ]
+      RESET ALL
+
+where role_specification can be:
+    role_name
+  | CURRENT_ROLE
+  | CURRENT_USER
+  | SESSION_USER
+
+● 権限を継承する
+SET [ SESSION | LOCAL ] ROLE role_name
+
+● 権限を元に戻す
+SET [ SESSION | LOCAL ] ROLE NONE
+RESET ROLE
+
+
+● ロールの削除
+DROP ROLE [ IF EXISTS ] role_name [, ...]
+
+</pre>
+<br>
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>role_name</td>	<td>作成/変更/削除するロール名</td>
+</tr><tr>
+<td>rolename</td>	<td>作成するロールへ、権限などを継承するロール名</td>
+</tr><tr>
+<td>abstime</td>	<td>パスワードの期限(日付)。例：'2012-12-31' </td>
+</tr><tr>
+<td>parameter</td>	<td>変更する設定パラメータ</td>
+</tr></table>
+<br>
+
+
+<table>
+<caption>オプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明[デフォルト]</th>
+
+</tr><tr>
+<td>ALL</td>	<td>すべてのロールに対してパラメータを変更する。</td>
+</tr><tr>
+<td>SUPERUSER, NOSUPERUSER</td>	<td>スーパーユーザ権限を与えるか否か[NOSUPERUSER]</td>
+</tr><tr>
+<td>CREATEDB, NOCREATEDB</td>	<td>作成するロールによる、新しいデータベースの作成を許可、禁止[NOCREATEDB]</td>
+</tr><tr>
+<td>CREATEROLE, NOCREATEROLE</td>	<td>作成するロールによる新しいロールの作成を許可、禁止[NOCREATEROLE]</td>
+</tr><tr>
+<td>CREATEUSER, NOCREATEUSER</td>	<td>CREATEROLE, NOCREATEROLEの別名。廃止予定</td>
+</tr><tr>
+<td>LOGIN, NOLOGIN	</td>	<td>LOGIN可能か否か[CREATE ROLE=NOLOGIN, CREATE USER=LOGIN]</td>
+</tr><tr>
+<td>INHERIT, NOINHERIT	</td>	<td>権限を継承するか否か[INHERIT]</td>
+</tr><tr>
+<td>SESSION		</td>	<td>セッションの間のみ設定値が有効。デフォルト</td>
+</tr><tr>
+<td>LOCAL		</td>	<td>トランザクションの間のみ設定値が有効</td>
+</tr><tr>
+<td>IF EXISTS		</td>	<td>削除するロールが存在しなくともエラーにならない。</td>
+</tr></table>
+
+<br>
+
+
+<table>
+<caption>句</caption>
+<tr bgcolor="#cccccc">
+<th>句</th>	<th>説明[デフォルト]</th>
+
+</tr><tr>
+<td>CONNECTION LIMIT connlimit		</td>	<td>同名ロールによる最大接続(セッション)数[無制限]</td>
+</tr><tr>
+<td>[ENCRYPTED | UNENCRYPTED] PASSWORD password	</td>	<td>パスワードpasswordを暗号化して保存するか否か[UNENCRYPTED]</td>
+</tr><tr>
+<td>VALID UNTIL timestamp	</td>	<td>パスワードの有効期間。timestampまで。[無期限]</td>
+</tr><tr>
+<td>IN ROLE role_name		</td>	<td>親になるロールを列挙する</td>
+</tr><tr>
+<td>IN GROUP role_name		</td>	<td>IN ROLEの別名。廃止予定</td>
+</tr><tr>
+<td>ROLE role_name		</td>	<td>子にするロールを列挙する</td>
+</tr><tr>
+<td>ADMIN role_name		</td>	<td>WITH ADMIN OPTIONつきで子にするロールを列挙する</td>
+</tr><tr>
+<td>USER role_name		</td>	<td>ROLEの別名。廃止予定</td>
+</tr><tr>
+<td>SYSID uid			</td>	<td>SYSID句は無視される。下位互換性のため存続</td>
+</tr><tr>
+<td>IN DATABASE db_name		</td>	<td>データベースdb_nameに限定して変更する</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+CREATE ROLE文、ALTER ROLE文、DROP ROLE文でロールの作成と削除など行います。
+<br>
+SET ROLE文でロールの権限(SUPERUSER, CREATEDB, CREATEROLEなど)を継承できます。
+</p>
+
+<p>
+ロールの権限はメタコマンド\du、より詳細な<a href="./admin-05.html">システムカタログ</a>pg_rolesで表示できます。
+また、ロールが各種データベースオブジェクト(テーブルや関数など)に対してアクセス権限を持つか否か
+調べる関数群(<a href="./func-10.html">[<7-29>]</a>)があります。
+</p>
+
+<p>
+ロールのアクセス制御に関する詳細は
+<a href="./admin-09.html">[<3-09>]</a>、<a href="./admin-10.html">[<3-10>]</a>を参照してください。
+</p>

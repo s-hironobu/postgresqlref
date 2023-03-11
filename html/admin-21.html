@@ -2,12 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
- <title>PostgreSQLバイブル草稿</title>
- <link rel="stylesheet" type="text/css" media="screen" href="./default.css"">
-</head>
-
-<body>
+ <meta http-equiv="content-style-type" content="text/css">
+ <title>自分用PostgreSQLマニュアル</title>
+ <link rel="stylesheet" type="text/css" media="screen" href="./default.css" charset="UTF-8">
+ </head>
+ <body>
 
 <script language=javascript>
 <!--
@@ -26,11 +25,10 @@ objID.className='close';
 </script>
 
 <div id="header">
-<h1 class="title">PostgreSQLバイブル草稿</title></h1>
+<h1 class="title">自分用PostgreSQLマニュアル</title></h1>
     <span class="small">
 </span>
 </div>
-
 
 <hr class="full_hr">
 <table style="width: 100%;" border="0">
@@ -38,15 +36,16 @@ objID.className='close';
   <td class="menubar">
    <div id="menubar">
 
-
 <h5>PostgreSQLとは</h5>
 
-<li><a href="./index.html">PostgreSQLとは</a><br></li>
+<li><a href="./intro.html">PostgreSQLとは</a><br></li>
+
 
 <h5>PostgreSQLの内部構造</h5>
 <ul>
 <li><a href="./internal.html">とびら</a><br></li>
 </ul>
+
 <ol>
 <li><a href="./internal-01.html">プロセスとメモリ構造</a><br></li>
 <li><a href="./internal-02.html">データベースクラスタ、テーブルの構造</a></li>
@@ -58,7 +57,7 @@ objID.className='close';
 <li><a href="./internal-08.html">HOTとIndex Only Scan</a></li>
 <li><a href="./internal-09.html">WAL(Write Ahead Logging)</a></li>
 <li><a href="./internal-10.html">アーカイブログとPITR</a></li>
-<li><a href="./internal-11.html">レプリケーション(Streaming ReplicationとHotStandby)</a></li>
+<li><a href="./internal-11.html">Streaming ReplicationとHotStandby</a></li>
 </ol>
 
 
@@ -69,56 +68,46 @@ objID.className='close';
 </ul>
 
 <ol>
-[PostgreSQLの基礎]<br>
-<li><a href="./admin-01.html">オブジェクト、データベース、スキーマ</a><br></li>
-<li><a href="./admin-02.html">システムカタログ</a><br></li>
-<li><a href="./admin-03.html">文字コードの扱い</a><br></li>
-
 
 [インストールと起動、停止]<br>
-<li><a href="./admin-04.html">インストール</a><br></li>
-<li><a href="./admin-05.html">データベースシステムの初期化 initdb</a><br></li>
-<li><a href="./admin-06.html">PostgreSQLサーバの起動/停止</a><br></li>
+<li><a href="./admin-01.html">インストール</a><br></li>
+<li><a href="./admin-02.html">データベースシステムの初期化 initdb</a><br></li>
+<li><a href="./admin-03.html">PostgreSQLサーバの起動/停止</a><br></li>
 
+<hr>
+[PostgreSQLの基礎]<br>
+<li><a href="./admin-04.html">オブジェクト、データベース、スキーマ</a><br></li>
+<li><a href="./admin-05.html">システムカタログ</a><br></li>
+<li><a href="./admin-06.html">文字コードの扱い</a><br></li>
 
+  <hr>
 [認証とアクセス制御]<br>
 <li><a href="./admin-07.html">認証とアクセス制御</a><br></li>
 <li><a href="./admin-08.html">クライアントのアクセス制御</a><br></li>
 <li><a href="./admin-09.html">権限について</a><br></li>
 <li><a href="./admin-10.html">ロールの作成と権限制御</a><br></li>
 
-<HR>
-
+<hr>
 [バックアップとアップグレード]<br>
 <li><a href="./admin-11.html">バックアップとアップグレード</a><br></li>
 <li><a href="./admin-12.html">ダンプとリストア</a><br></li>
 <li><a href="./admin-13.html">アップグレード</a><br></li>
 
+  <hr>
 [保守、監視とチューニング]<br>
 <li><a href="./admin-14.html">保守、監視とチューニング</a><br></li> 
 <li><a href="./admin-15.html">稼働統計情報</a><br></li>
 <li><a href="./admin-16.html">実行ログの取得</a><br></li>
-<li><a href="./admin-17.html">モニタリングツール</a><br></li>
-<li><a href="./admin-18.html">ログと統計情報の分析</a><br></li>
-<li><a href="./admin-19.html">パラメータチューニング</a><br></li>
+<li><a href="./admin-17.html">ログと統計情報の分析</a><br></li>
+<li><a href="./admin-18.html">パラメータチューニング</a><br></li>
 
+  <hr>
 [耐障害性、高可用性]<br>
-<li><a href="./admin-20.html">耐障害性、高可用性</a><br></li>
-<li><a href="./admin-21.html">アーカイブログとPITR</a><br></li>
-<li><a href="./admin-22.html">レプリケーションの設定</a><br></li>
-<li><a href="./admin-23.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-19.html">アーカイブログとPITR</a><br></li>
+<li><a href="./admin-20.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-21.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-22.html">ロジカルレプリケーション</a><br></li>
 
-
-[FDW]<br>
-<li><a href="./admin-24.html">FDW</a><br></li>
-<li><a href="./admin-25.html">postgres_fdw</a><br></li>
-</ol>
-
-[追加の文章(未完)]<br>
-<li><a href="./admin-26.html">ロギング</a><br></li>
-<li><a href="./admin-27.html">統計情報</a><br></li>
-<li><a href="./admin-28.html">モニタリング</a><br></li>
-<li><a href="./admin-29.html">メンテナンス</a><br></li>
 </ol>
 
 
@@ -138,6 +127,7 @@ objID.className='close';
 <li><a href="./param-11.html">クライアント接続デフォルト</a><br></li>
 <li><a href="./param-12.html">ロック管理/バージョンとプラットフォーム互換性</a><br></li>
 </ol>
+
 
 
 <h5>psql</h5>
@@ -160,6 +150,7 @@ objID.className='close';
 </ol>
 
 
+
 <h5>SQL</h5>
 
 <ul>
@@ -167,15 +158,14 @@ objID.className='close';
 </ul>
 
 <ol>
-[SQL]<br>
 
 <li><a href="./sql-01.html">SQL語彙</a><br></li>
 <li><a href="./sql-02.html">テーブルスペースの作成/削除/変更</a><br></li>
 <li><a href="./sql-03.html">データベースの作成/変更/削除</a><br></li>
-<li><a href="./sql-04.html">テーブルの作成</a><br></li>
+<li><a href="./sql-04.html">テーブルの作成 CREATE TABLE / CREATE TABLE AS</a><br></li>
 <li><a href="./sql-05.html">外部キー</a><br></li>
 <li><a href="./sql-06.html">オブジェクトの継承/LIKE句</a><br></li>
-<li><a href="./sql-07.html">問い合わせ結果から新しいテーブルを作成</a><br></li>
+<li><a href="./sql-07.html">パーティション</a><br></li>
 <li><a href="./sql-08.html">テーブルの削除</a><br></li>
 <li><a href="./sql-09.html">スキーマの定義/変更/削除</a><br></li>
 
@@ -201,7 +191,7 @@ objID.className='close';
 <li><a href="./sql-25.html">問い合わせの結合</a><br></li>
 <li><a href="./sql-26.html">ORDER BY</a><br></li>
 <li><a href="./sql-27.html">LIMIT OFFSET</a><br></li>
-<li><a href="./sql-28.html">FOR UPDATE/ FOR SHARE</a><br></li>
+<li><a href="./sql-28.html">FOR [NO KEY] UPDATE/ FOR [KEY] SHARE</a><br></li>
 <li><a href="./sql-29.html">サブクエリ</a><br></li>
 <li><a href="./sql-30.html">CASE式</a><br></li>
 <li><a href="./sql-31.html">VALUES</a><br></li>
@@ -227,18 +217,12 @@ objID.className='close';
 <li><a href="./sql-49.html">COPY/IMPORT</a><br></li>
 <li><a href="./sql-50.html">COPY/EXPORT</a><br></li>
 <li><a href="./sql-51.html">関数定義</a><br></li>
-<li><a href="./sql-52.html">エクステンション</a><br></li>
-<li><a href="./sql-53.html">外部サーバの定義、変更、削除</a><br></li>
-<li><a href="./sql-54.html">外部サーバのユーザマップ定義、変更、削除</a><br></li>
-<li><a href="./sql-55.html">外部テーブルの定義、変更、削除</a><br></li>
-<hr>
-<li><a href="./sql-56.html">イベントトリガ</a><br></li>
-<li><a href="./sql-57.html">行レベルセキュリティ</a><br></li>
+<li><a href="./sql-52.html">FDW(Foreign Data Wrapper)</a><br></li>
 
-<hr>
-<li><a href="./sql-60.html">新しい機能</a><br></li>
+<li><a href="./sql-53.html">PUBLICATION</a><br></li>
+<li><a href="./sql-54.html">SUBSCRIPTION</a><br></li>
+  
 </ol>
-
 
 <h5>関数</h5>
 
@@ -260,8 +244,6 @@ objID.className='close';
 <li><a href="./type-09.html">バイナリ列データ型</a><br></li>
 <li><a href="./type-10.html">Range型</a><br></li>
 <li><a href="./type-11.html">配列</a><br></li>
-<hr>
-<li><a href="./type-12.html">JSON型</a><br></li>
 
 <hr>
 [演算子]<br>
@@ -273,9 +255,6 @@ objID.className='close';
 <li><a href="./ope-06.html">パターンマッチング</a><br></li>
 <li><a href="./ope-07.html">日付/時刻演算子</a><br></li>
 <li><a href="./ope-08.html">Range型演算子</a><br></li>
-<hr>
-<li><a href="./ope-09.html">JSON型演算子</a><br></li>
-
 
 <hr>
 [関数]<br>
@@ -287,89 +266,73 @@ objID.className='close';
 <li><a href="./func-06.html">型変換関数</a><br></li>
 <li><a href="./func-07.html">Range型関数</a><br></li>
 <li><a href="./func-08.html">Window関数</a><br></li>
-<li><a href="./func-09.html">セッション情報関数</a><br></li>
-<li><a href="./func-10.html">アクセス権限とスキーマ可視性照会関数</a><br></li>
-<li><a href="./func-11.html">データベースオブジェクト関数</a><br></li>
-<li><a href="./func-12.html">バックアップとリカバリ制御関数</a><br></li>
+  <hr>
 
-<li><a href="./func-13.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-09.html">セッション情報関数</a><br></li>
+<li><a href="./func-10.html">アクセス権限照会関数</a><br></li>
+<li><a href="./func-11.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-12.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-13.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
+<li><a href="./func-14.html">制御データ関数</a><br></li>
+  <hr>
 <li><a href="./func-15.html">構成設定関数</a><br></li>
 <li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-17.html">レプリケーションSQL関数</a><br></li>
-
-<hr>
-<li><a href="./func-18.html">JSON関数</a><br></li>
+<li><a href="./func-17.html">バックアップ制御関数</a><br></li>
+<li><a href="./func-18.html">リカバリ制御関数</a><br></li>
+<li><a href="./func-19.html">スナップショット同期関数</a><br></li>	
+<li><a href="./func-20.html">レプリケーション管理関数</a><br></li>	
+<li><a href="./func-21.html">データベースオブジェクト管理関数</a><br></li>
+<li><a href="./func-22.html">インデックス保守関数</a><br></li>	
+<li><a href="./func-23.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-24.html">勧告的ロック用関数</a><br></li>
+<li><a href="./func-25.html">統計情報関数</a><br></li>	
 
 </ol>
-
-<!--
-[削除するもの]<br>
-<li><a href="./type-07.html">幾何データ型</a><br></li>
-<li><a href="./type-08.html">ネットワークアドレス型型</a><br></li>
-<li><a href="./ope-08.html">幾何演算子</a><br></li>
-<li><a href="./ope-09.html">ネットワーク演算子</a><br></li>
-<li><a href="./func-06.html">幾何関数</a><br></li>
-<li><a href="./func-07.html">ネットワークアドレス関数</a><br></li>
-<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
-<li><a href="./func-16.html">トランザクションID関数</a><br></li>
-<li><a href="./func-17.html">スキーマ可視性照会関数</a><br></li>
-<li><a href="./func-18.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-19.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-20.html">勧告的ロック用関数</a><br></li>
--->
 
 <h5>PL/pgSQL</h5>
 
 <ol>
-<li><a href="./plpgsql.html">結果の返し方</a><br></li>
-<li><a href="./plpgsql-01.html">ストアドプロシージャ</a><br></li>
-<li><a href="./plpgsql-02.html">ストアドプロシージャの定義</a><br></li>
+<li><a href="./plpgsql-01.html">PL/pgSQLによるストアドプロシージャ</a><br></li>
+
+  <hr>[定義]
+    <br>
+
+<li><a href="./plpgsql-02.html">PL/pgSQLによるストアドプロシージャの定義</a><br></li>
+
+  <hr>[基本的な使い方]
+    <br>
 <li><a href="./plpgsql-03.html">変数宣言と値の代入</a><br></li>
-**** まとめる >>
+
 <li><a href="./plpgsql-04.html">SELECT INTO文</a><br></li>
 <li><a href="./plpgsql-05.html">結果ステータスの取得</a><br></li>
 <li><a href="./plpgsql-06.html">動的なSQL文の実行</a><br></li>
-<< ここまで****
+
+  <hr>[制御構造]
+    <br>
 <li><a href="./plpgsql-07.html">IF 条件分岐</a><br></li>
-<li><a href="./plpgsql-08.html">ループ処理</a><br></li>
-*** >>>
-<li><a href="./plpgsql-09.html">RETURN</a><br></li>
-<<< ***
+<li><a href="./plpgsql-08.html">EXIT</a><br></li>
+
+<li><a href="./plpgsql-09.html">RETURN NEXT / RETURN QUERY</a><br></li>
+
 <li><a href="./plpgsql-10.html">ループ処理　LOOP</a><br></li>
 <li><a href="./plpgsql-11.html">ループ処理　WHILE</a><br></li>
-<li><a href="./plpgsql-12.html">ループ処理　FOR </a><br></li>
+<li><a href="./plpgsql-12.html">ループ処理　FOR</a><br></li>
 <li><a href="./plpgsql-13.html">ループ処理 (複数行の問い合わせ結果を扱う)</a><br></li>
+
+<hr>[カーソル]
+    <br>
 <li><a href="./plpgsql-14.html">カーソルの利用</a><br></li>
 <li><a href="./plpgsql-15.html">カーソル変数の宣言</a><br></li>
 <li><a href="./plpgsql-16.html">カーソルのオープンとクローズ	OPEN / CLOSE</a><br></li>
-<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得		FETCH</a><br></li>
-<li><a href="./plpgsql-18.html">カーソルを使った例</a><br></li>
-<li><a href="./plpgsql-19.html">例外</a><br></li>
-*** >>>
-<li><a href="./plpgsql-21.html">CASE</a><br></li>
-<li><a href="./plpgsql-22.html">FOREACH</a><br></li>
-<<< ***
-</ol>
+<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得	FETCH</a><br></li>
+  <li><a href="./plpgsql-18.html">FOR IN LOOPにカーソル行の取得</a><br></li>
+<li><a href="./plpgsql-19.html">カーソルを使った例</a><br></li>
+
+  <hr>[例外]
+    <br>
+<li><a href="./plpgsql-20.html">例外処理</a><br></li>
 
 
-<h5>Appendix(付録)</h5>
-
-<ol>
-<li><a href="./app-01.html">pgpool-II</a><br></li>
-<li><a href="./app-02.html">Pacemaker</a><br></li>
-</ol>
-
-
-<h5>おまけ:ネット公開(ページ数の関係で書籍には載せない)</h5>
-
-<ol>
-[pgpool]<br>
-<li><a href="./ha-06.html">pgpool-II セットアップ</a><br></li>
-<li><a href="./ha-07.html">pgpool-II レプリケーションモード</a><br></li>
-<li><a href="./ha-08.html">pgpool-II マスタースレーブモード</a><br></li>
-[Pacemaker]<br>
-<li><a href="./ha-10.html">Pacemaker</a><br></li>
 </ol>
 
 </div>
@@ -378,524 +341,850 @@ objID.className='close';
 
   </td>
   <td valign="top">
-   <div id="body">
+    <div id="body">
+      
 
 
-<h2>アーカイブログとPITR</h2>
+<h2>同期レプリケーションの故障対応</h2>
 
 <p>
-[<2-10>]で解説したアーカイブログとPITRの運用方法について説明します。
+同期レプリケーションでの故障対応について、
+先に結論をまとめます([<表3-25>]参照)。
 </p>
 
-<div class="jumpmenu"></div><h3>アーカイブログによる耐障害性</h3>
+<table border=1>
+<caption>[<表3-25>] 同期レプリケーションの故障対応</caption>
+<tr bgcolor="#cccccc">
+<th>＼故障箇所<br>-------<br>構成　　＼ </th>
+<th>Primary故障　　　　　　　　　　　</th>
+<th>Standby故障　　　　　　　　　　　　　　　　　　　　</th>
+</tr><tr>
+<td>1:1 <br>(1-Primary : 1-Standby)</td>
 
+<td>
+<ul>
+ <li>Standbyを新Primaryに昇格(promote)。</li>
+ <li>Primary故障から新Primary昇格の期間、データ更新ができない。</li>
+ <li>故障の瞬間に開いていたトランザクションは不定(COMMITかABORTか状況依存)になる。</li>
+</ul>
+</td>
 
+<td>
+<ul>
+ <li>Primaryの更新ができなくなる。<br>ただし、非同期レプリケーションに移行すれば、稼働し続けることができる。</li>
+ <li>Standby故障から非同期に移行する期間、データ更新ができない。</li>
+</ul>
+</td>
 
-<p>
-[<2-10>]の[<図2-58>]に示したように、
-アーカイブログを使っても、
-最新のWALログをサルベージできなければ、データロストが発生します。
+</tr><tr>
+<td>1:N <br>(1-Primary : N-Standby)</td>
+
+<td>
+<ul>
+ <li>Standbyを新Primaryに昇格(promote)。</li>
+ <li>残りのStandbyを新Primaryに再接続(Follow Master)しなければならない。</li>
+ <li>Primary故障からStandbyの再接続完了までの期間、データが更新できない。</li>
+</ul>
+</td>
+
+<td>
+<ul>
+<li>(N-1台までのStandby故障は)Primaryの動作に影響しない。
 <br>
-耐障害性の観点からみると、
-アーカイブログ機能単体では、
-データロストの被害をなるべく小さくすることしかできません(ゼロにはできない)。
-</p>
+ただし、同期モード(sync_state=sync)のStandbyが故障した場合、Primaryがその故障を検出して他のStandbyに切り替える期間、データ更新ができない。
+</li>
+</ul>
 
-<p>
-WALログ書き込み領域を(同期モードの)DRBDで多重化したウォームスタンバイ(Warm Standby)構成で、
-アーカイブログによるデータロストを避けることができます([<コラム3-4>]参照)。
-</p>
 
-<blockquote><table BORDER="1"><tr><td>コラム3-4：ウォームスタンバイ</td><td>
+</td>
+</tr></table>
 
-<p>
-ウォームスタンバイの詳しい説明は省略しますが、
-本項の解説とDRBDを組み合わせれば容易に構築できると思います([<図3-05>]参照)。
-</p>
-
-<p>
-DRBDで多重化するのは、pg_xlog以下のWALログ領域とアーカイブログ領域だけで十分です。
 <br>
-多重化する領域が小規模であるほどパフォーマンス低下を抑制でき、
-予め取得したベースバックアップと組み合わせ、データロストなしでリカバリ可能だからです。
-なお、DRBDはプロトコルCで運用することが大前提です。
-</p>
-
-<table BORDER=1>
-<caption>[<図3-05>] DRBDによるウォームスタンバイ構成</caption>
-<tr><td><center>
-<img src="./fig-3-21-01.jpg"><br>
-</center></td></tr>
-</table>
 
 <p>
-pg_xlog以下のWALログの書き込み途中でサーバクラッシュしても、
-トランザクションがコミットしないのでデータロストとはなりません。
+ここで「(Primaryの)データ更新ができない」との記述について補足します。
 <br>
-また、アーカイブログの書き込み途中でサーバクラッシュしても、
-pg_xlog以下にWALログとしてまだ残っているのでデータロスト無しにリカバリ可能です。
+厳密に言えば更新系SQLが実行できないだけでなく、WALログを書き込むSQLの実行もできません。
+よって、検索系SQLでも実行できない場合があります。
+例えば、SELECT文の実行中にHOTの不要なタプルを削除すると、WALログ書き込みが発生するからです。
 </p>
 
-<p>
-ただし、[<2-09>]で説明したように、トランザクションがCOMMITのレスポンス無しでクラッシュした場合は、
-リカバリ後にCOMMITしたかABORTしたかの確認が必要になります。
-</p>
 
 <p>
-ここではウォームスタンバイと称しましたが、
-スタンバイ側のPostgreSQLを稼働状態にするには、相応のリカバリ時間が必要になります。
-<br>
-[<コラム3-5>]に示すように、PostgreSQLのリカバリ処理は非常に高速ですが、
-それでもアーカイブログの量によって相応の時間が必要になります。
-</p>
-
-</td></tr></table></blockquote>
-
-
-
-
-<div class="jumpmenu"></div><h3>アーカイブログの設定</h3>
-
-<p>
-アーカイブログ機能を有効にする方法を説明します。
-</p>
-
-<div class="jumpmenu"></div><h4>ディレクトリ作成</h4>
-<p>
-アーカイブログを保存するディレクトリを新規に作成します。
-本書では'/home/postgres/archivelogs'とします。
-このディレクトリのパーミッションは、PostgreSQLサーバを起動するOSのユーザ(本書ではpostgres)が読み書きできるようにします。
-</p>
-
-<pre>
-postgres@orig> mkdir -p /home/postgres/archivelogs
-postgres@orig> chmod 700 /home/postgres/archivelogs
-</pre>
-
-
-<div class="jumpmenu"></div><h4>設定パラメータ</h4>
-
-<p>
-postgresql.confのパラメータを設定します。必要なのは次の2つです。
+次にPrimary故障の対応について、注意点を示します。
 </p>
 
 <ol>
-<li>archive_mode</li>
+<li>Streaming ReplicationはPrimary故障時、Standbyを新Primaryにpromote(昇格)させることができる。
+ただし、故障の瞬間に開いていたトランザクションは不定(COMMITかABORTか状況依存)になる。
+</li>
+
+<li>
+N-Standby構成でPrimary故障した場合、
+Standbyを新Primaryに昇格した後に残りのStandbyを新Primaryに再接続しなければならない。
+この再接続手順を(pgpool-IIに倣って)フォローPrimary(Follow Master)と呼ぶことにする。
+</li>
+
+</ol>
+
+
 <p>
-バージョン8.3以降の場合、archive_modeをon(有効)にする[<脚注9>]。
+以下、故障対応について詳細に解説します。
 </p>
 
-<li>archive_command</li>
+
+<div class="jumpmenu"></div><h3>全般的な注意点</h3>
+
+<div class="jumpmenu"></div><h4>新Primary選択の任意性</h4>
+
 <p>
-archive_commandには、WALログをアーカイブログ保存用ディレクトリにコピーするコマンドを記述する。
+複数のStandbyがあると、どのStandbyを新Primaryにpromote(昇格)すべきか決定しなければなりません。
+</p>
+
+<p>
+Standbyの数をnとすると、Primary故障時のシナリオ数は2<sup>n</sup>となりますが、
+それらは3つのパターンに分類できます。
+</p>
+
+<ul>
+<li>パターン[1]</li>
+<p>
+すべてのStandbyがWALログデータを受信しない。
+</p>
+
+<li>パターン[2]</li>
+<p>
+すべてのStandbyがWALログデータを受信してHDDに書き込む。
+</p>
+
+<li>パターン[3]</li>
+<p>
+Standbyによって受信したWALログデータが異なる。
+[<図3-09>]は、パターン[3]に属するシナリオのひとつである。
+
+</p>
+</ul>
+
+
 <br>
-ここでコマンドとは、文字どおりUNIXコマンドのことで、"%p"はWALログを置くディレクトリ、"%f"をアーカイブログ名に置換して実行する。
+
+
+<table BORDER="1">
+<caption>[<図3-09>] 1:N Primary故障時、Standby間の受信WALログに差違が生じるシナリオ</caption>
+<tr><td><center>
+<img src="./fig-3-23-03.png" width=800><br>
+</center></td></tr>
+</table>
+
+<br>
+
+
+
+<p>
+パターン[1]とパターン[2]の場合、
+すべてのStandbyは同じ状態にあるので、どのStandbyを新Primaryに選択しても違いはありません。
+<br>
+パターン[3]の場合、どのStandbyをPrimaryにpromote(昇格)すべきか決めなければなりません。
+
+<p>
+ほとんどのユーザは、次に示すどちらかの戦略を採用しています。
+それぞれ一長一短があります。
+</p>
+
+<ul>
+<li>戦略1: LSNが最も進んでいるStandbyを新Primaryに昇格(promote)</li>
+<p>
+データロストの可能性を最小限にとどめるという立場からすると、合理的な戦略です。
+<br>
+受信したWALログのLSNを知るには、関数pg_last_wal_receive_location()などが使えます(<a href="func-18.html">[<7-37>]</a></a>参照)。
+ただし、関数の実行タイミングによっては正確な値を返さない可能性があります。
+</p>
+
+<li>戦略2: sync_priority=1のStandbyを新Primaryに昇格(promote)</li>
+<p>
+SRの実装上、Primaryと同期しているのはsync_state=syncのStandbyなので、
+sync_priority=1のStandbyはsync_state=syncであると仮定すれば、合理的な戦略です。
+<br>
+ただし、Primary故障の瞬間にどのStandbyがsync_state=syncだったのかを知る術はありません。
+例えば、ネットワークの不調でsync_priority=1のStandbyを切り離した１秒後に、Primaryが故障したとします。
+このStandbyを新Primaryにpromote(昇格)すると、切り離されていた1秒間のデータは失われます。
+</p>
+
+</ul>
+
+<br>
+
+<p>
+筆者の意見としては、データロストの可能性を最小にする戦略1が望ましいと考えます。
+戦略2は(説明でも述べたように)データロストの可能性があります。
+実際、実運用では戦略1が多いようです。
+</p>
+
+
+<div class="jumpmenu"></div><h4>PrimaryによるStandbyの故障検出と、故障の影響</h4>
+
+<p>
+PrimaryがStandbyの故障を検出するタイミングを列挙します。
+</p>
+
+<ol>
+<li>libpqの内部関数が異常が検出した場合</li>
+<p>
+Streaming Replicationを司るwalsenderプロセスとwalreceiverプロセスは、libpqという(PostgreSQLの)通信ライブラリの内部関数を使ってデータ通信している。
+<br>
+libpqは高機能で、
+walreceiverプロセスがクラッシュしてコネクションが切断したりStandbyが終了した場合、
+その旨を通知する。
+Standbyの異常を通知されたwalsenderプロセスは<u>即座にStandby故障と判断</u>する。
+<br>
+また、walreceiverプロセスへの(socket)読み書きが失敗したりEOFを返すなど、
+libpqの内部関数がエラーを返した場合も、<u>即座にStandby故障と判断</u>する。
+</p>
+
+
+<li>ネットワークやStandbyが稼働しているサーバに異常が発生した場合</li>
+<p>
+パラメータwal_sender_timeoutに設定した時間(デフォルト60[秒])内に返ってこなければ、故障と判断する。
+故障の発生から検出まで<u>最大でwal_sender_timeoutのタイムラグが発生</u>する。
 </p>
 
 </ol>
 
+
 <p>
-以下に例を示します。
+このように、状況によって故障発生の直後に検出できる場合もあれば、
+発生から検出までにタイムラグが生じる場合もあります。
+<br>
+このタイムラグがシステムに影響を及ぼす一例を示します。
 </p>
 
+<p>
+同期モード(sync_state=sync)のStandbyが故障し、その故障を検出して対処するまでの間、
+Primaryの更新はできなくなります。
+<br>
+複数Standbyで冗長性を持たせたシステム構成であっても、
+同期モードのStandby故障によってシステムの可用性が低下する場合があるのです。
+</p>
+
+
+
+<div class="jumpmenu"></div><h4>同期/非同期の切り替え</h4>
+
+<p>
+レプリケーションを同期から非同期に切り替えるのは、非常に簡単です。
+<br>
+設定パラメータsynchronous_standby_namesをコメントアウトして無効にし、再読み込み(reload)するだけです。
+</p>
+
+<p>
+逆も同様で、
+非同期から同期に切り替えるには、
+設定パラメータsynchronous_standby_namesを有効にして、再読み込み(reload)するだけです。
+</p>
+
+<p>
+postgresql.confの再読み込み(reload)は、クライアントには直接影響せず、
+<u>セッションもトランザクションも保持したまま行われます</u>。
+</p>
+
+
+<div class="jumpmenu"></div><h4><font color="#0000ff">レプリケーションスロット</font></h4>
+
+<p>
+レプリケーションスロットを使っている場合、
+Standbyの故障やプロモートなど、レプリケーションの構成が変化する場合には、レプリケーションスロットも更新する必要があります。
+更新しない場合、pg_wal以下にWALファイルが残り続け、HDD/SSDの容量を食い潰す可能性があります。
+</p>
+
+<p>
+具体的には以下のような対応が必要となります。
+</p>
+
+<ol>
+<li>Standbyが故障した場合、Primary側で対応するStandbyのレプリケーションスロットを削除する。</li>
+<li>Primaryが故障した場合、プロモートした新Primaryは古いレプリケーションスロットを削除して新たにレプリケーションスロットを作成する。</li>
+</ol>
+
+
+<div class="jumpmenu"></div><h3>故障対応 (Primary:Standby = 1:1の場合)</h3>
+
+<p>
+Primary1台、Standby1台構成について、PostgreSQLの操作方法を説明します。
+</p>
+
+<div class="jumpmenu"></div><h4>Standby故障:Standbyが1台の場合</h4>
+
+<p>
+同期レプリケーションは、1台しかないStandbyが故障すると、Primaryの更新もできなくなります。
+<br>
+この場合、Primaryを非同期レプリケーションに切り替えて運用を続けます。
+</p>
+
+
+<table BORDER="1">
+<caption>[<図3-10>] 1:1  Standby故障</caption>
+<tr><td><center>
+<img src="./fig-3-23-04.png" width=800><br>
+</center></td></tr>
+</table>
+
+<br>
+
+<p>
+同期/非同期レプリケーション切り替えの手順を示します。
+</p>
+
+<ol>
+<li>postgresql.confファイルを編集し、synchronous_standby_namesをコメントアウトする。</li>
 
 [< postgresql.confの設定例>]
 <pre>
-archive_mode = on    # バージョン8.3から
-archive_command = '/bin/cp %p /home/postgres/archivelogs/%f'
+# コメントアウトして、非同期モードにする
+# synchronous_standby_names = 'standby1'
 </pre>
 
+<br>
 
-<blockquote><table BORDER="1"><tr><td>脚注9</td><td>
-<p>
-8.2以前はarchive_commandにパラメータを設定すると、自動的にアーカイブログ機能が有効になりました。
-</p>
-</td></tr></table></blockquote>
-
-
-
-<div class="jumpmenu"></div><h3>ベースバックアップの取得</h3>
-
-<p>
-ベースバックアップの取得手順を示します。ここでは手動で行う方法を示します。ツールpg_basebackupを使う方法は[<3-22>]で説明します。
-</p>
-
-<p>
-PostgreSQLの管理者権限を持つデータベースユーザ(本書の場合postgres)で、
-任意のデータベース(ここではtemplate1)に接続し、関数pg_start_backup()を実行します。
-関数の引数にはラベルとして適当な文字列を設定します。
+<li>編集後、再読み込み(reload)する。</li>
 
 <pre>
-template1=# SELECT pg_start_backup ('base backup: テスト用ベースバックアップ');
- pg_start_backup 
------------------
- 0/34A0010
+primary> pg_ctl -D /usr/local/pgsql/data reload
+</pre>
+<br>
+
+</ol>
+
+<p>
+再読み込み(reload)を実行しても、クライアントのセッションやトランザクションは継続しています。
+よって、ユーザは切り替わったことに気づきません。
+</p>
+
+<p>
+<font color="#0000ff">レプリケーションスロットを使用している場合、故障したStandbyに対応するレプリケーションスロットを削除します。</font>
+</p>
+
+<pre>
+sampledb=# SELECT * FROM pg_drop_replication_slot('standby1_slot');
+ pg_drop_replication_slot
+--------------------------
+
 (1 row)
 </pre>
 
-<p>
-次に、データベースクラスタ(本書では'/usr/local/pgsql/data'以下)をバックアップします。
-<u>テーブルスペースを使っている場合は、それらもバックアップします</u>。
 <br>
-バックアップ方法は任意です。
-ここではtarコマンドで圧縮ファイルとしてバックアップする方法を示します。
+
+
+<div class="jumpmenu"></div><h4>Primary故障:Standbyが1台の場合</h4>
+
+<p>
+Primaryが故障した場合の対処を説明します。
+</p>
+
+
+<p>
+今、Primaryをimmediateモードでshutdownし(Primary故障をシミュレート)、standby1サーバ上でpg_ctl promoteコマンドを実行します。
 </p>
 
 <pre>
-postgres@orig> cd /usr/local/pgsql/
-postgres@orig> tar -czf /home/postgres/base_backup.tgz data
+standby1> pg_ctl -D /usr/local/pgsql/data/ promote
 </pre>
 
+<br>
+
 <p>
-バックアップが終了したら、関数pg_stop_backup()を実行します。
+これで、standby1は検索だけでなく更新も実行できるようになりました。
 </p>
 
 <pre>
-template1=# SELECT pg_stop_backup ();
- pg_stop_backup 
-----------------
- 0/34A0054
+standby1> psql sampledb -q
+sampledb=# SELECT pg_is_in_recovery();
+ pg_is_in_recovery
+-------------------
+ f
 (1 row)
 </pre>
 
-
-<div class="jumpmenu"></div><h3>リカバリ</h3>
-
-<p>
-データベースのリカバリについて説明します。
-はじめにリカバリ範囲を指定しないリカバリ方法を述べます。
-</p>
-
-<div class="jumpmenu"></div><h4>ベースバックアップの展開</h4>
+<br>
 
 <p>
-ベースバックアップを新しいサーバ上で展開します。
+なお、standby1のpostgresql.confは、設定パラメータsynchronous_standby_namesが無効になっていることを確認してください(なんらかの値が設定されていると、同期レプリケーションのPrimaryになってしまい、データ更新ができない)。
 </p>
 
 <pre>
-postgres@new> cd /usr/local/pgsql
-postgres@new> tar xvfz base_backup.tgz
-</pre>
+sampledb=# SHOW synchronous_standby_names;
+ synchronous_standby_names
+---------------------------
 
-<p>
-テーブルスペースがある場合は、元サーバと同じディレクトリ構成で展開します。
-</p>
-
-<div class="jumpmenu"></div><h4>アーカイブログの配置</h4>
-
-<p>
-元サーバのアーカイブログを新しいサーバに配置します。
-</p>
-
-<p>
-はじめに(元サーバの)アーカイブログを配置するディレクトリを作成します。
-</p>
-
-<pre>
-postgres@new> mkdir -p /usr/local/pgsql/archivelogs_orig
-</pre>
-
-<p>
-次にアーカイブログをコピーします。ここではscpを使います。
-</p>
-
-<pre>
-postgres@new> cd /usr/local/pgsql/archivelogs_orig
-postgres@new> scp postgres@orig:/home/postgres/archivelogs/* .
-</pre>
-
-<p>
-可能ならば元サーバのpg_xlog以下のWALログもコピーします。
-WALログに異常がなければ、クラッシュ直前のデータまでリカバリできます。
-</p>
-
-<pre>
-postgres@new> scp postgres@orig:/usr/local/pgsql/data/pg_xlog/* .
-</pre>
-
-
-<div class="jumpmenu"></div><h4>recovery.confの設定　</h4>
-
-<p>
-リカバリを制御するrecovery.confファイルを用意します。
-<br>
-PostgreSQLのインストールディレクトリ下share/にテンプレートrecovery.conf.sampleがあるので、
-これをベースディレクトリにコピーして編集します。
-</p>
-
-<pre>
-postgres@new> cp /usr/local/pgsql/share/recovery.conf.sample \
->                               /usr/local/pgsql/data/recovery.conf
-</pre>
-
-<p>
-recovery.confの設定項目を示します([<表3-23>])。
-</p>
-
-<table border=1>
-<caption>[<表3-23>] recovery.confの設定項目(1)</caption>
-<tr bgcolor="#cccccc">
-<th>パラメータ</th>	<th>説明</th>
-</tr><tr>
-<td>restore_command</td>	<td>リカバリに使うアーカイブログをコピーするコマンドを記述する。下に示す具体例を参照</td>
-</tr><tr>
-<td>archive_cleanup_command</td>     <td>ツールpg_archivecleanupを実行するコマンドを記述する(このツールは手動でも実行できる)。バージョン9.0から</td>
-</tr><tr>
-<td>recovery_end_command</td>	     <td>リカバリ後、一度だけ実行するコマンドを記述する。シェルスクリプトも可能。バージョン8.4から</td>
-</tr><tr>
-<td>recovery_target_timeline</td>    <td>リカバリするTimelineIDを指定。バージョン9.0以降のデフォルトは'latest'</td>
-</tr></table>
-
-<br>
-
-
-<p>
-最低限、restore_commandを設定すればリカバリできます。
-<br>
-本書の例では、ディレクトリ/usr/local/pgsql/archivelogs_orig以下にアーカイブログを配置するので、
-次のように記述します。
-</p>
-
-<pre>
-restore_command = '/bin/cp /usr/local/pgsql/archivelogs_orig/%f %p'
-</pre>
-
-<p>
-ここで"%f"はアーカイブログ名に置換され、順次再実行されます。
-</p>
-
-
-<div class="jumpmenu"></div><h4>起動</h4>
-
-<p>
-準備を終えたら、サーバを起動します。リカバリを終えると通常のアクセスが可能になります。
-</p>
-
-<pre>
-postgres@new> pg_ctl -D /usr/local/pgsql/data start
-</pre>
-
-<blockquote><table BORDER="1"><tr><td>コラム3-5:リカバリ時間</td><td>
-<p>
-運用で問題になるのはリカバリ時間です。なぜならリカバリにかかる時間は可用性に直接影響するからです。
-</p>
-
-<p>
-ここで、筆者が2010年におこなったリカバリ時間の測定結果を示します。
-<br>
-測定環境は次のとおり：
-</p>
-
-<table border=1>
-<tr bgcolor="#cccccc">
-<th colspan=2 align=left>ハードウエア</th><th colspan=2 align=left>ソフトウエア　　　　　　　　　　　</th>
-</tr><tr>
-<td>CPU</td>	<td>Intel Core2 Quad Q6600@2.40GHz</td>	<td>PostgreSQLのバージョン</td>	<td>8.4</td>
-</tr><tr>
-
-
-<td>メモリ</td>	<td>8GB</td>				<td rowspan=2 valign=top>shared_buffers</td>	<td rowspan=2 valign=top>320MB</td>
-</tr><tr>
-<td>HDD</td>	<td>2HDD (データベースクラスタとアーカイブログを分離)</td>
-
-</tr></table>
-
-<br>
-
-<p>
-この環境で、1000万件のINSERTと1000万件のUPDATEを実行しました。アーカイブログは108ファイル生成されました。
-</p>
-
-<p>
-事前に取得したベースバックアップとアーカイブログ108ファイルからリカバリを行ったところ、
-<u>3分9秒でリカバリが完了</u>しました。
-<br>
-これは他のRDBMSと比較して驚異的に短い時間です。
-同条件でMySQL5.1.37 はリカバリに100分59秒かかりました(MySQLの機構上、REDOログの再実行に時間がかかるのは避けられない)。
-(Oracleはベンチマーク結果公開を禁止しているので記述できませんが）PostgreSQLは他のRDBMSと比較してリカバリが桁違いに早いことは事実です。
-</p>
-
-</td></tr></table></blockquote>
-
-
-<p>
-リカバリが成功して無事にサーバが起動したなら、
-コピーしてきた元サーバのアーカイブログは削除しても構いません。
-</p>
-
-<pre>
-postgres@new> rm -rf  /usr/local/pgsql/archivelogs_orig
-</pre>
-
-
-<div class="jumpmenu"></div><h3>PITR(Point In Time Recovery)</h3>
-
-<p>
-次に、任意の時点までリカバリするPITR(Point In Time Recovery)を説明します。
-<br>
-なお、TimeLineIDを操作して試行錯誤的にリカバリする手順は、[<2-10>]に示しました。
-</p>
-
-<p>
-手順は上記と同じで、違いはrecovery.confに以下のパラメータを設定する点だけです([<表3-24>])。
-</p>
-
-<table border=1>
-<caption>[<表3-24>] recovery.confの設定項目(2)</caption>
-<tr bgcolor="#cccccc">
-<th>パラメータ</th>	<th>説明</th>
-<tr bgcolor="#eeeeee">
-<th colspan=2 align=left>リカバリ範囲の指定(三者択一)</th>
-</tr><tr>
-<td>recovery_target_name</td>	<td>任意の'文字列'を指定して、関数pg_create_restore_point('文字列')を実行したLSNまでリカバリする。バージョン9.1から</td>
-</tr><tr>
-<td>recovery_target_time</td>	<td>'2011-03-11 14:46:00 JST'など、設定した時刻までリカバリする。</td>
-</tr><tr>
-<td>recovery_target_xid</td>	<td>LSNを直接指定し、そのLSNまでリカバリする。</td>
-<tr bgcolor="#eeeeee">
-<th colspan=2 align=left>リカバリ範囲の制御</th>
-</tr><tr>
-<td>recovery_target_inclusive</td>   <td>recovery_target_name,recovery_target_time,recovery_target_xidで指定した値を、リカバリに含めるか否か。 デフォルトはtrueで"含める"。</td>
-</tr></table>
-
-
-<br>
-
-<p>
-recovery_target_timeやrecovery_target_xidの指定は分かり易いので、説明を省略します。
-<br>
-以降、バージョン9.1でサポートされたrecovery_target_nameの使い方を含めて、PITRの実例を示します。
-</p>
-
-<div class="jumpmenu"></div><h4>元サーバでの操作</h4>
-
-<p>
-すでにベースバックアップを取得した元データベースに対し、次のSQLを実行します。
-<br>
-関数pg_create_restore_point()には任意の文字列を指定します。
-リカバリする際は、この文字列でリカバリの終了点を指定します。
-</p>
-
-<pre>
-sampledb=# INSERT INTO test VALUES(1);
-INSERT 0 1
-
-sampledb=# SELECT * FROM test;
- id 
-----
-  1
 (1 row)
+</pre>
 
-sampledb=# -- リストアポイントを設定
-sampledb=# SELECT pg_create_restore_point('restorePoint 1');
-LOG:  restore point "restorePoint 1" created at 0/D0575CC
- pg_create_restore_point 
--------------------------
- 0/D0575CC
-(1 row)
+<br>
 
-sampledb=# INSERT INTO test VALUES(2);
-INSERT 0 1
+<p>
+もしも同期モードでpromoteしてしまった場合は、上記の非同期レプリケーションへの切り替え手順を実行してください。
+</p>
 
-sampledb=# SELECT * FROM test;
- id 
-----
-  1
-  2
+
+<p>
+<font color="#0000ff">レプリケーションスロットを使用している場合は、念の為、postgresql.confのprimary_slot_nameをコメントアウトし、設定をreloadするとよいでしょう。</font>
+</p>
+
+[< postgresql.confの設定>]
+<pre>
+# コメントアウトする
+#primary_slot_name = 'standby1_slot'
+</pre>
+
+<br>
+
+<pre>
+standby1> pg_ctl -D data reload
+</pre>
+
+<br>
+
+
+<div class="jumpmenu"></div><h3>故障対応 (Primary:Standby = 1:Nの場合)</h3>
+
+<p>
+Standbyが2台の場合について、PostgreSQLの操作方法を説明します。
+</p>
+
+
+<div class="jumpmenu"></div><h4>Standby故障:Standbyが2台の場合</h4>
+
+<p>
+それぞれのStandbyが故障した場合の動作を示します。
+</p>
+
+<blockquote>
+(1)sync_state=potential のStandbyが故障がした場合([<図3-11>(1)])<br>
+<p>
+sync_state=syncのStandbyは同期レプリケーションを続ける。Standby故障はユーザからは完全にマスクされる。
+</p>
+
+(2)sync_state=sync のStandbyが故障した場合([<図3-11(2)>])<br>
+<p>
+sync_state=potentialのStandbyが昇格して 同期レプリケーションを続ける。
+Standby故障が発生してから、その故障を検出し他のStandbyを昇格する間、Primaryの更新はできない。
+</p>
+
+</blockquote>
+
+<font color="#ff0000">
+作図用の文章
+</font>
+<pre>
+sync_state = potentialのstandby2がクラッシュしても、
+standby1は同期レプリケーションを続ける
+
+
+sync_state = syncのstandby1がクラッシュすると、
+standby2がsync_state=syncに昇格して、
+同期レプリケーションを続ける
+</pre>
+
+
+<table BORDER=1>
+<caption>[<図3-11>] 1:2  Standby故障</caption>
+<tr><td><center>
+<img src="./fig-3-23-05.png" width=800><br>
+</center></td></tr>
+</table>
+
+<br>
+
+<p>
+(2)の状況をPrimary側で確認してみます。
+<br>
+はじめはStandbyが2台稼働しています。
+</p>
+
+<pre>
+sampledb=# SELECT application_name,state,sync_priority,sync_state
+sampledb-#                                     FROM pg_stat_replication;
+ application_name |   state   | sync_priority | sync_state
+------------------+-----------+---------------+------------
+ standby1           | streaming |             1 | sync
+ standby2           | streaming |             2 | potential
 (2 rows)
 </pre>
 
-<div class="jumpmenu"></div><h4>再構築するサーバでの作業</h4>
-
-<p>
-再構築するサーバ上でベースバックアップを展開します。
-次に元サーバのアーカイブログとpg_xlog以下のWALログを/usr/local/pgsql/data/archivelogs_origにコピーします。
-</p>
-
-<pre>
-postgres@new> cd /usr/local/pgsql
-postgres@new> rm -rf data
-postgres@new> tar xvfz base_backup.tgz
-postgres@new> scp postgres@orig:/home/postgres/archivelogs/* \
->                                /usr/local/pgsql/archivelogs_orig
-postgres@new> scp postgres@orig:/usr/local/pgsql/data/pg_xlog/* \
->                                /usr/local/pgsql/archivelogs_orig
-</pre>
-
-<p>
-recovery.confに次のパラメータを設定します。
-</p>
-
-<pre>
-archive_mode = on    # バージョン8.3から
-archive_command = '/bin/cp %p /home/postgres/archivelogs/%f'
-
-# 関数pg_create_restore_point('restorePoint 1')を実行した時点までリカバリする。
-restore_target_name = 'restorePoint 1'	
-</pre>
-
-<p>
-この状態でサーバを起動すると、元サーバでpg_create_restore_point('restorePoint 1')を実行した時点までリカバリします。
 <br>
-起動したサーバでテーブルtestを確認すると、次のような結果を得ます。
+
+<p>
+ここで、同期レプリケーションをしていたstandby1が故障したとします。
+<br>
+すると、standby2が昇格して同期レプリケーションを続けます。
+<br>
+ただし、前記の「PrimaryによるStandbyの故障検出と、故障の影響」で説明したように、
+状況によっては故障検出に時間がかかり、その間はPrimaryの更新ができないこともあります。
 </p>
 
 <pre>
-sampledb=# SELECT * FROM test;
- id 
-----
-  1
+sampledb=# SELECT application_name,state,sync_priority,sync_state
+sampledb-#                                     FROM pg_stat_replication;
+ application_name |   state   | sync_priority | sync_state
+------------------+-----------+---------------+------------
+ standby2           | streaming |             2 | sync
 (1 row)
 </pre>
 
-
-
-
-<div class="jumpmenu"></div><h3>アーカイブログの削除ツール:pg_archivecleanup</h3>
+<br>
 
 <p>
-バージョン9.0からcontribにpg_archivecleanupが追加されました。
-これはアーカイブログを削除するツールです。
-</p>
-
-<p>
-インストール方法は次のとおりです。
+standby1が復旧できた場合、standby2は予備(potential)に降格します。
 </p>
 
 <pre>
-postgres> cd contrib/pg_archivecleanup
-postgres> make && make install
+sampledb=# SELECT application_name,state,sync_priority,sync_state
+sampledb-#                                     FROM pg_stat_replication;
+ application_name |   state   | sync_priority | sync_state
+------------------+-----------+---------------+------------
+ standby1           | streaming |             1 | sync
+ standby2           | streaming |             2 | potential
+(2 rows)
 </pre>
 
+
+<br>
+
 <p>
-使い方は簡単で、アーカイブログのディレクトリとログ名を指定すると、そのログ名よりも古いログをすべて削除します(バックアップヒストリーファイルは残す)。
+<font color="#0000ff">
+レプリケーションスレッドを使用している場合、故障したStandbyに対応するスレッドを削除します。
+</font>
 </p>
 
 <pre>
-postgres> ls /home/postgres/archivelogs/
-000000010000000000000011.00000020.backup  000000010000000000000016
-000000010000000000000012                  000000010000000000000017
-000000010000000000000013                  000000010000000000000018
-000000010000000000000014                  000000010000000000000018.00000020.backup
-000000010000000000000015                  000000010000000000000019
-000000010000000000000015.00000020.backup  00000001000000000000001A
+sampledb=# SELECT * FROM pg_drop_replication_slot('standby1_slot');
+ pg_drop_replication_slot
+--------------------------
 
-postgres> pg_archivecleanup /home/postgres/archivelogs \
->                     000000010000000000000018.00000020.backup 
-
-postgres> ls /home/postgres/archivelogs/
-000000010000000000000011.00000020.backup  000000010000000000000018.00000020.backup
-000000010000000000000015.00000020.backup  000000010000000000000019
-000000010000000000000018                  00000001000000000000001A
+(1 row)
 </pre>
 
+<br>
+
+
+<div class="jumpmenu"></div><h4>Primary故障：Standbyが2台の場合</h4>
+
 <p>
-このツールはバージョン依存性がないので、古いバージョンのアーカイブログに対しても使用できます。
+Primaryが故障し、2台体制の縮退運転に移行する手順を説明します([<図3-12>])。
+<br>
+なお、ここでは解説を簡略化するため、Primary選択は戦略2を用いることにします。
 </p>
 
+
+<table BORDER=1>
+<caption>[<図3-12>] 1:2  Primary故障</caption>
+<tr><td><center>
+<img src="./fig-3-23-06.png" width=800><br>
+</center></td></tr>
+</table>
+
+
+<br>
+
+
+<p>
+フォローマスタの手順が繁雑なのは、
+新Primary(standby1)のTimeLineIDがPrimary昇格(promote)によって1つ繰り上がること、
+および、Standby間でWALログの再生状況が異なるからです。
+<br>
+そのため、
+Standbyは新Primaryのベースバックアップかアーカイブログを取得し、
+リカバリモードで再起動しなければなりません。
+</p>
+
+
+<p>
+フォローPrimaryには2つの方式があります([<脚注1>])。
+どちらの方式も、Standbyのデータベースクラスタをゼロから再構築します。
+ここでは便宜的に[A]と[B]と呼ぶことにします。
+</p>
+
+<blockquote>
+[A]: pg_basebackupコマンドでデータベースクラスタを再構築する。
+<br>
+[B]: 手動でベースバックアップを取得し、Standby側でリカバリする。
+</blockquote>
+
+<br>
+
+<p>
+以下、Primary故障対応の概略を示し、次に方式別のフォローPrimaryの実行手順を説明します。
+</p>
+
+
+
+<blockquote><table BORDER="1"><tr><td>脚注1</td><td>
+<p>
+新Standbyのアーカイブログとhistoryファイルを使う方法もありますが、ここでは説明を省略します。
+</p>
+</td></tr></table></blockquote>
+
+
+
+<p>
+[0] standby1の事前準備/Primary故障
+</p>
+
+<blockquote>
+
+<p>
+[B]を選択する場合、アーカイブログの設定も必要です。
+<br>
+この設定により、Primary昇格後にアーカイブログ機構が有効になります。
+</p>
+
+[< postgresql.confの設定例>]
+<pre>
+archive_mode = on
+archive_command = 'cp %p /home/postgres/archivelogs/%f'
+</pre>
+
+</blockquote>
+
+
+<p>
+[1] standby1をPrimaryに昇格(promote)
+</p>
+
+<blockquote>
+<p>
+Primaryに故障が発生したら、standby1サーバ上でpg_ctl promoteコマンドを実行して、新Primaryに昇格させます。
+</p>
+
+<pre>
+standby1> pg_ctl -D /usr/local/pgsql/data/ promote
+</pre>
+
+<br>
+
+<p>
+<font color="#0000ff">
+この系がレプリケーションスロットを使っている場合、念の為、新Primaryにレプリケーションスロットがないことを確認します。
+</font>
+</p>
+
+<pre>
+postgres=# SELECT slot_name, active FROM pg_replication_slots;
+ slot_name | active
+-----------+--------
+(0 rows)
+</pre>
+
+</blockquote>
+
+
+<p>
+[2] standby2を新Primary(standby1)に接続(Follow Master)
+</p>
+
+<blockquote>
+<p>
+概略のみ示します。Standbyのリカバリ準備は後述します。
+</p>
+
+<ol>
+<li>postgresql.conf、pg_hba.confを退避</li>
+<p>
+適当なディレクトリにpostgresql.conf、pg_hba.confを退避しておきます。
+</p>
+
+<pre>
+standby2> cp /usr/local/pgsql/data/postgresql.conf /usr/local/pgsql
+standby2> cp /usr/local/pgsql/data/pg_hba.conf /usr/local/pgsql
+</pre>
+
+<br>
+
+<li>リカバリの準備</li>
+<p>
+手順は後述します。
+</p>
+
+
+<li> postgresql.conf, pg_hba.confをデータベースクラスタに戻す</li>
+
+<pre>
+standby2> cp /usr/local/pgsql/postgresql.conf /usr/local/pgsql/data
+standby2> cp /usr/local/pgsql/pg_hba.conf /usr/local/pgsql/data
+</pre>
+
+<br>
+
+<li> 再起動</li>
+
+<p>
+Standbyを起動します。
+</p>
+
+<pre>
+standby2> pg_ctl -D data start
+</pre>
+
+<br>
+
+<li> <font color="#0000ff">レプリケーションスロットの確認と削除</font></li>
+
+<p>
+念の為、レプリケーションスロットがあるかどうか、確認します。
+もしも存在している場合はpg_drop_replication_slot()で削除します。
+</p>
+
+<pre>
+postgres=# SELECT slot_name, active FROM pg_replication_slots;
+ slot_name | active
+-----------+--------
+(0 rows)
+</pre>
+
+<br>
+
+</ol>
+
+</blockquote>
+
+
+
+<p>
+[3] 新Primary(standby1)を同期レプリケーションに切り替え
+</p>
+
+<blockquote>
+<p>
+standby1のpostgresql.conf:synchronous_standby_nameに'standby2'を設定し、
+reloadします。
+</p>
+
+[< postgresql.confの設定例>]
+<pre>
+synchronous_standby_names = 'standby2'
+</pre>
+
+<br>
+
+<p>
+設定後、リロードします。
+</p>
+
+<pre>
+standby1> pg_ctl -D /usr/local/pgsql/data reload
+</pre>
+
+</blockquote>
+
+<br>
+
+
+<p>
+<font color="#0000ff">[4] レプリケーションスロットの設定</font>
+</p>
+
+<blockquote>
+
+<p>
+レプリケーションスロットを使用する場合、以下のコマンドで新規にスロットを作成します。
+</p>
+
+<pre>
+postgres=# SELECT * FROM pg_create_physical_replication_slot('standby2_slot');
+   slot_name   | lsn
+---------------+-----
+ standby2_slot |
+(1 row)
+</pre>
+
+<br>
+
+<p>
+Standby側でprimary_slot_nameを設定した状態で起動すると、以下の様に設定後すぐにスロットがアクティブになります。
+</p>
+
+<pre>
+postgres=# SELECT slot_name, active FROM pg_replication_slots;
+   slot_name   | active
+---------------+--------
+ standby2_slot | t
+(1 row)
+</pre>
+<br>
+
+</blockquote>
+
+
+<div class="jumpmenu"></div><h3>フォローマスタにおけるStandbyのリカバリ準備</h3>
+
+<p>
+以下、方式別に手順を説明します。
+</p>
+
+<div class="jumpmenu"></div><h4>[A] pg_basebackupを使う</h4>
+
+
+<ol>
+<li> 新Primaryのベースバックアップ</li>
+ <p>
+新Primary：standby1のデータベースクラスタをstandby2にベースバックアップします。
+ </p>
+
+<pre>
+standby2> rm -rf /usr/local/pgsql/data
+standby2> pg_basebackup -h standby1 -p 5432 -D /usr/local/pgsql/data -X stream -P -R -v --no-slot
+</pre>
+
+<br>
+
+
+<li> postgresql.conf|postgresql.auto.conf編集</li>
+ <p>
+primary_conninfo の接続hostを"primary"から"standby1"に変更します。
+<font color="#0000ff">レプリケーションスロットを使用する場合は、primary_slot_nameも設定します。</font>
+ </p>
+[< postgresql.conf|postgresql.auto.confの設定例>]
+<pre>
+primary_conninfo = 'host=standby1 port=5432 application_name=standby2'
+
+# レプリケーションスロットを使う場合
+primary_slot_name = 'standby2_slot'
+</pre>
+</ol>
+
+<br>
+
+<div class="jumpmenu"></div><h4>[B]手動でベースバックアップとアーカイブログを取得する</h4>
+
+<p>
+pg_basebackupコマンドが使えない場合に利用します。
+</p>
+
+<ol>
+<li> 新Primaryのベースバックアップ</li>
+ <p>
+新Primarystandby1のデータベースクラスタをstandby2にベースバックアップします。
+ベースバックアップの取得方法は<a href="./admin-19.html">[<3-19>]</a>を参照してください。
+ </p>
+
+<li> postgresql.conf編集</li>
+ <p>
+primary_conninfo の接続hostを"primary"から"standby1"に変更します。
+<font color="#0000ff">レプリケーションスロットを使用する場合は、primary_slot_nameも設定します。</font>
+</p>
+
+[< postgresql.confの設定例>]
+<pre>
+primary_conninfo = 'host=standby1 port=5432 application_name=standby2'
+
+# レプリケーションスロットを使う場合
+primary_slot_name = 'standby2_slot'
+</pre>
+</ol>
+
+<br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2018-9-8
+Last-modified: 2023-3-11
 </div>
 </body>
 </html>

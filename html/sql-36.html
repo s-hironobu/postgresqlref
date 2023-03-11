@@ -2,12 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
- <title>PostgreSQLバイブル草稿</title>
- <link rel="stylesheet" type="text/css" media="screen" href="./default.css"">
-</head>
-
-<body>
+ <meta http-equiv="content-style-type" content="text/css">
+ <title>自分用PostgreSQLマニュアル</title>
+ <link rel="stylesheet" type="text/css" media="screen" href="./default.css" charset="UTF-8">
+ </head>
+ <body>
 
 <script language=javascript>
 <!--
@@ -26,11 +25,10 @@ objID.className='close';
 </script>
 
 <div id="header">
-<h1 class="title">PostgreSQLバイブル草稿</title></h1>
+<h1 class="title">自分用PostgreSQLマニュアル</title></h1>
     <span class="small">
 </span>
 </div>
-
 
 <hr class="full_hr">
 <table style="width: 100%;" border="0">
@@ -38,15 +36,16 @@ objID.className='close';
   <td class="menubar">
    <div id="menubar">
 
-
 <h5>PostgreSQLとは</h5>
 
-<li><a href="./index.html">PostgreSQLとは</a><br></li>
+<li><a href="./intro.html">PostgreSQLとは</a><br></li>
+
 
 <h5>PostgreSQLの内部構造</h5>
 <ul>
 <li><a href="./internal.html">とびら</a><br></li>
 </ul>
+
 <ol>
 <li><a href="./internal-01.html">プロセスとメモリ構造</a><br></li>
 <li><a href="./internal-02.html">データベースクラスタ、テーブルの構造</a></li>
@@ -58,7 +57,7 @@ objID.className='close';
 <li><a href="./internal-08.html">HOTとIndex Only Scan</a></li>
 <li><a href="./internal-09.html">WAL(Write Ahead Logging)</a></li>
 <li><a href="./internal-10.html">アーカイブログとPITR</a></li>
-<li><a href="./internal-11.html">レプリケーション(Streaming ReplicationとHotStandby)</a></li>
+<li><a href="./internal-11.html">Streaming ReplicationとHotStandby</a></li>
 </ol>
 
 
@@ -69,56 +68,46 @@ objID.className='close';
 </ul>
 
 <ol>
-[PostgreSQLの基礎]<br>
-<li><a href="./admin-01.html">オブジェクト、データベース、スキーマ</a><br></li>
-<li><a href="./admin-02.html">システムカタログ</a><br></li>
-<li><a href="./admin-03.html">文字コードの扱い</a><br></li>
-
 
 [インストールと起動、停止]<br>
-<li><a href="./admin-04.html">インストール</a><br></li>
-<li><a href="./admin-05.html">データベースシステムの初期化 initdb</a><br></li>
-<li><a href="./admin-06.html">PostgreSQLサーバの起動/停止</a><br></li>
+<li><a href="./admin-01.html">インストール</a><br></li>
+<li><a href="./admin-02.html">データベースシステムの初期化 initdb</a><br></li>
+<li><a href="./admin-03.html">PostgreSQLサーバの起動/停止</a><br></li>
 
+<hr>
+[PostgreSQLの基礎]<br>
+<li><a href="./admin-04.html">オブジェクト、データベース、スキーマ</a><br></li>
+<li><a href="./admin-05.html">システムカタログ</a><br></li>
+<li><a href="./admin-06.html">文字コードの扱い</a><br></li>
 
+  <hr>
 [認証とアクセス制御]<br>
 <li><a href="./admin-07.html">認証とアクセス制御</a><br></li>
 <li><a href="./admin-08.html">クライアントのアクセス制御</a><br></li>
 <li><a href="./admin-09.html">権限について</a><br></li>
 <li><a href="./admin-10.html">ロールの作成と権限制御</a><br></li>
 
-<HR>
-
+<hr>
 [バックアップとアップグレード]<br>
 <li><a href="./admin-11.html">バックアップとアップグレード</a><br></li>
 <li><a href="./admin-12.html">ダンプとリストア</a><br></li>
 <li><a href="./admin-13.html">アップグレード</a><br></li>
 
+  <hr>
 [保守、監視とチューニング]<br>
 <li><a href="./admin-14.html">保守、監視とチューニング</a><br></li> 
 <li><a href="./admin-15.html">稼働統計情報</a><br></li>
 <li><a href="./admin-16.html">実行ログの取得</a><br></li>
-<li><a href="./admin-17.html">モニタリングツール</a><br></li>
-<li><a href="./admin-18.html">ログと統計情報の分析</a><br></li>
-<li><a href="./admin-19.html">パラメータチューニング</a><br></li>
+<li><a href="./admin-17.html">ログと統計情報の分析</a><br></li>
+<li><a href="./admin-18.html">パラメータチューニング</a><br></li>
 
+  <hr>
 [耐障害性、高可用性]<br>
-<li><a href="./admin-20.html">耐障害性、高可用性</a><br></li>
-<li><a href="./admin-21.html">アーカイブログとPITR</a><br></li>
-<li><a href="./admin-22.html">レプリケーションの設定</a><br></li>
-<li><a href="./admin-23.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-19.html">アーカイブログとPITR</a><br></li>
+<li><a href="./admin-20.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-21.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-22.html">ロジカルレプリケーション</a><br></li>
 
-
-[FDW]<br>
-<li><a href="./admin-24.html">FDW</a><br></li>
-<li><a href="./admin-25.html">postgres_fdw</a><br></li>
-</ol>
-
-[追加の文章(未完)]<br>
-<li><a href="./admin-26.html">ロギング</a><br></li>
-<li><a href="./admin-27.html">統計情報</a><br></li>
-<li><a href="./admin-28.html">モニタリング</a><br></li>
-<li><a href="./admin-29.html">メンテナンス</a><br></li>
 </ol>
 
 
@@ -138,6 +127,7 @@ objID.className='close';
 <li><a href="./param-11.html">クライアント接続デフォルト</a><br></li>
 <li><a href="./param-12.html">ロック管理/バージョンとプラットフォーム互換性</a><br></li>
 </ol>
+
 
 
 <h5>psql</h5>
@@ -160,6 +150,7 @@ objID.className='close';
 </ol>
 
 
+
 <h5>SQL</h5>
 
 <ul>
@@ -167,15 +158,14 @@ objID.className='close';
 </ul>
 
 <ol>
-[SQL]<br>
 
 <li><a href="./sql-01.html">SQL語彙</a><br></li>
 <li><a href="./sql-02.html">テーブルスペースの作成/削除/変更</a><br></li>
 <li><a href="./sql-03.html">データベースの作成/変更/削除</a><br></li>
-<li><a href="./sql-04.html">テーブルの作成</a><br></li>
+<li><a href="./sql-04.html">テーブルの作成 CREATE TABLE / CREATE TABLE AS</a><br></li>
 <li><a href="./sql-05.html">外部キー</a><br></li>
 <li><a href="./sql-06.html">オブジェクトの継承/LIKE句</a><br></li>
-<li><a href="./sql-07.html">問い合わせ結果から新しいテーブルを作成</a><br></li>
+<li><a href="./sql-07.html">パーティション</a><br></li>
 <li><a href="./sql-08.html">テーブルの削除</a><br></li>
 <li><a href="./sql-09.html">スキーマの定義/変更/削除</a><br></li>
 
@@ -201,7 +191,7 @@ objID.className='close';
 <li><a href="./sql-25.html">問い合わせの結合</a><br></li>
 <li><a href="./sql-26.html">ORDER BY</a><br></li>
 <li><a href="./sql-27.html">LIMIT OFFSET</a><br></li>
-<li><a href="./sql-28.html">FOR UPDATE/ FOR SHARE</a><br></li>
+<li><a href="./sql-28.html">FOR [NO KEY] UPDATE/ FOR [KEY] SHARE</a><br></li>
 <li><a href="./sql-29.html">サブクエリ</a><br></li>
 <li><a href="./sql-30.html">CASE式</a><br></li>
 <li><a href="./sql-31.html">VALUES</a><br></li>
@@ -227,18 +217,12 @@ objID.className='close';
 <li><a href="./sql-49.html">COPY/IMPORT</a><br></li>
 <li><a href="./sql-50.html">COPY/EXPORT</a><br></li>
 <li><a href="./sql-51.html">関数定義</a><br></li>
-<li><a href="./sql-52.html">エクステンション</a><br></li>
-<li><a href="./sql-53.html">外部サーバの定義、変更、削除</a><br></li>
-<li><a href="./sql-54.html">外部サーバのユーザマップ定義、変更、削除</a><br></li>
-<li><a href="./sql-55.html">外部テーブルの定義、変更、削除</a><br></li>
-<hr>
-<li><a href="./sql-56.html">イベントトリガ</a><br></li>
-<li><a href="./sql-57.html">行レベルセキュリティ</a><br></li>
+<li><a href="./sql-52.html">FDW(Foreign Data Wrapper)</a><br></li>
 
-<hr>
-<li><a href="./sql-60.html">新しい機能</a><br></li>
+<li><a href="./sql-53.html">PUBLICATION</a><br></li>
+<li><a href="./sql-54.html">SUBSCRIPTION</a><br></li>
+  
 </ol>
-
 
 <h5>関数</h5>
 
@@ -260,8 +244,6 @@ objID.className='close';
 <li><a href="./type-09.html">バイナリ列データ型</a><br></li>
 <li><a href="./type-10.html">Range型</a><br></li>
 <li><a href="./type-11.html">配列</a><br></li>
-<hr>
-<li><a href="./type-12.html">JSON型</a><br></li>
 
 <hr>
 [演算子]<br>
@@ -273,9 +255,6 @@ objID.className='close';
 <li><a href="./ope-06.html">パターンマッチング</a><br></li>
 <li><a href="./ope-07.html">日付/時刻演算子</a><br></li>
 <li><a href="./ope-08.html">Range型演算子</a><br></li>
-<hr>
-<li><a href="./ope-09.html">JSON型演算子</a><br></li>
-
 
 <hr>
 [関数]<br>
@@ -287,89 +266,73 @@ objID.className='close';
 <li><a href="./func-06.html">型変換関数</a><br></li>
 <li><a href="./func-07.html">Range型関数</a><br></li>
 <li><a href="./func-08.html">Window関数</a><br></li>
-<li><a href="./func-09.html">セッション情報関数</a><br></li>
-<li><a href="./func-10.html">アクセス権限とスキーマ可視性照会関数</a><br></li>
-<li><a href="./func-11.html">データベースオブジェクト関数</a><br></li>
-<li><a href="./func-12.html">バックアップとリカバリ制御関数</a><br></li>
+  <hr>
 
-<li><a href="./func-13.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-09.html">セッション情報関数</a><br></li>
+<li><a href="./func-10.html">アクセス権限照会関数</a><br></li>
+<li><a href="./func-11.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-12.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-13.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
+<li><a href="./func-14.html">制御データ関数</a><br></li>
+  <hr>
 <li><a href="./func-15.html">構成設定関数</a><br></li>
 <li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-17.html">レプリケーションSQL関数</a><br></li>
-
-<hr>
-<li><a href="./func-18.html">JSON関数</a><br></li>
+<li><a href="./func-17.html">バックアップ制御関数</a><br></li>
+<li><a href="./func-18.html">リカバリ制御関数</a><br></li>
+<li><a href="./func-19.html">スナップショット同期関数</a><br></li>	
+<li><a href="./func-20.html">レプリケーション管理関数</a><br></li>	
+<li><a href="./func-21.html">データベースオブジェクト管理関数</a><br></li>
+<li><a href="./func-22.html">インデックス保守関数</a><br></li>	
+<li><a href="./func-23.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-24.html">勧告的ロック用関数</a><br></li>
+<li><a href="./func-25.html">統計情報関数</a><br></li>	
 
 </ol>
-
-<!--
-[削除するもの]<br>
-<li><a href="./type-07.html">幾何データ型</a><br></li>
-<li><a href="./type-08.html">ネットワークアドレス型型</a><br></li>
-<li><a href="./ope-08.html">幾何演算子</a><br></li>
-<li><a href="./ope-09.html">ネットワーク演算子</a><br></li>
-<li><a href="./func-06.html">幾何関数</a><br></li>
-<li><a href="./func-07.html">ネットワークアドレス関数</a><br></li>
-<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
-<li><a href="./func-16.html">トランザクションID関数</a><br></li>
-<li><a href="./func-17.html">スキーマ可視性照会関数</a><br></li>
-<li><a href="./func-18.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-19.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-20.html">勧告的ロック用関数</a><br></li>
--->
 
 <h5>PL/pgSQL</h5>
 
 <ol>
-<li><a href="./plpgsql.html">結果の返し方</a><br></li>
-<li><a href="./plpgsql-01.html">ストアドプロシージャ</a><br></li>
-<li><a href="./plpgsql-02.html">ストアドプロシージャの定義</a><br></li>
+<li><a href="./plpgsql-01.html">PL/pgSQLによるストアドプロシージャ</a><br></li>
+
+  <hr>[定義]
+    <br>
+
+<li><a href="./plpgsql-02.html">PL/pgSQLによるストアドプロシージャの定義</a><br></li>
+
+  <hr>[基本的な使い方]
+    <br>
 <li><a href="./plpgsql-03.html">変数宣言と値の代入</a><br></li>
-**** まとめる >>
+
 <li><a href="./plpgsql-04.html">SELECT INTO文</a><br></li>
 <li><a href="./plpgsql-05.html">結果ステータスの取得</a><br></li>
 <li><a href="./plpgsql-06.html">動的なSQL文の実行</a><br></li>
-<< ここまで****
+
+  <hr>[制御構造]
+    <br>
 <li><a href="./plpgsql-07.html">IF 条件分岐</a><br></li>
-<li><a href="./plpgsql-08.html">ループ処理</a><br></li>
-*** >>>
-<li><a href="./plpgsql-09.html">RETURN</a><br></li>
-<<< ***
+<li><a href="./plpgsql-08.html">EXIT</a><br></li>
+
+<li><a href="./plpgsql-09.html">RETURN NEXT / RETURN QUERY</a><br></li>
+
 <li><a href="./plpgsql-10.html">ループ処理　LOOP</a><br></li>
 <li><a href="./plpgsql-11.html">ループ処理　WHILE</a><br></li>
-<li><a href="./plpgsql-12.html">ループ処理　FOR </a><br></li>
+<li><a href="./plpgsql-12.html">ループ処理　FOR</a><br></li>
 <li><a href="./plpgsql-13.html">ループ処理 (複数行の問い合わせ結果を扱う)</a><br></li>
+
+<hr>[カーソル]
+    <br>
 <li><a href="./plpgsql-14.html">カーソルの利用</a><br></li>
 <li><a href="./plpgsql-15.html">カーソル変数の宣言</a><br></li>
 <li><a href="./plpgsql-16.html">カーソルのオープンとクローズ	OPEN / CLOSE</a><br></li>
-<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得		FETCH</a><br></li>
-<li><a href="./plpgsql-18.html">カーソルを使った例</a><br></li>
-<li><a href="./plpgsql-19.html">例外</a><br></li>
-*** >>>
-<li><a href="./plpgsql-21.html">CASE</a><br></li>
-<li><a href="./plpgsql-22.html">FOREACH</a><br></li>
-<<< ***
-</ol>
+<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得	FETCH</a><br></li>
+  <li><a href="./plpgsql-18.html">FOR IN LOOPにカーソル行の取得</a><br></li>
+<li><a href="./plpgsql-19.html">カーソルを使った例</a><br></li>
+
+  <hr>[例外]
+    <br>
+<li><a href="./plpgsql-20.html">例外処理</a><br></li>
 
 
-<h5>Appendix(付録)</h5>
-
-<ol>
-<li><a href="./app-01.html">pgpool-II</a><br></li>
-<li><a href="./app-02.html">Pacemaker</a><br></li>
-</ol>
-
-
-<h5>おまけ:ネット公開(ページ数の関係で書籍には載せない)</h5>
-
-<ol>
-[pgpool]<br>
-<li><a href="./ha-06.html">pgpool-II セットアップ</a><br></li>
-<li><a href="./ha-07.html">pgpool-II レプリケーションモード</a><br></li>
-<li><a href="./ha-08.html">pgpool-II マスタースレーブモード</a><br></li>
-[Pacemaker]<br>
-<li><a href="./ha-10.html">Pacemaker</a><br></li>
 </ol>
 
 </div>
@@ -378,117 +341,189 @@ objID.className='close';
 
   </td>
   <td valign="top">
-   <div id="body">
+    <div id="body">
+      
 
-<h2>VIEW(ビュー)の定義と削除	CREATE VIEW / DROP VIEW </h2>
+<h2>VIEW(ビュー)とマテリアライズドビューの定義と削除 <a href="https://www.postgresql.org/docs/current/sql-createview.html" target="_blank" rel="noopener noreferrer">CREATE VIEW</a> / <a href="https://www.postgresql.org/docs/current/sql-creatematerializedview.html" target="_blank" rel="noopener noreferrer">CREATE MATERIALIZED VIEW</a> / <a href="https://www.postgresql.org/docs/current/sql-dropview.html" target="_blank" rel="noopener noreferrer">DROP  VIEW</a> / <a href="https://www.postgresql.org/docs/current/sql-dropmaterializedview.html" target="_blank" rel="noopener noreferrer">DROP MATERIALIZED VIEW</a> / <a href="https://www.postgresql.org/docs/current/sql-refreshmaterializedview.html" target="_blank" rel="noopener noreferrer">REFRESH MATERIALIZED VIEW</a></h2>
+
 
 <pre>
 [<書式>]
 ● ビューの定義
-CREATE [ OR REPLACE ] [ TEMP | TEMPORARY ] [ RECURSIVE ] VIEW 
-	 view_name [ ( column_name_list ) ] AS SELECT query 
-       [ WITH [ CASCADED | LOCAL ] CHECK OPTION ]
+CREATE [ OR REPLACE ] [ TEMP | TEMPORARY ] [ RECURSIVE ] VIEW view_name [ ( column_name [, ...] ) ]
+    [ WITH ( view_option_name [= view_option_value] [, ... ] ) ]
+    AS query
+    [ WITH [ CASCADED | LOCAL ] CHECK OPTION ]
 
 ● ビューの削除
-DROP VIEW [ IF EXISTS ] view_name [, ...] [ CASCADE | RESTRICT ] 
+DROP VIEW [ IF EXISTS ] view_name [, ...] [ CASCADE | RESTRICT ]
 
-● マテリアライズドビューの定義	 (バージョン9.3から)
+● マテリアライズドビューの定義
 CREATE MATERIALIZED VIEW [ IF NOT EXISTS ] view_name
     [ (column_name [, ...] ) ]
+    [ USING method ]
     [ WITH ( storage_parameter [= value] [, ... ] ) ]
     [ TABLESPACE tablespace_name ]
     AS query
     [ WITH [ NO ] DATA ]
 
-● マテリアライズドビューの更新	 (バージョン9.3から)
+
+● マテリアライズドビューの更新
 REFRESH MATERIALIZED VIEW [ CONCURRENTLY ] view_name
     [ WITH [ NO ] DATA ]
 
-● マテリアライズドビューの削除	 (バージョン9.3から)
+
+● マテリアライズドビューの削除
 DROP MATERIALIZED VIEW [ IF EXISTS ] view_name [, ...] [ CASCADE | RESTRICT ]
 
-=============================================================
-パラメータ		説明
-=============================================================
-view_name		定義、または削除するビューの名前
-column_name_list	ビューのカラム
-query			ビューのもとになるSELECT文
-=============================================================
-
-=============================================================
-オプション	説明
-=============================================================
-OR REPLACE	すでに同名のビューが存在する場合、新たに再定義する
-TEMP, TEMPORARY	一時的なビューとして作成する。バージョン8.1から
-
-CASCADED
-LOCAL
-CHECK OPTION
-IF NOT EXISTS
-
-IF EXISTS	削除するビューが存在しなくともエラーを返さない。バージョン8.2から
-CASCADE		ビューに依存するオブジェクト(関数など)も一緒に削除
-RESTRICT	依存するオブジェクトのないビューのみ削除
-CONCURRENTLY	マテリアライズドビューをREFRESHしている間も、他のセッションでSELECT文が実行できる(SELECT文の実行をロックしない)。
-=============================================================
 </pre>
+
+<br>
+
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>    <th>説明</th>
+</tr><tr>
+<td>view_name</td>	<td>定義、または削除するビューの名前</td>
+</tr><tr>
+<td>column_name</td>	<td>ビューのカラム</td>
+</tr><tr>
+<td>view_column_name</td>	<td>ビューのカラム名</td>
+</tr><tr>
+<td>query</td>	<td>ビューのもとになるSELECT文</td>
+</tr></table>
+
+<br>
+
+
+<table>
+<caption>オプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>    <th>説明</th>
+</tr><tr>
+<td>OR REPLACE</td>	<td>すでに同名のビューが存在する場合、新たに再定義する</td>
+</tr><tr>
+<td>TEMP, TEMPORARY</td>	<td>一時的なビューとして作成する</td>
+</tr><tr>
+<td>RECURSIVE</td>	<td>CTEのRECURSIVE定義を簡略表記する。詳細は本文</td>
+</tr><tr>
+<td>IF EXISTS</td>	<td>削除するビューが存在しなくともエラーを返さない。</td>
+</tr><tr>
+<td>CASCADE</td>	<td>ビューに依存するオブジェクト(関数など)も一緒に削除</td>
+</tr><tr>
+<td>RESTRICT</td>	<td>依存するオブジェクトのないビューのみ削除</td>
+</tr><tr>
+<td></td>	<td></td>
+</tr><tr>
+<td></td>	<td></td>
+</tr></table>
+
+<br>
+
+
+<table>
+<caption>句</caption>
+<tr bgcolor="#cccccc">
+<th>句</th>    <th>説明</th>
+</tr><tr>
+<td>WITH [ CASCADED | LOCAL ] CHECK OPTION</td>	<td></td>
+</tr><tr>
+<td>WITH ( view_option_name [= view_option_value]</td>	<td>view_option_nameは security_barrier (bool), security_invoker (bool), check_option。</td>
+</tr><tr>
+<td>WITH ( storage_parameter [= value]</td>	<td>テーブルの格納パラメータを設定。詳細はCREATE TABLE([<6-04>])参照</td>
+</tr><tr>
+<td>WITH DATA</td>	<td>データも引き継ぐ。デフォルト</td>
+</tr><tr>
+<td>WITH NO DATA</td>	<td>データを引き継がない。制約のないテーブル定義のみ</td>
+</tr><tr>
+<td>TABLESPACE tablespace</td>	<td>テーブルスペースtablespaceにテーブルを作成する。</td>
+</tr><tr>
+<td></td>	<td></td>
+</tr><tr>
+<td></td>	<td></td>
+</tr></table>
+
+<br>
+
+			セキュリティバリア(SECURITY_BARRIER)を設定する。バージョン9.2から
+<br>
 
 <div class="jumpmenu"></div><h3>解説</h3>
 
 <p>
-ビューとはあるテーブルの一部だけを表示したり、複数のテーブルの結合を表示するために使う、便宜的なものです。
-PostgreSQLではルールシステムにSELECT文を保存し、ビューが呼び出される毎に保存されたSELECT文を実行することでビューを実現しています。
+CREATE VIEW文でビューを定義します。
+</p>
+
+
+<p>
+•更新
+<br>
+バージョン9.2までのPostgreSQLのビューは読み取り専用でしたが、バージョン9.3から単一テーブルから生成した単純なビューに限り、更新(INSERT, UPDATE, DELETE)が可能になりました。
+<br>
+具体的な条件を列挙します。
+</p>
+
+<ol>
+<li>FROM句にはテーブル一つのみ。</li>
+<li>WITH句, DISTINCT句, GROUP BY句, HAVING句, LIMIT句, OFFSET句を含まない。</li>
+<li>UNION, INTERSECT, EXCEPTを含まないSELECT文で生成する。</li>
+<li>SELECT文のカラムに関数や式を使わない。また同じカラムを１回以上使わない。</li>
+<li>SECURITY_BARRIERを設定しない。</li>
+</ol>
+
+<br>
+
+<p>
+生成したビューが更新可能か否かは、インフォメーションスキーマ(information_schema)のviewsから知ることができます。
+<br>
+例えばビュー"my_view"が更新/挿入可能か否かは次のSELECT文で知ることができます。
+</p>
+
+
+
+<pre>
+SELECT table_name, is_updatable, is_insertable_into 
+     FROM information_schema.views WHERE table_name = 'my_view';
+</pre>
+
+<br>
+
+
+<p>
+•RECURSIVE
+<br>
+バージョン9.3から共通テーブル式[<6-21>]を簡略化して表記できるようになりました。
+<br>
+例えば、以下の2つの定義は同等です。
+</p>
+
+
+<pre>
+CREATE RECURSIVE VIEW name (columns) AS select_query;
+
+CREATE VIEW name AS WITH RECURSIVE name (columns) 
+       AS (select_query) SELECT columns FROM name;
+</pre>
+
+<br>
+
+
+<p>
+•マテリアライズドビュー
+<br>
+バージョン9.3からマテリアライズドビュー(MATERIALIZED VIEW)がサポートされました。
 </p>
 
 <p>
-・更新可能ビュー<br>
-上記のような仕組みでビューを実現していたため、バージョン9.2までのビューは読み取り専用でしたが、バージョン9.3からビューに対する更新(INSERT, UPDATE, DELETE)が可能になりました。ただし更新可能なビューであるためには多くの制約があります。以下にそれらを列挙します。
+[<2-03>]の[<コラム2-1>]で述べたように、通常のビューはRuleを使った仮想的な存在です。
+それに対してマテリアライズドビューは実際にテーブルスペースにテーブルが作られます。
+よってCREATE MATERIALIZED VIEWの構文はCREATE TABLE AS([<6-07>]参照)によく似ています。
+<br>
+バージョン9.3のマテリアライズドビューは、元になるテーブルの更新が反映されません。
+更新を反映するにはREFRESH MATERIALIZED VIEW文を明示的に実行しなければなりません。
 </p>
-
-<ul>
-<li>ビューのFROMリストでは正確に１つの項目を持たなければならず、それはテーブルまたは他の更新可能ビューでなければならない。</li>
-<li>    ビューの定義の最上位レベルにおいてWITH、DISTINCT、GROUP BY、HAVING、LIMIT、OFFSETを含めてはならない。</li>
-<li>    ビューの定義の最上位レベルにおいて集合操作（UNION、INTERSECT、EXCEPT）を含めてはならない。</li>
-<li>    ビューの選択リスト内の列はすべて基となるリレーションの列に対する単純な参照でなければならない。 式、リテラル、関数は設定できない。システム列も参照することができない。</li>
-<li>    ビューの選択リストにおいて元となるリレーションの列を複数回記述することができない。</li>
-<li>    ビューはsecurity_barrier属性を持ってはならない。 </li>
-</ul>
-
-<p>
-念のため追記すると、生成するビューが更新できなくとも良い場合、つまりバージョン9.2までの旧来のビューで良い場合は、上記の制約に縛られず自由にビューを生成できます。
-</p>
-
-<p>
-・マテリアライズドビュー<br>
-バージョン9.3からマテリアライズドビューもサポートされました。
-</p>
-
-<p>
-マテリアライズドビューとは(論理的な存在であるビューとは異なり)実際にビューを物理的なテーブルとして作成し、主にSELECTの実行性能を向上させる機能です。物理的にビューを生成するので、元になるテーブルが更新されてもビューの結果には反映されません。元テーブルの更新を反映させるにはFRESH MATERIALIZED VIEW文を明示的に実行しなければなりません。
-</p>
-
-<p>
-
-</p>
-
-<p>
-REFRESH MATERIALIZED VIEW文でマテリアライズドビューを更新している間、他のセッションでそのマテリアライズドビューを使っているSELECT文はロックされます。
-もしもマテリアライズドビューが以下の条件を満たしていて、SELECT文の実行をロックしないようにしたい場合は、REFRESH MATERIALIZED VIEW文にCONCURRENTLYオプションを設定してください。
-</p>
-
-<ul>
-<li>マテリアライズドビューは列名だけ</li>
-
-すべての行を含むUNIQUEインデックスが少なくとも1つある場合にのみ使えます。 
-つまり、そのインデックスは式を使っていたり、WHERE句を含んでいてはいけません。
-
-
-</ul>
-
-<p>
-CONCURRENTLYオプションを使うとREFRESH中でもSELECT文が実行でき、そのSELECT文はREFRESH前のマテリアライズドビューの内容を返します。ただしその場合は、REFRESH MATERIALIZED VIEW文の実行は数倍から数十倍も遅くなります。
-</p>
-
 
 
 
@@ -506,10 +541,10 @@ sampledb-#           AS SELECT id, name FROM customerlist;
 CREATE VIEW
 </pre>
 
+<br>
+
 <p>
 ・複数のテーブルからビューを定義
-<br>
-複数のテーブルからビューを定義する例を示します。
 </p>
 
 <pre>
@@ -528,6 +563,7 @@ sampledb=# SELECT * FROM customer_view WHERE id < 4;
 (3 rows)
 </pre>
 
+<br>
 
 <p>
 ・ビューの一覧と定義の表示
@@ -557,141 +593,274 @@ View definition:
   WHERE a.companycode = b.companycode;
 </pre>
 
-<p>
-●更新可能ビュー<br>
-</p>
+<br>
+
+
+•更新
+<br>
+バージョン9.3以降は単純なビューに限り、更新や挿入ができます。
+<br>
+テーブルitemlistからビューmy_itemlistを定義します。
+
 
 <pre>
-testdb=# CREATE VIEW itemlist_view (name, price)
-       AS SELECT name, price FROM itemlist;
+sampledb=# SELECT * FROM itemlist;
+ id |   name   | price | makercode 
+----+----------+-------+-----------
+  1 | pen      |   100 |        10
+  2 | notebook |   120 |        20
+  3 | eraser   |    72 |        10
+(3 rows)
+
+sampledb=# CREATE VIEW my_itemlist (id, name, price)
+sampledb-#   AS SELECT id, name, price FROM itemlist;
 CREATE VIEW
-testdb=# SELECT * FROM itemlist_view;
-   name   | price 
-----------+-------
- pen      |   100
- notebook |   120
- eraser   |    72
- book     |  1000
+
+sampledb=# SELECT table_name, is_updatable, is_insertable_into 
+sampledb-#     FROM information_schema.views WHERE table_name = 'my_itemlist';
+ table_name  | is_updatable | is_insertable_into 
+-------------+--------------+--------------------
+ my_itemlist | YES          | YES
+(1 row)
+</pre>
+
+<br>
+
+
+ビューmy_itemlistに対して更新を実行した結果を示します。
+
+
+<pre>
+sampledb=# SELECT * FROM my_itemlist;
+ id |   name   | price 
+----+----------+-------
+  1 | pen      |   100
+  2 | notebook |   120
+  3 | eraser   |    72
+(3 rows)
+
+sampledb=# UPDATE my_itemlist SET price = 80 WHERE id = 3;
+UPDATE 1
+
+sampledb=# SELECT * FROM my_itemlist;
+ id |   name   | price 
+----+----------+-------
+  1 | pen      |   100
+  2 | notebook |   120
+  3 | eraser   |    80
+(3 rows)
+</pre>
+
+<br>
+
+
+
+次に、ビューmy_itemlistにデータを挿入してみます。
+<br>
+ビューmy_itemlistと、元になったテーブルitemlistを表示します。テーブルitemlistのカラムmakercodeは(デフォルトの)NULLになっています。
+
+
+<pre>
+sampledb=# INSERT INTO my_itemlist VALUES(4, 'book', 1200);
+INSERT 0 1
+sampledb=# SELECT * FROM my_itemlist;
+ id |   name   | price 
+----+----------+-------
+  1 | pen      |   100
+  2 | notebook |   120
+  3 | eraser   |    80
+  4 | book     |  1200
 (4 rows)
 
-testdb=# INSERT INTO itemlist_view VALUES('pencil', 50);
-INSERT 0 1
-testdb=# SELECT * FROM itemlist_view;
-   name   | price 
-----------+-------
- pen      |   100
- notebook |   120
- eraser   |    72
- book     |  1000
- pencil   |    50
-(5 rows)
-
-testdb=# SELECT * FROM itemlist;
+sampledb=# SELECT * FROM itemlist;
  id |   name   | price | makercode 
 ----+----------+-------+-----------
   1 | pen      |   100 |        10
   2 | notebook |   120 |        20
-  3 | eraser   |    72 |        10
-  4 | book     |  1000 |        50
-    | pencil   |    50 |          
-(5 rows)
+  3 | eraser   |    80 |        10
+  4 | book     |  1200 |          
+(4 rows)
 </pre>
 
+<br>
+
+<div class="jumpmenu"></div><h4>マテリアライズドビュー</h4>
+
+
 <p>
-●マテリアライズドビュー<br>
-マテリアライズドビューの作成、更新、および削除を簡単に示します。
+テーブルpgbench_accountsとpgbench_branchesを結合し、abalanceの上位３件を求めることを考えます。
+なお説明の都合上、pgbenchのテーブルpgbench_branchesにカラム支店名(name)を追加しました。
 </p>
 
 
 <pre>
-testdb=# SELECT * FROM itemlist;
- id |   name   | price | makercode 
-----+----------+-------+-----------
-  1 | pen      |   100 |        10
-  2 | notebook |   120 |        20
-  3 | eraser   |    72 |        10
+sampledb=# SELECT a.aid, b.name, a.abalance 
+sampledb-#    FROM pgbench_accounts AS a, pgbench_branches AS b
+sampledb-#    WHERE a.bid = b.bid
+sampledb-#  　　　　　　ORDER BY a.abalance DESC LIMIT 3;
+  aid   |   name   | abalance 
+--------+----------+----------
+  61393 | yokohama |     4997
+ 216753 | spain    |     4829
+ 350088 | tokyo    |     4669
 (3 rows)
-
-testdb=# CREATE MATERIALIZED VIEW mv_itemlist (name, price)
-testdb-#        AS SELECT name, price FROM itemlist;
-SELECT 3
-testdb=# SELECT * FROM mv_itemlist;
-   name   | price 
-----------+-------
- pen      |   100
- notebook |   120
- eraser   |    72
-(3 rows)
-
-testdb=# INSERT INTO itemlist VALUES (4, 'pen', 100, 1);
-INSERT 0 1
-testdb=# SELECT * FROM itemlist;
- id |   name   | price | makercode 
-----+----------+-------+-----------
-  1 | pen      |   100 |        10
-  2 | notebook |   120 |        20
-  3 | eraser   |    72 |        10
-  4 | pen      |   100 |         1
-(4 rows)
-
-testdb=# SELECT * FROM mv_itemlist;
-   name   | price 
-----------+-------
- pen      |   100
- notebook |   120
- eraser   |    72
-(3 rows)
-
-testdb=# REFRESH MATERIALIZED VIEW mv_itemlist;
-REFRESH MATERIALIZED VIEW
-testdb=# SELECT * FROM mv_itemlist;
-   name   | price 
-----------+-------
- pen      |   100
- notebook |   120
- eraser   |    72
- pen      |   100
-(4 rows)
 </pre>
+
+<br>
+
+
+<p>
+同等の結果を得るためのマテリアライズドビューmv_abalanceを定義し、
+その実体ファイルをpg_relation_filepath()で求めます。
+</p>
+
 
 <pre>
-testdb=# CREATE UNIQUE INDEX mv_itemlist_u_idx ON mv_itemlist (name);
-CREATE INDEX
+sampledb=# CREATE MATERIALIZED VIEW mv_abalance AS
+sampledb-#      SELECT a.aid, b.name, a.abalance 
+sampledb-#        FROM pgbench_accounts AS a, pgbench_branches AS b 
+sampledb-#            WHERE a.bid = b.bid;
+SELECT 400000
 
-testdb=# \d+ mv_itemlist
-                Materialized view "public.mv_itemlist"
- Column |  Type   | Modifiers | Storage  | Stats target | Description 
---------+---------+-----------+----------+--------------+-------------
- name   | text    |           | extended |              | 
- price  | integer |           | plain    |              | 
-Indexes:
-    "mv_itemlist_u_idx" UNIQUE, btree (name)
-View definition:
- SELECT itemlist.name,
-    itemlist.price
-   FROM itemlist;
-
-testdb=# REFRESH MATERIALIZED VIEW CONCURRENTLY mv_itemlist;
-REFRESH MATERIALIZED VIEW
+sampledb=# SELECT pg_relation_filepath('mv_abalance');
+ pg_relation_filepath 
+----------------------
+ base/16384/16416
+(1 row)
 </pre>
 
-
-CREATE TABLE itemlist (id int, name text, price int, maker int);
-INSERT INTO itemlist VALUES (1, 'pen', 100, 10);
-INSERT INTO itemlist VALUES (2, 'notebook', 120, 20);
-INSERT INTO itemlist VALUES (3, 'eraser', 72, 10);
+<br>
 
 
-INSERT INTO itemlist VALUES (4, 'pen', 100, 1);
+<p>
+実際にファイルの情報を表示してみます。
+</p>
+
+
+<pre>
+$ ls -la data/base/16384/16416 
+-rw-------. 1 postgres:postgres 18505728 Sep 10 06:29 data/base/16384/16416
+</pre>
+
+<br>
+
+
+<p>
+生成したマテリアライズドビューmv_abalanceを検索すると、先のSELECT文と同じ結果が得られます。
+</p>
+
+
+<pre>
+sampledb=# SELECT * FROM mv_abalance ORDER BY abalance DESC LIMIT 3;
+  aid   |   name   | abalance 
+--------+----------+----------
+  61393 | yokohama |     4997
+ 216753 | spain    |     4829
+ 350088 | tokyo    |     4669
+(3 rows)
+</pre>
+
+<br>
+
+
+<p>
+ここで元テーブルpgbanch_accountsのデータを更新した後、マテリアライズドビューmv_abalanceを検索します。
+<br>
+PostgreSQLのマテリアライズドビューは元データの更新が反映されないので、
+テーブルpgbench_accountsのaid=61393のデータを更新した後も、検索結果には反映されていません。
+</p>
+
+
+<pre>
+sampledb=# --- テーブルpgbench_accountsの、aid =61393のデータを更新する。
+sampledb=# UPDATE pgbench_accounts SET abalance = 5000 WHERE aid = 61393;
+UPDATE 1
+
+sampledb=# SELECT * FROM mv_abalance ORDER BY abalance DESC LIMIT 3;
+  aid   |   name   | abalance 
+--------+----------+----------
+  61393 | yokohama |     4997	← 値が更新されていない
+ 216753 | spain    |     4829
+ 350088 | tokyo    |     4669
+(3 rows)
+</pre>
+
+<br>
+
+
+<p>
+マテリアライズドビューのデータを更新するには、REFRESH MATERIALIZED VIEW文を実行します。
+</p>
 
 
 
-CREATE MATERIALIZED VIEW mv_itemlist (name, price) 
-       AS SELECT name, price FROM itemlist;
+<pre>
+sampledb=# REFRESH MATERIALIZED VIEW mv_abalance;
+REFRESH MATERIALIZED VIEW
+
+sampledb=# SELECT * FROM mv_abalance ORDER BY abalance DESC LIMIT 3;
+  aid   |   name   | abalance 
+--------+----------+----------
+  61393 | yokohama |     5000	← REFRESH MATERIALIZED VIEWでデータが更新された
+ 216753 | spain    |     4829
+ 350088 | tokyo    |     4669
+(3 rows)
+</pre>
+
+<br>
+
+
+<p>
+マテリアライズドビューを使用するにあたって、気になるのは実行効率です。効率的なアクセスを求めてマテリアライズドビューを定義したにも関らず、検索が遅くては話になりません。
+<br>
+単にマテリアライズドビューを定義しただけではインデックスは定義されないので、検索は常にシーケンシャルスキャンになります。
+</p>
+
+
+<pre>
+sampledb=# \d mv_abalance
+Materialized view "public.mv_abalance"
+  Column  |  Type   | Modifiers 
+----------+---------+-----------
+ aid      | integer | 
+ name     | text    | 
+ abalance | integer | 
+
+sampledb=# EXPLAIN SELECT * FROM mv_abalance ORDER BY abalance DESC LIMIT 3;
+                                   QUERY PLAN                                   
+--------------------------------------------------------------------------------
+ Limit  (cost=8266.31..8266.32 rows=3 width=40)
+   ->  Sort  (cost=8266.31..8921.42 rows=262044 width=40)
+         Sort Key: abalance
+         ->  Seq Scan on mv_abalance  (cost=0.00..4879.44 rows=262044 width=40)
+(4 rows)
+</pre>
+
+<br>
+
+
+<p>
+マテリアライズドビューは物理的な実体があるので、CREATE INDEX文([<6-35>]参照)でインデックスを定義できます。
+<br>
+マテリアラズドビューmv_abalanceのカラムabalanceにインデックスを定義すると、
+以降はインデックススキャンが使われます。
+</p>
+
+
+<pre>
+sampledb=# CREATE INDEX mv_abalance_idx ON mv_abalance (abalance);
+CREATE INDEX
+sampledb=#  EXPLAIN SELECT * FROM mv_abalance ORDER BY abalance DESC LIMIT 3;
+                                                 QUERY PLAN                                                 
+------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.42..0.52 rows=3 width=14)
+   ->  Index Scan Backward using mv_abalance_idx on mv_abalance  (cost=0.42..12666.55 rows=400000 width=14)
+(2 rows)
+</pre>
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2018-9-8
+Last-modified: 2023-3-11
 </div>
 </body>
 </html>

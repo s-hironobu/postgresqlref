@@ -1,0 +1,89 @@
+%FILE internal/sql-18.html
+%LASTMOD
+%KEY pgsql-sql18
+
+%TITLE <a href="https://www.postgresql.org/docs/current/sql-select.html#SQL-FROM" target="_blank" rel="noopener noreferrer">テーブルの指定 FROM句</a> / <a href="https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-FROM" target="_blank" rel="noopener noreferrer"> FROM Clause</a>
+
+
+<pre>
+[<書式>]
+
+    [ FROM from_item [, ...] ]
+
+where from_item can be one of:
+
+    [ ONLY ] table_name [ * ] [ [ AS ] alias [ ( column_alias [, ...] ) ] ]
+                [ TABLESAMPLE sampling_method ( argument [, ...] ) [ REPEATABLE ( seed ) ] ]
+    [ LATERAL ] ( select ) [ AS ] alias [ ( column_alias [, ...] ) ]
+    with_query_name [ [ AS ] alias [ ( column_alias [, ...] ) ] ]
+    [ LATERAL ] function_name ( [ argument [, ...] ] )
+                [ WITH ORDINALITY ] [ [ AS ] alias [ ( column_alias [, ...] ) ] ]
+    [ LATERAL ] function_name ( [ argument [, ...] ] ) [ AS ] alias ( column_definition [, ...] )
+    [ LATERAL ] function_name ( [ argument [, ...] ] ) AS ( column_definition [, ...] )
+    [ LATERAL ] ROWS FROM( function_name ( [ argument [, ...] ] ) [ AS ( column_definition [, ...] ) ] [, ...] )
+                [ WITH ORDINALITY ] [ [ AS ] alias [ ( column_alias [, ...] ) ] ]
+    from_item join_type from_item { ON join_condition | USING ( join_column [, ...] ) [ AS join_using_alias ] }
+    from_item NATURAL join_type from_item
+    from_item CROSS JOIN from_item
+
+</pre>
+
+<br>
+
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>table_name</td>	<td>検索を行う既存のテーブルかビューの名前</td>
+</tr><tr>
+<td>alias</td>	<td>別名</td>
+</tr><tr>
+<td>sub_query</td>	<td>サブクエリ、もしくはVALUES文</td>
+</tr><tr>
+<td>with_query_name</td>	<td>WITH句で定義したCTE(共通テーブル式)。<a href="./sql-21.html">[<6-21>]</a>参照</td>
+</tr><tr>
+<td>function_name</td>	<td>関数名</td>
+</tr><tr>
+<td>from_item</td>	<td>テーブル名など</td>
+</tr></table>
+
+<br>
+
+<table>
+<caption>テーブルの結合</caption>
+<tr bgcolor="#cccccc">
+<th>テーブルの結合</th>	<th>説明</th>
+</tr><tr>
+<td>join_type</td>	<td>テーブルの結合形式</td>
+</tr><tr>
+<td>join_condition</td>	<td>テーブル結合の制約条件</td>
+</tr><tr>
+<td>join_column_list</td>	<td>USING句のカラムリスト</td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER 解説
+
+<p>
+FROM句には1つ以上のテーブルだけでなく、
+CTE(共通テーブル式<a href="./sql-21.html">[<6-21>]</a>参照)、サブクエリ(副問い合わせ<a href="./sql-29.html">[<6-29>]</a>参照)を指定できます。
+</p>
+
+<p>
+・テーブルの結合
+<br>
+テーブルの結合(CROSS, INNER, OUTER)を指定できます。
+詳細は<a href="./sql-24.html">[<6-24>]</a>を参照してください。
+</p>
+
+<p>
+・LATERAL結合
+<br>
+バージョン9.3からLATERAL結合がサポートされました。
+詳細は<a href="./sql-24.html">[<6-24>]</a>を参照してください。
+</p>
+

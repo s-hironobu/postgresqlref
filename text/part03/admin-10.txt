@@ -1,0 +1,200 @@
+%FILE internal/admin-10.html
+%LASTMOD
+%KEY pgsql-admin10
+
+%TITLE ロールの作成と権限制御
+
+<p>
+ロールの作成と権限制御について、チュートリアル風に説明します。
+</p>
+
+
+%CHAPTER ロールの作成
+
+<p>
+CREATE ROLE文でロールを作成します。
+作成する際、ロールの権限/属性(<a href="./admin-09.html">[<3-09>]</a>[<表3-04>]参照)を設定します。
+LOGIN権限を設定しなければ、作成したロールがデータベースにログインできないので注意してください。
+</p>
+
+<p>
+ここでは、LOGIN権限のみ有するロールrole1を作成します。
+ロールの作成にはロール作成権限が必要です。
+ここではスーパーユーザpostgresがロールを作成します。
+</p>
+
+<pre>
+sampledb=# CREATE ROLE role1 LOGIN;
+CREATE ROLE
+sampledb=# \du role*
+List of roles
+-[ RECORD 1 ]------
+Role name  | role1
+Attributes |
+Member of  | {}
+</pre>
+<br>
+
+%CHAPTER 権限の付与/取り上げ
+
+%SECTION ロールの権限/属性を変更
+
+<p>
+ALTER ROLE文でロールの権限/属性を変更します。
+<br>
+権限の変更はCREATEROLE権限を持つロールか、スーパーユーザ権限を持つロールのみ実行可能です(ただし、パスワード属性はロール自身が変更可能)。
+</p>
+
+<p>
+ロールrole1にCREATEROLE権限とCREATEDB権限を付与します。
+</p>
+
+<pre>
+sampledb=# ALTER ROLE role1 CREATEROLE CREATEDB;
+ALTER ROLE
+sampledb=# \du role*
+List of roles
+-[ RECORD 1 ]-----------------------
+Role name  | role1
+Attributes | Create role, Create DB
+Member of  | {}
+</pre>
+<br>
+
+%SECTION データベースオブジェクトに対する権限の付与/取り上げ
+
+<p>
+テーブルやビューなどのデータベースオブジェクトに対する権限の付与/取り上げは、GRANTとREVOKEを使用します。
+<br>
+権限の変更はそのオブジェクトの所有者かスーパーユーザ権限を持つロールのみ実行可能です。
+</p>
+
+<p>
+スーパーユーザpostgresの所有するテーブルpostgres_tableに関し、ロールrole1に対していくつかの権限を付与、もしくは取り上げます。
+</p>
+
+<p>
+例として、テーブルpostgres_tableの所有者であるpostgresがロールrole1に対してSELECT文とUPDATE文の実行権限を付与します。
+</p>
+
+<pre>
+sampledb=# GRANT SELECT, UPDATE ON TABLE postgres_table
+sampledb-#                       TO role1 WITH GRANT OPTION;
+GRANT
+</pre>
+<br>
+
+<p>
+ロールrole1がテーブルpostgres_tableにアクセスすると、無事にアクセスできることが確認できます。
+</p>
+
+<pre>
+postgres> psql -q -U role1 sampledb
+sampledb=> SELECT count(*) FROM postgres_table;
+ count
+-------
+     0
+(1 row)
+</pre>
+<br>
+
+<p>
+ところで、ロールrole1に権限を付与する際、"WITH GRANT OPTION"を設定しました。
+よってロールrole1は、他のロールに対してテーブルpostgres_tableのSELECT権限とUPDATE権限を与えることができます。
+<br>
+例として、ロールrole1がロールrole2に対してテーブルpostgres_tableのSELECT権限を付与してみます。
+</p>
+
+<pre>
+sampledb=> SELECT SESSION_USER;
+ session_user
+--------------
+ role1
+(1 row)
+
+sampledb=> GRANT SELECT ON TABLE postgres_table TO role2;
+GRANT
+sampledb=# \z postgres_table
+Access privileges
+-[ RECORD 1 ]------------+--------------------------
+Schema                   | public
+Name                     | postgres_table
+Type                     | table
+Access privileges        | postgres=arwdDxt/postgres
+                         | role1=r*w*/postgres
+                         | role2=r/role1
+Column access privileges |
+</pre>
+<br>
+
+<p>
+次にREVOKE文による権限の取り上げを説明します。
+<br>
+例を示します。
+はじめにrole1からUPDATE権限を取り上げます。
+</p>
+
+<pre>
+sampledb=# SELECT SESSION_USER;
+ session_user
+--------------
+ postgres
+(1 row)
+
+sampledb=# REVOKE UPDATE ON TABLE postgres_table FROM role1;
+REVOKE
+sampledb=# \z postgres_table
+Access privileges
+-[ RECORD 1 ]------------+--------------------------
+Schema                   | public
+Name                     | postgres_table
+Type                     | table
+Access privileges        | postgres=arwdDxt/postgres
+                         | role1=r*/postgres
+                         | role2=r/role1
+Column access privileges |
+</pre>
+<br>
+
+<p>
+次にSELECT権限を取り上げてみます。
+<br>しかし、これはうまくいきません。ロールrole1がrole2に対してSELECT権限を付与しているからです。強制的に権限を取り上げるにはCASCADEオプションを設定します。
+</p>
+
+<pre>
+sampledb=# REVOKE SELECT ON TABLE postgres_table FROM role1;
+ERROR:  dependent privileges exist
+HINT:  Use CASCADE to revoke them too.
+
+sampledb=# REVOKE SELECT ON TABLE postgres_table FROM role1 CASCADE;
+REVOKE
+sampledb=# \z postgres_table
+Access privileges
+-[ RECORD 1 ]------------+--------------------------
+Schema                   | public
+Name                     | postgres_table
+Type                     | table
+Access privileges        | postgres=arwdDxt/postgres
+Column access privileges |
+</pre>
+<br>
+
+<p>
+ロールrole1だけでなく、ロールrole2のSELECT権限も取り上げられたことが確認できます。
+</p>
+
+%CHAPTER ロールの削除
+
+<p>
+DROP ROLE文でロールを削除します。
+</p>
+
+<pre>
+sampledb=# DROP ROLE role_1;
+DROP ROLE
+
+sampledb=# DROP ROLE role_2;
+DROP ROLE
+</pre>
+<br>
+

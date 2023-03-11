@@ -1,0 +1,155 @@
+%FILE internal/func-02.html
+%LASTMOD
+%KEY pgsql-func02
+
+%TITLE <a href="https://www.postgresql.org/docs/current/functions-math.html" target="_blank" rel="noopener noreferrer">算術関数</a>
+
+
+[<算術関数>]
+
+<table><tr bgcolor="#cccccc">
+<th>関数</th>		<th>返り値型　　</th>	<th>説明</th>		<th>例</th>	<th>結果</th>
+</tr><tr>
+<td>abs(z)</td>		<td>引数と同じ型</td>	<td>絶対値</td>		<td>abs(-17.4)</td>		<td>17.4 </td>
+</tr><tr>
+<td>cbrt(d)</td>	<td>倍精度</td>		<td>立方根</td>		<td>cbrt(27)</td>		<td>3 </td>
+</tr><tr>
+<td>ceil(x)</td>	<td>引数と同じ型</td>	<td>切り上げ(引数より大きい最小の整数)</td>	<td>ceil(42.2)</td>	<td>43 </td>
+</tr><tr>
+<td>degrees(d)</td>	<td>倍精度</td>	<td>d度に対するラジアン	</td>	<td>degrees(0.5)</td>	<td>28.6478897565412 </td>
+
+
+</tr><tr>
+<td>div(y, x)</td>	<td>numeric</td>	<td>y/xの整数部分</td>	<td>div(9, 4)</td>	<td>2 </td>
+
+
+</tr><tr>
+<td>exp(x)</td>	<td>引数と同じ型</td>	<td>指数</td>		<td>exp(1.0)</td>	<td>2.7182818284590452 </td>
+
+
+</tr><tr>
+<td>factorial(x bigint)</td>	<td>numeric</td>	<td>x! (階乗)</td>	<td>factorial(5)</td>	<td>120</td>
+
+
+</tr><tr>
+<td>floor(x)</td>	<td>引数と同じ型</td>	<td>切り下げ(引数より小さい最大の整数)</td>	<td>floor(42.2)</td>	<td>42 </td>
+</tr><tr>
+<td>ln(x)</td>	<td>引数と同じ型</td>	<td>自然対数</td>	<td>ln(2.0)</td>	<td>0.6931471805599453 </td>
+</tr><tr>
+<td>log(x)</td>	<td>引数と同じ型</td>	<td>10を底とする自然対数</td>	<td>log(100.0)</td>	<td>2.0000000000000000 </td>
+</tr><tr>
+<td>log(y, x)</td>	<td>numeric</td>	<td>yを底とするxの対数	</td>	<td>log(2.0, 64.0)</td>	<td>6.0000000000000000 </td>
+
+
+</tr><tr>
+<td>min_scale(x numeric)</td>	<td>integer</td>	<td>xを正確に表現するために必要な桁数、つまり少数以下の桁数。バージョン13から</td>	<td>min_scale(8.123000)</td>	<td>3</td>
+
+
+</tr><tr>
+<td>mod(i, j)</td>	<td>引数と同じ型</td>	<td>i/jの剰余	</td>	<td>mod(9.2, 4)</td>	<td>1.2 </td>
+</tr><tr>
+<td>pi()</td>	<td>倍精度</td>	<td>円周率π	</td>	<td>pi()</td>	<td>3.14159265358979 </td>
+</tr><tr>
+<td>pow(y, x)</td>	<td>引数と同じ型</td>	<td>yのx乗	</td>	<td>pow(2,4)</td>	<td>16 </td>
+</tr><tr>
+<td>radians(d)</td>	<td>倍精度</td>	<td>xラジアンに対応する度</td>	<td>radians(45)</td>	<td>0.785398163397448 </td>
+</tr><tr>
+<td>random()</td>	<td>倍精度</td>	<td>0.0〜1.0の乱数</td>	<td>	</td>	<td>		 </td>
+</tr><tr>
+<td>round(x)</td>	<td>引数と同じ型</td>	<td>四捨五入</td>	<td>round(42.2)</td>	<td>42 </td>
+</tr><tr>
+<td>round(x, i)</td>	<td>numeric</td>	<td>少数点位置iで四捨五入</td>	<td>round(42.2765,2)</td>	<td>42.28 </td>
+
+
+</tr><tr>
+<td>scale(x numeric)</td>	<td>integer</td>	<td>xの小数点以下の位取り</td>	<td>scale(8.123000)</td>	<td>6</td>
+
+
+</tr><tr>
+<td>setseed(d)</td>	<td>なし</td>	<td>乱数の種(seed)を設定</td>	<td>	</td>	<td>		 </td>
+</tr><tr>
+<td>sign(x)</td>	<td>引数と同じ型</td>	<td>引数xの符号(-1,0,1)	</td>	<td>sign(-8.4)</td>	<td>-1 </td>
+</tr><tr>
+<td>sqrt(x)</td>	<td>引数と同じ型</td>	<td>平方根</td>	<td>sqrt(2.0)</td>	<td>1.414213562373095 </td>
+
+</tr><tr>
+<td>trim_scale(x numeric)</td>	<td>numeric</td>	<td>xの小数点以下で0を取り除いた値。バージョン13から</td>	<td>trim_scale(8.123000)</td>	<td>8.123</td>
+
+
+</tr><tr>
+<td>trunc(x)</td>	<td>引数と同じ型</td>	<td>切捨て</td>	<td>trunc(42.2)</td>	<td>42 </td>
+</tr><tr>
+<td>trunc(x, i)</td>	<td>numeric</td>	<td>少数点位置iで切捨て	</td>	<td>trunc(42.2765,2)</td>	<td>42.27 </td>
+
+</tr><tr>
+<td>width_bucket(op, b1, b2, count)</td>	<td>int</td>	<td>値opが、b1からb2をcountで分割した<br>ヒストグラムのどのバケットに入るか。バージョン9.2から</td>	<td>with_bucket(5, 0, 10, 100)</td>	<td>51 </td>
+
+</tr></table>
+
+<br>
+
+<table><tr>
+<td>i,j </td><td>:</td> <td>整数</td>
+</tr><tr>
+<td>  n </td><td>:</td> <td>numeric</td>
+</tr><tr>
+<td>  d </td><td>:</td> <td>倍精度</td>
+</tr><tr>
+<td>x,y </td><td>:</td> <td>倍精度、もしくはnumeric</td>
+</tr><tr>
+<td>  z </td><td>:</td> <td>任意の型</td>
+</tr><tr>
+<td>op, b1, b2,</td><td>:</td> <td>倍精度、もしくはnumeric</td>
+</tr></table>
+
+<br>
+
+<p>
+・三角関数
+</p>
+
+<table><tr bgcolor="#cccccc">
+<th>関数</th>		<th>返り値型</th>	<th>説明</th>
+</tr><tr>
+<td>acos(x)</td>	<td>倍精度</td>	<td>逆余弦関数(arc cosine) </td>
+</tr><tr>
+<td>asin(x) </td>	<td>倍精度	</td>	<td>逆正弦関数(arc sine) </td>
+</tr><tr>
+<td>atan(x) </td>	<td>倍精度</td>	<td>逆正接関数(arc tangent) </td>
+</tr><tr>
+<td>atan2(x, y) </td>	<td>倍精度	</td>	<td>y/x の逆正接関数(arc tangent) </td>
+</tr><tr>
+<td>cos(x)	</td>	<td>倍精度</td>	<td>余弦関数(cosine) </td>
+</tr><tr>
+<td>cot(x)</td>	<td>倍精度</td>	<td>余接関数(cotangent) </td>
+</tr><tr>
+<td>sin(x)</td>	<td>倍精度</td>	<td>正弦関数(sine) </td>
+</tr><tr>
+<td>tan(x)</td>	<td>倍精度</td>	<td>正接関数(tangent) </td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER 実行例
+
+<p>
+・三角関数
+<br>
+三角関数の単位はラジアンです。度からラジアンへの変換は関数radians()を使います。
+</p>
+
+<pre>
+sampledb=# SELECT sin(radians(30));	← sin(30度)
+ sin
+-----
+ 0.5
+(1 row)
+
+sampledb=# SELECT sin(radians(90));	← sin(90度)
+ sin
+-----
+   1
+(1 row)
+</pre>
+<br>

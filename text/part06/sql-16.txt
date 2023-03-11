@@ -1,0 +1,182 @@
+%FILE internal/sql-16.html
+%LASTMOD
+%KEY pgsql-sql16
+
+%TITLE データの挿入 <a href="https://www.postgresql.org/docs/current/sql-insert.html" target="_blank" rel="noopener noreferrer">INSERT</a>
+
+
+<pre>
+[<書式>]
+
+[ WITH [ RECURSIVE ] with_query [, ...] ]
+INSERT INTO table_name [ AS alias ] [ ( column_name [, ...] ) ]
+    [ OVERRIDING { SYSTEM | USER } VALUE ]
+    { DEFAULT VALUES | VALUES ( { expression | DEFAULT } [, ...] ) [, ...] | query }
+    [ ON CONFLICT [ conflict_target ] conflict_action ]
+    [ RETURNING * | output_expression [ [ AS ] output_name ] [, ...] ]
+
+・conflict_target can be one of:
+
+    ( { index_column_name | ( index_expression ) } [ COLLATE collation ] [ opclass ] [, ...] )
+    [ WHERE index_predicate ]
+      ON CONSTRAINT constraint_name
+
+・conflict_action is one of:
+
+    DO NOTHING
+    DO UPDATE SET { column_name = { expression | DEFAULT } |
+                    ( column_name [, ...] ) = [ ROW ] ( { expression | DEFAULT } [, ...] ) |
+                    ( column_name [, ...] ) = ( sub-SELECT )
+                  } [, ...]
+              [ WHERE condition ]
+
+</pre>
+<br>
+
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>table_name</td>	<td>データを挿入するテーブル名</td>
+</tr><tr>
+<td>column_name</td>	<td>データを挿入するカラム名</td>
+</tr><tr>
+<td>DEFAULT VALUES</td>	<td>デフォルト値を使う</td>
+</tr><tr>
+<td>expression</td>	<td>挿入する値、または式</td>
+</tr><tr>
+<td>with_query</td>	<td>SELECT文 <a href="./sql-17.html">[<6-17>]</a>参照</td>
+</tr></table>
+
+
+<br>
+
+
+<table>
+<caption>句</caption>
+<tr bgcolor="#cccccc">
+<th>句</th>	<th>説明</th>
+</tr><tr>
+<td>RETURNING　output_expression</td>	<td>INSERT後の結果を表示する</td>
+</tr><tr>
+<td>RECURSIVE</td>	<td>CTE <a href="./sql-21.html">[<6-21>]</a>参照</td>
+</tr><tr>
+<td>OVERRIDING</td>	<td>GENERATED ALWAYS設定されたGENERATEDカラムの属性をオーバーライドするか否か</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+INSERT文でテーブルにデータを挿入します。
+PostgreSQLのINSERT文はSQL99標準と完全な互換性がありますが、ビューに対してデータは挿入できません。
+</p>
+
+<p>
+バージョン9.5からUPSERTがサポートされました。
+</p>
+
+<p>
+・DEFAULT 句
+<br>
+カラムの値が未設定の場合、テーブルの該当するカラムにDEFAULT値が設定されていればデフォルト値を、
+設定されていなければNULLを挿入します。
+</p>
+
+<p>
+・SELECT句
+<br>
+SELECT文の検索結果を直接テーブルに挿入できます。
+</p>
+
+<p>
+・RETURNING句
+<br>
+バージョン8.2からRETURNING句で挿入結果を表示できます。
+使い方は実行例を参照してください。
+</p>
+
+
+%CHAPTER 実行例
+
+<p>
+・SELECT文を利用したデータの挿入
+<br>
+テーブルcustomerlistからidが5未満のレコードを、テーブルnew_customerlistに挿入します。
+</p>
+
+<pre>
+sampledb=# INSERT INTO new_customerlist (id, name, companycode)
+sampledb-#        SELECT id, name, companycode FROM customerlist WHERE id < 5;
+</pre>
+<br>
+
+<p>
+・RETURNING句の使用例
+<br>
+RETURNING句を使うと、挿入したレコードデータが表示できます。
+</p>
+
+<pre>
+sampledb=# INSERT INTO test VALUES(1,10), (2,20) RETURNING id;
+ id
+----
+  1
+  2
+(2 rows)
+
+INSERT 0 2
+
+sampledb=# INSERT INTO test VALUES(3,30), (4,40),(5,50) RETURNING *;
+ id | data
+----+------
+  3 |   30
+  4 |   40
+  5 |   50
+(3 rows)
+
+INSERT 0 3
+</pre>
+<br>
+
+
+<p>
+・UPSERTの実行例
+</p>
+
+<pre>
+postgres=# CREATE TABLE upsert_test (id int primary key, no_1 int, no_2 int, data int, constraint no_unique unique (no_1, no_2));
+CREATE TABLE
+
+postgres=# \d upsert_test
+            Table "public.upsert_test"
+ Column |  Type   | Collation | Nullable | Default
+--------+---------+-----------+----------+---------
+ id     | integer |           | not null |
+ no_1   | integer |           |          |
+ no_2   | integer |           |          |
+ data   | integer |           |          |
+Indexes:
+    "upsert_test_pkey" PRIMARY KEY, btree (id)
+    "no_unique" UNIQUE CONSTRAINT, btree (no_1, no_2)
+
+postgres=# INSERT INTO upsert_test      VALUES (1, 1, 1, 1);
+INSERT 0 1
+postgres=# SELECT * FROM upsert_test;
+ id | no_1 | no_2 | data
+----+------+------+------
+  1 |    1 |    1 |    1
+(1 row)
+
+postgres=# INSERT INTO upsert_test VALUES (1, 2, 2, 2) ON CONFLICT (id) DO UPDATE SET no_1 = 2, no_2 = 2, data = 2;
+INSERT 0 1
+postgres=# SELECT * FROM upsert_test;
+ id | no_1 | no_2 | data
+----+------+------+------
+  1 |    2 |    2 |    2
+(1 row)
+</pre>
+<br>

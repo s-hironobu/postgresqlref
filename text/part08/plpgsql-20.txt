@@ -1,0 +1,122 @@
+%FILE internal/plpgsql-20.html
+%LASTMOD
+%KEY pgsql-plpgsql20
+
+%TITLE <a href="https://www.postgresql.org/docs/current/plpgsql-control-structures.html#PLPGSQL-ERROR-TRAPPING" target="_blank" rel="noopener noreferrer">例外処理</a>
+
+<pre>
+[<例外処理の書式>]
+
+    EXCEPTION
+        WHEN condition [ OR condition ... ] THEN  /* 例外の捕捉    */
+            handler_statements			  /* 例外処理      */
+        [ WHEN condition [ OR condition ... ] THEN
+            handler_statements
+         ... ]
+</pre>
+
+<br>
+
+<pre>
+[<エラー表示>]
+
+	GET STACKED DIAGNOSTICS variable { = | := } item [ , ... ];
+</pre>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+<a href="https://www.postgresql.org/docs/current/plpgsql-control-structures.html#PLPGSQL-EXCEPTION-DIAGNOSTICS-VALUES" target="_blank" rel="noopener noreferrer">GET STACKED DIAGNOSTICS</a>については公式ドキュメント参照。
+</p>
+
+<p>
+WHEN句のconditionはPostgreSQLの状態で、
+例えば"DIVISION_BY_ZERO"はゼロで割ろうとした、
+"INSUFFICIENT_PRIVILEGE"は権限が不足していて検索や更新などができない、
+"UNIQUE_VIOLATION"は一意性制約違反が起きた、などです。
+</p>
+
+<p>
+例外処理が導入されて間もないため、捕捉したいエラーとPostgreSQLの状態(condition)との対応が簡単には分からないので、現在は、ユーザが容易に例外処理を使いこなせる状況にはありません。
+現在のところ、最も確実にPostgreSQLの状態(condition)を知る方法は、設定ファイルpostgresql.confのlog_error_verbosityをverboseに設定し、実際にエラーを起こしてみることです。
+</p>
+
+
+[postgresql.confの設定部分]
+<pre>
+log_error_verbosity = verbose
+</pre>
+<br>
+
+<p>
+例として、「テーブルのSELECT権限がない場合のPostgreSQLの状態(condition)」を調べます。そのためには、実際にテーブルitemlistにSELECT権限のないデータベースロールにSELECT文を実行してみます。
+</p>
+
+<pre>
+sample=> SELECT * FROM itemlist;
+ERROR:  42501: permission denied for relation itemlist		← エラーコードは42501
+LOCATION:  aclcheck_error, aclchk.c:1322
+ERROR:  permission denied for relation itemlist
+</pre>
+<br>
+
+<p>
+エラーの出力レベルを上げたことで、エラーメッセージとともにエラーコードも出力するようになります。上の例では、42501がエラーコードです。そして、このエラーコードからPostgreSQLの状態(condition)を見つけることができます。
+</p>
+
+
+%CHAPTER 実行例
+
+<p>
+テーブル名を引数として、そのテーブルの行数を数える関数count_rows()を定義します。この関数は、指定されたテーブルのSELECT権限がない場合には、-1を返します。
+</p>
+
+<pre>
+CREATE FUNCTION count_rows(table_name text) RETURNS bigint AS
+ $$
+  DECLARE
+    ret   bigint;
+    query text;
+  BEGIN
+    query := 'SELECT count(*) FROM ' || table_name;
+
+    /* 問い合わせを実行*/
+    EXECUTE query INTO ret;
+    RETURN ret;
+
+  /* 例外処理  */
+  EXCEPTION
+    WHEN INSUFFICIENT_PRIVILEGE THEN /* SELECT権限が無い場合 */
+         RETURN -1;
+  END;
+ $$
+LANGUAGE PLpgSQL;
+</pre>
+<br>
+
+<p>
+データベースロールuser1として、関数count_rows()を実行してみます。データベースロールuser1は、テーブルorderlistに対するSELECT権限は持っていますが、テーブルitemlistのSELECT権限は持っていません。
+</p>
+
+<pre>
+sampledb=> SELECT CURRENT_ROLE;
+ current_user
+--------------
+ user1
+(1 row)
+
+sampledb=> SELECT count_rows('orderlist');
+ count_rows
+------------
+          5
+(1 row)
+
+sampledb=> SELECT count_rows('itemlist');
+ count_rows
+------------
+         -1
+(1 row)
+</pre>
+<br>

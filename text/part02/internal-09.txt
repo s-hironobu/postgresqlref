@@ -1,0 +1,10 @@
+%FILE internal/internal-09.html
+%LASTMOD
+%KEY pgsql-internal09
+
+
+%TITLE WAL (Write Ahead Logging)
+
+<p>
+The Internals of PostgreSQL <a href="https://www.interdb.jp/pg/pgsql09.html" target="_blank" rel="noopener noreferrer">Chapter 9: Write Ahead Logging (WAL)</a>
+</p>

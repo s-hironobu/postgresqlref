@@ -1,0 +1,117 @@
+%FILE internal/func-23.html
+%LASTMOD
+%KEY pgsql-func23
+
+%TITLE <a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADMIN-GENFILE" target="_blank" rel="noopener noreferrer">汎用ファイルアクセス関数</a>
+
+
+<table><tr bgcolor="#cccccc">
+
+<th>関数</th>							<th>返り値型</th>	<th>説明</th>
+
+</tr><tr>
+<td>pg_ls_dir(dirname text [, missing_ok bool, include_dot_dirs bool])</td>	<td>setof text</td>	<td>ディレクトリdirnameのファイルなどを表示する</td>
+
+</tr><tr>
+<td>pg_ls_logdir()</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>ログディレクトリ以下のログファイル名、サイズ、変更時刻を表示</td>
+
+</tr><tr>
+<td>pg_ls_waldir()</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>WALディレクトリ以下のWALログファイル名、サイズ、変更時刻を表示</td>
+
+</tr><tr>
+<td>pg_ls_logicalmapdir()</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>バージョン15から</td>
+
+</tr><tr>
+<td>pg_ls_logicalsnapdir()</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>バージョン15から</td>
+
+</tr><tr>
+<td>pg_ls_replslotdir(slot_name text)</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>バージョン15から</td>
+
+</tr><tr>
+<td>pg_ls_archive_statusdir()</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>アーカイブステータスを保存するディレクトリ(pg_wal/archive_status/)以下を表示する。バージョン12から</td>
+
+</tr><tr>
+<td>pg_ls_tmpdir([tablespace oid])</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>バージョン12から</td>
+
+</tr><tr>
+<td>pg_read_file(filename text [, offset bigint, length bigint [, missing_ok bool]])</td>	<td>text</td>	<td>テキストファイルfilenameの内容を(offsetからlengthだけ)返す</td>
+
+</tr><tr>
+<td>pg_read_binary_file(filename text [, offset bigint, length bigint [, missing_ok bool]])</td>	<td>bytea</td>	<td>バイナリファイルfilenameの内容を(offsetからlengthだけ)返す</td>
+
+</tr><tr>
+<td>pg_stat_file(filename text [, missing_ok bool])</td>	<td>record (size bigint, access timestamp, modification timestamp, change timestamp, creation timestamp, isdir bool)</td>	<td>ファイル情報を返す</td>
+
+
+</tr></table>
+
+<br>
+
+
+
+
+<pre>
+
+===============================================================================
+関数								返り値型	説明
+===============================================================================
+pg_ls_dir(dirname text)						setof text
+pg_read_file(filename text, offset bigint, length bigint)	text
+pg_stat_file(filename text)	   record
+===============================================================================
+</pre>
+
+<br>
+
+<pre>
+表 9-61. 汎用ファイルアクセス関数
+名前	 戻り型	説明
+pg_ls_dir(dirname text)		setof text	ディレクトリ内容のリスト
+pg_read_file(filename text [, offset bigint, length bigint])	text	テキストファイルの内容を返す
+pg_read_binary_file(filename text [, offset bigint, length bigint])	bytea	ファイルの内容を返す
+pg_stat_file(filename text)  record  ファイル情報を返す
+
+pg_ls_dirは、特別なエントリである"."、および　".."を除いた、指定されたディレクトリの全ての名前を返します。
+
+pg_read_fileは与えられたoffsetから始まり、最大lengthバイト（最初にファイルの終りに到達すればこれより少なくなりますが）
+テキストファイルの一部分を返します。offsetが負の場合にはファイルの終りから数えた位置から読み出します。
+もしoffsetとlengthが省略された場合、ファイル全体が返されます。ファイルからのバイトの読み込みは、
+そのサーバ符号化方式に対する文字列と同様の解釈をされます。
+そのため、読み込んだバイト列がその符号化方式において有効でない場合にはエラーが投げられます。
+
+pg_read_binary_fileは、結果がbytea値となり、従って符号化の検査がされないことを除き、pg_read_fileと似ています。
+convert_from関数と組み合わせることで、この指定した符号化方式でファイルの読み込みを行うことができます。
+
+SELECT convert_from(pg_read_binary_file('file_in_utf8.txt'), 'UTF8');
+
+pg_stat_fileはファイル容量、最終アクセス時刻、最終更新時刻、最後にファイルステータスを変更した時刻（これはUnixプラットフォームのみ）、
+ファイル作成時刻（Windowsのみ）およびもしディレクトリであればそれを示すbooleanを返します。典型的な使用法を示します。
+
+SELECT * FROM pg_stat_file('filename');
+SELECT (pg_stat_file('filename')).modification;
+
+
+</pre>
+
+<br>
+
+%CHAPTER 解説
+
+%CHAPTER 実行例
+
+
+<p>
+・pg_ls_archive_statusdir()
+<br>
+
+</p>
+
+<pre>
+postgres=# SELECT pg_ls_archive_statusdir();
+                  pg_ls_archive_statusdir
+------------------------------------------------------------
+ (000000010000000000000005.done,0,"2023-02-12 00:04:32+09")
+(1 row)
+</pre>
+
+<br>

@@ -1,0 +1,128 @@
+%FILE internal/func-10.html
+%LASTMOD
+%KEY pgsql-func10
+
+%TITLE <a href="https://www.postgresql.org/docs/current/functions-info.html#FUNCTIONS-INFO-ACCESS-TABLE" target="_blank" rel="noopener noreferrer">アクセス権限照会関数</a>
+
+<table><tr bgcolor="#cccccc">
+<th>関数</th>							<th>返り値型</th>	<th>説明</th>	<th>権限</th>
+
+</tr><tr>
+<td>has_any_column_privilege(role, table, privilege)	</td>	<td>bool</td>	<td>ロールroleがテーブルtableの全カラムに権限があるか否か</td>	<td>SELECT,INSERT,UPDATE,REFERENCES</td>
+</tr><tr>
+<td>has_any_column_privilege(table, privilege)		</td>	<td>bool</td>	<td>現在のロールがテーブルtableの全カラムに権限があるか否か</td>	<td>SELECT,INSERT,UPDATE,REFERENCES</td>
+</tr><tr>
+<td>has_column_privilege(role, table, column, privilege)	</td>	<td>bool</td>	<td>ロールroleにテーブルtableのカラムcolumnに対する権限があるか否か</td>	<td>SELECT,INSERT,UPDATE,REFERENCES</td>
+</tr><tr>
+<td>has_column_privilege(table, column, privilege)		</td>	<td>bool</td>	<td>現在のロールにテーブルtableのカラムcolumnに対する権限があるか否か</td>	<td>SELECT,INSERT,UPDATE,REFERENCES</td>
+
+</tr><tr>
+<td>has_database_privilege(role, database, privilege)	</td>	<td>bool</td>	<td>ロールroleにデータベースdatabaseの権限があるか否か</td>	<td>CREATE,CONNECT,TEMPORARY</td>
+</tr><tr>
+<td>has_database_privilege(database, privilege)		</td>	<td>bool</td>	<td>現在のロールにデータベースdatabaseの権限があるか否か</td>	<td>CREATE,CONNECT,TEMPORARY</td>
+
+</tr><tr>
+<td>has_foreign_data_wrapper_privilege(role, fdw, privilege)	</td>	<td>bool</td>	<td>ロールroleに外部データラッパfdwに対する権限があるか否か</td>	<td>USAGE</td>
+</tr><tr>
+<td>has_foreign_data_wrapper_privilege(fdw, privilege)	</td>	<td>bool</td>	<td>現在のロールに外部データラッパfdwに対する権限があるか否か</td>	<td>USAGE</td>
+
+</tr><tr>
+<td>has_function_privilege(role, function, privilege)	</td>	<td>bool</td>	<td>ロールroleに関数functionの権限があるか否か</td>	<td>EXECUTE</td>
+</tr><tr>
+<td>has_function_privilege(function, privilege)		</td>	<td>bool</td>	<td>現在のロールに関数functionの権限があるか否か</td>	<td>EXECUTE</td>
+
+</tr><tr>
+<td>has_language_privilege(role, language, privilege)	</td>	<td>bool</td>	<td>ロールroleに言語languageの権限があるか否か</td>	<td>USAGE</td>
+</tr><tr>
+<td>has_language_privilege(language, privilege)		</td>	<td>bool</td>	<td>現在のロールに言語languageの権限があるか否か</td>	<td>USAGE</td>
+
+
+</tr><tr>
+<td>has_parameter_privilege(role, parameter, privilege)		</td>	<td>bool</td>	<td>ロールroleにパラメータparameter設定の権限があるか否か)</td>	<td>SET,ALTER SYSTEM</td>
+</tr><tr>
+<td>has_parameter_privilege(parameter, privilege)		</td>	<td>bool</td>	<td>現在のロールにパラメータparameter設定の権限があるか否か</td>	<td>SET,ALTER SYSTEM</td>
+
+</tr><tr>
+<td>has_schema_privilege(role, schema, privilege)		</td>	<td>bool</td>	<td>ロールroleにスキーマschemaの権限があるか否か</td>	<td>CREATE,USAGE</td>
+</tr><tr>
+<td>has_schema_privilege(schema, privilege)			</td>	<td>bool</td>	<td>現在のロールにスキーマschemaの権限があるか否か</td>	<td>CREATE,USAGE</td>
+
+</tr><tr>
+<td>has_sequence_privilege(role, sequence, privilege)	</td>	<td>bool</td>	<td>ロールroleにシーケンスsequenceに対する権限があるか否か</td>	<td>USAGE,SELECT,UPDATE</td>
+</tr><tr>
+<td>has_sequence_privilege(sequence, privilege)		</td>	<td>bool</td>	<td>現在のロールにシーケンスsequenceに対する権限があるか否か</td>	<td>USAGE,SELECT,UPDATE</td>
+
+</tr><tr>
+<td>has_server_privilege(role, server, privilege)		</td>	<td>bool</td>	<td>ロールroleに外部サーバserverに対する権限があるか否か</td>	<td>USAGE</td>
+</tr><tr>
+<td>has_server_privilege(server, privilege)			</td>	<td>bool</td>	<td>現在のロールに外部サーバserverに対する権限があるか否か</td>	<td>USAGE</td>
+
+</tr><tr>
+<td>has_table_privilege(role, table, privilege)		</td>	<td>bool</td>	<td>テーブルtableにロールroleの権限があるか否か</td>	<td>SELECT,INSERT,UPDATE,<br>DELETE,<br>TRUNCATE,REFERENCES,TRIGGER</td>
+</tr><tr>
+<td>has_table_privilege(table, privilege)			</td>	<td>bool</td>	<td>テーブルtableに現在のロールの権限があるか否か</td>	<td>SELECT,INSERT,UPDATE,DELETE,<br>TRUNCATE,REFERENCES,TRIGGER</td>
+
+</tr><tr>
+<td>has_tablespace_privilege(role, tablespace, privilege)	</td>	<td>bool</td>	<td>ロールにテーブルスペースtablespaceの権限があるか否か</td>	<td>CREATE</td>
+</tr><tr>
+<td>has_tablespace_privilege(tablespace, privilege)		</td>	<td>bool</td>	<td>現在のロールにテーブルスペースtablespaceの権限があるか否か</td>	<td>CREATE</td>
+
+</tr><tr>
+<td>pg_type_role(role, type, privilege)			</td>	<td>bool</td>	<td>ロールroleにデータ型typeの権限があるか否か</td>	<td>USAGE</td>
+
+</tr><tr>
+<td>pg_type_role(type, privilege)			</td>	<td>bool</td>	<td>現在のロールにデータ型typeの権限があるか否か</td>	<td>USAGE</td>
+
+
+</tr><tr>
+<td>pg_has_role(role1, role2, privilege)			</td>	<td>bool</td>	<td>ロールrole1がロールrole2の権限を所有しているか否か</td>	<td>MEMBER,USAGE</td>
+</tr><tr>
+<td>pg_has_role(role, privilege)				</td>	<td>bool</td>	<td>現在のロールがロールroleの権限を所有しているか否か</td>	<td>MEMBER,USAGE</td>
+</tr></table>
+<p>
+※ privilege:権限は<a href="./admin-09.html"> [<3-09></a>]参照
+</p>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+PostgreSQLは上記のアクセス権限照会関数をサポートしています。
+検査する権限(privilege)は<a href="./admin-09.html">[<3-09>]の[<表3-05>]を参照してください。
+</p>
+
+
+%CHAPTER 実行例
+
+<p>
+テーブルcompanylistは所有者postgresだけがアクセスできます。
+</p>
+
+<pre>
+sampledb=# SELECT current_user;
+ current_user
+--------------
+ postgres
+(1 row)
+
+sampledb=# \z companylist
+                              Access privileges
+ Schema |     Name    | Type  | Access privileges | Column access privileges
+--------+-------------+-------+-------------------+--------------------------
+ public | companylist | table |                   |
+(1 row)
+
+sampledb=# SELECT has_table_privilege('customerlist', 'SELECT');
+ has_table_privilege
+---------------------
+ t
+(1 row)
+
+sampledb=# SELECT has_table_privilege('webuser3', 'customerlist', 'SELECT');
+ has_table_privilege
+---------------------
+ f
+(1 row)
+</pre>
+<br>

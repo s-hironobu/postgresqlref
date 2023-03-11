@@ -1,0 +1,79 @@
+%FILE internal/func-24.html
+%LASTMOD
+%KEY pgsql-func24
+
+%TITLE <a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADVISORY-LOCKS" target="_blank" rel="noopener noreferrer">勧告的ロック用関数</a>
+
+
+<table><tr bgcolor="#cccccc">
+
+<th>関数</th>							<th>返り値型</th>	<th>説明</th>
+
+</tr><tr>
+<td>pg_advisory_lock(key bigint)</td>	<td>void</td>	<td>排他勧告的ロックを獲得</td>
+</tr><tr>
+<td>pg_advisory_lock(key1 int, key2 int)</td>	<td>void</td>	<td>排他勧告的ロックを獲得</td>
+</tr><tr>
+<td>pg_advisory_lock_shared(key bigint)</td>	<td>void</td>	<td>共有勧告的ロックを獲得</td>
+</tr><tr>
+<td>pg_advisory_lock_shared(key1 int, key2 int)</td>	<td>void</td>	<td>共有勧告的ロックを獲得</td>
+</tr><tr>
+<td>pg_advisory_unlock(key bigint)</td>	<td>bool</td>	<td>排他勧告的ロックを解放</td>
+</tr><tr>
+<td>pg_advisory_unlock(key1 int, key2 int)</td>	<td>bool</td>	<td>排他勧告的ロックを解放</td>
+</tr><tr>
+<td>pg_advisory_unlock_all()</td>	<td>void</td>	<td>現在のセッションで保持している勧告的ロックをすべて解放</td>
+</tr><tr>
+<td>pg_advisory_unlock_shared(key bigint)</td>	<td>bool</td>	<td>共有勧告的ロックを解放</td>
+</tr><tr>
+<td>pg_advisory_unlock_shared(key1 int, key2 int)</td>	<td>bool</td>	<td>共有勧告的ロックを解放</td>
+</tr><tr>
+<td>pg_advisory_xact_lock(key bigint)</td>	<td>void</td>	<td></td>
+</tr><tr>
+<td>pg_advisory_xact_lock(key1 int, key2 int)</td>	<td>void</td>	<td></td>
+</tr><tr>
+<td>pg_advisory_xact_lock_shared(key bigint)</td>	<td>void</td>	<td></td>
+</tr><tr>
+<td>pg_advisory_xact_lock_shared(key1 int, key2 int)</td>	<td>void</td>	<td></td>
+</tr><tr>
+<td>pg_try_advisory_lock(key bigint)</td>	<td>bool</td>	<td>可能ならば排他勧告的ロックを獲得</td>
+</tr><tr>
+<td>pg_try_advisory_lock(key1 int, key2 int)</td>	<td>bool</td>	<td>可能ならば排他勧告的ロックを獲得</td>
+</tr><tr>
+<td>pg_try_advisory_lock_shared(key bigint)</td>	<td>bool</td>	<td>可能ならば共有勧告的ロックを獲得</td>
+</tr><tr>
+<td>pg_try_advisory_lock_shared(key1 int, key2 int)</td>	<td>bool</td>	<td>可能ならば共有勧告的ロックを獲得</td>
+</tr><tr>
+<td>pg_try_advisory_xact_lock(key bigint)</td>	<td>bool</td>	<td></td>
+</tr><tr>
+<td>pg_try_advisory_xact_lock(key1 int, key2 int)</td>	<td>bool</td>	<td></td>
+</tr><tr>
+<td>pg_try_advisory_xact_lock_shared(key bigint)</td>	<td>bool</td>	<td></td>
+</tr><tr>
+<td>pg_try_advisory_xact_lock_shared(key1 int, key2 int)</td>	<td>bool</td>	<td></td>
+
+</tr></table>
+
+<br>
+
+
+<pre>
+===============================================================================
+関数					返り値型	説明
+===============================================================================
+pg_advisory_lock(key bigint)	void
+pg_advisory_lock(key1 int, key2 int)	void
+pg_advisory_lock_shared(key bigint)	void
+pg_advisory_lock_shared(key1 int, key2 int)	void
+pg_try_advisory_lock(key bigint)  boolean
+pg_try_advisory_lock(key1 int, key2 int)	boolean
+pg_try_advisory_lock_shared(key bigint)		boolean
+pg_try_advisory_lock_shared(key1 int, key2 int)		boolean	可能ならば共有勧告的ロックを獲得
+pg_advisory_unlock(key bigint)
+pg_advisory_unlock(key1 int, key2 int)	   boolean
+pg_advisory_unlock_shared(key bigint)	   boolean
+pg_advisory_unlock_shared(key1 int, key2 int)		boolean
+pg_advisory_unlock_all()       void
+===============================================================================
+
+</pre>

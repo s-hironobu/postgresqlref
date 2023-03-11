@@ -1,0 +1,126 @@
+%FILE internal/sql-54.html
+%LASTMOD
+%KEY pgsql-sql54
+
+
+%TITLE <a href="https://www.postgresql.org/docs/current/sql-createsubscription.html" target="_blank" rel="noopener noreferrer">CREATE SUBSCRIPTION</a> / <a href="https://www.postgresql.org/docs/current/sql-dropsubscription.html" target="_blank" rel="noopener noreferrer">DROP SUBSCRIPTION</a> / <a href="https://www.postgresql.org/docs/current/sql-altersubscription.html" target="_blank" rel="noopener noreferrer">ALTER SUBSCRIPTION</a>
+
+<pre>
+●サブスクリプションを作成
+CREATE SUBSCRIPTION name
+    CONNECTION 'conninfo'
+    PUBLICATION publication_name [, ...]
+    [ WITH ( subscription_parameter [= value] [, ... ] ) ]
+
+●サブスクリプションの変更
+ALTER SUBSCRIPTION name CONNECTION 'conninfo'
+ALTER SUBSCRIPTION name SET PUBLICATION publication_name [, ...] [ WITH ( publication_option [= value] [, ... ] ) ]
+ALTER SUBSCRIPTION name ADD PUBLICATION publication_name [, ...] [ WITH ( publication_option [= value] [, ... ] ) ]
+ALTER SUBSCRIPTION name DROP PUBLICATION publication_name [, ...] [ WITH ( publication_option [= value] [, ... ] ) ]
+ALTER SUBSCRIPTION name REFRESH PUBLICATION [ WITH ( refresh_option [= value] [, ... ] ) ]
+ALTER SUBSCRIPTION name ENABLE
+ALTER SUBSCRIPTION name DISABLE
+ALTER SUBSCRIPTION name SET ( subscription_parameter [= value] [, ... ] )
+ALTER SUBSCRIPTION name SKIP ( skip_option = value )
+ALTER SUBSCRIPTION name OWNER TO { new_owner | CURRENT_ROLE | CURRENT_USER | SESSION_USER }
+ALTER SUBSCRIPTION name RENAME TO new_name
+
+●サブスクリプションの削除
+DROP SUBSCRIPTION [ IF EXISTS ] name [ CASCADE | RESTRICT ]
+
+</pre>
+
+<br>
+
+<table>
+<caption>主なパラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>name</td>	<td>定義/削除するサブスクリプション名</td>
+</tr><tr>
+<td></td>	<td></td>
+</tr><tr>
+<td></td>	<td></td>
+</tr></table>
+
+<br>
+
+<table>
+<caption>主なオプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>CASCADE</td>	<td>関係するオブジェクトも削除する</td>
+</tr><tr>
+<td>RESTRICT</td>	<td>関係するオブジェクトが存在する場合は削除できない。デフォルト</td>
+</tr></table>
+
+<br>
+
+<table>
+<caption>主な句</caption>
+<tr bgcolor="#cccccc">
+<th>句</th>	<th>説明</th>
+</tr><tr>
+<td>CONNECTION 'conninfo'</td>	<td></td>
+</tr><tr>
+<td></td>	<td></td>
+
+</tr></table>
+
+<br>
+
+<table>
+<caption>publish_parameter</caption>
+<tr bgcolor="#cccccc">
+<th>publish_parameter</th>	<th>説明</th>
+</tr><tr>
+<td>publish</td>	<td>可能な操作。設定可能値は"insert", "update", "delete", "truncate"。コンマで連結できる。<br>デフォルトは"insert,update,delete,truncate"</td>
+
+</tr><tr>
+<td>publish_via_partition_root</td>	<td>設定値はbool。</td>
+</tr></table>
+
+<br>
+
+<table>
+<caption>subscription_parameter</caption>
+<tr bgcolor="#cccccc">
+<th>subscription_parameter</th>	<th>型[デフォルト]</th>		<th>説明</th>
+</tr><tr>
+<td>connect</td>	<td>on/off [on]</td>	<td></td>
+
+</tr><tr>
+<td>create_slot</td>	<td>on/off [on]</td>	<td></td>
+
+</tr><tr>
+<td>enabled</td>	<td>on/off [on]</td>	<td></td>
+
+</tr><tr>
+<td>slot_name</td>	<td>string</td>	<td></td>
+
+</tr><tr>
+<td>binary</td>		<td>on/off [off]</td>	<td></td>
+
+</tr><tr>
+<td>copy_data</td>	<td>on/off [on]</td>	<td></td>
+
+</tr><tr>
+<td>streaming</td>	<td>on/off [off]</td>	<td></td>
+
+</tr><tr>
+<td>synchronous_commit</td>	<td>remote_apply/on/remote_write/local/off [off]</td>	<td></td>
+
+</tr><tr>
+<td>two_phase</td>	<td>on/off [off]</td>	<td></td>
+
+</tr><tr>
+<td>disable_on_error</td>	<td>on/off [off]</td>	<td></td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER 解説
+

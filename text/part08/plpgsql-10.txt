@@ -1,0 +1,84 @@
+%FILE internal/plpgsql-10.html
+%LASTMOD
+%KEY pgsql-plpgsql10
+
+
+%TITLE <a href="https://www.postgresql.org/docs/current/plpgsql-control-structures.html#PLPGSQL-CONTROL-STRUCTURES-LOOPS" target="_blank" rel="noopener noreferrer">ループ処理　LOOP</a>
+
+<pre>
+[<書式>]
+
+[ <<label>> ]
+LOOP
+    statements
+END LOOP [ label ];
+
+</pre>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+LOOPは、条件無しのループを定義します。LOOPで定義されたループは、EXIT文またはRETURN文で終了するまで、無限にループ内の処理が繰り返されます。
+</p>
+
+%CHAPTER プログラム例
+
+<p>
+LOOP構文を使って、テーブルitemlistの列nameを列挙する関数item_names()を定義します。
+</p>
+
+<pre>
+CREATE FUNCTION item_names () RETURNS SETOF text AS
+ $$
+   DECLARE
+     myname text;     /* 商品名を格納 */
+     count  integer;  /* ループのカウンタ */
+     max_id integer;  /* 商品idの最大値を格納 */
+   BEGIN
+     /* 商品idの最小値と最大値を、変数count,max_idに格納 */
+     SELECT INTO count  min(id) FROM itemlist;
+     SELECT INTO max_id max(id) FROM itemlist;
+
+     LOOP
+       /* すべての商品idの処理が終ったら、ループを脱出 */
+       EXIT WHEN max_id < count;
+
+       /* 条件に一致した商品名を変数mynameに格納 */
+       SELECT INTO myname name FROM itemlist WHERE  id = count;
+
+       IF FOUND THEN
+	  /* 変数mynameに格納された値を保存し、次の処理へ進む */
+	  RETURN NEXT myname;
+	END IF;
+
+	/* カウンタの値をインクリメント */
+	count := count + 1;
+    END LOOP;
+
+    /* 保存された値を返し、関数を終了 */
+    RETURN;
+  END;
+ $$
+LANGUAGE PLpgSQL;
+</pre>
+
+<br>
+
+<p>
+関数item_names()はRETURN NEXT文を使っているので、"SELECT * FROM 関数()"形式で実行しなければなりません。
+</pre>
+
+
+<pre>
+sampledb=# SELECT * FROM item_names();
+ item_names
+------------
+ pen
+ notebook
+ eraser
+(3 rows)
+</pre>
+
+<br>

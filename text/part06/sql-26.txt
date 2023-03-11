@@ -1,0 +1,135 @@
+%FILE internal/sql-26.html
+%LASTMOD
+%KEY pgsql-sql26
+
+%TITLE 検索結果の並び替え <a href="https://www.postgresql.org/docs/current/sql-select.html#SQL-ORDERBY" target="_blank" rel="noopener noreferrer">ORDER BY句</a>
+
+<pre>
+[<書式>]
+
+SELECT select_list
+       FROM from_list
+       ORDER BY expression [ ASC | DESC | USING operator ]
+       [ NULLS { FIRST | LAST } ] [, ...] ]
+
+</pre>
+
+<br>
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>expression</td>	<td>並べ換えを設定するカラム、または式</td>
+</tr><tr>
+<td>operator</td>	<td>並べ換えに使う比較演算子</td>
+</tr></table>
+
+<br>
+
+
+<table>
+<caption>オプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>ASC</td>	<td>昇順に並べる。デフォルト</td>
+</tr><tr>
+<td>DESC</td>	<td>降順に並べる</td>
+</tr><tr>
+<td>NULLS FIRST</td>	<td>NULL値をはじめに並べる。DESCのときのデフォルトの挙動</td>
+</tr><tr>
+<td>NULLS LAST</td>	<td>NULL値を非NULL値の後に並べる。ASCのときのデフォルトの挙動</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+ORDER BY句で結果の表示順序を並べ替えます。
+</p>
+
+<p>
+・USING句
+<br>
+'ASC'や'DESC'を指定する代わりに、特定の比較演算子を指定できます。ASC は'USING <'、DESCは'USING >'と等価です。
+</p>
+
+%CHAPTER 実行例
+
+<p>
+・昇順で並び替え
+<br>
+カラムidの小さい順にテーブルcustomerlistを表示します。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM customerlist WHERE id < 5 ORDER BY id;
+ id |       name       | companycode
+----+------------------+-------------
+  1 | デューク東郷     |           1
+  2 | アーネスト東郷   |           2
+  3 | アランサイジョー |           4
+  4 | ダグラストウゴウ |           5
+(4 rows)
+</pre>
+<br>
+
+<p>
+・降順で並び替え
+<br>
+DESC句を使うと、カラムidの大きな順にテーブルcustomerlistを表示します。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM customerlist WHERE id < 5 ORDER BY id DESC;
+ id |       name       | companycode
+----+------------------+-------------
+  4 | ダグラストウゴウ |           5
+  3 | アランサイジョー |           4
+  2 | アーネスト東郷   |           2
+  1 | デューク東郷     |           1
+(4 rows)
+</pre>
+<br>
+
+<p>
+・複数のカラムによる並び替え
+<br>
+ORDER BY句には、複数のカラムや式を設定できます。例として、総得点の低い順に表示します。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM test_result
+sampledb-#                ORDER BY (math + english + physics);
+ name  | math | english | physics
+-------+------+---------+---------
+ Bobby |    2 |       3 |       3
+ Duke  |    2 |       4 |       2
+ Eddie |    4 |       4 |       3
+ Alice |    4 |       5 |       3
+ Candy |    5 |       3 |       4
+(5 rows)
+</pre>
+<br>
+
+<p>
+・USING句を用いた降順の並び替え
+<br>
+DESC句の代わりに'USING >'を用います。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM customerlist
+sampledb-#                WHERE id < 5 ORDER BY id USING >;
+ id |       name       | companycode
+----+------------------+-------------
+  4 | ダグラストウゴウ |           5
+  3 | アランサイジョー |           4
+  2 | アーネスト東郷   |           2
+  1 | デューク東郷     |           1
+(4 rows)
+</pre>
+<br>

@@ -1,0 +1,189 @@
+%FILE internal/sql-48.html
+%LASTMOD
+%KEY pgsql-sql48
+
+%TITLE <a href="https://www.postgresql.org/docs/current/sql-explain.html" target="_blank" rel="noopener noreferrer">問い合わせプランの表示	EXPLAIN </a>
+
+<pre>
+[<書式>]
+EXPLAIN [ ( option [, ...] ) ] statement
+EXPLAIN [ ANALYZE ] [ VERBOSE ] statement
+
+・option can be one of:
+
+    ANALYZE [ boolean ]
+    VERBOSE [ boolean ]
+    COSTS [ boolean ]
+    SETTINGS [ boolean ]
+    BUFFERS [ boolean ]
+    WAL [ boolean ]
+    TIMING [ boolean ]
+    SUMMARY [ boolean ]
+    FORMAT { TEXT | XML | JSON | YAML }
+</pre>
+<br>
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>query</td>	<td>問い合わせプランを表示するSQL文</td>
+
+</tr></table>
+
+<br>
+
+<table>
+<caption>オプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明[デフォルト値]</th>
+</tr><tr>
+<td>ANALYZE [true|false]</td>	<td>問い合わせを実行し、実際の実行時間を表示。[false]</td>
+</tr><tr>
+<td>VERBOSE	[true|false]</td>	<td>問い合わせプランの詳細表示。[false]</td>
+</tr><tr>
+<td>COSTS   [true|false]</td>	<td>問い合わせプランのコストを表示。[true]</td>
+</tr><tr>
+<td>SETTINGS	[true|false]</td>	<td>EXPLAIN表示に関連する設定パラメータのうち、デフォルト値以外の値が設定されたパラメータとその値を表示。バージョン12から。[false]</td>
+</tr><tr>
+<td>BUFFERS [true|false]</td>	<td>バッファの利用状況を表示。ANALYZEも設定しなければならない。[false]</td>
+</tr><tr>
+<td>WAL	[true|false]</td>	<td>jsonフォーマットの場合、WAL関連情報：WALの書き込み量とFPWの値を表示。TEXTフォーマットの場合は0以外の値の時のみ表示。バージョン13から。[false]</td>
+</tr><tr>
+<td>TIMING	[true|false]</td>	<td>各ノードで消費した時間を表示。ANALYZEと同時に使う。デフォルトがTrueなのでANALYZEなら常に時間が表示される。[true]</td>
+</tr><tr>
+<td>SUMMARY	[true|false]</td>	<td>消費時間などの要約情報を表示する。ANALYZEが設定されるとデフォルトでTrue、それ以外はFalse。[false]</td>
+</tr><tr>
+<td>FORMAT { TEXT | XML | JSON | YAML }	</td>	<td>出力形式を設定。[TEXT]</td>
+
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+EXPLAIN文でSQL文の問い合わせプランを表示します。
+</p>
+
+%CHAPTER 実行例
+
+<p>
+・FORMAT
+<br>
+通常の出力と、JSONでの出力例を示します。
+</p>
+
+<pre>
+sampledb=# EXPLAIN SELECT * FROM pgbench_accounts WHERE (aid BETWEEN 1 AND 1000);
+                                            QUERY PLAN
+--------------------------------------------------------------------------------------------------
+ Index Scan using pgbench_accounts_pkey on pgbench_accounts  (cost=0.29..52.87 rows=1029 width=97)
+   Index Cond: ((aid >= 1) AND (aid <= 1000))
+(2 rows)
+
+
+sampledb=# EXPLAIN (FORMAT json) SELECT * FROM pgbench_accounts WHERE (aid BETWEEN 1 AND 1000);
+                      QUERY PLAN
+------------------------------------------------------
+ [                                                   +
+   {                                                 +
+     "Plan": {                                       +
+       "Node Type": "Index Scan",                    +
+       "Parallel Aware": false,                      +
+       "Async Capable": false,                       +
+       "Scan Direction": "Forward",                  +
+       "Index Name": "pgbench_accounts_pkey",        +
+       "Relation Name": "pgbench_accounts",          +
+       "Alias": "pgbench_accounts",                  +
+       "Startup Cost": 0.29,                         +
+       "Total Cost": 52.87,                          +
+       "Plan Rows": 1029,                            +
+       "Plan Width": 97,                             +
+       "Index Cond": "((aid >= 1) AND (aid <= 1000))"+
+     }                                               +
+   }                                                 +
+ ]
+(1 row)
+
+</pre>
+<br>
+
+<p>
+・ANALYZE、BUFFERS
+<br>
+ANALYZE、SETTINGS、BUFFERSオプションの例を示します。
+</p>
+
+<pre>
+sampledb=# EXPLAIN ANALYZE SELECT * FROM pgbench_accounts WHERE (aid BETWEEN 1 AND 1000);
+                                                                   QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------------------------------
+ Index Scan using pgbench_accounts_pkey on pgbench_accounts  (cost=0.29..52.87 rows=1029 width=97) (actual time=0.044..0.322 rows=1000 loops=1)
+   Index Cond: ((aid >= 1) AND (aid <= 1000))
+ Planning Time: 0.414 ms
+ Execution Time: 0.425 ms
+(4 rows)
+
+sampledb=# EXPLAIN (ANALYZE true, SETTINGS true, BUFFERS true) SELECT * FROM pgbench_accounts WHERE (aid BETWEEN 1 AND 1000);
+                                                                   QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------------------------------
+ Index Scan using pgbench_accounts_pkey on pgbench_accounts  (cost=0.29..52.87 rows=1029 width=97) (actual time=0.030..0.308 rows=1000 loops=1)
+   Index Cond: ((aid >= 1) AND (aid <= 1000))
+ Settings: max_parallel_workers_per_gather = '0'
+ Planning:
+   Buffers: shared hit=3
+ Planning Time: 0.378 ms
+ Execution Time: 0.391 ms
+(7 rows)
+</pre>
+<br>
+
+<p>
+ANALYZEでは実行時間が表示され、BUFFERSと併用することでヒットしたバッファ数も表示されます。
+</p>
+
+<p>
+・WAL
+<br>
+WALオプションの例を示します。
+</p>
+
+<pre>
+postgres=# EXPLAIN (ANALYZE true, FORMAT json, WAL true) SELECT * FROM pgbench_accounts WHERE (aid BETWEEN 1 AND 1000);
+                      QUERY PLAN
+-------------------------------------------------------
+ [                                                    +
+   {                                                  +
+     "Plan": {                                        +
+       "Node Type": "Index Scan",                     +
+       "Parallel Aware": false,                       +
+       "Async Capable": false,                        +
+       "Scan Direction": "Forward",                   +
+       "Index Name": "pgbench_accounts_pkey",         +
+       "Relation Name": "pgbench_accounts",           +
+       "Alias": "pgbench_accounts",                   +
+       "Startup Cost": 0.29,                          +
+       "Total Cost": 52.87,                           +
+       "Plan Rows": 1029,                             +
+       "Plan Width": 97,                              +
+       "Actual Startup Time": 0.049,                  +
+       "Actual Total Time": 0.357,                    +
+       "Actual Rows": 1000,                           +
+       "Actual Loops": 1,                             +
+       "Index Cond": "((aid >= 1) AND (aid <= 1000))",+
+       "Rows Removed by Index Recheck": 0,            +
+       "WAL Records": 0,                              +
+       "WAL FPI": 0,                                  +
+       "WAL Bytes": 0                                 +
+     },                                               +
+     "Planning Time": 1.396,                          +
+     "Triggers": [                                    +
+     ],                                               +
+     "Execution Time": 0.470                          +
+   }                                                  +
+ ]
+(1 row)
+</pre>
+<br>

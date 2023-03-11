@@ -1,0 +1,14 @@
+%FILE internal/sql.html
+%LASTMOD
+%KEY pgsql-sql
+
+%TITLE SQL
+
+<p>
+PostgreSQLがサポートするSQLについて解説します。
+</p>
+
+<p>
+オフィシャルドキュメントが充実してきたこともあり、
+本書では必要最低限の解説を行います。
+</p>

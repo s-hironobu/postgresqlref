@@ -1,0 +1,35 @@
+%FILE internal/type-13.html
+%LASTMOD
+%KEY pgsql-type13
+
+%TITLE Range型
+
+[<Range型>]
+
+<table><tr bgcolor="#cccccc">
+<th>データ型名</th>	<th>説明</th>
+</tr><tr>
+<td>int4range</td>		<td>int4の範囲</td>
+</tr><tr>
+<td>int8range</td>		<td>int8の範囲</td>
+</tr><tr>
+<td>numrange</td>		<td>numericの範囲</td>
+</tr><tr>
+<td>tsrange</td>		<td>timestampの範囲</td>
+</tr><tr>
+<td>tstzrange</td>		<td>タイムゾーン付きtimestampの範囲</td>
+</tr><tr>
+<td>daterange</td>		<td>dateの範囲</td>
+</tr></table>
+
+%CHAPTER 範囲
+
+<p>
+バージョン9.2からRange型がサポートされた。使用方法はRange型演算子[<7-XX>]、Range型関数[<7-XX>]を参照。
+</p>
+
+<p>
+一般に、指定した範囲の<u>下限値は含まれ、上限値は含まれない</u>。
+<br>
+例えば、「int4range(1, 10)」の範囲を明示的に記述すると「'[1, 10)'::int4range'」であることに注意。
+</p>

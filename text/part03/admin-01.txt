@@ -1,0 +1,84 @@
+%FILE internal/admin-01.html
+%LASTMOD
+%KEY pgsql-admin01
+
+%TITLE <a href="https://www.postgresql.org/docs/current/installation.html" target="_blank" rel="noopener noreferrer">インストール</a>
+
+<pre>
+手順	[1]グループpostgres、ユーザpostgresの登録
+	[2]ソースコードのダウンロード
+	[3]コンパイルとインストール
+</pre>
+
+<p>
+UNIX系OSでPostgreSQLをソースコードからインストールする手順を示します。
+</p>
+
+%CHAPTER [1] グループとユーザの登録
+
+<p>
+グループpostgresとユーザpostgresを登録します。登録方法はOSのマニュアルを参照してください。
+</p>
+
+%CHAPTER [2] ソースコードのダウンロード
+
+<p>
+次のサイトからソースコードのアーカイブをダウンロードします。
+</p>
+
+<p>
+<a href="https://ftp.postgresql.org/pub/latest/" target="_blank" rel="noopener noreferrer">https://ftp.postgresql.org/pub/latest/</a>
+</p>
+<br>
+
+
+%CHAPTER コンパイルとインストール
+
+<p>
+適当なディレクトリでPostgreSQLのアーカイブを展開し、作成されたディレクトリに移動します。インストール作業はユーザpostgresで行います。
+</p>
+
+<pre>
+postgres> tar xvfz postgresql-15.1.tar.gz
+postgres> cd postgresql-15.1
+</pre>
+
+<p>
+次にconfigureコマンド、gmakeコマンドを実行します。本書では/usr/local/pgsqlにインストールします。
+<br>
+なおバイナリパッケージをインストールする場合、
+パッケージ毎にインストールディレクトリが異なるので、本書の説明を逐次読みかえてください。
+</p>
+
+<pre>
+postgres> ./configure --prefix=/usr/local/pgsql
+postgres> gmake
+postgres> cd contrib
+postgres> gmake
+postgres> cd ..
+</pre>
+
+<p>
+PostgreSQLをインストールするディレクトリの所有者を変更します。この作業は一時的にスーパーユーザrootになって行います。
+PostgreSQLをインストールするディレクトリ/usr/local/pgsqlを作成し、所有者をユーザpostgresに変更します。
+</p>
+
+<pre>
+postgres> su
+Password：
+root> mkdir -p /usr/local/pgsql
+root> chown postgres:postgres /usr/local/pgsql
+root> exit
+postgres>
+</pre>
+
+<p>
+最後に、PostgreSQLをインストールします。
+</p>
+
+<pre>
+postgres> gmake install
+postgres> cd contrib
+postgres> gmake install
+</pre>
+

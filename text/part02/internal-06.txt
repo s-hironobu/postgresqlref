@@ -1,0 +1,11 @@
+%FILE internal/internal-06.html
+%LASTMOD
+%KEY pgsql-internal06
+
+
+%TITLE トランザクションIDと同時実行制御
+
+
+<p>
+The Internals of PostgreSQL <a href="https://www.interdb.jp/pg/pgsql05.html" target="_blank" rel="noopener noreferrer">Chapter 5: Concurrency Control</a>
+</p>

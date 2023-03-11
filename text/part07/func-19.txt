@@ -1,0 +1,44 @@
+%FILE internal/func-19.html
+%LASTMOD
+%KEY pgsql-func19
+
+%TITLE <a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-SNAPSHOT-SYNCHRONIZATION" target="_blank" rel="noopener noreferrer">スナップショット同期関数</a>
+
+
+[<スナップショット同期関数>]
+
+<table><tr bgcolor="#cccccc">
+<th>関数</th>							<th>返り値型</th>	<th>説明</th>
+</tr><tr>
+<td>pg_export_snapshot()</td>	<td>text	</td>	<td>トランザクションのスナップショットを返す</td>
+
+
+</tr></table>
+
+<br>
+
+
+%CHAPTER 実行例
+
+<pre>
+postgres=# SELECT pg_export_snapshot();
+ pg_export_snapshot
+---------------------
+ 00000004-000033C8-1
+(1 row)
+
+postgres=# BEGIN;
+BEGIN
+
+postgres=*# SELECT pg_current_xact_id();
+ pg_current_xact_id
+--------------------
+                978
+(1 row)
+
+postgres=*# SELECT pg_export_snapshot();
+ pg_export_snapshot
+---------------------
+ 00000004-000033C9-1
+(1 row)
+</pre>

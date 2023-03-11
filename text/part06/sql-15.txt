@@ -1,0 +1,293 @@
+%FILE internal/sql-15.html
+%LASTMOD
+%KEY pgsql-sql15
+
+%TITLE 権限の付与/取り上げ(2) <a href="https://www.postgresql.org/docs/current/sql-grant.html" target="_blank" rel="noopener noreferrer">GRANT</a> / <a href="https://www.postgresql.org/docs/current/sql-revoke.html" target="_blank" rel="noopener noreferrer">REVOKE</a>
+
+<pre>
+[<書式>]
+
+● テーブルの権限付与/取り上げ
+GRANT { { SELECT | INSERT | UPDATE | DELETE | TRUNCATE | REFERENCES | TRIGGER }
+    [, ...] | ALL [ PRIVILEGES ] }
+    ON { [ TABLE ] table_name [, ...]
+         | ALL TABLES IN SCHEMA schema_name [, ...] }
+    TO role_specification [, ...] [ WITH GRANT OPTION ]
+    [ GRANTED BY role_specification ]
+
+REVOKE [ GRANT OPTION FOR ]
+    { { SELECT | INSERT | UPDATE | DELETE | TRUNCATE | REFERENCES | TRIGGER }
+    [, ...] | ALL [ PRIVILEGES ] }
+    ON { [ TABLE ] table_name [, ...]
+         | ALL TABLES IN SCHEMA schema_name [, ...] }
+    FROM role_specification [, ...]
+    [ GRANTED BY role_specification ]
+    [ CASCADE | RESTRICT ]
+
+● テーブルのカラムへの権限付与/取り上げ
+GRANT { { SELECT | INSERT | UPDATE | REFERENCES } ( column_name [, ...] )
+    [, ...] | ALL [ PRIVILEGES ] ( column_name [, ...] ) }
+    ON [ TABLE ] table_name [, ...]
+    TO role_specification [, ...] [ WITH GRANT OPTION ]
+    [ GRANTED BY role_specification ]
+
+REVOKE [ GRANT OPTION FOR ]
+    { { SELECT | INSERT | UPDATE | REFERENCES } ( column_name [, ...] )
+    [, ...] | ALL [ PRIVILEGES ] ( column_name [, ...] ) }
+    ON [ TABLE ] table_name [, ...]
+    FROM role_specification [, ...]
+    [ GRANTED BY role_specification ]
+    [ CASCADE | RESTRICT ]
+
+● シーケンスの権限付与/取り上げ
+GRANT { { USAGE | SELECT | UPDATE }    [, ...] | ALL [ PRIVILEGES ] }
+    ON { SEQUENCE sequence_name [, ...]
+         | ALL SEQUENCES IN SCHEMA schema_name [, ...] }
+    TO role_specification [, ...] [ WITH GRANT OPTION ]
+    [ GRANTED BY role_specification ]
+
+
+REVOKE [ GRANT OPTION FOR ]
+    { { USAGE | SELECT | UPDATE }
+    [, ...] | ALL [ PRIVILEGES ] }
+    ON { SEQUENCE sequence_name [, ...]
+         | ALL SEQUENCES IN SCHEMA schema_name [, ...] }
+    FROM role_specification [, ...]
+    [ GRANTED BY role_specification ]
+    [ CASCADE | RESTRICT ]
+
+● 関数の権限付与/取り上げ
+GRANT { EXECUTE | ALL [ PRIVILEGES ] }
+    ON { { FUNCTION | PROCEDURE | ROUTINE } routine_name [ ( [ [ argmode ] [ arg_name ] arg_type [, ...] ] ) ] [, ...]
+         | ALL { FUNCTIONS | PROCEDURES | ROUTINES } IN SCHEMA schema_name [, ...] }
+    TO role_specification [, ...] [ WITH GRANT OPTION ]
+    [ GRANTED BY role_specification ]
+
+REVOKE [ GRANT OPTION FOR ]
+    { EXECUTE | ALL [ PRIVILEGES ] }
+    ON { { FUNCTION | PROCEDURE | ROUTINE } function_name [ ( [ [ argmode ] [ arg_name ] arg_type [, ...] ] ) ] [, ...]
+         | ALL { FUNCTIONS | PROCEDURES | ROUTINES } IN SCHEMA schema_name [, ...] }
+    FROM role_specification [, ...]
+    [ GRANTED BY role_specification ]
+    [ CASCADE | RESTRICT ]
+
+●　組込み言語の権限付与/取り上げ
+GRANT { USAGE | ALL [ PRIVILEGES ] }
+    ON LANGUAGE lang_name [, ...]
+    TO role_specification [, ...] [ WITH GRANT OPTION ]
+    [ GRANTED BY role_specification ]
+
+REVOKE [ GRANT OPTION FOR ]
+    { USAGE | ALL [ PRIVILEGES ] }
+    ON LANGUAGE lang_name [, ...]
+    FROM role_specification [, ...]
+    [ GRANTED BY role_specification ]
+    [ CASCADE | RESTRICT ]
+
+● ラージオブジェクトの権限付与/取り上げ
+GRANT { { SELECT | UPDATE } [, ...] | ALL [ PRIVILEGES ] }
+    ON LARGE OBJECT loid [, ...]
+    TO role_specification [, ...] [ WITH GRANT OPTION ]
+    [ GRANTED BY role_specification ]
+
+REVOKE [ GRANT OPTION FOR ]
+    { { SELECT | UPDATE } [, ...] | ALL [ PRIVILEGES ] }
+    ON LARGE OBJECT loid [, ...]
+    FROM role_specification [, ...]
+    [ GRANTED BY role_specification ]
+    [ CASCADE | RESTRICT ]
+
+●タイプ
+GRANT { USAGE | ALL [ PRIVILEGES ] }
+    ON TYPE type_name [, ...]
+    TO role_specification [, ...] [ WITH GRANT OPTION ]
+    [ GRANTED BY role_specification ]
+
+REVOKE [ GRANT OPTION FOR ]
+    { USAGE | ALL [ PRIVILEGES ] }
+    ON TYPE type_name [, ...]
+    FROM role_specification [, ...]
+    [ GRANTED BY role_specification ]
+    [ CASCADE | RESTRICT ]
+
+●FDW関連
+
+GRANT { USAGE | ALL [ PRIVILEGES ] }
+    ON FOREIGN DATA WRAPPER fdw_name [, ...]
+    TO role_specification [, ...] [ WITH GRANT OPTION ]
+    [ GRANTED BY role_specification ]
+
+REVOKE [ GRANT OPTION FOR ]
+    { USAGE | ALL [ PRIVILEGES ] }
+    ON FOREIGN DATA WRAPPER fdw_name [, ...]
+    FROM role_specification [, ...]
+    [ GRANTED BY role_specification ]
+    [ CASCADE | RESTRICT ]
+
+
+GRANT { USAGE | ALL [ PRIVILEGES ] }
+    ON FOREIGN SERVER server_name [, ...]
+    TO role_specification [, ...] [ WITH GRANT OPTION ]
+    [ GRANTED BY role_specification ]
+
+REVOKE [ GRANT OPTION FOR ]
+    { USAGE | ALL [ PRIVILEGES ] }
+    ON FOREIGN SERVER server_name [, ...]
+    FROM role_specification [, ...]
+    [ GRANTED BY role_specification ]
+    [ CASCADE | RESTRICT ]
+
+
+●パラメータ
+GRANT { { SET | ALTER SYSTEM } [, ... ] | ALL [ PRIVILEGES ] }
+    ON PARAMETER configuration_parameter [, ...]
+    TO role_specification [, ...] [ WITH GRANT OPTION ]
+    [ GRANTED BY role_specification ]
+
+REVOKE [ GRANT OPTION FOR ]
+    { { SET | ALTER SYSTEM } [, ...] | ALL [ PRIVILEGES ] }
+    ON PARAMETER configuration_parameter [, ...]
+    FROM role_specification [, ...]
+    [ GRANTED BY role_specification ]
+    [ CASCADE | RESTRICT ]
+
+
+where role_specification can be:
+
+    [ GROUP ] role_name
+  | PUBLIC
+  | CURRENT_ROLE
+  | CURRENT_USER
+  | SESSION_USER
+
+</pre>
+<br>
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ/句</th>	<th>説明</th>
+</tr><tr>
+<td>table_name <br> ALL TABLES IN SCHEMA schema_name [, ...]</td>	<td>アクセス権限を付与/取り上げるテーブル名<br> スキーマschema_name内の全テーブル</td>
+</tr><tr>
+<td>column</td>		<td>アクセス権限を付与/取り上げるカラム名</td>
+</tr><tr>
+<td>sequence_name<br> ALL SEQUENCES IN SCHEMA schema_name [, ...]</td>	<td>アクセス権限を付与/取り上げるシーケンス名<br> スキーマschema_name内の全シーケンス</td>
+</tr><tr>
+<td>func_name <br>  ALL FUNCTIONS IN SCHEMA schema_name [, ...]</td>	<td>アクセス権限を付与/取り上げる関数名 <br> スキーマschema_name内の全関数</td>
+</tr><tr>
+<td>lang_name</td>	<td>アクセス権限を付与/取り上げる組込み言語名</td>
+</tr><tr>
+<td>loid</td>		<td>アクセス権限を付与/取り上げるラージオブジェクトID</td>
+</tr><tr>
+<td>role_name</td>	<td>権限を付与/削除するロール</td>
+</tr><tr>
+<td>PUBLIC</td>		<td>全ロール</td>
+</tr></table>
+
+<br>
+
+<table>
+<caption>権限</caption>
+</tr><tr bgcolor="#cccccc">
+<th>権限</th>	<th>説明</th>
+</tr><tr>
+<th align=left bgcolor="#eeeeee" colspan=2>テーブル</th>
+</tr><tr>
+<td>SELECT</td>		<td>テーブル/ビューの問い合わせ、COPY FROM文の実行</td>
+</tr><tr>
+<td>INSERT</td>		<td>テーブルのデータ挿入、COPY TO文の実行	</td>
+</tr><tr>
+<td>UPDATE</td>		<td>テーブルの更新</td>
+</tr><tr>
+<td>DELETE</td>		<td>テーブルのデータの削除</td>
+</tr><tr>
+<td>RULE</td>		<td>テーブル/ビューのルール定義。バージョン8.1まで	</td>
+</tr><tr>
+<td>TRUNCATE</td>		<td>テーブルの全削除(TRUNCATE)。バージョン8.4から</td>
+</tr><tr>
+<td>REFERENCES</td>		<td>外部キー制約を持つテーブルの作成</td>
+</tr><tr>
+<td>TRIGGER	</td>		<td>テーブル/ビューのトリガ作成</td>
+</tr><tr>
+
+<th align=left bgcolor="#eeeeee" colspan=2>テーブルのカラム</th>
+</tr><tr>
+
+<td>SELECT</td>		<td>テーブル/ビューの指定したカラムへの問い合わせ</td>
+</tr><tr>
+<td>INSERT</td>		<td>テーブルの指定したカラムへのデータ挿入</td>
+</tr><tr>
+<td>UPDATE</td>		<td>テーブルの指定したカラムの更新</td>
+</tr><tr>
+<td>REFERENCES</td>		<td>外部キー制約を持つテーブル作成</td>
+</tr><tr>
+
+<th align=left bgcolor="#eeeeee" colspan=2>シーケンス</th>
+</tr><tr>
+
+<td>USAGE</td>		<td>シーケンスの使用(関数nextval(), currval())</td>
+</tr><tr>
+<td>SELECT</td>		<td>シーケンスの使用(関数currval())</td>
+</tr><tr>
+<td>UPDATE</td>		<td>シーケンスの使用(関数nextval(), setval())</td>
+</tr><tr>
+
+<th align=left bgcolor="#eeeeee" colspan=2>関数</th>
+</tr><tr>
+
+<td>EXECUTE</td>		<td>指定した関数や演算の実行</td>
+</tr><tr>
+
+<th align=left bgcolor="#eeeeee" colspan=2>言語</th>
+</tr><tr>
+
+<td>USAGE</td>		<td>指定した手続き言語で関数を作成</td>
+</tr><tr>
+
+<th align=left bgcolor="#eeeeee" colspan=2>ラージオブジェクト</th>
+</tr><tr>
+<td>SELECT</td>		<td>ラージオブジェクトの読み取り</td>
+</tr><tr>
+<td>UPDATE</td>		<td>ラージオブジェクトの書き出しや切り取り</td>
+</tr><tr>
+
+<th align=left bgcolor="#eeeeee" colspan=2>共通</th>
+</tr><tr>
+<td>ALL, ALL PRIVILEGES</td>		<td>すべての権限</td>
+</tr></table>
+
+<br>
+
+
+
+<table>
+<caption>オプション</caption>
+</tr><tr bgcolor="#cccccc">
+<th>オプション</th>		<th>説明</th>
+</tr><tr>
+<td>WITH GRANT OPTION</td>	<td>権限を得たロールが他のロールにその権限を付与/取り上げできる(継承)</td>
+</tr><tr>
+<td>CASCADE			<td>他のロールに継承した権限も削除する</td>
+</tr><tr>
+<td>RESTRICT			<td>他のロールに権限を継承した場合、REVOKE文を実行しない(エラーが返る)</td>
+</tr><tr>
+<td>GRANTED BY	role_specification		<td>role_specificationによって権限が操作されたようにする。superuserのみこのオプションは使用可能。バージョン14から</td>
+
+</tr></table>
+
+
+<br>
+
+
+%CHAPTER 解説
+
+<p>
+権限の付与/取り上げは[<3-09>]と[<3-10>]に説明があります。
+</p>
+
+<p>
+PostgreSQLは、ロールが各種データベースオブジェクト(スキーマ、テーブル、関数など)に対してアクセス権限を持つか否か調べる関数群を持ちます。
+関数の一覧は<a href="./func-10.html">[<7-29>]</a>を参照してください。
+</p>
+

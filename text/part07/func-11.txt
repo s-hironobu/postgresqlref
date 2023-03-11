@@ -1,0 +1,43 @@
+%FILE internal/func-11.html
+%LASTMOD
+%KEY pgsql-func11
+
+%TITLE <a href="https://www.postgresql.org/docs/current/functions-info.html#FUNCTIONS-INFO-SCHEMA-TABLE" target="_blank" rel="noopener noreferrer">スキーマ可視性照会関数</a>
+
+
+<table border=1>
+<caption>スキーマ可視性照会関数</caption>
+<tr bgcolor="#cccccc">
+<th>関数</th>				<th>返り値型</th>	<th>説明</th>
+
+</tr><tr>
+<td>pg_collation_is_visible(collation_oid)</td>	<td>boolean</td>	<td>collationが可視か否か</td>
+</tr><tr>
+<td>pg_conversion_is_visible(conversion_oid)</td>	<td>boolean</td>	<td>変換が可視か否か</td>
+</tr><tr>
+<td>pg_function_is_visible(function_oid)</td>	<td>boolean</td>	<td>関数が可視か否か</td>
+</tr><tr>
+<td>pg_opclass_is_visible(opclass_oid)</td>	<td>boolean</td>	<td>演算子クラスが可視か否か</td>
+</tr><tr>
+<td>pg_operator_is_visible(operator_oid)</td>	<td>boolean</td>	<td>演算子が可視か否か</td>
+</tr><tr>
+<td>pg_opfamily_is_visible(opclass_oid)</td>	<td>boolean</td>	<td>演算子ファミリーが可視か否か</td>
+</tr><tr>
+<td>pg_statistics_obj_is_visible(stat_oid)</td>	<td>boolean</td>	<td>統計オブジェクトが可視か否か。<br><font color="#0000ff">statistics objectとは何か、よくわからない。必要になったら調べる。</font></td>
+</tr><tr>
+<td>pg_table_is_visible(table_oid)</td>	<td>boolean</td>	<td>テーブルが可視か否か</td>
+</tr><tr>
+<td>pg_ts_config_is_visible(config_oid)</td>	<td>boolean</td>	<td>テキスト検索構成が可視か否か</td>
+</tr><tr>
+<td>pg_ts_dict_is_visible(dict_oid)</td>	<td>boolean</td>	<td>テキスト検索辞書が可視か否か</td>
+</tr><tr>
+<td>pg_ts_parser_is_visible (parser_oid)</td>	<td>boolean</td>	<td>テキスト検索パーサが可視か否か</td>
+</tr><tr>
+<td>pg_ts_template_is_visible(template_oid)</td>	<td>boolean</td>	<td>テキスト検索テンプレートが可視か否か</td>
+</tr><tr>
+<td>pg_type_is_visible(type_oid)</td>	<td>boolean</td>	<td>型（またはドメイン）が可視か否か</td>
+
+</tr></table>
+
+<br>
+

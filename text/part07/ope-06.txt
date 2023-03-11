@@ -1,0 +1,282 @@
+%FILE internal/ope-06.html
+%LASTMOD
+%KEY pgsql-ope-06
+
+%TITLE <a href="https://www.postgresql.org/docs/current/functions-matching.html" target="_blank" rel="noopener noreferrer">パターンマッチング</a>
+
+<p>
+PostgreSQLはLIKE式、SIMILAR TO式、およびPOSIX正規表現の3種類のパターンマッチングをサポートしています。
+</p>
+
+%CHAPTER LIKE式
+
+<p>
+LIKE式はSQL92、SQL99で定義されています。
+LIKE式の書式を示します。
+</p>
+
+[<書式>]
+<pre>
+     string LIKE pattern [ ESCAPE escape-character ]
+     string NOT LIKE pattern [ ESCAPE escape-character ]
+</pre>
+
+<br>
+
+<table>
+<tr bgcolor="#cccccc">
+<th>引数</th>		<th>説明</th>
+</tr><tr>
+<td>string</td>	<td>比較される文字列</td>
+</tr><tr>
+<td>pattern	</td>	<td>ワイルドカード演算子('_','%')を含む文字列</td>
+</tr></table>
+
+<br>
+
+<p>
+LIKE式はstringとpatternのパターンが一致すればtrue(真)を返します。
+LIKE NOT式はstringとpatternのパターンが一致しなければtrue(真)を返します。
+<br>
+patternにはワイルドカード演算子が使えます。
+[<表7-13>]にワイルドカード演算子一覧を示します。
+</p>
+
+<table border=1>
+<caption>[<表7-13>] LIKE式のワイルドカード演算子一覧</caption>
+<tr bgcolor="#cccccc">
+<th>ワイルドカード演算子</th>		<th>説明</th>
+</tr><tr>
+<td>%		</td>	<td>0文字以上の文字に一致</td>
+</tr><tr>
+<td>_  (アンダースコア)	</td>	<td>任意の1文字に一致</td>
+</tr></table>
+
+<br>
+
+
+<p>
+いくつかの例を[<表7-14>]に示します。
+</p>
+
+<table border=1>
+<caption>[<表7-14>] LIKE式使用例</caption>
+<tr bgcolor="#cccccc">
+<th>LIKE式</th>		<th>結果</th>
+</tr><tr>
+<td>'abc' LIKE 'abc'	</td>	<td>true</td>
+</tr><tr>
+<td>'abc' LIKE 'a%'	</td>	<td>true</td>
+</tr><tr>
+<td>'abc' LIKE '_b_'	</td>	<td>true</td>
+</tr><tr>
+<td>'abc' LIKE 'c'	</td>	<td>false</td>
+</tr><tr>
+<td>'abc' NOT LIKE 'c'	</td>	<td>true</td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER SIMILAR TO式
+
+<p>
+SIMILAR TO式はSQL99で定義されています。
+SIMILAR TO式の書式を示します。
+</p>
+
+[<書式>]
+<pre>
+     string SIMILAR TO pattern [ESCAPE escape-character]
+     string NOT SIMILAR TO pattern [ESCAPE escape-character]
+</pre>
+<br>
+
+<table>
+<tr bgcolor="#cccccc">
+<th>引数</th>		<th>説明</th>
+</tr><tr>
+<td>string	</td>	<td>比較される文字列</td>
+</tr><tr>
+<td>pattern	</td>	<td>ワイルドカード演算子('_', '%', '[]', '[^]', '|', '*', '+', '()')を含む文字列</td>
+</tr></table>
+
+<br>
+
+<p>
+LIKE式はstringとpatternのパターンが一致すればtrue(真)を返します。
+LIKE NOT式は、stringとpatternのパターンが一致しなければtrue(真)を返します。
+<br>
+patternにはワイルドカード演算子が使えます。
+[<表7-15>]にワイルドカード演算子一覧を示します。
+</p>
+
+
+<table border=1>
+<caption> [<表7-15>] SIMILAR TO式のワイルドカード演算子一覧</caption>
+<tr bgcolor="#cccccc">
+<th>ワイルドカード演算子</th>		<th>説明</th>
+</tr><tr>
+<td>%		</td>	<td>0文字以上の文字に一致</td>
+</tr><tr>
+<td>_  	</td>	<td>任意の1文字に一致</td>
+</tr><tr>
+<td>*		</td>	<td>直前の文字の0回以上の繰り返し(任意の文字列に一致)</td>
+</tr><tr>
+<td>+		</td>	<td>直前の文字の1回以上の繰り返し</td>
+</tr><tr>
+<td>[文字列]	</td>	<td>指定した文字列、もしくは文字範囲([a-z]ならaからz)に含まれるあらゆる文字に一致</td>
+</tr><tr>
+<td>[^文字列]	</td>	<td>指定した文字列、もしくは文字範囲([^a-z]ならaからz)に含まれないあらゆる文字に一致</td>
+</tr><tr>
+<td>|		</td>	<td>二者択一</td>
+</tr><tr>
+<td>(パターン)	</td>	<td>パターンをグループ化</td>
+</tr></table>
+
+<br>
+
+
+
+<p>
+いくつかの例を[<表7-16>]に示します。
+</p>
+
+
+<table border=1>
+<caption> [<表7-16>] SIMILAR TO式使用例</caption>
+<tr bgcolor="#cccccc">
+<th>SIMILAR TO式</th>		<th>結果</th>
+</tr><tr>
+<td>'abc' SIMILAR TO 'abc'	</td>	<td>true</td>
+</tr><tr>
+<td>'abc' SIMILAR TO 'a%'	</td>	<td>true</td>
+</tr><tr>
+<td>'abc' SIMILAR TO '_b_'	</td>	<td>true</td>
+</tr><tr>
+<td>'abc' SIMILAR TO 'c'	</td>	<td>false</td>
+</tr><tr>
+<td>'abc' NOT SIMILAR TO 'c'	</td>	<td>true</td>
+</tr><tr>
+<td>'abc' SIMILAR TO '[a-z]b_'	</td>	<td>true</td>
+</tr><tr>
+<td>'abc' SIMILAR TO '(a|c)bc'	</td>	<td>true</td>
+</tr><tr>
+<td>'abb' SIMILAR TO 'ab*'	</td>	<td>true</td>
+</tr><tr>
+<td>'bc' SIMILAR TO 'a*bc'	</td>	<td>true</td>
+</tr><tr>
+<td>'bc' SIMILAR TO 'a+bc'	</td>	<td>false</td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER POSIX正規表現
+
+<p>
+PostgreSQLはPOSIX 1003.2のbasic正規表現(BRE：Basic Regular Expression)とextended正規表現(ERE : Extended Regular Expression)、およびadvanced正規表現(ARE : Advanced Regular Expression)もサポートしています([<脚注1>])。
+<br>
+PostgreSQLで使える正規表現演算子(メタキャラクタ)を[<表7-17>]、文字クラスを[<表7-18>]に示します。
+</p>
+
+
+<blockquote><table BORDER="1"><tr><td>脚注1</td><td>
+<p>
+advanced正規表現(ARE)とはPerlの正規表現に似たもので、POSIXのEREに対し、ほぼ完全な上位互換性を保っています。
+唯一の違いはadvanced正規表現では、'\'(バックスラッシュ)がブラケット式([]で囲まれた式)の内側で特殊な意味を失わないという点です。
+</p>
+</td></tr></table></blockquote>
+
+
+<table border=1>
+<caption>[<表7-17>] POSIX正規表現一覧</caption>
+<tr bgcolor="#cccccc">
+<th>正規表現演算子</th>		<th>説明</th>
+</tr><tr>
+<td>.		</td>	<td>任意の1文字</td>
+</tr></tr>
+<td>*		</td>	<td>任意の文字の(0回以上)繰り返し。ワイルドカード</td>
+</tr></tr>
+<td>+		</td>	<td>任意の文字の(1回以上)繰り返し</td>
+</tr></tr>
+<td>[:文字クラス:]	</td>	<td>文字クラス([<表.7-19>])によるマッチング</td>
+</tr></tr>
+<td>[文字列]	</td>	<td>カッコ内のいずれかの文字にマッチ</td>
+</tr></tr>
+<td>(文字列)	</td>	<td>(と)に囲まれた文字列にマッチ</td>
+</tr></tr>
+<td>|		</td>	<td>演算子の左右に置かれた部分正規表現のいずれかにマッチ</td>
+</tr></tr>
+<td>{n, m}	</td>	<td>n回以上m回以下の繰り返し</td>
+</tr></tr>
+<td>^		</td>	<td>文字列の先頭にマッチ</td>
+</tr></tr>
+<td>$		</td>	<td>文字列の末尾にマッチ</td>
+</tr></tr>
+
+<br>
+
+
+<table border=1>
+<caption>[<表7-18>] 文字クラス</caption>
+<tr bgcolor="#cccccc">
+<th>文字クラス</th>		<th>説明</th>
+</tr><tr>
+<td>[:alnum:]	</td>	<td>アルファベットと10進数字</td>
+</tr><tr>
+<td>[:alpha:]	</td>	<td>アルファベット</td>
+</tr><tr>
+<td>[:blank:]	</td>	<td>空白文字(スペース、タブ等) </td>
+</tr><tr>
+<td>[:cntrl:]	</td>	<td>制御文字</td>
+</tr><tr>
+<td>[:digit:]	</td>	<td>10進数字</td>
+</tr><tr>
+<td>[:graph:]	</td>	<td>印字可能かつ表示可能な文字(スペースは印字可能だが表示可能ではない)</td>
+</tr><tr>
+<td>[:lower:]	</td>	<td>アルファベットの小文字</td>
+</tr><tr>
+<td>[:print:]	</td>	<td>印字可能なキャラクタ(=制御文字以外のキャラクタ)</td>
+</tr><tr>
+<td>[:punct:]	</td>	<td>句読点(通常の文字、数字、制御文字、スペースのいずれでもないキャラクタ)</td>
+</tr><tr>
+<td>[:space:]	</td>	<td>スペース、タブ、改ページ</td>
+</tr><tr>
+<td>[:upper:]	</td>	<td>アルファベットの大文字</td>
+</tr><tr>
+<td>[:xdigit:]	</td>	<td>16進数字</td>
+</tr></table>
+<br>
+
+
+<p>
+POSIX正規表現によるパターンマッチングの例を[<表7-19>]に示します。
+</p>
+
+
+<table border=1>
+<caption>[<表7-19>] POSIX正規表現によるパターンマッチングの例</caption>
+<tr bgcolor="#cccccc">
+<th>POSIX正規表現によるパターンマッチング</th>		<th>結果</th>
+</tr><tr>
+<td>'' ~ '.*'		</td>	<td>true</td>
+</tr><tr>
+<td>'abc' ~ '.+'	</td>	<td>true</td>
+</tr><tr>
+<td>'1abcd' ~ '^[1-9].*'	</td>	<td>true</td>
+</tr><tr>
+<td>'abcabc' ~ '(abc)+'		</td>	<td>true</td>
+</tr><tr>
+<td>'fooool' ~ 'fo{2,10}l'	</td>	<td>true</td>
+</tr><tr>
+<td>'X12345' ~ '^X|6$'		</td>	<td>true</td>
+</tr><tr>
+<td>'X12345' ~ '^Y|6$'		</td>	<td>false</td>
+</tr><tr>
+<td>'12345' ~ '^[[:digit:]]+$'	</td>	<td>true</td>
+</tr><tr>
+<td>'abc12345' ~ '^[[:digit:]]+$'	</td>	<td>false</td>
+</tr></table>
+<br>
+

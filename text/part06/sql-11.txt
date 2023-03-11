@@ -1,0 +1,321 @@
+%FILE internal/sql-11.html
+%LASTMOD
+%KEY pgsql-sql11
+
+
+%TITLE テーブル属性の更新(2)	<a href="https://www.postgresql.org/docs/current/sql-altertable.html" target="_blank" rel="noopener noreferrer">ALTER TABLE</a>
+
+%SECTION カラム属性の更新
+
+<pre>
+[<書式>]
+
+●　カラム名の変更
+ALTER TABLE [ ONLY ] table_name [ * ]
+    RENAME [ COLUMN ] old_column TO new_column
+
+● カラムの追加と削除
+ALTER TABLE [ ONLY ] table_name [ * ]
+    ADD [ COLUMN ] column data_type [ COLLATE collation ]
+    [ column_constraint [ ... ] ]
+ALTER TABLE [ ONLY ] table_name [ * ]
+    DROP [ COLUMN ] [ IF EXISTS ] column [ RESTRICT | CASCADE ]
+
+● データ型の変更
+ALTER TABLE [ ONLY ] table_name [ * ]
+    ALTER [ COLUMN ] column [ SET DATA ] TYPE data_type
+	   [ COLLATE collation ] [ USING expression ]
+
+●  DEFAULT値の追加、削除
+ALTER TABLE [ ONLY ] table_name [ * ]
+    ALTER [ COLUMN ] column SET DEFAULT expression
+
+ALTER TABLE [ ONLY ] table_name [ * ]
+    ALTER [ COLUMN ] column DROP DEFAULT
+
+●  NOT NULL制約の追加と削除
+ALTER TABLE [ ONLY ] table_name [ * ]
+    ALTER [ COLUMN ] column SET NOT NULL
+
+ALTER TABLE [ ONLY ] table_name [ * ]
+    ALTER [ COLUMN ] column DROP NOT NULL
+
+● ANALYZEの基本情報
+ALTER TABLE [ ONLY ] table_name [ * ]
+    ALTER [ COLUMN ] column SET STATISTICS default_statistics_target
+
+
+●カラムのGENERATEDカラム設定と削除
+ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
+      ALTER [ COLUMN ] column_name ADD GENERATED { ALWAYS | BY DEFAULT } AS IDENTITY [ ( sequence_options ) ]
+
+ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
+      ALTER [ COLUMN ] column_name { SET GENERATED { ALWAYS | BY DEFAULT } | SET sequence_option | RESTART [ [ WITH ] restart ] } [...]
+
+ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
+    ALTER [ COLUMN ] column_name DROP EXPRESSION [ IF EXISTS ]
+
+ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
+      ALTER [ COLUMN ] column_name DROP IDENTITY [ IF EXISTS ]
+
+●カラムのアトリビュートの設定とリセット
+ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
+      ALTER [ COLUMN ] column_name SET ( attribute_option = value [, ... ] )
+
+ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
+      ALTER [ COLUMN ] column_name RESET ( attribute_option [, ... ] )
+
+●
+ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
+      ALTER [ COLUMN ] column_name SET STORAGE { PLAIN | EXTERNAL | EXTENDED | MAIN }
+
+●カラムの圧縮方法を設定
+ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
+      ALTER [ COLUMN ] column_name SET COMPRESSION compression_method
+
+
+・column_constraint is:
+
+[ CONSTRAINT constraint_name ]
+{ NOT NULL |
+  NULL |
+  CHECK ( expression ) [ NO INHERIT ] |
+  DEFAULT default_expr |
+  GENERATED ALWAYS AS ( generation_expr ) STORED |
+  GENERATED { ALWAYS | BY DEFAULT } AS IDENTITY [ ( sequence_options ) ] |
+  UNIQUE [ NULLS [ NOT ] DISTINCT ] index_parameters |
+  PRIMARY KEY index_parameters |
+  REFERENCES reftable [ ( refcolumn ) ] [ MATCH FULL | MATCH PARTIAL | MATCH SIMPLE ]
+    [ ON DELETE referential_action ] [ ON UPDATE referential_action ] }
+[ DEFERRABLE | NOT DEFERRABLE ] [ INITIALLY DEFERRED | INITIALLY IMMEDIATE ]
+
+
+・index_parameters in UNIQUE, PRIMARY KEY, and EXCLUDE constraints are:
+
+[ INCLUDE ( column_name [, ... ] ) ]
+[ WITH ( storage_parameter [= value] [, ... ] ) ]
+[ USING INDEX TABLESPACE tablespace_name ]
+
+
+・referential_action in a FOREIGN KEY/REFERENCES constraint is:
+
+{ NO ACTION | RESTRICT | CASCADE | SET NULL [ ( column_name [, ... ] ) ] | SET DEFAULT [ ( column_name [, ... ] ) ] }
+
+</pre>
+
+
+<br>
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>table_name</td>	<td>カラムの属性変更するテーブル名</td>
+</tr><tr>
+<td>column</td>	<td>属性変更するカラムの名前</td>
+</tr><tr>
+<td>collation</td>	<td>CREATE TABLE文([<6-04>])のCOLLATEを参照</td>
+</tr><tr>
+<td>column_constraint</td>	<td>CREATE TABLE文([<6-04>])のcolumn_constraintを参照</td>
+</tr><tr>
+<td>data_type</td>	<td>追加、または変更するカラムの型</td>
+</tr><tr>
+<td>value</td>	<td>デフォルト値</td>
+</tr><tr>
+<td>expression</td>	<td>型変換を設定。暗黙の型変換がある場合は指定不要</td>
+</tr><tr>
+<td>default_statistics_target</td>	<td>ANALYZEでデータ収集するレコード数。1から1000まで。デフォルト100。[<4-07>]参照</td>
+</tr><tr>
+<td></td>	<td></td>
+</tr><tr>
+<td></td>	<td></td>
+</tr></table>
+
+<br>
+
+
+<table>
+<caption>追加する制約</caption>
+<tr bgcolor="#cccccc">
+<th>追加する制約</th>	<th>構文の説明</th>
+</tr><tr>
+<td>CHECK</td>	<td>[<6-04>]参照</td>
+</tr><tr>
+<td>UNIQUE</td>	<td>[<6-04>]参照</td>
+</tr><tr>
+<td>主キー</td>	<td>[<6-04>]参照</td>
+</tr><tr>
+<td>EXCLUDE</td>	<td>[<6-04>]参照</td>
+</tr><tr>
+<td>外部キー</td>	<td>[<6-05>]参照</td>
+</tr></table>
+
+<br>
+
+<table>
+<caption>オプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>CASCADE</td>	<td>この制約に依存するオブジェクトも一緒に削除</td>
+</tr><tr>
+<td>RESTRICT</td>	<td>依存するオブジェクトがない制約のみ削除</td>
+</tr><tr>
+<td>ALL. USER</td>	<td>全てのロールでトリガを有効/無効にするか、ALTER TABLEを実行したロールのみ有効/無効にするか</td>
+</tr><tr>
+<td>IF EXISTS</td>	<td>制約が存在する場合のみ削除。エラーを返さない</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+・カラム名の変更
+<br>
+テーブルに新たなカラムを追加するには、ALTER TABLE文のADD COLUMN形式を使います。
+列制約column_constraintの書式はCREATE TABLE文と同じです。詳細は[<6-04>]を参照してください。
+<br>
+テーブルからカラムを削除するには、ALTER TABLE文のDROP COLUMN形式を使います。
+</p>
+
+<p>
+・SET DEFAULT形式, DROP DEFAULT形式
+<br>
+カラムのデフォルトを設定、または削除します。
+</p>
+
+<p>
+・SET NOT NULL形式, DROP NOT NULL形式
+<br>
+カラムにNOT NULL制約を設定、または削除します。
+</p>
+
+<p>
+・TYPE形式
+<br>
+カラムのデータ型を変更できます。
+例えばchar型をtext型へ、integer型をbigint型へ型変換(キャスト)できます。
+<br>
+メタコマンド\dCで、変換可能なデータ型の組合せや、その変換が暗黙で行なわれるか否かがわかります。
+</p>
+
+<pre>
+sampledb=# \dC
+                                  List of casts
+    Source type      |     Target type      |       Function      |   Implicit?
+---------------------+----------------------+---------------------+---------------
+ "char"              | character            | bpchar              | in assignment
+ "char"              | character varying    | text                | in assignment
+ "char"              | integer              | int4                | no
+ "char"              | text                 | text                | yes
+…略…
+ integer             | "char"               | char                | no
+ integer             | abstime              | (binary compatible) | no
+ integer             | bigint               | int8                | yes
+ integer             | bit                  | bit                 | no
+…略…
+</pre>
+
+<br>
+
+%CHAPTER 実行例
+
+<p>
+・列の追加と削除
+<br>
+テーブルtest_tableに新しいカラムdataを追加します。
+</p>
+
+
+<pre>
+sampledb=# \d test_table
+     Table "public.test_table"
+ Column |  Type   | Modifiers
+--------+---------+-----------
+ id     | integer |
+
+sampledb=# ALTER TABLE test_table ADD COLUMN data text;
+ALTER TABLE
+
+sampledb=# \d test_table
+     Table "public.test_table"
+ Column |  Type   | Modifiers
+--------+---------+-----------
+ id     | integer |
+ data   | text    |
+</pre>
+
+<br>
+
+<p>
+追加したカラムdataを削除します。
+</p>
+
+
+<pre>
+sampledb=# \d test_table
+     Table "public.test_table"
+ Column |  Type   | Modifiers
+--------+---------+-----------
+ id     | integer |
+ data   | text    |
+
+sampledb=# ALTER TABLE test_table DROP COLUMN data;
+ALTER TABLE
+
+sampledb=# \d test_table
+     Table "public.test_table"
+ Column |  Type   | Modifiers
+--------+---------+-----------
+ id     | integer |
+</pre>
+
+<br>
+
+<p>
+・列名の変更
+<br>
+テーブルtest_tableのカラムidをa_idに変更します。
+同様にインデックス名、シーケンス名も変更できます。
+</p>
+
+<pre>
+sampledb=# ALTER TABLE test_table RENAME COLUMN id TO a_id;
+ALTER TABLE
+
+sampledb=# \d test_table
+     Table "public.test_table"
+ Column |  Type   | Modifiers
+--------+---------+-----------
+ a_id   | integer |
+</pre>
+
+<br>
+
+<p>
+・列にNOT NULL制約を設定
+<br>
+テーブルtest_tableのカラムa_idに、NOT NULL制約を設定します。
+</p>
+
+<pre>
+sampledb=# ALTER TABLE test_table ALTER a_id SET NOT NULL;
+ALTER TABLE
+
+sampledb=# \d test_table
+     Table "public.test_table"
+ Column |  Type   | Modifiers
+--------+---------+-----------
+ a_id   | integer | not null
+</pre>
+
+<br>
+
+<p>
+なお、
+<u>すでにNULLを持つレコードが存在する場合、NOT NULL制約は設定できません</u>。
+</p>
+
+

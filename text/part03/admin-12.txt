@@ -1,0 +1,357 @@
+%FILE internal/admin-12.html
+%LASTMOD
+%KEY pgsql-admin12
+
+%TITLE ダンプとリストア <a href="https://www.postgresql.org/docs/current/app-pgdump.html" target="_blank" rel="noopener noreferrer">pg_dump</a> / <a href="https://www.postgresql.org/docs/current/app-pg-dumpall.html" target="_blank" rel="noopener noreferrer">pg_dumpall</a> / <a href="https://www.postgresql.org/docs/current/app-pgrestore.html" target="_blank" rel="noopener noreferrer">pg_restore</a>
+
+
+<pre>
+[<書式>]
+
+● ダンプ
+pg_dump [OPTION .. ] db_name
+
+● リストア
+pg_restore [OPTION ..] [archive_file]
+</pre>
+
+<br>
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>引数</th>	<th>説明</th>
+</tr><tr>
+<td>db_name</td>	<td>ダンプするデータベース名</td>
+</tr><tr>
+<td>archive_file</td>	<td>リストアするアーカイブファイルを設定。指定しない場合、標準入力からリストアデータを読み込む</td>
+</tr></table>
+
+<br>
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>主なオプション</th>				<th>説明[デフォルト]</th>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>共通のオプション</th>
+</tr><tr>
+<td>-h host_name</td>		<td>PostgreSQLサーバが稼働しているホスト名(host_name)を設定</td>
+</tr><tr>
+<td>-p port_no</td>		<td>PostgreSQLサーバに接続するTCP/IPポート番号(port_no)を設定[5432]</td>
+</tr><tr>
+<td>-U user_name</td>		<td>接続するデータベースユーザ/ロール名(user_name)を設定</td>
+</tr><tr>
+<td>-W	</td>		<td>パスワード入力プロンプトを表示</td>
+</tr><tr>
+<td>-w	</td>		<td>パスワード入力を促さない。バージョン8.4から</td>
+</tr><tr>
+<td>-v, --verbose</td>		<td>処理の内容を詳細に表示</td>
+</tr><tr>
+<td>-a, --data-only</td>		<td>テーブルのデータのみダンプ/リストア。各種定義(テーブル定義、権限定義、関数定義など)はダンプ/リストアしない。プレーンテキスト形式のみ有効</td>
+
+</tr><tr>
+<td>-C, --create</td>		<td>リストア前にCREATE DATABASE文を実行してデータベースを新たに作成。プレーンテキスト形式のみ有効</td>
+
+</tr><tr>
+<td>-c, --clean	</td>		<td>データベースとテーブルの削除コマンド(DROP DATABASE文、DROP TABLE文)を含める。プレーンテキスト形式のみ有効</td>
+
+</tr><tr>
+<td>--disable-triggers</td>		<td></td>
+
+</tr><tr>
+<td>--enable-row-security</td>		<td></td>
+
+</tr><tr>
+<td>--if-exists</td>		<td></td>
+
+
+</tr><tr>
+<td>-F format</td>		<td>出力フォーマット(format)を指定。別表参照</td>
+
+</tr><tr>
+<td><font color="#ff0000">-jobs=NUM</font></td>		<td><font color="#ff0000">ダンプ/リストアを指定した数NUMだけ並行して実行する。バージョン9.3から</font></td>
+
+</tr><tr>
+<td>-n pattern, --schema=pattern </td> <td></td>
+</tr><tr>
+<td>-N pattern, --exclude-schema=pattern </td> <td></td>
+
+
+</tr><tr>
+<td>-O, --no-owner</td>		<td>所有権に関するSQL文をダンプ/リストアしない(復元時、復元作業を行ったユーザが所有権をもつ)。プレーンテキスト形式のみ有効</td>
+</tr><tr>
+<td>-no-security-labels</td>		<td>セキュリティラベルに関する設定をダンプ/リストアしない。バージョン9.1から</td>
+</tr><tr>
+<td>--role=ROLENAME</td>		<td>ダンプ/リストアの前に"SET ROLE文でROLENAMEを設定。バージョン8.4から</td>
+
+</tr><tr>
+<td>--no-comments</td>		<td></td>
+
+
+</tr><tr>
+<td>--no-publications</td>		<td></td>
+
+</tr><tr>
+<td>--no-security-labels</td>		<td></td>
+
+</tr><tr>
+<td>--no-subscriptions</td>		<td></td>
+
+</tr><tr>
+<td>--no-table-access-method</td>		<td>バージョン15から</td>
+
+
+</tr><tr>
+<td>-R, --no-reconnect</td>		<td>メタコマンド\connectをダンプしない(\connectはリストア時に所有権を反映するために用いる場合がある)。プレーンテキスト形式のみ有効</td>
+</tr><tr>
+<td>--no-tablespaces</td>		<td>テーブルスペースに関する設定をダンプ/リストアしない。バージョン8.4から</td>
+</tr><tr>
+
+</tr><tr>
+<td>--no-toast-compression</td>		<td>バージョン14から</td>
+
+</tr><tr>
+<td>--no-unlogged-table-data</td>		<td></td>
+
+
+</tr><tr>
+<td>--section</td>		<td></td>
+
+</tr><tr>
+<td>--ows-per-insert=nrows</td>		<td>バージョン12から</td>
+
+
+</tr><tr>
+<td>--strict-names</td>		<td></td>
+
+</tr><tr>
+<td>-S user_name</td>		<td>スーパーユーザ権限をもつデータベースユーザ名(user_name)を指定</td>
+</tr><tr>
+<td>-s, --schema-only</td>		<td>各種定義のみをダンプ/リストア。データはダンプ/リストアしない</td>
+</tr><tr>
+<td>--schema=schema</td>		<td>指定したschemaの内容のみをダンプ/リストア</td>
+
+</tr><tr>
+<td>-t table, --table table_name</td>		<td>指定したテーブルのデータのみダンプ/リストア。プレーンテキスト形式のみ有効</td>
+
+
+</tr><tr>
+<td>--x, --no-privileges</td>		<td>GRANT文、REVOKE文(アクセス権限を制御する文)をダンプ/リストアしない</td>
+</tr>
+<tr bgcolor="#eeeeee">
+<th colspan=2 align=left>pg_dumpだけのオプション</th>
+
+</tr><tr>
+<td>--binary-upgrade</td>	<td></td>
+
+
+</tr><tr>
+<td>--column-inserts</td>		<td>データを(COPY文ではなく)明示的にカラム名をつけたINSERT文としてダンプする</td>
+
+</tr><tr>
+<td>--attribute-inserts</td>		<td></td>
+
+
+</tr><tr>
+<td>-b, --blogs</td>		<td></td>
+
+</tr><tr>
+<td>-B, --no-blogs</td>		<td></td>
+
+
+</tr><tr>
+<td>-E encoding, --encoding=encoding</td>		<td></td>
+
+</tr><tr>
+<td>-d, --inserts</td>		<td>データを(COPY文ではなく)INSERT文としてダンプする</td>
+</tr><tr>
+<td>--disable-dollar-quoting</td>		<td>関数定義のドル引用符を無効にし、強制的に標準SQLの文字列構文を使用した引用符付けにする。バージョン8.1から</td>
+
+
+</tr><tr>
+<td>-e pattern, --extension=pattern </td> <td>バージョン14から</td>
+
+</tr><tr>
+<td>--extra-float-digits=ndigits</td>		<td>バージョン12から</td>
+
+</tr><tr>
+<td>--exclude-table-data</td>		<td></td>
+
+
+</tr><tr>
+<td>--include-foreign-data=foreignserver</td>		<td>バージョン13から</td>
+
+
+</tr><tr>
+<td>--load-via-partition-root</td>		<td></td>
+
+</tr><tr>
+<td>--lock-wait-timeout=timeout</td>		<td></td>
+
+
+</tr><tr>
+<td>--no-sync</td>		<td></td>
+
+</tr><tr>
+<td>--on-conflict-do-nothing</td>		<td>バージョン12から</td>
+
+</tr><tr>
+<td>--no-synchronized-snapshots</td>		<td></td>
+
+</tr><tr>
+<td>--rows-per-insert</td>		<td></td>
+
+</tr><tr>
+<td>--serializable-deferrable</td>		<td></td>
+
+</tr><tr>
+<td>--snapshot=snapshotname</td>		<td></td>
+
+</tr><tr>
+<td>--use-set-session-authorization</td>		<td></td>
+
+
+</tr><tr>
+<td>-f file_name</td>		<td>アーカイブを書き込むファイル名(file_name)。指定しない場合は標準出力へデータを出力</td>
+</tr><tr>
+<td>-i, --ignore-version</td>		<td> pg_dumpコマンドとPostgreSQLサーバのバージョンの不一致を無視</td>
+</tr><tr>
+<td>--no-unlogged-table-data</td>		<td>WALログを取らないテーブルのデータをダンプしない。バージョン9.1から</td>
+</tr><tr>
+<td>-o, --oids	</td>		<td>オブジェクトIDをダンプ。バージョン11まで</td>
+</tr><tr>
+<td>--quote-all-identifiers</td>		<td>強制的にすべての識別子を引用符で囲む。バージョン9.1から</td>
+</tr><tr>
+<td>-T table, --exclude-table=table</td>	<td></td>
+
+</tr><tr>
+<td>-Z 0..9, --compress=0..9</td>	<td></td>
+
+</tr>
+
+<tr bgcolor="#eeeeee">
+<th colspan=2 align=left>pg_restoreだけのオプション</th>
+
+</tr><tr>
+<td>-1, --single-transaction</td>		<td></td>
+
+</tr><tr>
+<td>-d db_name</td>		<td>リストアするデータベース名(db_name)を設定</td>
+
+       </tr><tr>
+       <td>-e, --exit-on-error	</td>		<td>エラーが発生したら終了する。デフォルトはエラーが発生しても終了しない。バージョン8.1から</td>
+
+</tr><tr>
+<td>-f file_name</td>		<td>作成するスクリプト(file_name)、もしくは、'-l'を使用した場合の一覧用の出力ファイル(file_name)を指定。デフォルトは標準出力</td>
+</tr><tr>
+<td>-i index_name</td>		<td>指定されたインデックス(index_name)のみリストア</td>
+</tr><tr>
+<td>-T trigger_name, --triger trigger_name</td>		<td>指定したトリガ(trigger_name)の定義のみリストア</td>
+</tr><tr>
+<td>-P function_name, --function=function_name</td>		<td>リストアするプロシージャや関数(function_name)を指定</td>
+</tr><tr>
+<td>--single-transaction</td>		<td>リストアを１トランザクションで実行する。バージョン8.2から</td>
+</tr><tr>
+<td>-I, --index=NAME</td>		<td>指定したインデックスの定義のみリストアする。バージョン8,1から</td>
+</tr><tr>
+<td>-l, --list	</td>		<td>アーカイブの内容を一覧表示</td>
+</tr><tr>
+<td>-L list_file</td>		<td>list_file内の要素のみをファイル内の出現順にリストア。行を移動することも、行の先頭に;をつけてコメントアウトすることも可能</td>
+</tr><tr>
+<td>--no-data-for-failed-tables	</td>		<td>デフォルトでは既にテーブルが存在しても、データをリストアによって追記してしまう可能性がある。このオプションを設定すると(既にテーブルが存在するため)テーブル生成に失敗するとリストアをしない。バージョン8.2から</td>
+</tr><tr>
+<td>-N, --orig-order	</td>		<td>OIDによる順番づけを無視し、ダンプした時の順番のままリストア</td>
+</tr><tr>
+<td>-o, --oid-order	</td>		<td>OIDによる順番づけに従ってリストア</td>
+</tr><tr>
+<td>-r, --rearrange	</td>		<td>変更されたOIDによる順番づけに従ってリストア。デフォルトで有効</td>
+</tr>
+</table>
+
+<br>
+<br>
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>フォーマットオプション</th>		<th>形式名</th>			<th>説明</th>
+</tr><tr>
+<td>p</td>		<td>プレーンテキスト形式</td>		<td>プレーンテキストのSQLスクリプトファイルを出力(デフォルト)</td>
+</tr><tr>
+<td>t</td>		<td>tarアーカイブ形式</td>		<td>pg_restoreコマンドが読み込み可能なtarアーカイブを出力</td>
+</tr><tr>
+<td>c</td>		<td>カスタムアーカイブ形式</td>		<td>pg_restoreコマンドが読み込み可能なカスタムアーカイブを出力</td>
+</tr>
+</table>
+
+<br>
+<br>
+
+%CHAPTER 解説
+
+<p>
+バージョンが進む毎にオプションが増え、使いかたも変化しています。例えば-Xオプションはバージョン8.2以降使われなくなっています。使用バージョンのhelpメッセージを確認してください。
+</p>
+
+
+<p>
+・-Fオプション
+<br>
+-Fオプションでアーカイブファイルの出力フォーマットを設定します。
+<br>
+設定する値は'p'(プレーンテキスト形式)、't'(tarアーカイブ形式)、'c'(カスタムアーカイブ形式)のいずれかです。特にPostgreSQLのカスタムアーカイブ形式は圧縮してダンプするため、サイズの大きなデータベースをバックアップする際に有効です。
+</p>
+
+<p>
+•-c, --clean
+<br>
+データベースとテーブルの削除コマンド(DROP DATABASE文、DROP TABLE文)を含めます。
+<br>
+リストア時に指定すると、リストア前にDROP文を実行してデータベースオブジェクトを削除します。
+</p>
+
+<p>
+・ラージオブジェクトの扱い
+<br>
+バージョン8.0までのpg_dumpはラージオブジェクトを扱う場合、-bオプションを設定して明示的にラージオブジェクトを扱うと宣言し、tarアーカイブ形式かカスタムアーカイブ形式でダンプしなければなりませんでした(-Fオプションで't'か'c'を設定)。
+<br>
+バージョン8.1からラージオブジェクトを特別扱いする必要がなくなり、-bオプションと-Fオプションなしでもラージオブジェクトをダンプできるようになりました。
+</p>
+
+%CHAPTER 実行例
+
+<p>
+データベースsampledbをダンプします。
+ダンプデータはアーカイブファイルsampledb.dbに書き込みます。
+</p>
+
+<pre>
+postgres> pg_dump -U postgres -f sampledb.db sampledb
+</pre>
+
+<p>
+アーカイブファイルsampledb.dbはプレーンテキスト形式なので、データベースnew_sampledbへのリストアはpsqlコマンドで行います。
+</p>
+
+<pre>
+postgres> createdb -U postgres new_sampledb
+postgres> psql -U postgres -d new_sampledb -f sampledb.db
+</pre>
+
+<p>
+・カスタムアーカイブ形式によるダンプ
+<br>
+データベースsampledbを、PostgreSQLのカスタムアーカイブ形式でダンプします。
+</p>
+
+<pre>
+postgres> pg_dump -U postgres -F c -f sampledb.car sampledb
+</pre>
+
+<p>
+リストアの手順は次のとおりです。
+</p>
+
+<pre>
+postgres> createdb -U postgres new_sampledb
+postgres> pg_restore -U postgres -d new_sampledb -F c sampledb.car
+</pre>
+<br>

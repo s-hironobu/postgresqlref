@@ -2,12 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
- <title>PostgreSQLバイブル草稿</title>
- <link rel="stylesheet" type="text/css" media="screen" href="./default.css"">
-</head>
-
-<body>
+ <meta http-equiv="content-style-type" content="text/css">
+ <title>自分用PostgreSQLマニュアル</title>
+ <link rel="stylesheet" type="text/css" media="screen" href="./default.css" charset="UTF-8">
+ </head>
+ <body>
 
 <script language=javascript>
 <!--
@@ -26,11 +25,10 @@ objID.className='close';
 </script>
 
 <div id="header">
-<h1 class="title">PostgreSQLバイブル草稿</title></h1>
+<h1 class="title">自分用PostgreSQLマニュアル</title></h1>
     <span class="small">
 </span>
 </div>
-
 
 <hr class="full_hr">
 <table style="width: 100%;" border="0">
@@ -38,15 +36,16 @@ objID.className='close';
   <td class="menubar">
    <div id="menubar">
 
-
 <h5>PostgreSQLとは</h5>
 
-<li><a href="./index.html">PostgreSQLとは</a><br></li>
+<li><a href="./intro.html">PostgreSQLとは</a><br></li>
+
 
 <h5>PostgreSQLの内部構造</h5>
 <ul>
 <li><a href="./internal.html">とびら</a><br></li>
 </ul>
+
 <ol>
 <li><a href="./internal-01.html">プロセスとメモリ構造</a><br></li>
 <li><a href="./internal-02.html">データベースクラスタ、テーブルの構造</a></li>
@@ -58,7 +57,7 @@ objID.className='close';
 <li><a href="./internal-08.html">HOTとIndex Only Scan</a></li>
 <li><a href="./internal-09.html">WAL(Write Ahead Logging)</a></li>
 <li><a href="./internal-10.html">アーカイブログとPITR</a></li>
-<li><a href="./internal-11.html">レプリケーション(Streaming ReplicationとHotStandby)</a></li>
+<li><a href="./internal-11.html">Streaming ReplicationとHotStandby</a></li>
 </ol>
 
 
@@ -69,56 +68,46 @@ objID.className='close';
 </ul>
 
 <ol>
-[PostgreSQLの基礎]<br>
-<li><a href="./admin-01.html">オブジェクト、データベース、スキーマ</a><br></li>
-<li><a href="./admin-02.html">システムカタログ</a><br></li>
-<li><a href="./admin-03.html">文字コードの扱い</a><br></li>
-
 
 [インストールと起動、停止]<br>
-<li><a href="./admin-04.html">インストール</a><br></li>
-<li><a href="./admin-05.html">データベースシステムの初期化 initdb</a><br></li>
-<li><a href="./admin-06.html">PostgreSQLサーバの起動/停止</a><br></li>
+<li><a href="./admin-01.html">インストール</a><br></li>
+<li><a href="./admin-02.html">データベースシステムの初期化 initdb</a><br></li>
+<li><a href="./admin-03.html">PostgreSQLサーバの起動/停止</a><br></li>
 
+<hr>
+[PostgreSQLの基礎]<br>
+<li><a href="./admin-04.html">オブジェクト、データベース、スキーマ</a><br></li>
+<li><a href="./admin-05.html">システムカタログ</a><br></li>
+<li><a href="./admin-06.html">文字コードの扱い</a><br></li>
 
+  <hr>
 [認証とアクセス制御]<br>
 <li><a href="./admin-07.html">認証とアクセス制御</a><br></li>
 <li><a href="./admin-08.html">クライアントのアクセス制御</a><br></li>
 <li><a href="./admin-09.html">権限について</a><br></li>
 <li><a href="./admin-10.html">ロールの作成と権限制御</a><br></li>
 
-<HR>
-
+<hr>
 [バックアップとアップグレード]<br>
 <li><a href="./admin-11.html">バックアップとアップグレード</a><br></li>
 <li><a href="./admin-12.html">ダンプとリストア</a><br></li>
 <li><a href="./admin-13.html">アップグレード</a><br></li>
 
+  <hr>
 [保守、監視とチューニング]<br>
 <li><a href="./admin-14.html">保守、監視とチューニング</a><br></li> 
 <li><a href="./admin-15.html">稼働統計情報</a><br></li>
 <li><a href="./admin-16.html">実行ログの取得</a><br></li>
-<li><a href="./admin-17.html">モニタリングツール</a><br></li>
-<li><a href="./admin-18.html">ログと統計情報の分析</a><br></li>
-<li><a href="./admin-19.html">パラメータチューニング</a><br></li>
+<li><a href="./admin-17.html">ログと統計情報の分析</a><br></li>
+<li><a href="./admin-18.html">パラメータチューニング</a><br></li>
 
+  <hr>
 [耐障害性、高可用性]<br>
-<li><a href="./admin-20.html">耐障害性、高可用性</a><br></li>
-<li><a href="./admin-21.html">アーカイブログとPITR</a><br></li>
-<li><a href="./admin-22.html">レプリケーションの設定</a><br></li>
-<li><a href="./admin-23.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-19.html">アーカイブログとPITR</a><br></li>
+<li><a href="./admin-20.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-21.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-22.html">ロジカルレプリケーション</a><br></li>
 
-
-[FDW]<br>
-<li><a href="./admin-24.html">FDW</a><br></li>
-<li><a href="./admin-25.html">postgres_fdw</a><br></li>
-</ol>
-
-[追加の文章(未完)]<br>
-<li><a href="./admin-26.html">ロギング</a><br></li>
-<li><a href="./admin-27.html">統計情報</a><br></li>
-<li><a href="./admin-28.html">モニタリング</a><br></li>
-<li><a href="./admin-29.html">メンテナンス</a><br></li>
 </ol>
 
 
@@ -138,6 +127,7 @@ objID.className='close';
 <li><a href="./param-11.html">クライアント接続デフォルト</a><br></li>
 <li><a href="./param-12.html">ロック管理/バージョンとプラットフォーム互換性</a><br></li>
 </ol>
+
 
 
 <h5>psql</h5>
@@ -160,6 +150,7 @@ objID.className='close';
 </ol>
 
 
+
 <h5>SQL</h5>
 
 <ul>
@@ -167,15 +158,14 @@ objID.className='close';
 </ul>
 
 <ol>
-[SQL]<br>
 
 <li><a href="./sql-01.html">SQL語彙</a><br></li>
 <li><a href="./sql-02.html">テーブルスペースの作成/削除/変更</a><br></li>
 <li><a href="./sql-03.html">データベースの作成/変更/削除</a><br></li>
-<li><a href="./sql-04.html">テーブルの作成</a><br></li>
+<li><a href="./sql-04.html">テーブルの作成 CREATE TABLE / CREATE TABLE AS</a><br></li>
 <li><a href="./sql-05.html">外部キー</a><br></li>
 <li><a href="./sql-06.html">オブジェクトの継承/LIKE句</a><br></li>
-<li><a href="./sql-07.html">問い合わせ結果から新しいテーブルを作成</a><br></li>
+<li><a href="./sql-07.html">パーティション</a><br></li>
 <li><a href="./sql-08.html">テーブルの削除</a><br></li>
 <li><a href="./sql-09.html">スキーマの定義/変更/削除</a><br></li>
 
@@ -201,7 +191,7 @@ objID.className='close';
 <li><a href="./sql-25.html">問い合わせの結合</a><br></li>
 <li><a href="./sql-26.html">ORDER BY</a><br></li>
 <li><a href="./sql-27.html">LIMIT OFFSET</a><br></li>
-<li><a href="./sql-28.html">FOR UPDATE/ FOR SHARE</a><br></li>
+<li><a href="./sql-28.html">FOR [NO KEY] UPDATE/ FOR [KEY] SHARE</a><br></li>
 <li><a href="./sql-29.html">サブクエリ</a><br></li>
 <li><a href="./sql-30.html">CASE式</a><br></li>
 <li><a href="./sql-31.html">VALUES</a><br></li>
@@ -227,18 +217,12 @@ objID.className='close';
 <li><a href="./sql-49.html">COPY/IMPORT</a><br></li>
 <li><a href="./sql-50.html">COPY/EXPORT</a><br></li>
 <li><a href="./sql-51.html">関数定義</a><br></li>
-<li><a href="./sql-52.html">エクステンション</a><br></li>
-<li><a href="./sql-53.html">外部サーバの定義、変更、削除</a><br></li>
-<li><a href="./sql-54.html">外部サーバのユーザマップ定義、変更、削除</a><br></li>
-<li><a href="./sql-55.html">外部テーブルの定義、変更、削除</a><br></li>
-<hr>
-<li><a href="./sql-56.html">イベントトリガ</a><br></li>
-<li><a href="./sql-57.html">行レベルセキュリティ</a><br></li>
+<li><a href="./sql-52.html">FDW(Foreign Data Wrapper)</a><br></li>
 
-<hr>
-<li><a href="./sql-60.html">新しい機能</a><br></li>
+<li><a href="./sql-53.html">PUBLICATION</a><br></li>
+<li><a href="./sql-54.html">SUBSCRIPTION</a><br></li>
+  
 </ol>
-
 
 <h5>関数</h5>
 
@@ -260,8 +244,6 @@ objID.className='close';
 <li><a href="./type-09.html">バイナリ列データ型</a><br></li>
 <li><a href="./type-10.html">Range型</a><br></li>
 <li><a href="./type-11.html">配列</a><br></li>
-<hr>
-<li><a href="./type-12.html">JSON型</a><br></li>
 
 <hr>
 [演算子]<br>
@@ -273,9 +255,6 @@ objID.className='close';
 <li><a href="./ope-06.html">パターンマッチング</a><br></li>
 <li><a href="./ope-07.html">日付/時刻演算子</a><br></li>
 <li><a href="./ope-08.html">Range型演算子</a><br></li>
-<hr>
-<li><a href="./ope-09.html">JSON型演算子</a><br></li>
-
 
 <hr>
 [関数]<br>
@@ -287,89 +266,73 @@ objID.className='close';
 <li><a href="./func-06.html">型変換関数</a><br></li>
 <li><a href="./func-07.html">Range型関数</a><br></li>
 <li><a href="./func-08.html">Window関数</a><br></li>
-<li><a href="./func-09.html">セッション情報関数</a><br></li>
-<li><a href="./func-10.html">アクセス権限とスキーマ可視性照会関数</a><br></li>
-<li><a href="./func-11.html">データベースオブジェクト関数</a><br></li>
-<li><a href="./func-12.html">バックアップとリカバリ制御関数</a><br></li>
+  <hr>
 
-<li><a href="./func-13.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-09.html">セッション情報関数</a><br></li>
+<li><a href="./func-10.html">アクセス権限照会関数</a><br></li>
+<li><a href="./func-11.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-12.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-13.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
+<li><a href="./func-14.html">制御データ関数</a><br></li>
+  <hr>
 <li><a href="./func-15.html">構成設定関数</a><br></li>
 <li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-17.html">レプリケーションSQL関数</a><br></li>
-
-<hr>
-<li><a href="./func-18.html">JSON関数</a><br></li>
+<li><a href="./func-17.html">バックアップ制御関数</a><br></li>
+<li><a href="./func-18.html">リカバリ制御関数</a><br></li>
+<li><a href="./func-19.html">スナップショット同期関数</a><br></li>	
+<li><a href="./func-20.html">レプリケーション管理関数</a><br></li>	
+<li><a href="./func-21.html">データベースオブジェクト管理関数</a><br></li>
+<li><a href="./func-22.html">インデックス保守関数</a><br></li>	
+<li><a href="./func-23.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-24.html">勧告的ロック用関数</a><br></li>
+<li><a href="./func-25.html">統計情報関数</a><br></li>	
 
 </ol>
-
-<!--
-[削除するもの]<br>
-<li><a href="./type-07.html">幾何データ型</a><br></li>
-<li><a href="./type-08.html">ネットワークアドレス型型</a><br></li>
-<li><a href="./ope-08.html">幾何演算子</a><br></li>
-<li><a href="./ope-09.html">ネットワーク演算子</a><br></li>
-<li><a href="./func-06.html">幾何関数</a><br></li>
-<li><a href="./func-07.html">ネットワークアドレス関数</a><br></li>
-<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
-<li><a href="./func-16.html">トランザクションID関数</a><br></li>
-<li><a href="./func-17.html">スキーマ可視性照会関数</a><br></li>
-<li><a href="./func-18.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-19.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-20.html">勧告的ロック用関数</a><br></li>
--->
 
 <h5>PL/pgSQL</h5>
 
 <ol>
-<li><a href="./plpgsql.html">結果の返し方</a><br></li>
-<li><a href="./plpgsql-01.html">ストアドプロシージャ</a><br></li>
-<li><a href="./plpgsql-02.html">ストアドプロシージャの定義</a><br></li>
+<li><a href="./plpgsql-01.html">PL/pgSQLによるストアドプロシージャ</a><br></li>
+
+  <hr>[定義]
+    <br>
+
+<li><a href="./plpgsql-02.html">PL/pgSQLによるストアドプロシージャの定義</a><br></li>
+
+  <hr>[基本的な使い方]
+    <br>
 <li><a href="./plpgsql-03.html">変数宣言と値の代入</a><br></li>
-**** まとめる >>
+
 <li><a href="./plpgsql-04.html">SELECT INTO文</a><br></li>
 <li><a href="./plpgsql-05.html">結果ステータスの取得</a><br></li>
 <li><a href="./plpgsql-06.html">動的なSQL文の実行</a><br></li>
-<< ここまで****
+
+  <hr>[制御構造]
+    <br>
 <li><a href="./plpgsql-07.html">IF 条件分岐</a><br></li>
-<li><a href="./plpgsql-08.html">ループ処理</a><br></li>
-*** >>>
-<li><a href="./plpgsql-09.html">RETURN</a><br></li>
-<<< ***
+<li><a href="./plpgsql-08.html">EXIT</a><br></li>
+
+<li><a href="./plpgsql-09.html">RETURN NEXT / RETURN QUERY</a><br></li>
+
 <li><a href="./plpgsql-10.html">ループ処理　LOOP</a><br></li>
 <li><a href="./plpgsql-11.html">ループ処理　WHILE</a><br></li>
-<li><a href="./plpgsql-12.html">ループ処理　FOR </a><br></li>
+<li><a href="./plpgsql-12.html">ループ処理　FOR</a><br></li>
 <li><a href="./plpgsql-13.html">ループ処理 (複数行の問い合わせ結果を扱う)</a><br></li>
+
+<hr>[カーソル]
+    <br>
 <li><a href="./plpgsql-14.html">カーソルの利用</a><br></li>
 <li><a href="./plpgsql-15.html">カーソル変数の宣言</a><br></li>
 <li><a href="./plpgsql-16.html">カーソルのオープンとクローズ	OPEN / CLOSE</a><br></li>
-<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得		FETCH</a><br></li>
-<li><a href="./plpgsql-18.html">カーソルを使った例</a><br></li>
-<li><a href="./plpgsql-19.html">例外</a><br></li>
-*** >>>
-<li><a href="./plpgsql-21.html">CASE</a><br></li>
-<li><a href="./plpgsql-22.html">FOREACH</a><br></li>
-<<< ***
-</ol>
+<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得	FETCH</a><br></li>
+  <li><a href="./plpgsql-18.html">FOR IN LOOPにカーソル行の取得</a><br></li>
+<li><a href="./plpgsql-19.html">カーソルを使った例</a><br></li>
+
+  <hr>[例外]
+    <br>
+<li><a href="./plpgsql-20.html">例外処理</a><br></li>
 
 
-<h5>Appendix(付録)</h5>
-
-<ol>
-<li><a href="./app-01.html">pgpool-II</a><br></li>
-<li><a href="./app-02.html">Pacemaker</a><br></li>
-</ol>
-
-
-<h5>おまけ:ネット公開(ページ数の関係で書籍には載せない)</h5>
-
-<ol>
-[pgpool]<br>
-<li><a href="./ha-06.html">pgpool-II セットアップ</a><br></li>
-<li><a href="./ha-07.html">pgpool-II レプリケーションモード</a><br></li>
-<li><a href="./ha-08.html">pgpool-II マスタースレーブモード</a><br></li>
-[Pacemaker]<br>
-<li><a href="./ha-10.html">Pacemaker</a><br></li>
 </ol>
 
 </div>
@@ -378,106 +341,322 @@ objID.className='close';
 
   </td>
   <td valign="top">
-   <div id="body">
+    <div id="body">
+      
 
-<h2>外部サーバの定義、変更、削除	CREATE SERVER / ALTER SERVER / DROP SERVER</h2>
+
+<h2><a href="https://www.postgresql.org/docs/current/sql-createpublication.html" target="_blank" rel="noopener noreferrer">CREATE PUBLICATION</a> / <a href="https://www.postgresql.org/docs/current/sql-droppublication.html" target="_blank" rel="noopener noreferrer">DROP PUBLICATION</a> / <a href="https://www.postgresql.org/docs/current/sql-alterpublication.html" target="_blank" rel="noopener noreferrer">ALTER PUBLICATION</a></h2>
+
 
 <pre>
-[<書式>]
+●パブリケーションの作成
+CREATE PUBLICATION name
+    [ FOR ALL TABLES
+      | FOR publication_object [, ... ] ]
+    [ WITH ( publication_parameter [= value] [, ... ] ) ]
 
-● 定義
-CREATE SERVER server_name [ TYPE 'server_type' ] [ VERSION 'server_version' ]
-    FOREIGN DATA WRAPPER fdw_name
-    [ OPTIONS ( option 'value' [, ... ] ) ]
+●パブリケーションの変更
+ALTER PUBLICATION name ADD publication_object [, ...]
+ALTER PUBLICATION name SET publication_object [, ...]
+ALTER PUBLICATION name DROP publication_object [, ...]
+ALTER PUBLICATION name SET ( publication_parameter [= value] [, ... ] )
+ALTER PUBLICATION name OWNER TO { new_owner | CURRENT_ROLE | CURRENT_USER | SESSION_USER }
+ALTER PUBLICATION name RENAME TO new_name
 
-● オプションの変更
-ALTER SERVER server_name [ VERSION 'new_version' ]
-    [ OPTIONS ( [ ADD | SET | DROP ] option ['value'] [, ... ] ) ]
+●パブリケーションの削除
+DROP PUBLICATION [ IF EXISTS ] name [, ...] [ CASCADE | RESTRICT ]
 
-● 所有者の変更
-ALTER SERVER server_name OWNER TO { new_owner | CURRENT_USER | SESSION_USER }
 
-● 外部サーバ名の変更
-ALTER SERVER server_name RENAME TO new_name
+・publication_object is one of:
 
-● 削除
-DROP SERVER [ IF EXISTS ] server_name [ CASCADE | RESTRICT ]
+    TABLE [ ONLY ] table_name [ * ] [ ( column_name [, ... ] ) ] [ WHERE ( expression ) ] [, ... ]
+    TABLES IN SCHEMA { schema_name | CURRENT_SCHEMA } [, ... ]
 
-=================================================================
-引数			説明
-=================================================================
-server_name		定義、変更、削除する外部サーバ名
-server_type		サーバ型。postgres_fdwは設定不要
-server_version		サーバのバージョン。postgres_fdwは設定不要
-fdw_name		'postgres_fdw'など、利用するFDW用extensionを指定する
-new_owner		変更後の所有者名
-new_name		変更後の外部サーバ名
-=================================================================
-
-=================================================================
-句		説明
-=================================================================
-OPTIONS option 'value'	オプションoptionと設定値valueを設定する。設定すべきoptionはextension毎に異なる。
-=================================================================
-
-=================================================================
-オプション		説明
-=================================================================
-CURRENT_USER	所有者の変更時、CURRENT_USERを新しい所有者とする
-SESSION_USER	所有者の変更時、SESSION_USERを新しい所有者とする
-CASCADE		外部サーバに依存するオブジェクト（ユーザマップなど）を自動的に削除する
-RESTRICT	依存するオブジェクトが存在する場合、外部サーバの削除を取りやめる。デフォルト
-=================================================================
 </pre>
+
+<br>
+
+<table>
+<caption>主なパラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>name</td>	<td>作成/削除/変更するパブリケーション名</td>
+</tr><tr>
+<td>new_name</td>	<td>変更するパブリケーション名</td>
+</tr><tr>
+<td>new_owner</td>	<td>新しい所有者名</td>
+</tr><tr>
+<td>table_name</td>	<td>作成/変更するパブリケーションのテーブル名</td>
+</tr><tr>
+<td>column_name</td>	<td>作成/変更するパブリケーションのテーブルのカラム名</td>
+</tr><tr>
+<td>schema_name</td>	<td>作成/変更するパブリケーションのテーブルのスキーマ名</td>
+</tr></table>
+
+<br>
+
+<table>
+<caption>主なオプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>CASCADE</td>	<td>関係するオブジェクトも削除する</td>
+</tr><tr>
+<td>RESTRICT</td>	<td>関係するオブジェクトが存在する場合は削除できない。デフォルト</td>
+</tr></table>
+
+<br>
+
+
+<table>
+<caption>publish_parameter</caption>
+<tr bgcolor="#cccccc">
+<th>publish_parameter</th>	<th>説明</th>
+</tr><tr>
+<td>publish</td>	<td>レプリケーションする操作。設定可能値は"insert", "update", "delete", "truncate"。コンマで連結できる。<br>デフォルトは"insert,update,delete,truncate"</td>
+
+</tr><tr>
+<td>publish_via_partition_root</td>	<td>設定値はbool。</td>
+</tr></table>
+
+<br>
+
+
 
 <div class="jumpmenu"></div><h3>解説</h3>
 
-<p>
-上記のSQL文はFDW(外部データラッパー)機能を利用する際に使います。具体的な使い方は[<4-24>]、[<4-25>]を参照してください。
-</p>
 
-<p>
-CREATE SERVER文で新しい外部サーバを定義します。 サーバを定義したユーザがその所有者となります。
-ALTER SERVER文とDROP SERVER文はそれぞれ、外部サーバの各種定義を変更、定義の削除を行います。
-</p>
+<ul>
+<li>DELETE,UPDATEにはINDEXが必要</li>
+<li>INDEXが不要な場合、擬似的にシーケンスで代用</li>
+<li>シーケンスをSUBSCRIPUTION側でどう対処するか？</li>
+<li>後からインデックスを追加する場合、ALTER　REPLICA　IDENTITYを使う？</li>
+<li>now()の扱いは？</li>
+<li></li>
+<li>PUBRICATION SUBSRCIPTIONは両立できるか？</li>
+<li></li>
+
+</ul>
+
+<br>
+
+<ul>
+<li>コピーを明示的に行うには？</li>
+<li>スロットを明示的に作成するには？</li>
+<li></li>
+<li></li>
+
+</ul>
 
 
 <div class="jumpmenu"></div><h3>実行例</h3>
 
+
 <p>
-postgres_fdwの設定方法を示します。外部サーバのIPアドレスは192.168.1.100、接続するデータベース名は'testdb'とすると、以下のCREATE SERVER文で外部サーバremote_serverを定義できます。
+・一般的なパブリケーション
+<br>
+以下に一般的なパブリケーションの設定を示します。
 </p>
 
 <pre>
-testdb=# CREATE EXTENSION postgres_fdw;
-CREATE EXTENSION
+pubdb=# CREATE TABLE logical_tbl (id int PRIMARY KEY, data int);
+CREATE TABLE
 
-testdb=# CREATE SERVER remote_server FOREIGN DATA WRAPPER postgres_fdw
-testdb-#     OPTIONS(host '192.168.1.100', port '5432', dbname 'testdb');
-CREATE SERVER
+pubdb=# CREATE PUBLICATION pub_logical_tbl FOR TABLE logical_tbl;
+CREATE PUBLICATION
 </pre>
+<br>
 
 <p>
-外部サーバの定義は\des+ メタコマンドで表示できます。
+上記のテーブルをロジカルレプリケーションするサブスクリプションの設定を以下に示します。
 </p>
 
 <pre>
-testdb=# \x
-Expanded display is on.
-
-testdb=# \des+
-Name                 | remote_server
-Owner                | postgres
-Foreign-data wrapper | postgres_fdw
-Access privileges    | 
-Type                 | 
-Version              | 
-FDW Options          | (host '192.168.1.100', port '5432', dbname 'testdb')
-Description          | 
+subscribedb=# CREATE TABLE logical_tbl (id int PRIMARY KEY, data int);
+CREATE TABLE
+subscribedb=# CREATE SUBSCRIPTION sub_logical_tbl CONNECTION 'host=primary port=5432 dbname=pubdb' PUBLICATION pub_logical_tbl;
+NOTICE:  created replication slot "sub_logical_tbl" on publisher
+CREATE SUBSCRIPTION
 </pre>
+<br>
+
+
+<p>
+・INSERTのみレプリケーションするパブリケーション
+<br>
+INSERTのみレプリケーションするパブリケーションを以下に示します。
+</p>
+
+<pre>
+pubdb=# CREATE TABLE logical_insert_only_tbl (id int PRIMARY KEY, data int);
+CREATE TABLE
+
+pubdb=# CREATE PUBLICATION pub_logical_insert_only_tbl FOR TABLE logical_insert_only_tbl WITH (publish = 'insert');
+CREATE PUBLICATION
+</pre>
+<br>
+
+<p>
+上記のテーブルをロジカルレプリケーションするサブスクリプションの設定を以下に示します。
+</p>
+
+
+<pre>
+subscribedb=# CREATE TABLE logical_insert_only_tbl (id int PRIMARY KEY, data int);
+CREATE TABLE
+
+subscribedb=# CREATE SUBSCRIPTION sub_logical_insert_only_tbl CONNECTION 'host=primary port=5432 dbname=pubdb'
+	   PUBLICATION pub_logical_insert_only_tbl;
+NOTICE:  created replication slot "sub_logical_insert_only_tbl" on publisher
+CREATE SUBSCRIPTION
+</pre>
+<br>
+
+<p>
+パブリケーション側でINSERTとDELETEを実行します。こちらはDELETEも問題なく実行できます。
+</p>
+
+<pre>
+pubdb=# INSERT INTO logical_insert_only_tbl VALUES (1,1),(2,2);
+INSERT 0 2
+pubdb=# DELETE FROM logical_insert_only_tbl WHERE id = 2;
+DELETE 1
+pubdb=# SELECT * FROM logical_insert_only_tbl;
+ id | data 
+----+------
+  1 |    1
+(1 row)
+</pre>
+<br>
+
+<p>
+一方、サブスクリプション側ではDELETEがレプリケーションされないので、INSERTされた2行がそのまま残ります。
+</p>
+
+<pre>
+subscribedb=# SELECT * FROM logical_insert_only_tbl;
+ id | data 
+----+------
+  1 |    1
+  2 |    2
+(2 rows)
+</pre>
+<br>
+
+
+<p>
+・WHERE句で装飾したパブリケーション
+<br>
+WHERE句を使って偶数のidのみレプリケーションするパブリケーションを以下に示します。
+</p>
+
+<pre>
+pubdb=# CREATE TABLE logical_even_number_tbl (id int PRIMARY KEY, data int);
+CREATE TABLE
+
+pubdb=# CREATE PUBLICATION pub_logical_even_number_tbl FOR TABLE logical_even_number_tbl WHERE (id % 2 = 0);
+CREATE PUBLICATION
+</pre>
+<br>
+
+<p>
+上記のテーブルをロジカルレプリケーションするサブスクリプションの設定を以下に示します。
+</p>
+
+<pre>
+subscribedb=# CREATE TABLE logical_even_number_tbl (id int PRIMARY KEY, data int);
+CREATE TABLE
+
+subscribedb=# CREATE SUBSCRIPTION sub_logical_even_number_tbl CONNECTION 'host=primary port=5432 dbname=pubdb'
+	   PUBLICATION pub_logical_even_number_tbl;
+NOTICE:  created replication slot "sub_logical_even_number_tbl" on publisher
+CREATE SUBSCRIPTION
+</pre>
+<br>
+
+
+<p>
+idが1から4までのデータをINSERTします。
+</p>
+
+
+<pre>
+pubdb=# INSERT INTO logical_even_number_tbl VALUES (1,1),(2,2),(3,3),(4,4);
+INSERT 0 4
+pubdb=# SELECT * FROM logical_even_number_tbl;
+ id | data 
+----+------
+  1 |    1
+  2 |    2
+  3 |    3
+  4 |    4
+(4 rows)
+</pre>
+<br>
+
+<p>
+サブスクリプション側では、idが偶数の2と4の行しかレプリケーションされません。
+</p>
+
+<pre>
+subscribedb=# SELECT * FROM logical_even_number_tbl;
+ id | data 
+----+------
+  2 |    2
+  4 |    4
+(2 rows)
+</pre>
+<br>
+
+
+<p>
+・パーティションに対するパブリケーション
+<br>
+</p>
+
+<pre>
+pubdb=# CREATE TABLE logical_partition_tbl (id int, hight int, birthday date, PRIMARY KEY (id, hight)) PARTITION BY RANGE (hight);
+CREATE TABLE
+
+pubdb=# CREATE TABLE logical_partition_p0 PARTITION OF logical_partition_tbl FOR VALUES FROM (MINVALUE) TO ('150');
+CREATE TABLE
+pubdb=# CREATE TABLE logical_partition_p1 PARTITION OF logical_partition_tbl FOR VALUES FROM ('150') TO ('170');
+CREATE TABLE
+pubdb=# CREATE TABLE logical_partition_p2 PARTITION OF logical_partition_tbl FOR VALUES FROM ('170') TO ('190');
+CREATE TABLE
+pubdb=# CREATE TABLE logical_partition_p3 PARTITION OF logical_partition_tbl FOR VALUES FROM ('190') TO (MAXVALUE);
+CREATE TABLE
+
+pubdb=# CREATE PUBLICATION pub_logical_partition_tbl FOR TABLE logical_partition_tbl;
+CREATE PUBLICATION
+</pre>
+<br>
+
+
+<pre>
+subsribedb=# CREATE TABLE logical_partition_tbl (id int, hight int, birthday date, PRIMARY KEY (id, hight)) PARTITION BY RANGE (hight);
+CREATE TABLE
+
+subsribedb=# CREATE TABLE logical_partition_p0 PARTITION OF logical_partition_tbl FOR VALUES FROM (MINVALUE) TO ('150');
+CREATE TABLE
+subsribedb=# CREATE TABLE logical_partition_p1 PARTITION OF logical_partition_tbl FOR VALUES FROM ('150') TO ('170');
+CREATE TABLE
+subsribedb=# CREATE TABLE logical_partition_p2 PARTITION OF logical_partition_tbl FOR VALUES FROM ('170') TO ('190');
+CREATE TABLE
+subsribedb=# CREATE TABLE logical_partition_p3 PARTITION OF logical_partition_tbl FOR VALUES FROM ('190') TO (MAXVALUE);
+CREATE TABLE
+
+subscribedb=# CREATE SUBSCRIPTION sub_logical_partition_tbl CONNECTION 'host=primary port=5432 dbname=pubdb'
+	   PUBLICATION pub_logical_partition_tbl;
+NOTICE:  created replication slot "sub_logical_partition_tbl" on publisher
+CREATE SUBSCRIPTION
+</pre>
+<br>
+
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2018-9-8
+Last-modified: 2023-3-11
 </div>
 </body>
 </html>

@@ -2,12 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
- <title>PostgreSQLバイブル草稿</title>
- <link rel="stylesheet" type="text/css" media="screen" href="./default.css"">
-</head>
-
-<body>
+ <meta http-equiv="content-style-type" content="text/css">
+ <title>自分用PostgreSQLマニュアル</title>
+ <link rel="stylesheet" type="text/css" media="screen" href="./default.css" charset="UTF-8">
+ </head>
+ <body>
 
 <script language=javascript>
 <!--
@@ -26,11 +25,10 @@ objID.className='close';
 </script>
 
 <div id="header">
-<h1 class="title">PostgreSQLバイブル草稿</title></h1>
+<h1 class="title">自分用PostgreSQLマニュアル</title></h1>
     <span class="small">
 </span>
 </div>
-
 
 <hr class="full_hr">
 <table style="width: 100%;" border="0">
@@ -38,15 +36,16 @@ objID.className='close';
   <td class="menubar">
    <div id="menubar">
 
-
 <h5>PostgreSQLとは</h5>
 
-<li><a href="./index.html">PostgreSQLとは</a><br></li>
+<li><a href="./intro.html">PostgreSQLとは</a><br></li>
+
 
 <h5>PostgreSQLの内部構造</h5>
 <ul>
 <li><a href="./internal.html">とびら</a><br></li>
 </ul>
+
 <ol>
 <li><a href="./internal-01.html">プロセスとメモリ構造</a><br></li>
 <li><a href="./internal-02.html">データベースクラスタ、テーブルの構造</a></li>
@@ -58,7 +57,7 @@ objID.className='close';
 <li><a href="./internal-08.html">HOTとIndex Only Scan</a></li>
 <li><a href="./internal-09.html">WAL(Write Ahead Logging)</a></li>
 <li><a href="./internal-10.html">アーカイブログとPITR</a></li>
-<li><a href="./internal-11.html">レプリケーション(Streaming ReplicationとHotStandby)</a></li>
+<li><a href="./internal-11.html">Streaming ReplicationとHotStandby</a></li>
 </ol>
 
 
@@ -69,56 +68,46 @@ objID.className='close';
 </ul>
 
 <ol>
-[PostgreSQLの基礎]<br>
-<li><a href="./admin-01.html">オブジェクト、データベース、スキーマ</a><br></li>
-<li><a href="./admin-02.html">システムカタログ</a><br></li>
-<li><a href="./admin-03.html">文字コードの扱い</a><br></li>
-
 
 [インストールと起動、停止]<br>
-<li><a href="./admin-04.html">インストール</a><br></li>
-<li><a href="./admin-05.html">データベースシステムの初期化 initdb</a><br></li>
-<li><a href="./admin-06.html">PostgreSQLサーバの起動/停止</a><br></li>
+<li><a href="./admin-01.html">インストール</a><br></li>
+<li><a href="./admin-02.html">データベースシステムの初期化 initdb</a><br></li>
+<li><a href="./admin-03.html">PostgreSQLサーバの起動/停止</a><br></li>
 
+<hr>
+[PostgreSQLの基礎]<br>
+<li><a href="./admin-04.html">オブジェクト、データベース、スキーマ</a><br></li>
+<li><a href="./admin-05.html">システムカタログ</a><br></li>
+<li><a href="./admin-06.html">文字コードの扱い</a><br></li>
 
+  <hr>
 [認証とアクセス制御]<br>
 <li><a href="./admin-07.html">認証とアクセス制御</a><br></li>
 <li><a href="./admin-08.html">クライアントのアクセス制御</a><br></li>
 <li><a href="./admin-09.html">権限について</a><br></li>
 <li><a href="./admin-10.html">ロールの作成と権限制御</a><br></li>
 
-<HR>
-
+<hr>
 [バックアップとアップグレード]<br>
 <li><a href="./admin-11.html">バックアップとアップグレード</a><br></li>
 <li><a href="./admin-12.html">ダンプとリストア</a><br></li>
 <li><a href="./admin-13.html">アップグレード</a><br></li>
 
+  <hr>
 [保守、監視とチューニング]<br>
 <li><a href="./admin-14.html">保守、監視とチューニング</a><br></li> 
 <li><a href="./admin-15.html">稼働統計情報</a><br></li>
 <li><a href="./admin-16.html">実行ログの取得</a><br></li>
-<li><a href="./admin-17.html">モニタリングツール</a><br></li>
-<li><a href="./admin-18.html">ログと統計情報の分析</a><br></li>
-<li><a href="./admin-19.html">パラメータチューニング</a><br></li>
+<li><a href="./admin-17.html">ログと統計情報の分析</a><br></li>
+<li><a href="./admin-18.html">パラメータチューニング</a><br></li>
 
+  <hr>
 [耐障害性、高可用性]<br>
-<li><a href="./admin-20.html">耐障害性、高可用性</a><br></li>
-<li><a href="./admin-21.html">アーカイブログとPITR</a><br></li>
-<li><a href="./admin-22.html">レプリケーションの設定</a><br></li>
-<li><a href="./admin-23.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-19.html">アーカイブログとPITR</a><br></li>
+<li><a href="./admin-20.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-21.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-22.html">ロジカルレプリケーション</a><br></li>
 
-
-[FDW]<br>
-<li><a href="./admin-24.html">FDW</a><br></li>
-<li><a href="./admin-25.html">postgres_fdw</a><br></li>
-</ol>
-
-[追加の文章(未完)]<br>
-<li><a href="./admin-26.html">ロギング</a><br></li>
-<li><a href="./admin-27.html">統計情報</a><br></li>
-<li><a href="./admin-28.html">モニタリング</a><br></li>
-<li><a href="./admin-29.html">メンテナンス</a><br></li>
 </ol>
 
 
@@ -138,6 +127,7 @@ objID.className='close';
 <li><a href="./param-11.html">クライアント接続デフォルト</a><br></li>
 <li><a href="./param-12.html">ロック管理/バージョンとプラットフォーム互換性</a><br></li>
 </ol>
+
 
 
 <h5>psql</h5>
@@ -160,6 +150,7 @@ objID.className='close';
 </ol>
 
 
+
 <h5>SQL</h5>
 
 <ul>
@@ -167,15 +158,14 @@ objID.className='close';
 </ul>
 
 <ol>
-[SQL]<br>
 
 <li><a href="./sql-01.html">SQL語彙</a><br></li>
 <li><a href="./sql-02.html">テーブルスペースの作成/削除/変更</a><br></li>
 <li><a href="./sql-03.html">データベースの作成/変更/削除</a><br></li>
-<li><a href="./sql-04.html">テーブルの作成</a><br></li>
+<li><a href="./sql-04.html">テーブルの作成 CREATE TABLE / CREATE TABLE AS</a><br></li>
 <li><a href="./sql-05.html">外部キー</a><br></li>
 <li><a href="./sql-06.html">オブジェクトの継承/LIKE句</a><br></li>
-<li><a href="./sql-07.html">問い合わせ結果から新しいテーブルを作成</a><br></li>
+<li><a href="./sql-07.html">パーティション</a><br></li>
 <li><a href="./sql-08.html">テーブルの削除</a><br></li>
 <li><a href="./sql-09.html">スキーマの定義/変更/削除</a><br></li>
 
@@ -201,7 +191,7 @@ objID.className='close';
 <li><a href="./sql-25.html">問い合わせの結合</a><br></li>
 <li><a href="./sql-26.html">ORDER BY</a><br></li>
 <li><a href="./sql-27.html">LIMIT OFFSET</a><br></li>
-<li><a href="./sql-28.html">FOR UPDATE/ FOR SHARE</a><br></li>
+<li><a href="./sql-28.html">FOR [NO KEY] UPDATE/ FOR [KEY] SHARE</a><br></li>
 <li><a href="./sql-29.html">サブクエリ</a><br></li>
 <li><a href="./sql-30.html">CASE式</a><br></li>
 <li><a href="./sql-31.html">VALUES</a><br></li>
@@ -227,18 +217,12 @@ objID.className='close';
 <li><a href="./sql-49.html">COPY/IMPORT</a><br></li>
 <li><a href="./sql-50.html">COPY/EXPORT</a><br></li>
 <li><a href="./sql-51.html">関数定義</a><br></li>
-<li><a href="./sql-52.html">エクステンション</a><br></li>
-<li><a href="./sql-53.html">外部サーバの定義、変更、削除</a><br></li>
-<li><a href="./sql-54.html">外部サーバのユーザマップ定義、変更、削除</a><br></li>
-<li><a href="./sql-55.html">外部テーブルの定義、変更、削除</a><br></li>
-<hr>
-<li><a href="./sql-56.html">イベントトリガ</a><br></li>
-<li><a href="./sql-57.html">行レベルセキュリティ</a><br></li>
+<li><a href="./sql-52.html">FDW(Foreign Data Wrapper)</a><br></li>
 
-<hr>
-<li><a href="./sql-60.html">新しい機能</a><br></li>
+<li><a href="./sql-53.html">PUBLICATION</a><br></li>
+<li><a href="./sql-54.html">SUBSCRIPTION</a><br></li>
+  
 </ol>
-
 
 <h5>関数</h5>
 
@@ -260,8 +244,6 @@ objID.className='close';
 <li><a href="./type-09.html">バイナリ列データ型</a><br></li>
 <li><a href="./type-10.html">Range型</a><br></li>
 <li><a href="./type-11.html">配列</a><br></li>
-<hr>
-<li><a href="./type-12.html">JSON型</a><br></li>
 
 <hr>
 [演算子]<br>
@@ -273,9 +255,6 @@ objID.className='close';
 <li><a href="./ope-06.html">パターンマッチング</a><br></li>
 <li><a href="./ope-07.html">日付/時刻演算子</a><br></li>
 <li><a href="./ope-08.html">Range型演算子</a><br></li>
-<hr>
-<li><a href="./ope-09.html">JSON型演算子</a><br></li>
-
 
 <hr>
 [関数]<br>
@@ -287,89 +266,73 @@ objID.className='close';
 <li><a href="./func-06.html">型変換関数</a><br></li>
 <li><a href="./func-07.html">Range型関数</a><br></li>
 <li><a href="./func-08.html">Window関数</a><br></li>
-<li><a href="./func-09.html">セッション情報関数</a><br></li>
-<li><a href="./func-10.html">アクセス権限とスキーマ可視性照会関数</a><br></li>
-<li><a href="./func-11.html">データベースオブジェクト関数</a><br></li>
-<li><a href="./func-12.html">バックアップとリカバリ制御関数</a><br></li>
+  <hr>
 
-<li><a href="./func-13.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-09.html">セッション情報関数</a><br></li>
+<li><a href="./func-10.html">アクセス権限照会関数</a><br></li>
+<li><a href="./func-11.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-12.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-13.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
+<li><a href="./func-14.html">制御データ関数</a><br></li>
+  <hr>
 <li><a href="./func-15.html">構成設定関数</a><br></li>
 <li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-17.html">レプリケーションSQL関数</a><br></li>
-
-<hr>
-<li><a href="./func-18.html">JSON関数</a><br></li>
+<li><a href="./func-17.html">バックアップ制御関数</a><br></li>
+<li><a href="./func-18.html">リカバリ制御関数</a><br></li>
+<li><a href="./func-19.html">スナップショット同期関数</a><br></li>	
+<li><a href="./func-20.html">レプリケーション管理関数</a><br></li>	
+<li><a href="./func-21.html">データベースオブジェクト管理関数</a><br></li>
+<li><a href="./func-22.html">インデックス保守関数</a><br></li>	
+<li><a href="./func-23.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-24.html">勧告的ロック用関数</a><br></li>
+<li><a href="./func-25.html">統計情報関数</a><br></li>	
 
 </ol>
-
-<!--
-[削除するもの]<br>
-<li><a href="./type-07.html">幾何データ型</a><br></li>
-<li><a href="./type-08.html">ネットワークアドレス型型</a><br></li>
-<li><a href="./ope-08.html">幾何演算子</a><br></li>
-<li><a href="./ope-09.html">ネットワーク演算子</a><br></li>
-<li><a href="./func-06.html">幾何関数</a><br></li>
-<li><a href="./func-07.html">ネットワークアドレス関数</a><br></li>
-<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
-<li><a href="./func-16.html">トランザクションID関数</a><br></li>
-<li><a href="./func-17.html">スキーマ可視性照会関数</a><br></li>
-<li><a href="./func-18.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-19.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-20.html">勧告的ロック用関数</a><br></li>
--->
 
 <h5>PL/pgSQL</h5>
 
 <ol>
-<li><a href="./plpgsql.html">結果の返し方</a><br></li>
-<li><a href="./plpgsql-01.html">ストアドプロシージャ</a><br></li>
-<li><a href="./plpgsql-02.html">ストアドプロシージャの定義</a><br></li>
+<li><a href="./plpgsql-01.html">PL/pgSQLによるストアドプロシージャ</a><br></li>
+
+  <hr>[定義]
+    <br>
+
+<li><a href="./plpgsql-02.html">PL/pgSQLによるストアドプロシージャの定義</a><br></li>
+
+  <hr>[基本的な使い方]
+    <br>
 <li><a href="./plpgsql-03.html">変数宣言と値の代入</a><br></li>
-**** まとめる >>
+
 <li><a href="./plpgsql-04.html">SELECT INTO文</a><br></li>
 <li><a href="./plpgsql-05.html">結果ステータスの取得</a><br></li>
 <li><a href="./plpgsql-06.html">動的なSQL文の実行</a><br></li>
-<< ここまで****
+
+  <hr>[制御構造]
+    <br>
 <li><a href="./plpgsql-07.html">IF 条件分岐</a><br></li>
-<li><a href="./plpgsql-08.html">ループ処理</a><br></li>
-*** >>>
-<li><a href="./plpgsql-09.html">RETURN</a><br></li>
-<<< ***
+<li><a href="./plpgsql-08.html">EXIT</a><br></li>
+
+<li><a href="./plpgsql-09.html">RETURN NEXT / RETURN QUERY</a><br></li>
+
 <li><a href="./plpgsql-10.html">ループ処理　LOOP</a><br></li>
 <li><a href="./plpgsql-11.html">ループ処理　WHILE</a><br></li>
-<li><a href="./plpgsql-12.html">ループ処理　FOR </a><br></li>
+<li><a href="./plpgsql-12.html">ループ処理　FOR</a><br></li>
 <li><a href="./plpgsql-13.html">ループ処理 (複数行の問い合わせ結果を扱う)</a><br></li>
+
+<hr>[カーソル]
+    <br>
 <li><a href="./plpgsql-14.html">カーソルの利用</a><br></li>
 <li><a href="./plpgsql-15.html">カーソル変数の宣言</a><br></li>
 <li><a href="./plpgsql-16.html">カーソルのオープンとクローズ	OPEN / CLOSE</a><br></li>
-<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得		FETCH</a><br></li>
-<li><a href="./plpgsql-18.html">カーソルを使った例</a><br></li>
-<li><a href="./plpgsql-19.html">例外</a><br></li>
-*** >>>
-<li><a href="./plpgsql-21.html">CASE</a><br></li>
-<li><a href="./plpgsql-22.html">FOREACH</a><br></li>
-<<< ***
-</ol>
+<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得	FETCH</a><br></li>
+  <li><a href="./plpgsql-18.html">FOR IN LOOPにカーソル行の取得</a><br></li>
+<li><a href="./plpgsql-19.html">カーソルを使った例</a><br></li>
+
+  <hr>[例外]
+    <br>
+<li><a href="./plpgsql-20.html">例外処理</a><br></li>
 
 
-<h5>Appendix(付録)</h5>
-
-<ol>
-<li><a href="./app-01.html">pgpool-II</a><br></li>
-<li><a href="./app-02.html">Pacemaker</a><br></li>
-</ol>
-
-
-<h5>おまけ:ネット公開(ページ数の関係で書籍には載せない)</h5>
-
-<ol>
-[pgpool]<br>
-<li><a href="./ha-06.html">pgpool-II セットアップ</a><br></li>
-<li><a href="./ha-07.html">pgpool-II レプリケーションモード</a><br></li>
-<li><a href="./ha-08.html">pgpool-II マスタースレーブモード</a><br></li>
-[Pacemaker]<br>
-<li><a href="./ha-10.html">Pacemaker</a><br></li>
 </ol>
 
 </div>
@@ -378,410 +341,20 @@ objID.className='close';
 
   </td>
   <td valign="top">
-   <div id="body">
+    <div id="body">
+      
 
 
 
 <h2>データベースクラスタ、テーブルの構造</h2>
 
-<div class="jumpmenu"></div><h3>データベースクラスタ</h3>
-
 <p>
-物理的なデータ本体や設定ファイルなど、データベースシステムの全データを保存する領域を「データベースクラスタ」と呼びます。
-</p>
-<p>
-データベースクラスタはデータベースシステムの初期化時に指定したディレクトリに作られます。
-指定したディレクトリを「ベースディレクトリ」と呼びます。
+The Internals of PostgreSQL <a href="https://www.interdb.jp/pg/pgsql01.html" target="_blank" rel="noopener noreferrer">Chapter 1: Database Cluster, Databases, and Tables</a>
 </p>
 
-<p>
-[<表.2-02>]にデータベースクラスタの構造を示します。
-</p>
-
-[<表.2-02>] データベースクラスタ直下のファイルとディレクトリ
-
-(本書では"/usr/local/pgsql/data")
-<table border=1><tr  bgcolor="#cccccc">
-<th>ベースディレクトリ以下のファイル</th>	<th>説明</th>
-</tr><tr>
-<td>PG_VERSION</td>	<td>PostgreSQLのバージョン番号ファイル</td>
-</tr><tr>
-<td>pg_hba.conf</td>	<td>ホスト認証設定ファイル。[<3-08>]参照</td>
-</tr><tr>
-<td>pg_ident.conf</td>	<td>identによる認証ファイル</td>
-</tr><tr>
-<td>postgresql.conf</td>	<td>パラメータを設定するファイル。4章参照</td>
-</tr><tr>
-<td>postmaster.opts</td>	<td>起動オプション記録</td>
-</tr><tr  bgcolor="#cccccc">
-
-<th>ベースディレクトリ以下のディレクトリ</th>	<th>説明</th>
-</tr><tr>
-<td>base/</td>	<td>データ領域(データベースのデータを格納する)</td>
-</tr><tr>
-<td>global/</td>	<td>pg_control(コントロールファイル)やパスワードファイルなど、共通オブジェクトの保存ディレクトリ</td>
-</tr><tr>
-<td>pg_clog/</td>	<td>CLOG(コミットログ)の保存ディレクトリ(CLOGはすべてのトランザクションのコミット状態を記録する)</td>
-</tr><tr>
-<td>pg_multixact/</td>	<td>マルチトランザクションの状態を記録する。共有行ロックで使用(バージョン8.1から)</td>
-</tr><tr>
-<td>pg_notify/</td>	<td>LESTEN/NOTIFYの状態を保存する(バージョン9.0から)</td>
-</tr><tr>
-<td>pg_serial/</td>	<td>コミットされたシリアライザブルトランザクションに関する情報を保有する(バージョン9.1から)</td>
-</tr><tr>
-<td>pg_snapshot/</td>	<td>pg_export_snapshot()でエクスポートされたスナップショット情報ファイル。この情報はエクスポートしたトランザクションが終了した際に消去される。(バージョン9.2から)</td>
-</tr><tr>
-<td>pg_stat_tmp/</td>	<td>統計情報コレクタの一時データを保存する(バージョン9.0から)</td>
-</tr><tr>
-<td>pg_subtrans/</td>	<td>サブトランザクションの状態を記録する</td>
-</tr><tr>
-<td>pg_tblspc/</td>	<td>テーブルスペースへのシンボリックリンクを記録する</td>
-</tr><tr>
-<td>pg_twophase/</td>	<td>2相コミットの状態を記録する。[<6-43>]参照。(バージョン8.1から)</td>
-</tr><tr>
-<td>pg_xlog/</td>	<td>WALログの保存ディレクトリ</td>
-</tr></table>
-
-<br>
-
-
-<p>
-PostgreSQLのデータ領域は、他のRDBMSと大きく異なります。
-<br>
-OracleやMySQLのInnoDBストレージエンジンはデータ領域を(いくつかの)巨大なファイルとして確保し、
-複数のテーブルデータをファイルの内部で一括して管理します。
-<br>
-これに対しPostgreSQLは、テーブル毎に一つのファイルを確保します。
-データベースの物理的な正体はディレクトリで、
-テーブルファイルはデータベースに対応するディレクトリ下に置かれます。
-</p>
-
-
-<div class="jumpmenu"></div><h3>テーブルスペース</h3>
-
-<p>
-テーブルスペースにはテーブルやインデックス、データベースなどを分散して保存できます([<図2-03>])。
-</p>
-
-<table border=1>
-<caption>[<図2-03>] テーブルスペース</caption>
-<tr><td>
-<left>
-<img src="./fig-2-02-01.jpg"><br>
-</left>
-</td></tr></table>
-
-
-<p>
-PostgreSQLのテーブルスペースの物理的な正体はディレクトリです。
-Oracleのテーブルスペース(表領域)とは、概念的にまったく異なるものなので注意してください。
-<br>
-「テーブルやインデックスを別のテーブルスペースに配置する」とは、
-データベースクラスタと別のディレクトリ以下にテーブルファイルやインデックスファイルを置くことです。
-また、「データベースをテーブルスペースに配置する」とは、
-テーブルスペース以下にデータベースのサブディレクトリを作成することです。
-</p>
-
-</p>
-データベースクラスタをひとつのHDDに保存した場合、
-アクセスが集中するとHDDのI/Oがボトルネックとなり、結果として性能低下を引き起こす可能性があります。
-<br>
-テーブルスペースを使ってデータベースやテーブルを別々のHDDに保存すれば、上記の欠点を解消できます。
-</p>
-
-<div class="jumpmenu"></div><h3>テーブル</h3>
-
-<p>
-一つのテーブルは、データベースクラスタ以下に一つのファイルとして存在しています。
-<br>
-テーブルのファイル名はシステムテーブルpg_classを検索すればわかります。
-例えば、テーブルsimpletblの実体は次のSELECT文でわかります。
-</p>
-
-<pre>
-sampledb=# SELECT * FROM simpletbl;
- id |    data    
-----+------------
-  1 | AAAAAAAAAA
-  2 | BBBBBBBBBB
-(2 rows)
-
-sampledb=# SELECT datname, oid FROM pg_database 
-sampledb-#       WHERE datname = 'sampledb';
- datname  |  oid  
-----------+-------
- sampledb | 16384
-(1 row)
-
-sampledb=# SELECT relname, relfilenode FROM pg_class 
-sampledb-#           WHERE relname = 'simpletbl';
-  relname  | relfilenode 
------------+-------------
- simpletbl |       18740
-(1 row)
-</pre>
-
-<p>
-上の検索結果から、ディレクトリbase/16384がデータベースsampledb、ファイル名"18740"がテーブルsimpletblのデータを保存しているとわかります。
-<p>
-
-<pre>
-$ ls -la DATABASE_CLUSTER/base/16384/18740
--rw------- 1 postgres users 8192 12月  8 10:14 data/base/16384/18740
-</pre>
-
-<p>
-バージョン9.0からは関数pg_relation_filepath()で直接ファイル名を表示できます。
-</p>
-
-<pre>
-sampledb=# SELECT pg_relation_filepath('simpletbl');
- pg_relation_filepath 
-----------------------
- base/16384/18740
-(1 row)
-</pre>
-
-<div class="jumpmenu"></div><h3>テーブルデータの構造と空き領域マップ(FSM)</h3>
-
-<p>
-テーブルやインデックスのデータを保存するファイルの内部は、8192[byte]のブロックに分割されています([<図2-04>])。
-データが増えてブロック内に保存しきれなくなると、ファイルの末尾にブロックを追加してファイルサイズを増やします。
-</p>
-
-<table border=1>
-<caption>[<図2-04>]デーブルデータのブロック構造</caption>
-<tr><td>
-<left>
-<img src="./fig-2-02-02.jpg"><br>
-</left>
-</td></tr></table>
-
-<br>
-
-<p>
-一つのブロックは、ブロックの情報を保存するヘッダ、データへのポインタ(ラインポインタ)、および実際のデータから構成されます。
-インデックステーブルの場合は最末尾にSpecial領域としてインデックスに関する特別なデータを保存します。
-<br>
-テーブルのレコードデータは「ヒープタプル(HeapTuple)」と呼ばれ、ブロックの末尾から書き込みます。
-</p>
-
-<p>
-以下、テーブルブロックの構成要素について簡単に説明します。
-</p>
-
-
-<ol>
-
-<li>ヘッダ</li>
- <p>
-ヘッダの構造体
-<a href="javascript:void(0)" id="category_PageHeaderData" onclick="show('PageHeaderData');">PageHeaderData</a>
-を[<図2-04>]に図示します[<脚注3>]。
-<div id="layer_PageHeaderData" style="display: none;position:relative;margin-left:15pt" class="close">
-<!----------------------------- 以下は印刷不要。WEB向け ------------------------------------------------->
-
-<pre>
-src/include/storage/bufpage.h
-typedef struct PageHeaderData
-{
-        /* XXX LSN is member of *any* block, not only page-organized ones */
-        XLogRecPtr      pd_lsn;         /* LSN: next byte after last byte of xlog
-                                         * record for last change to this page */
-        uint16          pd_tli;         /* least significant bits of the TimeLineID 
-                                         * containing the LSN */
-        uint16          pd_flags;       /* flag bits, see below */
-        LocationIndex pd_lower;         /* offset to start of free space */
-        LocationIndex pd_upper;         /* offset to end of free space */
-        LocationIndex pd_special;       /* offset to start of special space */
-        uint16          pd_pagesize_version;
-        TransactionId pd_prune_xid;     /* oldest prunable XID, or zero if none */
-        ItemIdData      pd_linp[1];     /* beginning of line pointer array */
-} PageHeaderData;
-
-typedef PageHeaderData *PageHeader;
-</pre>
-</div> 
-
-<div id="layer_xlogrecptr" style="display: none;position:relative;margin-left:15pt" class="close">
-<pre>
-src/include/access/xlogdef.h
-
-typedef struct XLogRecPtr
-{
-        uint32          xlogid;                 /* log file #, 0 based */
-        uint32          xrecoff;                /* byte offset of location in log file */
-} XLogRecPtr;
-</pre>
-
-<!--------------------------------------　ここまで印刷不要　---------------------------------------------->
-</div> 
-</p>
-
-<p>
-構成要素のXLogRecPtrとTimeLineIDはWALとPITRに関係したデータで、[<2-09>]と[<2-10>]で詳しく説明します。
-<br>
-特にXLogRecPtrの実体である4[byte]の数値の組(xlogid, xrecoff)を「Log Sequence Number(LSN)」と呼びます[<脚注4>]。
-簡単にいえばWALログの番地で、WALログの書き込みやリカバリの際に重要な役割を果たします。
-</p>
-
-<table>
-<caption>[< XLogRecPtrの定義>]</caption>
-<tr><td>
-<pre>
-typedef struct XLogRecPtr
-{
-   uint32   xlogid;  
-   uint32   xrecoff; 
-} XLogRecPtr;
-</pre>
-</td></tr></table>
-
-
-<blockquote><table BORDER="1"><tr><td>脚注3</td><td>
-<p>
-PageHeaderDataの定義はsrc/include/storage/bufpage.h。
-</p>
-</td></tr></table></blockquote>
-
-
-<blockquote><table BORDER="1"><tr><td>脚注4</td><td>
-<p>
-XLogRecPtrの定義はsrc/include/access/xlogdef.h。
-</p>
-</td></tr></table></blockquote>
-
-<p>
-pd_lowerはラインポインタの末尾を指し、pd_pupperはヒープタプルを置くデータ領域の先頭を指します。
-pg_lowerとpg_upperの指した先の間が、そのブロックの「空き領域」となります。
-</p>
-
-<p>
-pd_specialは(もし存在すれば)specialの先頭を指します。
-pd_pagesize_versionはページのサイズとページ構造のバージョン番号です。
-</p>
-
-
-<li>ラインポインタ</li>
- <p>
-ヘッダの次はラインポインタが続きます。各ラインポインタはヒープタプルへのポインタを保持しています。
- </p>
-
-<li>ヒープタプル</li>
- <p>
-ヒープタプルの構造は後述します([<2-06>]参照)。
- </p>
-
-</ol>
-
-
-<p>
-参考までに、先のテーブルsimpletblが保存されたファイルの中身を表示します。
-ヘッダ部分とラインポインタ、および２つのヒープタプルをみることができます。
-</p>
-
-
-<font color="#ff0000">
-書籍の原稿用。表示は下の図のようにする。
-</font>
-
-<pre>
-$ od -c data/base/16384/18740
-0000000  \0  \0  \0  \0 324   V 022 002 001  \0  \0  \0      \0 260 037
-0000020  \0     004      \0  \0  \0  \0 330 237   N  \0 260 237   N  \0
-0000040  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0
-*
-0017660   4   *  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0
-0017700 002  \0 002  \0 002  \t 030  \0 002  \0  \0  \0 027   B   B   B
-0017720   B   B   B   B   B   B   B  \0   3   *  \0  \0  \0  \0  \0  \0
-0017740  \0  \0  \0  \0  \0  \0  \0  \0 001  \0 002  \0 002  \t 030  \0
-0017760 001  \0  \0  \0 027   A   A   A   A   A   A   A   A   A   A  \0
-0020000
-</pre>
-
-
-<left>
-<img src="./fig-2-02-source.jpg"><br>
-</left>
-
-<p>
-なお、8192[byte]を越える大きなサイズのタプルは"TOAST(The Oversized-Attribute Storage Technique)"という方式で格納管理します。詳細はPostgreSQLのドキュメントを参照してください。
-</p>
-
-<div class="jumpmenu"></div><h4>空き領域マップ(FSM)</h4>
-
-<p>
-PostgreSQLはタプルを追記する際、空き領域のあるブロックを探して追記します。
-空き領域マップはブロック毎にどの程度の空き領域があるかを記録しています。
-<br>
-バージョン8.3までは空き領域マップの大きさは設定パラメータで指定していました。よって、設定パラメータが不適切な場合は空き領域を保存できないブロックが存在しました。
-バージョン8.4からは可変サイズですべてのテーブルの空き領域を保存します。
-</p>
-
-<p>
-なお、空き領域マップの情報はVACUUM処理が更新します([<2-07>]参照)。
-</p>
-
-
-<div class="jumpmenu"></div><h3>データへのアクセス</h3>
-
-<p>
-データタプルにどうやってアクセスするか、概略を示します([<図2-05>])。
-</p>
-
-<table border=1>
-<caption>[<図2-05>] タプルへのアクセス</caption>
-<tr><td>
-<left>
-<img src="./fig-2-02-03.jpg"><br>
-</left>
-</td></tr></table>
-
-<br>
-
-<ul>
-<li>シーケンシャルスキャン</li>
-<p>
-ブロックのラインポインタを順次スキャンしてタプルにアクセスする。
-</p>
-
-<li>インデックススキャン</li>
-<p>
-インデックステーブルもブロック単位で構成され、インデックスはTID(タプルID)とキーから成る。
-<br>
-インデックススキャンは、TIDからテーブルファイルのブロックと配置された位置を割り出し、
-該当テーブル該当ブロックのラインポインタを経由して、目的のタプルに直接アクセスする。
-</p>
-
-</ul>
-
-<p>
-ちなみにPostgreSQLは、ctidに直接タプルを指定して検索できます。
-これを「TIDスキャン」といいます。
-例えば'(0,1)'は「第0ブロックの1番目のタプル」という意味です。
-</p>
-
-<pre>
-sampledb=# SELECT * FROM simpletbl WHERE ctid = '(0,1)';
- id |   data    
-----+-----------
-  1 | AAAAAAAAA
-(1 row)
-</pre>
-
-<div class="jumpmenu"></div><h3>参考文献</h3>
-
-<ol>
-<li>PostgreSQL解析資料 ストレージマネージャ(2)	井久保氏</li>
-http://ikubo.x0.com/PostgreSQL/pdf/IK04_Storage2_041214.pdf
-<p>
-冒頭にテーブルのブロック構造について解説があります。
-後半のバッファマネージャの解説はバージョン7.4ベースで、現在と異なるので注意してください。
-</p>
-</ol>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2018-9-8
+Last-modified: 2023-3-11
 </div>
 </body>
 </html>

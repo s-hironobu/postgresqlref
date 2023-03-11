@@ -1,0 +1,175 @@
+%FILE internal/func-06.html
+%LASTMOD
+%KEY pgsql-func06
+
+%TITLE <a href="https://www.postgresql.org/docs/current/functions-formatting.html" target="_blank" rel="noopener noreferrer">型変換関数</a>
+
+
+[<型変換関数>]
+
+<table border=1><tr bgcolor="#cccccc">
+<th>関数</th>		<th>返り値型</th>	<th>説明</th>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2>例</th>			<th>結果</th>
+</tr><tr>
+<td>to_char(timestamp, format)	</td>	<td>text</td>	<td>timestamp型のデータを指定した形式formatの文字列に変換</td>
+</tr><tr  bgcolor="#eeeeee">
+<th colspan=2 align=left>to_char(timestamp 'now','HH12:MI:SS')	</th>	<th align=left>08:47:01</th>
+
+</tr><tr>
+<td>to_char(interval, format) </td>	<td>text</td>	<td>interval型のデータを指定した形式formatの文字列に変換</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	to_char(interval '15h 2m 12s','HH24:MI:SS')</th>	<th align=left>15:02:12</th>
+
+</tr><tr>
+<td>to_char(int, format)	</td>	<td>text</td>	<td>int型のデータを指定した桁数の文字列に変換</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	to_char(125, '999')	</th>	<th align=left>125</th>
+
+</tr><tr>
+<td>to_char(numeric, format)	</td>	<td>text</td>	<td>numeric型(もしくは倍精度)のデータを指定した形式formatの文字列に変換</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	to_char(numeric '-125.8', 'S999D99')	</th>	<th align=left>-125.80</th>
+
+</tr><tr>
+<td>to_date(text, format)	</td>	<td>date</td>	<td>指定した形式formatで表示したデータをdate型に変換</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>  to_date('04 Nov 2012', 'DD Mon YYYY') </th>	<th align=left>2012-11-04</th>
+
+</tr><tr>
+<td>to_timestamp(text, format)	</td>	<td>timestamp</td>	<td>指定した形式formatで表示したデータをtimestamp型に変換</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>to_timestamp('04 Nov 2012', 'DD Mon YYYY')</th>	<th align=left>2012-11-04 00:00:00+09</th>
+
+</tr><tr>
+<td>to_number(text, format)	</td>	<td>numeric</td>	<td>指定した形式formatで表示したデータを数値型に変換</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	to_number('-12456.8', 'S999999D9')	</th>	<th align=left>-12456.8</th>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+PostgreSQLは上記の型変換関数をサポートしています。
+<br>
+これらの関数の第2引数には入力フォーマット、または出力フォーマットのパターンを定義します。定義方法は関数一覧の例を参照してください。
+</p>
+
+<p>
+なお、2重コロン'::'でデータ型をキャストすることも可能です。
+</p>
+
+<pre>
+sampledb=# SELECT 'あ'::text, 'あ'::bytea;
+ text |  bytea
+------+----------
+ あ   | \xe38182
+(1 row)
+</pre>
+<br>
+
+<p>
+以下、[<表7-23>]に数値変換に使用可能なパターンを、[<表7-24>]に日付/時刻型の値のフォーマットに使用可能なパターンを示します。
+</p>
+
+<table border=1>
+<caption>[<表7-23>] 数値変換のパターン</caption>
+<tr bgcolor="#cccccc">
+<th>パターン　　　　</th>	<th>説明　　　　　　　　　　　　　　　　　　　　　　　　　　　　</th>
+</tr><tr>
+<td>9</td>		<td>指定された桁数での値</td>
+</tr><tr>
+<td>0</td>		<td>前にゼロがついた値</td>
+</tr><tr>
+<td>.</td>		<td>小数点</td>
+</tr><tr>
+<td>,	</td>		<td>3桁ごとの区切り符号</td>
+</tr><tr>
+<td>PR	</td>		<td>負の値の角括弧表示</td>
+</tr><tr>
+<td>S	</td>		<td>マイナス記号付き負の値</td>
+</tr><tr>
+<td>L	</td>		<td>通貨記号</td>
+</tr><tr>
+<td>D	</td>		<td>小数点</td>
+</tr><tr>
+<td>G	</td>		<td>グループ区切り符号</td>
+</tr><tr>
+<td>MI	</td>		<td>負数ならば、指定位置にマイナス記号</td>
+</tr><tr>
+<td>PL	</td>		<td>正数ならば、指定位置にプラス記号</td>
+</tr><tr>
+<td>SG	</td>		<td>指定された位置にプラス/マイナス記号</td>
+</tr><tr>
+<td>RN	</td>		<td>(1 〜 3999 の入力値による)ローマ数字</td>
+</tr><tr>
+<td>TH,th	</td>		<td>序数変換</td>
+</tr></table>
+
+<br>
+
+<table border=1>
+<caption>[<表7-24>] 日付/時刻データ型のパターン</caption>
+<tr bgcolor="#cccccc">
+<th>パターン　　　　</th>	<th>説明[範囲]　　　　　　　　　　　　　　　　　　　　　　　　　　　　</th>
+</tr><tr>
+<td>BC, B.C., bc, b.c.</td>		<td>紀元前の指定</td>
+</tr><tr>
+<td>AD, A.D., ad, a.d.</td>		<td>紀元後の指定</td>
+</tr><tr>
+<td>CC		</td>		<td>世紀(2桁) </td>
+</tr><tr>
+<td>Y,YYY	</td>		<td>コンマ付き年(4桁)</td>
+</tr><tr>
+<td>YYYY, YYY, YY, Y</td>		<td>年(4桁，下3桁，下2桁，下1桁) </td>
+</tr><tr>
+<td>MONTH, Month, month</td>		<td>月名(9文字) </td>
+</tr><tr>
+<td>MON, Mon, mon</td>		<td>短縮形の月名(3文字) </td>
+</tr><tr>
+<td>MM	</td>		<td>月番号([01-12]) </td>
+</tr><tr>
+<td>DAY, Day, day</td>		<td>曜日(9文字) </td>
+</tr><tr>
+<td>DY, Dy, dy	</td>		<td>短縮形の曜日(3文字) </td>
+</tr><tr>
+<td>DDD		</td>		<td>1年通算の日にち([001-366]) </td>
+</tr><tr>
+<td>DD	</td>		<td>1月通算の日にち([01-31]) </td>
+</tr><tr>
+<td>D		</td>		<td>1週通算の日にち([1-7]日曜日=1) </td>
+</tr><tr>
+<td>W		</td>		<td>月中の週番号([1-5])でその月の初日がある週が第1週</td>
+</tr><tr>
+<td>WW		</td>		<td>年間を通じた週番号([1-53])で元旦のある週が第1週</td>
+</tr><tr>
+<td>IW		</td>		<td>ISO週番号(新年の最初の木曜日がある週が第1週) </td>
+</tr><tr>
+<td>HH, HH12, HH24	</td>		<td>時([01-12]，[01-12]，[00-23]) </td>
+</tr><tr>
+<td>MI		</td>		<td>分([00-59]) </td>
+</tr><tr>
+<td>SS		</td>		<td>秒([00-59]) </td>
+</tr><tr>
+<td>MS		</td>		<td>ミリ秒([000-999]) </td>
+</tr><tr>
+<td>US		</td>		<td>マイクロ秒([000000-999999]) </td>
+</tr><tr>
+<td>SSSS	</td>		<td>深夜0時からの秒数([0-86399]) </td>
+</tr><tr>
+<td>AM, A.M., am, a.m.</td>		<td>午前の指定</td>
+</tr><tr>
+<td>PM, P.M., pm, p.m.</td>		<td>午後の指定</td>
+</tr><tr>
+<td>TZ, tz	</td>		<td>時間帯</td>
+</tr><tr>
+<td>J	</td>		<td>ユリウス日(紀元前4712年1月1日からの通算経過日) </td>
+</tr><tr>
+<td>Q	</td>		<td>四半期(quarter) </td>
+</tr><tr>
+<td>RM, rm	</td>		<td>ローマ数字による月([I-XII] I=月曜日) </td>
+</tr></table>
+
+

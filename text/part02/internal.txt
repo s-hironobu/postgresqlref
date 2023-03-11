@@ -1,0 +1,21 @@
+%FILE internal/internal.html
+%LASTMOD
+%KEY pgsql-internal
+
+%TITLE PostgreSQLの内部構造
+
+<p>
+基本的に全部削除した。今後は
+<a href="https://www.interdb.jp/pg/" target="_blank" rel="noopener noreferrer">The Internals of PostgreSQL</a>を見てくださいということで。
+</p>
+
+<p>
+唯一、
+
+
+<a href="./internal-11.html" target="_blank" rel="noopener nore
+ferrer">ストリーミングレプリケーション</a>については日本語記事を残した。
+
+</p>
+
+</p>

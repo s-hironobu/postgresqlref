@@ -1,0 +1,499 @@
+%FILE internal/admin-19.html
+%LASTMOD
+%KEY pgsql-admin19
+
+
+%TITLE <a href="https://www.postgresql.org/docs/current/continuous-archiving.html" target="_blank" rel="noopener noreferrer">アーカイブログとPITR</a>
+
+<p>
+アーカイブログとPITRの運用方法について説明します。
+</p>
+
+
+%CHAPTER [1] アーカイブログの設定
+
+<p>
+アーカイブログ機能を有効にする方法を説明します。
+</p>
+
+%SECTION (1) アーカイブディレクトリ作成
+<p>
+アーカイブログを保存するディレクトリを新規に作成します。
+本書では'/home/postgres/archivelogs'とします。
+このディレクトリのパーミッションは、PostgreSQLサーバを起動するOSのユーザ(本書ではpostgres)が読み書きできるようにします。
+</p>
+
+<pre>
+postgres@orig> mkdir -p /home/postgres/archivelogs
+postgres@orig> chmod 700 /home/postgres/archivelogs
+</pre>
+
+<br>
+
+%SECTION (2) 設定パラメータ
+
+<p>
+postgresql.confのパラメータを設定します。必要なのは次の3つです。
+</p>
+
+<ol>
+<li>archive_mode</li>
+<p>
+archive_modeをon(有効)にする。
+</p>
+
+<li>archive_command</li>
+<p>
+archive_commandには、WALログをアーカイブログ保存用ディレクトリにコピーするコマンドを記述する。
+<br>
+ここでコマンドとは、文字どおりUNIXコマンドのことで、"%p"はWALログを置くディレクトリ、"%f"をアーカイブログ名に置換して実行する。
+</p>
+
+<li>wal_level</li>
+<p>
+replica以上のレベルに設定する。
+</p>
+
+</ol>
+
+<p>
+以下に例を示します。
+</p>
+
+
+[< postgresql.confの設定例>]
+<pre>
+wal_level = replica
+archive_mode = on
+archive_command = '/bin/cp %p /home/postgres/archivelogs/%f'
+</pre>
+
+<br>
+
+
+%CHAPTER [2] ベースバックアップの取得
+
+<p>
+ベースバックアップの取得手順を示します。ここでは手動で行う方法を示します。ツールpg_basebackupを使う方法は<a href="./admin-20.html">[<3-20>]</a>で説明します。
+</p>
+
+<p>
+PostgreSQLの管理者権限を持つデータベースユーザ(本書の場合postgres)で、
+任意のデータベース(ここではtemplate1)に接続し、関数pg_start_backup() (バージョン15からはpg_backup_start())を実行します。
+関数の引数にはラベルとして適当な文字列を設定します。
+
+<pre>
+template1=# -- バージョン14以前は pg_start_backup()
+template1=# SELECT pg_backup_start ('base backup: テスト用ベースバックアップ');
+ pg_backup_start
+-----------------
+0/D000028
+(1 row)
+</pre>
+
+<br>
+
+<p>
+次に、データベースクラスタ(本書では'/usr/local/pgsql/data'以下)をバックアップします。
+<br>
+バックアップ方法は任意です。
+ここではtarコマンドで圧縮ファイルとしてバックアップする方法を示します。
+</p>
+
+<pre>
+postgres@orig> cd /usr/local/pgsql/
+postgres@orig> tar -czf /home/postgres/base_backup.tgz data
+</pre>
+
+<br>
+
+<p>
+バックアップが終了したら、関数pg_stop_backup() (バージョン15以降はpg_backup_stop())を実行します。
+</p>
+
+<pre>
+template1=# -- バージョン14以前は pg_stop_backup();
+template1=# SELECT pg_backup_stop ();
+NOTICE:  all required WAL segments have been archived
+                              pg_backup_stop
+---------------------------------------------------------------------------
+ (0/D015ED8,"START WAL LOCATION: 0/D000028 (file 00000001000000000000000D)+
+ CHECKPOINT LOCATION: 0/D000060                                           +
+ BACKUP METHOD: streamed                                                  +
+ BACKUP FROM: primary                                                     +
+ START TIME: 2023-02-28 21:37:46 JST                                      +
+ LABEL: base backup: テスト用ベースバックアップ                           +
+ START TIMELINE: 1                                                        +
+ ","")
+(1 row)
+</pre>
+
+<br>
+
+%CHAPTER [3] リカバリ
+
+<p>
+データベースのリカバリについて説明します。
+はじめにリカバリ範囲を指定しないリカバリ方法を述べます。
+</p>
+
+%SECTION (1) ベースバックアップの展開
+
+<p>
+ベースバックアップを新しいサーバ上で展開します。
+</p>
+
+<pre>
+postgres@new> cd /usr/local/pgsql
+postgres@new> tar xvfz base_backup.tgz
+</pre>
+
+<br>
+
+<p>
+テーブルスペースがある場合は、元サーバと同じディレクトリ構成で展開します。
+</p>
+
+%SECTION (2) アーカイブログの配置
+
+<p>
+元サーバのアーカイブログを新しいサーバに配置します。
+</p>
+
+<p>
+はじめに(元サーバの)アーカイブログを配置するディレクトリを作成します。
+</p>
+
+<pre>
+postgres@new> mkdir -p /usr/local/pgsql/archivelogs_orig
+</pre>
+
+<br>
+
+<p>
+次にアーカイブログをコピーします。ここではscpを使います。
+</p>
+
+<pre>
+postgres@new> cd /usr/local/pgsql/archivelogs_orig
+postgres@new> scp postgres@orig:/home/postgres/archivelogs/* .
+</pre>
+
+<br>
+
+<p>
+可能ならば元サーバのpg_wal以下のWALログもコピーします。
+WALログに異常がなければ、クラッシュ直前のデータまでリカバリできます。
+</p>
+
+<pre>
+postgres@new> scp postgres@orig:/usr/local/pgsql/data/pg_wal/* .
+</pre>
+
+<br>
+
+%SECTION (3) パラメータの設定
+
+<p>
+バージョン12以降はpostgresql.confにリカバリ関連のパラメータを設定します。バージョン11以前はrecovery.confファイルを用意します。
+</p>
+
+<p>
+リカバリに関連する主要な設定項目を示します([<表3-23>])。
+</p>
+
+<table border=1>
+<caption>[<表3-23>] postgresql.confの設定項目(1)</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>restore_command</td>	<td>リカバリに使うアーカイブログをコピーするコマンドを記述する。下に示す具体例を参照</td>
+</tr><tr>
+<td>archive_cleanup_command</td>     <td>ツールpg_archivecleanupを実行するコマンドを記述する(このツールは手動でも実行できる)</td>
+</tr><tr>
+<td>recovery_end_command</td>	     <td>リカバリ後、一度だけ実行するコマンドを記述する。シェルスクリプトも可能。</td>
+</tr><tr>
+<td>recovery_target_timeline</td>    <td>リカバリするTimelineIDを指定。デフォルトは'latest'</td>
+</tr></table>
+
+<br>
+
+
+<p>
+最低限、restore_commandを設定すればリカバリできます。
+<br>
+本書の例では、ディレクトリ/usr/local/pgsql/archivelogs_orig以下にアーカイブログを配置するので、
+次のように記述します。
+</p>
+
+<pre>
+restore_command = '/bin/cp /usr/local/pgsql/archivelogs_orig/%f %p'
+</pre>
+
+<br>
+
+<p>
+ここで"%f"はアーカイブログ名に置換され、順次再実行されます。
+</p>
+
+
+%SECTION (4) recovery.signal
+
+<p>
+展開したデータクラスタに'recovery.signal'を配置します。
+</p>
+
+
+<pre>
+postgres@new> touch /usr/local/pgsql/data/recovery.signal
+</pre>
+
+<br>
+
+%SECTION (5) 起動
+
+<p>
+準備を終えたら、サーバを起動します。リカバリを終えると通常のアクセスが可能になります。
+</p>
+
+<pre>
+postgres@new> pg_ctl -D /usr/local/pgsql/data start
+</pre>
+
+<br>
+
+
+
+<blockquote><table BORDER="1"><tr><td>コラム3-5:リカバリ時間</td><td>
+<p>
+運用で問題になるのはリカバリ時間です。なぜならリカバリにかかる時間は可用性に直接影響するからです。
+</p>
+
+<p>
+ここで、筆者が2010年におこなったリカバリ時間の測定結果を示します。
+<br>
+測定環境は次のとおり：
+</p>
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th colspan=2 align=left>ハードウエア</th><th colspan=2 align=left>ソフトウエア　　　　　　　　　　　</th>
+</tr><tr>
+<td>CPU</td>	<td>Intel Core2 Quad Q6600@2.40GHz</td>	<td>PostgreSQLのバージョン</td>	<td>8.4</td>
+</tr><tr>
+
+
+<td>メモリ</td>	<td>8GB</td>				<td rowspan=2 valign=top>shared_buffers</td>	<td rowspan=2 valign=top>320MB</td>
+</tr><tr>
+<td>HDD</td>	<td>2HDD (データベースクラスタとアーカイブログを分離)</td>
+
+</tr></table>
+
+<br>
+
+<p>
+この環境で、1000万件のINSERTと1000万件のUPDATEを実行しました。アーカイブログは108ファイル生成されました。
+</p>
+
+<p>
+事前に取得したベースバックアップとアーカイブログ108ファイルからリカバリを行ったところ、
+<u>3分9秒でリカバリが完了</u>しました。
+<br>
+これは他のRDBMSと比較して驚異的に短い時間です。
+同条件でMySQL5.1.37 はリカバリに100分59秒かかりました(MySQLの機構上、REDOログの再実行に時間がかかるのは避けられない)。
+(Oracleはベンチマーク結果公開を禁止しているので記述できませんが）PostgreSQLは他のRDBMSと比較してリカバリが桁違いに早いことは事実です。
+</p>
+
+</td></tr></table></blockquote>
+
+
+<p>
+リカバリが成功して無事にサーバが起動したなら、
+コピーしてきた元サーバのアーカイブログは削除しても構いません。
+</p>
+
+<pre>
+postgres@new> rm -rf  /usr/local/pgsql/archivelogs_orig
+</pre>
+
+<br>
+
+%CHAPTER [4] PITR(Point In Time Recovery)
+
+<p>
+次に、任意の時点までリカバリするPITR(Point In Time Recovery)を説明します。
+</p>
+
+<p>
+手順は上記と同じで、違いはpostgresql.confに以下のパラメータを設定する点だけです([<表3-24>])。
+</p>
+
+<table border=1>
+<caption>[<表3-24>] postgresql.confの設定項目(2)</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+<tr bgcolor="#eeeeee">
+<th colspan=2 align=left>リカバリ範囲の指定(三者択一)</th>
+</tr><tr>
+<td>recovery_target_name</td>	<td>任意の'文字列'を指定して、関数pg_create_restore_point('文字列')を実行したLSNまでリカバリする。バージョン9.1から</td>
+</tr><tr>
+<td>recovery_target_time</td>	<td>'2011-03-11 14:46:00 JST'など、設定した時刻までリカバリする。</td>
+</tr><tr>
+<td>recovery_target_xid</td>	<td>LSNを直接指定し、そのLSNまでリカバリする。</td>
+<tr bgcolor="#eeeeee">
+<th colspan=2 align=left>リカバリ範囲の制御</th>
+</tr><tr>
+<td>recovery_target_inclusive</td>   <td>recovery_target_name,recovery_target_time,recovery_target_xidで指定した値を、リカバリに含めるか否か。 デフォルトはtrueで"含める"。</td>
+</tr></table>
+
+
+<br>
+
+<p>
+recovery_target_timeやrecovery_target_xidの指定は分かり易いので、説明を省略します。
+<br>
+以降、バージョン9.1でサポートされたrecovery_target_nameの使い方を含めて、PITRの実例を示します。
+</p>
+
+%SECTION (1) 元サーバでの操作
+
+<p>
+すでにベースバックアップを取得した元データベースに対し、次のSQLを実行します。
+<br>
+関数pg_create_restore_point()には任意の文字列を指定します。
+リカバリする際は、この文字列でリカバリの終了点を指定します。
+</p>
+
+<pre>
+sampledb=# INSERT INTO test VALUES(1);
+INSERT 0 1
+
+sampledb=# SELECT * FROM test;
+ id
+----
+  1
+(1 row)
+
+sampledb=# -- リカバリポイントを設定
+sampledb=# SELECT pg_create_restore_point('restorePoint 1');
+LOG:  restore point "restorePoint 1" created at 0/D0575CC
+ pg_create_restore_point
+-------------------------
+ 0/D0575CC
+(1 row)
+
+sampledb=# INSERT INTO test VALUES(2);
+INSERT 0 1
+
+sampledb=# SELECT * FROM test;
+ id
+----
+  1
+  2
+(2 rows)
+</pre>
+
+<br>
+
+%SECTION (2) 再構築するサーバでの作業
+
+<p>
+再構築するサーバ上でベースバックアップを展開します。
+次に元サーバのアーカイブログとpg_wal以下のWALログを/usr/local/pgsql/data/archivelogs_origにコピーします。
+</p>
+
+<pre>
+postgres@new> cd /usr/local/pgsql
+postgres@new> rm -rf data
+postgres@new> tar xvfz base_backup.tgz
+postgres@new> scp postgres@orig:/home/postgres/archivelogs/*    /usr/local/pgsql/archivelogs_orig
+postgres@new> scp postgres@orig:/usr/local/pgsql/data/pg_wal/* /usr/local/pgsql/archivelogs_orig
+</pre>
+
+<br>
+
+<p>
+postgresql.confに次のパラメータを設定します。
+</p>
+
+<pre>
+archive_mode = on
+archive_command = '/bin/cp %p /home/postgres/archivelogs/%f'
+
+# 関数pg_create_restore_point('restorePoint 1')を実行した時点までリカバリする。
+restore_target_name = 'restorePoint 1'
+</pre>
+
+<br>
+
+<p>
+この状態でサーバを起動すると、元サーバでpg_create_restore_point('restorePoint 1')を実行した時点までリカバリします。
+<br>
+起動したサーバでテーブルtestを確認すると次のような結果を得ます。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM test;
+ id
+----
+  1
+(1 row)
+</pre>
+
+<br>
+
+
+%CHAPTER [5] アーカイブログの削除
+
+%SECTION (1) ツール:pg_archivecleanup
+
+<p>
+バージョン9.0からcontribにpg_archivecleanupが追加されました。
+これはアーカイブログを削除するツールです。
+</p>
+
+<p>
+インストール方法は次のとおりです。
+</p>
+
+<pre>
+postgres> cd contrib/pg_archivecleanup
+postgres> make && make install
+</pre>
+
+<br>
+
+<p>
+使い方は簡単で、アーカイブログのディレクトリとログ名を指定すると、そのログ名よりも古いログをすべて削除します(バックアップヒストリーファイルは残す)。
+</p>
+
+<pre>
+postgres> ls /home/postgres/archivelogs/
+000000010000000000000011.00000020.backup  000000010000000000000016
+000000010000000000000012                  000000010000000000000017
+000000010000000000000013                  000000010000000000000018
+000000010000000000000014                  000000010000000000000018.00000020.backup
+000000010000000000000015                  000000010000000000000019
+000000010000000000000015.00000020.backup  00000001000000000000001A
+
+postgres> pg_archivecleanup /home/postgres/archivelogs \
+>                     000000010000000000000018.00000020.backup
+
+postgres> ls /home/postgres/archivelogs/
+000000010000000000000011.00000020.backup  000000010000000000000018.00000020.backup
+000000010000000000000015.00000020.backup  000000010000000000000019
+000000010000000000000018                  00000001000000000000001A
+</pre>
+
+<br>
+
+<p>
+このツールはバージョン依存性がないので、古いバージョンのアーカイブログに対しても使用できます。
+</p>
+
+%SECTION (2) archive_cleanup_command OR recovery_end_command
+
+<p>
+postgresql.confのarchive_cleanup_command か recovery_end_commandを使ってアーカイブログを削除することもできます。
+</p>
+

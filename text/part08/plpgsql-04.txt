@@ -1,0 +1,102 @@
+%FILE internal/plpgsql-04.html
+%LASTMOD
+%KEY pgsql-plpgsql04
+
+%TITLE <a href="https://www.postgresql.org/docs/current/plpgsql-implementation.html#PLPGSQL-VAR-SUBST" target="_blank" rel="noopener noreferrer">SELECT INTO文</a>
+
+<pre>
+[<書式>]
+
+SELECT INTO target [, target, ... ] expressions [, expressions, ...] FROM ...
+
+</pre>
+
+<br>
+
+<table>
+<caption>主なパラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>target</td>	<td>record変数、行変数、列変数</td>
+</tr><tr>
+<td>expressions</td>	<td>SELECT文で取り出すテーブルの列名、もしくは式</td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER 解説
+
+<p>
+SELECT INTO文を使い、任意のテーブルの行データをレコード変数、行変数、列変数に代入できます。INTO句を除き、PL/pgSQLのSELECT INTO文は通常のSELECT文と同一であり、SELECT文のすべての機能を使用できます。
+注意しなければならないのは、
+<u>PL/pgSQLのSELECT INTO文はテーブルのデータ1行のみ代入できる点です</u>。
+</p>
+
+<p>
+SELECT INTO文が複数の行を返す場合、最初の行が変数に代入され、残りは破棄されます。SELECT INTO文が検索行を返さない場合(0行を返す場合)、NULL値が変数に代入されます。
+</p>
+
+<p>
+複数行の検索結果を処理したい場合は、次のいずれかを方法を利用してください。
+</p>
+
+<ol>
+<li> FOR IN LOOP文、FOR IN EXECUTE LOOP文を使う(<a href="./plpgsql-10.html">[<8-10>]</a>,<a href="./plpgsql-11.html">[<8-11>]</a>,<a href="./plpgsql-12.html">[<8-12>]</a>,<a href="./plpgsql-13.html">[<8-13>]</a>参照)</li>
+<li> PL/pgSQLのカーソルを利用する(<a href="./plpgsql-14.html">[<8-16>]</a>参照)</li>
+</ol>
+
+<p>
+・変数 FOUND
+<br>
+boolean型変数のFOUNDを検査することで、SELECT INTO文が変数に値を代入できたか否か知ることができます。
+</p>
+
+
+%CHAPTER 実行例
+
+
+<p>
+・変数 FOUND の利用
+<br>
+関数select_into_sample()は、テーブルcustomerlistを検索し、結果が得られた場合にはその結果を、結果が得られない場合には"Data not found."という文字列を出力します。
+</p>
+
+<pre>
+CREATE FUNCTION select_into_sample (idx int) RETURNS text AS
+ $$
+  DECLARE
+    customer_name text;
+  BEGIN
+    SELECT INTO customer_name name FROM customerlist WHERE id = idx;
+    IF FOUND THEN
+      RETURN customer_name;
+    ELSE
+      RETURN 'Data not found.';
+    END IF;
+  END;
+ $$
+LANGUAGE PLpgSQL;
+</pre>
+<br>
+
+<p>
+実行例を示します。
+</p>
+
+<pre>
+sampledb=# SELECT select_into_sample (1);
+ select_into_sample
+--------------------
+ デューク東郷
+(1 row)
+
+sampledb=# SELECT select_into_sample (-1);
+ select_into_sample
+--------------------
+ Data not found.
+(1 row)
+</pre>
+<br>
+

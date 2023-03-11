@@ -1,0 +1,318 @@
+%FILE internal/sql-05.html
+%LASTMOD
+%KEY pgsql-sql05
+
+%TITLE <a href="https://www.postgresql.org/docs/current/sql-createtable.html" target="_blank" rel="noopener noreferrer">FOREIGN KEY句(外部キー)、REFERENCES句(参照) </a>
+
+<pre>
+[<書式>]
+FOREIGN KEY ( column_name [, ... ] )
+	REFERENCES reftable [ ( refcolumn [, ... ] ) ]
+	    [ MATCH FULL | MATCH PARTIAL | MATCH SIMPLE ]
+	    [ ON DELETE referential_action ] [ ON UPDATE referential_action ] }
+	    [ DEFERRABLE | NOT DEFERRABLE ] [ INITIALLY DEFERRED | INITIALLY IMMEDIATE ]
+
+REFERENCES reftable [ ( refcolumn ) ]
+	   [ MATCH FULL | MATCH PARTIAL | MATCH SIMPLE ]
+	   [ ON DELETE referential_action ] [ ON UPDATE referential_action ] }
+	   [ DEFERRABLE | NOT DEFERRABLE ] [ INITIALLY DEFERRED | INITIALLY IMMEDIATE ]
+
+</pre>
+<br>
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>column_name</td>	<td>外部制約を設定するカラム</td>
+</tr><tr>
+<td>reftable</td>	<td>被参照テーブル名</td>
+</tr><tr>
+<td>refcolumn</td>	<td>被参照テーブルのカラム</td>
+</tr><tr>
+<td>matchtype</td>	<td>参照型。下表</td>
+</tr></table>
+<br>
+
+<table>
+<caption>句</caption>
+<tr bgcolor="#cccccc">
+<th>句</th>	<th>説明</th>
+</tr><tr>
+<td>ON DELETE referantial_action</td>	<td>被参照テーブルの被参照レコードが削除された場合の動作actionを指定。actionは[<表6-03>]</td>
+</tr><tr>
+<td>ON UPDATE referential_action</td>	<td>被参照テーブルの被参照レコードが更新された場合の動作actionを指定。actionは[<表6-03>]</td>
+</tr></table>
+<br>
+
+<table>
+<caption>参照型(matchtype)</caption>
+<tr bgcolor="#cccccc">
+<th>参照型(matchtype)</th>	<th>説明</th>
+</tr><tr>
+<td>未設定</td>	<td>外部キーの一部がNULL となることを許可する</td>
+</tr><tr>
+<td>MATCH FULL</td>	<td>外部キーを設定したカラムがNULLとなることを許可しない(全ての外部キー列がNULLとなる場合を除く)</td>
+</tr><tr>
+<td>MATCH PARTIAL</td>	<td>未実装</td>
+</tr><tr>
+<td>MATCH SIMPLE</td>	<td>外部キーの一部がNULL となることを許可する。デフォルト</td>
+</tr></table>
+<br>
+
+<table>
+<caption>オプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>DEFERRABLE</td>	<td>制約を遅延検査する。</td>
+</tr><tr>
+<td>NOT DEFERRABLE</td>	<td>SQL文(command)の実行毎に即座に制約を検査する。デフォルト。</td>
+</tr><tr>
+<td>INITIALLY DEFERRED</td>	<td>DEFERRABLEの場合のみ有効で、トランザクションのCOMMIT時に検査する。</td>
+</tr><tr>
+<td>INITIALLY IMMEDIATE</td>	<td>DEFERRABLEの場合のみ有効で、ステートメント(statement)実行毎に検査する。デフォルト。<br><font color="#ff0000">正直、NOT DEFERRABLEとの違いがわからない。</font></td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+FOREIGN KEY制約とREFERENCES制約で外部キーを設定します。
+<br>
+被参照テーブルの被参照カラムは、UNIQUE制約もしくはPRIMARY KEY制約(主キー)が必要です。
+被参照カラムが省略された場合、被参照テーブルの主キーを被参照カラムとして使用します([<図6-01>]参照)。
+</p>
+
+
+<table border=1>
+<caption>[<図6-01>] 外部キー制約</caption>
+<tr><td>
+<left>
+<img src="./fig-6-01.png" width=800><br>
+</left>
+</td></tr></table>
+
+<br>
+
+<p>
+以下、実例を使って説明します。
+</p>
+
+%SECTION 参照制約および外部キー制約の設定
+<p>
+テーブルbook_listにおいて、
+カラムauthor_idの値は被参照テーブルauthor_listのカラムidに存在する値以外は保存できません。
+</p>
+
+<pre>
+sampledb=# \d author_list
+  Table "public.author_list"
+ Column |  Type   | Modifiers
+--------+---------+-----------
+ id     | integer | not null
+ name   | text    |
+Indexes:
+    "author_list_pkey" PRIMARY KEY, btree (id)
+
+sampledb=# CREATE TABLE book_list (title text,
+sampledb(#    author_id int REFERENCES author_list (id));
+CREATE TABLE
+</pre>
+<br>
+
+<p>
+実際にデータをINSERTします。
+被参照カラムidに'1'は存在するのでINSERTできますが、'10'は存在しないのでINSERTできません。
+</p>
+
+<pre>
+sampledb=# INSERT INTO book_list VALUES ('カラマーゾフの兄弟', 1);
+INSERT 0 1
+sampledb=# INSERT INTO book_list VALUES ('幼年期の終わり', 10); ← id=:10 は存在しない
+ERROR:  insert or update on table "book_list" violates foreign key constraint "book_list_author_id_fkey"
+DETAIL:  Key (author_id)=(10) is not present in table "author_list".
+</pre>
+<br>
+
+<p>
+前述の例を、FOREIGN KEY句を使って書き換えます。
+</p>
+
+<pre>
+sampledb=# CREATE TABLE book_list (title text,  author_id int,
+sampledb(#     CONSTRAINT book_list_fkey
+sampledb(#     FOREIGN KEY (author_id) REFERENCES author_list (id));
+CREATE TABLE
+</pre>
+<br>
+
+
+%SECTION 参照先の値を削除する
+
+<p>
+すでにテーブルbook_listで参照されている値(author_list.id = 1)を削除する場合を示します。
+<br>
+FOREIGN KEY句のデフォルト設定は'ON DELETE NO ACTION'なので、この操作はエラーになります。
+</p>
+
+<pre>
+sampledb=# DELETE FROM author_list WHERE id = 1;
+ERROR:  update or delete on table "author_list" violates foreign key constraint
+    "book_list_author_id_fkey" on table "book_list"
+</pre>
+<br>
+
+<p>
+次に、'ON DELETE CASCADE'を指定した場合の挙動を示します。
+</p>
+
+<pre>
+sampledb=# CREATE TABLE book_list_OnDeleteCascade (
+sampledb(#   title text,
+sampledb(#   author_id int REFERENCES author_list (id) ON DELETE CASCADE);
+CREATE TABLE
+
+sampledb=# INSERT INTO book_list_OnDeleteCascade VALUES ('貧しき人々', 1);
+INSERT 0 1
+sampledb=# SELECT * FROM book_list_OnDeleteCascade;
+   title    | author_id
+------------+-----------
+ 貧しき人々 |         1
+(1 row)
+</pre>
+<br>
+
+<p>
+ここで、被参照テーブルの値を削除します。
+</p>
+
+<pre>
+sampledb=# DELETE FROM author_list WHERE id = 1;
+DELETE 1
+</pre>
+<br>
+
+<p>
+すると、参照側のテーブルbook_list_OnDeleteCascadeのデータも削除できます。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM book_list_OnDeleteCascade;
+ title | author_id
+-------+-----------
+(0 rows)
+</pre>
+<br>
+
+
+%SECTION MATCH SIMPLE、MATCH FULL
+<p>
+外部キー制約における、'MATCH SIMPLE'と'MATCH FULL'の挙動の違いを示します。
+</p>
+
+<p>
+はじめに、参照元のテーブルbaseを示します。
+</p>
+
+<pre>
+sampledb=# CREATE TABLE base (data1 int, data2 text,
+sampledb(#        CONSTRAINT base_uq
+sampledb(#                   UNIQUE (data1, data2));
+NOTICE:  CREATE TABLE / UNIQUE will create implicit index "base_uq" for table "base"
+CREATE TABLE
+
+sampledb=# INSERT INTO base VALUES (1, 'one'), (2, 'two'), (3, 'three');
+INSERT 0 3
+
+sampledb=# SELECT * FROM base;
+ data1 | data2
+-------+-------
+     1 | one
+     2 | two
+     3 | three
+(3 rows)
+</pre>
+<br>
+
+<p>
+次に'MATCH SIMPLE'を設定した参照先テーブルmatch_simpleを定義し、データをINSERTします。
+INSERTするデータは一方のカラムにNULLがある場合(2,NULL)と、すべてのカラムがNULLの場合(NULL,NULL)が含まれます。
+</p>
+
+<pre>
+sampledb=# CREATE TABLE match_simple (d1 int, d2 text,
+sampledb(#        CONSTRAINT simple_fkey
+sampledb(#        FOREIGN KEY (d1, d2) REFERENCES base (data1, data2) MATCH SIMPLE);
+CREATE TABLE
+
+sampledb=# INSERT INTO match_simple VALUES (1, 'one'), (2, NULL), (NULL, NULL);
+INSERT 0 3
+sampledb=# SELECT * FROM match_simple;
+ d1 | d2
+----+-----
+  1 | one
+  2 |
+    |
+(3 rows)
+</pre>
+<br>
+
+<p>
+上に示したように、'MATCH SIMPLE'を設定した場合、部分的にNULLが含まれていてもデータをINSERTできます。
+</p>
+
+<p>
+次に'MATCH FULL'を設定した参照先テーブルmatch_fullを定義し、データをINSERTします。
+</p>
+
+
+<pre>
+sampledb=# CREATE TABLE match_full (d1 int, d2 text,
+sampledb(#        CONSTRAINT full_fkey
+sampledb(#        FOREIGN KEY (d1, d2) REFERENCES base (data1, data2) MATCH FULL);
+CREATE TABLE
+
+sampledb=# INSERT INTO match_full VALUES (1,'one');
+INSERT 0 1
+
+sampledb=# INSERT INTO match_full VALUES (2, NULL);
+ERROR:  insert or update on table "match_full" violates foreign key constraint "full_fkey"
+DETAIL:  MATCH FULL does not allow mixing of null and nonnull key values.
+
+sampledb=# INSERT INTO match_full VALUES (NULL, NULL);
+INSERT 0 1
+</pre>
+<br>
+
+<p>
+上に示したように、'MATCH FULL'を設定した場合、部分的にNULLが含まれているとエラーになります。
+</p>
+
+
+%SECTION ON DELETE句、ON UPDATE句
+
+<p>
+ON DELETE句には被参照テーブルの被参照レコードが削除された場合の動作を指定します。
+ON UPDATE句には被参照レコードが更新された場合の動作を指定します。
+[<表6-03>]に動作の一覧を示します。
+</p>
+
+<table border=1>
+<caption>[<表6-03>] action </caption>
+<tr bgcolor="#cccccc">
+<th>動作(action)	</th>	<th>説明</th>
+</tr><tr>
+<td>NO ACTION, RESTRICT</td>	<td>削除/更新を行わず、"外部キー制約違反"のエラーメッセージを表示。デフォルト</td>
+</tr><tr>
+<td>CASCADE</td>	<td>削除の場合は、その値を参照しているレコードも削除。更新の場合は、その値を参照しているレコードの値も更新</td>
+</tr><tr>
+<td>SET NULL</td>	<td>参照するカラムの値をNULLに設定</td>
+</tr><tr>
+<td>SET DEFAULT	</td>	<td>参照するカラムの値をデフォルト値に設定</td>
+</tr></table>
+
+<br>
+

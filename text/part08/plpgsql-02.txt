@@ -1,0 +1,162 @@
+%FILE internal/plpgsql-02.html
+%LASTMOD
+%KEY pgsql-plpgsql02
+
+%TITLE <a href="https://www.postgresql.org/docs/current/plpgsql-structure.html" target="_blank" rel="noopener noreferrer">PL/pgSQLによるストアドプロシージャの定義</a>
+
+
+<pre>
+[<書式>]
+
+CREATE [ OR REPLACE ] FUNCTION func_name ( [ [ argmode ] argname argtype [, ...] ] ) [ RETURNS rettype ]
+    AS $$
+      [ DECLARE
+          declarations ]
+	BEGIN
+	    statements
+
+      [ EXCEPTION
+           WHEN condition [ OR condition ... ] THEN
+	    handler_statements
+	 [ WHEN condition [ OR condition ... ] THEN
+	    handler_statements
+         ... ] ]
+
+	END;
+    $$ LANGUAGE PLpgSQL
+  { IMMUTABLE | STABLE | VOLATILE
+    | CALLED ON NULL INPUT | RETURNS NULL ON NULL INPUT | STRICT
+    | [ EXTERNAL ] SECURITY INVOKER | [ EXTERNAL ] SECURITY DEFINER
+  }
+
+</pre>
+
+<br>
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>func_name</td>	<td>定義する関数名。引数が異なれば同名関数を作成可能(オーバーロード可能) </td>
+</tr><tr>
+<td>argmode</td>	<td>引数のモード。IN,OUT,INOUTのいずれか。省略時はIN</td>
+</tr><tr>
+<td>argname</td>	<td>引数名</td>
+</tr><tr>
+<td>argtype</td>	<td>引数のデータ型</td>
+</tr><tr>
+<td>rettype</td>	<td>返り値のデータ型</td>
+</tr><tr>
+<td>definition</td>	<td>関数を定義する文字列</td>
+</tr><tr>
+<td></td>	<td></td>
+</tr><tr>
+<td></td>	<td></td>
+</tr></table>
+
+<br>
+
+<table>
+<caption>オプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>OR REPLACE</td>	<td>関数が定義済みであっても、新たに再定義する</td>
+</tr><tr>
+<td>VOLATILE</td>	<td>オプティマイザへの指示。random()、currval()、timeofday()のように、テーブルスキャン中に毎回、関数の値を評価する。デフォルト</td>
+</tr><tr>
+<td>STABLE</td>	<td>テーブルスキャン中は同じ値を返す</td>
+</tr><tr>
+<td>IMMUTABLE</td>	<td>(同じ引数値を与えた場合)新たに関数を評価することなく、キャッシュされた値を返す</td>
+</tr><tr>
+<td>CALLED ON NULL INPUT</td>	<td>引数にNULLがある場合でも、通常通り関数を実行する。デフォルト</td>
+</tr><tr>
+<td>STRICT</td>	<td>引数にNULLがある場合、NULLを返す</td>
+</tr><tr>
+<td>RETURNS NULL ON NULL INPUT</td>	<td>STRICTと同じ</td>
+</tr><tr>
+<td>[EXTERNAL] SECURITY INVOKER</td>	<td>関数を呼び出したデータベースユーザの権限で関数を実行</td>
+</tr><tr>
+<td>[EXTERNAL] SECURITY DEFINER</td>	<td>関数を作成したデータベースユーザの権限で関数を実行</td>
+</tr></table>
+
+<br>
+
+<table>
+<caption>PL/pgSQL言語</caption>
+<tr bgcolor="#cccccc">
+<th>PL/pgSQL言語</th>	<th>説明</th>
+</tr><tr>
+<td>label</td>	<td>関数名</td>
+</tr><tr>
+<td>declaretions</td>	<td>変数の宣言部分</td>
+</tr><tr>
+<td>statements</td>	<td>関数本体</td>
+</tr><tr>
+<td>condition</td>	<td>PostgreSQLの状態。詳細は[<8-21>]参照</td>
+</tr><tr>
+<td>handler_statements</td>	<td>状態(condition)に応じて実行するSQL文など</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+PL/pgSQLによるストアドプロシージャ定義の書式です。
+定義した関数の中身を表示するには、メタコマンド\df+に関数名を指定して実行してください。
+</p>
+
+<p>
+CREATE FUNCTION文([<6-51>])との相違点と共通点を以下にまとめます。
+</p>
+
+[< CREATE FUNCTION文との相違点と共通点>]
+<ul>
+<li>相違点</li>
+ <ol>
+  <li>引数の宣言方法</li>
+SQL文による関数定義では、引数の部分にデータ型しか指定できなかったが、バージョン8.0以降のPL/pgSQLでは引数名とそのデータ型の両方を指定できる。さらにバージョン8.1では"引数のモード"がサポートされた。
+
+ <li>関数の定義方法</li>
+SQL文の列挙による関数定義と、"PL/pgSQL"という言語による関数定義。詳細は[<表.8-01>]を参照。
+ </ol>
+
+<li>共通点</li>
+ <ol>
+ <li>記法</li>
+コメント、単一引用符付けやドル引用符付けなど、定義の記述方法は共通。詳細は[<6-01>]を参照。
+
+ <li>返り値型</li>
+関数の返り値型についても共通。
+ </ol>
+</ul>
+
+<p>
+次に、関数定義の方法について、詳細に述べます([<表.8-01>]参照)。
+</li>
+
+<table border=1>
+<caption>[<表.8-01>]関数定義方法の相違点</caption>
+<tr bgcolor="#cccccc">
+<th>相違</th>	<th>説明</th>		<th>参照</th>
+</tr><tr>
+<td>ブロック構造</td>	<td>PL/pgSQLによる関数定義は、変数宣言部分と関数本体、および例外処理の3つの部分から成る。</td>	<td> </td>
+</tr><tr>
+<td>内部変数</td>	<td>内部変数を使うことができる。</td>	<td>[<8-04>] </td>
+</tr><tr>
+<td>関数定義の終了</td>	<td>関数の処理は、必ずRETURN文で終了しなければならない。関数の返り値の型がvoidであっても、RETURN文を記述しなければならない。  </td>	<td> </td>
+</tr><tr>
+<td>行の取得</td>	<td>PL/pgSQL内部ではSELECT文が使えない。SELECT INTO文を使う。ここでSELECT INTO文は、1行しか結果を返せないという制約がある。 </td>	<td>[<8-06>] </td>
+</tr><tr>
+<td>制御構造</td>	<td>IF文による条件分岐と、WHILE文やFOR文などのループ処理が可能。</td>	<td>[<8-09>]〜[<8-15>] </td>
+</tr><tr>
+<td>動的なSQLの実行</td>	<td>EXECUTE文で動的SQLの実行可能。</td>	<td>[<8-08>] </td>
+</tr><tr>
+<td>カーソル</td>	<td>カーソルが利用可能。</td>	<td>[<8-16>]〜[<8-20>] </td>
+</tr><tr>
+<td>例外処理</td>	<td>バージョン8.0から、エラー発生時の処理(例外処理)を記述可能。	</td>	<td>[<8-21>] </td>
+</table>
+
+

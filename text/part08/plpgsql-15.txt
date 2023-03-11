@@ -1,0 +1,95 @@
+%FILE internal/plpgsql-15.html
+%LASTMOD
+%KEY pgsql-plpgsql15
+
+
+
+%TITLE <a href="https://www.postgresql.org/docs/current/plpgsql-cursors.html#PLPGSQL-CURSOR-DECLARATIONS" target="_blank" rel="noopener noreferrer">カーソル変数の宣言</a>
+
+
+<pre>
+[<書式>]
+
+● unboundカーソル変数の宣言
+  cursor_name refcursor
+
+● boundカーソル変数の宣言
+  cursor_name [ [NO] SCROLL ] CURSOR [ ( arguments ) ] {FOR | IS} query_string
+
+</pre>
+
+<br>
+
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>cursor_name</td>	<td>カーソル名</td>
+</tr><tr>
+<td>arguments</td>	<td>カーソル変数に与える引数</td>
+</tr><tr>
+<td>query-string</td>	<td>実行するSQL文を記述した文字列</td>
+</tr></table>
+
+<br>
+
+
+<table>
+<caption>オプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>SCROLL</td>	<td>逆方向に取り出す</td>
+</tr><tr>
+<td>NO SCROLL</td>	<td>順方向に取り出す。デフォルト</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+PL/pgSQLのカーソル変数には、unbound型とbound型の2種類があります。
+unbound型のカーソル変数は、宣言時に変数のみ宣言し、実際のSQL文の指定はカーソルのオープン時に行います。
+他方、bound型のカーソル変数は、宣言時にSQL文の指定も同時に行います。
+</p>
+
+<p>
+・unboundカーソル変数
+<br>
+unboundカーソル変数の宣言は、refcursor型の変数を定義することで行います。
+</p>
+
+<p>
+・boundカーソル変数
+<br>
+boundカーソル変数の宣言は、変数にCURSOR FOR句とSELECT文を設定することで行います。
+また、boundカーソル変数はCURSOR句に続けて引数を設定できます。
+</p>
+
+
+%CHAPTER 宣言例
+
+<p>
+・unboundカーソル変数の定義
+</p>
+
+<pre>
+(1) unbound_cursor refcursor;
+</pre>
+<br>
+
+<p>
+・boundカーソル変数の定義
+<br>
+引数(下例(3)の場合、lowerとupper)は、SELECT文中の変数として使われます。
+</p>
+
+<pre>
+(2) bound_cursor1 CURSOR FOR SELECT * FROM customerlist;
+(3) bound_cursor2 CURSOR (lower integer, upper integer)
+       FOR SELECT * FROM customerlist WHERE id BETWEEN lower AND upper;
+</pre>
+<br>

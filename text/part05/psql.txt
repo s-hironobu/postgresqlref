@@ -1,0 +1,6 @@
+%FILE internal/psql.html
+%LASTMOD
+%KEY pgsql-psql
+
+%TITLE 対話型インタフェースpsql
+

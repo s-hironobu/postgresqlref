@@ -1,0 +1,47 @@
+%FILE internal/func-15.html
+%LASTMOD
+%KEY pgsql-func15
+
+%TITLE <a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADMIN-SET" target="_blank" rel="noopener noreferrer">構成設定関数</a>
+
+
+<table border=1>
+<caption>構成設定関数</caption>
+<tr bgcolor="#cccccc">
+<th>関数</th>				<th>返り値型</th>	<th>説明</th>
+
+</tr><tr>
+<td>current_setting ( setting_name text [, missing_ok boolean ] ) </td>	<td>text</td>	<td>設定パラメータの値を表示する。SHOWと同じ</td>
+
+</tr><tr>
+<td>set_config ( setting_name text, new_value text, is_local boolean ) </td>	<td>text</td>	<td>設定パラメータの値を設定する。SETと同じ</td>
+
+</tr></table>
+
+<br>
+
+
+%CHAPTER 実行例
+
+
+<pre>
+postgres=# select current_setting('enable_hashjoin');
+ current_setting
+-----------------
+ on
+(1 row)
+
+postgres=# select set_config('enable_hashjoin', 'off', true);
+ set_config
+------------
+ off
+(1 row)
+
+postgres=# select current_setting('enable_hashjoin');
+ current_setting
+-----------------
+ on
+(1 row)
+
+</pre>
+<br>

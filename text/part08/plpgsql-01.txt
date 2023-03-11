@@ -1,0 +1,25 @@
+%FILE internal/plpgsql-01.html
+%LASTMOD
+%KEY pgsql-plpgsql01
+
+%TITLE <a href="https://www.postgresql.org/docs/current/plpgsql-overview.html" target="_blank" rel="noopener noreferrer">PL/pgSQLによるストアドプロシージャ</a>
+
+
+<p>
+PostgreSQLでは、PL/pgSQLという言語でストアドプロシージャを定義します。
+PL/pgSQLの特徴は次のとおりです。
+</p>
+
+<ul>
+<li>条件判断(IF-ELSE)やループなどの制御文</li>
+<li>動的なSQL文の実行(EXECUTE文)</li>
+<li>カーソル</li>
+<li>例外処理</li>
+</ul>
+
+<p>
+PLpgSQLはトランザクションを扱うことができません。
+よって、
+ストアドプロシージャで扱う関数内部でBEGIN文や、COMMIT文、ROLLBACK文は使えません。
+</p>
+

@@ -1,0 +1,239 @@
+%FILE internal/admin-17.html
+%LASTMOD
+%KEY pgsql-admin17
+
+%TITLE ログと統計情報の分析
+
+
+%CHAPTER スロークエリの捕捉
+
+<p>
+ログの収集はチューニングだけでなく、システムの状態把握のための第一歩です。
+</p>
+
+
+<p>
+処理に時間のかかるSQL文をスロークエリと呼びます。
+設定パラメータlog_min_duration_statementでスロークエリを捕捉できます。
+<br>
+以下に、log_min_duration_statement = 80とした場合のログの出力例を示します。
+
+
+<pre>
+LOG:  duration: 161.371 ms  statement: vacuum pgbench_branches
+LOG:  duration: 121.393 ms  statement: UPDATE pgbench_branches
+      SET bbalance = bbalance + 97 WHERE bid = 1;
+LOG:  duration: 118.580 ms  statement: UPDATE pgbench_tellers
+      SET tbalance = tbalance + 2065 WHERE tid = 2;
+LOG:  duration: 193.489 ms  statement: UPDATE pgbench_branches
+      SET bbalance = bbalance + -2631 WHERE bid = 1;
+</pre>
+
+<br>
+
+<p>
+設定パラメータlog_min_duration_statementに0を設定すれば、実行したすべてのSQL文をログに書き出します。
+小さな値を設定するほど捕捉するSQL文は増えますが、ログファイルへの書き込みコストが膨大になり、DBMSの性能が劣化するという本末転倒な事態に陥ります。
+慎重に設定値を選んでください。
+</p>
+
+
+<p>
+スロークエリを捕捉したらEXPLAINで問い合わせプランを表示し、想定したインデックスが効いているか、どの処理に時間を費しているか、SQL文が複雑過ぎないかなど調べて対処してください。
+</p>
+
+<p>
+EXPLAIN文で特に問題が見つからない場合、サーバの高負荷やアクセス競合による並列処理の効率低下などが影響している可能性もあります。
+そのような場合は稼働統計情報の分析に進みます。
+</p>
+
+%CHAPTER 稼働統計情報の分析
+
+<p>
+[<3-15>]で紹介した稼働統計情報でシステムの様々な情報を得られます。
+以下に有用な使いかたをいくつか紹介します。
+</p>
+
+%SECTION データベース毎の稼働状況
+
+<p>
+稼働統計情報pg_stat_databaseのxact_commitとxact_rollbackでデータベース毎の活動状況が、blks_readとblks_hitでブロックの読み込み数とキャッシュヒット数がわかります。
+blks_readとblks_hitからキャッシュのヒット率も計算できます。
+</p>
+
+<pre>
+sampledb=# SELECT datname,xact_commit,xact_rollback,blks_read, blks_hit,
+sampledb-#        CASE WHEN blks_read = 0 THEN 0.00
+sampledb-#             ELSE round(100 * blks_hit/(blks_hit + blks_read), 2)
+sampledb-#        END AS hit_ratio
+sampledb-# FROM pg_stat_database;
+  datname  | xact_commit | xact_rollback | blks_read | blks_hit | hit_ratio
+-----------+-------------+---------------+-----------+----------+-----------
+ template1 |           0 |             0 |         0 |        0 |      0.00
+ template0 |           0 |             0 |         0 |        0 |      0.00
+ postgres  |         184 |             0 |       442 |     4863 |     91.00
+ sampledb  |     1921632 |             6 |   1020775 |  8901197 |     89.00
+(4 rows)
+</pre>
+
+<br>
+
+%SECTION テーブル毎の稼働状況
+
+<p>
+稼働統計情報pg_stat_all_tablesは多くの有用な情報を提供します。
+</p>
+
+%SUBSECTION キャッシュヒット
+
+<p>
+heap_blks_readとheap_blks_hitでテーブル毎のキャッシュのヒット率hit_ratioを計算できます。
+<br>
+データベースを起動した直後はすべてのブロックを読み込まなければならないのでhit_ratioは低いはずです。
+しかし、十分な時間稼働した後もhit_ratioが低いままなら、
+共有バッファshared_buffersの調整や、テーブルへのアクセスパターンを分析して対応を図ってください。
+</p>
+
+<pre>
+sampledb=# SELECT relname, heap_blks_read, heap_blks_hit,
+sampledb-#  CASE WHEN heap_blks_read = 0 THEN 0.00
+sampledb-#   ELSE round(100 * heap_blks_read/(heap_blks_read+heap_blks_hit),2)
+sampledb-#  END AS hit_ratio
+sampledb-#   FROM pg_statio_all_tables WHERE relname LIKE 'pgbench%';
+     relname      | heap_blks_read | heap_blks_hit | hit_ratio
+------------------+----------------+---------------+-----------
+ pgbench_accounts |        1011839 |       1315008 |     43.00
+ pgbench_history  |           5299 |        158040 |      3.00
+ pgbench_branches |            209 |        542398 |      0.00
+ pgbench_tellers  |            201 |        387035 |      0.00
+(4 rows)
+</pre>
+
+<br>
+
+%SUBSECTION インデックス利用率
+
+<p>
+seq_scanとidx_scanでテーブル毎のインデックスの利用率idx_scan_ratioを計算できます。
+<br>
+利用率が低いテーブルにアクセスしているSQL文をEXPLAINで分析し、適切なインデックスが張られているか確認してください。
+</p>
+
+<pre>
+sampledb=# SELECT relname, seq_scan, idx_scan,
+sampledb-#  CASE WHEN (seq_scan + idx_scan) = 0 THEN 0.00
+sampledb-#   ELSE round(100 * idx_scan/(seq_scan+idx_scan), 2)
+sampledb-#  END AS idx_scan_ratio
+sampledb-#   FROM pg_stat_all_tables WHERE relname LIKE 'pgbench%';
+     relname      | seq_scan | idx_scan | idx_scan_ratio
+------------------+----------+----------+----------------
+ pgbench_branches |    66273 |   106659 |          61.00
+ pgbench_accounts |        1 |  2076832 |          99.00
+ pgbench_tellers  |    50955 |   106971 |          67.00
+ pgbench_history  |        0 |          |
+(4 rows)
+</pre>
+
+<br>
+
+%SUBSECTION HOTの効果確認
+
+<p>
+バージョン8.3からサポートされたn_tup_hot_updとn_tup_updから、UPDATE文でHOTが利用されている割合hot_upd_ratioが計算できます。
+<br>
+もしも狙ったほどの効果がない場合、SQL文の見直しやロングトランザクションの影響などを調べてください。
+</p>
+
+
+<pre>
+sampledb=#  -- http://lets.postgresql.jp/documents/technical/statistics/2
+sampledb=#  -- 笠原氏のクエリを改変
+sampledb=# SELECT relname, n_tup_upd, n_tup_hot_upd,
+sampledb-#        round(100 * n_tup_hot_upd/n_tup_upd, 2) AS hot_upd_ratio
+sampledb-#      FROM pg_stat_user_tables WHERE n_tup_upd > 0;
+     relname      | n_tup_upd | n_tup_hot_upd | hot_upd_ratio
+------------------+-----------+---------------+---------------
+ pgbench_branches |    413997 |        413780 |         99.00
+ pgbench_accounts |    413997 |        398581 |         96.00
+ pgbench_tellers  |    413997 |        412393 |         99.00
+(3 rows)
+</pre>
+
+<br>
+
+%SECTION ロングトランザクションの確認
+
+<p>
+ロングトランザクションとは、長時間コミットもアボートもされずに残っているトランザクションのことです。
+ロングトランザクションはVACUUMやHOTの機能に悪影響を与えます。
+</p>
+
+<p>
+以下のSQL文でトランザクション毎に開始時刻からの経過時間が表示できます。
+コミット忘れしたまま放置された端末やアプリケーションプログラムなど見つける際に有用です。
+</p>
+
+<pre>
+sampledb=# -- ver9.1までは"pid"を"procpid"へ, "query"を"current_query"へ
+sampledb=# SELECT pid, waiting, (current_timestamp - xact_start)::interval(3)
+ AS duration, query FROM pg_stat_activity
+    WHERE pid <> pg_backend_pid();
+   pid  | waiting |   duration   |                          query
+--------+---------+--------------+---------------------------------------------------------
+  21968 | f       | 00:27:21.195 | <IDLE> in transaction
+  21972 | t       | 00:26:50.01  | UPDATE pgbench_accounts SET abalance = 1 WHERE aid = 1;
+(2 rows)
+</pre>
+
+<br>
+
+%SECTION ロック待ち処理の確認
+
+<p>
+[<3-16>]で説明したように、設定パラメータlog_lock_waitsを有効にすると、
+ログにdeadlock_timeout以上の待ちが発生したSQL文を表示できます。
+</p>
+
+<p>
+上記のロングトランザクションとして検出されたUPDATE文のログを示します。
+deadlock_timeout以上(ここでは1秒)の待ちが発生した段階で、ログに書き込まれたことがわかります。
+</p>
+
+<pre>
+LOG:  duration: 331.250 ms  statement: UPDATE pgbench_accounts SET abalance = 1 WHERE aid = 1;
+LOG:  process 21972 still waiting for ShareLock on transaction 1245305 after 1004.557 ms
+STATEMENT:  UPDATE pgbench_accounts SET abalance = 1 WHERE aid = 1;
+</pre>
+
+<br>
+
+<p>
+しかし、膨大なログファイルを分析するのも手間がかかるので、簡単に現時点でのロック状態(のスナップショット)を表示するSELECT文を紹介します。
+</p>
+
+<pre>
+sampledb=#  -- http://lets.postgresql.jp/documents/technical/statistics/2
+sampledb=#  -- 笠原氏のクエリを改変
+sampledb=#  -- ver9.1までは"pid"を"procpid"へ, "query"を"current_query"へ
+sampledb=# SELECT l.locktype, c.relname, l.pid, l.mode,
+　　　　　　substring(a.query, 1, 6) AS query,
+       　　　　　　　(current_timestamp - xact_start)::interval(3) AS duration
+　　　　    FROM pg_locks AS l
+       　　　　LEFT OUTER JOIN pg_stat_activity AS a ON l.pid = a.pid
+         　　　LEFT OUTER JOIN pg_class AS c ON l.relation = c.oid
+　　　　　　WHERE  NOT l.granted ORDER BY l.pid;
+   locktype    |     relname      |  pid  |     mode      | query  |   duration
+---------------+------------------+-------+---------------+--------+--------------
+ transactionid |                  | 21972 | ShareLock     | UPDATE | 00:26:54.681
+ transactionid |                  | 22073 | ShareLock     | UPDATE | 00:00:00.062
+ transactionid |                  | 22079 | ShareLock     | UPDATE | 00:00:00.061
+ tuple         | pgbench_branches | 22080 | ExclusiveLock | UPDATE | 00:00:00.057
+(4 rows)
+</pre>
+
+<br>
+
+<p>
+合計４つのロックがかかっていますが、特に1行目に着目すると、UPDATE文は26分54秒以上ShareLockでブロックされた状態であることがわかります。
+</p>
+

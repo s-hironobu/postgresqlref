@@ -1,0 +1,10 @@
+%FILE internal/internal-05.html
+%LASTMOD
+%KEY pgsql-internal05
+
+%TITLE バッファマネージャとバックグランドライタ
+
+
+<p>
+The Internals of PostgreSQL <a href="https://www.interdb.jp/pg/pgsql08.html" target="_blank" rel="noopener noreferrer">Chapter 8: Buffer Manager</a>
+</p>

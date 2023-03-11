@@ -1,0 +1,75 @@
+%FILE internal/sql-34.html
+%LASTMOD
+%KEY pgsql-sql34
+
+%TITLE テーブルの全データ削除 <a href="https://www.postgresql.org/docs/current/sql-truncate.html" target="_blank" rel="noopener noreferrer">TRUNCATE</a>
+
+<pre>
+[<書式>]
+TRUNCATE [ TABLE ] table_name [, ... ]
+			      [ RESTART IDENTITY | CONTINUE IDENTITY ]
+			      [ CASCADE | RESTRICT ]
+</pre>
+<br>
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>table_name</td>	<td>全データを削除し、空にするテーブル名</td>
+</tr></table>
+
+<br>
+
+
+<table>
+<caption>オプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>RESTART IDENTITY</td>	<td>空になるテーブルのカラムに所有されるシーケンス値をリセットする。</td>
+</tr><tr>
+<td>CONTINUE IDENTITY</td>	<td>シーケンスの値を変更しない。デフォルト</td>
+</tr><tr>
+<td>CASCADE</td>	<td>外部キーで参照している外部テーブルも一緒に空にする。</td>
+</tr><tr>
+<td>RESTRICT</td>	<td>外部キーで参照しているテーブルが空の場合のみ実行する。参照しているテーブルにデータがあるとTRUNCATEはエラーを返す。デフォルト</td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER 解説
+<p>
+TRUNCATE文でテーブルの全データを空にします。
+トランザクション内でも使用でき、ROLLBACKすれば削除は無効になります。
+</p>
+
+<p>
+DELETE文でも全データを削除できますが、テーブル内をスキャンしながら削除するので処理コストが高いです。
+<br>
+一方、TRUNCATE文はデータ削除に特化したコマンドで、データ領域そのものを削除するので非常に高速、且つ効率的にテーブルを空にできます。
+</p>
+
+%CHAPTER 実行例
+
+<pre>
+sampledb=# SELECT * FROM itemlist;
+ id |   name   | price | makercode
+----+----------+-------+-----------
+  2 | notebook |   200 |        20
+  3 | eraser   |    60 |        10
+  1 | pen      |   120 |        10
+(3 rows)
+
+sampledb=# TRUNCATE itemlist;
+TRUNCATE TABLE
+
+sampledb=# SELECT * FROM itemlist;
+ id | name | companycode
+----+------+-------------
+(0 rows)
+</pre>
+<br>
+

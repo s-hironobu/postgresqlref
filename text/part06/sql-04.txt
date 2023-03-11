@@ -1,0 +1,1007 @@
+%FILE internal/sql-04.html
+%LASTMOD
+%KEY pgsql-sql04
+
+%TITLE テーブルの作成 <a href="https://www.postgresql.org/docs/current/sql-createtable.html" target="_blank" rel="noopener noreferrer">CREATE TABLE</a> / <a href="https://www.postgresql.org/docs/current/sql-createtableas.html" target="_blank" rel="noopener noreferrer">CREATE TABLE AS</a>
+
+<pre>
+[<書式>]
+
+● CREATE TABLE
+CREATE [ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } | UNLOGGED ] TABLE [ IF NOT EXISTS ] table_name ( [
+  { column_name data_type [ COMPRESSION compression_method ] [ COLLATE collation ] [ column_constraint [ ... ] ]
+    | table_constraint
+    | LIKE source_table [ like_option ... ] }
+    [, ... ]
+] )
+[ INHERITS ( parent_table [, ... ] ) ]
+[ PARTITION BY { RANGE | LIST | HASH } ( { column_name | ( expression ) } [ COLLATE collation ] [ opclass ] [, ... ] ) ]
+[ USING method ]
+[ WITH ( storage_parameter [= value] [, ... ] ) | WITHOUT OIDS ]
+[ ON COMMIT { PRESERVE ROWS | DELETE ROWS | DROP } ]
+[ TABLESPACE tablespace_name ]
+
+
+
+CREATE [ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } | UNLOGGED ] TABLE [ IF NOT EXISTS ] table_name
+    OF type_name [ (
+  { column_name [ WITH OPTIONS ] [ column_constraint [ ... ] ]
+    | table_constraint }
+    [, ... ]
+) ]
+[ PARTITION BY { RANGE | LIST | HASH } ( { column_name | ( expression ) } [ COLLATE collation ] [ opclass ] [, ... ] ) ]
+[ USING method ]
+[ WITH ( storage_parameter [= value] [, ... ] ) | WITHOUT OIDS ]
+[ ON COMMIT { PRESERVE ROWS | DELETE ROWS | DROP } ]
+[ TABLESPACE tablespace_name ]
+
+
+CREATE [ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } | UNLOGGED ] TABLE [ IF NOT EXISTS ] table_name
+    PARTITION OF parent_table [ (
+  { column_name [ WITH OPTIONS ] [ column_constraint [ ... ] ]
+    | table_constraint }
+    [, ... ]
+) ] { FOR VALUES partition_bound_spec | DEFAULT }
+[ PARTITION BY { RANGE | LIST | HASH } ( { column_name | ( expression ) } [ COLLATE collation ] [ opclass ] [, ... ] ) ]
+[ USING method ]
+[ WITH ( storage_parameter [= value] [, ... ] ) | WITHOUT OIDS ]
+[ ON COMMIT { PRESERVE ROWS | DELETE ROWS | DROP } ]
+[ TABLESPACE tablespace_name ]
+
+
+● CREATE TABLE AS
+CREATE [ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } | UNLOGGED ] TABLE [ IF NOT EXISTS ] table_name
+    [ (column_name [, ...] ) ]
+    [ USING method ]
+    [ WITH ( storage_parameter [= value] [, ... ] ) | WITHOUT OIDS ]
+    [ ON COMMIT { PRESERVE ROWS | DELETE ROWS | DROP } ]
+    [ TABLESPACE tablespace_name ]
+    AS query
+    [ WITH [ NO ] DATA ]
+
+
+・column_constraint is:
+
+[ CONSTRAINT constraint_name ]
+{ NOT NULL |
+  NULL |
+  CHECK ( expression ) [ NO INHERIT ] |
+  DEFAULT default_expr |
+  GENERATED ALWAYS AS ( generation_expr ) STORED |
+  GENERATED { ALWAYS | BY DEFAULT } AS IDENTITY [ ( sequence_options ) ] |
+  UNIQUE [ NULLS [ NOT ] DISTINCT ] index_parameters |
+  PRIMARY KEY index_parameters |
+  REFERENCES reftable [ ( refcolumn ) ] [ MATCH FULL | MATCH PARTIAL | MATCH SIMPLE ]
+    [ ON DELETE referential_action ] [ ON UPDATE referential_action ] }
+[ DEFERRABLE | NOT DEFERRABLE ] [ INITIALLY DEFERRED | INITIALLY IMMEDIATE ]
+
+
+・table_constraint is:
+
+[ CONSTRAINT constraint_name ]
+{ CHECK ( expression ) [ NO INHERIT ] |
+  UNIQUE [ NULLS [ NOT ] DISTINCT ] ( column_name [, ... ] ) index_parameters |
+  PRIMARY KEY ( column_name [, ... ] ) index_parameters |
+  EXCLUDE [ USING index_method ] ( exclude_element WITH operator [, ... ] ) index_parameters [ WHERE ( predicate ) ] |
+  FOREIGN KEY ( column_name [, ... ] ) REFERENCES reftable [ ( refcolumn [, ... ] ) ]
+    [ MATCH FULL | MATCH PARTIAL | MATCH SIMPLE ] [ ON DELETE referential_action ] [ ON UPDATE referential_action ] }
+[ DEFERRABLE | NOT DEFERRABLE ] [ INITIALLY DEFERRED | INITIALLY IMMEDIATE ]
+
+
+・like_option is:
+
+{ INCLUDING | EXCLUDING }
+  { COMMENTS | COMPRESSION | CONSTRAINTS | DEFAULTS | GENERATED | IDENTITY | INDEXES | STATISTICS | STORAGE | ALL }
+
+・partition_bound_spec is:
+
+IN ( partition_bound_expr [, ...] ) |
+FROM ( { partition_bound_expr | MINVALUE | MAXVALUE } [, ...] )
+  TO ( { partition_bound_expr | MINVALUE | MAXVALUE } [, ...] ) |
+WITH ( MODULUS numeric_literal, REMAINDER numeric_literal )
+
+
+・index_parameters in UNIQUE, PRIMARY KEY, and EXCLUDE constraints are:
+
+[ INCLUDE ( column_name [, ... ] ) ]
+[ WITH ( storage_parameter [= value] [, ... ] ) ]
+[ USING INDEX TABLESPACE tablespace_name ]
+
+・exclude_element in an EXCLUDE constraint is:
+
+{ column_name | ( expression ) } [ opclass ] [ ASC | DESC ] [ NULLS { FIRST | LAST } ]
+
+・referential_action in a FOREIGN KEY/REFERENCES constraint is:
+
+{ NO ACTION | RESTRICT | CASCADE | SET NULL [ ( column_name [, ... ] ) ] | SET DEFAULT [ ( column_name [, ... ] ) ] }
+
+</pre>
+
+<br>
+
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>table_name</td>	<td>作成するテーブル名</td>
+</tr><tr>
+<td>column_name</td>	<td>カラム名</td>
+</tr><tr>
+<td>data_type</td>	<td>カラムのデータ型</td>
+</tr><tr>
+<td>compression_method</td>	<td>圧縮方法。pglzかlz4(--with-lz4でコンパイル必須)</td>
+</tr><tr>
+<td>OF type_name</td>	<td>CREATE TYPE で作成された型によるテーブルを作成する</td>
+</tr></table>
+
+<br>
+
+<table>
+<caption>テーブル全体のオプション</caption>
+<tr bgcolor="#cccccc">
+<th>テーブル全体のオプション</th>	<th>説明</th>
+</tr><tr>
+<td>GLOBAL</td>	<td>SQL99標準との互換性のためサポート。無視する</td>
+</tr><tr>
+<td>LOCAL</td>	<td>SQL99標準との互換性のためサポート。無視する</td>
+</tr><tr>
+<td>TEMPORARY,TEMP</td>	<td>一時テーブルとして作成。セッションの間だけ有効</td>
+</tr><tr>
+<td>UNLOGGED</td>	<td>このテーブルに関するWALログを書き込まない。処理は高速化するが、障害が起きるとリカバリできない。</td>
+</tr><tr>
+<td>IF NOT EXISTS</td>	<td>既に存在するテーブルを定義してもエラーを返さない。</td>
+</tr><tr>
+<td>WITH OIDS, WITHOUT OIDS</td>	<td>新しいテーブルのレコードにOID(オブジェクト識別子)を割り当てるか否かを指定</td>
+</tr><tr>
+<td></td>	<td></td>
+</tr><tr>
+<td></td>	<td></td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER 解説
+
+<p>
+CREATE TABLE文でテーブルを作成します。
+<br>
+テーブルが持てる最大カラム数は1600です。
+実際に設定できる最大数は、カラムのデータ型に依存します。
+<br>
+PostgreSQLは既存のテーブルのオブジェクトを継承してテーブルを作成できます([<6-06>]参照)。
+また、作成したテーブルの制約は後から追加/削除できます([<6-12>]参照)。
+</p>
+
+
+<p>
+CREATE TALBE AS文で問い合わせの結果から新しいテーブルを作成します。新しいテーブルには元テーブルの定義とデータのみ引き継ぎます。元テーブルの各種制約(PRIMARY KEY, UNIQUE, NOT NULL, CHECK, REFERENCES)は引き継ぎません。
+</p>
+
+
+<p>
+テーブル定義はメタコマンド\dで表示できます。
+</p>
+
+<pre>
+sampledb=# CREATE TABLE test (id int PRIMARY KEY, data text NOT NULL);
+CREATE TABLE
+
+sampledb=# \d test
+     Table "public.test"
+ Column |  Type   | Modifiers
+--------+---------+-----------
+ id     | integer | not null
+ data   | text    | not null
+Indexes:
+    "test_pkey" PRIMARY KEY, btree (id)
+</pre>
+
+<p>
+データベースロールがテーブルに対してアクセス権限を持つか否かは、
+<font color="#0000ff"><s>関数has_table_privilege()で判ります([<7-29>]参照)。</s></font>
+<font color="#ff0000">関数has_table_privilege()で判ります([<7-30>]参照)。</font>
+</p>
+
+<p>
+CREATE TABLEは構文が複雑なので、いくつかに分割して説明します。
+</p>
+
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>設定項目</th>	<th>説明</th>	<th>備考</th>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=3 align=left>テーブルに対する設定</th>
+</tr><tr>
+<td>ON COMMIT句</td>	<td>一時テーブルを削除するタイミング</td>	<td>	</td>
+</tr><tr>
+<td>EXCLUDE句</td>	<td>重複を避ける</td>	<td>	</td>
+</tr><tr>
+<td>INHERIT句</td>	<td>テーブルの継承</td>	<td>[<6-06>]参照</td>
+</tr><tr>
+<td>LIKE句</td>		<td>既存テーブル定義から新たにテーブル作成</td>	<td>[<6-06>]参照</td>
+</tr><tr>
+<td>TABLESPACE句</td>	<td>指定したテーブルスペースに配置</td>	<td>	</td>
+</tr><tr>
+<td>PARTITION句</td>		<td>パーティション</td>	<td>[<6-07>]参照</td>
+
+
+</tr><tr>
+<td>USING句 method</td>		<td>アクセスメソッドを設定。デフォルトは'heap'</td>	<td>バージョン12から</td>
+
+<tr bgcolor="#eeeeee">
+<th colspan=3 align=left>カラムの制約設定(単一カラム、複数カラム)</th>
+</tr><tr>
+<td>CHECK制約</td>	<td>CHECK制約</td>	<td>	</td>
+</tr><tr>
+<td>UNIQUE制約</td>	<td>UNIQUE制約(一意性制約)</td>	<td>	</td>
+</tr><tr>
+<td>PRIMARY KEY制約</td>	<td>主キー制約</td>	<td>	</td>
+</tr><tr>
+<td>
+FOREIGN KEY句(外部キー)、REFERENCES句(参照) </td>	<td>外部キー制約</td>	<td>[<6-05>]参照</td>
+</tr><tr>
+<td>WITH句</td>		<td>テーブルやインデックスのストレージパラメータを設定</td>	<td>	</td>
+
+
+<tr bgcolor="#eeeeee">
+<th colspan=3 align=left>カラム毎の制約設定(単一カラムのみ)</th>
+</tr><tr>
+<td>DEFAULT</td>	<td>デフォルト値を設定</td>	<td>関数も設定可能</td>
+</tr><tr>
+<td>NULL, NOT NULL</td>	<td>'NULL'を許すか、許さないか</td>	<td>デフォルトはNULL</td>
+</tr><tr>
+<td>COLLATE</td>	<td>collationを指定</td>	<td></td>
+
+
+</tr><tr>
+<td>GENERATED句</td>		<td>シーケンスを発行する、もしくはGENRATEDカラムを生成する。<a href="https://www.postgresql.org/docs/current/ddl-generated-columns.html" target="_blank" rel="noopener noreferrer">Generated Columns</a>	</td>	<td>GENERATEDカラムはバージョン12から</td>
+
+</tr></table>
+
+<br>
+
+<p>
+各種制約の検査タイミングは以下にまとめて解説します。
+</p>
+
+
+
+%SECTION 各種制約の検査タイミング: DEFERRABLE、INITIALLY DEFERRED、INITIALLY IMMEDIATE
+
+
+<p>
+これらのオプションはトランザクション内の各種制約の検査タイミングを設定します。
+より具体的には、SQL文の実行時に即座に検査するか、
+そのSQL文を実行したトランザクションが閉じたときまで検査を遅延させるか設定します。
+<br>
+検査タイミングの初期値は次に示す3つがあり、全ての制約は必ずひとつの初期値を持ちます([表6-02]参照)。
+</p>
+
+<table border=1>
+<caption>[<表6-02>] 検査タイミングの初期値</caption>
+<tr bgcolor="#cccccc">
+<th>検査タイミングの初期値</th>	<th>説明</th>
+</tr><tr>
+<td>NOT DEFERRABLE</td>	 <td>デフォルト。通常の設定では遅延検査できない。SQL文の実行時に即座に検査する。 </td>
+</tr><tr>
+<td>DEFERRABLE INITIALLY IMMEDIATE</td>	 <td>遅延可能。初期状態では即座に検査する。 </td>
+</tr><tr>
+<td>DEFERRABLE INITIALLY DEFERRED</td>	 <td>遅延検査する。 </td>
+</tr></table>
+
+<p>
+明示的に検査タイミングを設定できるのは次の制約です。
+</p>
+
+<ul>
+<li>UNIQUE制約</li>
+<li>PRIMARY KEY(主キー)</li>
+<li>REFERENCES(外部キー)</li>
+<li>EXCLUDE制約</li>
+<li>(CONSTRAINTオプションを設定したトリガ)</li>
+</ul>
+
+<br>
+
+<p>
+NOT NULLとCHECK制約は、常にレコードがINSERTかUPDATEされたときに検査します(遅延検査は設定できない)。
+</p>
+
+
+<p>
+設定例を示します。
+</p>
+
+<pre>
+sampledb=# CREATE TABLE test_deferrable (id1 int,  unique(id1),
+                   id2 int,  unique(id2) DEFERRABLE INITIALLY IMMEDIATE,
+                   id3 int,  unique(id3) DEFERRABLE INITIALLY DEFERRED);
+CREATE TABLE
+
+sampledb=# SELECT conname, condeferrable, condeferred
+sampledb-#             FROM pg_constraint where conname like 'test_deferrable%';
+         conname         | condeferrable | condeferred
+-------------------------+---------------+-------------
+ test_deferrable_id1_key | f             | f
+ test_deferrable_id2_key | t             | f
+ test_deferrable_id3_key | t             | t
+(3 rows)
+</pre>
+
+<br>
+
+<p>
+デフォルト設定はALTER TABLE([<6-13>]参照)で変更できます。
+</p>
+
+<p>
+トランザクション内で一時的に変更するにはSET CONSTRAINTS文を使います。
+</p>
+
+
+
+%CHAPTER テーブルに対する設定項目
+
+
+%SECTION ON COMMIT句
+<p>
+ON COMMIT句は一時テーブルを削除するタイミングを制御します。
+</p>
+
+
+<pre>
+[<書式>]
+
+	ON COMMIT { PRESERVE ROWS | DELETE ROWS | DROP }
+</pre>
+
+<br>
+
+<table>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>PRESERVE ROWS</td>		<td>セッション終了時に一時テーブルを削除。トランザクション終了時には何もしない。デフォルト</td>
+</tr><tr>
+<td>DELETE ROWS</td>		<td>トランザクション終了時に一時テーブルの全レコードをTRUNCATEで削除。一時テーブルは残る</td>
+</tr><tr>
+<td>DROP</td>		<td>トランザクション終了時に一時テーブルを削除</td>
+</tr></table>
+
+<br>
+
+<p>
+通常、一時テーブルを作成したセッション中のみ存在し、セッション終了時に一時テーブルも削除します。
+<br>
+ここでON COMMIT句のDROPオプションを設定すると、トランザクションブロック内でしか一時テーブルを作成できず、そのトランザクションが終了するとともに、一時テーブルも削除されます。
+</p>
+
+
+%SECTION EXCLUDE句
+
+<pre>
+[<書式>]
+
+ EXCLUDE [ USING index_method ] ( exclude_element WITH operator [, ... ] )
+	 [ WITH ( storage_parameter [= value] [, ... ] ) ]
+	 [ USING INDEX TABLESPACE tablespace ]	[ WHERE ( predicate ) ]
+	 [ DEFERRABLE | NOT DEFERRABLE ] [ INITIALLY DEFERRED | INITIALLY IMMEDIATE ]
+</pre>
+
+<br>
+
+<table>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>index_method</td>	<td>インデックスのアクセスメソッド</td>
+</tr><tr>
+<td>exclude_element</td>	<td>EXCLUDE制約を設定するカラム名など</td>
+</tr><tr>
+<td>operator</td>	<td>条件検索に使用する演算子</td>
+</tr><tr>
+<td>tablespace	</td>	<td>UNIQUE制約を保存するテーブルスペース</td>
+</tr><tr>
+<td>predicate	</td>	<td>部分インデックスを利用する場合の条件式</td>
+</tr></table>
+
+<br>
+※ WITH句は下記参照
+
+<br>
+<br>
+
+<p>
+EXCLUDE制約は重複を避けます。UNIQUE制約よりも適用範囲が広く、例えば円や長方形など図形などの重複を避けることができます。
+ただし処理効率はUNIQUE制約に劣ります。
+</p>
+
+<p>
+公式ドキュメントの実例を示します。これは円の重複を許しません。
+</p>
+
+<pre>
+CREATE TABLE circles (
+    c circle,
+    EXCLUDE USING gist (c WITH &&)
+);
+</pre>
+
+<br>
+
+<p>
+EXCLUDE制約は適切なインデックスメソッドと演算子を選択することが重要です。
+現状(バージョン15)、GiNは使用できません。
+</p>
+
+
+%SECTION TABLESPACE句
+
+<p>
+テーブルを指定したテーブルスペースに配置します。
+</p>
+
+<pre>
+[<書式>]
+
+	TABLESPACE tablespace
+</pre>
+
+<br>
+
+<table>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>tablespace</td>		<td>テーブルやインデックスを配置するテーブルスペース。デフォルトはパラメータdefault_tablespaceの設定値。<br>一時テーブルのデフォルトはtemp_tablespaces</td>
+</tr></table>
+
+<br>
+
+%SECTION OF type
+
+<p>
+CREATE TYPEで作成された型を指定するだけでテーブルを作成することができます。以下に本家ドキュメントの例を示します。
+</p>
+
+<pre>
+CREATE TYPE employee_type AS (name text, salary numeric);
+
+CREATE TABLE employees OF employee_type (
+    PRIMARY KEY (name),
+    salary WITH OPTIONS DEFAULT 1000);
+</pre>
+
+<br>
+
+%CHAPTER カラムの制約設定(単一カラム、複数カラム)
+
+
+%SECTION CHECK句(整合性制約)
+
+<pre>
+[<書式>]
+
+ CHECK (expression) [ NO INHERIT ]
+</pre>
+
+<br>
+
+<p>
+CHECK制約(整合性制約)で条件を満たしたデータのみ、INSERTまたはUPDATEできます。
+制約はブール値を返す条件式で記述します。
+</p>
+
+<p>
+CHECK制約は列制約、テーブル制約、どちらの形式でも設定できます。
+<br>
+ただし、どちらの形式も現在のレコードの値しか条件式に使えません。
+例えば集約関数のAVG(age)は全レコードのデータに依存するので、条件式に含めることはできません。
+</p>
+
+<p>
+例を示します。
+<br>
+列制約の形式でCHECK句を設定します。制約条件は「ageについて、25以上の値しか許可しない」です。
+</p>
+
+<pre>
+sampledb=# CREATE TABLE wine_club (name text PRIMARY KEY,
+sampledb(#              age integer CHECK(25 <= age));
+</pre>
+
+<br>
+
+<p>
+次にテーブル制約の形式でCHECK句を設定します。
+制約条件は「heightが180以上でweightが100以上の場合のみ許可する」です。
+</p>
+
+<pre>
+sampledb=# CREATE TABLE sumo_wrestler (name text,
+sampledb(#      height integer, weight integer,
+sampledb(#      CONSTRAINT examination CHECK(180 >= height AND 100 >= weight));
+</pre>
+
+<br>
+
+
+%SECTION UNIQUE句(一意性制約)
+
+
+<pre>
+[<書式>]
+
+　UNIQUE ( column_name [, ... ] ) [ WITH ( storage_parameter [= value] [, ... ] ) ]
+	    [ USING INDEX TABLESPACE tablespace ]
+            [ DEFERRABLE | NOT DEFERRABLE ]
+            [ INITIALLY DEFERRED | INITIALLY IMMEDIATE ]
+</pre>
+
+<br>
+
+<table>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>column_name	</td>	<td>UNIQUE制約を設定するカラム名</td>
+</tr><tr>
+<td>tablespace	</td>	<td>UNIQUE制約を保存するテーブルスペース</td>
+</tr></table>
+
+※ WITH句は下記参照
+
+<br>
+<br>
+
+<p>
+UNIQUE制約を設定したカラムには、互いに異なるデータ以外は登録できません。
+ただし、NULLは等しいとみなさないので、複数のレコードにNULLを登録できます。
+<br>
+制約の検査タイミングについては前記参照してください。
+</p>
+
+
+<p>
+例を示します。
+<br>
+カラムuser_nameにUNIQUE制約を設定します。これにより、同名のメンバーは登録できなくなります。
+</p>
+
+<pre>
+sampledb=# CREATE TABLE member_list (id integer PRIMARY KEY,
+sampledb(#             user_name text UNIQUE,
+sampledb(#             passwd text NOT NULL);
+</pre>
+
+<br>
+
+<p>
+参考までに、別の書式でUNIQUE制約を設定します。
+</p>
+
+<pre>
+sampledb=# CREATE TABLE member_list (id integer PRIMARY KEY,
+sampledb(#             user_name text,
+sampledb(#             passwd text NOT NULL,
+sampledb(#             UNIQUE (user_name));
+</pre>
+
+<br>
+
+<p>
+ここで、テーブルmember_listにデータをINSERTします。
+UNIQUE制約のあるカラムuser_nameに同名('Alice')のデータをINSERTすると、エラーが発生します。
+</p>
+
+<pre>
+sampledb=# INSERT INTO member_list VALUES (1, 'Alice', 'xxx');
+INSERT 0 1
+sampledb=# INSERT INTO member_list VALUES (2, 'Alice', '');
+ERROR:  duplicate key violates unique constraint "member_list_user_name_key"
+</pre>
+
+<br>
+
+%SECTION PRIMARY KEY句(主キー)
+
+<pre>
+[<書式>]
+
+ PRIMARY KEY ( column_name [, ... ] ) [ WITH ( storage_parameter [= value] [, ... ] ) ]
+       [ USING INDEX TABLESPACE tablespace ]
+       [ DEFERRABLE | NOT DEFERRABLE ]
+       [ INITIALLY DEFERRED | INITIALLY IMMEDIATE ]
+</pre>
+
+<br>
+
+<table>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>column_name	</td>	<td>主キーを設定するカラム名</td>
+</tr><tr>
+<td>tablespace	</td>	<td>主キーを保存するテーブルスペース</td>
+</tr></table>
+※ WITH句は下記参照
+
+<br>
+<br>
+
+<p>
+主キーを設定します。主キーはテーブルごとに1つだけ設定できます。
+<br>
+検査タイミングについては前記参照してください。
+</p>
+
+<p>
+・列制約による主キーの設定
+<br>
+カラムidに主キーを設定します。
+</p>
+
+<pre>
+sampledb=# CREATE TABLE pkeysample (id integer PRIMARY KEY,
+sampledb(#         data integer NOT NULL);
+</pre>
+
+<br>
+
+<p>
+・テーブル制約による主キーの設定
+<br>
+複数カラムの組に対して主キーを設定するには、テーブル制約の形式を使います。
+テーブルalbum_listについて、カラムの組(artist, title)に主キー制約を設定します。
+</p>
+
+<pre>
+sampledb=# CREATE TABLE album_list (artist text, title text, year integer,
+sampledb(#             PRIMARY KEY (artist, title));
+</pre>
+
+<br>
+
+%SECTION WITH句 / <a href="https://www.postgresql.org/docs/current/sql-createtable.html#SQL-CREATETABLE-STORAGE-PARAMETERS" target="_blank" rel="noopener noreferrer">ストレージパラメータ</a>
+
+<pre>
+[<書式>]
+
+	WITH storage_parameter[=value]
+</pre>
+
+<br>
+
+<table>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>設定値</th>	<th>説明</th>
+</tr><tr>
+
+<td>fillfactor</td>	<td>整数(10-100)</td>	<td>テーブルのフィルファクタを設定する。フィルファクタとはINSERTで追記するテーブルブロックの割合を制限する値で、例えば"90"なら、INSERTできるタプルはそのブロックの90%まで(残りはUPDATEのために残しておく。HOTの効果を維持するため)。デフォルト100</td>
+
+
+</tr><tr>
+<td>toast_tuple_target</td>	<td></td>	<td></td>
+</tr><tr>
+<td>parallel_workers</td>	<td></td>	<td></td>
+
+
+</tr><tr>
+<td>autovacuum_enabled, <br>toast.autovacuum_enabled </td>	<td>boolean</td>	<td>AUTOVACUUMで処理を許可するか否か。デフォルトは有効(true)</td>
+
+</tr><tr>
+<td>vacuum_index_cleanup, toast.vacuum_index_cleanup</td>	<td></td>	<td></td>
+
+</tr><tr>
+<td>vacuum_truncate, toast.vacuum_truncate</td>	<td></td>	<td></td>
+
+
+</tr><tr>
+<td>autovacuum_vacuum_threshold, <br>toast.autovacuum_vacuum_threshold <td>整数</td>	<td>この値以上の不要なタプルがあれば、VACUUM処理を行う</td>
+
+</tr><tr>
+<td>autovacuum_vacuum_scale_factor, <br>toast.autovacuum_vacuum_scale_factor <td>float4</td>	<td>autovacuum_vacuum_thresholdに加算する乗数</td>
+
+
+</tr><tr>
+<td>autovacuum_vacuum_insert_threshold, toast.autovacuum_vacuum_insert_threshold</td>	<td></td>	<td></td>
+
+
+</tr><tr>
+<td>autovacuum_vacuum_insert_scale_factor, toast.autovacuum_vacuum_insert_scale_factor</td>	<td></td>	<td></td>
+
+
+</tr><tr>
+<td>autovacuum_analyze_threshold </td>	<td>整数</td>	<td>この値以上の不要なタプルがあれば、ANALYZE処理を行う</td>
+
+</tr><tr>
+<td>autovacuum_analyze_scale_factor </td>	<td>float4</td>	<td>autovacuum_analyze_thresholdに加算する乗数</td>
+
+</tr><tr>
+<td>autovacuum_vacuum_cost_delay,<br> toast.autovacuum_vacuum_cost_delay	</td>	<td>整数</td>	<td>このテーブル用のautovacuum_vacuum_cost_delay</td>
+
+</tr><tr>
+<td>autovacuum_vacuum_cost_limit,<br> toast.autovacuum_vacuum_cost_limit </td>	<td>整数</td>	<td>このテーブル用のautovacuum_vacuum_cost_limit</td>
+
+</tr><tr>
+<td>autovacuum_freeze_min_age, <br>toast.autovacuum_freeze_min_age  </td>	<td>整数</td>	<td>このテーブル用のvacuum_freeze_min_age</td>
+
+</tr><tr>
+<td>autovacuum_freeze_max_age, <br>toast.autovacuum_freeze_max_age  </td>	<td>整数</td>	<td>このテーブル用のautovacuum_freeze_max_age</td>
+
+</tr><tr>
+<td>autovacuum_freeze_table_age, <br> toast.autovacuum_freeze_table_age  </td>	<td>整数</td>	<td>このテーブル用のvacuum_freeze_table_age</td>
+
+</tr><tr>
+<td>autovacuum_multixact_freeze_min_age, toast.autovacuum_multixact_freeze_min_age</td>	<td></td>	<td></td>
+
+</tr><tr>
+<td>autovacuum_multixact_freeze_max_age, toast.autovacuum_multixact_freeze_max_age</td>	<td></td>	<td></td>
+
+</tr><tr>
+<td>autovacuum_multixact_freeze_table_age, toast.autovacuum_multixact_freeze_table_age</td>	<td></td>	<td></td>
+
+
+</tr><tr>
+<td>log_autovacuum_min_duration, toast.log_autovacuum_min_duration</td>	<td></td>	<td></td>
+
+</tr><tr>
+<td>user_catalog_table</td>	<td></td>	<td></td>
+
+
+</tr></table>
+
+<br>
+
+
+<p>
+WITH句は、
+テーブルやインデックスのストレージパラメータを設定します。
+</p>
+
+
+%CHAPTER カラム毎の制約設定(単一カラムのみ)
+
+%SECTION DEFAULT 句
+
+<p>
+DEFAULT句でカラムのデフォルト値を設定します。
+値を直接設定するだけでなく、関数も設定できます。
+</p>
+
+<p>
+例を示します。
+<br>
+テーブル作成後にメタコマンド\dでテーブル定義を表示します。
+</p>
+
+<pre>
+sampledb=# CREATE TABLE default_test (id int PRIMARY KEY,
+sampledb(#             register_datetime timestamp DEFAULT current_timestamp,
+sampledb(#             data integer DEFAULT 0);
+CREATE TABLE
+
+sampledb=# \d default_test
+                  Table "public.default_test"
+      Column       |            Type             |   Modifiers
+-------------------+-----------------------------+---------------
+ id                | integer                     | not null
+ register_datetime | timestamp without time zone | default now()
+ data              | integer                     | default 0
+Indexes:
+    "default_test_pkey" PRIMARY KEY, btree (id)
+
+
+sampledb=# INSERT INTO default_test VALUES (1);
+INSERT 0 1
+
+sampledb=# SELECT * FROM default_test;
+ id |     register_datetime      | data
+----+----------------------------+------
+  1 | 2006-07-28 09:08:03.857572 |    0
+(1 row)
+</pre>
+
+<br>
+
+%SECTION NULL, NOT NULL
+
+<p>
+'NULL'を許すかどうか指定します。デフォルトはNOT NULLで'NULL'を許します。
+</p>
+
+%SECTION COLLATE
+
+<p>
+カラムのcollationを指定します。
+</p>
+
+<br>
+
+%SECTION GENERATED
+
+%SUBSECTION <a href="https://www.postgresql.org/docs/current/ddl-generated-columns.html" target="_blank" rel="noopener noreferrer">GENERATED ALWAYS AS ( generation_expr ) STORED</a>
+
+<br>
+
+<pre>
+[<書式>]
+
+GENERATED ALWAYS AS ( generation_expr ) STORED
+</pre>
+
+<br>
+
+<p>
+他のカラムの値から生成されるカラム。バージョン12から導入された。以下にオフィシャルドキュメントの例を示す。
+</p>
+
+<br>
+
+<pre>
+CREATE TABLE people (
+    ...,
+    height_cm numeric,
+    height_in numeric GENERATED ALWAYS AS (height_cm / 2.54) STORED
+);
+</pre>
+
+<br>
+
+<p>
+カラムheight_cmはセンチメートル単位で入力され、生成されるカラムhight_inはカラムhight_cmの値を2.54で除算することでインチ単位に変換されて保存・表示される。
+</p>
+
+<br>
+
+
+%SUBSECTION GENERATED { ALWAYS | BY DEFAULT } AS IDENTITY [ ( sequence_options ) ]
+
+<br>
+
+<pre>
+[<書式>]
+
+GENERATED { ALWAYS | BY DEFAULT } AS IDENTITY [ ( sequence_options ) ]
+</pre>
+
+<br>
+
+<p>
+この書式でもシーケンスを設定できるようだ。
+</p>
+
+<br>
+
+<pre>
+postgres=# CREATE TABLE a1 (id int, seq bigint GENERATED ALWAYS AS IDENTITY);
+CREATE TABLE
+postgres=# \d+ a1
+                                                      Table "public.a1"
+ Column |  Type   | Collation | Nullable |           Default            | Storage | Compression | Stats target | Description
+--------+---------+-----------+----------+------------------------------+---------+-------------+--------------+-------------
+ id     | integer |           |          |                              | plain   |             |              |
+ seq    | bigint  |           | not null | generated always as identity | plain   |             |              |
+Access method: heap
+
+postgres=# \ds
+            List of relations
+ Schema |    Name    |   Type   | Owner
+--------+------------+----------+--------
+ public | a1_seq_seq | sequence | ubuntu
+(1 row)
+
+postgres=# INSERT INTO a1 VALUES(1);
+INSERT 0 1
+postgres=# INSERT INTO a1 VALUES(2);
+INSERT 0 1
+postgres=# SELECT * FROM a1;
+ id | seq
+----+-----
+  1 |   1
+  2 |   2
+(2 rows)
+</pre>
+<br>
+
+%CHAPTER <a href="https://www.postgresql.org/docs/current/sql-createtableas.html" target="_blank" rel="noopener noreferrer">CREATE TABLE AS</a>
+
+<pre>
+[<書式>]
+
+● CREATE TABLE AS
+CREATE [ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } | UNLOGGED ] TABLE [ IF NOT EXISTS ] table_name
+    [ (column_name [, ...] ) ]
+    [ USING method ]
+    [ WITH ( storage_parameter [= value] [, ... ] ) | WITHOUT OIDS ]
+    [ ON COMMIT { PRESERVE ROWS | DELETE ROWS | DROP } ]
+    [ TABLESPACE tablespace_name ]
+    AS query
+    [ WITH [ NO ] DATA ]
+
+</pre>
+
+<br>
+
+
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>table_name</td>	<td>作成するテーブル名</td>
+</tr><tr>
+<td>column_name</td>	<td>カラム名</td>
+</tr><tr>
+<td>query</td>	<td>問い合わせ(SELECT文、もしくはEXECUTE文)</td>
+</tr></table>
+
+<br>
+
+
+
+<table>
+<caption>オプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>LOCAL</td>	<td>SQL99標準との互換性のためサポート。無視する</td>
+</tr><tr>
+<td>GLOBAL</td>	<td>SQL99標準との互換性のためサポート。無視する</td>
+</tr><tr>
+<td>TEMPORARY, TEMP</td>	<td>一時テーブルとして作成(セッション終了で自動的に削除)</td>
+</tr><tr>
+<td>UNLOGGED</td>	<td>WALログを書き出さない</td>
+</tr><tr>
+<td>WITH OIDS, WITHOUT OIDS</td>	<td>新しく作成するテーブルにOIDを設定するか否か、デフォルトは設定パラメータdefault_with_oidsの値</td>
+</tr><tr>
+<td>WITH (storage_parameter= value)</td>	<td>テーブルのストレージパラメータを設定</td>
+</tr><tr>
+<td>ON COMMIT PRESERVE ROWS</td>	<td>セッション終了時に一時テーブルを削除。トランザクション終了時には何もしない。デフォルト</td>
+</tr><tr>
+<td>ON COMMIT DELETE ROWS</td>	<td>トランザクション終了時に一時テーブルの全レコードを削除。一時テーブルは残る</td>
+</tr><tr>
+<td>ON COMMIT DROP</td>	<td>トランザクション終了時に一時テーブルを削除</td>
+</tr><tr>
+<td>TABLESPACE tablespace</td>	<td>テーブルスペースtablespaceにテーブルを作成する</td>
+</tr><tr>
+<td>WITH DATA</td>	<td>データも引き継ぐ。デフォルト</td>
+</tr><tr>
+<td>WITH NO DATA</td>	<td>データを引き継がない。制約のないテーブル定義のみ</td>
+</tr><tr>
+<td></td>	<td></td>
+</tr></table>
+
+<br>
+
+
+<p>
+テーブルorigから新しいテーブルnewを作成します。主キー制約やNOT NULL制約が引き継がれないことが確認できます。
+</p>
+
+<pre>
+sampledb=# \d orig
+     Table "public.orig"
+ Column |  Type   | Modifiers
+--------+---------+-----------
+ id     | integer | not null
+ name   | text    | not null
+Indexes:
+    "orig_pkey" PRIMARY KEY, btree (id)
+
+sampledb=# CREATE TABLE new AS SELECT * FROM orig;
+SELECT
+
+sampledb=# \d new
+      Table "public.new"
+ Column |  Type   | Modifiers
+--------+---------+-----------
+ id     | integer |
+ name   | text    |
+</pre>
+<br>

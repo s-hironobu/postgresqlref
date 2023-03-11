@@ -1,0 +1,76 @@
+%FILE internal/sql-08.html
+%LASTMOD
+%KEY pgsql-sql08
+
+%TITLE テーブルの削除 / <a href="https://www.postgresql.org/docs/current/sql-droptable.html" target="_blank" rel="noopener noreferrer">DROP TABLE</a>
+
+<pre>
+[<書式>]
+
+
+   DROP TABLE [ IF EXISTS ] table_name [, ...] [ CASCADE | RESTRICT ]
+
+</pre>
+<br>
+
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>table_name</td>	<td>削除するテーブル名</td>
+</tr></table>
+
+<br>
+
+
+<table>
+<caption>オプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>CASCADE</td>	<td>依存するオブジェクト(テーブル、ビュー、制約など)も一緒に削除</td>
+</tr><tr>
+<td>RESTRICT</td>	<td>依存するオブジェクトのないテーブルのみ削除。デフォルト</td>
+</tr><tr>
+<td>IF EXISTS</td>	<td>削除するテーブルが定義されてなくともエラーにならない</td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER 解説
+
+<p>
+・CASCADE、RESTRICTオプション
+<br>
+デフォルトはRESTRICTです。
+よって、削除しようとするテーブルに依存するオブジェクトが存在する場合は、そのテーブルを削除できません。
+<br>
+依存するオブジェクトを含めてテーブルを削除するには、'CASCADE'を設定します。
+</p>
+
+<p>
+・テーブルの削除
+</p>
+
+<pre>
+sampledb=# DROP TABLE customerlist;
+DROP TABLE
+</pre>
+<br>
+
+<p>
+・依存するオブジェクトごと削除
+<br>
+テーブルcustomerlistには、依存するオブジェクト(継承で作成されたテーブル)new_customerlistが存在します。
+継承されたテーブルも含めて削除するには'CASCADE'を設定します。
+</p>
+
+<pre>
+sampledb=# DROP TABLE customerlist CASCADE;
+NOTICE: Drop cascades to table new_customerlist
+DROP TABLE
+</pre>
+<br>

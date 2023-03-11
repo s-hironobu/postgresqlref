@@ -5,7 +5,7 @@
 // $Id: default.ja.css,v 1.30 2004/04/03 15:56:08 arino Exp $
 //
 */
-/* @charset "shift-jis"; */
+@charset "shift-jis";
 /* this @charset is for mozilla's bug */
 
 pre, dl, ol, p, blockquote
@@ -132,18 +132,39 @@ dt
 	margin-left:1em;
 }
 
-pre {
-	border-top:    #666666 1px solid;
-	border-bottom: #cccccc 1px solid;
-	border-left:   #666666 1px solid;
-	border-right:  #cccccc 1px solid;
-	padding: 0.5em;
-	margin-left: 1em;
-	margin-right: 2em;
-	white-space: pre;
-	background-color: #eeeeee;
-	color: #555555;
-	line-height: 1em;
+pre{
+    white-space: pre-wrap;       /* css-3 */
+    white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+    margin: 0 0 0 0;
+    /*padding:5px 5px 3px 5px;*/
+    /*background:#fff;*/
+    -moz-border-radius:5px;
+    /*-webkit-border-radius:5px;*/
+    /*border-radius:5px;*/
+    /*-webkit-box-shadow:inset 0 0 7px rgba(0,0,0,0.2);*/
+    -moz-box-shadow:inset 0 0 7px rgba(0,0,0,0.2);
+    box-shadow:inset 0 0 7px rgba(0,0,0,0.2);
+    /*padding:10px;*/
+    /*margin:0 0;*/
+    border:1px solid #ddd;
+    font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+    font-size:0.9em;
+
+    border-top:    #666666 1px solid;
+    border-bottom: #cccccc 1px solid;
+    border-left:   #666666 1px solid;
+    border-right:  #cccccc 1px solid;
+    padding: 0.5em;
+    margin-left: 1em;
+    margin-right: 2em;
+    white-space: pre;
+    background-color: #f8f8f8;
+    color: #555555;
+    line-height: 1em;
+
 }
 
 img

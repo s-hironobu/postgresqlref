@@ -1,0 +1,10 @@
+%FILE internal/internal-07.html
+%LASTMOD
+%KEY pgsql-internal07
+
+
+%TITLE VACUUM
+
+<p>
+The Internals of PostgreSQL <a href="https://www.interdb.jp/pg/pgsql06.html" target="_blank" rel="noopener noreferrer">Chapter 6: VACUUM Processing</a>
+</p>

@@ -1,0 +1,133 @@
+%FILE internal/sql-45.html
+%LASTMOD
+%KEY pgsql-sql45
+
+%TITLE 設定パラメータの設定/表示/リセット <a href="https://www.postgresql.org/docs/current/sql-set.html" target="_blank" rel="noopener noreferrer">SET</a> / <a href="https://www.postgresql.org/docs/current/sql-show.html" target="_blank" rel="noopener noreferrer">SHOW</a> / <a href="https://www.postgresql.org/docs/current/sql-reset.html" target="_blank" rel="noopener noreferrer">RESET</a>
+
+<pre>
+● 設定
+SET [ SESSION | LOCAL ] parameter { TO | = } { value | 'value' | DEFAULT }
+SET [ SESSION | LOCAL ] TIME ZONE { value | 'value' | LOCAL | DEFAULT }
+
+● 表示
+SHOW parameter
+SHOW ALL
+
+● リセット
+RESET parameter
+RESET ALL
+</pre>
+<br>
+
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>value</td>	<td>設定パラメータの設定値</td>
+</tr><tr>
+<td>parameter</td>	<td>設定値を表示、またはリセットする設定パラメータ名</td>
+</tr></table>
+
+<br>
+
+<table>
+<caption>オプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>SESSION</td>	<td>セッションの間のみ設定値が有効。デフォルト</td>
+</tr><tr>
+<td>LOCAL</td>	<td>トランザクションの間のみ設定値が有効</td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER 解説
+
+<p>
+SET文で設定パラメータやタイムゾーンを設定します。
+<br>
+SHOW文で設定パラメータの値を表示します。SHOW ALL文ですべての設定パラメータの値を表示します。
+<br>
+RESET文で設定パラメータの値をデフォルト値に戻します。RESET ALL文ですべての設定パラメータの値をデフォルト値に戻します。ここでデフォルト値とは、postgresql.confファイルに設定された値のことです。
+</p>
+
+<p>
+・設定パラメータの設定
+<br>
+SET文で設定できる設定パラメータは、<a href="./param-02.html">[<4-02>]</a>〜<a href="./param-12.html">[<4-12>]</a>の表中、"変更可能性"の欄に'◎'か'○'が付いています。
+<br>
+変更した設定パラメータの値は、設定したセッション(もしくはトランザクション)の間だけ有効です。
+</p>
+
+%CHAPTER 実行例
+
+<p>
+・設定パラメータの変更(1)
+<br>
+enable_seqscanを無効にします。
+</p>
+
+<pre>
+sampledb=# SET enable_seqscan TO OFF;
+SET
+
+sampledb=# SHOW enable_seqscan;
+ enable_seqscan
+----------------
+ off
+(1 row)
+</pre>
+<br>
+
+<p>
+・設定パラメータの変更(2)
+<br>
+commit_delayの値を変更します。
+</p>
+
+<pre>
+sampledb=# SET commit_delay = 1000;
+SET
+
+sampledb=# SHOW commit_delay;
+ commit_delay
+--------------
+ 1000
+(1 row)
+</pre>
+<br>
+
+<p>
+・設定パラメータの値を表示
+<br>
+enable_seqscanの値を表示します。
+</p>
+
+<pre>
+sampledb=# SHOW enable_seqscan;
+ enable_seqscan
+----------------
+ on
+(1 row)
+</pre>
+<br>
+
+<p>
+・設定パラメータの値をデフォルト値に戻す
+</p>
+
+<pre>
+sampledb=# RESET enable_seqscan;
+RESET
+
+sampledb=# SHOW enable_seqscan;
+ enable_seqscan
+----------------
+ on
+(1 row)
+</pre>
+<br>

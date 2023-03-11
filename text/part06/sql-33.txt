@@ -1,0 +1,144 @@
+%FILE internal/sql-33.html
+%LASTMOD
+%KEY pgsql-sql33
+
+%TITLE データの削除 <a href="https://www.postgresql.org/docs/current/sql-delete.html" target="_blank" rel="noopener noreferrer">DELETE</a>
+
+<pre>
+[<書式>]
+
+DELETE FROM [ ONLY ] table [ [ AS ] alias ]
+    [ USING usinglist ]
+    [ WHERE condition | WHERE CURRENT OF cursor_name ]
+    [ RETURNING * | output_expression [ AS output_name ] [, ...] ]
+</pre>
+<br>
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>table_name</td>	<td>データを削除するテーブル名</td>
+</tr><tr>
+<td>where_condition</td>	<td>WHERE句による削除レコード指定の条件</td>
+</tr></table>
+
+<br>
+
+
+<table>
+<caption>句</caption>
+<tr bgcolor="#cccccc">
+<th>句</th>	<th>説明</th>
+</tr><tr>
+<td>WHERE condition</td>	<td>WHERE句による削除レコード指定の条件。サブクエリも使用可</td>
+</tr><tr>
+<td>WHERE CURRENT OF cursor_name</td>	<td>カーソルcursor_nameから最近取り出した1レコードを削除する</td>
+</tr><tr>
+<td>RETURNING　output_expression</td>	<td>削除結果を表示する</td>
+</tr></table>
+
+<br>
+
+
+<table>
+<caption>オプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>ONLY</td>	<td>継承先のデータを削除しない。詳細は<a href="./sql-06.html">[<6-06>]</a>「データ操作の継承を無効にする」を参照</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+DELETE文でテーブルのデータを削除します(ラージオブジェクトの削除はメタコマンド\lo_unlink)。
+現在のところ、ビューのデータは削除できません。
+<br>
+DELETE文はそのテーブルのDELETE権限が必要です(権限の表示はメタコマンド\z)。
+</p>
+
+<p>
+バージョン8.3から、カーソルで最近取り出した1レコードを削除できます。
+実行例はカーソル<a href="./sql-39.html">[<6-39>]</a>に示します。
+</p>
+
+%CHAPTER 実行例
+
+<p>
+・全データの削除
+<br>
+WHERE句を設定しない場合、指定したテーブルの全データを削除します。
+</p>
+
+<pre>
+sampledb=# DELETE FROM itemlist;
+DELETE 3
+</pre>
+<br>
+
+<p>
+・条件を指定して削除
+<br>
+WHERE句を設定し、「価格(price)が100円未満」のレコードを削除します。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM itemlist;
+ id |   name   | price | makercode
+----+----------+-------+-----------
+  1 | pen      |   100 |        10
+  2 | notebook |   120 |        20
+  3 | eraser   |    72 |        10
+(3 rows)
+
+sampledb=# DELETE FROM itemlist WHERE price < 100;
+DELETE 1
+
+sampledb=# SELECT * FROM itemlist;
+ id |   name   | price | makercode
+----+----------+-------+-----------
+  1 | pen      |   100 |        10
+  2 | notebook |   120 |        20
+(2 rows)
+</pre>
+<br>
+
+<p>
+・サブクエリ
+<br>
+DELETE文のWHERE句にサブクエリ(<a href="./sql-29.html">[<6-29>]</a>参照)を使います。
+<br>
+例として、テーブルmakerlistに含まれるデータをもとに、テーブルitemlistのデータ(ここではSmythson社の製品)を削除します。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM itemlist;
+ id |   name   | price | makercode
+----+----------+-------+-----------
+  1 | pen      |   100 |        10
+  2 | notebook |   120 |        20
+  3 | eraser   |    72 |        10
+(3 rows)
+
+sampledb=# SELECT * FROM makerlist;
+ id |   name
+----+----------
+ 10 | Smythson
+ 20 | Rotring
+(2 rows)
+
+sampledb=# DELETE FROM itemlist
+sampledb-#   WHERE makercode IN (SELECT id FROM makerlist WHERE name = 'Smythson');
+DELETE 2
+
+sampledb=# SELECT * FROM itemlist;
+ id |   name   | price | makercode
+----+----------+-------+-----------
+  2 | notebook |   120 |        20
+(1 row)
+</pre>
+<br>

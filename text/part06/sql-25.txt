@@ -1,0 +1,144 @@
+%FILE internal/sql-25.html
+%LASTMOD
+%KEY pgsql-sql25
+
+%TITLE <a href="https://www.postgresql.org/docs/current/queries-union.html" target="_blank" rel="noopener noreferrer">問い合わせの結合</a>　<a href="https://www.postgresql.org/docs/current/sql-select.html#SQL-UNION" target="_blank" rel="noopener noreferrer">UNION</a>, <a href="https://www.postgresql.org/docs/current/sql-select.html#SQL-INTERSECT" target="_blank" rel="noopener noreferrer">INTERSECT</a>, <a href="https://www.postgresql.org/docs/current/sql-select.html#SQL-EXCEPT" target="_blank" rel="noopener noreferrer">EXCEPT</a>
+
+<pre>
+[<書式>]
+query1 UNION [ALL | DISTINCT] query2
+query1 INTERSECT [ALL | DISTINCT] query2
+query1 EXCEPT [ALL | DISTINCT] query2
+
+※ query1, query2は問い合わせ
+
+</pre>
+<br>
+
+<table>
+<caption>オプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>ALL</td>	<td>すべての結果を返す</td>
+</tr><tr>
+<td>DISTINCT</td>	<td>重複レコードを省く。デフォルト。形式的なオプション</td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER 解説
+
+<p>
+UNION句、INTERSECT句、EXCEPT句で2つの問い合わせ結果の集合(和、積、差)を得ることができます。
+ここで、問い合わせquery1とquery2は同じカラム数、かつ同じデータ型どうしの結果を返さなければなりません。
+また、入力SQL(query1やquery2)や結果自身にFOR UPDATEとFOR SHAREを使うことはできません。
+</p>
+
+<p>
+・UNION句
+<br>
+UNION句で問い合わせ結果の和を求めます。
+具体的には、query2の結果をquery1の結果に付加します。
+</p>
+
+<p>
+・INTERSECT句
+<br>
+INTERSECT句は問い合わせ結果の積を求めます。
+具体的には、query1の結果とquery2の結果の両方に含まれているすべてのレコードを返します。
+</p>
+
+<p>
+・EXCEPT句
+<br>
+EXCEPT句は問い合わせ結果の差を求めます。
+具体的には、query1の結果からquery2の結果を差し引いたレコードを返します。
+</p>
+
+%CHAPTER 実行例
+
+<p>
+テーブルenglish_clubは英語クラブのメンバーリスト、テーブルfootball_clubはサッカークラブのメンバーリストで、CandyとDukeは両クラブに所属しています。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM english_club;
+ name  | grade
+-------+--------
+ Alice | first
+ Bobby | second
+ Candy | first
+ Duke  | second
+(4 rows)
+
+sampledb=# SELECT * FROM football_club;
+  name   | class
+---------+--------
+ Candy   | first
+ Eddie   | 3-B
+ Freddie | 1-A
+ Duke    | second
+(4 rows)
+</pre>
+<br>
+
+<p>
+・UNION句
+<br>
+テーブルenglish_clubとテーブルfootball_clubの検索結果をUNION句で結合します。
+両クラブに所属しているCandyとDukeのデータは1つにまとまっています。
+ALLオプションを設定すると、重複レコードもすべて表示します。
+</p>
+
+<pre>
+sampledb=# (SELECT name, grade AS "class" FROM english_club)
+sampledb-#     UNION (SELECT name, class FROM football_club);
+  name   |  "class"
+---------+-----------
+ Alice   | first
+ Bobby   | second
+ Candy   | first
+ Duke    | second
+ Eddie   | 3-B
+ Freddie | 1-A
+(6 rows)
+</pre>
+<br>
+
+<p>
+・INTERSECT句
+<br>
+テーブルenglish_clubとテーブルfootball_clubの検索結果をINTERSECT句で結合します。
+両クラブに所属しているCandyとDukeのデータのみ表示します。
+</p>
+
+<pre>
+sampledb=# (SELECT name, grade AS "class" FROM english_club)
+sampledb-#      INTERSECT (SELECT name, class FROM football_club);
+ name  | class
+-------+--------
+ Candy | first
+ Duke  | second
+(2 rows)
+</pre>
+<br>
+
+<p>
+・EXCEPT句
+<br>
+テーブルenglish_clubとテーブルfootball_clubの検索結果をEXCEPT句で結合します。
+どちらか一方のクラブにしか所属していないAliceとBobbyのデータを表示します。
+</p>
+
+<pre>
+sampledb=# (SELECT name, grade AS "class" FROM english_club)
+sampledb-#     EXCEPT (SELECT name, class FROM football_club);
+ name  | class
+-------+--------
+ Alice | first
+ Bobby | second
+(2 rows)
+</pre>
+<br>

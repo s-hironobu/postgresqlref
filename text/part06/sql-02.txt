@@ -1,0 +1,161 @@
+%FILE internal/sql-02.html
+%LASTMOD
+%KEY pgsql-sql02
+
+%TITLE テーブルスペースの作成/削除/変更	<a href="https://www.postgresql.org/docs/current/sql-createtablespace.html" target="_blank" rel="noopener noreferrer">CREATE TABLESPACE</a> / <a href="https://www.postgresql.org/docs/current/sql-droptablespace.html" target="_blank" rel="noopener noreferrer">DROP TABLESPACE</a> / <a href="https://www.postgresql.org/docs/current/sql-altertablespace.html" target="_blank" rel="noopener noreferrer">ALTER TABLESPACE</a>
+
+<pre>
+[<書式>]
+
+● テーブルスペースの作成
+CREATE TABLESPACE tablespacename
+       [ OWNER { owner | CURRENT_ROLE | CURRENT_USER | SESSION_USER } ]
+       LOCATION 'directory'
+       [ WITH ( tablespace_option = value [, ... ] ) ]
+
+       * CURRENT_ROLE　はバージョン14から設定可能
+
+● テーブルスペースの削除
+DROP TABLESPACE [IF EXISTS] tablespacename
+
+● テーブルスペース名の変更
+ALTER TABLESPACE tablespacename RENAME TO new_tablespacename
+
+● テーブルスペースの所有者の変更
+ALTER TABLESPACE tablespacename OWNER TO new_owner
+
+● パラメータの設定
+ALTER TABLESPACE tablespacename SET ( tablespace_option = value [, ... ] )
+ALTER TABLESPACE tablespacename RESET ( tablespace_option [, ... ] )
+
+</pre>
+
+<br>
+
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>tablespacename</td>	<td>作成/削除/変更するテーブルスペース名。'pg_'から始まる名前は不可</td>
+</tr><tr>
+<td>owner</td>	<td>テーブルスペースの所有者[CREATE TABLESPACE文の実行者]</td>
+</tr><tr>
+<td>directory</td>	<td>テーブルスペースを作成するディレクトリ名</td>
+</tr><tr>
+<td>new_tablespacename</td>	<td>新しいテーブルスペース名</td>
+</tr><tr>
+<td>new_owner</td>	<td>新しい所有者</td>
+</tr><tr>
+<td>tablespace_option</td>	<td>seq_page_cost, random_page_cost, effective_io_concurrency, maintenance_io_concurrencyのみ設定可能</td>
+</tr></table>
+
+<br>
+
+
+<table>
+<caption>オプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>IF EXISTS</td>	<td>テーブルスペースが存在しない場合でもエラーにならない。</td>
+
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+テーブルスペースの作成にはスーパーユーザ権限が必要です。
+テーブルスペースの削除と変更はスーパーユーザか、そのテーブルスペースの所有者のみ可能です。
+<br>
+テーブルスペース内にオブジェクト(データベース、テーブル、もしくはインデックス)が存在する場合は削除できません。
+<br>
+データベースロールがテーブルスペースに対してアクセス権限を持つか否かは、関数has_tablespace_privilege()で確認できます。
+</p>
+
+%CHAPTER 実行例
+
+%SECTION テーブルスペースの作成
+<p>
+ディレクトリ'/home/postgres/tblspc'に新しいテーブルスペースnew_spaceを作成します。
+予めディレクトリ'/home/postgres/tblspc'を作成し、PostgreSQLサーバを起動したOSユーザが読み書き可能にしてください。
+</p>
+<p>
+次にCREATE TABLESPACE文を実行します。
+</p>
+
+<pre>
+sampledb=# CREATE TABLESPACE new_space LOCATION '/home/postgres/tblspc';
+CREATE TABLESPACE
+
+sampledb=# SELECT * FROM pg_tablespace;
+  spcname   | spcowner |      spclocation      | spcacl | spcoptions
+------------+----------+-----------------------+--------+------------
+ pg_default |       10 |                       |        |
+ pg_global  |       10 |                       |        |
+ new_space  |       10 | /home/postgres/tblspc |        |
+(3 rows)
+</pre>
+<br>
+
+<p>
+ディレクトリ'/home/postgres/tblspc'以下を示します。
+バージョン9.0以降は"PG_バージョン_カタログバージョン"というディレクトリを作成します。
+<br>
+サブディレクトリを作ってバージョン毎に領域を分離するのは、
+pg_upgradeコマンド(<a href="./admin-13.html">[<3-13>]</a>)がテーブルスペースのアップグレードを混乱なく実施するためです。
+<br>
+カタログバージョンはソースコードのinclude/catalog/catversion.hに CATALOG_VERSION_NOとして定義してあります。
+</p>
+
+<pre>
+postgres> pwd
+/home/postgres/tblspc
+PG_9.1_201105231
+</pre>
+<br>
+
+
+%SECTION テーブル、データベースの作成と移動
+
+<p>
+CREATE DATABASE文やCREATE TABLE文、CREATE INDEX文にTABLESPACE句を追加すれば、
+指定したテーブルスペースにデータベースやテーブル、インデックスを作成できます。
+<br>
+例としてテーブルnew_tableをテーブルスペースnew_spaceに作成します。
+</p>
+
+<pre>
+sampledb=# CREATE TABLE new_table (id int) TABLESPACE new_space;
+CREATE TABLE
+sampledb=# \d+ new_table
+               Table "public.new_table"
+ Column |  Type   | Modifiers | Storage | Description
+--------+---------+-----------+---------+-------------
+ id     | integer |           | plain   |
+Has OIDs: no
+Tablespace: "new_space"
+</pre>
+<br>
+
+<p>
+ディレクトリ'/home/postgres/tblspc'以下にはテーブルnew_tableのデータを保存するファイル16510と、データベースsampledbに対応するディレクトリ16477が作成されています。
+</p>
+
+<pre>
+postgres> ls /home/postgres/tblspc/PG_9.1_201105231
+16477
+postgres> ls /home/postgres/tblspc/PG_9.1_201105231/16477/
+16510
+</pre>
+<br>
+
+<p>
+既存のテーブルやインデックスを作成したテーブルスペースに移動するには、
+ALTER TABLE文の"SET TABLESPACE"形式(<a href="./sql-10.html">[<6-10>]</a>)、ALTER INDEX文(<a href="./sql-35.html">[<6-35>]</a>)を使います。
+<br>
+バージョン8.4からALTER DATABASE文の"SET TABLESPACE"形式<a href="./sql-03.html">[<6-03>]</a>でデータベースも移動できます。
+</p>

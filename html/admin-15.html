@@ -2,12 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
- <title>PostgreSQLバイブル草稿</title>
- <link rel="stylesheet" type="text/css" media="screen" href="./default.css"">
-</head>
-
-<body>
+ <meta http-equiv="content-style-type" content="text/css">
+ <title>自分用PostgreSQLマニュアル</title>
+ <link rel="stylesheet" type="text/css" media="screen" href="./default.css" charset="UTF-8">
+ </head>
+ <body>
 
 <script language=javascript>
 <!--
@@ -26,11 +25,10 @@ objID.className='close';
 </script>
 
 <div id="header">
-<h1 class="title">PostgreSQLバイブル草稿</title></h1>
+<h1 class="title">自分用PostgreSQLマニュアル</title></h1>
     <span class="small">
 </span>
 </div>
-
 
 <hr class="full_hr">
 <table style="width: 100%;" border="0">
@@ -38,15 +36,16 @@ objID.className='close';
   <td class="menubar">
    <div id="menubar">
 
-
 <h5>PostgreSQLとは</h5>
 
-<li><a href="./index.html">PostgreSQLとは</a><br></li>
+<li><a href="./intro.html">PostgreSQLとは</a><br></li>
+
 
 <h5>PostgreSQLの内部構造</h5>
 <ul>
 <li><a href="./internal.html">とびら</a><br></li>
 </ul>
+
 <ol>
 <li><a href="./internal-01.html">プロセスとメモリ構造</a><br></li>
 <li><a href="./internal-02.html">データベースクラスタ、テーブルの構造</a></li>
@@ -58,7 +57,7 @@ objID.className='close';
 <li><a href="./internal-08.html">HOTとIndex Only Scan</a></li>
 <li><a href="./internal-09.html">WAL(Write Ahead Logging)</a></li>
 <li><a href="./internal-10.html">アーカイブログとPITR</a></li>
-<li><a href="./internal-11.html">レプリケーション(Streaming ReplicationとHotStandby)</a></li>
+<li><a href="./internal-11.html">Streaming ReplicationとHotStandby</a></li>
 </ol>
 
 
@@ -69,56 +68,46 @@ objID.className='close';
 </ul>
 
 <ol>
-[PostgreSQLの基礎]<br>
-<li><a href="./admin-01.html">オブジェクト、データベース、スキーマ</a><br></li>
-<li><a href="./admin-02.html">システムカタログ</a><br></li>
-<li><a href="./admin-03.html">文字コードの扱い</a><br></li>
-
 
 [インストールと起動、停止]<br>
-<li><a href="./admin-04.html">インストール</a><br></li>
-<li><a href="./admin-05.html">データベースシステムの初期化 initdb</a><br></li>
-<li><a href="./admin-06.html">PostgreSQLサーバの起動/停止</a><br></li>
+<li><a href="./admin-01.html">インストール</a><br></li>
+<li><a href="./admin-02.html">データベースシステムの初期化 initdb</a><br></li>
+<li><a href="./admin-03.html">PostgreSQLサーバの起動/停止</a><br></li>
 
+<hr>
+[PostgreSQLの基礎]<br>
+<li><a href="./admin-04.html">オブジェクト、データベース、スキーマ</a><br></li>
+<li><a href="./admin-05.html">システムカタログ</a><br></li>
+<li><a href="./admin-06.html">文字コードの扱い</a><br></li>
 
+  <hr>
 [認証とアクセス制御]<br>
 <li><a href="./admin-07.html">認証とアクセス制御</a><br></li>
 <li><a href="./admin-08.html">クライアントのアクセス制御</a><br></li>
 <li><a href="./admin-09.html">権限について</a><br></li>
 <li><a href="./admin-10.html">ロールの作成と権限制御</a><br></li>
 
-<HR>
-
+<hr>
 [バックアップとアップグレード]<br>
 <li><a href="./admin-11.html">バックアップとアップグレード</a><br></li>
 <li><a href="./admin-12.html">ダンプとリストア</a><br></li>
 <li><a href="./admin-13.html">アップグレード</a><br></li>
 
+  <hr>
 [保守、監視とチューニング]<br>
 <li><a href="./admin-14.html">保守、監視とチューニング</a><br></li> 
 <li><a href="./admin-15.html">稼働統計情報</a><br></li>
 <li><a href="./admin-16.html">実行ログの取得</a><br></li>
-<li><a href="./admin-17.html">モニタリングツール</a><br></li>
-<li><a href="./admin-18.html">ログと統計情報の分析</a><br></li>
-<li><a href="./admin-19.html">パラメータチューニング</a><br></li>
+<li><a href="./admin-17.html">ログと統計情報の分析</a><br></li>
+<li><a href="./admin-18.html">パラメータチューニング</a><br></li>
 
+  <hr>
 [耐障害性、高可用性]<br>
-<li><a href="./admin-20.html">耐障害性、高可用性</a><br></li>
-<li><a href="./admin-21.html">アーカイブログとPITR</a><br></li>
-<li><a href="./admin-22.html">レプリケーションの設定</a><br></li>
-<li><a href="./admin-23.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-19.html">アーカイブログとPITR</a><br></li>
+<li><a href="./admin-20.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-21.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-22.html">ロジカルレプリケーション</a><br></li>
 
-
-[FDW]<br>
-<li><a href="./admin-24.html">FDW</a><br></li>
-<li><a href="./admin-25.html">postgres_fdw</a><br></li>
-</ol>
-
-[追加の文章(未完)]<br>
-<li><a href="./admin-26.html">ロギング</a><br></li>
-<li><a href="./admin-27.html">統計情報</a><br></li>
-<li><a href="./admin-28.html">モニタリング</a><br></li>
-<li><a href="./admin-29.html">メンテナンス</a><br></li>
 </ol>
 
 
@@ -138,6 +127,7 @@ objID.className='close';
 <li><a href="./param-11.html">クライアント接続デフォルト</a><br></li>
 <li><a href="./param-12.html">ロック管理/バージョンとプラットフォーム互換性</a><br></li>
 </ol>
+
 
 
 <h5>psql</h5>
@@ -160,6 +150,7 @@ objID.className='close';
 </ol>
 
 
+
 <h5>SQL</h5>
 
 <ul>
@@ -167,15 +158,14 @@ objID.className='close';
 </ul>
 
 <ol>
-[SQL]<br>
 
 <li><a href="./sql-01.html">SQL語彙</a><br></li>
 <li><a href="./sql-02.html">テーブルスペースの作成/削除/変更</a><br></li>
 <li><a href="./sql-03.html">データベースの作成/変更/削除</a><br></li>
-<li><a href="./sql-04.html">テーブルの作成</a><br></li>
+<li><a href="./sql-04.html">テーブルの作成 CREATE TABLE / CREATE TABLE AS</a><br></li>
 <li><a href="./sql-05.html">外部キー</a><br></li>
 <li><a href="./sql-06.html">オブジェクトの継承/LIKE句</a><br></li>
-<li><a href="./sql-07.html">問い合わせ結果から新しいテーブルを作成</a><br></li>
+<li><a href="./sql-07.html">パーティション</a><br></li>
 <li><a href="./sql-08.html">テーブルの削除</a><br></li>
 <li><a href="./sql-09.html">スキーマの定義/変更/削除</a><br></li>
 
@@ -201,7 +191,7 @@ objID.className='close';
 <li><a href="./sql-25.html">問い合わせの結合</a><br></li>
 <li><a href="./sql-26.html">ORDER BY</a><br></li>
 <li><a href="./sql-27.html">LIMIT OFFSET</a><br></li>
-<li><a href="./sql-28.html">FOR UPDATE/ FOR SHARE</a><br></li>
+<li><a href="./sql-28.html">FOR [NO KEY] UPDATE/ FOR [KEY] SHARE</a><br></li>
 <li><a href="./sql-29.html">サブクエリ</a><br></li>
 <li><a href="./sql-30.html">CASE式</a><br></li>
 <li><a href="./sql-31.html">VALUES</a><br></li>
@@ -227,18 +217,12 @@ objID.className='close';
 <li><a href="./sql-49.html">COPY/IMPORT</a><br></li>
 <li><a href="./sql-50.html">COPY/EXPORT</a><br></li>
 <li><a href="./sql-51.html">関数定義</a><br></li>
-<li><a href="./sql-52.html">エクステンション</a><br></li>
-<li><a href="./sql-53.html">外部サーバの定義、変更、削除</a><br></li>
-<li><a href="./sql-54.html">外部サーバのユーザマップ定義、変更、削除</a><br></li>
-<li><a href="./sql-55.html">外部テーブルの定義、変更、削除</a><br></li>
-<hr>
-<li><a href="./sql-56.html">イベントトリガ</a><br></li>
-<li><a href="./sql-57.html">行レベルセキュリティ</a><br></li>
+<li><a href="./sql-52.html">FDW(Foreign Data Wrapper)</a><br></li>
 
-<hr>
-<li><a href="./sql-60.html">新しい機能</a><br></li>
+<li><a href="./sql-53.html">PUBLICATION</a><br></li>
+<li><a href="./sql-54.html">SUBSCRIPTION</a><br></li>
+  
 </ol>
-
 
 <h5>関数</h5>
 
@@ -260,8 +244,6 @@ objID.className='close';
 <li><a href="./type-09.html">バイナリ列データ型</a><br></li>
 <li><a href="./type-10.html">Range型</a><br></li>
 <li><a href="./type-11.html">配列</a><br></li>
-<hr>
-<li><a href="./type-12.html">JSON型</a><br></li>
 
 <hr>
 [演算子]<br>
@@ -273,9 +255,6 @@ objID.className='close';
 <li><a href="./ope-06.html">パターンマッチング</a><br></li>
 <li><a href="./ope-07.html">日付/時刻演算子</a><br></li>
 <li><a href="./ope-08.html">Range型演算子</a><br></li>
-<hr>
-<li><a href="./ope-09.html">JSON型演算子</a><br></li>
-
 
 <hr>
 [関数]<br>
@@ -287,89 +266,73 @@ objID.className='close';
 <li><a href="./func-06.html">型変換関数</a><br></li>
 <li><a href="./func-07.html">Range型関数</a><br></li>
 <li><a href="./func-08.html">Window関数</a><br></li>
-<li><a href="./func-09.html">セッション情報関数</a><br></li>
-<li><a href="./func-10.html">アクセス権限とスキーマ可視性照会関数</a><br></li>
-<li><a href="./func-11.html">データベースオブジェクト関数</a><br></li>
-<li><a href="./func-12.html">バックアップとリカバリ制御関数</a><br></li>
+  <hr>
 
-<li><a href="./func-13.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-09.html">セッション情報関数</a><br></li>
+<li><a href="./func-10.html">アクセス権限照会関数</a><br></li>
+<li><a href="./func-11.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-12.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-13.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
+<li><a href="./func-14.html">制御データ関数</a><br></li>
+  <hr>
 <li><a href="./func-15.html">構成設定関数</a><br></li>
 <li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-17.html">レプリケーションSQL関数</a><br></li>
-
-<hr>
-<li><a href="./func-18.html">JSON関数</a><br></li>
+<li><a href="./func-17.html">バックアップ制御関数</a><br></li>
+<li><a href="./func-18.html">リカバリ制御関数</a><br></li>
+<li><a href="./func-19.html">スナップショット同期関数</a><br></li>	
+<li><a href="./func-20.html">レプリケーション管理関数</a><br></li>	
+<li><a href="./func-21.html">データベースオブジェクト管理関数</a><br></li>
+<li><a href="./func-22.html">インデックス保守関数</a><br></li>	
+<li><a href="./func-23.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-24.html">勧告的ロック用関数</a><br></li>
+<li><a href="./func-25.html">統計情報関数</a><br></li>	
 
 </ol>
-
-<!--
-[削除するもの]<br>
-<li><a href="./type-07.html">幾何データ型</a><br></li>
-<li><a href="./type-08.html">ネットワークアドレス型型</a><br></li>
-<li><a href="./ope-08.html">幾何演算子</a><br></li>
-<li><a href="./ope-09.html">ネットワーク演算子</a><br></li>
-<li><a href="./func-06.html">幾何関数</a><br></li>
-<li><a href="./func-07.html">ネットワークアドレス関数</a><br></li>
-<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
-<li><a href="./func-16.html">トランザクションID関数</a><br></li>
-<li><a href="./func-17.html">スキーマ可視性照会関数</a><br></li>
-<li><a href="./func-18.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-19.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-20.html">勧告的ロック用関数</a><br></li>
--->
 
 <h5>PL/pgSQL</h5>
 
 <ol>
-<li><a href="./plpgsql.html">結果の返し方</a><br></li>
-<li><a href="./plpgsql-01.html">ストアドプロシージャ</a><br></li>
-<li><a href="./plpgsql-02.html">ストアドプロシージャの定義</a><br></li>
+<li><a href="./plpgsql-01.html">PL/pgSQLによるストアドプロシージャ</a><br></li>
+
+  <hr>[定義]
+    <br>
+
+<li><a href="./plpgsql-02.html">PL/pgSQLによるストアドプロシージャの定義</a><br></li>
+
+  <hr>[基本的な使い方]
+    <br>
 <li><a href="./plpgsql-03.html">変数宣言と値の代入</a><br></li>
-**** まとめる >>
+
 <li><a href="./plpgsql-04.html">SELECT INTO文</a><br></li>
 <li><a href="./plpgsql-05.html">結果ステータスの取得</a><br></li>
 <li><a href="./plpgsql-06.html">動的なSQL文の実行</a><br></li>
-<< ここまで****
+
+  <hr>[制御構造]
+    <br>
 <li><a href="./plpgsql-07.html">IF 条件分岐</a><br></li>
-<li><a href="./plpgsql-08.html">ループ処理</a><br></li>
-*** >>>
-<li><a href="./plpgsql-09.html">RETURN</a><br></li>
-<<< ***
+<li><a href="./plpgsql-08.html">EXIT</a><br></li>
+
+<li><a href="./plpgsql-09.html">RETURN NEXT / RETURN QUERY</a><br></li>
+
 <li><a href="./plpgsql-10.html">ループ処理　LOOP</a><br></li>
 <li><a href="./plpgsql-11.html">ループ処理　WHILE</a><br></li>
-<li><a href="./plpgsql-12.html">ループ処理　FOR </a><br></li>
+<li><a href="./plpgsql-12.html">ループ処理　FOR</a><br></li>
 <li><a href="./plpgsql-13.html">ループ処理 (複数行の問い合わせ結果を扱う)</a><br></li>
+
+<hr>[カーソル]
+    <br>
 <li><a href="./plpgsql-14.html">カーソルの利用</a><br></li>
 <li><a href="./plpgsql-15.html">カーソル変数の宣言</a><br></li>
 <li><a href="./plpgsql-16.html">カーソルのオープンとクローズ	OPEN / CLOSE</a><br></li>
-<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得		FETCH</a><br></li>
-<li><a href="./plpgsql-18.html">カーソルを使った例</a><br></li>
-<li><a href="./plpgsql-19.html">例外</a><br></li>
-*** >>>
-<li><a href="./plpgsql-21.html">CASE</a><br></li>
-<li><a href="./plpgsql-22.html">FOREACH</a><br></li>
-<<< ***
-</ol>
+<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得	FETCH</a><br></li>
+  <li><a href="./plpgsql-18.html">FOR IN LOOPにカーソル行の取得</a><br></li>
+<li><a href="./plpgsql-19.html">カーソルを使った例</a><br></li>
+
+  <hr>[例外]
+    <br>
+<li><a href="./plpgsql-20.html">例外処理</a><br></li>
 
 
-<h5>Appendix(付録)</h5>
-
-<ol>
-<li><a href="./app-01.html">pgpool-II</a><br></li>
-<li><a href="./app-02.html">Pacemaker</a><br></li>
-</ol>
-
-
-<h5>おまけ:ネット公開(ページ数の関係で書籍には載せない)</h5>
-
-<ol>
-[pgpool]<br>
-<li><a href="./ha-06.html">pgpool-II セットアップ</a><br></li>
-<li><a href="./ha-07.html">pgpool-II レプリケーションモード</a><br></li>
-<li><a href="./ha-08.html">pgpool-II マスタースレーブモード</a><br></li>
-[Pacemaker]<br>
-<li><a href="./ha-10.html">Pacemaker</a><br></li>
 </ol>
 
 </div>
@@ -378,77 +341,298 @@ objID.className='close';
 
   </td>
   <td valign="top">
-   <div id="body">
+    <div id="body">
+      
 
 
 <h2>稼働統計情報</h2>
 
 <p>
-稼働統計情報を表示するビューの一覧を示します。稼働統計情報に関する設定パラメータは[<4-09>]を参照してください。
+稼働統計情報を表示するビューの一覧を示します。稼働統計情報に関する設定パラメータは<a href="./param-09.html">[<4-09>]</a>を参照してください。
 </p>
 
+
 <table border=1>
-<caption>[<表3-09>] 稼働統計情報を表示するビュー</caption>
+<caption>[<表3-09>] Dynamic Statistics Views</caption>
 <tr bgcolor="#cccccc">
 <th>ビュー名</th>		<th>説明</th>
 </tr><tr>
-<td>pg_stat_activity</td>	<td>postgresプロセスのPID、データベース、データベースユーザ/ロール、現在の問い合わせを表示</td>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-ACTIVITY-VIEW" target="_blank" rel="noopener noreferrer">pg_stat_activity</a>
+</td>	<td>postgresプロセスのPID、データベース、データベースユーザ/ロール、現在の問い合わせを表示</td>
 </tr><tr>
-<td>pg_stat_bgwriter</td>	<td>バックグランドライタの稼働統計情報を表示。バージョン8.3から</td>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-REPLICATION-VIEW" target="_blank" rel="noopener noreferrer">pg_stat_replication</a>
+</td>	<td>レプリケーションしているスレーブの状態を表示。マスタのみ利用可能(スレーブでは表示されない)。</td>
 </tr><tr>
-<td>pg_stat_database</td>	<td>データベース毎のpostgresプロセス数、コミットされたトランザクションの総数、ロールバックされたトランザクションの総数などを表示</td>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-WAL-RECEIVER-VIEW" target="_blank" rel="noopener noreferrer">pg_stat_wal_receiver</a>
+</td>	<td>受信サーバが接続したサーバからWAL受信サーバに関する統計情報を表示。</td>
 </tr><tr>
-<td>pg_stat_database_conflicts</td>	<td>レプリケーション実行時、データベースのConflict状態を表示。Conflictはスレーブでのみ発生するので、スレーブでのみ表示。バージョン9.1から</td>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-RECOVERY-PREFETCH" target="_blank" rel="noopener noreferrer">pg_stat_recovery_prefetch</a>
+</td>	<td>リカバリ中にプリフェッチされたブロックに関する統計情報を表示。バージョン15から</td>
 </tr><tr>
-<td>pg_stat_replication</td>	<td>レプリケーションしているスレーブの状態を表示。マスタのみ利用可能(スレーブでは表示されない)。バージョン9.1から</td>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-SUBSCRIPTION" target="_blank" rel="noopener noreferrer">pg_stat_subscription</a>
+</td>	<td>1つのサブスクリプションにつき少なくとも1行の形式で、サブスクリプションワーカに関する情報を表示。</td>
 </tr><tr>
-<td>pg_stat_all_tables</td>	<td>テーブルに関する、シーケンシャルスキャン、インデックススキャンの総数、各種スキャンによって返されたレコードの総数、挿入、更新、削除されたレコードの総数を表示</td>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-SSL-VIEW" target="_blank" rel="noopener noreferrer">pg_stat_ssl</a>
+</td>	<td>接続（通常およびレプリケーション）あたり1行の形式で、接続に使われるSSLの情報を表示。</td>
 </tr><tr>
-<td>pg_stat_sys_tables</td>	<td>システムカタログのみ表示される点を除き、pg_stat_all_tables と同じ</td>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-GSSAPI-VIEW" target="_blank" rel="noopener noreferrer">pg_stat_gssapi</a>
+</td>	<td>接続（通常およびレプリケーション）あたり1行の形式で、接続に使われるGSSAPI認証と暗号化に関する情報を表示。バージョン12から</td>
 </tr><tr>
-<td>pg_stat_user_tables</td>	<td>一般のテーブルのみが表示される点を除き、pg_stat_all_tables と同じ</td>
+<td>
+<a href="https://www.postgresql.org/docs/current/progress-reporting.html#ANALYZE-PROGRESS-REPORTING" target="_blank" rel="noopener noreferrer">pg_stat_progress_analyze</a>
+</td>	<td>ANALYZEを実行している（自動バキュームワーカプロセスを含んだ）各バックエンドごとに1行の形式で、現在の進捗を表示。バージョン13から</td>
 </tr><tr>
-<td>pg_stat_xact_all_tables</td>	<td>pg_stat_all_tablesとほぼ同じ項目を表示。ただし、現在のトランザクション内での処理結果のみ(ここで表示されている情報はまだ、pg_stat_all_tablesには反映されない)。バージョン9.1から</td>
+<td>
+<a href="https://www.postgresql.org/docs/current/progress-reporting.html#CREATE-INDEX-PROGRESS-REPORTING" target="_blank" rel="noopener noreferrer">pg_stat_progress_create_index</a>
+</td>	<td>CREATE INDEXまたはREINDEXを実行している各バックエンドごとに1行の形式で、現在の進捗を表示。バージョン12から</td>
 </tr><tr>
-<td>pg_stat_xact_sys_tables</td>	<td>システムテーブルのみが表示される点を除き、pg_stat_xact_all_tablesと同じ。バージョン9.1から</td>
+<td>
+<a href="https://www.postgresql.org/docs/current/progress-reporting.html#VACUUM-PROGRESS-REPORTING" target="_blank" rel="noopener noreferrer">pg_stat_progress_vacuum</a>
+</td>	<td>VACUUMを実行している（自動バキュームワーカプロセスを含んだ）各バックエンドごとに１行の形式で、現在の進捗を表示。</td>
 </tr><tr>
-<td>pg_stat_xact_user_tables</td>	<td>ユーザテーブルのみが表示される点を除き、pg_stat_xact_all_tablesと同じ。バージョン9.1から</td>
+<td>
+<a href="https://www.postgresql.org/docs/current/progress-reporting.html#CLUSTER-PROGRESS-REPORTING" target="_blank" rel="noopener noreferrer">pg_stat_progress_cluster</a>
+</td>	<td>CLUSTERまたはVACUUM FULLを実行している各バックエンドごとに1行の形式で、現在の進捗を表示。バージョン12から</td>
 </tr><tr>
-<td>pg_stat_all_indexes	</td>	<td>各インデックスに関する、インデックススキャン数、読みとられたインデックス数などを表示</td>
+<td>
+<a href="https://www.postgresql.org/docs/current/progress-reporting.html#BASEBACKUP-PROGRESS-REPORTING" target="_blank" rel="noopener noreferrer">pg_stat_progress_basebackup</a>
+</td>	<td>ベースバックアップをストリームしている各WAL送信プロセスごとに1行の形式で、現在の進捗を表示。バージョン13から</td>
 </tr><tr>
-<td>pg_stat_sys_indexes	</td>	<td>システムカタログのインデックスのみ表示される点を除き、pg_stat_all_indexes と同じ</td>
+<td>
+<a href="https://www.postgresql.org/docs/current/progress-reporting.html#COPY-PROGRESS-REPORTING" target="_blank" rel="noopener noreferrer">pg_stat_progress_copy</a>
+</td>	<td>COPYを実行している各バックエンドごとに1行の形式で、現在の進捗を表示。バージョン14から</td>
+</tr></table>
+
+
+
+<table border=1>
+<caption>[<表3-09>] Collected Statistics Views</caption>
+<tr bgcolor="#cccccc">
+<th>ビュー名</th>		<th>説明</th>
 </tr><tr>
-<td>pg_stat_user_indexes</td>	<td>一般のテーブルのインデックスのみが表示される点を除き、pg_stat_all_indexes と同じ</td>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-ARCHIVER-VIEW" target="_blank" rel="noopener noreferrer">
+pg_stat_archiver</a></td>	<td>WALアーカイバプロセスの活動状況に関する統計情報を１行のみで表示。</td>
 </tr><tr>
-<td>pg_statio_all_tables</td>	<td>テーブル毎の読み取られたディスクブロックの総数、バッファヒット数などを表示</td>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-BGWRITER-VIEW" target="_blank" rel="noopener noreferrer">
+pg_stat_bgwriter</a></td>	<td>バックグランドライタの稼働統計情報を表示。</td>
 </tr><tr>
-<td>pg_statio_sys_tables</td>	<td>システムカタログのみが表示される点を除き、pg_statio_all_tables と同じ</td>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-WAL-VIEW" target="_blank" rel="noopener noreferrer">
+pg_stat_wal</td>	<td>WALの活動状況に関する統計情報を1行のみで表示。バージョン14から</td>
 </tr><tr>
-<td>pg_statio_user_tables</td>	<td>一般のテーブルのみが表示される点を除き、pg_statio_all_tables と同じ</td>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-DATABASE-VIEW" target="_blank" rel="noopener noreferrer">
+pg_stat_database</a></td>	<td>データベース毎のpostgresプロセス数、コミットされたトランザクションの総数、ロールバックされたトランザクションの総数などを表示。</td>
 </tr><tr>
-<td>pg_statio_all_indexes</td>	<td>各インデックスに関する、そのインデックスの読みとられたディスクブロック数とバッファヒット数を表示</td>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-DATABASE-CONFLICTS-VIEW" target="_blank" rel="noopener noreferrer">
+pg_stat_database_conflicts</a></td>	<td>レプリケーション実行時、データベースのコンフリクト状態を表示。コンフリクトはスレーブでのみ発生するので、スレーブでのみ表示。</td>
 </tr><tr>
-<td>pg_statio_sys_indexes</td>	<td>システムテーブルのインデックスのみが表示される点を除き、pg_statio_all_indexes と同じ</td>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-ALL-TABLES-VIEW" target="_blank" rel="noopener noreferrer">
+pg_stat_all_tables</a></td>	<td>テーブルに関する、シーケンシャルスキャン、インデックススキャンの総数、各種スキャンによって返されたレコードの総数、挿入、更新、削除されたレコードの総数を表示。</td>
 </tr><tr>
-<td>pg_statio_user_indexes</td>	<td>ユーザテーブルのインデックスのみが表示される点を除き、pg_statio_all_indexes と同じ</td>
+<td>
+pg_stat_sys_tables</td>	<td>システムカタログのみ表示される点を除き、pg_stat_all_tables と同じ。</td>
 </tr><tr>
-<td>pg_statio_all_sequences</td>	<td>各シーケンスに関する、読みとられたディスクブロック数とバッファヒット数を表示</td>
+<td>
+pg_stat_user_tables</td>	<td>一般のテーブルのみが表示される点を除き、pg_stat_all_tables と同じ。</td>
 </tr><tr>
-<td>pg_statio_sys_sequences</td>	<td>システムカタログのシーケンスのみが表示される点を除き、pg_statio_all_sequences と同じ</td>
+<td>
+pg_stat_xact_all_tables</td>	<td>pg_stat_all_tablesとほぼ同じ項目を表示。ただし、現在のトランザクション内での処理結果のみ(ここで表示されている情報はまだ、pg_stat_all_tablesには反映されない)。</td>
 </tr><tr>
-<td>pg_statio_user_sequences</td>	<td>一般のシーケンスのみが表示される点を除き、pg_statio_all_sequences と同じ</td>
+<td>
+pg_stat_xact_sys_tables</td>	<td>システムテーブルのみが表示される点を除き、pg_stat_xact_all_tablesと同じ。</td>
 </tr><tr>
-<td>pg_stat_user_functions</td>	<td>ユーザ定義関数の稼働統計情報を表示。設定パラメータtrack_functionの値によって表示する関数の範囲が異なる。noneなら表示しない、plならPL/pgSQLなどで定義された関数のみ、allならSQLやCで定義したユーザ定義関数すべて。バージョン8.4から</td>
+<td>
+pg_stat_xact_user_tables</td>	<td>ユーザテーブルのみが表示される点を除き、pg_stat_xact_all_tablesと同じ。</td>
 </tr><tr>
-<td>pg_stat_xact_user_functions</td>	<td>pg_stat_user_functionsと同じ項目を表示。ただし、現在のトランザクション内での処理結果のみ(ここで表示されている情報はまだ、pg_stat_user_functionsには反映されない)。バージョン9.1から</td>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-ALL-INDEXES-VIEW" target="_blank" rel="noopener noreferrer">
+pg_stat_all_indexes</a></td>	<td>各インデックスに関する、インデックススキャン数、読みとられたインデックス数などを表示。</td>
+</tr><tr>
+<td>
+pg_stat_sys_indexes</td>	<td>システムカタログのインデックスのみ表示される点を除き、pg_stat_all_indexes と同じ。</td>
+</tr><tr>
+<td>
+pg_stat_user_indexes</td>	<td>一般のテーブルのインデックスのみが表示される点を除き、pg_stat_all_indexes と同じ。</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STATIO-ALL-TABLES-VIEW" target="_blank" rel="noopener noreferrer">
+pg_statio_all_tables</a></td>	<td>テーブル毎の読み取られたディスクブロックの総数、バッファヒット数などを表示。</td>
+</tr><tr>
+<td>
+pg_statio_sys_tables</td>	<td>システムカタログのみが表示される点を除き、pg_statio_all_tables と同じ。</td>
+</tr><tr>
+<td>
+pg_statio_user_tables</td>	<td>一般のテーブルのみが表示される点を除き、pg_statio_all_tables と同じ。</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STATIO-ALL-INDEXES-VIEW" target="_blank" rel="noopener noreferrer">
+pg_statio_all_indexes</a></td>	<td>各インデックスに関する、そのインデックスの読みとられたディスクブロック数とバッファヒット数を表示。</td>
+</tr><tr>
+<td>
+pg_statio_sys_indexes</td>	<td>システムテーブルのインデックスのみが表示される点を除き、pg_statio_all_indexes と同じ。</td>
+</tr><tr>
+<td>
+pg_statio_user_indexes</td>	<td>ユーザテーブルのインデックスのみが表示される点を除き、pg_statio_all_indexes と同じ。</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STATIO-ALL-SEQUENCES-VIEW" target="_blank" rel="noopener noreferrer">
+pg_statio_all_sequences</a></td>	<td>各シーケンスに関する、読みとられたディスクブロック数とバッファヒット数を表示。</td>
+</tr><tr>
+<td>
+pg_statio_sys_sequences</td>	<td>システムカタログのシーケンスのみが表示される点を除き、pg_statio_all_sequences と同じ。</td>
+</tr><tr>
+<td>
+pg_statio_user_sequences</td>	<td>一般のシーケンスのみが表示される点を除き、pg_statio_all_sequences と同じ。</td>
+</tr><tr>
+<td>
+pg_stat_user_functions</td>	<td>ユーザ定義関数の稼働統計情報を表示。設定パラメータtrack_functionの値によって表示する関数の範囲が異なる。noneなら表示しない、plならPL/pgSQLなどで定義された関数のみ、allならSQLやCで定義したユーザ定義関数すべて。</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-USER-FUNCTIONS-VIEW" target="_blank" rel="noopener noreferrer">
+pg_stat_xact_user_functions</a></td>	<td>ユーザ定義関数の稼働統計情報を表示。設定パラメータtrack_functionの値によって表示する関数の範囲が異なる。noneなら表示しない、plならPL/pgSQLなどで定義された関数のみ、allならSQLやCで定義したユーザ定義関数すべて。</td>
+</tr><tr>
+<td>
+pg_stat_slru</td>	<td>SLRUごとに1行の形で、操作に関する統計情報を表示。バージョン13から</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-REPLICATION-SLOTS-VIEW" target="_blank" rel="noopener noreferrer">
+pg_stat_replication_slots</a></td>	<td>レプリケーションスロット毎に1行の形式で、レプリケーションスロットの使用状況に関する統計情報を表示。バージョン14から</td>
+</tr><tr>
+<td>
+pg_stat_subscription_stats</td>	<td>サブスクリプションごとに1行で、エラーに関する統計を表示。バージョン15から</td>
 </tr></table>
 
 <br>
 
+<table border=1>
+<caption>[<表3-09>]<a href="https://www.postgresql.org/docs/current/views.html" target="_blank" rel="noopener noreferrer">System Views</a></caption>
+<tr bgcolor="#cccccc">
+<th>ビュー名</th>		<th>説明</th>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-available-extensions.html" target="_blank" rel="noopener noreferrer">pg_available_extensions</a></td>	<td>available extensions</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-available-extension-versions.html" target="_blank" rel="noopener noreferrer">pg_available_extension_versions</a></td>	<td>available versions of extensions</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-backend-memory-contexts.html" target="_blank" rel="noopener noreferrer">pg_backend_memory_contexts</a></td>	<td>backend memory contexts</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-config.html" target="_blank" rel="noopener noreferrer">pg_config</a></td>	<td>compile-time configuration parameters</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-cursors.html" target="_blank" rel="noopener noreferrer">pg_cursors</a></td>	<td>open cursors</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-file-settings.html" target="_blank" rel="noopener noreferrer">pg_file_settings</a></td>	<td>summary of configuration file contents</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-group.html" target="_blank" rel="noopener noreferrer">pg_group</a></td>	<td>groups of database users</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-hba-file-rules.html" target="_blank" rel="noopener noreferrer">pg_hba_file_rules</a></td>	<td>summary of client authentication configuration file contents</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-ident-file-mappings.html" target="_blank" rel="noopener noreferrer">pg_ident_file_mappings</a></td>	<td>summary of client user name mapping configuration file contents</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-indexes.html" target="_blank" rel="noopener noreferrer">pg_indexes</a></td>	<td>indexes</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-locks.html" target="_blank" rel="noopener noreferrer">pg_locks</a></td>	<td>locks currently held or awaited</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-matviews.html" target="_blank" rel="noopener noreferrer">pg_matviews</a></td>	<td>materialized views</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-policies.html" target="_blank" rel="noopener noreferrer">pg_policies</a></td>	<td>policies</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-prepared-statements.html" target="_blank" rel="noopener noreferrer">pg_prepared_statements</a></td>	<td>prepared statements</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-prepared-xacts.html" target="_blank" rel="noopener noreferrer">pg_prepared_xacts</a></td>	<td>prepared transactions</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-publication-tables.html" target="_blank" rel="noopener noreferrer">pg_publication_tables</a></td>	<td>publications and information of their associated tables</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-replication-origin-status.html" target="_blank" rel="noopener noreferrer">pg_replication_origin_status</a></td>	<td>information about replication origins, including replication progress</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-replication-slots.html" target="_blank" rel="noopener noreferrer">pg_replication_slots</a></td>	<td>replication slot information</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-roles.html" target="_blank" rel="noopener noreferrer">pg_roles</a></td>	<td>database roles</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-rules.html" target="_blank" rel="noopener noreferrer">pg_rules</a></td>	<td>rules</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-seclabels.html" target="_blank" rel="noopener noreferrer">pg_seclabels</a></td>	<td>security labels</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-sequences.html" target="_blank" rel="noopener noreferrer">pg_sequences</a></td>	<td>sequences</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-settings.html" target="_blank" rel="noopener noreferrer">pg_settings</a></td>	<td>parameter settings</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-shadow.html" target="_blank" rel="noopener noreferrer">pg_shadow</a></td>	<td>database users</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-shmem-allocations.html" target="_blank" rel="noopener noreferrer">pg_shmem_allocations</a></td>	<td>shared memory allocations</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-stats.html" target="_blank" rel="noopener noreferrer">pg_stats</a></td>	<td>planner statistics</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-stats-ext.html" target="_blank" rel="noopener noreferrer">pg_stats_ext</a></td>	<td>extended planner statistics</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-stats-ext-exprs.html" target="_blank" rel="noopener noreferrer">pg_stats_ext_exprs</a></td>	<td>extended planner statistics for expressions</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-tables.html" target="_blank" rel="noopener noreferrer">pg_tables</a></td>	<td>tables</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-timezone-abbrevs.html" target="_blank" rel="noopener noreferrer">pg_timezone_abbrevs</a></td>	<td>time zone abbreviations</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-timezone-names.html" target="_blank" rel="noopener noreferrer">pg_timezone_names</a></td>	<td>time zone names</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-user.html" target="_blank" rel="noopener noreferrer">pg_user</a></td>	<td> database users</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-user-mappings.html" target="_blank" rel="noopener noreferrer">pg_user_mappings</a></td>	<td> user mappings</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-pg-views.html" target="_blank" rel="noopener noreferrer">pg_views</a></td>	<td>views</td>
+</tr></table>
+
+
+
+<br>
 
 <p>
 以下、主要なものを解説します。
 </p>
+
+
 
 <div class="jumpmenu"></div><h3>データベースユーザ/ロールの稼働統計情報</h3>
 
@@ -461,50 +645,82 @@ objID.className='close';
 <tr bgcolor="#cccccc">
 <th>項目</th>		<th>説明</th>
 </tr><tr>
-<td>datid</td>		<td>接続しているデータベースのOID。バージョン8.1から</td>
+<td>datid</td>		<td>接続しているデータベースのOID。</td>
 </tr><tr>
-<td>datname</td>	<td>接続しているデータベース名</td>
+<td>datname</td>	<td>接続しているデータベース名。</td>
 </tr><tr>
-<td>pid (ver9.1までprocpid)</td>	<td>接続しているpostgresプロセスのプロセス番号</td>
+<td>pid</td>	<td>このバックエンドのプロセス番号。</td>
 </tr><tr>
-<td>usesysid</td>	<td>データベースユーザ/ロールのID</td>
+<td>leader_pid</td>	<td>Parallel Queryのワーカプロセスの場合、グループリーダーPIDを表示。ワーカプロセスでない場合はNULL。バージョン13から</td>
 </tr><tr>
-<td>usename</td>	<td>データベースユーザ/ロール名</td>
+<td>usesysid</td>	<td>データベースユーザ/ロールのID。</td>
 </tr><tr>
-<td>application_name</td>	<td>接続しているアプリケーション名。バージョン9.0から</td>
+<td>usename</td>	<td>データベースユーザ/ロール名。</td>
 </tr><tr>
-<td>query (ver9.1までcurrent_query)</td>	<td>現在、実行しているSQL文</td>
+<td>application_name</td>	<td>接続しているアプリケーション名。</td>
+</tr><tr>
+<td>client_addr</td>	<td>接続しているクライアントのIPアドレス。</td>
+</tr><tr>
+<td>client_hostname</td>	<td>接続しているクライアントのhostname。IP接続かつ設定パラメータlog_hostnameが有効の場合のみ有効。</td>
+</tr><tr>
+<td>client_port</td>	<td>接続しているクライアントのport番号。</td>
+</tr><tr>
+<td>backend_start</td>	<td>接続してpostgresプロセスが起動した時刻。</td>
+</tr><tr>
+<td>xact_start</td>	<td>現在のトランザクションの開始時刻。</td>
+</tr><tr>
+<td>query_start</td>	<td>最近のSQL文を実行した時刻。</td>
+</tr><tr>
+<td>state_change</td>	<td>stateが最後に変更された時刻。</td>
+</tr><tr>
+<td>wait_event_type</td>	<td>バックエンドが待機しているイベントの型。なければNULL。
+<blockquote>
 
+</blockquote>
 
+</td>
 </tr><tr>
-<td>state_change</td>	<td>stateが最後に変更された時刻。バージョン9.2から</td>
-
+<td>wait_event</td>	<td>バックエンドが待機しているイベントの方の名前。なければNULL。</td>
 </tr><tr>
-<td>waiting</td>	<td>待機状態。バージョン8.2から</td>
-
-
+<td>state</td>
+<td>postgresプロセスの状態。
+<blockquote>
+active:				問い合わせ実行中。<br>
+idle:				クライアントからの問い合わせ待ち。<br>
+idle in transaction:		BEGIN実行後(トランザクション内で)問い合わせを待っている状態。<br>
+idle in transaction (aborted):	トランザクション内でエラーが発生し、ABORTすることが確定している状態。<br>
+fastpath function call:		fastpath関数を実行中。
+disabled:			設定パラメータ track_activities が無効の場合。
+</blockquote>
+</td>
 </tr><tr>
-<td>state</td>		
-<td>postgresプロセスの状態。<br>
-"active"は問い合わせ実行中。
-"idle"はクライアントからの問い合わせ待ち。
-"idle in transaction"はBEGIN実行後(トランザクション内で)問い合わせを待っている状態。
-"idle in transaction (aborted)"はトランザクション内でエラーが発生し、ABORTすることが確定している状態。
-"fastpath function call"はfastpath関数を実行中。バージョン9.2から</td>
-
-
+<td>backend_xid</td>	<td>このバックエンドの最上位のXID。</td>
 </tr><tr>
-<td>xact_start</td>	<td>現在のトランザクションの開始時刻。バージョン8.4から</td>
+<td>backend_xmin</td>	<td>このバックエンドのxmin。</td>
 </tr><tr>
-<td>query_start</td>	<td>最近のSQL文を実行した時刻</td>
+<td>query_id</td>	<td>実行している、もしくは最後に実行されたSQL文のID。
+設定パラメータcompute_query_idがonの場合のみ有効。
+<font color="#ff0000">注意:型はbigintだが内部では符号なしで計算されるため、負号で表示される場合がある。</font>バージョン14から</td>
 </tr><tr>
-<td>backend_start</td>	<td>接続してpostgresプロセスが起動した時刻</td>
+<td>query</td>	<td>実行しているSQL文、もしくは最後に実行されたSQL文。</td>
 </tr><tr>
-<td>client_addr	</td>	<td>クライアントのIPアドレス</td>
-</tr><tr>
-<td>client_hostname</td><td>クライアントのホスト名。バージョン9.1から</td>
-</tr><tr>
-<td>client_port</td>	<td>クライアントが接続しているポート番号</td>
+<td>backend_type</td>	<td>バックエンドの型。現時点でサポートしている型は以下：
+<blockquote>
+autovacuum launcher<br>
+autovacuum worker<br>
+logical replication launcher<br>
+logical replication worker<br>
+parallel worker<br>
+background writer<br>
+client backend<br>
+checkpointer<br>
+archiver<br>
+startup<br>
+walreceiver<br>
+walsender<br>
+walwriter
+</blockquote>
+</td>
 </tr></table>
 
 <br>
@@ -534,41 +750,69 @@ objID.className='close';
 </tr><tr>
 <td>blks_hit</td>		<td>今までにヒットしたブロックの総数</td>
 </tr><tr>
-<td>tup_returned</td>		<td>今までに返されたレコード数。バージョン8.3から</td>
+<td>tup_returned</td>		<td>今までに返されたレコード数。</td>
 </tr><tr>
-<td>tup_fetched</td>		<td>今までにFETCHされたレコード数。バージョン8.3から</td>
+<td>tup_fetched</td>		<td>今までにFETCHされたレコード数。</td>
 </tr><tr>
-<td>tup_inserted</td>		<td>今までにINSERTされたレコード数。バージョン8.3から</td>
+<td>tup_inserted</td>		<td>今までにINSERTされたレコード数。</td>
 </tr><tr>
-<td>tup_updated</td>		<td>今までにUPDATEされたレコード数。バージョン8.3から</td>
+<td>tup_updated</td>		<td>今までにUPDATEされたレコード数。</td>
 </tr><tr>
-<td>tup_deleted</td>		<td>今までにDELETEされたレコード数。バージョン8.3から</td>
+<td>tup_deleted</td>		<td>今までにDELETEされたレコード数。</td>
 </tr><tr>
-<td>	conflicts	</td>	<td>(レプリケーションで)Conflictが発生してキャンセルした問い合わせの数。バージョン9.1から</td>
+<td>	conflicts	</td>	<td>(レプリケーションで)Conflictが発生してキャンセルした問い合わせの数。</td>
+</tr><tr>
+<td>temp_files	</td>		<td>生成した一時ファイルの数。</td>
+</tr><tr>
+<td>temp_bytes	</td>		<td>一時ファイルに書き込んだデータのバイト数。</td>
+</tr><tr>
+<td>deadlocks	</td>		<td>発生したデッドロックの数。</td>
 
 </tr><tr>
-<td>temp_files	</td>		<td>生成した一時ファイルの数。バージョン9.2から</td>
+<td>checksum_failures	</td>		<td>データベース内で検知されたデータページチェックサムの検査失敗数。バージョン12から</td>
 </tr><tr>
-<td>temp_bytes	</td>		<td>一時ファイルに書き込んだデータのバイト数。バージョン9.2から</td>
-</tr><tr>
-<td>deadlocks	</td>		<td>発生したデッドロックの数。バージョン9.2から</td>
-</tr><tr>
-<td>blk_read_time	</td>		<td>共有バッファにデータを読み込むために要した時間の総計。単位は[ミリ秒]。この集計を有効にするには設定パラメータtrack_timingをonにする。バージョン9.2から</td>
-</tr><tr>
-<td>blk_write_time	</td>		<td>共有バッファにデータを書き込むために要した時間の総計。単位は[ミリ秒]。この集計を有効にするには設定パラメータtrack_timingをonにする。バージョン9.2から</td>
+<td>checksum_last_failure	</td>		<td>データベース内で最後に検知されたデータページチェックサム検査失敗の時刻。バージョン12から</td>
 
 </tr><tr>
-<td>stats_reset</td>		<td>稼働統計情報をリセットした時刻。バージョン9.1から</td>
+<td>blk_read_time	</td>		<td>共有バッファにデータを読み込むために要した時間の総計。単位は[ミリ秒]。この集計を有効にするには設定パラメータtrack_io_timingをonにする。</td>
+</tr><tr>
+<td>blk_write_time	</td>		<td>共有バッファにデータを書き込むために要した時間の総計。単位は[ミリ秒]。この集計を有効にするには設定パラメータtrack_io_timingをonにする。</td>
+
+</tr><tr>
+<td>session_time	</td>		<td>このデータベースでデータベースセッションに費やされたミリ秒単位の時間。バージョン14から</td>
+
+</tr><tr>
+<td>active_time	</td>		<td>このデータベースでSQL文実行に費やされたミリ秒単位の時間(pg_stat_activityのactiveとfastpath function call状態の和)。バージョン14から</td>
+
+</tr><tr>
+<td>idle_in_transaction_time	</td>		<td>このデータベースでトランザクション中にアイドル状態であったミリ秒単位の時間(pg_stat_activityのidle in transactionとidle in transaction (aborted)状態の和)。バージョン14から</td>
+
+</tr><tr>
+<td>sessions	</td>		<td>このデータベースに対して確立されたセッションの総数。バージョン14から</td>
+
+
+</tr><tr>
+<td>sessions_abandoned	</td>		<td>クライアントとの接続が切断したために終了したセッションの数。バージョン14から</td>
+
+</tr><tr>
+<td>sessions_fatal	</td>		<td>致命的なエラーによって終了したセッションの数。バージョン14から</td>
+
+</tr><tr>
+<td>sessions_killed	</td>		<td>オペレータによって終了したセッションの数。バージョン14から</td>
+
+</tr><tr>
+<td>stats_reset</td>		<td>稼働統計情報をリセットした時刻。</td>
 </tr></table>
 
 <br>
+
 
 
 <div class="jumpmenu"></div><h3>テーブルやインデックスの稼働統計情報</h3>
 
 <p>
 ビューpg_stat_all_tablesは、シーケンシャルスキャンとインデックススキャンされた総数、
-各種スキャンによって返されたレコードの総数、挿入、更新、削除されたレコードの総数などを表示します([<表3-12>])。
+各種スキャンによって返されたレコードの総数、挿入、更新、削除された行の総数などを表示します([<表3-12>])。
 バージョンが進むにつれてVACUUMやANALYZEした回数や、有効なタプル数や削除対象のタプル数など有用な情報が取得できるようになりました。
 <br>
 ブロックの読み込み数とキャッシュヒット数などはビューpg_statio_all_tablesで表示できます([<表3-13>])。
@@ -599,27 +843,31 @@ objID.className='close';
 </tr><tr>
 <td>n_tup_del</td>	<td>DELETEされたレコード数</td>
 </tr><tr>
-<td>n_tup_hot_upd</td>	<td>UPDATEでHOTが使われたレコード数。バージョン8.3から</td>
+<td>n_tup_hot_upd</td>	<td>UPDATEでHOTが使われたレコード数。</td>
 </tr><tr>
-<td>n_live_tup</td>	<td>有効なタプル数。バージョン8.3から</td>
+<td>n_live_tup</td>	<td>有効なタプル数。</td>
 </tr><tr>
-<td>n_dead_tup</td>	<td>削除や更新で無効になったタプル数(VACUUMの対象)。バージョン8.3から</td>
+<td>n_dead_tup</td>	<td>削除や更新で無効になったタプル数(VACUUMの対象)。</td>
 </tr><tr>
-<td>last_vacuum</td>	<td>手動でVACUUMコマンドを実行した時刻。バージョン8.2から</td>
+<td>n_mod_since_analyze</td>	<td>このテーブルが最後にanalyzeされてから変更された行数の推定値。バージョン13から</td>
 </tr><tr>
-<td>last_autovacuum</td>	<td>AUTOVACUUMプロセスがVACUUM処理した時刻。バージョン8.2から</td>
+<td>n_ins_since_vacuum</td>	<td>このテーブルが最後にvacuumされてから挿入された行数の推定値。バージョン13から</td>
 </tr><tr>
-<td>last_analyze</td>	<td>手動でANALYZEコマンドを実行した時刻。バージョン8.2から</td>
+<td>last_vacuum</td>	<td>手動でVACUUMコマンドを実行した時刻。</td>
 </tr><tr>
-<td>last_autoanalyze</td>	<td>AUTOVACUUMプロセスがANALYZEを行った時刻。バージョン8.2から</td>
+<td>last_autovacuum</td>	<td>AUTOVACUUMプロセスがVACUUM処理した時刻。</td>
 </tr><tr>
-<td>vacuum_count</td>	<td>手動でVACUUMコマンドが実行された回数。バージョン9.1から</td>
+<td>last_analyze</td>	<td>手動でANALYZEコマンドを実行した時刻。</td>
 </tr><tr>
-<td>autovacuum_count</td>	<td>AUTOVACUUMプロセスでVACUUMされた回数。バージョン9.1から</td>
+<td>last_autoanalyze</td>	<td>AUTOVACUUMプロセスがANALYZEを行った時刻。</td>
 </tr><tr>
-<td>analyze_count</td>	<td>手動でANALYZEコマンドが実行された回数。バージョン9.1から</td>
+<td>vacuum_count</td>	<td>手動でVACUUMコマンドが実行された回数。</td>
 </tr><tr>
-<td>autoanalyze_count</td>	<td>AUTOVACUUMプロセスでANALYZEされた回数。バージョン9.1から</td>
+<td>autovacuum_count</td>	<td>AUTOVACUUMプロセスでVACUUMされた回数。</td>
+</tr><tr>
+<td>analyze_count</td>	<td>手動でANALYZEコマンドが実行された回数。</td>
+</tr><tr>
+<td>autoanalyze_count</td>	<td>AUTOVACUUMプロセスでANALYZEされた回数。</td>
 </tr></table>
 
 <br>
@@ -747,9 +995,74 @@ objID.className='close';
 
 <br>
 
+<div class="jumpmenu"></div><h3>WAL関連の統計情報</h3>
+
+<p>
+</p>
+
+
+
+<table border=1>
+<caption>[<表3-16>] pg_stat_archiver</caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>		<th>説明</th>
+</tr><tr>
+<td>archived_count</td>	<td>アーカイブに成功したWALファイル数。</td>
+</tr><tr>
+<td>last_archived_wal</td>	<td>最後にアーカイブに成功したWALファイル名。</td>
+</tr><tr>
+<td>last_archived_time</td>	<td>最後にアーカイブに成功した時刻。</td>
+</tr><tr>
+<td>failed_count</td>	<td>WALファイルのアーカイブに失敗した回数。</td>
+</tr><tr>
+<td>last_failed_wal</td>	<td>最後にアーカイブ操作に失敗したWALファイル名。</td>
+</tr><tr>
+<td>last_failed_time</td>	<td>最後にアーカイブ操作に失敗した時刻。</td>
+</tr><tr>
+<td>stats_reset </td>	<td>稼働統計情報をリセットした時刻。</td>
+</tr></table>
+
+
+<br>
+
+
+<table border=1>
+<caption>[<表3-16>] pg_stat_wal</caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>		<th>説明</th>
+</tr><tr>
+<td>wal_records</td>	<td>生成されたWALレコードの総数。</td>
+</tr><tr>
+<td>wal_fpi</td>	<td>生成されたWALフルページイメージの総数。</td>
+</tr><tr>
+<td>wal_bytes</td>	<td>生成されたWALのバイト単位の総量。</td>
+</tr><tr>
+<td>wal_buffers_full</td>	<td>WALバッファが溢れたためにWALデータがディスクに書き込まれた回数。</td>
+</tr><tr>
+<td>wal_write</td>	<td>WALバッファがXLogWrite要求によりディスクに書き出された回数。</td>
+</tr><tr>
+<td>wal_sync</td>	<td>WALファイルがissue_xlog_fsync要求によりディスクに同期された回数。</td>
+</tr><tr>
+<td>wal_write_time</td>	<td>XLogWriteの要求を介してWALバッファをディスクに書き込むのに費やされたミリ秒単位の合計時間。設定パラメータtrack_wal_io_timingがonの場合のみ有効。</td>
+</tr><tr>
+<td>wal_sync_time</td>	<td>issue_xlog_fsync要求を介してWALファイルのディスクへの同期に費やされたミリ秒単位の合計時間。設定パラメータtrack_wal_io_timingがonの場合のみ有効。</td>
+</tr><tr>
+<td>stats_reset </td>	<td>稼働統計情報をリセットした時刻。</td>
+</tr></table>
+
+<br>
 
 
 <div class="jumpmenu"></div><h3>レプリケーション</h3>
+
+
+<!--
+pg_stat_wal_receiver
+pg_stat_recovery_prefetch
+pg_stat_subscription
+===
+-->
+
 
 <p>
 バージョン9.1からレプリケーションに関連する２つのビューがサポートされました。
@@ -758,7 +1071,7 @@ objID.className='close';
 <p>
 ビューpg_stat_replicationはスレーブの状態を表示します([<表3-17>])。このデータはマスタのみ保持しています。
 <br>
-ビューpg_stat_database_conflictsはデータベースのConflict(衝突)に関する情報を表示します([<表3-18>])。
+ビューpg_stat_database_conflictsはデータベースの衝突に関する情報を表示します([<表3-18>])。
 このデータはスレーブのみ保持しています。
 </p>
 
@@ -829,7 +1142,7 @@ streaming:　ストリーミング中<br>
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2018-9-8
+Last-modified: 2023-3-11
 </div>
 </body>
 </html>

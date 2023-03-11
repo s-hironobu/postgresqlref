@@ -2,12 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
- <title>PostgreSQLバイブル草稿</title>
- <link rel="stylesheet" type="text/css" media="screen" href="./default.css"">
-</head>
-
-<body>
+ <meta http-equiv="content-style-type" content="text/css">
+ <title>自分用PostgreSQLマニュアル</title>
+ <link rel="stylesheet" type="text/css" media="screen" href="./default.css" charset="UTF-8">
+ </head>
+ <body>
 
 <script language=javascript>
 <!--
@@ -26,11 +25,10 @@ objID.className='close';
 </script>
 
 <div id="header">
-<h1 class="title">PostgreSQLバイブル草稿</title></h1>
+<h1 class="title">自分用PostgreSQLマニュアル</title></h1>
     <span class="small">
 </span>
 </div>
-
 
 <hr class="full_hr">
 <table style="width: 100%;" border="0">
@@ -38,15 +36,16 @@ objID.className='close';
   <td class="menubar">
    <div id="menubar">
 
-
 <h5>PostgreSQLとは</h5>
 
-<li><a href="./index.html">PostgreSQLとは</a><br></li>
+<li><a href="./intro.html">PostgreSQLとは</a><br></li>
+
 
 <h5>PostgreSQLの内部構造</h5>
 <ul>
 <li><a href="./internal.html">とびら</a><br></li>
 </ul>
+
 <ol>
 <li><a href="./internal-01.html">プロセスとメモリ構造</a><br></li>
 <li><a href="./internal-02.html">データベースクラスタ、テーブルの構造</a></li>
@@ -58,7 +57,7 @@ objID.className='close';
 <li><a href="./internal-08.html">HOTとIndex Only Scan</a></li>
 <li><a href="./internal-09.html">WAL(Write Ahead Logging)</a></li>
 <li><a href="./internal-10.html">アーカイブログとPITR</a></li>
-<li><a href="./internal-11.html">レプリケーション(Streaming ReplicationとHotStandby)</a></li>
+<li><a href="./internal-11.html">Streaming ReplicationとHotStandby</a></li>
 </ol>
 
 
@@ -69,56 +68,46 @@ objID.className='close';
 </ul>
 
 <ol>
-[PostgreSQLの基礎]<br>
-<li><a href="./admin-01.html">オブジェクト、データベース、スキーマ</a><br></li>
-<li><a href="./admin-02.html">システムカタログ</a><br></li>
-<li><a href="./admin-03.html">文字コードの扱い</a><br></li>
-
 
 [インストールと起動、停止]<br>
-<li><a href="./admin-04.html">インストール</a><br></li>
-<li><a href="./admin-05.html">データベースシステムの初期化 initdb</a><br></li>
-<li><a href="./admin-06.html">PostgreSQLサーバの起動/停止</a><br></li>
+<li><a href="./admin-01.html">インストール</a><br></li>
+<li><a href="./admin-02.html">データベースシステムの初期化 initdb</a><br></li>
+<li><a href="./admin-03.html">PostgreSQLサーバの起動/停止</a><br></li>
 
+<hr>
+[PostgreSQLの基礎]<br>
+<li><a href="./admin-04.html">オブジェクト、データベース、スキーマ</a><br></li>
+<li><a href="./admin-05.html">システムカタログ</a><br></li>
+<li><a href="./admin-06.html">文字コードの扱い</a><br></li>
 
+  <hr>
 [認証とアクセス制御]<br>
 <li><a href="./admin-07.html">認証とアクセス制御</a><br></li>
 <li><a href="./admin-08.html">クライアントのアクセス制御</a><br></li>
 <li><a href="./admin-09.html">権限について</a><br></li>
 <li><a href="./admin-10.html">ロールの作成と権限制御</a><br></li>
 
-<HR>
-
+<hr>
 [バックアップとアップグレード]<br>
 <li><a href="./admin-11.html">バックアップとアップグレード</a><br></li>
 <li><a href="./admin-12.html">ダンプとリストア</a><br></li>
 <li><a href="./admin-13.html">アップグレード</a><br></li>
 
+  <hr>
 [保守、監視とチューニング]<br>
 <li><a href="./admin-14.html">保守、監視とチューニング</a><br></li> 
 <li><a href="./admin-15.html">稼働統計情報</a><br></li>
 <li><a href="./admin-16.html">実行ログの取得</a><br></li>
-<li><a href="./admin-17.html">モニタリングツール</a><br></li>
-<li><a href="./admin-18.html">ログと統計情報の分析</a><br></li>
-<li><a href="./admin-19.html">パラメータチューニング</a><br></li>
+<li><a href="./admin-17.html">ログと統計情報の分析</a><br></li>
+<li><a href="./admin-18.html">パラメータチューニング</a><br></li>
 
+  <hr>
 [耐障害性、高可用性]<br>
-<li><a href="./admin-20.html">耐障害性、高可用性</a><br></li>
-<li><a href="./admin-21.html">アーカイブログとPITR</a><br></li>
-<li><a href="./admin-22.html">レプリケーションの設定</a><br></li>
-<li><a href="./admin-23.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-19.html">アーカイブログとPITR</a><br></li>
+<li><a href="./admin-20.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-21.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-22.html">ロジカルレプリケーション</a><br></li>
 
-
-[FDW]<br>
-<li><a href="./admin-24.html">FDW</a><br></li>
-<li><a href="./admin-25.html">postgres_fdw</a><br></li>
-</ol>
-
-[追加の文章(未完)]<br>
-<li><a href="./admin-26.html">ロギング</a><br></li>
-<li><a href="./admin-27.html">統計情報</a><br></li>
-<li><a href="./admin-28.html">モニタリング</a><br></li>
-<li><a href="./admin-29.html">メンテナンス</a><br></li>
 </ol>
 
 
@@ -138,6 +127,7 @@ objID.className='close';
 <li><a href="./param-11.html">クライアント接続デフォルト</a><br></li>
 <li><a href="./param-12.html">ロック管理/バージョンとプラットフォーム互換性</a><br></li>
 </ol>
+
 
 
 <h5>psql</h5>
@@ -160,6 +150,7 @@ objID.className='close';
 </ol>
 
 
+
 <h5>SQL</h5>
 
 <ul>
@@ -167,15 +158,14 @@ objID.className='close';
 </ul>
 
 <ol>
-[SQL]<br>
 
 <li><a href="./sql-01.html">SQL語彙</a><br></li>
 <li><a href="./sql-02.html">テーブルスペースの作成/削除/変更</a><br></li>
 <li><a href="./sql-03.html">データベースの作成/変更/削除</a><br></li>
-<li><a href="./sql-04.html">テーブルの作成</a><br></li>
+<li><a href="./sql-04.html">テーブルの作成 CREATE TABLE / CREATE TABLE AS</a><br></li>
 <li><a href="./sql-05.html">外部キー</a><br></li>
 <li><a href="./sql-06.html">オブジェクトの継承/LIKE句</a><br></li>
-<li><a href="./sql-07.html">問い合わせ結果から新しいテーブルを作成</a><br></li>
+<li><a href="./sql-07.html">パーティション</a><br></li>
 <li><a href="./sql-08.html">テーブルの削除</a><br></li>
 <li><a href="./sql-09.html">スキーマの定義/変更/削除</a><br></li>
 
@@ -201,7 +191,7 @@ objID.className='close';
 <li><a href="./sql-25.html">問い合わせの結合</a><br></li>
 <li><a href="./sql-26.html">ORDER BY</a><br></li>
 <li><a href="./sql-27.html">LIMIT OFFSET</a><br></li>
-<li><a href="./sql-28.html">FOR UPDATE/ FOR SHARE</a><br></li>
+<li><a href="./sql-28.html">FOR [NO KEY] UPDATE/ FOR [KEY] SHARE</a><br></li>
 <li><a href="./sql-29.html">サブクエリ</a><br></li>
 <li><a href="./sql-30.html">CASE式</a><br></li>
 <li><a href="./sql-31.html">VALUES</a><br></li>
@@ -227,18 +217,12 @@ objID.className='close';
 <li><a href="./sql-49.html">COPY/IMPORT</a><br></li>
 <li><a href="./sql-50.html">COPY/EXPORT</a><br></li>
 <li><a href="./sql-51.html">関数定義</a><br></li>
-<li><a href="./sql-52.html">エクステンション</a><br></li>
-<li><a href="./sql-53.html">外部サーバの定義、変更、削除</a><br></li>
-<li><a href="./sql-54.html">外部サーバのユーザマップ定義、変更、削除</a><br></li>
-<li><a href="./sql-55.html">外部テーブルの定義、変更、削除</a><br></li>
-<hr>
-<li><a href="./sql-56.html">イベントトリガ</a><br></li>
-<li><a href="./sql-57.html">行レベルセキュリティ</a><br></li>
+<li><a href="./sql-52.html">FDW(Foreign Data Wrapper)</a><br></li>
 
-<hr>
-<li><a href="./sql-60.html">新しい機能</a><br></li>
+<li><a href="./sql-53.html">PUBLICATION</a><br></li>
+<li><a href="./sql-54.html">SUBSCRIPTION</a><br></li>
+  
 </ol>
-
 
 <h5>関数</h5>
 
@@ -260,8 +244,6 @@ objID.className='close';
 <li><a href="./type-09.html">バイナリ列データ型</a><br></li>
 <li><a href="./type-10.html">Range型</a><br></li>
 <li><a href="./type-11.html">配列</a><br></li>
-<hr>
-<li><a href="./type-12.html">JSON型</a><br></li>
 
 <hr>
 [演算子]<br>
@@ -273,9 +255,6 @@ objID.className='close';
 <li><a href="./ope-06.html">パターンマッチング</a><br></li>
 <li><a href="./ope-07.html">日付/時刻演算子</a><br></li>
 <li><a href="./ope-08.html">Range型演算子</a><br></li>
-<hr>
-<li><a href="./ope-09.html">JSON型演算子</a><br></li>
-
 
 <hr>
 [関数]<br>
@@ -287,89 +266,73 @@ objID.className='close';
 <li><a href="./func-06.html">型変換関数</a><br></li>
 <li><a href="./func-07.html">Range型関数</a><br></li>
 <li><a href="./func-08.html">Window関数</a><br></li>
-<li><a href="./func-09.html">セッション情報関数</a><br></li>
-<li><a href="./func-10.html">アクセス権限とスキーマ可視性照会関数</a><br></li>
-<li><a href="./func-11.html">データベースオブジェクト関数</a><br></li>
-<li><a href="./func-12.html">バックアップとリカバリ制御関数</a><br></li>
+  <hr>
 
-<li><a href="./func-13.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-09.html">セッション情報関数</a><br></li>
+<li><a href="./func-10.html">アクセス権限照会関数</a><br></li>
+<li><a href="./func-11.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-12.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-13.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
+<li><a href="./func-14.html">制御データ関数</a><br></li>
+  <hr>
 <li><a href="./func-15.html">構成設定関数</a><br></li>
 <li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-17.html">レプリケーションSQL関数</a><br></li>
-
-<hr>
-<li><a href="./func-18.html">JSON関数</a><br></li>
+<li><a href="./func-17.html">バックアップ制御関数</a><br></li>
+<li><a href="./func-18.html">リカバリ制御関数</a><br></li>
+<li><a href="./func-19.html">スナップショット同期関数</a><br></li>	
+<li><a href="./func-20.html">レプリケーション管理関数</a><br></li>	
+<li><a href="./func-21.html">データベースオブジェクト管理関数</a><br></li>
+<li><a href="./func-22.html">インデックス保守関数</a><br></li>	
+<li><a href="./func-23.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-24.html">勧告的ロック用関数</a><br></li>
+<li><a href="./func-25.html">統計情報関数</a><br></li>	
 
 </ol>
-
-<!--
-[削除するもの]<br>
-<li><a href="./type-07.html">幾何データ型</a><br></li>
-<li><a href="./type-08.html">ネットワークアドレス型型</a><br></li>
-<li><a href="./ope-08.html">幾何演算子</a><br></li>
-<li><a href="./ope-09.html">ネットワーク演算子</a><br></li>
-<li><a href="./func-06.html">幾何関数</a><br></li>
-<li><a href="./func-07.html">ネットワークアドレス関数</a><br></li>
-<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
-<li><a href="./func-16.html">トランザクションID関数</a><br></li>
-<li><a href="./func-17.html">スキーマ可視性照会関数</a><br></li>
-<li><a href="./func-18.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-19.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-20.html">勧告的ロック用関数</a><br></li>
--->
 
 <h5>PL/pgSQL</h5>
 
 <ol>
-<li><a href="./plpgsql.html">結果の返し方</a><br></li>
-<li><a href="./plpgsql-01.html">ストアドプロシージャ</a><br></li>
-<li><a href="./plpgsql-02.html">ストアドプロシージャの定義</a><br></li>
+<li><a href="./plpgsql-01.html">PL/pgSQLによるストアドプロシージャ</a><br></li>
+
+  <hr>[定義]
+    <br>
+
+<li><a href="./plpgsql-02.html">PL/pgSQLによるストアドプロシージャの定義</a><br></li>
+
+  <hr>[基本的な使い方]
+    <br>
 <li><a href="./plpgsql-03.html">変数宣言と値の代入</a><br></li>
-**** まとめる >>
+
 <li><a href="./plpgsql-04.html">SELECT INTO文</a><br></li>
 <li><a href="./plpgsql-05.html">結果ステータスの取得</a><br></li>
 <li><a href="./plpgsql-06.html">動的なSQL文の実行</a><br></li>
-<< ここまで****
+
+  <hr>[制御構造]
+    <br>
 <li><a href="./plpgsql-07.html">IF 条件分岐</a><br></li>
-<li><a href="./plpgsql-08.html">ループ処理</a><br></li>
-*** >>>
-<li><a href="./plpgsql-09.html">RETURN</a><br></li>
-<<< ***
+<li><a href="./plpgsql-08.html">EXIT</a><br></li>
+
+<li><a href="./plpgsql-09.html">RETURN NEXT / RETURN QUERY</a><br></li>
+
 <li><a href="./plpgsql-10.html">ループ処理　LOOP</a><br></li>
 <li><a href="./plpgsql-11.html">ループ処理　WHILE</a><br></li>
-<li><a href="./plpgsql-12.html">ループ処理　FOR </a><br></li>
+<li><a href="./plpgsql-12.html">ループ処理　FOR</a><br></li>
 <li><a href="./plpgsql-13.html">ループ処理 (複数行の問い合わせ結果を扱う)</a><br></li>
+
+<hr>[カーソル]
+    <br>
 <li><a href="./plpgsql-14.html">カーソルの利用</a><br></li>
 <li><a href="./plpgsql-15.html">カーソル変数の宣言</a><br></li>
 <li><a href="./plpgsql-16.html">カーソルのオープンとクローズ	OPEN / CLOSE</a><br></li>
-<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得		FETCH</a><br></li>
-<li><a href="./plpgsql-18.html">カーソルを使った例</a><br></li>
-<li><a href="./plpgsql-19.html">例外</a><br></li>
-*** >>>
-<li><a href="./plpgsql-21.html">CASE</a><br></li>
-<li><a href="./plpgsql-22.html">FOREACH</a><br></li>
-<<< ***
-</ol>
+<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得	FETCH</a><br></li>
+  <li><a href="./plpgsql-18.html">FOR IN LOOPにカーソル行の取得</a><br></li>
+<li><a href="./plpgsql-19.html">カーソルを使った例</a><br></li>
+
+  <hr>[例外]
+    <br>
+<li><a href="./plpgsql-20.html">例外処理</a><br></li>
 
 
-<h5>Appendix(付録)</h5>
-
-<ol>
-<li><a href="./app-01.html">pgpool-II</a><br></li>
-<li><a href="./app-02.html">Pacemaker</a><br></li>
-</ol>
-
-
-<h5>おまけ:ネット公開(ページ数の関係で書籍には載せない)</h5>
-
-<ol>
-[pgpool]<br>
-<li><a href="./ha-06.html">pgpool-II セットアップ</a><br></li>
-<li><a href="./ha-07.html">pgpool-II レプリケーションモード</a><br></li>
-<li><a href="./ha-08.html">pgpool-II マスタースレーブモード</a><br></li>
-[Pacemaker]<br>
-<li><a href="./ha-10.html">Pacemaker</a><br></li>
 </ol>
 
 </div>
@@ -378,15 +341,17 @@ objID.className='close';
 
   </td>
   <td valign="top">
-   <div id="body">
+    <div id="body">
+      
 
-<h2>権限について</h2>
+<h2>権限について</h2>
 
 <p>
 PostgreSQLの権限はロールに関する権限と、オブジェクトに関する権限の2つに分類できます。
 </p>
 
-<div class="jumpmenu"></div><h3>ロールの権限/属性</h3>
+<div class="jumpmenu"></div><h3><a href="https://www.postgresql.org/docs/current/role-attributes.html" target="_blank" rel="noopener noreferrer">ロールの権限/属性</a></h3>
+
 
 <p>
 ロールに与える権限と属性を以下に示します([<表3-04>]参照)。
@@ -406,7 +371,7 @@ PostgreSQLの権限はロールに関する権限と、オブジェクトに関�
 </tr><tr>
 <td>データベース作成</td>	<td>false</td>	<td></td>	<td>最大接続数</td>	<td>無制限</td>
 </tr><tr>
-<td>レプリケーション(ver9.1から)</td>	<td>false</td>	<td></td>	<td></td>	<td></td>
+<td>レプリケーション</td>	<td>false</td>	<td></td>	<td></td>	<td></td>
 </tr></table>
 
 <br>
@@ -431,15 +396,19 @@ rolcanlogin   | t
 rolconnlimit  | -1
 </pre>
 
+<br>
+
 <p>
 ・スーパーユーザ
 <br>
-CREATE ROLE文やALTER ROLE文に'SUPERUSER'オプションを設定すると、そのロールはスーパーユーザ権限を持ちます。
+CREATE ROLE文やALTER ROLE文に'SUPERUSER'オプションを設定するとそのロールはスーパーユーザ権限を持ちます。
 </p>
 
 <pre>
 ALTER ROLE role_name SUPERUSER;
 </pre>
+
+<br>
 
 <p>
 厳密には「スーパーユーザ権限」が存在するのでなく、「権限検査しない＝すべての権限を持つ」ロールをスーパーユーザと呼びます。
@@ -464,23 +433,25 @@ ALTER ROLE role_name SUPERUSER;
 <pre>
 sampledb=# \du postgres
 List of roles
--[ RECORD 1 ]----------------------------------------------------------
+-[ RECORD 1 ]----------------------------------------------
 Role name  | postgres
-Attributes | Superuser, Create role, Create DB, Replication, Bypass RLS
+Attributes | Superuser, Create role, Create DB, Replication
 Member of  | {}
 </pre>
 
+<br>
 
-<div class="jumpmenu"></div><h3>データベースオブジェクトの権限</h3>
+<div class="jumpmenu"></div><h3><a href="https://www.postgresql.org/docs/current/ddl-priv.html" target="_blank" rel="noopener noreferrer">データベースオブジェクトの権限</a></h3>
+
 
 <p>
-PostgreSQLにおける"データベースオブジェクト"とは、データベースやテーブル、関数などを総称したものです([<脚注4>])。
+PostgreSQLにおける"データベースオブジェクト"とは、データベースやテーブル、関数などを総称したものです([<脚注1>])。
 ここでは、テーブルの検索権限や更新権限などをまとめて"データベースオブジェクトの権限"とよぶことにします。
 <br>
 [<表3-05>]に、データベースオブジェクトの権限一覧を示します。
 </p>
 
-<blockquote><table BORDER="1"><tr><td>脚注4</td><td>
+<blockquote><table BORDER="1"><tr><td>脚注1</td><td>
 開発当初、PostgreSQL内部でデータベースやテーブル、関数などを"オブジェクト"として一貫した扱いを目指したため、これらをデータベースオブジェクトと呼んでいます。
 </td></tr></table></blockquote>
 
@@ -520,6 +491,15 @@ d = データベース, t = テーブル, c = カラム, v = ビュー, s = シ�
 <td>EXECUTE</td>	<td>X	</td>	<td>f	</td>	<td>関数や演算子の使用</td>
 </tr><tr>
 <td>USAGE	</td>	<td>U	</td>	<td>l,S	</td>	<td>手続き言語での関数作成、もしくはスキーマ内部のオブジェクトへのアクセス</td>
+
+
+</tr><tr>
+<td>SET</td>	<td>s	</td>	<td>	</td>	<td>設定パラメータの設定</td>
+
+</tr><tr>
+<td>ALTER SYSTEM</td>	<td>A	</td>	<td>	</td>	<td><a href="https://www.postgresql.org/docs/current/sql-altersystem.html" target="_blank" rel="noopener noreferrer">ALTER SYSTEM</a>で変更するシステムパラメータの設定</td>
+
+
 </tr><tr>
 <td>ALL, ALL PRIVILEGES</td>	<td>なし</td>	<td>d,t,v,s,S,f,l</td>	<td>すべての権限</td>
 </tr></table>
@@ -555,17 +535,17 @@ d = データベース, t = テーブル, c = カラム, v = ビュー, s = シ�
 
 [<権限表示の書式>]
 <pre>
-	ユーザorロール = 権限の列 / 設定者, ... 
+	ユーザorロール = 権限の列 / 設定者, ...
 </pre>
 
 <p>
-ここで権限は[<表3-05>]の略号で表します。また略号の後に"*"がある場合は「他のユーザorロールにその権限を与える権限も持っている」ことを示します([<脚注5>])。
+ここで権限は[<表3-05>]の略号で表します。また略号の後に"*"がある場合は「他のユーザorロールにその権限を与える権限も持っている」ことを示します([<脚注2>])。
 <br>
 例えば、下に示すテーブルpostgres_tableの権限は[<表3-07>]のように解釈します。
 </p>
 
-<blockquote><table BORDER="1"><tr><td>脚注5</td><td>
-この権限を与えるにはGRANT文([<6-14>],[<6-15>])でWITH GRANT OPTIONを設定します。
+<blockquote><table BORDER="1"><tr><td>脚注2</td><td>
+この権限を与えるにはGRANT文(<a href="./sql-14.html">[<6-14>]</a>,<a href="./sql-15.html">[<6-15>]</a>)でWITH GRANT OPTIONを設定します。
 </td></tr></table></blockquote>
 
 
@@ -584,12 +564,14 @@ Column access privileges | aid:
                          |   role2=r/role1
 </pre>
 
+<br>
+
 <table border=1>
 <caption> [<表3-07>] 権限の解釈例</caption>
 <tr bgcolor="#cccccc">
 <th>権限の例</th>	<th>解釈</th>
 </tr><tr>
-<td>postgres=arwdDxt/postgres <sup> ※1</sup> 
+<td>postgres=arwdDxt/postgres <sup> ※1</sup>
 </td>	<td>	postgresはa=INSERT, r=SELECT, w=UPDATE, d=DELETE, D=TRUNCATE, x=REFERENCES, t=TRIGGER権限を持つ。<br>設定者はpostgres自身。</td>
 </tr><tr>
 
@@ -599,6 +581,8 @@ Column access privileges | aid:
 <td>aid: role2=r/role1<br>bid: role2=r/role1 </td>	<td>role2はカラムaidとbidにr=SELECT権限のみ持つ。<br>
 		設定者はrole1。</td>
 </tr></table>
+
+<br>
 
 <blockquote>
 <p>
@@ -613,7 +597,7 @@ Column access privileges | aid:
 <p>
 PostgreSQLには、
 データベースユーザ/ロールのテーブルやスキーマへのアクセス権限を調べる関数が多数サポートされています。
-関数の一覧は[<7-29>]を参照してください。
+関数の一覧は<a href="./func-10.html">[<7-29>]</a>を参照してください。
 <br>
 例えば、
 ロールrole1のテーブルpgbench_accountsにおけるSELECT権限の有無は、
@@ -621,16 +605,18 @@ PostgreSQLには、
 </p>
 
 <pre>
-sampledb=# SELECT has_table_privilege('role1', 
+sampledb=# SELECT has_table_privilege('role1',
 sampledb(#                           'pgbench_accounts', 'select');
- has_table_privilege 
+ has_table_privilege
 ---------------------
  t
 (1 row)
 </pre>
+
+<br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2018-9-8
+Last-modified: 2023-3-11
 </div>
 </body>
 </html>

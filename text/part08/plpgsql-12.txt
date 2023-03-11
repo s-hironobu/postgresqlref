@@ -1,0 +1,104 @@
+%FILE internal/plpgsql-12.html
+%LASTMOD
+%KEY pgsql-plpgsql12
+
+%TITLE <a href="https://www.postgresql.org/docs/current/plpgsql-control-structures.html#PLPGSQL-INTEGER-FOR" target="_blank" rel="noopener noreferrer">ループ処理 FOR</a>
+
+<pre>
+[<書式>]
+
+[ << label >> ]
+FOR name IN [ REVERSE ] expression-lower .. expression-upper [ BY expression-by ] LOOP
+    statements
+END LOOP [ label ];
+
+</pre>
+
+<br>
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>name</td>	<td>ループ変数名。変数定義部での定義不要。</td>
+</tr><tr>
+<td>expression-lower</td>	<td>ループ変数が取る下限値を表す値、または条件式</td>
+</tr><tr>
+<td>expression-upper</td>	<td>ループ変数が取る上限値を表す値、または条件式</td>
+</tr><tr>
+<td>expression-by</td>	<td>指定した値ごとにLOOPを回す。例：2なら一つおきに、など</td>
+</tr><tr>
+<td>statements</td>	<td>SQL文など</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+FOR文は与えられた範囲のあいだ、繰り返し処理を行います。
+</p>
+
+<p>
+ループ変数は整数型として自動的に定義され、ループ内部のみで存在します。
+</p>
+
+<p>
+範囲の下限、上限として与えた2つの式はループに入った時に一度だけ評価されます。繰返し刻み幅は、通常の場合は1、REVERSEが指定された場合は-1です。
+</p>
+
+
+%CHAPTER プログラム例
+
+<p>
+FOR構文を使って、テーブルitemlistの列nameを列挙する関数item_names()を定義します。
+</p>
+
+<pre>
+CREATE FUNCTION item_names () RETURNS SETOF text AS
+ $$
+   DECLARE
+     myname text;     /* 商品名を格納 */
+     min_id integer;  /* 商品idの最小値を格納 */
+     max_id integer;  /* 商品idの最大値を格納 */
+   BEGIN
+     /* 商品idの最小値と最大値を、変数count,max_idに格納 */
+     SELECT INTO min_id min(id) FROM itemlist;
+     SELECT INTO max_id max(id) FROM itemlist;
+
+     /* すべての商品idの処理が終ったら、ループを脱出 */
+     FOR count IN min_id..max_id LOOP   /* ループ変数countは、明示的な定義が不要。*/
+
+       /* 条件に一致した商品名を変数mynameに格納 */
+       SELECT INTO myname name FROM itemlist WHERE  id = count;
+
+       IF FOUND THEN
+	  /* 変数mynameに格納された値を保存し、次の処理へ進む */
+	  RETURN NEXT myname;
+	END IF;
+
+    END LOOP;
+
+    /* 保存された値を返し、関数を終了 */
+    RETURN;
+  END;
+ $$
+LANGUAGE PLpgSQL;
+</pre>
+
+<p>
+関数item_names()はRETURN NEXT文を使っているので、"SELECT * FROM 関数()"形式で実行しなければなりません。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM item_names ();
+ item_names
+------------
+ pen
+ notebook
+ eraser
+(3 rows)
+</pre>
+
+<br>

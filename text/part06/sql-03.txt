@@ -1,0 +1,187 @@
+%FILE internal/sql-03.html
+%LASTMOD
+%KEY pgsql-sql03
+
+%TITLE データベースの作成/変更/削除<br> <a href="https://www.postgresql.org/docs/current/sql-createdatabase.html" target="_blank" rel="noopener noreferrer">CREATE DATABASE</a> / <a href="https://www.postgresql.org/docs/current/sql-dropdatabase.html" target="_blank" rel="noopener noreferrer">ALTER DATABASE</a> / <a href="https://www.postgresql.org/docs/current/sql-alterdatabase.html" target="_blank" rel="noopener noreferrer">DROP DATABASE</a>
+
+<pre>
+[<書式>]
+
+● データベースの作成
+CREATE DATABASE db_name
+    [ [ WITH ] [ OWNER [=] dbowner ]
+    [ TEMPLATE [=] template ]
+    [ ENCODING [=] encoding ]
+    [ STRATEGY [=] strategy ] ]
+    [ LOCALE [=] locale ]
+    [ LC_COLLATE [=] lc_collate ]
+    [ LC_CTYPE [=] lc_ctype ]
+    [ ICU_LOCALE [=] icu_locale ]
+    [ LOCALE_PROVIDER [=] locale_provider ]
+    [ COLLATION_VERSION = collation_version ]
+    [ TABLESPACE [=] tablespace ]
+    [ ALLOW_CONNECTIONS [=] allowconn ]
+    [ CONNECTION LIMIT [=] connlimit ] ]
+    [ IS_TEMPLATE [=] istemplate ]
+
+    * STRATEGY, ICU_LOCALE, LOCATE_PROVIDER, COLLECTION_VERSIONはバージョン15から
+    * LOCALEはバージョン13から
+
+●  設定パラメータの設定
+ALTER DATABASE db_name SET variable { TO | = } { value | DEFAULT }
+
+●  設定パラメータの変更
+ALTER DATABASE db_name RESET variable
+
+● データベース名の変更
+ALTER DATABASE db_name RENAME TO new_db_name
+
+● データベース所有者の変更
+ALTER DATABASE owner OWNER TO {new_owner | CURRENT_ROLE | CURRENT_USER | SESSION_USER }
+
+● テーブルスペースの変更
+ALTER DATABASE db_name SET TABLESPACE new_tablespace
+
+●データベースのCOLLATIONバージョンのリフレッシュ(バージョン15から)
+ALTER DATABASE name REFRESH COLLATION VERSION
+
+● データベースの削除
+DROP DATABASE [ IF EXISTS ] db_name [ [ WITH FORCE]
+
+     * WITH FORCEはバージョン13から
+
+</pre>
+<br>
+
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>db_name</td>	<td>作成/変更/削除するデータベース名</td>
+</tr><tr>
+<td>dbowner</td>	<td>データベースの所有者</td>
+</tr><tr>
+<td>dbpath</td>	<td>データベースクラスタのあるディレクトリ(ベースディレクトリ)</td>
+</tr><tr>
+<td>template</td>	<td>作成するデータベースのテンプレート[template1]</td>
+</tr><tr>
+<td>encoding</td>	<td>作成するデータベースのエンコーディング[initdb実行時に指定したエンコーディグ]</td>
+</tr><tr>
+<td>strategy</td>	<td>WAL_LOG(default)とFILE_COPY。WAL_LOGはブロックごとにWALに書き込む。バージョン15から</td>
+</tr><tr>
+<td>locale</td>	<td>LC_COLLATEとLC_CTYPEを同時に設定する</td>
+</tr><tr>
+<td>lc_collate</td>	<td>データベースで使用する照合順（LC_COLLATE)</td>
+</tr><tr>
+<td>lc_ctype</td>	<td>データベースで使用する文字のクラス（LC_CTYPE）</td>
+</tr><tr>
+<td>icu_locale</td>	<td>ICUロケールプロバイダを使用する場合のID。バージョン15から</td>
+</tr><tr>
+<td>locale_provider</td>	<td>ロケールプロバイダを設定。"icu"か”lic"”(default)バージョン15から</td>
+</tr><tr>
+<td>collation_version</td>	<td>照合バージョン文字列を指定。この値はpg_upgradeが使用する。バージョン15から</td>
+</tr><tr>
+<td>tablespace</td>	<td>データベースを作成するテーブルスペース</td>
+</tr><tr>
+<td>allowconn</td>	<td>falseの場合、誰も接続できない、スーパーユーザもDB作成者も。</td>
+</tr><tr>
+<td>connlimit</td>	<td>このデータベースに接続できる最大数。デフォルト-1は無制限</td>
+</tr><tr>
+<td>istemplate</td>	<td>trueの場合はCREATEDB権限だけで誰でも複製可能。falseの場合はスーパーユーザか所有者のみ複製可能。</td>
+</tr><tr>
+<td>variable</td>	<td>設定パラメータ名</td>
+</tr><tr>
+<td>value</td>	<td>設定パラメータの設定値</td>
+</tr><tr>
+<td>new_db_name</td>	<td>新たに設定するデータベース名</td>
+</tr><tr>
+<td>new_tablespace</td>	<td>変更するテーブルスペース</td>
+</tr><tr>
+<td>owner</td>	<td>データベースの所有者</td>
+</tr><tr>
+<td>new_owner</td>	<td>データベースの新しい所有者</td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER 解説
+
+<p>
+CREATE DATABASE文とDROP DATABASE文を実行できるのは、データベース作成権限を持つデータベースユーザだけです。
+\duメタコマンドでデータベースユーザの権限を表示できます。
+</p>
+
+<p>
+ALTER DATABASE文のSET形式とRESET形式で、データベースの設定パラメータの設定や変更ができます。
+これはSET文<a href="./sql-45.html">[<6-45>]</a>と同機能です。
+<br>
+ALTER DATABASE文のRENAME TO形式でデータベース名を、OWNER TO形式で所有者を、それぞれ変更できます。
+</p>
+
+<p>
+・マルチバイトコードの利用
+<br>
+日本語などのマルチバイトコードを利用する場合、ENCODING句にエンコーディングを設定します。
+指定できるエンコーディングの一覧は<a href="./admin-06.html">[<3-06>]</a>にあります。
+日本語利用についても<a href="./admin-06.html">[<3-06>]</a>を参照してください。
+</p>
+
+<p>
+・OWNER
+<br>
+データベースの所有者を設定します。'DEFAULT'という文字列を設定すると、CREATE DATABASE文を実行したデータベースロールが所有者になります。
+</p>
+
+
+<p>
+・TABLESPACE
+<br>
+テーブルスペースの作成や利用方法は<a href="./sql-02.html">[<6-02>]</a>を参照してください。
+</p>
+
+%CHAPTER 実行例
+
+<p>
+・エンコーディングを指定してデータベースを作成
+</p>
+
+<pre>
+template1=# CREATE DATABASE sampledb WITH ENCODING = 'UTF-8';
+CREATE DATABASE
+template1=# \l
+                                  List of databases
+   Name    |  Owner   | Encoding |   Collate   |    Ctype    |   Access privileges
+-----------+----------+----------+-------------+-------------+-----------------------
+ sampledb  | postgres | UTF8     | ja_JP.UTF-8 | ja_JP.UTF-8 |
+ postgres  | postgres | UTF8     | ja_JP.UTF-8 | ja_JP.UTF-8 |
+ template0 | postgres | UTF8     | ja_JP.UTF-8 | ja_JP.UTF-8 | =c/postgres          +
+           |          |          |             |             | postgres=CTc/postgres
+ template1 | postgres | UTF8     | ja_JP.UTF-8 | ja_JP.UTF-8 | =c/postgres          +
+           |          |          |             |             | postgres=CTc/postgres
+(4 rows)
+</pre>
+<br>
+
+<p>
+・設定パラメータの設定値を変更
+<br>
+データベースsampledbについて、設定パラメータenable_indexscan をOFFにします。
+</p>
+
+<pre>
+sampledb=# ALTER DATABASE sampledb SET enable_indexscan TO off;
+ALTER DATABASE
+</pre>
+<br>
+
+<p>
+・データベースの削除
+</p>
+
+<pre>
+template1=# DROP DATABASE sampledb;
+</pre>
+<br>

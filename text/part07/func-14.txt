@@ -1,0 +1,198 @@
+%FILE internal/func-14.html
+%LASTMOD
+%KEY pgsql-func14
+
+%TITLE <a href="https://www.postgresql.org/docs/current/functions-info.html#FUNCTIONS-CONTROLDATA" target="_blank" rel="noopener noreferrer">制御データ関数</a>
+
+
+
+<table border=1>
+<caption>制御データ関数</caption>
+<tr bgcolor="#cccccc">
+<th>関数</th>				<th>返り値型</th>	<th>説明</th>
+
+</tr><tr>
+<td>pg_control_checkpoint()</td>	<td>record</td>	<td>CHECKPOINT情報を返す。情報の内容は解説を参照</td>
+
+</tr><tr>
+<td>pg_control_system()</td>	<td>record</td>	<td>コントロールファイルの情報を返す。内容は解説参照</td>
+
+</tr><tr>
+<td>pg_control_init()</td>	<td>record</td>	<td>クラスタの初期化情報を返す。内容は解説参照</td>
+
+</tr><tr>
+<td>pg_control_recovery()</td>	<td>record</td>	<td>リカバリ状態を返す。内容は解説参照</td>
+
+
+</tr></table>
+
+<br>
+
+
+%CHAPTER 解説
+
+
+<p>
+・pg_control_checkpoint()の出力
+</p>
+
+<table border=1>
+<caption>pg_control_checkpoint</caption>
+<tr bgcolor="#cccccc">
+<th>カラム</th>				<th>返り値型</th>
+
+</tr><tr>
+<td>checkpoint_lsn</td>	<td>pg_lsn</td>
+</tr><tr>
+<td>redo_lsn</td>	<td>pg_lsn</td>
+</tr><tr>
+<td>redo_wal_file</td>	<td>text</td>
+</tr><tr>
+<td>timeline_id</td>	<td>int</td>
+</tr><tr>
+<td>prev_timeline_id</td>	<td>int</td>
+</tr><tr>
+<td>full_page_writes</td>	<td>boolean</td>
+</tr><tr>
+<td>next_xid</td>	<td>text</td>
+</tr><tr>
+<td>next_oid</td>	<td>oid</td>
+</tr><tr>
+<td>next_multiact_id</td>	<td>xid</td>
+</tr><tr>
+<td>next_multi_offset</td>	<td>xid</td>
+</tr><tr>
+<td>oldest_xid</td>	<td>xid</td>
+</tr><tr>
+<td>oldest_xid_dbid</td>	<td>oid</td>
+</tr><tr>
+<td>oldest_active_xid</td>	<td>xid</td>
+</tr><tr>
+<td>oldest_multi_xid</td>	<td>xid</td>
+</tr><tr>
+<td>oldest_multi_dbid</td>	<td>oid</td>
+</tr><tr>
+<td>oldest_commit_ts_xid</td>	<td>xid</td>
+</tr><tr>
+<td>newest_commit_ts_xid</td>	<td>xid</td>
+</tr><tr>
+<td>checkpoint_time</td>	<td>timestamp</td>
+
+</tr></table>
+
+
+<br>
+
+<p>
+・pg_control_system()の出力
+</p>
+
+
+<table border=1>
+<caption>pg_control_system</caption>
+<tr bgcolor="#cccccc">
+<th>カラム</th>				<th>返り値型</th>
+
+</tr><tr>
+<td>pg_control_version</td>	<td>int</td>
+</tr><tr>
+<td>catalog_version_no</td>	<td>int</td>
+</tr><tr>
+<td>system_identifier</td>	<td>bigint</td>
+</tr><tr>
+<td>pg_control_last_modified</td>	<td>timestamp</td>
+</tr></table>
+
+<br>
+
+<p>
+・pg_control_init()の出力
+</p>
+
+<table border=1>
+<caption>pg_control_init</caption>
+<tr bgcolor="#cccccc">
+<th>カラム</th>				<th>返り値型</th>
+
+</tr><tr>
+<td>max_data_alignment</td>	<td>int</td>
+</tr><tr>
+<td>database_block_size</td>	<td>int</td>
+</tr><tr>
+<td>blocks_per_segment</td>	<td>int</td>
+</tr><tr>
+<td>wal_block_size</td>	<td>int</td>
+</tr><tr>
+<td>bytes_per_wal_segment</td>	<td>int</td>
+</tr><tr>
+<td>max_identifier_length</td>	<td>int</td>
+</tr><tr>
+<td>max_index_columns</td>	<td>int</td>
+</tr><tr>
+<td>max_toast_chunk_size</td>	<td>int</td>
+</tr><tr>
+<td>large_object_chunk_size</td>	<td>int</td>
+</tr><tr>
+<td>float8_pass_by_value</td>	<td>boolean</td>
+</tr><tr>
+<td>data_page_checksum_version</td>	<td>int</td>
+
+</tr></table>
+
+
+<br>
+
+<p>
+・pg_control_recovery()の出力
+</p>
+
+<table border=1>
+<caption>pg_control_recovery</caption>
+<tr bgcolor="#cccccc">
+<th>カラム</th>				<th>返り値型</th>
+
+</tr><tr>
+<td></td>	<td></td>
+</tr><tr>
+<td>min_recovery_end_lsn</td>	<td>pg_lsn</td>
+</tr><tr>
+<td>min_recovery_end_timeline</td>	<td>int</td>
+</tr><tr>
+<td>backup_start_lsn</td>	<td>pg_lsn</td>
+</tr><tr>
+<td>backup_end_lsn</td>	<td>pg_lsn</td>
+</tr><tr>
+<td>end_of_backup_record_required</td>	<td>boolean</td>
+
+</tr></table>
+
+
+
+
+%CHAPTER 実行例
+
+<pre>
+postgres=# SELECT pg_control_checkpoint();
+                                                pg_control_checkpoint
+---------------------------------------------------------------------------------------------------------------------
+ (0/4951DD8,0/4951DA0,000000010000000000000004,1,1,t,0:914,16881,1,0,716,1,914,1,5,912,912,"2023-01-13 09:24:19+09")
+(1 row)
+
+postgres=# SELECT pg_control_system();
+                       pg_control_system
+---------------------------------------------------------------
+ (1300,202209061,7157832683592402310,"2023-01-13 09:24:19+09")
+(1 row)
+
+postgres=# SELECT pg_control_init();
+                  pg_control_init
+---------------------------------------------------
+ (8,8192,131072,8192,16777216,64,32,1996,2048,t,0)
+(1 row)
+
+postgres=# SELECT pg_control_recovery();
+ pg_control_recovery
+---------------------
+ (0/0,0,0/0,0/0,f)
+(1 row)
+</pre>

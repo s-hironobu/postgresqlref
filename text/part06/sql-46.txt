@@ -1,0 +1,64 @@
+%FILE internal/sql-46.html
+%LASTMOD
+%KEY pgsql-sql46
+
+%TITLE <a href="https://www.postgresql.org/docs/current/sql-vacuum.html " target="_blank" rel="noopener noreferrer">VACUUM</a>
+
+<pre>
+VACUUM [ ( option [, ...] ) ] [ table_and_columns [, ...] ]
+VACUUM [ FULL ] [ FREEZE ] [ VERBOSE ] [ ANALYZE ] [ table_and_columns [, ...] ]
+
+where option can be one of:
+
+    FULL [ boolean ]
+    FREEZE [ boolean ]
+    VERBOSE [ boolean ]
+    ANALYZE [ boolean ]
+    DISABLE_PAGE_SKIPPING [ boolean ]
+    SKIP_LOCKED [ boolean ]
+    INDEX_CLEANUP { AUTO | ON | OFF }
+    PROCESS_TOAST [ boolean ]
+    TRUNCATE [ boolean ]
+    PARALLEL integer
+
+and table_and_columns is:
+
+    table_name [ ( column_name [, ...] ) ]
+</pre>
+
+
+<table>
+<caption>オプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>FULL</td>	<td>テーブルの排他的ロックを行い、不要領域の開放を含むVACUUM処理を行う</td>
+</tr><tr>
+<td>FREEZE</td>	<td>データを強制的にFreezeする</td>
+</tr><tr>
+<td>VERBOSE</td>	<td>詳細な結果を出力</td>
+</tr><tr>
+<td>ANALYZE</td>	<td>統計情報を更新</td>
+</tr><tr>
+<td>DISABLE_PAGE_SKIPPING</td>	<td>ページスキップを行わない。</td>
+</tr><tr>
+<td>SKIP_LOCKED</td>	<td>対象テーブルのロックが即座にリリースされない場合、対象テーブルのVACUUM処理をスキップする。バージョン12から</td>
+</tr><tr>
+<td>INDEX_CLEANUP</td>	<td>デフォルトのAUTOでは通常通り、インデックスのデッドタプルが少数の場合はVACUUM処理をスキップする。OFFの場合はインデックスの処理を完全にスキップする。ONの場合は保守的にインデックスの処理を行う。バージョン12から</td>
+</tr><tr>
+<td>PROCESS_TOAST</td>	<td>VACUUM FULLでこのオプションがFALSEの場合、トーストテーブルのVACUUM処理を行わない。TRUEの場合は通常通りトーストテーブルも処理する。バージョン14から</td>
+</tr><tr>
+<td>TRUNCATE</td>	<td>通常は空になったページを切り捨てるが、TRUNCATE falseを設定すると切り捨てない。よってACCESS EXCLUSIVE lockが不要になる。VACUUM FULLでは無視される。バージョン12から</td>
+</tr><tr>
+<td>PARALLEL</td>	<td>インデックスのVACUUM処理をmin_parallel_index_scan_sizeからmax_parallel_index_scan_size台数の並列ワーカで行う。バージョン13から</td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER 解説
+
+<p>
+VACUUMは奥深くて難しい。
+</p>
+

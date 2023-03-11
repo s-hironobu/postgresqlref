@@ -1,0 +1,75 @@
+%FILE internal/plpgsql-18.html
+%LASTMOD
+%KEY pgsql-plpgsql18
+
+
+%TITLE <a href="https://www.postgresql.org/docs/current/plpgsql-cursors.html#PLPGSQL-CURSOR-FOR-LOOP" target="_blank" rel="noopener noreferrer">FOR IN LOOPによるカーソル行の取得</a>
+
+<pre>
+[<書式>]
+
+FOR recordvar IN bound_cursorvar [ ( [ argument_name := ] argument_value [, ...] ) ] LOOP
+    statements
+END LOOP;
+
+</pre>
+
+<br>
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>recordvar</td>	<td>カーソル変数から取り出す値</td>
+</tr><tr>
+<td>bound_cursorvar</td>	<td>カーソル変数</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+boundカーソルから連続してデータを取得する場合、FOR IN LOOPを利用すると簡単に実装できます。
+</p>
+
+<p>
+FOR IN LOOPを使う場合、カーソル変数は自動的に設定されるため、宣言は不要です。
+また、カーソルのOPENとCLOSEも不要です。
+</p>
+
+%CHAPTER プログラム例
+
+<br>
+
+<pre>
+postgres=# CREATE OR REPLACE FUNCTION item_names() RETURNS SETOF text AS
+ $$
+  DECLARE
+    names text;		/* 商品名を格納 */
+    bound_cursor CURSOR FOR SELECT name FROM itemlist;
+  BEGIN
+
+    FOR tmp IN bound_cursor LOOP  /* カーソル変数 tmpの宣言は不要 */
+      names := tmp;
+      RETURN NEXT names;
+    END LOOP;
+
+    RETURN;
+  END;
+ $$
+LANGUAGE PLpgSQL;
+CREATE FUNCTION
+
+postgres=# select * from item_names();
+ item_names
+------------
+ (aaa)
+ (bbb)
+ (ccc)
+ (bbb)
+ (ccc)
+(5 rows)
+</pre>
+<br>

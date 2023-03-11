@@ -1,0 +1,35 @@
+%FILE internal/plpgsql-05.html
+%LASTMOD
+%KEY pgsql-plpgsql05
+
+%TITLE <a href="https://www.postgresql.org/docs/current/plpgsql-control-structures.html#PLPGSQL-CALL-STACK" target="_blank" rel="noopener noreferrer">結果ステータスの取得</a>
+
+<pre>
+[<書式>]
+GET DIAGNOSTICS variable = item [ , ... ]
+
+</pre>
+
+<br>
+
+
+<table>
+<caption>item(ステータス項目)</caption>
+<tr bgcolor="#cccccc">
+<th>item(ステータス項目)</th>	<th>説明</th>
+</tr><tr>
+<td>ROW_COUNT</td>	<td>SQL文で処理された行数</td>
+</tr><tr>
+<td>RESULT_OID</td>	<td>INSERT文で挿入された(最後の)行のoid(オブジェクトID)</td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER 解説
+
+<p>
+GET DIAGNOSTICS文で、結果ステータスを取り出します。現在使用可能なステータス項目は、ROW_COUNTとRESULT_OIDの2つです。
+実行例は(<a href="./plpgsql-06.html">[<8-06>]</a>)の例を参照してください。
+</p>
+

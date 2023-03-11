@@ -2,12 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
- <title>PostgreSQLバイブル草稿</title>
- <link rel="stylesheet" type="text/css" media="screen" href="./default.css"">
-</head>
-
-<body>
+ <meta http-equiv="content-style-type" content="text/css">
+ <title>自分用PostgreSQLマニュアル</title>
+ <link rel="stylesheet" type="text/css" media="screen" href="./default.css" charset="UTF-8">
+ </head>
+ <body>
 
 <script language=javascript>
 <!--
@@ -26,11 +25,10 @@ objID.className='close';
 </script>
 
 <div id="header">
-<h1 class="title">PostgreSQLバイブル草稿</title></h1>
+<h1 class="title">自分用PostgreSQLマニュアル</title></h1>
     <span class="small">
 </span>
 </div>
-
 
 <hr class="full_hr">
 <table style="width: 100%;" border="0">
@@ -38,15 +36,16 @@ objID.className='close';
   <td class="menubar">
    <div id="menubar">
 
-
 <h5>PostgreSQLとは</h5>
 
-<li><a href="./index.html">PostgreSQLとは</a><br></li>
+<li><a href="./intro.html">PostgreSQLとは</a><br></li>
+
 
 <h5>PostgreSQLの内部構造</h5>
 <ul>
 <li><a href="./internal.html">とびら</a><br></li>
 </ul>
+
 <ol>
 <li><a href="./internal-01.html">プロセスとメモリ構造</a><br></li>
 <li><a href="./internal-02.html">データベースクラスタ、テーブルの構造</a></li>
@@ -58,7 +57,7 @@ objID.className='close';
 <li><a href="./internal-08.html">HOTとIndex Only Scan</a></li>
 <li><a href="./internal-09.html">WAL(Write Ahead Logging)</a></li>
 <li><a href="./internal-10.html">アーカイブログとPITR</a></li>
-<li><a href="./internal-11.html">レプリケーション(Streaming ReplicationとHotStandby)</a></li>
+<li><a href="./internal-11.html">Streaming ReplicationとHotStandby</a></li>
 </ol>
 
 
@@ -69,56 +68,46 @@ objID.className='close';
 </ul>
 
 <ol>
-[PostgreSQLの基礎]<br>
-<li><a href="./admin-01.html">オブジェクト、データベース、スキーマ</a><br></li>
-<li><a href="./admin-02.html">システムカタログ</a><br></li>
-<li><a href="./admin-03.html">文字コードの扱い</a><br></li>
-
 
 [インストールと起動、停止]<br>
-<li><a href="./admin-04.html">インストール</a><br></li>
-<li><a href="./admin-05.html">データベースシステムの初期化 initdb</a><br></li>
-<li><a href="./admin-06.html">PostgreSQLサーバの起動/停止</a><br></li>
+<li><a href="./admin-01.html">インストール</a><br></li>
+<li><a href="./admin-02.html">データベースシステムの初期化 initdb</a><br></li>
+<li><a href="./admin-03.html">PostgreSQLサーバの起動/停止</a><br></li>
 
+<hr>
+[PostgreSQLの基礎]<br>
+<li><a href="./admin-04.html">オブジェクト、データベース、スキーマ</a><br></li>
+<li><a href="./admin-05.html">システムカタログ</a><br></li>
+<li><a href="./admin-06.html">文字コードの扱い</a><br></li>
 
+  <hr>
 [認証とアクセス制御]<br>
 <li><a href="./admin-07.html">認証とアクセス制御</a><br></li>
 <li><a href="./admin-08.html">クライアントのアクセス制御</a><br></li>
 <li><a href="./admin-09.html">権限について</a><br></li>
 <li><a href="./admin-10.html">ロールの作成と権限制御</a><br></li>
 
-<HR>
-
+<hr>
 [バックアップとアップグレード]<br>
 <li><a href="./admin-11.html">バックアップとアップグレード</a><br></li>
 <li><a href="./admin-12.html">ダンプとリストア</a><br></li>
 <li><a href="./admin-13.html">アップグレード</a><br></li>
 
+  <hr>
 [保守、監視とチューニング]<br>
 <li><a href="./admin-14.html">保守、監視とチューニング</a><br></li> 
 <li><a href="./admin-15.html">稼働統計情報</a><br></li>
 <li><a href="./admin-16.html">実行ログの取得</a><br></li>
-<li><a href="./admin-17.html">モニタリングツール</a><br></li>
-<li><a href="./admin-18.html">ログと統計情報の分析</a><br></li>
-<li><a href="./admin-19.html">パラメータチューニング</a><br></li>
+<li><a href="./admin-17.html">ログと統計情報の分析</a><br></li>
+<li><a href="./admin-18.html">パラメータチューニング</a><br></li>
 
+  <hr>
 [耐障害性、高可用性]<br>
-<li><a href="./admin-20.html">耐障害性、高可用性</a><br></li>
-<li><a href="./admin-21.html">アーカイブログとPITR</a><br></li>
-<li><a href="./admin-22.html">レプリケーションの設定</a><br></li>
-<li><a href="./admin-23.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-19.html">アーカイブログとPITR</a><br></li>
+<li><a href="./admin-20.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-21.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-22.html">ロジカルレプリケーション</a><br></li>
 
-
-[FDW]<br>
-<li><a href="./admin-24.html">FDW</a><br></li>
-<li><a href="./admin-25.html">postgres_fdw</a><br></li>
-</ol>
-
-[追加の文章(未完)]<br>
-<li><a href="./admin-26.html">ロギング</a><br></li>
-<li><a href="./admin-27.html">統計情報</a><br></li>
-<li><a href="./admin-28.html">モニタリング</a><br></li>
-<li><a href="./admin-29.html">メンテナンス</a><br></li>
 </ol>
 
 
@@ -138,6 +127,7 @@ objID.className='close';
 <li><a href="./param-11.html">クライアント接続デフォルト</a><br></li>
 <li><a href="./param-12.html">ロック管理/バージョンとプラットフォーム互換性</a><br></li>
 </ol>
+
 
 
 <h5>psql</h5>
@@ -160,6 +150,7 @@ objID.className='close';
 </ol>
 
 
+
 <h5>SQL</h5>
 
 <ul>
@@ -167,15 +158,14 @@ objID.className='close';
 </ul>
 
 <ol>
-[SQL]<br>
 
 <li><a href="./sql-01.html">SQL語彙</a><br></li>
 <li><a href="./sql-02.html">テーブルスペースの作成/削除/変更</a><br></li>
 <li><a href="./sql-03.html">データベースの作成/変更/削除</a><br></li>
-<li><a href="./sql-04.html">テーブルの作成</a><br></li>
+<li><a href="./sql-04.html">テーブルの作成 CREATE TABLE / CREATE TABLE AS</a><br></li>
 <li><a href="./sql-05.html">外部キー</a><br></li>
 <li><a href="./sql-06.html">オブジェクトの継承/LIKE句</a><br></li>
-<li><a href="./sql-07.html">問い合わせ結果から新しいテーブルを作成</a><br></li>
+<li><a href="./sql-07.html">パーティション</a><br></li>
 <li><a href="./sql-08.html">テーブルの削除</a><br></li>
 <li><a href="./sql-09.html">スキーマの定義/変更/削除</a><br></li>
 
@@ -201,7 +191,7 @@ objID.className='close';
 <li><a href="./sql-25.html">問い合わせの結合</a><br></li>
 <li><a href="./sql-26.html">ORDER BY</a><br></li>
 <li><a href="./sql-27.html">LIMIT OFFSET</a><br></li>
-<li><a href="./sql-28.html">FOR UPDATE/ FOR SHARE</a><br></li>
+<li><a href="./sql-28.html">FOR [NO KEY] UPDATE/ FOR [KEY] SHARE</a><br></li>
 <li><a href="./sql-29.html">サブクエリ</a><br></li>
 <li><a href="./sql-30.html">CASE式</a><br></li>
 <li><a href="./sql-31.html">VALUES</a><br></li>
@@ -227,18 +217,12 @@ objID.className='close';
 <li><a href="./sql-49.html">COPY/IMPORT</a><br></li>
 <li><a href="./sql-50.html">COPY/EXPORT</a><br></li>
 <li><a href="./sql-51.html">関数定義</a><br></li>
-<li><a href="./sql-52.html">エクステンション</a><br></li>
-<li><a href="./sql-53.html">外部サーバの定義、変更、削除</a><br></li>
-<li><a href="./sql-54.html">外部サーバのユーザマップ定義、変更、削除</a><br></li>
-<li><a href="./sql-55.html">外部テーブルの定義、変更、削除</a><br></li>
-<hr>
-<li><a href="./sql-56.html">イベントトリガ</a><br></li>
-<li><a href="./sql-57.html">行レベルセキュリティ</a><br></li>
+<li><a href="./sql-52.html">FDW(Foreign Data Wrapper)</a><br></li>
 
-<hr>
-<li><a href="./sql-60.html">新しい機能</a><br></li>
+<li><a href="./sql-53.html">PUBLICATION</a><br></li>
+<li><a href="./sql-54.html">SUBSCRIPTION</a><br></li>
+  
 </ol>
-
 
 <h5>関数</h5>
 
@@ -260,8 +244,6 @@ objID.className='close';
 <li><a href="./type-09.html">バイナリ列データ型</a><br></li>
 <li><a href="./type-10.html">Range型</a><br></li>
 <li><a href="./type-11.html">配列</a><br></li>
-<hr>
-<li><a href="./type-12.html">JSON型</a><br></li>
 
 <hr>
 [演算子]<br>
@@ -273,9 +255,6 @@ objID.className='close';
 <li><a href="./ope-06.html">パターンマッチング</a><br></li>
 <li><a href="./ope-07.html">日付/時刻演算子</a><br></li>
 <li><a href="./ope-08.html">Range型演算子</a><br></li>
-<hr>
-<li><a href="./ope-09.html">JSON型演算子</a><br></li>
-
 
 <hr>
 [関数]<br>
@@ -287,89 +266,73 @@ objID.className='close';
 <li><a href="./func-06.html">型変換関数</a><br></li>
 <li><a href="./func-07.html">Range型関数</a><br></li>
 <li><a href="./func-08.html">Window関数</a><br></li>
-<li><a href="./func-09.html">セッション情報関数</a><br></li>
-<li><a href="./func-10.html">アクセス権限とスキーマ可視性照会関数</a><br></li>
-<li><a href="./func-11.html">データベースオブジェクト関数</a><br></li>
-<li><a href="./func-12.html">バックアップとリカバリ制御関数</a><br></li>
+  <hr>
 
-<li><a href="./func-13.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-09.html">セッション情報関数</a><br></li>
+<li><a href="./func-10.html">アクセス権限照会関数</a><br></li>
+<li><a href="./func-11.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-12.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-13.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
+<li><a href="./func-14.html">制御データ関数</a><br></li>
+  <hr>
 <li><a href="./func-15.html">構成設定関数</a><br></li>
 <li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-17.html">レプリケーションSQL関数</a><br></li>
-
-<hr>
-<li><a href="./func-18.html">JSON関数</a><br></li>
+<li><a href="./func-17.html">バックアップ制御関数</a><br></li>
+<li><a href="./func-18.html">リカバリ制御関数</a><br></li>
+<li><a href="./func-19.html">スナップショット同期関数</a><br></li>	
+<li><a href="./func-20.html">レプリケーション管理関数</a><br></li>	
+<li><a href="./func-21.html">データベースオブジェクト管理関数</a><br></li>
+<li><a href="./func-22.html">インデックス保守関数</a><br></li>	
+<li><a href="./func-23.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-24.html">勧告的ロック用関数</a><br></li>
+<li><a href="./func-25.html">統計情報関数</a><br></li>	
 
 </ol>
-
-<!--
-[削除するもの]<br>
-<li><a href="./type-07.html">幾何データ型</a><br></li>
-<li><a href="./type-08.html">ネットワークアドレス型型</a><br></li>
-<li><a href="./ope-08.html">幾何演算子</a><br></li>
-<li><a href="./ope-09.html">ネットワーク演算子</a><br></li>
-<li><a href="./func-06.html">幾何関数</a><br></li>
-<li><a href="./func-07.html">ネットワークアドレス関数</a><br></li>
-<li><a href="./func-14.html">システムカタログ情報関数</a><br></li>
-<li><a href="./func-16.html">トランザクションID関数</a><br></li>
-<li><a href="./func-17.html">スキーマ可視性照会関数</a><br></li>
-<li><a href="./func-18.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-19.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-20.html">勧告的ロック用関数</a><br></li>
--->
 
 <h5>PL/pgSQL</h5>
 
 <ol>
-<li><a href="./plpgsql.html">結果の返し方</a><br></li>
-<li><a href="./plpgsql-01.html">ストアドプロシージャ</a><br></li>
-<li><a href="./plpgsql-02.html">ストアドプロシージャの定義</a><br></li>
+<li><a href="./plpgsql-01.html">PL/pgSQLによるストアドプロシージャ</a><br></li>
+
+  <hr>[定義]
+    <br>
+
+<li><a href="./plpgsql-02.html">PL/pgSQLによるストアドプロシージャの定義</a><br></li>
+
+  <hr>[基本的な使い方]
+    <br>
 <li><a href="./plpgsql-03.html">変数宣言と値の代入</a><br></li>
-**** まとめる >>
+
 <li><a href="./plpgsql-04.html">SELECT INTO文</a><br></li>
 <li><a href="./plpgsql-05.html">結果ステータスの取得</a><br></li>
 <li><a href="./plpgsql-06.html">動的なSQL文の実行</a><br></li>
-<< ここまで****
+
+  <hr>[制御構造]
+    <br>
 <li><a href="./plpgsql-07.html">IF 条件分岐</a><br></li>
-<li><a href="./plpgsql-08.html">ループ処理</a><br></li>
-*** >>>
-<li><a href="./plpgsql-09.html">RETURN</a><br></li>
-<<< ***
+<li><a href="./plpgsql-08.html">EXIT</a><br></li>
+
+<li><a href="./plpgsql-09.html">RETURN NEXT / RETURN QUERY</a><br></li>
+
 <li><a href="./plpgsql-10.html">ループ処理　LOOP</a><br></li>
 <li><a href="./plpgsql-11.html">ループ処理　WHILE</a><br></li>
-<li><a href="./plpgsql-12.html">ループ処理　FOR </a><br></li>
+<li><a href="./plpgsql-12.html">ループ処理　FOR</a><br></li>
 <li><a href="./plpgsql-13.html">ループ処理 (複数行の問い合わせ結果を扱う)</a><br></li>
+
+<hr>[カーソル]
+    <br>
 <li><a href="./plpgsql-14.html">カーソルの利用</a><br></li>
 <li><a href="./plpgsql-15.html">カーソル変数の宣言</a><br></li>
 <li><a href="./plpgsql-16.html">カーソルのオープンとクローズ	OPEN / CLOSE</a><br></li>
-<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得		FETCH</a><br></li>
-<li><a href="./plpgsql-18.html">カーソルを使った例</a><br></li>
-<li><a href="./plpgsql-19.html">例外</a><br></li>
-*** >>>
-<li><a href="./plpgsql-21.html">CASE</a><br></li>
-<li><a href="./plpgsql-22.html">FOREACH</a><br></li>
-<<< ***
-</ol>
+<li><a href="./plpgsql-17.html">FETCH文によるカーソル行の取得	FETCH</a><br></li>
+  <li><a href="./plpgsql-18.html">FOR IN LOOPにカーソル行の取得</a><br></li>
+<li><a href="./plpgsql-19.html">カーソルを使った例</a><br></li>
+
+  <hr>[例外]
+    <br>
+<li><a href="./plpgsql-20.html">例外処理</a><br></li>
 
 
-<h5>Appendix(付録)</h5>
-
-<ol>
-<li><a href="./app-01.html">pgpool-II</a><br></li>
-<li><a href="./app-02.html">Pacemaker</a><br></li>
-</ol>
-
-
-<h5>おまけ:ネット公開(ページ数の関係で書籍には載せない)</h5>
-
-<ol>
-[pgpool]<br>
-<li><a href="./ha-06.html">pgpool-II セットアップ</a><br></li>
-<li><a href="./ha-07.html">pgpool-II レプリケーションモード</a><br></li>
-<li><a href="./ha-08.html">pgpool-II マスタースレーブモード</a><br></li>
-[Pacemaker]<br>
-<li><a href="./ha-10.html">Pacemaker</a><br></li>
 </ol>
 
 </div>
@@ -378,111 +341,206 @@ objID.className='close';
 
   </td>
   <td valign="top">
-   <div id="body">
+    <div id="body">
+      
+
+<h2><a href="https://www.postgresql.org/docs/current/functions-info.html#FUNCTIONS-CONTROLDATA" target="_blank" rel="noopener noreferrer">制御データ関数</a></h2>
 
 
-<h2>システムカタログ情報関数</h2>
 
-[<システムカタログ情報関数一覧>]
+<table border=1>
+<caption>制御データ関数</caption>
+<tr bgcolor="#cccccc">
+<th>関数</th>				<th>返り値型</th>	<th>説明</th>
 
-<pre>
-関数   戻り型	説明
-format_type(type_oid, typemod)	text	データ型のSQL名を取得
+</tr><tr>
+<td>pg_control_checkpoint()</td>	<td>record</td>	<td>CHECKPOINT情報を返す。情報の内容は解説を参照</td>
 
-###
-pg_get_constraintdef(constraint_oid)	text	制約の定義を取得
-pg_get_constraintdef(constraint_oid, pretty_bool)	text	制約の定義を取得
+</tr><tr>
+<td>pg_control_system()</td>	<td>record</td>	<td>コントロールファイルの情報を返す。内容は解説参照</td>
 
-pg_get_expr(pg_node_tree, relation_oid)			text	式中のすべてのVarが２番目のパラメータによって指定されるリレーションを参照すると仮定して、式の内部形式を逆コンパイル
-pg_get_expr(pg_node_tree, relation_oid, pretty_bool)	text	式中のすべてのVarが２番目のパラメータによって指定されるリレーションを参照すると仮定して、式の内部形式を逆コンパイル
+</tr><tr>
+<td>pg_control_init()</td>	<td>record</td>	<td>クラスタの初期化情報を返す。内容は解説参照</td>
 
-
-pg_get_functiondef(func_oid)		text		関数定義の取得
-pg_get_function_arguments(func_oid)	text		関数定義の引数リスト（デフォルト値付き）を取得
-pg_get_function_identity_arguments(func_oid)		text	関数を特定するための引数リスト（デフォルト値なし）を取得
-pg_get_function_result(func_oid)			text	関数に対するRETURNS句の取得
+</tr><tr>
+<td>pg_control_recovery()</td>	<td>record</td>	<td>リカバリ状態を返す。内容は解説参照</td>
 
 
-pg_get_indexdef(index_oid)				text	インデックスに対するCREATE INDEXコマンドの取得
-pg_get_indexdef(index_oid, column_no, pretty_bool)	text	インデックスに対するCREATE INDEXコマンドの取得、またはcolumn_noが非ゼロの場合は、１つのインデックス列のみの定義の取得
+</tr></table>
+
+<br>
 
 
-pg_get_keywords()	   setof record			SQLキーワードとそれらの種類のリストを取得
-
-pg_get_ruledef(rule_oid)   text	 ルールに対するCREATE RULEコマンドを取得
-pg_get_ruledef(rule_oid, pretty_bool)		      text	ルールに対するCREATE RULEコマンドを取得
-
-
-pg_get_serial_sequence(table_name, column_name)	      text	serial、smallserial、またはbigserial列が使用するシーケンス名の取得
-
-
-pg_get_triggerdef(trigger_oid)	   text		      トリガに対するCREATE [ CONSTRAINT ] TRIGGERコマンドの取得
-pg_get_triggerdef(trigger_oid, pretty_bool)	      text		   トリガに対するCREATE [ CONSTRAINT ] TRIGGERコマンドの取得
-
-
-pg_get_userbyid(role_oid)      name		      与えられたOIDでロール名を取得
-
-####
-pg_get_viewdef(view_name)      text		      ビューまたはマテリアライズドビューの元になるSELECTコマンドを取得（廃止予定）
-pg_get_viewdef(view_name, pretty_bool)		      text	ビューまたはマテリアライズドビューの元になるSELECTコマンドを取得（廃止予定）
-pg_get_viewdef(view_oid)  text			      ビューまたはマテリアライズドビューの元になるSELECTコマンドを取得
-pg_get_viewdef(view_oid, pretty_bool)		      text	ビューまたはマテリアライズドビューの元になるSELECTコマンドを取得
-pg_get_viewdef(view_oid, wrap_column_int)	      text	ビューまたはマテリアライズドビューの元になるSELECTコマンドを取得。 フィールドを含む行は指定された列数で折り返され、成形された表示が行われます。
-
-
-pg_options_to_table(reloptions)			      setof record								   格納オプションの名前/値のペアのセットを取得 バージョン9.1から
-
-
-pg_tablespace_databases(tablespace_oid)		      setof oid									   テーブル空間内にオブジェクトを所有するデータベースOID集合を取得
-pg_tablespace_location(tablespace_oid)		      text  指定したテーブル空間が実際に配置されているファイルシステム上のパスを取得 バージョン9.2から
-
-
-pg_typeof(any)					      regtype	指定した値のデータ型を取得
-
-collation for (any)				      text	引数の照合順序を取得
-
-to_regclass(rel_name)				      regclass	指定のリレーションのOIDを取得。バージョン9.4から
-to_regproc(func_name)				      regproc	指定の関数のOIDを取得。バージョン9.4から
-to_regprocedure(func_name)			      regprocedure	指定の関数のOIDを取得。バージョン9.4から
-to_regoper(operator_name)			      regoper		指定の演算子のOIDを取得。バージョン9.4から
-to_regoperator(operator_name)			      regoperator	指定の演算子のOIDを取得。バージョン9.4から
-to_regtype(type_name)				      regtype		指定の型のOIDを取得。バージョン9.4から
-to_regnamespace(schema_name)			      regnamespace	指定のスキーマのOIDを取得。バージョン9.5から
-to_regrole(role_name)				      regrole		指定のロールのOIDを取得。バージョン9.5から
-</pre>
-
+<div class="jumpmenu"></div><h3>解説</h3>
 
 
 <p>
-・pg_get_constraintdef()
-<br>
-pg_get_constraintdef()は制約の定義を取得します。
+・pg_control_checkpoint()の出力
 </p>
 
-<pre>
-SELECT pg_get_constraintdef(to_regclass(''));
+<table border=1>
+<caption>pg_control_checkpoint</caption>
+<tr bgcolor="#cccccc">
+<th>カラム</th>				<th>返り値型</th>
 
-</pre>
-constraint_oid)	text	制約の定義を取得
-pg_get_constraintdef(constraint_oid, pretty_bool)	text	制約の定義を取得
+</tr><tr>
+<td>checkpoint_lsn</td>	<td>pg_lsn</td>
+</tr><tr>
+<td>redo_lsn</td>	<td>pg_lsn</td>
+</tr><tr>
+<td>redo_wal_file</td>	<td>text</td>
+</tr><tr>
+<td>timeline_id</td>	<td>int</td>
+</tr><tr>
+<td>prev_timeline_id</td>	<td>int</td>
+</tr><tr>
+<td>full_page_writes</td>	<td>boolean</td>
+</tr><tr>
+<td>next_xid</td>	<td>text</td>
+</tr><tr>
+<td>next_oid</td>	<td>oid</td>
+</tr><tr>
+<td>next_multiact_id</td>	<td>xid</td>
+</tr><tr>
+<td>next_multi_offset</td>	<td>xid</td>
+</tr><tr>
+<td>oldest_xid</td>	<td>xid</td>
+</tr><tr>
+<td>oldest_xid_dbid</td>	<td>oid</td>
+</tr><tr>
+<td>oldest_active_xid</td>	<td>xid</td>
+</tr><tr>
+<td>oldest_multi_xid</td>	<td>xid</td>
+</tr><tr>
+<td>oldest_multi_dbid</td>	<td>oid</td>
+</tr><tr>
+<td>oldest_commit_ts_xid</td>	<td>xid</td>
+</tr><tr>
+<td>newest_commit_ts_xid</td>	<td>xid</td>
+</tr><tr>
+<td>checkpoint_time</td>	<td>timestamp</td>
 
+</tr></table>
+
+
+<br>
 
 <p>
-・pg_get_viewdef()
-<br>
-pg_get_viewdef()はビューやマテリアライズドビューの定義を返します。
+・pg_control_system()の出力
 </p>
 
 
-      text		      ビューまたはマテリアライズドビューの元になるSELECTコマンドを取得（廃止予定）
-pg_get_viewdef(view_name, pretty_bool)		      text	ビューまたはマテリアライズドビューの元になるSELECTコマンドを取得（廃止予定）
-pg_get_viewdef(view_oid)  text			      ビューまたはマテリアライズドビューの元になるSELECTコマンドを取得
-pg_get_viewdef(view_oid, pretty_bool)		      text	ビューまたはマテリアライズドビューの元になるSELECTコマンドを取得
-pg_get_viewdef(view_oid, wrap_column_int)	      text	ビューまたはマテリアライズドビューの元になるSELECTコマンドを取得。 フィールドを含む行は指定された列数で折り返され、成形された表示が行われます。
+<table border=1>
+<caption>pg_control_system</caption>
+<tr bgcolor="#cccccc">
+<th>カラム</th>				<th>返り値型</th>
 
+</tr><tr>
+<td>pg_control_version</td>	<td>int</td>
+</tr><tr>
+<td>catalog_version_no</td>	<td>int</td>
+</tr><tr>
+<td>system_identifier</td>	<td>bigint</td>
+</tr><tr>
+<td>pg_control_last_modified</td>	<td>timestamp</td>
+</tr></table>
+
+<br>
+
+<p>
+・pg_control_init()の出力
+</p>
+
+<table border=1>
+<caption>pg_control_init</caption>
+<tr bgcolor="#cccccc">
+<th>カラム</th>				<th>返り値型</th>
+
+</tr><tr>
+<td>max_data_alignment</td>	<td>int</td>
+</tr><tr>
+<td>database_block_size</td>	<td>int</td>
+</tr><tr>
+<td>blocks_per_segment</td>	<td>int</td>
+</tr><tr>
+<td>wal_block_size</td>	<td>int</td>
+</tr><tr>
+<td>bytes_per_wal_segment</td>	<td>int</td>
+</tr><tr>
+<td>max_identifier_length</td>	<td>int</td>
+</tr><tr>
+<td>max_index_columns</td>	<td>int</td>
+</tr><tr>
+<td>max_toast_chunk_size</td>	<td>int</td>
+</tr><tr>
+<td>large_object_chunk_size</td>	<td>int</td>
+</tr><tr>
+<td>float8_pass_by_value</td>	<td>boolean</td>
+</tr><tr>
+<td>data_page_checksum_version</td>	<td>int</td>
+
+</tr></table>
+
+
+<br>
+
+<p>
+・pg_control_recovery()の出力
+</p>
+
+<table border=1>
+<caption>pg_control_recovery</caption>
+<tr bgcolor="#cccccc">
+<th>カラム</th>				<th>返り値型</th>
+
+</tr><tr>
+<td></td>	<td></td>
+</tr><tr>
+<td>min_recovery_end_lsn</td>	<td>pg_lsn</td>
+</tr><tr>
+<td>min_recovery_end_timeline</td>	<td>int</td>
+</tr><tr>
+<td>backup_start_lsn</td>	<td>pg_lsn</td>
+</tr><tr>
+<td>backup_end_lsn</td>	<td>pg_lsn</td>
+</tr><tr>
+<td>end_of_backup_record_required</td>	<td>boolean</td>
+
+</tr></table>
+
+
+
+
+<div class="jumpmenu"></div><h3>実行例</h3>
+
+<pre>
+postgres=# SELECT pg_control_checkpoint();
+                                                pg_control_checkpoint                                                
+---------------------------------------------------------------------------------------------------------------------
+ (0/4951DD8,0/4951DA0,000000010000000000000004,1,1,t,0:914,16881,1,0,716,1,914,1,5,912,912,"2023-01-13 09:24:19+09")
+(1 row)
+
+postgres=# SELECT pg_control_system();
+                       pg_control_system                       
+---------------------------------------------------------------
+ (1300,202209061,7157832683592402310,"2023-01-13 09:24:19+09")
+(1 row)
+
+postgres=# SELECT pg_control_init();
+                  pg_control_init                  
+---------------------------------------------------
+ (8,8192,131072,8192,16777216,64,32,1996,2048,t,0)
+(1 row)
+
+postgres=# SELECT pg_control_recovery();
+ pg_control_recovery 
+---------------------
+ (0/0,0,0/0,0/0,f)
+(1 row)
+</pre>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2018-9-8
+Last-modified: 2023-3-11
 </div>
 </body>
 </html>

@@ -1,0 +1,120 @@
+%FILE internal/psql-02.html
+%LASTMOD
+%KEY pgsql-psql02
+
+
+%TITLE PostgreSQLサーバとの接続/切断/再接続
+
+<pre>
+[<書式>]
+psql [ options ] db_name
+
+</pre>
+
+<br>
+
+
+<table>
+<caption>引数</caption>
+<tr bgcolor="#cccccc">
+<th>引数</th>	<th>説明</th>
+</tr><tr>
+<td>db_name</td>	<td>接続するデータベース名</td>
+</tr></table>
+
+<br>
+
+
+<table>
+<caption>オプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>-h host_name</td>	<td>PostgreSQLサーバのホスト名、もしくはIPアドレス</td>
+</tr><tr>
+<td>-p port_no</td>	<td>PostgreSQLに接続するためのTCP/IPポート番号[5432] </td>
+</tr><tr>
+<td>-U role_name</td>	<td>データベースロール"role_name"としてデータベースに接続</td>
+</tr><tr>
+<td>-u</td>	<td>データベース接続時にデータベースロール名とパスワードを尋ねる</td>
+</tr><tr>
+<td>-W</td>	<td>データベースの接続時にパスワード入力を促す</td>
+</tr><tr>
+<td>-X</td>	<td>起動用ファイル(~/.psqlrc)を読み込まない</td>
+</tr></table>
+
+<br>
+
+
+<table>
+<caption>メタコマンド</caption>
+<tr bgcolor="#cccccc">
+<th>メタコマンド</th>	<th>説明</th>
+</tr><tr>
+<td>\connect [ db_name [ role_name ] ]</td>	<td>新たに別のデータベースdb_nameに接続する</td>
+</tr><tr>
+<td>\c [ db_name [ role_name ] ]</td>	<td>\connect と同じ</td>
+</tr><tr>
+<td>\q</td>	<td>切断</td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER 解説
+
+<p>
+・~/.psqlrc ファイル
+<br>
+psqlを起動したユーザのホームディレクトリに~/.psqlrcファイルがあれば、
+psqlは起動時にそのファイルを読み込んで実行します。
+<br>
+~/.psqlrcファイルには、ユーザごとの環境設定を行うメタコマンドなどを記述します。
+</p>
+
+
+<p>
+・\connect
+<br>
+新たに別のデータベースに接続します。
+それまでの接続は切断します。
+<br>
+role_nameを省略した場合、現在のデータベースロール名を使います。
+</p>
+
+%CHAPTER 実行例
+
+<p>
+・リモートホストからpsqlを起動する場合
+<br>
+ホスト名"dbms.server.net"で稼働しているPostgreSQLサーバのデータベースsampledbに、データベースロールpostgresとして接続します。
+<br>
+リモートホストからアクセスするには、サーバ側でいくつかの設定が必要になります。
+詳細は<a href="./admin-07.html">[<3-07>]</a>と<a href="admin-08.html">[<3-08>]</a>を参照してください。
+</p>
+
+<pre>
+postgres@remotehost> psql -U postgres -h dbms.server.net sampledb
+</pre>
+
+<p>
+・切断
+</p>
+
+<pre>
+sampledb=#\q
+</pre>
+
+
+<p>
+・データベースへの接続
+<br>
+データベースsampledbからデータベースlatindbに再接続します。
+</p>
+
+<pre>
+sampledb=# \connect latindb
+You are now connected to database latindb.
+latindb=#
+latindb=# \q
+</pre>

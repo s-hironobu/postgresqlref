@@ -1,0 +1,182 @@
+%FILE internal/admin-13.html
+%LASTMOD
+%KEY pgsql-admin13
+
+%TITLE アップグレード <a href="https://www.postgresql.org/docs/current/pgupgrade.html" target="_blank" rel="noopener noreferrer">pg_upgrade</a>
+
+<br>
+
+<pre>
+pg_upgrade -b oldbindir [-B newbindir] -d oldconfigdir -D newconfigdir [option...]
+</pre>
+<br>
+
+<table>
+<caption>オプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>-c, --check</td>	<td>チェックのみ。</td>
+</tr><tr>
+<td>-j njobs</td>	<td>並列処理</td>
+</tr><tr>
+<td>-k, --link</td>	<td>ハードリンクを使う</td>
+</tr><tr>
+<td>-N, --no-sync</td>	<td>syncを待たずに終了。テスト用？</td>
+</tr><tr>
+<td>-p port</td>	<td>ポート番号</td>
+</tr><tr>
+<td>-s dir</td>	<td>socketのディレクトリ</td>
+</tr><tr>
+<td>-U username</td>	<td>ユーザ名</td>
+</tr><tr>
+<td>-v, --verbose</td>	<td>verbose</td>
+</tr><tr>
+<td>-V, --version</td>	<td>バージョン表示</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+バージョン9.0から、データベースクラスタをアップグレードするツールpg_upgradeがサポートされました。
+</p>
+
+<p>
+pg_upgradeは、バージョン8.3以降のデータベースクラスタを、バージョン9.0以降のPostgreSQLで使えるようにアップグレードします。
+</p>
+
+
+<p>
+以降、バージョン9.0のデータベースクラスタから、バージョン9.1にアップグレードする手順を示します。
+<br>
+旧バージョンが9.0、新バージョンが9.1です。作業環境は次のとおりです。
+</p>
+
+<table>
+<tr bgcolor="#cccccc">
+<th></th>				<th>旧バージョン	9.0</th>		<th>新バージョン	9.1</th>
+</tr><tr>
+<td>インストールディレクトリ</td>	<td>/usr/local/pgsql-9.0</td>			<td>/usr/local/pgsql-9.1</td>
+</tr><tr>
+<td>データベースクラスタ</td>		<td>/usr/local/pgsql-9.0/data</td>		<td>/usr/local/pgsql-9.1/data</td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER 旧バージョンでの作業
+
+<p>
+特に作業は必要ありません。サーバは停止してください。
+</p>
+
+
+%CHAPTER 新バージョンでの作業
+
+%SECTION [1] インストール
+
+<p>
+新バージョンのPostgreSQLのcontribディレクトリで、pg_upgradeとpg_upgrade_supportをコンパイルしてインストールします。
+</p>
+
+<pre>
+postgres> cd postgresql-9.1.0
+postgres> cd contrib/pg_upgrade
+postgres> make && install
+postgres> cd ../pg_upgrade_support
+postgres> make && install
+</pre>
+<br>
+
+%SECTION [2] initdb実行
+
+<p>
+新バージョンのPostgreSQLでinitdbを実行し、データベースクラスタを作成します。
+</p>
+
+<pre>
+postgres> cd /usr/local/pgsql-9.1
+postgres> ./bin/initdb -D /usr/local/pgsql-9.1/data
+</pre>
+<br>
+
+%SECTION [3] アップグレードのチェック
+
+<p>
+pg_upgradeのチェックオプション"-c"で、アップグレードに問題がないか確認します。"-c"以外に必須のオプションが4つあります。
+</p>
+
+<table>
+<tr bgcolor="#cccccc">
+<th>必須オプション</th>		<th>説明</th>		<th></th>	<th>必須オプション</th>		<th>説明</th>
+</tr><tr>
+<td>-d DIR</td>		<td>旧バージョンのデータベースクラスタ</td>	<td></td>	<td>-D DIR</td>		<td>新バージョンのデータベースクラスタ</td>
+</tr><tr>
+<td>-b DIR</td>		<td>旧バージョンのバイナリディレクトリ</td>	<td></td>	<td>-B DIR</td>		<td>新バージョンのバイナリディレクトリ</td>
+</tr></table>
+
+<p>
+以下に実行例を示します。
+</p>
+
+<pre>
+postgres>  ./bin/pg_upgrade -c -d /usr/local/pgsql-9.0/data  -D /usr/local/pgsql-9.1/data
+>                              -b /usr/local/pgsql-9.0/bin   -B /usr/local/pgsql-9.1/bin
+Performing Consistency Checks
+-----------------------------
+Checking current, bin, and data directories                 ok
+Checking cluster versions                                   ok
+
+... 略 ...
+
+*Clusters are compatible*
+</pre>
+<br>
+
+%SECTION [4] pg_upgradeを実行
+
+<p>
+チェックが完了したら、pg_upgradeを実行します。
+</p>
+
+<pre>
+postgres>  ./bin/pg_upgrade -d /usr/local/pgsql-9.0/data  -D /usr/local/pgsql-9.1/data
+>                           -b /usr/local/pgsql-9.0/bin   -B /usr/local/pgsql-9.1/bin
+</pre>
+<br>
+
+
+%SECTION [5] postgresql.conf、pg_hba.confの編集
+
+<p>
+postgresql.confとpg_hba.confを適宜、編集します。
+</p>
+
+%SECTION [6] 旧バージョンのデータベースクラスタを削除
+
+<p>
+旧バージョンのデータベースクラスタを削除するスクリプトファイル delete_old_cluster.shが生成されます。
+</p>
+
+<pre>
+postgres> cat delete_old_cluster.sh
+#!/bin/sh
+rm -rf /usr/local/pgsql-9.0/data
+rm -rf /home/postgres/tblspc/PG_9.0_201008051
+</pre>
+<br>
+
+<p>
+旧バージョンが不要ならば、このスクリプトを実行して削除します。
+</p>
+
+%SECTION [7] 新サーバを起動し、analyzeを実行
+
+<p>
+アップグレードしたデータベースクラスタは統計情報が更新されていないので、サーバ起動後すみやかにANALYZE文を実行してください。
+version 9.2以上ならば、analyze_new_cluster.shというANALYZEを実行するshell scriptが生成されるので、これを実行するとよいでしょう。
+</p>
+
+

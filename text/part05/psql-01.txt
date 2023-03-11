@@ -1,0 +1,73 @@
+%FILE internal/psql-01.html
+%LASTMOD
+%KEY pgsql-psql01
+
+
+%TITLE psqlとは
+
+
+<p>
+psqlはPostgreSQLの対話型インタフェースです。
+psqlは入力されたSQL文をPostgreSQLサーバに送信し、結果を表示します。
+<br>
+psqlは対話的にSQL文を入力して使うことも、バッチ処理を行うこともできます。
+</p>
+
+<p>
+psqlの書式を示します。
+</p>
+
+[<書式>]
+<pre>
+psql [ options ] dbname
+</pre>
+
+<br>
+
+%CHAPTER 基本的な使い方
+
+<p>
+ターミナルからpsqlを起動すると入力プロンプト"sampledb=#"が表示されます。
+ここで"sampledb"はpsqlが接続したデータベース名です。
+</p>
+
+<pre>
+postgres> psql -U postgres sampledb
+psql (15.0)
+Type "help" for help.
+
+sampledb=#
+</pre>
+
+<p>
+入力プロンプトに続いてSQL文を入力します。
+入力が終ったら";"(セミコロン)、もしくは"\g"を入力して「ENTER」キーを押します。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM author_list WHERE 2 <= id AND id <= 3;
+ id |   name
+----+----------
+  2 | 夏目漱石
+  3 | ヘッセ
+(2 rows)
+</pre>
+
+<p>
+";"や"\g"を入力せずに「ENTER」キーを押すと、"sampledb-#"という入力プロンプトに変わり、さらに入力を促します。
+</p>
+
+<pre>
+sampledb=# SELECT * FROM author_list
+sampledb-#    WHERE 2 <= id AND id <= 3;
+</pre>
+
+<p>
+データベースとの接続を切断(セッションを終了)するには、\qメタコマンドを実行します。
+
+
+<pre>
+sampledb=# \q
+postgres>
+</pre>
+

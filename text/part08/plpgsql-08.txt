@@ -1,0 +1,30 @@
+%FILE internal/plpgsql-08.html
+%LASTMOD
+%KEY pgsql-plpgsql08
+
+%TITLE <a href="https://www.postgresql.org/docs/current/plpgsql-control-structures.html#PLPGSQL-CONTROL-STRUCTURES-LOOPS" target="_blank" rel="noopener noreferrer">EXIT</a>
+
+
+<pre>
+[<書式>]
+
+EXIT [ label ] [ WHEN boolean-expression ];
+
+</pre>
+
+<br>
+
+
+%CHAPTER 解説
+
+<p>
+EXIT文は各種ループを終了し、label が設定された位置に制御を移します。label はEXIT文があるループ、およびブロックの外側になければなりません。
+</p>
+
+<p>
+labelが指定されない場合は、最も内側のループを終了し、"END LOOP"の次の文に制御を移します。WHEN句がある場合、指定された条件が真の場合のみループを終了します。
+</p>
+
+<p>
+EXIT文の具体的な使い方は、<a href="./plpgsql-09.html">[<8-09>]</a>,<a href="./plpgsql-10.html">[<8-10>]</a>,<a href="./plpgsql-19.html">[<8-19>]</a>の例を参照してください。
+</p>

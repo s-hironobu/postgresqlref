@@ -1,0 +1,19 @@
+%FILE internal/ope-05.html
+%LASTMOD
+%KEY pgsql-ope-05
+
+%TITLE <a href="https://www.postgresql.org/docs/current/functions-string.html" target="_blank" rel="noopener noreferrer">文字列演算子</a>
+
+[<文字列演算子>]
+
+<table><tr bgcolor="#cccccc">
+<th>演算子　　</th>		<th>返り値　　　　　</th>		<th>説明　　　</th>		<th>例</th>	<th>結果</th>
+</tr><tr>
+<td>||	</th>	<td>text </td>	<td>文字列の結合 </td>	 <td>Postgre || SQL </td>	<td>PostgreSQL </td>
+</tr></table>
+
+%CHAPTER 解説
+
+<p>
+文字列の結合演算子'||'で、文字列を結合します。バイナリ列データ型(<a href="./type-09.html">[<7-09>]</a>)もこの演算子を使えます。
+</p>

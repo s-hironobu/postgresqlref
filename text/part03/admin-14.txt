@@ -1,0 +1,130 @@
+%FILE internal/admin-14.html
+%LASTMOD
+%KEY pgsql-admin14
+
+%TITLE 保守、監視とチューニング
+
+<p>
+日常的な運用管理作業について概略を示します。詳細は以降で解説します。
+</p>
+
+
+<p>
+運用全般については以下の資料が参考になります。
+</p>
+
+<table>
+<tr bgcolor="#cccccc"><th>資料</th>	<th>著者</th>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.jp/sites/default/files/2017-05/JPUG%E5%A4%8F%E3%82%BB%E3%83%9F%E3%83%8A_20110625_%E9%81%8B%E7%94%A8%E3%83%86%E3%82%AF%E3%83%8B%E3%83%83%E3%82%AF-%E6%8A%95%E5%BD%B1%E7%89%88.pdf" target="_blank" rel="noopener noreferrer">PostgreSQL運用テクニック</a></td>	<td>笠原辰仁、坂本昌彦</td>
+</tr></table>
+
+<br>
+
+%CHAPTER <a href="https://www.postgresql.org/docs/current/maintenance.html" target="_blank" rel="noopener noreferrer">保守</a>
+
+<p>
+PostgreSQLの運用にあたって必須の保守項目を示します([<表3-08>])。
+</p>
+
+<table>
+<caption>[<表3-08>]必須の保守項目</caption>
+<tr bgcolor="#cccccc">
+<th>処理　　　　　　</th>			<th>説明　　　　　　　　　　　</th>
+</tr><tr>
+<td>VACUUM</td>			<td>不要なタプルの回収とFSMの更新。バージョン8.1以降、AUTOVACUUMで自動実行</td>
+</tr><tr>
+<td>ANALYZE</td>		<td>統計情報の更新。バージョン8.1以降、AUTOVACUUMで自動実行</td>
+</tr><tr>
+<td>VACUUM FULL</td>		<td>大量のデータを削除した場合に実行。テーブルファイルサイズを削減できる</td>
+</tr><tr>
+<td>アーカイブログの削除</td>	<td>アーカイブログは明示的に削除しなければ、際限なく増えていく</td>
+</tr></table>
+
+<br>
+
+<p>
+バージョン8.1で導入されたAUTOVACUUMによって、それまでPostgreSQLの運用上大きな欠点であったVACUUM処理が自動で行われるようになりました。
+</p>
+
+<p>
+・アーカイブログの削除
+<br>
+アーカイブログは際限なく増えていきます。
+「定期的にベースバックアップを保存し、以前のアーカイブログを削除」してください。
+<br>
+古いアーカイブログをまとめて削除するツールpg_archivecleanupについて、
+<a href="./admin-19.html">[<3-19>]</a>で解説します。
+</p>
+
+
+%CHAPTER <a href="https://www.postgresql.org/docs/current/monitoring.html" target="_blank" rel="noopener noreferrer">監視</a>
+
+<p>
+PostgreSQLやサーバの稼働状態を監視する手法を示します。
+</p>
+
+%SECTION 稼働統計情報
+
+<p>
+PostgreSQLはサーバ内部に稼働統計情報(<a href="./admin-15.html">[<3-15>]</a>参照)を記録保存します。
+<br>
+稼働統計情報を定期的に収集し、集計するツールがいくつか公開されています。
+</p>
+
+<table border=1><tr bgcolor="#cccccc">
+<tr bgcolor="#cccccc">
+<th>ツール名　　　　　　</th>			<th>説明　　　　　　　　　　　</th>
+</tr><tr>
+ <td><a href="https://github.com/ossc-db/pg_statsinfo" target="_blank" rel="noopener noreferrer">pg_statsinfo</a></td>	<td>pg_statsinfodというデーモンプロセスが稼働統計情報を取得する。高機能であるが設定が繁雑である。情報の集計結果をグラフィカルに表示するpg_reporterも公開されている。</td>
+</tr></table>
+
+<br>
+
+%SECTION ログ
+
+<p>
+PostgreSQLは実行ログをファイルに書き出します。
+PostgreSQLが独自に管理するログファイルに書き出すこともできるし、syslogに書き出すこともできます。
+設定方法は<a href="./admin-16.html">[<3-16>]</a>参照してください。
+</p>
+
+
+%SECTION OSの稼働情報
+
+<p>
+HDDアクセスやCPUの負荷など、OSの稼働情報もRDBMSの運用管理に必要な情報です。多くのツールやコマンドが用意されています。
+</p>
+
+<table border=1><tr bgcolor="#cccccc">
+<th>ツール名</th>	<th>説明</th>
+</tr><tr>
+  <td>iostat, vmstat</td>	<td>UNIX系OSならば必ず付属するコマンドである(MacOSXはvm_stat)。特にiostatのディスクI/Oは継続的にモニタリングすべきデータである。</td>
+</tr><tr>
+  <td><a href="http://sebastien.godard.pagesperso-orange.fr/" target="_blank" rel="noopener noreferrer">sysstat</a>	</td>		<td>sysstatはUNIX系OSのシステム情報を収集、分析するツール群である。
+収集するデータの範囲も広く、結果の集計コマンドも充実しているので、sysstatがサポートされたUNIX系OSを運用するなら常備すべきである。</td>
+</tr><tr>
+  <td><a href="http://www.nagios.org/" target="_blank" rel="noopener noreferrer">nagios</a></td>	<td>OSだけでなく、各種プラグインでPostgreSQLはじめ様々なアプリケーションのモニタリングが可能なシステムである。
+デーモンプロセスとして稼働し、結果はhttpサーバでグラフィカルに表示できる。数100台規模のサーバのモニタリングも可能である。</td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER チューニング
+
+<p>
+<a href="./admin-17.html">[<3-17>]</a>でログや稼働統計情報の分析方法、<a href="./admin-18.html">[<3-18>]</a>でパラメータチューニングについて簡単に説明します。
+<br>
+詳細は以下の書籍、もしくは資料を参照してください。
+</p>
+
+<table>
+<tr bgcolor="#cccccc"><th>資料</th>	<th>著者</th>
+</tr><tr>
+<td><a href="https://www.postgresql.jp/sites/default/files/2017-01/B2-3-full.pdf" target="_blank" rel="noopener noreferrer">PostgreSQLのチューニング技法</a></td>	<td>笠原辰仁、 他</td>
+</tr><tr>
+<td><a href="http://lets.postgresql.jp/documents/technical/statistics/2" target="_blank" rel="noopener noreferrer">稼動統計情報を活用しよう(2)</a></td>	<td>笠原辰仁</td>
+</tr></table>
+

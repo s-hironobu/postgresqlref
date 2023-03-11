@@ -1,0 +1,256 @@
+%FILE internal/admin-22.html
+%LASTMOD
+%KEY pgsql-admin22
+
+
+%TITLE <a href="https://www.postgresql.org/docs/current/logical-replication.html" target="_blank" rel="noopener noreferrer">ロジカルレプリケーション</a>
+
+
+<table>
+<caption></caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>	<th>ロジカルレプリケーション</th>	<th>レプリケーション</th>
+</tr><tr>
+<td>転送タイミング</td>	<td>COMMIT 完了時</td>	<td>WALレコードの生成に応じて連続して送る</td>
+
+</tr><tr>
+<td>送信プロセス</td>	<td>wal_sender</td>	<td>wal_sender</td>
+
+</tr><tr>
+<td>受信プロセス</td>	<td>logical replication launcher, logical replication worker</td>	<td>walreceiver, startup</td>
+
+</tr><tr>
+<td>単位</td>	<td>テーブル、データベース</td>	<td>データベースクラスタ</td>
+
+</tr><tr>
+<td>レプリケーションされない操作</td>	<td>TRUNCATE</td>	<td></td>
+
+</tr><tr>
+<td>レプリケーションされないオブジェクト</td>	<td>テーブル以外(シーケンス、インデックスなど)</td>	<td>UNLOGGEDテーブル</td>
+
+</tr><tr>
+<td>異メジャーバージョン間</td>	<td>可能</td>	<td>不可</td>
+
+</tr><tr>
+<td>異OS間</td>	<td>可能</td>	<td>不可</td>
+
+</tr><tr>
+<td>スタンバイの更新</td>	<td>可能</td>	<td>不可</td>
+
+</tr><tr>
+<td>スタンバイのトリガ起動</td>	<td>可能</td>	<td>不可</td>
+</tr></table>
+
+
+<a href="https://www.sraoss.co.jp/tech-blog/pgsql/logical-replication-1/">参照元</a>
+
+%CHAPTER 解説
+
+<pre>
+wal_level = 'logical'
+</pre>
+<br>
+
+
+<pre>
+max_logical_replication_workers
+max_replication_slots
+max_sync_workers_per_subscription
+max_wal_senders
+max_worker_processes
+</pre>
+<br>
+
+
+%CHAPTER 初期設定
+
+
+%SECTION パブリケーションの作成
+
+<p>
+初めにロジカルレプリケーションするテーブルを作成します。ここではカラムidにPRIMAERY KEYを設定します
+</p>
+
+<pre>
+postgres=# CREATE TABLE logical_tbl (id int PRIMARY KEY, data int);
+CREATE TABLE
+
+postgres=# INSERT INTO logical_tbl VALUES (1,1), (2,2), (3,3);
+INSERT 0 3
+
+postgres=# SELECT * FROM logical_tbl;
+ id | data
+----+------
+  1 |    1
+  2 |    2
+  3 |    3
+(3 rows)
+</pre>
+<br>
+
+<p>
+テーブルlogical_tblにパブリケーションを作成します。今回は全ての操作(SELECT/UPDATE/DELETEなど)をレプリケーションします。
+</p>
+
+
+<pre>
+postgres=# CREATE PUBLICATION pub_1 FOR TABLE logical_tbl;
+CREATE PUBLICATION
+</pre>
+<br>
+
+
+<p>
+設定したパブリケーションの情報は以下のコマンドで表示できます。
+</p>
+
+<pre>
+postgres=# SELECT * FROM pg_publication;
+  oid  | pubname | pubowner | puballtables | pubinsert | pubupdate | pubdelete | pubtruncate | pubviaroot
+-------+---------+----------+--------------+-----------+-----------+-----------+-------------+------------
+ 25682 | pub_1   |       10 | f            | t         | t         | t         | t           | f
+(1 row)
+
+postgres=# \dRp
+                               List of publications
+ Name  | Owner  | All tables | Inserts | Updates | Deletes | Truncates | Via root
+-------+--------+------------+---------+---------+---------+-----------+----------
+ pub_1 | ubuntu | f          | t       | t       | t       | t         | f
+(1 row)
+</pre>
+<br>
+
+<p>
+パブリケーションとテーブル間の関係は以下のシステムテーブルに保存されています。
+</p>
+
+<pre>
+postgres=# SELECT * FROM pg_publication_tables;
+ pubname | schemaname |  tablename  | attnames  | rowfilter
+---------+------------+-------------+-----------+-----------
+ pub_1   | public     | logical_tbl | {id,data} |
+(1 row)
+
+postgres=# SELECT * from pg_publication_rel;
+  oid  | prpubid | prrelid | prqual | prattrs
+-------+---------+---------+--------+---------
+ 25683 |   25682 |   25677 |        |
+(1 row)
+</pre>
+
+<br>
+
+
+
+%SECTION サブスクリプションの作成
+
+<p>
+サブスクリプション側にテーブルを作成します。
+</p>
+
+<pre>
+postgres=# CREATE TABLE logical_tbl (id int PRIMARY KEY, data int);
+CREATE TABLE
+</pre>
+<br>
+
+<p>
+以下のコマンドでサブスクリプションを作成します。
+</p>
+
+<pre>
+postgres=# CREATE SUBSCRIPTION sub_1
+         CONNECTION 'host=primary port=5432 dbname=postgres application_name=subscription_1'
+         PUBLICATION pub_1;
+NOTICE:  created replication slot "sub_1" on publisher
+CREATE SUBSCRIPTION
+</pre>
+<br>
+
+
+<p>
+サブスクリプション作成時に明示的に既存のレプリケーションスロットを指定しないと、
+パブリケーション側でレプリケーションスロットが作成されます。
+<br>
+以下のコマンドで、パブリケーション側にレプリケーションスロットが作成されたことを確認できます。
+</p>
+
+<pre>
+postgres=# SELECT slot_name, active FROM pg_replication_slots;
+ slot_name | active
+-----------+--------
+ sub_1     | t
+(1 row)
+</pre>
+<br>
+
+<p>
+サブスクリプションの情報は以下のシステムカタログで表示できます。
+</p>
+
+<pre>
+postgres=# \x
+Expanded display is on.
+postgres=# SELECT * FROM pg_subscription;
+-[ RECORD 1 ]----+----------------------------------------------------------------------------
+oid              | 25682
+subdbid          | 5
+subskiplsn       | 0/0
+subname          | sub_1
+subowner         | 10
+subenabled       | t
+subbinary        | f
+substream        | f
+subtwophasestate | d
+subdisableonerr  | f
+subconninfo      | host=192.168.64.4 port=5432 dbname=postgres application_name=subscription_1
+subslotname      | sub_1
+subsynccommit    | off
+subpublications  | {pub_1}
+
+postgres=# SELECT * FROM pg_stat_subscription;
+-[ RECORD 1 ]---------+------------------------------
+subid                 | 25682
+subname               | sub_1
+pid                   | 397781
+relid                 |
+received_lsn          | 0/1205B3B0
+last_msg_send_time    | 2023-03-07 10:33:35.51157+09
+last_msg_receipt_time | 2023-03-07 10:33:35.511784+09
+latest_end_lsn        | 0/1205B3B0
+latest_end_time       | 2023-03-07 10:33:35.51157+09
+
+
+postgres=# SELECT * FROM pg_subscription_rel;
+-[ RECORD 1 ]----------
+srsubid    | 25682
+srrelid    | 25677
+srsubstate | r
+srsublsn   | 0/1205ADA0
+</pre>
+<br>
+
+<p>
+サブスクリプションを作成した時点で、パブリケーション側のデータが送信されます。
+</p>
+
+<pre>
+\x
+Expanded display is off.
+
+postgres=# SELECT  * FROM logical_tbl;
+id | data
+----+------
+  1 |    1
+  2 |    2
+  3 |    3
+(3 rows)
+</pre>
+
+<br>
+
+
+%CHAPTER 運用
+
+%SECTION パブリケーションの変更
+

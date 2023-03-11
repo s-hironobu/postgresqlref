@@ -1,0 +1,96 @@
+%FILE internal/psql-08.html
+%LASTMOD
+%KEY pgsql-psql08
+
+
+%TITLE ラージオブジェクトの扱い
+
+
+<table>
+<caption>メタコマンド</caption>
+<tr bgcolor="#cccccc">
+<th>メタコマンド</th>	<th>説明</th>
+</tr><tr>
+<td>\lo_export oid filename</td>	<td>オブジェクトID"oid"のラージオブジェクトをファイルfilenameに書き出す</td>
+</tr><tr>
+<td>\lo_import filename [ comment ]</td>	<td>ファイルfilenameをラージオブジェクトとして保存</td>
+</tr><tr>
+<td>\lo_unlink oid</td>	<td>オブジェクトID"oid"のラージオブジェクトをデータベースから削除</td>
+</tr><tr>
+<td>\lo_list</td>	<td>ラージオブジェクトの一覧を表示</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+
+<p>
+PostgreSQLは画像ファイルや音声ファイルなどのバイナリファイルを"ラージオブジェクト"として扱えます。
+</p>
+
+<p>
+・\lo_import
+<br>
+ラージオブジェクトをデータベースに保存します。
+ラージオブジェクトのアクセス(書き出しと削除)は、オブジェクトIDを指定します。
+必ずコメントを添えて、後からアクセスするときに困らないようにしてください。
+</p>
+
+%CHAPTER 実行例
+
+<p>
+・ラージオブジェクトの保存
+<br>
+\lo_importが成功すると、保存されたラージオブジェクトのオブジェクトID(oid)を表示します(この例では49800)。
+</p>
+
+<pre>
+sampledb=# BEGIN;
+sampledb=# \lo_import '/usr/share/pixmaps/mozilla-icon.png' 'mozilla-icon'
+lo_import 49800
+sampledb=# COMMIT;
+</pre>
+<br>
+
+<p>
+・ラージオブジェクトの一覧表示
+</p>
+
+<pre>
+sampledb=# \lo_list
+Large objects
+   ID  | Description
+-------+---------------
+ 49741 | user-icon
+ 49799 | document-icons
+ 49800 | mozilla-icon
+(3 rows)
+</pre>
+<br>
+
+<p>
+・ラージオブジェクトをファイルに書き出す
+<br>
+保存しているラージオブジェクトをファイルmozilla.pngに書き出します。
+</p>
+
+<pre>
+sampledb=# BEGIN;
+sampledb=# \lo_export 49800 mozilla.png
+lo_export
+sampledb=# COMMIT;
+</pre>
+<br>
+
+<p>
+・ラージオブジェクトの削除
+</p>
+
+<pre>
+sampledb=# BEGIN;
+sampledb=# \lo_unlink 49800
+lo_unlink 49800
+sampledb=# COMMIT;
+</pre>
+<br>

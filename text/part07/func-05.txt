@@ -1,0 +1,452 @@
+%FILE internal/func-05.html
+%LASTMOD
+%KEY pgsql-func05
+
+%TITLE <a href="https://www.postgresql.org/docs/current/functions-datetime.html" target="_blank" rel="noopener noreferrer">日付・時刻型関数</a>
+
+
+[<日付・時刻型関数>]
+
+<table><tr bgcolor="#cccccc">
+<th>関数</th>			<th>返り値型</th>	<th>説明</th>
+</tr><tr>
+<td>age(timestamp1, timestamp2)	</td>		<td>interval</td>		<td>timestamp2からtimestamp1までの期間</td>
+</tr><tr>
+<td>age(timestamp)	</td>		<td>interval</td>		<td>今日の日付からtimestampまでの期間</td>
+</tr><tr>
+<td>clock_timestamp()	</td>		<td>timestamp</td>		<td>INSERTやUPDATEを実行した日付と時刻。詳細は本文。</td>
+</tr><tr>
+<td>current_date	</td>		<td>date</td>		<td>トランザクションが開始した日付</td>
+</tr><tr>
+<td>current_time	</td>		<td>time</td>		<td>トランザクションが開始した時刻</td>
+</tr><tr>
+<td>current_timestamp</td>		<td>timestamp</td>		<td>トランザクションが開始した日付と時刻</td>
+
+
+</tr><tr>
+<td>date_bin(stride interval, source timestamp1,origin timestamp2)</td>		<td>timestamp</td>		<td>sourceがoriginからstride単位で(ヒストグラムの)どのビンに入るかを返す。実行例を参照。バージョン14から</td>
+
+</tr><tr>
+<td>date_part(field, timestamp)</td>		<td>倍精度</td>		<td>部分フィールドの取得。extractと同じ。fieldについては別表</td>
+</tr><tr>
+<td>date_part(field, interval)</td>		<td>倍精度</td>		<td>部分フィールドの取得。extractと同じ。fieldについては別表</td>
+
+</tr><tr>
+<td>date_trunc(field, timestamp)</td>		<td>timestamp</td>		<td>指定した精度で切捨て。fieldについては別表</td>
+</tr><tr>
+<td>date_trunc(field, timestamp, text)</td>		<td>timestamp</td>		<td>指定した精度で切捨て、textで指定したタイムゾーンでの値を返す。fieldについては別表</td>
+</tr><tr>
+<td>date_trunc(field, interval)</td>		<td>interval</td>		<td>指定した精度で切捨て。fieldについては別表</td>
+
+</tr><tr>
+<td>extract(field from timestamp)</td>		<td>numeric</td>		<td>部分フィールドの取得。fieldについては別表</td>
+</tr><tr>
+<td>extract(field from interval)</td>		<td>numeric</td>		<td>部分フィールドの取得。fieldについては別表</td>
+
+</tr><tr>
+<td>isfinite(timestamp)</td>		<td>論理値</td>		<td>有限か否か</td>
+</tr><tr>
+<td>isfinite(interval)	</td>		<td>論理値</td>		<td>有限か否か</td>
+</tr><tr>
+<td>isfinite(date)	</td>		<td>論理値</td>		<td>有限か否か</td>
+
+</tr><tr>
+<td>justify_hours(interval)</td>		<td>interval</td>		<td>"24hours"を1" day”のように変換する</td>
+</tr><tr>
+<td>justify_days(interval)</td>		<td>interval</td>		<td>"30days"を"1mon"のように変換する。</td>
+</tr><tr>
+<td>justify_interval(interval)</td>		<td>interval</td>		<td>justify_hours()とjustify_days()を組み合わせた変換。</td>
+
+</tr><tr>
+<td>localtime	</td>		<td>time</td>		<td>現在の時刻(LOCALE対応)</td>
+
+</tr><tr>
+<td>localtime(integer)	</td>		<td>time</td>		<td>integerで指定された精度の現在の時刻(LOCALE対応)。バージョン13から</td>
+
+
+</tr><tr>
+<td>localtimestamp	</td>		<td>timestamp</td>		<td>現在の日付と時刻(LOCALE対応)</td>
+
+</tr><tr>
+<td>localtimestamp(integer)	</td>		<td>timestamp</td>		<td>integerで指定された精度の現在の日付と時刻(LOCALE対応)。バージョン13から</td>
+
+
+</tr><tr>
+<td>make_date(year,month,day)	</td>	<td> date</td>	<td>指定されたyear,month,dayの日付を返す。</td>
+
+</tr><tr>
+<td>make_interval([years[, months [, weeks [, days [, hours [, mins [, secs]]]]]]] ) </td>	<td> interval</td>	<td>してした値で生成されたintervalを返す。</td>
+
+</tr><tr>
+<td>make_time(hour,min,sec) </td>	<td>time</td>	<td>指定された値で生成されたtimeを返す。</td>
+
+</tr><tr>
+<td>make_timestamp(year, month, day, hour, min, sec)</td>	<td>timestamp</td>	<td>指定された値で生成されたtimestampを返す。</td>
+
+</tr><tr>
+<td>make_timestamptz(year, month, day, hour, min, sec [,timezone])</td>	<td> timestamp with time zon</td>	<td>指定された値で生成された(timezoneの) timestampを返す。</td>
+
+</tr><tr>
+<td>now()	</td>		<td>timestamp</td>		<td>current_timestampと同じ</td>
+</tr><tr>
+<td>statement_timestamp()</td>		<td>timestamp</td>		<td>SQL文が実行された日付と時刻。詳細は本文。</td>
+</tr><tr>
+<td>timeofday()	</td>		<td>text</td>		<td>現在の日付と時刻</td>
+</tr><tr>
+<td>transaction_timestamp()</td>		<td>timestamp</td>		<td>current_timestampと同じ。</td>
+</tr><tr>
+
+</tr><tr>
+<td>to_timestamp(UnixEpoch)	</td>		<td>timestamp</td>		<td>指定したUnix Epochからタイムスタンプを返す。実行例参照。</td>
+
+</tr></table>
+
+<br>
+
+<table><tr bgcolor="#cccccc">
+<th>field</th>			<th>説明</th>					<th>date_trunc<br>の可否</th>
+</tr><tr>
+<td>millennium(ミレニアム)</td>		<td>年フィールドを1000で割ったもの</td>		<td>○</td>
+</tr><tr>
+<td>century(世紀)</td>		<td>年フィールドを100で割ったもの</td>		<td>○</td>
+</tr><tr>
+<td>decade</td>		<td>年フィールドを10で割ったもの		</td>		<td>○</td>
+</tr><tr>
+<td>year(年)</td>		<td>年フィールド				</td>		<td>○</td>
+</tr><tr>
+<td>quarter(四半期)</td>		<td>その日が含まれる年の四半期(1 - 4)。timestampのみ	</td>		<td>×</td>
+</tr><tr>
+<td>month(月)	</td>		<td>timestamp の値に対する年内の月番号(1 - 12)<br>intervalの値に対しては月番号で、12の剰余(0 - 11)</td>		<td>	○</td>
+</tr><tr>
+<td>week(週)	</td>		<td>timestamp 型の値に対し、その日がある年間通算での週<sup>※1  </sup></td>		<td>	×</td>
+</tr><tr>
+<td>day(日)	</td>		<td>(月内の)日付フィールド(1 - 31)	</td>		<td>		○</td>
+</tr><tr>
+<td>dow(曜日)	</td>		<td>曜日(0〜6)、日曜日が0。timestampの値のみで使用可	</td>		<td>×</td>
+</tr><tr>
+<td>doy(通算日数)</td>		<td>年内での通算日数(1〜365/366)。timestampの値のみ使用可</td>		<td>	×</td>
+</tr><tr>
+<td>hour(時)	</td>		<td>時のフィールド(0 - 23)			</td>		<td>	○</td>
+</tr><tr>
+<td>minute(分)	</td>		<td>分フィールド(0 - 59)				</td>		<td>	○</td>
+</tr><tr>
+<td>second(秒)	</td>		<td>端数を含んだ秒フィールド(0 - 59)		</td>		<td>	○</td>
+</tr><tr>
+<td>milliseconds (ミリ秒)</td>		<td>端数部分も含み、1000を乗じられた秒フィールド。<br>すべての秒を含むことに注意。	</td>		<td>	○</td>
+</tr><tr>
+<td>microseconds (マイクロ秒)</td>		<td>端数部分も含め、1,000,000を乗じた秒フィールド。<br>秒すべてを返すことに注意。</td>		<td>	○</td>
+</tr><tr>
+<td>epoch	</td>		<td>1970-01-01 00:00:00からの秒数。<br>intervalの値ではその時間間隔における秒の合計。			</td>		<td>	×</td>
+</tr></table>
+
+<br>
+
+<p>
+※1 : ISO8601の定義では、その年の1月4日の週を第1週とする。
+</p>
+
+%CHAPTER 解説
+
+<p>
+・current_date, current_time, current_timestamp
+<br>
+関数current_date、current_time、current_timestampはそれぞれ現在の日付、現在の時刻、現在の日時を返すSQL92,99の標準関数です。
+より正確にいえば「トランザクションを開始した日付時刻」を返します。
+<br>
+これらの関数はSQL92,99 に準拠しているため、他の関数と異なり、引数のための'()'が不要です。
+</p>
+
+<p>
+・now()、transaction_timestamp()、statement_timestamp()、clock_timestamp()
+<br>
+関数now()とcurrent_timestampと同じで、「トランザクションを開始した日付時刻」を返します。
+</p>
+
+<p>
+バージョン8.2から、時刻に関する関数が3つ追加されました。
+<br>
+transaction_timestamp()はnow()やcurrent_timestampと同じで、「トランザクションを開始した日付時刻」を返します。
+<br>
+statement_timestamp()は「問い合わせを実行開始した日付時刻」を返します。
+<br>
+clock_timestamp()は「その関数を実行した日付時刻」を返します。
+</p>
+
+<p>
+以下にこれら3関数の違いを示します。
+</p>
+
+<pre>
+sampledb=# BEGIN;
+BEGIN
+
+sampledb=# -- 1分ほど放置…
+
+sampledb=# VALUES('tansaction_timestamp', transaction_timestamp(),
+sampledb(#                                                 'BEGINの実行時刻')
+sampledb-# UNION ALL
+sampledb-# VALUES('stetement_timestamp', statement_timestamp(),
+sampledb(#                                          'このVALUES文の実行時刻')
+sampledb-# UNION ALL
+sampledb-# VALUES('clock_timestamp', clock_timestamp(), 'この関数の実行時刻');
+       column1        |            column2            |        column3
+----------------------+-------------------------------+------------------------
+ tansaction_timestamp | 2012-06-26 22:08:20.356774+09 | BEGINの実行時刻
+ stetement_timestamp  | 2012-06-26 22:09:21.377258+09 | このVALUES文の実行時刻
+ clock_timestamp      | 2012-06-26 22:09:21.406079+09 | この関数の実行時刻
+(3 rows)
+
+sampledb=# -- 1分ほど放置…
+
+sampledb=# VALUES('tansaction_timestamp', transaction_timestamp(),
+sampledb(#                                   'BEGINの実行時刻(先と同じ)')
+sampledb-# UNION ALL
+sampledb-# VALUES('stetement_timestamp', statement_timestamp(),
+sampledb(#                                    'このVALUES文の実行時刻')
+sampledb-# UNION ALL
+sampledb-# VALUES('clock_timestamp', clock_timestamp(), 'この関数の実行時刻');
+       column1        |            column2            |           column3
+----------------------+-------------------------------+---------------------------
+ tansaction_timestamp | 2012-06-26 22:08:20.356774+09 | BEGINの実行時刻(先と同じ)
+ stetement_timestamp  | 2012-06-26 22:10:23.280431+09 | このVALUES文の実行時刻
+ clock_timestamp      | 2012-06-26 22:10:23.28081+09  | この関数の実行時刻
+(3 rows)
+</pre>
+<br>
+
+<p>
+・extract(),date_part()
+<br>
+関数extract()、date_part()は日付/時刻の値から年や時刻などの部分フィールドを抽出します。
+<br>
+関数extract()はSQL92,99標準の関数、関数date_part()はPostgreSQL独自の関数で、両者は同じです。
+<br>
+すべての日付/時刻データ型の値に対して関数extract()、date_part()が利用できます。
+ただし、time型データに対してmillenniumやyearなど、時間以外の情報を求めることはできません。
+同様にinterval型データに対してweek、dow、doyを求めることはできません。
+</p>
+
+<p>
+・date_trunc()
+<br>
+関数date_trunc()は日付/時刻の値から指定されたフィールド名の精度未満の情報を切り捨てます。
+設定できるフィールド名は前述の表(date_truncの項目がチェックされているもの)のとおりです。
+</p>
+
+<p>
+・justify_hours(),justify_days(),justify_interval()
+<br>
+justify_hours()は時間を日時に変換します。
+<br>
+justify_days()は日時を月日に変換します。ひと月が30日なので注意が必要です。
+<br>
+justify_interval()は月日と日時を適当な値で返します。
+</p>
+
+<pre>
+sampledb=# SELECT justify_hours(interval '24 hours') AS "24 hours",
+sampledb-#        justify_hours(interval '36 hours') AS "36 hours",
+sampledb-#        justify_hours(interval '48 hours') AS "48 hours";
+ 24 hours |    36 hours    | 48 hours
+----------+----------------+----------
+ 1 day    | 1 day 12:00:00 | 2 days
+(1 row)
+
+sampledb=# SELECT justify_days(interval '30 days') AS "30 days",
+sampledb-#        justify_days(interval '31 days') AS "31 days",
+sampledb-#        justify_days(interval '32 days') AS "32 days";
+ 30 days |   31 days   |   32 days
+---------+-------------+--------------
+ 1 mon   | 1 mon 1 day | 1 mon 2 days
+(1 row)
+
+sampledb=# SELECT justify_interval(interval '1mon' - interval '1 hour');
+ justify_interval
+------------------
+ 29 days 23:00:00
+(1 row)
+</pre>
+<br>
+
+
+%CHAPTER 実行例
+
+<p>
+・現在の日時
+<br>
+current_date, current_time, current_timestampの返り値を示します。
+</p>
+
+<p>
+current_timestampはnow()やtransaction_timestamp()と同じで、BEGINを実行した時刻(トランザクションの開示時刻)を返します。
+<br>
+その他、statement_timestamp()やclock_timestamp()は上記の解説を参照してください。
+</p>
+
+<pre>
+sampledb=# BEGIN;
+BEGIN
+sampledb=# SELECT current_date, current_time, current_timestamp;
+    date    |       timetz       |              now
+------------+--------------------+-------------------------------
+ 2011-05-20 | 12:35:15.118258+09 | 2011-05-20 12:35:15.118258+09
+(1 row)
+
+sampledb=# -- しばらく時間をあけて実行したが、結果は変わらず
+sampledb=# SELECT current_date, current_time, current_timestamp;
+    date    |       timetz       |              now
+------------+--------------------+-------------------------------
+ 2011-05-20 | 12:35:15.118258+09 | 2011-05-20 12:35:15.118258+09
+(1 row)
+
+sampledb=# -- current_timestampとtransaction_timestamp()は同じ結果を返す
+sampledb=# SELECT current_timestamp, transaction_timestamp();
+              now              |     transaction_timestamp
+-------------------------------+-------------------------------
+ 2011-05-20 12:35:15.118258+09 | 2011-05-20 12:35:15.118258+09
+(1 row)
+</pre>
+<br>
+
+<p>
+・timeofday()を利用し現在の日時を表示
+<br>
+timeofday()は実行時刻を返します(トランザクション開始時刻ではない)。
+</p>
+
+<pre>
+sampledb=# SELECT timeofday();
+              timeofday
+-------------------------------------
+ Fri May 20 12:37:31.445932 2011 JST
+(1 row)
+</pre>
+<br>
+
+<p>
+・関数age()の使用例：引数間の期間を表示
+</p>
+
+<pre>
+sampledb=# SELECT age(date '2000-1-1'); -- 本日は2011年5月20日
+           age
+-------------------------
+ 11 years 4 mons 19 days
+(1 row)
+
+sampledb=# SELECT age(date '2011-3-11',
+sample(#              timestamp '2001-09-11 20:46:00');
+               age
+---------------------------------
+ 9 years 5 mons 29 days 03:14:00
+(1 row)
+
+sampledb=# SELECT age(timestamp '2011-3-11 14:46:00',
+sampledb(#                    timestamp '2001-09-11 21:46:00');
+               age
+---------------------------------
+ 9 years 5 mons 29 days 17:00:00
+(1 row)
+</pre>
+<br>
+
+<p>
+・関数extract()、date_part()の使用例:日時の指定部分を切り出して表示
+</p>
+
+<pre>
+sampledb=# SELECT extract(millennium from timestamp '2011-03-11 14:46:00');
+ date_part
+-----------
+         3
+(1 row)
+
+sampledb=# SELECT extract(day from date '2011-03-11 14:46:00');
+ date_part
+-----------
+        11
+(1 row)
+
+sampledb=# SELECT date_part('day', date '2011-03-11');
+ date_part
+-----------
+        11
+(1 row)
+
+sampledb=# SELECT date_part('hour', timestamp'2011-03-11 14:46:00');
+ date_part
+-----------
+        14
+(1 row)
+</pre>
+<br>
+
+
+<p>
+・関数date_trunc()の使用例
+<br>
+日時の値から指定されたフィールド名の精度未満の情報を切り捨てて表示します。
+</p>
+
+<pre>
+sampledb=# SELECT date_trunc('millennium', timestamp '2011-03-11 14:46:00');
+     date_trunc
+---------------------
+ 2001-01-01 00:00:00
+(1 row)
+
+sampledb=# SELECT date_trunc('year', timestamp '2011-03-11 14:46:00');
+     date_trunc
+---------------------
+ 2011-01-01 00:00:00
+(1 row)
+
+sampledb=# SELECT date_trunc('day', timestamp '2011-03-11 14:46:00');
+     date_trunc
+---------------------
+ 2011-03-11 00:00:00
+(1 row)
+</pre>
+<br>
+
+
+<p>
+・関数date_bin()の使用例
+<br>
+2023年1月1日0時を起点(origin)として、1月1日15時44分17秒が8時間をストライドとして（ヒストグラムの）どのビンに入るか、12時間がストライドならどのビンに入るかを、それぞれ返します。
+</p>
+
+<pre>
+postgres=# SELECT date_bin('8 hours', TIMESTAMP '2023-01-01 15:44:17', TIMESTAMP '2023-01-01 0:0:0');
+      date_bin
+---------------------
+ 2023-01-01 08:00:00
+(1 row)
+
+postgres=# SELECT date_bin('12 hours', TIMESTAMP '2023-01-01 15:44:17', TIMESTAMP '2023-01-01 0:0:0');
+      date_bin
+---------------------
+ 2023-01-01 12:00:00
+(1 row)
+</pre>
+<br>
+
+
+<p>
+・関数to_timestamp()の使用例
+</p>
+
+<pre>
+postgres=# SELECT EXTRACT(EPOCH FROM TIMESTAMP WITH TIME ZONE '2001-02-16 20:38:40.12-08');
+     extract
+------------------
+ 982384720.120000
+(1 row)
+
+postgres=# SELECT to_timestamp(982384720.120000);
+       to_timestamp
+---------------------------
+ 2001-02-17 13:38:40.12+09
+(1 row)
+</pre>
+<br>

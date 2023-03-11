@@ -1,0 +1,99 @@
+%FILE internal/sql-40.html
+%LASTMOD
+%KEY pgsql-sql40
+
+%TITLE プリペアステートメント <a href="https://www.postgresql.org/docs/current/sql-prepare.html" target="_blank" rel="noopener noreferrer">PREPARE</a> / <a href="https://www.postgresql.org/docs/current/sql-execute.html" target="_blank" rel="noopener noreferrer">EXECUTE</a> / <a href="https://www.postgresql.org/docs/current/sql-deallocate.html" target="_blank" rel="noopener noreferrer">DEALLOCATE</a>
+
+<pre>
+[<書式>]
+
+●プリペアステートメントの準備
+PREPARE plan_name [ (datatype [, ...] ) ] AS query_string
+
+●プリペアステートメントの実行
+EXECUTE plan_name [ (param [, ...] ) ]
+
+●プリペアステートメントの削除
+DEALLOCATE [ PREPARE ] { plan_name | ALL }
+</pre>
+<br>
+
+<table>
+<caption>パラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>plan_name</td>	<td>プリペアステートメントの名前</td>
+</tr><tr>
+<td>query_string</td>	<td>プリペアステートメントの定義。SELECT, INSERT,UPDATE,DELETEが設定可能。引数がある場合は$1, $2, ...を用いる</td>
+</tr><tr>
+<td>datatype</td>	<td>プリペアステートメントに与える引数のデータ型</td>
+</tr><tr>
+<td>param</td>	<td>プリペアステートメントに与える引数</td>
+</tr></table>
+
+<br>
+
+
+%CHAPTER 解説
+
+<p>
+PREPARE文でSQL文を準備し、EXECUTE文で実行します。
+</p>
+
+%CHAPTER 実行例
+
+<p>
+テーブルcustomerlistのレコード数を数えるSQL文を定義し、count_customerと名付けます。
+</p>
+
+<pre>
+sampledb=# PREPARE count_customer AS SELECT count(*) FROM customerlist;
+PREPARE
+</pre>
+<br>
+
+<p>
+EXECUTE文で、プリペアステートメント'count_customer'を実行します。
+</p>
+
+<pre>
+sampledb=# EXECUTE count_customer;
+ count
+-------
+     6
+(1 row)
+</pre>
+<br>
+
+<p>
+・引数を指定
+<br>
+プリペアステートメント中に引数を設定します。
+<br>
+名前に続く括弧中に引数のデータ型を記述し、SQL文中の引数は$1, $2, ...で記述します。
+<br>
+次に示すプリペアステートメントselect_customerは、テーブルcustomerlistについて、引数と一致するカラムidの値をもつデータを表示します。
+</p>
+
+<pre>
+sampledb=# PREPARE select_customer(integer)
+sampledb-#            AS SELECT * FROM customerlist WHERE id = $1;
+PREPARE
+
+sampledb=# EXECUTE select_customer(1);
+ id |     name     | companycode
+----+--------------+-------------
+  1 | デューク東郷 |           1
+(1 row)
+
+sampledb=# EXECUTE select_customer(2);
+ id |      name      | companycode
+----+----------------+-------------
+  2 | アーネスト東郷 |           2
+(1 row)
+
+sampledb=# DEALLOCATE select_customer;
+DEALLOCATE
+</pre>
+<br>

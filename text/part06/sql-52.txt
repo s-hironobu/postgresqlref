@@ -1,0 +1,420 @@
+%FILE internal/sql-52.html
+%LASTMOD
+%KEY pgsql-sql52
+
+
+%TITLE FDW(Foreign Data Wrapper) <a href="https://www.postgresql.org/docs/current/sql-createserver.html" target="_blank" rel="noopener noreferrer">CREATE SERVER</a> / <a href="https://www.postgresql.org/docs/current/sql-dropserver.html" target="_blank" rel="noopener noreferrer">DROP SERVER</a> / <a href="https://www.postgresql.org/docs/current/sql-createusermapping.html" target="_blank" rel="noopener noreferrer">CREATE USER MAPPING</a> / <a href="https://www.postgresql.org/docs/current/sql-dropusermapping.html" target="_blank" rel="noopener noreferrer">DROP USER MAPPING</a> / <a href="https://www.postgresql.org/docs/current/sql-createforeigntable.html" target="_blank" rel="noopener noreferrer">CREATE FOREIGN TABLE</a> / <a href="https://www.postgresql.org/docs/current/sql-dropforeigntable.html" target="_blank" rel="noopener noreferrer">DROP FOREIGN TABLE</a> / <a href="https://www.postgresql.org/docs/current/sql-importforeignschema.html" target="_blank" rel="noopener noreferrer">IMPORT FOREIGN SCHEMA</a>
+
+
+<pre>
+●外部サーバの定義と削除
+CREATE SERVER [ IF NOT EXISTS ] server_name [ TYPE 'server_type' ] [ VERSION 'server_version' ]
+    FOREIGN DATA WRAPPER fdw_name
+    [ OPTIONS ( option 'value' [, ... ] ) ]
+
+DROP SERVER [ IF EXISTS ] server_name [, ...] [ CASCADE | RESTRICT ]
+
+●ユーザマップの定義と削除
+CREATE USER MAPPING [ IF NOT EXISTS ] FOR { user_name | USER | CURRENT_ROLE | CURRENT_USER | PUBLIC }
+    SERVER server_name
+    [ OPTIONS ( option 'value' [ , ... ] ) ]
+
+DROP USER MAPPING [ IF EXISTS ] FOR { user_name | USER | CURRENT_ROLE | CURRENT_USER | PUBLIC } SERVER server_name
+
+●外部テーブルの定義と削除
+CREATE FOREIGN TABLE [ IF NOT EXISTS ] table_name ( [
+  { column_name data_type [ OPTIONS ( option 'value' [, ... ] ) ] [ COLLATE collation ] [ column_constraint [ ... ] ]
+    | table_constraint }
+    [, ... ]
+] )
+[ INHERITS ( parent_table [, ... ] ) ]
+  SERVER server_name
+[ OPTIONS ( option 'value' [, ... ] ) ]
+
+CREATE FOREIGN TABLE [ IF NOT EXISTS ] table_name
+  PARTITION OF parent_table [ (
+  { column_name [ WITH OPTIONS ] [ column_constraint [ ... ] ]
+    | table_constraint }
+    [, ... ]
+) ]
+{ FOR VALUES partition_bound_spec | DEFAULT }
+  SERVER server_name
+[ OPTIONS ( option 'value' [, ... ] ) ]
+
+
+DROP FOREIGN TABLE [ IF EXISTS ] table_name [, ...] [ CASCADE | RESTRICT ]
+
+
+・column_constraint is:
+[ CONSTRAINT constraint_name ]
+{ NOT NULL |
+  NULL |
+  CHECK ( expression ) [ NO INHERIT ] |
+  DEFAULT default_expr |
+  GENERATED ALWAYS AS ( generation_expr ) STORED }
+
+・table_constraint is:
+[ CONSTRAINT constraint_name ]
+CHECK ( expression ) [ NO INHERIT ]
+
+・partition_bound_spec is:
+IN ( partition_bound_expr [, ...] ) |
+FROM ( { partition_bound_expr | MINVALUE | MAXVALUE } [, ...] )
+  TO ( { partition_bound_expr | MINVALUE | MAXVALUE } [, ...] ) |
+WITH ( MODULUS numeric_literal, REMAINDER numeric_literal )
+
+
+●外部テーブル定義のインポート
+IMPORT FOREIGN SCHEMA remote_schema
+    [ { LIMIT TO | EXCEPT } ( table_name [, ...] ) ]
+    FROM SERVER server_name
+    INTO local_schema
+    [ OPTIONS ( option 'value' [, ... ] ) ]
+
+</pre>
+<br>
+
+<table>
+<caption>主なパラメータ</caption>
+<tr bgcolor="#cccccc">
+<th>パラメータ</th>	<th>説明</th>
+</tr><tr>
+<td>server_name</td>	<td>定義/削除する外部サーバ名</td>
+</tr><tr>
+<td>server_type</td>	<td>外部サーバの型。通常は設定不要。</td>
+</tr><tr>
+<td>server_version</td>	<td>外部サーバのバージョン。通常は設定不要。</td>
+</tr><tr>
+<td>fdw_name</td>	<td>適用する外部データラッパ(FDW)名</td>
+</tr><tr>
+<td>user_name</td>	<td>外部テーブルにアクセスするユーザ名</td>
+</tr><tr>
+<td>table_name</td>	<td>定義/削除する外部テーブル名</td>
+</tr><tr>
+<td>column_constraint</td>	<td>カラム制約名。設定できる制約はNULL, NOT NULL, DEFAULTのみ。通常は不要。</td>
+</tr><tr>
+<td>collation</td>	<td>collationを指定</td>
+</tr><tr>
+<td></td>	<td></td>
+</tr><tr>
+<td></td>	<td></td>
+</tr></table>
+
+<br>
+
+<table>
+<caption>主なオプション</caption>
+<tr bgcolor="#cccccc">
+<th>オプション</th>	<th>説明</th>
+</tr><tr>
+<td>CASCADE</td>	<td>関係するオブジェクトも削除する</td>
+</tr><tr>
+<td>RESTRICT</td>	<td>関係するオブジェクトが存在する場合は削除できない。デフォルト</td>
+</tr><tr>
+<td>CURRENT_USER, USER</td>	<td>外部テーブルにアクセスするユーザ名に、CREATE MAPPING USERを実行したユーザ名を使う</td>
+</tr><tr>
+<td>PUBLIC</td>	<td>外部テーブルにアクセスするユーザ名として内部的に”PUBLIC”を作成し、実際にアクセスするユーザ名はOPTIONSに指定する。</td>
+</tr><tr>
+<td>NOT NULL</td>	<td>NOT NULL制約を付与する</td>
+</tr><tr>
+<td>NULL</td>	<td>NULLを許可する。デフォルト</td>
+</tr></table>
+
+<br>
+
+<table>
+<caption>主な句</caption>
+<tr bgcolor="#cccccc">
+<th>句</th>	<th>説明</th>
+</tr><tr>
+<td>OPTIONS ( option 'value' [, ... ] )</td>	<td>ユーザ名、データベース名、ホスト名などを指定する。項目はFDW毎に異なる</td>
+</tr><tr>
+<td>DEFAULT default_expr</td>	<td>デフォルト値default_exprを設定</td>
+</tr></table>
+<br>
+
+%CHAPTER 解説
+
+<p>
+SQL/MED(Management of External Data)は、外部のRDBMSやサーバ上のデータをSQLで操作するための規格です。
+<br>
+SQL/MEDは大規模な規格ですが、PostgreSQLはバージョン9.1で規格の一部である「外部テーブル(Foreign Table)」をサポートしました。
+</p>
+
+<p>
+バージョン9.2までは検索専用(SELECTしか実行できない)でしたが、バージョン9.3から更新も可能になりました[<補足 2>]。
+<br>
+同時にPostgreSQL用のFDWであるpostgres_fdwがcontribに添付されるようになりました。
+</p>
+
+<p>
+また、すでにいつか公開されている外部データラッパ(FDW:Foreign Data Wrapper)の拡張モジュールを組み込めば、他のRDBMSなどの外部データを読み込むことができます。
+<br>
+PGXNのFDWにはOracleを外部テーブルとして検索するoracle_fdwモジュールや、MySQLを検索するmysql_fdw、変わったところではtwitterを読み出すtwitter_fdwなどが公開されています。
+<br>
+これらのFDWは完成度にばらつきがあり、更新に対応していないものがほとんどです。使用に際して仕様確認を勧めます。
+</p>
+
+<p>
+SQL/MEDは非常に興味深い規格ですが安易にサーバ間でデータを連携すると、
+一台の外部サーバがダウンしたためにシステム全体に支障をきたすとか、メンテナンスで停止しようにも停止できないなど、運用が面倒になります。
+<br>
+サーバ間のデータ連携は検討吟味を十分行った上で導入してください。
+</p>
+
+%CHAPTER 実行例
+
+%SECTION postgres_fdw
+
+<p>
+外部ホストremoteに外部テーブルitemlistを作成してアクセスすることを考えます。
+ネットワーク構成は[<補足 2>]の[<図6-07>]を参照してください。
+</p>
+
+<p>
+はじめに外部サーバremoteにログインし、データベースremotedbを作成します。
+<br>
+次にデータベースremotedb上にテーブルitemlistを定義します。
+</p>
+
+<pre>
+$ ssh remote
+remote> createdb remotedb
+remote> psql -q remotedb
+remotedb=# CREATE TABLE itemlist (id int, name text, price int);
+</pre>
+<br>
+
+<p>
+以上でリモート側の準備が完了しました。次にローカルのPostgreSQLの環境設定を行います。
+</p>
+
+
+<p>
+最初にpostgres_fdwモジュールを読み込みます。contribディレクトリに移動し、makeとmake installを実行します。
+</p>
+
+<pre>
+$ cd contrib/postgres_fdw
+$ make && make install
+</pre>
+<br>
+
+<p>
+次にローカルホストのデータベースsampledb上でCREATE EXTENSION文を実行し、postgres_fdwを読み込みます。
+</p>
+
+<pre>
+sampledb=# CREATE EXTENSION postgres_fdw;
+CREATE EXTENSION
+
+postgres=# \dx
+                               List of installed extensions
+     Name     | Version |   Schema   |                    Description
+--------------+---------+------------+----------------------------------------------------
+ plpgsql      | 1.0     | pg_catalog | PL/pgSQL procedural language
+ postgres_fdw | 1.1     | public     | foreign-data wrapper for remote PostgreSQL servers
+(2 rows)
+</pre>
+<br>
+
+<p>
+モジュールの読み込みが完了したら、
+CREATE SERVER文で外部サーバremote_server、
+CREATE USER MAPPING文でアクセスするユーザを定義します。
+<br>
+次に、外部テーブルitemlistをCREATE FOREIGN TABLE文で定義します。
+</p>
+
+<pre>
+sampledb=# -- 外部サーバremote_serverを定義する。
+sampledb=# -- 外部サーバのホスト名はremote、アクセスするデータベースはremotedb
+sampledb=# CREATE SERVER remote_server FOREIGN DATA WRAPPER postgres_fdw
+OPTIONS(host 'remote', dbname 'remotedb');
+CREATE SERVER
+
+sampledb=# -- 外部サーバremote_serverに対してアクセスするユーザを定義する。
+sampledb=# -- 実際にアクセスするユーザ名はpostgres
+sampledb=# CREATE USER MAPPING FOR PUBLIC SERVER remote_server
+sampledb-#                      OPTIONS(user 'postgres', password '');
+CREATE USER MAPPING
+
+sampledb=# -- 外部テーブルitemlistを定義する。
+sampledb=# CREATE FOREIGN TABLE itemlist (id int, name text, price int)
+sampledb-#          SERVER remote_server;
+CREATE FOREIGN TABLE
+</pre>
+<br>
+
+<p>
+バージョン9.5以降はIMPORT FOREIGN SCHEMAを使って外部テーブルの定義を直接読み込むことが可能です。
+</p>
+
+<pre>
+sampledb=# -- 外部テーブルの定義を読み込む。
+sampledb=# -- これにより、CREATE FOREIGN TABLEでの明示的な定義を省くことができる。
+sampledb=# -- IMPORT FOREIGN SCHEMA public LIMIT TO (itemlist) FROM SERVER remote_server INTO public;
+IMPORT FOREIGN SCHEMA
+</pre>
+<br>
+
+
+<p>
+ローカルホストのsampledb上から外部テーブルitemlistにデータを挿入し、検索した結果を示します。
+</p>
+
+<pre>
+sampledb=# INSERT INTO itemlist VALUES
+sampledb-#    (1, 'pen', 100),(2, 'notebook', 120),(3, 'eraser', 72);
+INSERT 0 3
+
+sampledb=# SELECT * FROM itemlist;
+ id |   name   | price
+----+----------+-------
+  1 | pen      |   100
+  2 | notebook |   120
+  3 | eraser   |    72
+(3 rows)
+</pre>
+<br>
+
+%SECTION mysql_fdw
+
+<p>
+MySQLはPostgreSQLと同じサーバで稼働しており、適切なアクセス権限が設定されているものとします。
+</p>
+
+<p>
+PGXN(http://pgxn.org/dist/mysql_fdw/)からmysql_fdwをダウンロードし、バージョン9.1以降のPostgreSQLソースコードディレクトリのcontribで展開します。
+</p>
+
+<pre>
+postgres> cd postgresql-9.1.0/contrib
+postgres> unzip  mysql_fdw-1.0.0.zip
+</pre>
+<br>
+
+<p>
+展開したディレクトリで、makeとmake installを実行します。
+ここでPostgreSQLは/usr/local/pgsql以下に、MySQLは/usr/local/mysql以下にインストールされていると仮定します。
+</p>
+
+<pre>
+postgres> cd mysql_fdw-1.0.0
+postgres> export PATH=/usr/local/pgsql/bin/:/usr/local/mysql/bin:$PATH
+postgres> make USE_PGXS=1 && make USE_PGXS=1 install
+</pre>
+<br>
+
+<p>
+次にmysql_fdwを組込み、CREATE SERVER文で外部サーバ、CREATE FOREIGN TABLE文で外部テーブル、
+CREATE USER MAPPING文で外部サーバへのアクセスをそれぞれ定義します。
+</p>
+
+<pre>
+sampledb=# CREATE EXTENSION mysql_fdw;
+CREATE EXTENSION
+sampledb=# \dx
+                            List of installed extensions
+   Name    | Version |   Schema   |                   Description
+-----------+---------+------------+--------------------------------------------------
+ mysql_fdw | 1.0     | public     | Foreign data wrapper for querying a MySQL server
+ plpgsql   | 1.0     | pg_catalog | PL/pgSQL procedural language
+(2 rows)
+
+sampledb=# CREATE SERVER mysql_svr FOREIGN DATA WRAPPER mysql_fdw
+    OPTIONS (address '127.0.0.1', port '3306');
+CREATE SERVER
+
+sampledb=# CREATE USER MAPPING FOR PUBLIC SERVER mysql_svr
+sampledb-#                              OPTIONS (username 'mysql', password '');
+CREATE USER MAPPING
+
+sampledb=# CREATE FOREIGN TABLE itemlist (id int, name text, price int) SERVER mysql_svr
+sampledb-# OPTIONS (table 'sampledb.itemlist');
+CREATE FOREIGN TABLE
+</pre>
+<br>
+
+<p>
+以降、MySQLで定義されたテーブルを、PostgreSQLの通常のSELECT文で検索できます。
+</p>
+
+<pre>
+sampledb=# -- MySQLサーバ上にあるテーブルを検索する。
+sampledb=# SELECT * FROM itemlist WHERE id = 2;
+ id |  name  | price
+----+--------+-------
+  2 | eraser |    80
+(1 row)
+</pre>
+<br>
+
+%CHAPTER 補足
+
+<p>
+(1) ISO/IEC 9075-9:2003 Information technology -- Database languages -- SQL -- Part 9: Management of External Data (SQL/MED)
+</p>
+
+<pre>
+http://www.iso.org/iso/iso_catalogue/catalogue_tc/catalogue_detail.htm?csnumber=34136
+</pre>
+<br>
+
+<p>
+(2)更新が可能になったことで、分散デッドロックの可能性も考えなければならなくなりました。
+<br>
+ローカルホストにテーブルmakerlist、外部サーバremoteに外部テーブルitemlistがあります。
+ここで２つのクライアントClient_AとClient_Bが２つのテーブルに対して交互に更新操作を行います。
+Client_Aはmakerlist->itemlistの順、
+Client_Bはitemlist->makerlistの順で更新操作を行うとデッロドックが発生します。
+</p>
+
+<pre>
+[<トランザクションA>]
+
+sampledb=# BEGIN;
+BEGIN
+sampledb=# UPDATE makerlist SET name = 'BOXY' WHERE id = 10;
+UPDATE 1
+sampledb=# UPDATE itemlist SET price = 200 WHERE id = 1;
+
+..... 永遠に待ち状態 .....
+
+[<トランザクションB>]
+sampledb=# BEGIN;
+BEGIN
+sampledb=#
+sampledb=# UPDATE itemlist SET price = 210 WHERE id = 1;
+UPDATE 1
+sampledb=# UPDATE makerlist SET name = 'BOXY' WHERE id = 10;
+
+..... 永遠に待ち状態 .....
+</pre>
+<br>
+
+<table border=1>
+<caption>[<図6-07>] 分散デッドロック</caption>
+<tr><td>
+<img src="./fig-6-distributed-deadlock.png" width=800><br>
+</td></tr></table>
+<br>
+
+<p>
+はじめにlocalhost側の状況を説明します。
+<br>
+Client_Aは外部テーブルitemlistの更新のレスポンスが外部サーバremote_serverから返ってこないので、待ち続けている状態です(FDWはただひたすら待つことしかできない)。
+Client_BはClient_Aが先に更新したテーブルmakerlistのトランザクションが終了するのを待っています。
+</p>
+
+<p>
+次にremote_server側の状況を説明します。
+<br>
+外部テーブルitemlistに対してlocalhostから2つの更新があったので、先に更新したClient_Bのトランザクションが終了するまで、後から更新したClient_Aをblockしています。remote_serverは、localhost側でClient_BがClient_Aにブロックされていることを知る術がありません。
+</p>
+
+
+<p>
+現在のところ、PostgreSQLは分散デッドロックの検出機構を持っていないので、
+ユーザが注意する必要があります。
+</p>

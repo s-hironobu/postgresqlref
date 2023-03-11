@@ -1,0 +1,77 @@
+%FILE internal/ope-02.html
+%LASTMOD
+%KEY pgsql-ope-02
+
+%TITLE <a href="https://www.postgresql.org/docs/current/functions-logical.html" target="_blank" rel="noopener noreferrer">論理演算子</a>
+
+
+[<論理演算子>]
+
+<table><tr bgcolor="#cccccc">
+<th>論理演算子　　　</th>		<th>説明　　　　　　　　　　　　　　　　　　　　　　</th>
+</tr><tr>
+<td>AND</td>		<td>論理積</td>
+</tr><tr>
+<td>OR</td>		<td>論理和</td>
+</tr><tr>
+<td>NOT</td>		<td>否定</td>
+</tr></table>
+
+<br>
+
+%CHAPTER 解説
+
+<p>
+PostgreSQLは論理演算子として"論理積"、"論理和"、および"否定"をサポートしています。
+<br>
+[<表7-11>]と[<表7-12>]に真理値表を示します。
+なお、NULLは"不定"を意味します。
+</p>
+
+
+<table><tr><td>
+
+<table border=1>
+<caption>[<表7-11>] AND、ORの真理値表</caption>
+<tr bgcolor="#cccccc">
+<th>a　　　　</th>	<th>b　　　　</th>	<th>a AND b　　　　</th>	<th>a OR b　　　　</th>
+</tr><tr>
+<td>TRUE</td>	<td>TRUE</td>	<td>TRUE</td>	<td>TRUE</td>
+</tr><tr>
+<td>TRUE</td>	<td>FALSE</td>	<td>FALSE</td>	<td>TRUE</td>
+</tr><tr>
+<td>TRUE</td>	<td>NULL</td>	<td>NULL</td>	<td>TRUE</td>
+</tr><tr>
+<td>FALSE</td>	<td>FALSE</td>	<td>FALSE</td>	<td>FALSE</td>
+</tr><tr>
+<td>FALSE</td>	<td>NULL</td>	<td>FALSE</td>	<td>NULL</td>
+</tr><tr>
+<td>NULL</td>	<td>NULL</td>	<td>NULL</td>	<td>NULL</td>
+</tr></table>
+
+</td><td> </td><td></td><td valign=top>
+
+<table border=1>
+<caption>[<表7-12>] NOTの真理値表</caption>
+<tr bgcolor="#cccccc">
+<th>a　　　　　　　　</th>		<th>NOT a　　　　　　　</th>
+</tr><tr>
+<td>TRUE</td>		<td>FALSE</th>
+</tr><tr>
+<td>FALSE</td>		<td>TRUE</th>
+</tr><tr>
+<td>NULL</td>		<td>NULL</th>
+</tr></table>
+
+</tr></table>
+
+<br>
+
+<p>
+論理演算子の結合順序(演算を行う順序)は、次のとおりです。
+</p>
+
+<pre>
+NOT(否定) > AND(論理積) > OR(論理和)
+</pre>
+<br>

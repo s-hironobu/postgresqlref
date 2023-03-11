@@ -1,0 +1,30 @@
+%FILE internal/func-22.html
+%LASTMOD
+%KEY pgsql-func22
+
+%TITLE <a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADMIN-INDEX" target="_blank" rel="noopener noreferrer">インデックス保守関数</a>
+
+
+<table>
+<tr bgcolor="#cccccc">
+<th>関数</th>							<th>返り値型</th>	<th>説明</th>
+
+</tr><tr>
+<td>brin_summarize_new_values(index regclass)</td>	<td>int</td>	<td>説明略</td>
+</tr><tr>
+<td>brin_summarize_range(index regclass, blockNumber bigint)</td>	<td>int</td>	<td>説明略</td>
+</tr><tr>
+<td>brin_desummarize_range(index regclass, blockNumber bigint)</td>	<td>void</td>	<td>説明略</td>
+</tr><tr>
+<td>gin_clean_pending_list(index regclass)</td>	<td>bigint</td>	<td>説明略</td>
+
+</tr></table>
+
+<br>
+
+
+%CHAPTER 解説
+
+<p>
+BRINやGINを使ったインデックスの保守のための関数群です。今回は説明を省略します。
+</p>
