@@ -436,7 +436,7 @@ CREATE [ OR REPLACE ] FUNCTION func_name ( [ [ argmode ] argname argtype [, ...]
 </tr><tr>
 <td>statements</td>	<td>関数本体</td>
 </tr><tr>
-<td>condition</td>	<td>PostgreSQLの状態。詳細は[<8-21>]参照</td>
+<td>condition</td>	<td>PostgreSQLの状態。詳細は<a href="./plpgsql-05.html">[<8-05>]</a>, <a href="./plpgsql-20.html">[<8-20>]</a>参照</td>
 </tr><tr>
 <td>handler_statements</td>	<td>状態(condition)に応じて実行するSQL文など</td>
 </tr></table>
@@ -451,7 +451,7 @@ PL/pgSQLによるストアドプロシージャ定義の書式です。
 </p>
 
 <p>
-CREATE FUNCTION文([<6-51>])との相違点と共通点を以下にまとめます。
+CREATE FUNCTION文(<a href="./sql-51.html">[<6-51>]</a>)との相違点と共通点を以下にまとめます。
 </p>
 
 [< CREATE FUNCTION文との相違点と共通点>]
@@ -468,7 +468,7 @@ SQL文の列挙による関数定義と、"PL/pgSQL"という言語による関�
 <li>共通点</li>
  <ol>
  <li>記法</li>
-コメント、単一引用符付けやドル引用符付けなど、定義の記述方法は共通。詳細は[<6-01>]を参照。
+コメント、単一引用符付けやドル引用符付けなど、定義の記述方法は共通。詳細は<a href="./sql-01.html">[<6-01>]</a>を参照。
 
  <li>返り値型</li>
 関数の返り値型についても共通。
@@ -486,25 +486,40 @@ SQL文の列挙による関数定義と、"PL/pgSQL"という言語による関�
 </tr><tr>
 <td>ブロック構造</td>	<td>PL/pgSQLによる関数定義は、変数宣言部分と関数本体、および例外処理の3つの部分から成る。</td>	<td> </td>
 </tr><tr>
-<td>内部変数</td>	<td>内部変数を使うことができる。</td>	<td>[<8-04>] </td>
+<td>内部変数</td>	<td>内部変数を使うことができる。</td>	<td><a href="./plpgsql-03.html">[<8-03>]</a> </td>
 </tr><tr>
 <td>関数定義の終了</td>	<td>関数の処理は、必ずRETURN文で終了しなければならない。関数の返り値の型がvoidであっても、RETURN文を記述しなければならない。  </td>	<td> </td>
 </tr><tr>
-<td>行の取得</td>	<td>PL/pgSQL内部ではSELECT文が使えない。SELECT INTO文を使う。ここでSELECT INTO文は、1行しか結果を返せないという制約がある。 </td>	<td>[<8-06>] </td>
+<td>行の取得</td>	<td>PL/pgSQL内部ではSELECT文が使えない。SELECT INTO文を使う。ここでSELECT INTO文は、1行しか結果を返せないという制約がある。 </td>	<td><a href="./plpgsql-04.html">[<8-04>]</a> </td>
 </tr><tr>
-<td>制御構造</td>	<td>IF文による条件分岐と、WHILE文やFOR文などのループ処理が可能。</td>	<td>[<8-09>]〜[<8-15>] </td>
+<td>制御構造</td>	<td>IF文による条件分岐と、WHILE文やFOR文などのループ処理が可能。</td>	<td>
+<a href="./plpgsql-07.html">[<8-07>]</a>,
+<a href="./plpgsql-08.html">[<8-08>]</a>,
+<a href="./plpgsql-09.html">[<8-09>]</a>,
+<a href="./plpgsql-10.html">[<8-10>]</a>,<br>
+<a href="./plpgsql-11.html">[<8-11>]</a>,
+<a href="./plpgsql-12.html">[<8-12>]</a>,
+<a href="./plpgsql-13.html">[<8-13>]</a></td>
+
 </tr><tr>
-<td>動的なSQLの実行</td>	<td>EXECUTE文で動的SQLの実行可能。</td>	<td>[<8-08>] </td>
+<td>動的なSQLの実行</td>	<td>EXECUTE文で動的SQLの実行可能。</td>	<td><a href="./plpgsql-06.html">[<8-06>]</a> </td>
 </tr><tr>
-<td>カーソル</td>	<td>カーソルが利用可能。</td>	<td>[<8-16>]〜[<8-20>] </td>
+<td>カーソル</td>	<td>カーソルが利用可能。</td>	<td>
+<a href="./plpgsql-14.html">[<8-14>]</a>,
+<a href="./plpgsql-15.html">[<8-15>]</a>,
+<a href="./plpgsql-16.html">[<8-16>]</a>,
+<a href="./plpgsql-17.html">[<8-17>]</a>,<br>
+<a href="./plpgsql-18.html">[<8-18>]</a>,
+<a href="./plpgsql-19.html">[<8-19>]</a></td>
+
 </tr><tr>
-<td>例外処理</td>	<td>バージョン8.0から、エラー発生時の処理(例外処理)を記述可能。	</td>	<td>[<8-21>] </td>
+<td>例外処理</td>	<td>バージョン8.0から、エラー発生時の処理(例外処理)を記述可能。	</td>	<td><a href="./plpgsql-30.html">[<8-20>]</a> </td>
 </table>
 
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-11
+Last-modified: 2023-3-12
 </div>
 </body>
 </html>
