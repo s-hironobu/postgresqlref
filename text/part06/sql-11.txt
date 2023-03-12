@@ -115,9 +115,9 @@ ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
 </tr><tr>
 <td>column</td>	<td>属性変更するカラムの名前</td>
 </tr><tr>
-<td>collation</td>	<td>CREATE TABLE文([<6-04>])のCOLLATEを参照</td>
+<td>collation</td>	<td>CREATE TABLE文(<a href="./sql-04.html">[<6-04>]</a>)のCOLLATEを参照</td>
 </tr><tr>
-<td>column_constraint</td>	<td>CREATE TABLE文([<6-04>])のcolumn_constraintを参照</td>
+<td>column_constraint</td>	<td>CREATE TABLE文(<a href="./sql-04.html">[<6-04>]</a>)のcolumn_constraintを参照</td>
 </tr><tr>
 <td>data_type</td>	<td>追加、または変更するカラムの型</td>
 </tr><tr>
@@ -125,7 +125,7 @@ ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
 </tr><tr>
 <td>expression</td>	<td>型変換を設定。暗黙の型変換がある場合は指定不要</td>
 </tr><tr>
-<td>default_statistics_target</td>	<td>ANALYZEでデータ収集するレコード数。1から1000まで。デフォルト100。[<4-07>]参照</td>
+<td>default_statistics_target</td>	<td>ANALYZEでデータ収集するレコード数。1から1000まで。デフォルト100。<a href="./param-07.html">[<4-07>]</a>参照</td>
 </tr><tr>
 <td></td>	<td></td>
 </tr><tr>
@@ -140,15 +140,15 @@ ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
 <tr bgcolor="#cccccc">
 <th>追加する制約</th>	<th>構文の説明</th>
 </tr><tr>
-<td>CHECK</td>	<td>[<6-04>]参照</td>
+<td>CHECK</td>	<td><a href="./sql-04.html">[<6-04>]</a>参照</td>
 </tr><tr>
-<td>UNIQUE</td>	<td>[<6-04>]参照</td>
+<td>UNIQUE</td>	<td><a href="./sql-04.html">[<6-04>]</a>参照</td>
 </tr><tr>
-<td>主キー</td>	<td>[<6-04>]参照</td>
+<td>主キー</td>	<td><a href="./sql-04.html">[<6-04>]</a>参照</td>
 </tr><tr>
-<td>EXCLUDE</td>	<td>[<6-04>]参照</td>
+<td>EXCLUDE</td>	<td><a href="./sql-04.html">[<6-04>]</a>参照</td>
 </tr><tr>
-<td>外部キー</td>	<td>[<6-05>]参照</td>
+<td>外部キー</td>	<td><a href="./sql-05.html">[<6-05>]</a>参照</td>
 </tr></table>
 
 <br>
@@ -175,7 +175,7 @@ ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
 ・カラム名の変更
 <br>
 テーブルに新たなカラムを追加するには、ALTER TABLE文のADD COLUMN形式を使います。
-列制約column_constraintの書式はCREATE TABLE文と同じです。詳細は[<6-04>]を参照してください。
+列制約column_constraintの書式はCREATE TABLE文と同じです。詳細は<a href="./sql-04.html">[<6-04>]</a>を参照してください。
 <br>
 テーブルからカラムを削除するには、ALTER TABLE文のDROP COLUMN形式を使います。
 </p>

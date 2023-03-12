@@ -513,8 +513,8 @@ CREATE TABLE文でテーブルを作成します。
 テーブルが持てる最大カラム数は1600です。
 実際に設定できる最大数は、カラムのデータ型に依存します。
 <br>
-PostgreSQLは既存のテーブルのオブジェクトを継承してテーブルを作成できます([<6-06>]参照)。
-また、作成したテーブルの制約は後から追加/削除できます([<6-12>]参照)。
+PostgreSQLは既存のテーブルのオブジェクトを継承してテーブルを作成できます(<a href="./sql-06.html">[<6-06>]</a>参照)。
+また、作成したテーブルの制約は後から追加/削除できます(<a href="./sql-12.html">[<6-12>]</a>参照)。
 </p>
 
 
@@ -543,8 +543,7 @@ Indexes:
 
 <p>
 データベースロールがテーブルに対してアクセス権限を持つか否かは、
-<font color="#0000ff"><s>関数has_table_privilege()で判ります([<7-29>]参照)。</s></font>
-<font color="#ff0000">関数has_table_privilege()で判ります([<7-30>]参照)。</font>
+関数has_table_privilege()で判ります(<a href="./func-10.html">[<7-29>]</a>参照)。
 </p>
 
 <p>
@@ -562,13 +561,13 @@ CREATE TABLEは構文が複雑なので、いくつかに分割して説明し�
 </tr><tr>
 <td>EXCLUDE句</td>	<td>重複を避ける</td>	<td>	</td>
 </tr><tr>
-<td>INHERIT句</td>	<td>テーブルの継承</td>	<td>[<6-06>]参照</td>
+<td>INHERIT句</td>	<td>テーブルの継承</td>	<td><a href="./sql-06.html">[<6-06>]</a>参照</td>
 </tr><tr>
-<td>LIKE句</td>		<td>既存テーブル定義から新たにテーブル作成</td>	<td>[<6-06>]参照</td>
+<td>LIKE句</td>		<td>既存テーブル定義から新たにテーブル作成</td>	<td><a href="./sql-06.html">[<6-06>]</a>参照</td>
 </tr><tr>
 <td>TABLESPACE句</td>	<td>指定したテーブルスペースに配置</td>	<td>	</td>
 </tr><tr>
-<td>PARTITION句</td>		<td>パーティション</td>	<td>[<6-07>]参照</td>
+<td>PARTITION句</td>		<td>パーティション</td>	<td><a href="./sql-07.html">[<6-07>]</a>参照</td>
 
 
 </tr><tr>
@@ -584,7 +583,7 @@ CREATE TABLEは構文が複雑なので、いくつかに分割して説明し�
 <td>PRIMARY KEY制約</td>	<td>主キー制約</td>	<td>	</td>
 </tr><tr>
 <td>
-FOREIGN KEY句(外部キー)、REFERENCES句(参照) </td>	<td>外部キー制約</td>	<td>[<6-05>]参照</td>
+FOREIGN KEY句(外部キー)、REFERENCES句(参照) </td>	<td>外部キー制約</td>	<td><a href="./sql-05.html">[<6-05>]</a>参照</td>
 </tr><tr>
 <td>WITH句</td>		<td>テーブルやインデックスのストレージパラメータを設定</td>	<td>	</td>
 
@@ -677,7 +676,7 @@ sampledb-#             FROM pg_constraint where conname like 'test_deferrable%';
 <br>
 
 <p>
-デフォルト設定はALTER TABLE([<6-13>]参照)で変更できます。
+デフォルト設定はALTER TABLE(<a href="./sql-13.html">[<6-13>]</a>参照)で変更できます。
 </p>
 
 <p>

@@ -391,7 +391,6 @@ ALTER INDEX ALL IN TABLESPACE name [ OWNED BY role_name [, ... ] ]
 DROP INDEX [ CONCURRENTLY ] [ IF EXISTS ] index_name [, ...]
 					  [ CASCADE | RESTRICT ]
 </pre>
-
 <br>
 
 <table>
@@ -425,7 +424,7 @@ DROP INDEX [ CONCURRENTLY ] [ IF EXISTS ] index_name [, ...]
 </tr><tr>
 <td>TABLESPACE tablespace</td>	<td>インデックスを保存するテーブルスペースtablespaceを指定</td>
 </tr><tr>
-<td>WITH storage_param = value</td>	<td>ストレージパラメータを設定。ストレージパラメータは[<6-04>]を参照。バージョン8.2から</td>
+<td>WITH storage_param = value</td>	<td>ストレージパラメータを設定。ストレージパラメータは<a href="./sql-04.html">[<6-04>]</a>を参照。</td>
 </tr><tr>
 <td>WHERE predicate	</td>	<td>部分インデックス用の制約式</td>
 
@@ -444,13 +443,13 @@ DROP INDEX [ CONCURRENTLY ] [ IF EXISTS ] index_name [, ...]
 </tr><tr>
 <td>RESTRICT</td>	<td>依存するオブジェクトのないインデックスのみ削除</td>
 </tr><tr>
-<td>IF EXISTS</td>	<td>削除するインデックスが存在しなくともエラーとならない。バージョン8.2から</td>
+<td>IF EXISTS</td>	<td>削除するインデックスが存在しなくともエラーとならない</td>
 </tr><tr>
-<td>CONCURRENTLY</td>	<td>対象テーブルの書き込みロックを行わずに、インデックスを作成/削除する。CREATE INDEXはバージョン8.2から、DROP INDEXはバージョン9.2から</td>
+<td>CONCURRENTLY</td>	<td>対象テーブルの書き込みロックを行わずに、インデックスを作成/削除する。</td>
 </tr><tr>
-<td>ASC, DESC</td>	<td>インデックスを昇順で並べるか、降順で並べるか。バージョン8.3から</td>
+<td>ASC, DESC</td>	<td>インデックスを昇順で並べるか、降順で並べるか。</td>
 </tr><tr>
-<td>NULLSFIRST, NULL LAST</td>	<td>NULLをインデックスの先頭に置くか、末尾に置くか。バージョン8.3から</td>
+<td>NULLSFIRST, NULL LAST</td>	<td>NULLをインデックスの先頭に置くか、末尾に置くか</td>
 
 
 
@@ -464,15 +463,15 @@ DROP INDEX [ CONCURRENTLY ] [ IF EXISTS ] index_name [, ...]
 </tr><tr>
 <td>BTREE	</td>	<td>Lehman-Yaoの高並行性B-trees。デフォルト</td>
 </tr><tr>
-<td>RTREE	</td>	<td>Guttmanの二次分割アルゴリズムを使った標準R-trees。バージョン8.1まで</td>
+<td>RTREE	</td>	<td>Guttmanの二次分割アルゴリズムを使った標準R-trees。</td>
 </tr><tr>
 <td>HASH	</td>	<td>Litwinの線形ハッシュ</td>
 </tr><tr>
 <td>GiST	</td>	<td>汎用検索ツリー(Generalized Search Tree)</td>
 </tr><tr>
-<td>GiN		</td>	<td>汎用転置インデックス(Generalized Inverted Index)。バージョン8.2から</td>
+<td>GiN		</td>	<td>汎用転置インデックス(Generalized Inverted Index)。</td>
 </tr><tr>
-<td>SP-GiST	</td>	<td>空間分割汎用検索ツリー(space-partitioned Generalized Inverted Index)。バージョン9.2から</td>
+<td>SP-GiST	</td>	<td>空間分割汎用検索ツリー(space-partitioned Generalized Inverted Index)。</td>
 </tr></table>
 
 <br>
@@ -525,6 +524,7 @@ sampledb=# CREATE INDEX idx ON table (a, b, c);
 CREATE INDEX
 SELECT * FROM table WHERE a = 1 AND b = 2 AND c = 3;
 </pre>
+<br>
 
 <p>
 不等号"<="や">="などの条件式を含む場合、
@@ -551,7 +551,6 @@ SELECT * FROM table WHERE a = 1 AND b = 2 AND c = 3;
 <br>
 バージョン8.1から実行プランのビットマップスキャン(Bitmap Scan)がサポートされました。
 これにより<u>WHERE句で条件式をORで結合した場合でもインデックスの効果が期待</u>できます。
-詳細は[<2-04>]を参照してください。
 </p>
 
 
@@ -577,6 +576,7 @@ B-TREEはスカラ値(一次元の値)の大小比較("="、"<"、">"、"<="、"
 Lehman, P. and Yao, S. 1981. "Efficient locking for concurrent operations on B-trees."
 ACM Trans. Database Systems 6, 4, pp650-670.
 </pre>
+<br>
 
 
 <div class="jumpmenu"></div><h4>GiST(Generalized Search Tree: 汎用検索ツリー)</h4>
@@ -598,7 +598,7 @@ GiSTの詳細は公式ドキュメント、もしくは実装者のサイトを�
 <pre>
 http://www.sai.msu.su/~megera/postgres/gist/
 </pre>
-
+<br>
 
 <div class="jumpmenu"></div><h4>GiN(Generalized Inverted Index: 汎用転置インデックス)</h4>
 
@@ -642,7 +642,7 @@ GiNの詳細は公式ドキュメント、もしくは実装者のサイトを�
 <pre>
 http://www.sai.msu.su/~megera/wiki/Gin
 </pre>
-
+<br>
 
 <div class="jumpmenu"></div><h4>SP-GiST (space-partitioned GiST)</h4>
 
@@ -661,6 +661,7 @@ SP-GiSTの詳細は公式ドキュメント、もしくは実装者のサイト�
 http://www.sai.msu.su/~megera/wiki/spgist_dev
 http://www.cs.purdue.edu/spgist/papers/icde06.pdf
 </pre>
+<br>
 
 
 <div class="jumpmenu"></div><h4>HASH</h4>
@@ -686,29 +687,7 @@ HASHインデックスはスカラ値の等価比較("=")のみ可能です。
 LITWIN,W.,NEIMAT, M.A., and SCHNEIDER, D. A. LH. 1996. "a scalable, distributed
 data structure." ACM Transactions on Database Systems (TODS) 21, 4, pp480-525.
 </pre>
-
-
-<div class="jumpmenu"></div><h4>R-TREE (バージョン8.1まで)</h4>
-
-<p>
-幾何データ型のカラムに対してインデックスを作成するために使用します。
-2次元の値の比較が可能です。
 <br>
-しかしマルチカラム、UNIQUE制約には対応していません。
-<br>
-バージョン8.1までサポートしていたが、8.2で廃止されました。
-</p>
-
-<p>
-実装はGuttmanの二次分割アルゴリズムを使った標準R-treesです。
-</p>
-
-<pre>
-Guttman, A. 1984. "R-trees a dynamic index structure for spatial searching" Proc ACM
-SIGMOD Int Conf on Management of Data, pp47-57.
-</pre>
-
-
 
 <div class="jumpmenu"></div><h3>実行例</h3>
 
@@ -732,6 +711,7 @@ sampledb=# \d customerlist
 Indexes:
     "name_idx" btree (name)
 </pre>
+<br>
 
 <p>
 ・マルチカラムインデックスの作成
@@ -754,6 +734,7 @@ sampledb=# \d album_list
 Indexes:
     "multicolumn_idx" btree (artist, title)
 </pre>
+<br>
 
 <p>
 このインデックスは、カラムartistとカラムtitleをキーにテーブル検索するときに使われる可能性があります。
@@ -763,6 +744,7 @@ Indexes:
 SELECT * FROM album_list WHERE artist = 'Bjork' AND title = 'Post';
 SELECT * FROM album_list WHERE artist = 'Fleetwood Mac' AND title = 'Rumours';
 </pre>
+<br>
 
 <p>
 ・関数インデックスの作成
@@ -780,6 +762,7 @@ sampledb=# SELECT * FROM my_class WHERE id < 5;
   4 | DUKE  |  20
 (4 rows)
 </pre>
+<br>
 
 <p>
 カラムnameをキーとして検索する場合、
@@ -802,6 +785,7 @@ Indexes:
     "my_class_pkey" PRIMARY KEY, btree (id)
     "myclass_name_idx" btree (lower(name))
 </pre>
+<br>
 
 <p>
 検索は次のように行います。
@@ -814,6 +798,7 @@ sampledb=# SELECT * FROM my_class WHERE lower(name) = 'duke';
   4 | DUKE | 20
 (1 row)
 </pre>
+<br>
 
 
 <p>
@@ -826,6 +811,7 @@ sampledb=# SELECT * FROM my_class WHERE lower(name) = 'duke';
 sampledb=# CREATE INDEX special_ids_idx ON customerlist (id)
 sampledb-#	  　　　　　　　　　　　　WHERE 50 <= id AND id < 100;
 </pre>
+<br>
 
 <p>
 ・インデックス名の変更
@@ -857,6 +843,7 @@ sampledb=# \d customerlist
 Indexes:
     "customerlist_idx" btree (name)
 </pre>
+<br>
 
 <p>
 ・インデックスの削除
@@ -866,6 +853,7 @@ Indexes:
 sampledb=# DROP INDEX test_index;
 DROP
 </pre>
+<br>
 
 <hr class="full_hr">
 <div id="lastmodified">

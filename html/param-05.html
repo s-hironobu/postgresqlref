@@ -358,9 +358,9 @@ objID.className='close';
 </tr><tr>
 <td>△</td>	<td>	fsync	</td>	<td>on/off[on]	</td>	<td>WALログ書き込みとCHECKPOINTで、データ書き込みを同期的に行うか、非同期的に行うか</td>
 </tr><tr>
-<td>◎</td>	<td>	synchronous_commit	</td>	<td>on/off/local/remote_write[on]	</td>	<td>コミットの制御。詳細は[<2-11>]の[<コラム2-11>]参照</td>
+<td>◎</td>	<td>	synchronous_commit	</td>	<td>on/off/local/remote_write[on]	</td>	<td>コミットの制御。詳細は<a href="./internal-11.html">[<2-11>]</a>の[<コラム2-11>]参照</td>
 </tr><tr>
-<td>△</td>	<td>	wal_sync_method</td>	<td>		[fsync]	</td>	<td>	WALログ書き込みの同期方法を指定。[<表.4-03>]参照</td>
+<td>△</td>	<td>	wal_sync_method</td>	<td>		[fsync]	</td>	<td>	WALログ書き込みの同期方法を指定。[<表4-03>]参照</td>
 </tr><tr>
 <td>△</td>	<td>	full_page_writes	</td>	<td>on/off[on]	</td>	<td>WALバッファページ全体をWALに書き込むが否か</td>
 
@@ -419,7 +419,7 @@ objID.className='close';
 </tr><tr>
 <td>×</td>	<td>archive_mode　</td>	<td>	 on/off[off]  </td>	<td>  アーカイブロギングを行うか否か、明示的に指定する。</td>
 </tr><tr>
-<td>△	</td>	<td>archive_command</td>	<td>	文字列[''(空文字)]	</td>	<td>WALログをアーカイブログ保存用ディレクトリにコピーするコマンド。詳細は[<3-19>]参照</td>
+<td>△	</td>	<td>archive_command</td>	<td>	文字列[''(空文字)]	</td>	<td>WALログをアーカイブログ保存用ディレクトリにコピーするコマンド。詳細は<a href="./admin-19.html">[<3-19>]</a>参照</td>
 
 </tr><tr>
 <td>△</td>	<td>archive_library</td>	<td>文字列 [''(空文字)]</td>	<td>archive_commandで使用するコマンドのライブラリを設定。バージョン15から</td>

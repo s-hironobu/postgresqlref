@@ -8,50 +8,80 @@
 [<書式>]
 	initdb [options...] -D dbdir
 
-
-
-====================================================================
-引数			説明[デフォルト]
-====================================================================
--D dbdir データベースクラスタを作成するベースディレクトリ(dbdir)を指定
-====================================================================
-
-====================================================================
-主なオプション		説明[デフォルト]
-===================================================================
--A authmethod		pg_hba.confでOSのローカルユーザに使用する認証方法を指定
--auth-host
--auth-local
--U superuser		データベースのスーパーユーザ名を指定[initdbを実行したユーザ名]
--E=encoding		デフォルトのエンコーディングencodingを設定[SQL_ASCII]
--L templatedir		各種設定ファイルのテンプレートがあるディレクトリ(templatedir)を設定
---locale=locale		ロケールlocaleを設定
---no-locale		ロケールを無効にする
---locale=locale
---lc-collate=locale
---lc-ctype=locale
---lc-messages=locale
---lc-monetary=locale
---lc-numeric=locale
---lc-time=locale
---locale-provider={libc|icu}
-
--g, --allow-group-access
--k, --data-checksums
-
--N, --no-sync
---no-instructions
--pwfile=filename
--S, --sync-only
--T config, --text-search-config=config
-
--W, --pwprompt
-
--X directory, --waldir=directory
---wal-segsize=size
-
-====================================================================
 </pre>
+<br>
+
+
+<table>
+<caption>引数</caption>
+<tr bgcolor="#cccccc">
+<th>引数</th>	<th>説明</th>
+</tr><tr>
+<td>-D dbdir</td>	<td> データベースクラスタを作成するベースディレクトリ(dbdir)を指定</td>
+</tr></table>
+<br>
+
+<table>
+<caption>主なオプション</caption>
+<tr bgcolor="#cccccc">
+<th>主なオプション</th>	<th>説明</th>
+</tr><tr>
+<td>-A authmethod</td>	<td>pg_hba.confでOSのローカルユーザに使用する認証方法を指定</td>
+</tr><tr>
+<td>-auth-host</td>	<td></td>
+</tr><tr>
+<td>-auth-local</td>	<td></td>
+</tr><tr>
+<td>-auth-local</td>	<td></td>
+</tr><tr>
+<td>-U superuser</td>	<td>データベースのスーパーユーザ名を指定[initdbを実行したユーザ名]</td>
+</tr><tr>
+<td>-E=encoding</td>	<td>デフォルトのエンコーディングencodingを設定[SQL_ASCII]</td>
+</tr><tr>
+<td>-L templatedir</td>	<td>各種設定ファイルのテンプレートがあるディレクトリ(templatedir)を設定</td>
+</tr><tr>
+<td>--locale=locale</td>	<td>ロケールlocaleを設定</td>
+</tr><tr>
+<td>--no-locale</td>	<td>ロケールを無効にする</td>
+</tr><tr>
+<td>--locale=locale</td>	<td></td>
+</tr><tr>
+<td>--lc-collate=locale</td>	<td></td>
+</tr><tr>
+<td>--lc-ctype=locale</td>	<td></td>
+</tr><tr>
+<td>--lc-messages=locale</td>	<td></td>
+</tr><tr>
+<td>--lc-monetary=locale</td>	<td></td>
+</tr><tr>
+<td>--lc-numeric=locale</td>	<td></td>
+</tr><tr>
+<td>--lc-time=locale</td>	<td></td>
+</tr><tr>
+<td>--locale-provider={libc|icu}</td>	<td></td>
+</tr><tr>
+<td>-g, --allow-group-access</td>	<td></td>
+</tr><tr>
+<td>-k, --data-checksums</td>	<td></td>
+</tr><tr>
+<td>-N, --no-sync</td>	<td></td>
+</tr><tr>
+<td>--no-instructions</td>	<td></td>
+</tr><tr>
+<td>-pwfile=filename</td>	<td></td>
+</tr><tr>
+<td>-S, --sync-only</td>	<td></td>
+</tr><tr>
+<td>-T config, --text-search-config=config</td>	<td></td>
+</tr><tr>
+<td>-W, --pwprompt</td>	<td></td>
+</tr><tr>
+<td>-X directory, --waldir=directory</td>	<td></td>
+</tr><tr>
+<td>--wal-segsize=size</td>	<td></td>
+</tr></table>
+<br>
+
 
 %CHAPTER 解説
 
@@ -81,8 +111,7 @@ initdbコマンドは、PostgreSQLをインストールしたユーザが実行�
 -Eオプションにはデフォルトのエンコーディングを指定します。
 ただし、データベース作成時にもエンコーディングを設定できるので、デフォルトのエンコーディングを設定しなくても支障はありません。
 <br>
-<font color="#0000ff"><s>指定できるエンコーディングの一覧、および文字コードの扱いと日本語利用は[<3-03>]を参照してください。</s></font>
-<font color="#ff0000">指定できるエンコーディングの一覧、および文字コードの扱いと日本語利用は[<3-06>]を参照してください。</font>
+指定できるエンコーディングの一覧、および文字コードの扱いと日本語利用は<a href="./admin-06.html">[<3-06>]</a>を参照してください。
 </p>
 
 <p>
@@ -104,3 +133,4 @@ initdbコマンドは、PostgreSQLをインストールしたユーザが実行�
 <pre>
 postgres> initdb --no-locale -D /usr/local/pgsql/data
 </pre>
+<br>

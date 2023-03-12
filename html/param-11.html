@@ -389,7 +389,7 @@ objID.className='close';
 <td>◎ </td><td> default_transaction_read_only </td><td>   on/off[off] </td><td>BEGINやSTART TRANSACTION文のデフォルトを"READ ONLY"とするか否か。デフォルトはoffで、BEGINやSTART TRANSACTION文は"READ WRITE"で実行する。</td>
 
 </tr><tr>
-<td>◎ </td><td> default_transaction_deferrable </td><td> on/off[off] </td><td>トランザクションのDEFERRABLEオプションのデフォルト値を設定。詳細は[<6-41>]を参照</td>
+<td>◎ </td><td> default_transaction_deferrable </td><td> on/off[off] </td><td>トランザクションのDEFERRABLEオプションのデフォルト値を設定。詳細は<a href="./sql-41.html">[<6-41>]</a>を参照</td>
 
 <!--
 </tr><tr>
@@ -419,9 +419,9 @@ objID.className='close';
 <td>◎</td>	<td>idle_session_timeout</td>	<td>整数 [0]</td>	<td>設定した時間以上アイドルの場合、セッションを閉じる。単位はms。0なら無効。</td>
 
 </tr><tr>
-<td>◎ </td><td>	vacuum_freeze_table_age	 </td><td>整数[150000000]	 </td><td>	詳細は[<2-07>]FREEZE処理参照</td>
+<td>◎ </td><td>	vacuum_freeze_table_age	 </td><td>整数[150000000]	 </td><td></td>
 </tr><tr>
-<td>◎ </td><td>	vacuum_freeze_min_age	 </td><td>整数[50000000]	 </td><td>	詳細は[<2-07>]FREEZE処理参照</td>
+<td>◎ </td><td>	vacuum_freeze_min_age	 </td><td>整数[50000000]	 </td><td></td>
 
 </tr><tr>
 <td>◎</td>	<td>vacuum_failsafe_age</td>	<td></td>	<td></td>
@@ -472,7 +472,7 @@ objID.className='close';
 </tr><tr>
 <td>◎ </td><td>	extra_float_digits	 </td><td>整数(-15から2)[0]	 </td><td>float4型,float8型,幾何データ型などの浮動小数点の表示桁数を調整。負値なら不要な桁数を切捨て。0ならプラットフォームに依存した桁数で表示</td>
 </tr><tr>
-<td>◎ </td><td>	client_encoding	 </td><td>	文字列[sql_ascii] </td	><td>クライアントのエンコーディングを設定。[<3-06>]参照。</td>
+<td>◎ </td><td>	client_encoding	 </td><td>	文字列[sql_ascii] </td	><td>クライアントのエンコーディングを設定。<a href="./admin-06.html">[<3-06>]</a>参照。</td>
 </tr><tr>
 <td>○ </td><td>	lc_messages	 </td><td>	文字列[''(空文字)] </td><td>	表示するメッセージの言語。localeを設定</td>
 </tr><tr>
@@ -533,7 +533,7 @@ objID.className='close';
 スキーマのサーチパスを設定します。
 デフォルトは"$user,public"です($userは接続しているデータベースユーザ/ロール名)。
 スキーマ名はコンマ","で区切って追加します。
-スキーマの詳細は[<6-09>]を参照してください。
+スキーマの詳細は<a href="./sql-09.html">[<6-09>]</a>を参照してください。
 </p>
 
 <p>

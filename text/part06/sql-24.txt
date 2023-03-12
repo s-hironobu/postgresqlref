@@ -300,7 +300,7 @@ sampledb=# SELECT title, name FROM book_list AS b
 <p>
 •LATERAL結合
 <br>
-[<6-29>]で使ったサブクエリをLATERAL結合で書き換えます。
+<a href="./sql-29.html">[<6-29>]</a>で使ったサブクエリをLATERAL結合で書き換えます。
 <br>
 次の２つのSELECT文は同じ結果を返します。
 LATERAL結合を使った後者のSELECT文は、サブクエリ内の条件句に外側FROM句のテーブルbook_listを使っていることに注目してください。
