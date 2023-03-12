@@ -355,7 +355,7 @@ objID.className='close';
 BEGIN [ WORK | TRANSACTION ] [ transaction_mode [, ...] ]
 START TRANSACTION [ transaction_mode [, ...] ]
 
-● トランザクションのコミット 
+● トランザクションのコミット
 COMMIT [ WORK | TRANSACTION ] [ AND [ NO ] CHAIN ]
 END [ WORK | TRANSACTION ] [ AND [ NO ] CHAIN ]
 
@@ -376,7 +376,7 @@ SET SESSION CHARACTERISTICS AS TRANSACTION transaction_mode [, ...]
     [ NOT ] DEFERRABLE
 
 ● トランザクション隔離レベルの確認
-SHOW TRANSACTION ISOLATION LEVEL 
+SHOW TRANSACTION ISOLATION LEVEL
 </pre>
 
 
@@ -491,7 +491,7 @@ AND　CHAINの使用例を示す。
 postgres=# begin;
 BEGIN
 postgres=*# select 1;
- ?column? 
+ ?column?
 ----------
         1
 (1 row)
@@ -499,7 +499,7 @@ postgres=*# select 1;
 postgres=*# commit and chain;
 COMMIT
 postgres=*# select 2;
- ?column? 
+ ?column?
 ----------
         2
 (1 row)
@@ -510,7 +510,7 @@ COMMIT
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-11
+Last-modified: 2023-3-12
 </div>
 </body>
 </html>

@@ -431,7 +431,7 @@ objID.className='close';
 
 <pre>
 postgres=# SELECT pg_xact_status('800');
- pg_xact_status 
+ pg_xact_status
 ----------------
  committed
 (1 row)
@@ -445,26 +445,26 @@ postgres=# SELECT pg_xact_status('800');
 
 <pre>
 postgres=# SHOW track_commit_timestamp;
- track_commit_timestamp 
+ track_commit_timestamp
 ------------------------
  on
 (1 row)
 
 postgres=# SELECT pg_current_xact_id ();
- pg_current_xact_id 
+ pg_current_xact_id
 --------------------
                 912
 (1 row)
 
 postgres=# SELECT pg_xact_commit_timestamp('912');
-   pg_xact_commit_timestamp    
+   pg_xact_commit_timestamp
 -------------------------------
  2023-01-13 09:20:31.609553+09
 (1 row)
 </pre>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-11
+Last-modified: 2023-3-12
 </div>
 </body>
 </html>

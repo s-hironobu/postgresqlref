@@ -352,7 +352,7 @@ objID.className='close';
 ●  インデックスの作成
 CREATE [ UNIQUE ] INDEX [ CONCURRENTLY ] index_name ON table_name
         [ USING method ]
-	( { column | ( expression ) } [ opclass ] [ ASC | DESC ] 
+	( { column | ( expression ) } [ opclass ] [ ASC | DESC ]
       [ NULLS { FIRST | LAST } ] [, ...] )
     [ WITH ( storage_param = value [, ... ] ) ]
     [ TABLESPACE tablespace ]
@@ -366,7 +366,7 @@ ALTER INDEX [ IF EXISTS ] index_name RENAME TO new_index_name
 ALTER INDEX [ IF EXISTS ] index_name SET TABLESPACE tablespace_name
 
 ● ストレージパラメータの変更/リセット
-ALTER INDEX [ IF EXISTS ] index_name 
+ALTER INDEX [ IF EXISTS ] index_name
 			SET ( storage_parame = value [, ... ] )
 
 ALTER INDEX [ IF EXISTS ] index_name
@@ -389,7 +389,7 @@ ALTER INDEX ALL IN TABLESPACE name [ OWNED BY role_name [, ... ] ]
 
 ● 削除
 DROP INDEX [ CONCURRENTLY ] [ IF EXISTS ] index_name [, ...]
-					  [ CASCADE | RESTRICT ] 
+					  [ CASCADE | RESTRICT ]
 </pre>
 
 <br>
@@ -487,7 +487,7 @@ DROP INDEX [ CONCURRENTLY ] [ IF EXISTS ] index_name [, ...]
 </p>
 
 <p>
-・UNIQUE 
+・UNIQUE
 <br>
 カラムの値が互いに重複しないインデックスを、ユニークインデックス(一意性インデックス)と呼びます。
 CREATE INDEX文にUNIQUEを設定すると、ユニークインデックスを作成できます。
@@ -521,7 +521,7 @@ PostgreSQLは複数カラムの組に対するインデックス(マルチカラ
 </p>
 
 <pre>
-sampledb=# CREATE INDEX idx ON table (a, b, c); 
+sampledb=# CREATE INDEX idx ON table (a, b, c);
 CREATE INDEX
 SELECT * FROM table WHERE a = 1 AND b = 2 AND c = 3;
 </pre>
@@ -574,12 +574,12 @@ B-TREEはスカラ値(一次元の値)の大小比較("="、"<"、">"、"<="、"
 </p>
 
 <pre>
-Lehman, P. and Yao, S. 1981. "Efficient locking for concurrent operations on B-trees." 
-ACM Trans. Database Systems 6, 4, pp650-670. 
+Lehman, P. and Yao, S. 1981. "Efficient locking for concurrent operations on B-trees."
+ACM Trans. Database Systems 6, 4, pp650-670.
 </pre>
 
 
-<div class="jumpmenu"></div><h4>GiST(Generalized Search Tree: 汎用検索ツリー) </h4>
+<div class="jumpmenu"></div><h4>GiST(Generalized Search Tree: 汎用検索ツリー)</h4>
 
 <p>
 GiSTの最も大きな特徴は、その名のとおり"Generalized(汎用)"である点です。
@@ -683,8 +683,8 @@ HASHインデックスはスカラ値の等価比較("=")のみ可能です。
 </p>
 
 <pre>
-LITWIN,W.,NEIMAT, M.A., and SCHNEIDER, D. A. LH. 1996. "a scalable, distributed 
-data structure." ACM Transactions on Database Systems (TODS) 21, 4, pp480-525. 
+LITWIN,W.,NEIMAT, M.A., and SCHNEIDER, D. A. LH. 1996. "a scalable, distributed
+data structure." ACM Transactions on Database Systems (TODS) 21, 4, pp480-525.
 </pre>
 
 
@@ -704,8 +704,8 @@ data structure." ACM Transactions on Database Systems (TODS) 21, 4, pp480-525.
 </p>
 
 <pre>
-Guttman, A. 1984. "R-trees a dynamic index structure for spatial searching" Proc ACM 
-SIGMOD Int Conf on Management of Data, pp47-57. 
+Guttman, A. 1984. "R-trees a dynamic index structure for spatial searching" Proc ACM
+SIGMOD Int Conf on Management of Data, pp47-57.
 </pre>
 
 
@@ -724,7 +724,7 @@ CREATE INDEX
 
 sampledb=# \d customerlist
             Table "public.customerlist"
-   Column    |  Type   |         Modifiers         
+   Column    |  Type   |         Modifiers
 -------------+---------+---------------------------
  id          | integer | not null default 0
  name        | text    | not null default ''::text
@@ -746,11 +746,11 @@ CREATE INDEX
 
 sampledb=# \d album_list
   Table "public.album_list"
- Column |  Type   | Modifiers 
+ Column |  Type   | Modifiers
 --------+---------+-----------
  artist | text    | not null
  title  | text    | not null
- year   | integer | 
+ year   | integer |
 Indexes:
     "multicolumn_idx" btree (artist, title)
 </pre>
@@ -760,8 +760,8 @@ Indexes:
 </p>
 
 <pre>
-SELECT * FROM album_list WHERE artist = 'Bjork' AND title = 'Post'; 
-SELECT * FROM album_list WHERE artist = 'Fleetwood Mac' AND title = 'Rumours'; 
+SELECT * FROM album_list WHERE artist = 'Bjork' AND title = 'Post';
+SELECT * FROM album_list WHERE artist = 'Fleetwood Mac' AND title = 'Rumours';
 </pre>
 
 <p>
@@ -772,11 +772,11 @@ SELECT * FROM album_list WHERE artist = 'Fleetwood Mac' AND title = 'Rumours';
 
 <pre>
 sampledb=# SELECT * FROM my_class WHERE id < 5;
- id | name  | age 
+ id | name  | age
 ----+-------+-----
-  1 | Alice |    
-  2 | Bobby |    
-  3 | Candy |    
+  1 | Alice |
+  2 | Bobby |
+  3 | Candy |
   4 | DUKE  |  20
 (4 rows)
 </pre>
@@ -793,11 +793,11 @@ CREATE INDEX
 
 sampledb=# \d my_class
    Table "public.my_class"
- Column |  Type   | Modifiers 
+ Column |  Type   | Modifiers
 --------+---------+-----------
  id     | integer | not null
- name   | text    | 
- age    | integer | 
+ name   | text    |
+ age    | integer |
 Indexes:
     "my_class_pkey" PRIMARY KEY, btree (id)
     "myclass_name_idx" btree (lower(name))
@@ -808,11 +808,11 @@ Indexes:
 </p>
 
 <pre>
-sampledb=# SELECT * FROM my_class WHERE lower(name) = 'duke'; 
- id | name | age 
-----+------+----- 
-  4 | DUKE | 20 
-(1 row) 
+sampledb=# SELECT * FROM my_class WHERE lower(name) = 'duke';
+ id | name | age
+----+------+-----
+  4 | DUKE | 20
+(1 row)
 </pre>
 
 
@@ -823,8 +823,8 @@ sampledb=# SELECT * FROM my_class WHERE lower(name) = 'duke';
 </p>
 
 <pre>
-sampledb=# CREATE INDEX special_ids_idx ON customerlist (id) 
-sampledb-#	  　　　　　　　　　　　　WHERE 50 <= id AND id < 100; 
+sampledb=# CREATE INDEX special_ids_idx ON customerlist (id)
+sampledb-#	  　　　　　　　　　　　　WHERE 50 <= id AND id < 100;
 </pre>
 
 <p>
@@ -836,7 +836,7 @@ sampledb-#	  　　　　　　　　　　　　WHERE 50 <= id AND id < 100;
 <pre>
 sampledb=# \d customerlist
             Table "public.customerlist"
-   Column    |  Type   |         Modifiers         
+   Column    |  Type   |         Modifiers
 -------------+---------+---------------------------
  id          | integer | not null default 0
  name        | text    | not null default ''::text
@@ -849,7 +849,7 @@ ALTER INDEX
 
 sampledb=# \d customerlist
             Table "public.customerlist"
-   Column    |  Type   |         Modifiers         
+   Column    |  Type   |         Modifiers
 -------------+---------+---------------------------
  id          | integer | not null default 0
  name        | text    | not null default ''::text
@@ -863,13 +863,13 @@ Indexes:
 </p>
 
 <pre>
-sampledb=# DROP INDEX test_index; 
-DROP 
+sampledb=# DROP INDEX test_index;
+DROP
 </pre>
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-11
+Last-modified: 2023-3-12
 </div>
 </body>
 </html>

@@ -484,7 +484,7 @@ CREATE VIEW文でビューを定義します。
 
 
 <pre>
-SELECT table_name, is_updatable, is_insertable_into 
+SELECT table_name, is_updatable, is_insertable_into
      FROM information_schema.views WHERE table_name = 'my_view';
 </pre>
 
@@ -503,7 +503,7 @@ SELECT table_name, is_updatable, is_insertable_into
 <pre>
 CREATE RECURSIVE VIEW name (columns) AS select_query;
 
-CREATE VIEW name AS WITH RECURSIVE name (columns) 
+CREATE VIEW name AS WITH RECURSIVE name (columns)
        AS (select_query) SELECT columns FROM name;
 </pre>
 
@@ -555,7 +555,7 @@ sampledb-#       WHERE a.companycode = b.companycode;
 CREATE VIEW
 
 sampledb=# SELECT * FROM customer_view WHERE id < 4;
- id |       name       |        companyname         
+ id |       name       |        companyname
 ----+------------------+----------------------------
   1 | デューク東郷     | トーゴー・コーポレーション
   2 | アーネスト東郷   | グラスゴー探鉱
@@ -572,9 +572,9 @@ sampledb=# SELECT * FROM customer_view WHERE id < 4;
 </p>
 
 <pre>
-sampledb=# \dv 
+sampledb=# \dv
               List of relations
- Schema |       Name        | Type |  Owner   
+ Schema |       Name        | Type |  Owner
 --------+-------------------+------+----------
  public | customer_view     | view | postgres
  public | mini_customerlist | view | postgres
@@ -582,11 +582,11 @@ sampledb=# \dv
 
 sampledb=# \d customer_view
     View "public.customer_view"
-   Column    |  Type   | Modifiers 
+   Column    |  Type   | Modifiers
 -------------+---------+-----------
- id          | integer | 
- name        | text    | 
- companyname | text    | 
+ id          | integer |
+ name        | text    |
+ companyname | text    |
 View definition:
  SELECT a.id, a.name, b.company AS companyname
    FROM customerlist a, companylist b
@@ -605,7 +605,7 @@ View definition:
 
 <pre>
 sampledb=# SELECT * FROM itemlist;
- id |   name   | price | makercode 
+ id |   name   | price | makercode
 ----+----------+-------+-----------
   1 | pen      |   100 |        10
   2 | notebook |   120 |        20
@@ -616,9 +616,9 @@ sampledb=# CREATE VIEW my_itemlist (id, name, price)
 sampledb-#   AS SELECT id, name, price FROM itemlist;
 CREATE VIEW
 
-sampledb=# SELECT table_name, is_updatable, is_insertable_into 
+sampledb=# SELECT table_name, is_updatable, is_insertable_into
 sampledb-#     FROM information_schema.views WHERE table_name = 'my_itemlist';
- table_name  | is_updatable | is_insertable_into 
+ table_name  | is_updatable | is_insertable_into
 -------------+--------------+--------------------
  my_itemlist | YES          | YES
 (1 row)
@@ -632,7 +632,7 @@ sampledb-#     FROM information_schema.views WHERE table_name = 'my_itemlist';
 
 <pre>
 sampledb=# SELECT * FROM my_itemlist;
- id |   name   | price 
+ id |   name   | price
 ----+----------+-------
   1 | pen      |   100
   2 | notebook |   120
@@ -643,7 +643,7 @@ sampledb=# UPDATE my_itemlist SET price = 80 WHERE id = 3;
 UPDATE 1
 
 sampledb=# SELECT * FROM my_itemlist;
- id |   name   | price 
+ id |   name   | price
 ----+----------+-------
   1 | pen      |   100
   2 | notebook |   120
@@ -664,7 +664,7 @@ sampledb=# SELECT * FROM my_itemlist;
 sampledb=# INSERT INTO my_itemlist VALUES(4, 'book', 1200);
 INSERT 0 1
 sampledb=# SELECT * FROM my_itemlist;
- id |   name   | price 
+ id |   name   | price
 ----+----------+-------
   1 | pen      |   100
   2 | notebook |   120
@@ -673,12 +673,12 @@ sampledb=# SELECT * FROM my_itemlist;
 (4 rows)
 
 sampledb=# SELECT * FROM itemlist;
- id |   name   | price | makercode 
+ id |   name   | price | makercode
 ----+----------+-------+-----------
   1 | pen      |   100 |        10
   2 | notebook |   120 |        20
   3 | eraser   |    80 |        10
-  4 | book     |  1200 |          
+  4 | book     |  1200 |
 (4 rows)
 </pre>
 
@@ -694,11 +694,11 @@ sampledb=# SELECT * FROM itemlist;
 
 
 <pre>
-sampledb=# SELECT a.aid, b.name, a.abalance 
+sampledb=# SELECT a.aid, b.name, a.abalance
 sampledb-#    FROM pgbench_accounts AS a, pgbench_branches AS b
 sampledb-#    WHERE a.bid = b.bid
 sampledb-#  　　　　　　ORDER BY a.abalance DESC LIMIT 3;
-  aid   |   name   | abalance 
+  aid   |   name   | abalance
 --------+----------+----------
   61393 | yokohama |     4997
  216753 | spain    |     4829
@@ -717,13 +717,13 @@ sampledb-#  　　　　　　ORDER BY a.abalance DESC LIMIT 3;
 
 <pre>
 sampledb=# CREATE MATERIALIZED VIEW mv_abalance AS
-sampledb-#      SELECT a.aid, b.name, a.abalance 
-sampledb-#        FROM pgbench_accounts AS a, pgbench_branches AS b 
+sampledb-#      SELECT a.aid, b.name, a.abalance
+sampledb-#        FROM pgbench_accounts AS a, pgbench_branches AS b
 sampledb-#            WHERE a.bid = b.bid;
 SELECT 400000
 
 sampledb=# SELECT pg_relation_filepath('mv_abalance');
- pg_relation_filepath 
+ pg_relation_filepath
 ----------------------
  base/16384/16416
 (1 row)
@@ -738,7 +738,7 @@ sampledb=# SELECT pg_relation_filepath('mv_abalance');
 
 
 <pre>
-$ ls -la data/base/16384/16416 
+$ ls -la data/base/16384/16416
 -rw-------. 1 postgres:postgres 18505728 Sep 10 06:29 data/base/16384/16416
 </pre>
 
@@ -752,7 +752,7 @@ $ ls -la data/base/16384/16416
 
 <pre>
 sampledb=# SELECT * FROM mv_abalance ORDER BY abalance DESC LIMIT 3;
-  aid   |   name   | abalance 
+  aid   |   name   | abalance
 --------+----------+----------
   61393 | yokohama |     4997
  216753 | spain    |     4829
@@ -777,7 +777,7 @@ sampledb=# UPDATE pgbench_accounts SET abalance = 5000 WHERE aid = 61393;
 UPDATE 1
 
 sampledb=# SELECT * FROM mv_abalance ORDER BY abalance DESC LIMIT 3;
-  aid   |   name   | abalance 
+  aid   |   name   | abalance
 --------+----------+----------
   61393 | yokohama |     4997	← 値が更新されていない
  216753 | spain    |     4829
@@ -799,7 +799,7 @@ sampledb=# REFRESH MATERIALIZED VIEW mv_abalance;
 REFRESH MATERIALIZED VIEW
 
 sampledb=# SELECT * FROM mv_abalance ORDER BY abalance DESC LIMIT 3;
-  aid   |   name   | abalance 
+  aid   |   name   | abalance
 --------+----------+----------
   61393 | yokohama |     5000	← REFRESH MATERIALIZED VIEWでデータが更新された
  216753 | spain    |     4829
@@ -820,14 +820,14 @@ sampledb=# SELECT * FROM mv_abalance ORDER BY abalance DESC LIMIT 3;
 <pre>
 sampledb=# \d mv_abalance
 Materialized view "public.mv_abalance"
-  Column  |  Type   | Modifiers 
+  Column  |  Type   | Modifiers
 ----------+---------+-----------
- aid      | integer | 
- name     | text    | 
- abalance | integer | 
+ aid      | integer |
+ name     | text    |
+ abalance | integer |
 
 sampledb=# EXPLAIN SELECT * FROM mv_abalance ORDER BY abalance DESC LIMIT 3;
-                                   QUERY PLAN                                   
+                                   QUERY PLAN
 --------------------------------------------------------------------------------
  Limit  (cost=8266.31..8266.32 rows=3 width=40)
    ->  Sort  (cost=8266.31..8921.42 rows=262044 width=40)
@@ -851,7 +851,7 @@ sampledb=# EXPLAIN SELECT * FROM mv_abalance ORDER BY abalance DESC LIMIT 3;
 sampledb=# CREATE INDEX mv_abalance_idx ON mv_abalance (abalance);
 CREATE INDEX
 sampledb=#  EXPLAIN SELECT * FROM mv_abalance ORDER BY abalance DESC LIMIT 3;
-                                                 QUERY PLAN                                                 
+                                                 QUERY PLAN
 ------------------------------------------------------------------------------------------------------------
  Limit  (cost=0.42..0.52 rows=3 width=14)
    ->  Index Scan Backward using mv_abalance_idx on mv_abalance  (cost=0.42..12666.55 rows=400000 width=14)
@@ -860,7 +860,7 @@ sampledb=#  EXPLAIN SELECT * FROM mv_abalance ORDER BY abalance DESC LIMIT 3;
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-11
+Last-modified: 2023-3-12
 </div>
 </body>
 </html>

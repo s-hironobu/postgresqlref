@@ -47,10 +47,10 @@
 <td>△	</td>		<td>syslog_ident	</td>		<td>文字列['postgres']	</td>		<td>メッセージのプログラム名を指定</td>
 
 </tr><tr>
-<td>	</td>		<td>syslog_sequence_numbers	</td>		<td>on/off [on]	</td>		<td>各メッセージにシーケンシャルな番号を付与するか否か</td>
+<td>△	</td>		<td>syslog_sequence_numbers	</td>		<td>on/off [on]	</td>		<td>各メッセージにシーケンシャルな番号を付与するか否か</td>
 
 </tr><tr>
-<td>	</td>		<td>syslog_split_messages	</td>		<td>on/off [on]	</td>		<td>長いメッセージを分割してsyslogに送るか否か</td>
+<td>△	</td>		<td>syslog_split_messages	</td>		<td>on/off [on]	</td>		<td>長いメッセージを分割してsyslogに送るか否か</td>
 
 
 </tr><tr bgcolor="#eeeeee">
@@ -65,26 +65,24 @@
 <td>○</td>		<td>	log_min_duration_statement	</td>		<td>整数[-1]	</td>		<td>設定した時間よりも処理時間を要したSQL文とその処理時間をログに書き込む。単位は[ミリ秒]。0の場合はすべてのSQL文と処理時間を書き込む。-1の場合は機能が無効</td>
 
 </tr><tr>
-<td></td> <td>log_min_duration_sample</td>	<td>整数 [-1]</td>	<td>指定した時間以上で実行完了した文の実行時間のサンプルを許可(実際にサンプリングするか否かはlog_statement_sample_rateに依存)。単位はms。-1の場合無効。バージョン13から</td>
+<td>○</td> <td>log_min_duration_sample</td>	<td>整数 [-1]</td>	<td>指定した時間以上で実行完了した文の実行時間のサンプルを許可(実際にサンプリングするか否かはlog_statement_sample_rateに依存)。単位はms。-1の場合無効。バージョン13から</td>
 
 </tr><tr>
-<td></td> <td>log_statement_sample_rate</td>	<td>浮動少数 [1.0]</td>	<td>サンプリング許可されたステートメントのうち、実際にサンプリングする割合を設定。バージョン13から</td>
+<td>○</td> <td>log_statement_sample_rate</td>	<td>浮動少数 [1.0]</td>	<td>サンプリング許可されたステートメントのうち、実際にサンプリングする割合を設定。バージョン13から</td>
 
 </tr><tr>
-<td></td> <td>log_transaction_sample_rate</td>	<td>浮動少数 [0.0]</td>	<td>サンプリングするトランザクションの割合を設定。バージョン12から</td>
+<td>○</td> <td>log_transaction_sample_rate</td>	<td>浮動少数 [0.0]</td>	<td>サンプリングするトランザクションの割合を設定。バージョン12から</td>
 
 
 </tr><tr>
-<td></td> <td>log_startup_progress_interval</td>	<td>整数 [10s]</td>	<td>スタートアッププロセスが実行中の長時間実行操作に関するメッセージをログに記録するまでの時間や次のメッセージを出すまでの時間間隔。バージョン15から</td>
+<td>△</td> <td>log_startup_progress_interval</td>	<td>整数 [10s]</td>	<td>スタートアッププロセスが実行中の長時間実行操作に関するメッセージをログに記録するまでの時間や次のメッセージを出すまでの時間間隔。バージョン15から</td>
 
 
 </tr><tr bgcolor="#eeeeee">
 <th colspan=4 align=left>What to Log</th>
 
-
 </tr><tr>
-<td></td> <td>application_name</td>	<td>文字列</td>	<td>64文字以下のアプリケーション名を設定できる。</td>
-
+<td>◎</td> <td>application_name</td>	<td>文字列</td>	<td>64文字以下のアプリケーション名を設定できる。</td>
 
 </tr><tr>
 <td>◎</td>		<td>	debug_print_parse	</td>		<td>on/off[off]</td>		<td>	パーサの解析結果(パースツリー)を出力するか否か。デバッグ用</td>
@@ -96,7 +94,7 @@
 <td>◎</td>		<td>	debug_pretty_print  </td>		<td>  on/off[on]		</td>		<td>デバッグ情報を整形して出力するか否か。デバッグ用</td>
 
 </tr><tr>
-<td></td> <td>log_autovacuum_min_duration</td>	<td>整数 [10m]</td>	<td>指定時間以上Autovacuumが実行すると各活動がログに残る。0
+<td>△</td> <td>log_autovacuum_min_duration</td>	<td>整数 [10m]</td>	<td>指定時間以上Autovacuumが実行すると各活動がログに残る。0
 なら全てが残る。-1なら残らない。バージョン14から</td>
 
 </tr><tr>
@@ -117,23 +115,24 @@
 <td>○</td>		<td>	log_lock_waits	</td>		<td>	on/off[off]	</td>		<td>	deadlock_timeoutよりもロック待ち時間が長くなった場合にログを書き出すか否か</td>
 
 </tr><tr>
-<td></td> <td>log_recovery_conflict_waits</td>	<td>on/off [off]</td>	<td>スタートアッププロセスがdeadlock_timeoutよりも長くリカバリコンフリクトを待つ場合にログメッセージを出力するか否か。バージョン14から</td>
+<td>△</td> <td>log_recovery_conflict_waits</td>	<td>on/off [off]</td>	<td>スタートアッププロセスがdeadlock_timeoutよりも長くリカバリコンフリクトを待つ場合にログメッセージを出力するか否か。バージョン14から</td>
 
 </tr><tr>
-<td></td> <td>log_parameter_max_length</td>	<td>整数 [-1]</td>	<td>エラーではない時にバインドパラメータ値が、文とともにこの指定バイト数に短縮。バージョン13から</td>
+<td>○</td> <td>log_parameter_max_length</td>	<td>整数 [-1]</td>	<td>エラーではない時にバインドパラメータ値が、文とともにこの指定バイト数に短縮。バージョン13から</td>
 
 </tr><tr>
-<td></td> <td>log_parameter_max_length_on_error</td>	<td>整数 [0]</td>	<td>エラー時のバインドパラメータ値が、エラーメッセージ中にこの指定バイト数に短縮。バージョン13から</td>
+<td>◎</td> <td>log_parameter_max_length_on_error</td>	<td>整数 [0]</td>	<td>エラー時のバインドパラメータ値が、エラーメッセージ中にこの指定バイト数に短縮。バージョン13から</td>
 
 </tr><tr>
 <td>○</td>		<td>	log_statement	</td>		<td>	下表参照	</td>		<td>	実行したSQL文を出力するか否か </td>
 
 </tr><tr>
-<td></td> <td>log_replication_commands</td>	<td>on/off [off]</td>	<td>サーバログにレプリケーションコマンドを記録</td>
+<td>○</td> <td>log_replication_commands</td>	<td>on/off [off]</td>	<td>サーバログにレプリケーションコマンドを記録</td>
 
 
 </tr><tr>
 <td>○</td>		<td>	log_temp_files	</td>		<td>	整数[-1]	</td>		<td>	一時ファイルが削除された時にログに書き出すか否か。-1なら書き出さない。0なら全て書き出す。整数値ならそのkBを越える一時テーブルサイズのみ書き出す</td>
+
 </tr><tr>
 <td>△</td>		<td>	log_timezone	</td>		<td>	文字列[サーバのTZ]	</td>		<td>ログに書き出す時刻のタイムゾーン。デフォルトはサーバのTZ</td>
 
@@ -142,10 +141,10 @@
 <th colspan=4 align=left>Process Title</th>
 
 </tr><tr>
-<td></td> <td>cluster_name</td>	<td>文字列 [''(空文字)]</td>	<td>データベースクラスタ（インスタンス）を識別名を設定</td>
+<td>×</td> <td>cluster_name</td>	<td>文字列 [''(空文字)]</td>	<td>データベースクラスタ（インスタンス）を識別名を設定</td>
 
 </tr><tr>
-<td></td> <td>update_process_title</td>	<td>on/off [on]</td>	<td>SQLコマンドを受け取る時に毎回、プロセスタイトルを更新するか否か</td>
+<td>○</td> <td>update_process_title</td>	<td>on/off [on]</td>	<td>SQLコマンドを受け取る時に毎回、プロセスタイトルを更新するか否か</td>
 
 
 </tr></table>
@@ -198,6 +197,6 @@
 %CHAPTER 解説
 
 <p>
-具体的なログの出力方法は[<3-16>]を参照してください。
+具体的なログの出力方法は<a href="./admin-16.html">[<3-16>]</a>を参照してください。
 </p>
 

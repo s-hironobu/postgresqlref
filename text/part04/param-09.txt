@@ -14,6 +14,11 @@
 
 </tr><tr>
 <td>○</td>	<td>track_activities	</td>	<td>	on/off[on]	</td>	<td>	すべてのサーバプロセスで現在実行されているコマンドを監視するか否か</td>
+
+</tr><tr>
+<td>×</td>	<td>track_activity_query_size</td>	<td>整数[1024]	</td>	<tdpg_stat_activity.current_queryフィールドに対し、それぞれの活動中のセッションで現在実行されているコマンドを追跡記録するため予約されるバイト数を指定></td>
+
+
 </tr><tr>
 <td>○ </td>	<td>     track_counts	</td>	<td>		on/off[on]	</td>	<td>	テーブルとインデックスアクセスの稼働統計情報を収集するか否か</td>
 
@@ -21,14 +26,14 @@
 <td>○ </td>	<td>    track_io_timing	</td>	<td>		on/off[off]	</td><td>共有バッファに対するデータ読み込みや書き込みの総時間を集計するか否か</td>
 
 </tr><tr>
-<td> </td>	<td>     track_wal_io_timing	</td>	<td>	on/off[off]</td>	<td>WALバッファに対するデータ読み込みや書き込みの総時間を集計するか否か。バージョン14から</td>
+<td>○ </td>	<td>     track_wal_io_timing	</td>	<td>	on/off[off]</td>	<td>WALバッファに対するデータ読み込みや書き込みの総時間を集計するか否か。バージョン14から</td>
 
 </tr><tr>
 <td>○</td>	<td>	track_function		</td>	<td>	none/pl/all[none]	</td>	<td>ユーザ定義関数の稼働統計情報を収集するか否か。表示はビューpg_user_functionsで行う。noneは収集しない。plはPL/pgSQLなどで定義した関数のみ。allはSQLやCで定義したユーザ定義関数すべて</td>
 
 
 </tr><tr>
-<td></td>	<td>stats_fetch_consistency</td>	<td>none/cache/snapshot [cache]	</td>	<td>バージョン15から</td>
+<td>◎</td>	<td>stats_fetch_consistency</td>	<td>none/cache/snapshot [cache]	</td>	<td>本文参照。バージョン15から</td>
 
 
 </tr><tr>
@@ -41,7 +46,7 @@
 <th colspan=4 align=left>Statistics Monitoring</th>
 
 </tr><tr>
-<td></td>	<td>compute_query_id</td>	<td>	auto/on/off[auto]</td>	<td>queryIDを計算するか否か</td>
+<td>○</td>	<td>compute_query_id</td>	<td>	auto/on/off[auto]</td>	<td>queryIDを計算するか否か</td>
 
 </tr><tr>
 <td>○</td>	<td>	log_parser_stats</td>	<td>	on/off[off]</td>	<td>	パーサの統計情報を出力するか否か</td>
@@ -75,14 +80,14 @@
 %CHAPTER 解説
 
 <p>
-"Query/Index Statistics Collector"で設定するパラメータはバージョン8.2前後で全面的に変更されました。収集する情報の表示と利用方法は、[<3-15>]を参照してください。
+"Query/Index Statistics Collector"で設定するパラメータはバージョン8.2前後で全面的に変更されました。収集する情報の表示と利用方法は、<a href="./admin-15.html">[<3-15>]</a>を参照してください。
 </p>
 
 <p>
 バージョン8.3以降は主要なパラメータはデフォルトで有効(on)です。設定が必要なのはtrack_functionとtrack_activity_query_sizeだけです。
 </p>
 <p>
-バージョン8.2以前では、stats_block_levelとstats_row_levelを有効(on)にしなければ、ブロックレベルのアクセス数など、詳細な情報を得ることができませんでした。
+バージョン8.2では、stats_block_levelとstats_row_levelを有効(on)にしなければ、ブロックレベルのアクセス数など、詳細な情報を得ることができませんでした。
 </p>
 
 

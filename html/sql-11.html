@@ -358,10 +358,10 @@ ALTER TABLE [ ONLY ] table_name [ * ]
 
 ● カラムの追加と削除
 ALTER TABLE [ ONLY ] table_name [ * ]
-    ADD [ COLUMN ] column data_type [ COLLATE collation ] 
-    [ column_constraint [ ... ] ]	
+    ADD [ COLUMN ] column data_type [ COLLATE collation ]
+    [ column_constraint [ ... ] ]
 ALTER TABLE [ ONLY ] table_name [ * ]
-    DROP [ COLUMN ] [ IF EXISTS ] column [ RESTRICT | CASCADE ]	
+    DROP [ COLUMN ] [ IF EXISTS ] column [ RESTRICT | CASCADE ]
 
 ● データ型の変更
 ALTER TABLE [ ONLY ] table_name [ * ]
@@ -546,7 +546,7 @@ ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
 <pre>
 sampledb=# \dC
                                   List of casts
-    Source type      |     Target type      |       Function      |   Implicit?   
+    Source type      |     Target type      |       Function      |   Implicit?
 ---------------------+----------------------+---------------------+---------------
  "char"              | character            | bpchar              | in assignment
  "char"              | character varying    | text                | in assignment
@@ -574,19 +574,19 @@ sampledb=# \dC
 <pre>
 sampledb=# \d test_table
      Table "public.test_table"
- Column |  Type   | Modifiers 
+ Column |  Type   | Modifiers
 --------+---------+-----------
- id     | integer | 
+ id     | integer |
 
 sampledb=# ALTER TABLE test_table ADD COLUMN data text;
 ALTER TABLE
 
 sampledb=# \d test_table
      Table "public.test_table"
- Column |  Type   | Modifiers 
+ Column |  Type   | Modifiers
 --------+---------+-----------
- id     | integer | 
- data   | text    | 
+ id     | integer |
+ data   | text    |
 </pre>
 
 <br>
@@ -599,19 +599,19 @@ sampledb=# \d test_table
 <pre>
 sampledb=# \d test_table
      Table "public.test_table"
- Column |  Type   | Modifiers 
+ Column |  Type   | Modifiers
 --------+---------+-----------
- id     | integer | 
- data   | text    | 
+ id     | integer |
+ data   | text    |
 
 sampledb=# ALTER TABLE test_table DROP COLUMN data;
 ALTER TABLE
 
 sampledb=# \d test_table
      Table "public.test_table"
- Column |  Type   | Modifiers 
+ Column |  Type   | Modifiers
 --------+---------+-----------
- id     | integer | 
+ id     | integer |
 </pre>
 
 <br>
@@ -629,9 +629,9 @@ ALTER TABLE
 
 sampledb=# \d test_table
      Table "public.test_table"
- Column |  Type   | Modifiers 
+ Column |  Type   | Modifiers
 --------+---------+-----------
- a_id   | integer | 
+ a_id   | integer |
 </pre>
 
 <br>
@@ -648,7 +648,7 @@ ALTER TABLE
 
 sampledb=# \d test_table
      Table "public.test_table"
- Column |  Type   | Modifiers 
+ Column |  Type   | Modifiers
 --------+---------+-----------
  a_id   | integer | not null
 </pre>
@@ -663,7 +663,7 @@ sampledb=# \d test_table
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-11
+Last-modified: 2023-3-12
 </div>
 </body>
 </html>

@@ -31,10 +31,10 @@
 <td>×	</td> <td>unix_socket_permissions</td> <td>整数[0777]		</td> <td>UNIXドメインソケットのアクセス権限を設定</td>
 
 </tr><tr>
-<td></td> <td>bonjour</td> <td>on/off [off]</td> <td>Bonjourでサーバを公表するか否か</td>
+<td>×</td> <td>bonjour</td> <td>on/off [off]</td> <td>Bonjourでサーバを公表するか否か</td>
 
 </tr><tr>
-<td></td> <td>bonjour_name</td> <td>''[空文字]</td> <td>Bonjourのサービス名</td>
+<td>×</td> <td>bonjour_name</td> <td>''[空文字]</td> <td>Bonjourのサービス名</td>
 
 
 </tr><tr>
@@ -46,10 +46,10 @@
 
 
 </tr><tr>
-<td>	</td> <td>tcp_user_timeout</td> <td>整数[0]</td> <td>TCP接続のタイムアウト。0の場合はOSのデフォルトを使用する。単位はms</td>
+<td>◎</td> <td>tcp_user_timeout</td> <td>整数[0]</td> <td>TCP接続のタイムアウト。0の場合はOSのデフォルトを使用する。単位はms</td>
 
 </tr><tr>
-<td>	</td> <td>client_connection_check_interval</td> <td>整数[0]</td> <td>クライアントが接続しているかどうかチェックする時間間隔。0の場合はチェックしない。単位はms</td>
+<td>◎</td> <td>client_connection_check_interval</td> <td>整数[0]</td> <td>クライアントが接続しているかどうかチェックする時間間隔。0の場合はチェックしない。単位はms</td>
 
 
 </tr><tr bgcolor="#eeeeee">
@@ -62,10 +62,10 @@
 
 
 </tr><tr>
-<td></td> <td>krb_server_keyfile</td> <td>FILE名</td> <td>Kerberosサーバーキーファイルの場所</td>
+<td>△</td> <td>krb_server_keyfile</td> <td>FILE名</td> <td>Kerberosサーバーキーファイルの場所</td>
 
 </tr><tr>
-<td></td> <td>krb_caseins_users</td> <td>on/off [off]</td> <td>KerberosのGSSAPIユーザ名の大文字小文字を区別するか否か。offの場合は区別する。</td>
+<td>△</td> <td>krb_caseins_users</td> <td>on/off [off]</td> <td>KerberosのGSSAPIユーザ名の大文字小文字を区別するか否か。offの場合は区別する。</td>
 
 
 </tr><tr>
@@ -75,20 +75,20 @@
 <th colspan=4 align=left>SSL</th>
 
 </tr><tr>
-<td>×</td> <td>ssl	</td> <td>on/off[off]</td> <td>SSLによる接続を行うか否か</td>
+<td>△</td> <td>ssl	</td> <td>on/off[off]</td> <td>SSLによる接続を行うか否か</td>
 
 </tr><tr>
-<td></td> <td>ssl_ca_file	</td> <td>文字列[''空文字]</td> <td>SSLサーバ認証局（CA）が入っているファイル名を設定</td>
+<td>△</td> <td>ssl_ca_file	</td> <td>文字列[''空文字]</td> <td>SSLサーバ認証局（CA）が入っているファイル名を設定</td>
 </tr><tr>
-<td></td> <td>ssl_cert_file	</td> <td>文字列['server.crt']</td> <td>SSLサーバ認証局（CA）が入っているファイル名を設定</td>
+<td>△</td> <td>ssl_cert_file	</td> <td>文字列['server.crt']</td> <td>SSLサーバ認証局（CA）が入っているファイル名を設定</td>
 </tr><tr>
-<td></td> <td>ssl_crl_file	</td> <td>文字列列[''空文字]</td> <td>SSLクライアント証明書失効リスト（CRL）が入っているファイル名を設定</td>
+<td>△</td> <td>ssl_crl_file	</td> <td>文字列列[''空文字]</td> <td>SSLクライアント証明書失効リスト（CRL）が入っているファイル名を設定</td>
 </tr><tr>
-<td></td> <td>ssl_crl_dir	</td> <td>文字列列[''空文字]</td> <td>SSLクライアント証明書失効リスト（CRL）が入っているディレクトリ名を設定</td>
+<td>△</td> <td>ssl_crl_dir	</td> <td>文字列列[''空文字]</td> <td>SSLクライアント証明書失効リスト（CRL）が入っているディレクトリ名を設定</td>
 </tr><tr>
-<td></td> <td>ssl_key_file	</td> <td>文字列列['server.key']</td> <td>SSLサーバの秘密鍵が入っているファイル名を設定</td>
+<td>△</td> <td>ssl_key_file	</td> <td>文字列列['server.key']</td> <td>SSLサーバの秘密鍵が入っているファイル名を設定</td>
 </tr><tr>
-<td></td> <td>ssl_ciphers	</td> <td>文字列</td> <td>SSL接続で使うことのできるSSL暗号スイートのリストを指定</td>
+<td>△</td> <td>ssl_ciphers	</td> <td>文字列</td> <td>SSL接続で使うことのできるSSL暗号スイートのリストを指定</td>
 
 
 </tr></table>
@@ -115,7 +115,7 @@
 <p>
 ・listen_addresses
 <br>
-listen_addressesについては[<3-08>]を参照してください。
+listen_addressesについては<a href="./admin-08.html">[<3-08>]</a>を参照してください。
 </p>
 
 <p>

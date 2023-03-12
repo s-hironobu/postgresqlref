@@ -20,7 +20,6 @@ LIKE式の書式を示します。
      string LIKE pattern [ ESCAPE escape-character ]
      string NOT LIKE pattern [ ESCAPE escape-character ]
 </pre>
-
 <br>
 
 <table>

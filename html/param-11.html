@@ -357,24 +357,24 @@ objID.className='close';
 <th colspan=4 align=left>Statement Behavior</th>
 
 </tr><tr>
-<td></td>	<td>client_min_messages</td>	<td>文字列 ['NOTICE']</td>	<td>クライアントに送るメッセージレベル。</td>
+<td>◎</td>	<td>client_min_messages</td>	<td>文字列 ['NOTICE']</td>	<td>クライアントに送るメッセージレベル。</td>
 
 
 </tr><tr>
 <td>◎ </td><td>	search_path	 </td><td>	文字列['$user,public']	 </td><td>スキーマのサーチパス</td>
 
 </tr><tr>
-<td></td>	<td>row_security</td>	<td>on/off [on]</td>	<td>行セキュリティポリシーの適用によってエラーを生じさせるか否か</td>
+<td>◎</td>	<td>row_security</td>	<td>on/off [on]</td>	<td>行セキュリティポリシーの適用によってエラーを生じさせるか否か</td>
 
 </tr><tr>
-<td></td>	<td>default_table_access_method</td>	<td>文字列 ['heap']</td>	<td>デフォルトのテーブルアクセスメソッド</td>
+<td>◎</td>	<td>default_table_access_method</td>	<td>文字列 ['heap']</td>	<td>デフォルトのテーブルアクセスメソッド</td>
 
 
 </tr><tr>
 <td>◎ </td><td>	default_tablespace </td><td>	文字列[''(空文字)] </td><td>	デフォルトのテーブルスペース。設定なしならデータベースクラスタにテーブルやインデックスを作成</td>
 
 </tr><tr>
-<td></td>	<td>default_toast_compression</td>	<td>pglz/lz4 [pglz]</td>	<td>デフォルトのTOASTの圧縮方法</td>
+<td>◎</td>	<td>default_toast_compression</td>	<td>pglz/lz4 [pglz]</td>	<td>デフォルトのTOASTの圧縮方法</td>
 
 
 </tr><tr>
@@ -393,13 +393,13 @@ objID.className='close';
 
 <!--
 </tr><tr>
-<td></td>	<td>transaction_isolation</td>	<td></td>	<td></td>
+<td>◎</td>	<td>transaction_isolation</td>	<td></td>	<td></td>
 
 </tr><tr>
-<td></td>	<td>transaction_read_only</td>	<td></td>	<td></td>
+<td>◎</td>	<td>transaction_read_only</td>	<td></td>	<td></td>
 
 </tr><tr>
-<td></td>	<td>transaction_deferrable</td>	<td></td>	<td></td>
+<td>◎</td>	<td>transaction_deferrable</td>	<td></td>	<td></td>
 -->
 
 </tr><tr>
@@ -413,10 +413,10 @@ objID.className='close';
 <td>◎</td><td>lock_timeout </td>	<td>整数[0]</td>	<td>LOCK状態のタイムアウト時間を設定。テーブルがロックされたまま設定した時間が過ぎるとエラーを返す。単位は[ミリ秒]。"0"の場合は無効。</td>
 
 </tr><tr>
-<td></td>	<td>idle_in_transaction_session_timeout</td>	<td>整数 [0]</td>	<td>設定した時間以上アイドルの場合、トランザクションを閉じる。単位はms。0なら無効。</td>
+<td>◎</td>	<td>idle_in_transaction_session_timeout</td>	<td>整数 [0]</td>	<td>設定した時間以上アイドルの場合、トランザクションを閉じる。単位はms。0なら無効。</td>
 
 </tr><tr>
-<td></td>	<td>idle_session_timeout</td>	<td>整数 [0]</td>	<td>設定した時間以上アイドルの場合、セッションを閉じる。単位はms。0なら無効。</td>
+<td>◎</td>	<td>idle_session_timeout</td>	<td>整数 [0]</td>	<td>設定した時間以上アイドルの場合、セッションを閉じる。単位はms。0なら無効。</td>
 
 </tr><tr>
 <td>◎ </td><td>	vacuum_freeze_table_age	 </td><td>整数[150000000]	 </td><td>	詳細は[<2-07>]FREEZE処理参照</td>
@@ -424,17 +424,17 @@ objID.className='close';
 <td>◎ </td><td>	vacuum_freeze_min_age	 </td><td>整数[50000000]	 </td><td>	詳細は[<2-07>]FREEZE処理参照</td>
 
 </tr><tr>
-<td></td>	<td>vacuum_failsafe_age</td>	<td></td>	<td></td>
+<td>◎</td>	<td>vacuum_failsafe_age</td>	<td></td>	<td></td>
 
 </tr><tr>
-<td></td>	<td>vacuum_multixact_freeze_table_age</td>	<td></td>	<td></td>
+<td>◎</td>	<td>vacuum_multixact_freeze_table_age</td>	<td></td>	<td></td>
 
 
 </tr><tr>
-<td></td>	<td>vacuum_multixact_freeze_min_age</td>	<td></td>	<td></td>
+<td>◎</td>	<td>vacuum_multixact_freeze_min_age</td>	<td></td>	<td></td>
 
 </tr><tr>
-<td></td>	<td>vacuum_multixact_failsafe_age</td>	<td></td>	<td></td>
+<td>◎</td>	<td>vacuum_multixact_failsafe_age</td>	<td></td>	<td></td>
 
 
 </tr><tr>
@@ -446,7 +446,7 @@ objID.className='close';
 
 
 </tr><tr>
-<td></td>	<td>gin_pending_list_limit</td>	<td>整数 [4MB]</td>	<td>GINインデックスのペンディングリストの最大サイズを設定</td>
+<td>◎</td>	<td>gin_pending_list_limit</td>	<td>整数 [4MB]</td>	<td>GINインデックスのペンディングリストの最大サイズを設定</td>
 
 </tr><tr bgcolor="#eeeeee">
 <th colspan=4 align=left>Locale and Formatting</th>
@@ -456,14 +456,14 @@ objID.className='close';
 
 
 </tr><tr>
-<td></td>	<td>intervalstyle</td>	<td>文字列 ['postgres']</td>	<td>時間間隔の表示形式</td>
+<td>◎</td>	<td>intervalstyle</td>	<td>文字列 ['postgres']</td>	<td>時間間隔の表示形式</td>
 
 
 </tr><tr>
 <td>◎ </td><td>	timezone	 </td><td>	文字列[unknown]		 </td><td>タイムゾーン</td>
 
 </tr><tr>
-<td></td>	<td>timezone_abbreviations</td>	<td>文字列 ['Default']</td>	<td>時間帯省略形の集合。現時点で設定可能なのはDefault, Australia, Indiaのみ</td>
+<td>◎</td>	<td>timezone_abbreviations</td>	<td>文字列 ['Default']</td>	<td>時間帯省略形の集合。現時点で設定可能なのはDefault, Australia, Indiaのみ</td>
 
 </tr><tr>
 <td>◎ </td><td>	australian_timezones	 </td><td>on/off[off]	 </td><td>CST,EST,SATをオーストラリアタイムゾーンとして解釈するか否か</td>
@@ -484,7 +484,7 @@ objID.className='close';
 
 
 </tr><tr>
-<td></td>	<td>default_text_search_config</td>	<td></td>	<td>テキスト検索設定を選択</td>
+<td>◎</td>	<td>default_text_search_config</td>	<td></td>	<td>テキスト検索設定を選択</td>
 
 
 </tr><tr bgcolor="#eeeeee">
@@ -511,7 +511,7 @@ objID.className='close';
 
 
 <table><tr bgcolor="#cccccc">
-<th>記号</th>  <th>意味</th> 
+<th>記号</th>  <th>意味</th>
 </tr><tr>
 <td> ◎ </td>	<td>一般ユーザ/ロールが変更可能</td>
 </tr><tr>
@@ -528,7 +528,7 @@ objID.className='close';
 <div class="jumpmenu"></div><h3>解説</h3>
 
 <p>
-・search_path 
+・search_path
 <br>
 スキーマのサーチパスを設定します。
 デフォルトは"$user,public"です($userは接続しているデータベースユーザ/ロール名)。
@@ -537,7 +537,7 @@ objID.className='close';
 </p>
 
 <p>
-・australian_timezones 
+・australian_timezones
 <br>
 australian_timezones が有効(on)の場合はCST, EST, SATをオーストラリアの時間帯として解釈し、無効(off)の場合はCST="北米中央"、EST="北米西部"、SAT="土曜日"と解釈します。
 </p>
@@ -550,14 +550,14 @@ lc_messages, lc_monetary, lc_numeric, lc_timeには表示する言語や書式�
 </p>
 
 <p>
-・dynamic_library_path 
+・dynamic_library_path
 <br>
 複数のディレクトリを指定する場合には"："で区切ります。デフォルト値$libdirはPostgreSQLのライブラリディレクトリに置換されます(本書の場合'/usr/local/pgsql/lib/')。
 </p>
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-11
+Last-modified: 2023-3-12
 </div>
 </body>
 </html>

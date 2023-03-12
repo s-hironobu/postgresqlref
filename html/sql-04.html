@@ -533,7 +533,7 @@ CREATE TABLE
 
 sampledb=# \d test
      Table "public.test"
- Column |  Type   | Modifiers 
+ Column |  Type   | Modifiers
 --------+---------+-----------
  id     | integer | not null
  data   | text    | not null
@@ -664,7 +664,7 @@ sampledb=# CREATE TABLE test_deferrable (id1 int,  unique(id1),
                    id3 int,  unique(id3) DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE
 
-sampledb=# SELECT conname, condeferrable, condeferred 
+sampledb=# SELECT conname, condeferrable, condeferred
 sampledb-#             FROM pg_constraint where conname like 'test_deferrable%';
          conname         | condeferrable | condeferred
 -------------------------+---------------+-------------
@@ -698,7 +698,7 @@ ON COMMIT句は一時テーブルを削除するタイミングを制御しま�
 <pre>
 [<書式>]
 
-	ON COMMIT { PRESERVE ROWS | DELETE ROWS | DROP } 
+	ON COMMIT { PRESERVE ROWS | DELETE ROWS | DROP }
 </pre>
 
 <br>
@@ -728,8 +728,8 @@ ON COMMIT句は一時テーブルを削除するタイミングを制御しま�
 <pre>
 [<書式>]
 
- EXCLUDE [ USING index_method ] ( exclude_element WITH operator [, ... ] ) 
- 	 [ WITH ( storage_parameter [= value] [, ... ] ) ] 
+ EXCLUDE [ USING index_method ] ( exclude_element WITH operator [, ... ] )
+	 [ WITH ( storage_parameter [= value] [, ... ] ) ]
 	 [ USING INDEX TABLESPACE tablespace ]	[ WHERE ( predicate ) ]
 	 [ DEFERRABLE | NOT DEFERRABLE ] [ INITIALLY DEFERRED | INITIALLY IMMEDIATE ]
 </pre>
@@ -880,7 +880,7 @@ sampledb(#      CONSTRAINT examination CHECK(180 >= height AND 100 >= weight));
 
 　UNIQUE ( column_name [, ... ] ) [ WITH ( storage_parameter [= value] [, ... ] ) ]
 	    [ USING INDEX TABLESPACE tablespace ]
-            [ DEFERRABLE | NOT DEFERRABLE ] 
+            [ DEFERRABLE | NOT DEFERRABLE ]
             [ INITIALLY DEFERRED | INITIALLY IMMEDIATE ]
 </pre>
 
@@ -941,7 +941,7 @@ UNIQUE制約のあるカラムuser_nameに同名('Alice')のデータをINSERT�
 </p>
 
 <pre>
-sampledb=# INSERT INTO member_list VALUES (1, 'Alice', 'xxx'); 
+sampledb=# INSERT INTO member_list VALUES (1, 'Alice', 'xxx');
 INSERT 0 1
 sampledb=# INSERT INTO member_list VALUES (2, 'Alice', '');
 ERROR:  duplicate key violates unique constraint "member_list_user_name_key"
@@ -1002,8 +1002,8 @@ sampledb(#         data integer NOT NULL);
 </p>
 
 <pre>
-sampledb=# CREATE TABLE album_list (artist text, title text, year integer, 
-sampledb(#             PRIMARY KEY (artist, title)); 
+sampledb=# CREATE TABLE album_list (artist text, title text, year integer,
+sampledb(#             PRIMARY KEY (artist, title));
 </pre>
 
 <br>
@@ -1129,7 +1129,7 @@ CREATE TABLE
 
 sampledb=# \d default_test
                   Table "public.default_test"
-      Column       |            Type             |   Modifiers   
+      Column       |            Type             |   Modifiers
 -------------------+-----------------------------+---------------
  id                | integer                     | not null
  register_datetime | timestamp without time zone | default now()
@@ -1142,7 +1142,7 @@ sampledb=# INSERT INTO default_test VALUES (1);
 INSERT 0 1
 
 sampledb=# SELECT * FROM default_test;
- id |     register_datetime      | data 
+ id |     register_datetime      | data
 ----+----------------------------+------
   1 | 2006-07-28 09:08:03.857572 |    0
 (1 row)
@@ -1224,15 +1224,15 @@ postgres=# CREATE TABLE a1 (id int, seq bigint GENERATED ALWAYS AS IDENTITY);
 CREATE TABLE
 postgres=# \d+ a1
                                                       Table "public.a1"
- Column |  Type   | Collation | Nullable |           Default            | Storage | Compression | Stats target | Description 
+ Column |  Type   | Collation | Nullable |           Default            | Storage | Compression | Stats target | Description
 --------+---------+-----------+----------+------------------------------+---------+-------------+--------------+-------------
- id     | integer |           |          |                              | plain   |             |              | 
- seq    | bigint  |           | not null | generated always as identity | plain   |             |              | 
+ id     | integer |           |          |                              | plain   |             |              |
+ seq    | bigint  |           | not null | generated always as identity | plain   |             |              |
 Access method: heap
 
 postgres=# \ds
             List of relations
- Schema |    Name    |   Type   | Owner  
+ Schema |    Name    |   Type   | Owner
 --------+------------+----------+--------
  public | a1_seq_seq | sequence | ubuntu
 (1 row)
@@ -1242,14 +1242,12 @@ INSERT 0 1
 postgres=# INSERT INTO a1 VALUES(2);
 INSERT 0 1
 postgres=# SELECT * FROM a1;
- id | seq 
+ id | seq
 ----+-----
   1 |   1
   2 |   2
 (2 rows)
-
 </pre>
-
 <br>
 
 <div class="jumpmenu"></div><h3><a href="https://www.postgresql.org/docs/current/sql-createtableas.html" target="_blank" rel="noopener noreferrer">CREATE TABLE AS</a></h3>
@@ -1331,7 +1329,7 @@ CREATE [ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } | UNLOGGED ] TABLE [ IF NOT EXI
 <pre>
 sampledb=# \d orig
      Table "public.orig"
- Column |  Type   | Modifiers 
+ Column |  Type   | Modifiers
 --------+---------+-----------
  id     | integer | not null
  name   | text    | not null
@@ -1339,19 +1337,19 @@ Indexes:
     "orig_pkey" PRIMARY KEY, btree (id)
 
 sampledb=# CREATE TABLE new AS SELECT * FROM orig;
-SELECT 
+SELECT
 
 sampledb=# \d new
       Table "public.new"
- Column |  Type   | Modifiers 
+ Column |  Type   | Modifiers
 --------+---------+-----------
- id     | integer | 
- name   | text    | 
+ id     | integer |
+ name   | text    |
 </pre>
-
+<br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-11
+Last-modified: 2023-3-12
 </div>
 </body>
 </html>

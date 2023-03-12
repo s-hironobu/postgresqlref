@@ -423,19 +423,19 @@ LSN(Log Sequence Number)からWALログのファイル名やオフセットを�
 
 <pre>
 sampledb=# SELECT pg_xlogfile_name_offset('0/F000074');
-    pg_xlogfile_name_offset     
+    pg_xlogfile_name_offset
 --------------------------------
  (00000001000000000000000F,116)
 (1 row)
 
 sampledb=# SELECT pg_xlogfile_name('0/F000074');
-     pg_xlogfile_name     
+     pg_xlogfile_name
 --------------------------
  00000001000000000000000F
 (1 row)
 
 sampledb=# SELECT pg_xlog_location_diff('0/F0001B0', '0/F000074');
- pg_xlog_location_diff 
+ pg_xlog_location_diff
 -----------------------
                    316
 (1 row)
@@ -460,7 +460,7 @@ pg_last_xlog_receive_location()は受信してHDDに書き込んだWALログのL
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-11
+Last-modified: 2023-3-12
 </div>
 </body>
 </html>

@@ -586,7 +586,7 @@ RecordTransactionCommit(void) {
     /* [6] COMMIT処理を終了、トランザクションを閉じる */
 }
 </pre>
-
+<br>
 
 <table border=1>
 <caption>[<図2-67>] 同期レプリケーションの動作シーケンス</caption>
@@ -674,7 +674,7 @@ XLogWalRcvSendReply(void)@src/backend/replication/walreceiver.c
  memcpy(&buf[1], &reply_message, sizeof(StandbyReplyMessage));
  walrcv_send(buf, sizeof(StandbyReplyMessage) + 1);
 </pre>
-</div> 
+</div>
  <ul>
  <li>書き込んだ(writeした)WALログのLSN</li>
  <li>flush()してHDDに書き込んだWALログのLSN</li>
@@ -697,16 +697,17 @@ COMMITなど、マスタでWALログ書き込みがあるとスレーブに送�
 </p>
 
 <pre>
-sampledb=# SELECT application_name AS host, state, sync_priority as priority, 
-sampledb-#        sync_state, write_location AS write_LSN, flush_location AS flush_LSN, 
+sampledb=# SELECT application_name AS host, state, sync_priority as priority,
+sampledb-#        sync_state, write_location AS write_LSN, flush_location AS flush_LSN,
 sampledb-#        　　　　　　　　　replay_location AS replay_LSN FROM pg_stat_replication;
 
-  host  |   state   | priority | sync_state | write_lsn | flush_lsn | replay_lsn 
+  host  |   state   | priority | sync_state | write_lsn | flush_lsn | replay_lsn
 --------+-----------+----------+------------+-----------+-----------+------------
  slave1 | streaming |        1 | sync       | 0/5000280 | 0/5000280 | 0/5000280
  slave2 | streaming |        2 | potential  | 0/5000280 | 0/5000280 | 0/5000280
 (2 rows)
 </pre>
+<br>
 
 <p>
 ビューpg_stat_replicationの詳細は[<3-15>]を参照してください。
@@ -722,6 +723,7 @@ sync_priorityはマスタのパラメータsynchronous_standby_namesに列挙し
 <pre>
 synchronous_standby_names = 'slave1, slave2'
 </pre>
+<br>
 
 <p>
 sync_stateはスレーブの同期の状態を示します。
@@ -867,7 +869,7 @@ startupプロセスは周期的にtrigger_fileの有無を確認しているの�
 </tr><tr>
 <td>パラメータ操作</td>	<td>SHOW、SET、RESET</td>	<td></td>
 </tr><tr>
-<td>トランザクション</td>	<td>BEGIN、END、ABORT、START TRANSACTION、<br>SAVEPOINT、RELEASE、ROLLBACK TO SAVEPOINT</td>  
+<td>トランザクション</td>	<td>BEGIN、END、ABORT、START TRANSACTION、<br>SAVEPOINT、RELEASE、ROLLBACK TO SAVEPOINT</td>
 <td>
 バージョン9.1以降READ COMMITTEDとREPEATABLE READのみ。
 (バージョン9.0はREAD COMMITTEDとSERIALIZABLE。[<脚注2>]参照)
@@ -922,34 +924,32 @@ http://www.postgresql.jp/document/9.1/html/hot-standby.html
 </p>
 
 <pre>
-sampledb=# DROP TABLE test1; 
+sampledb=# DROP TABLE test1;
 DROP TABLE
 sampledb=# VACUUM;
 VACUUM
 </pre>
-
+<br>
 
 <pre>
 sampledb=# BEGIN ISOLATION LEVEL REPEATABLE READ;
 BEGIN
 sampledb=# SELECT count(*) FROM test1;
- count 
+ count
 -------
      1
 (1 row)
 
 sampledb=# SELECT pg_last_xlog_receive_location()AS receive_lsn,
 　　　　　　　    pg_last_xlog_replay_location() AS replay_lsn;
- receive_lsn | replay_lsn 
+ receive_lsn | replay_lsn
 -------------+------------
  0/36EBCE8   | 0/36EBCE8
 (1 row)
 
-
-
 sampledb=# SELECT pg_last_xlog_receive_location()AS receive_lsn,
 　　　　　　　    pg_last_xlog_replay_location() AS replay_lsn;
- receive_lsn | replay_lsn 
+ receive_lsn | replay_lsn
 -------------+------------
  0/36ED628   | 0/36EC164
 (1 row)
@@ -960,6 +960,7 @@ sampledb=# SELECT pg_last_xlog_receive_location()AS receive_lsn,
 
 sampledb=# FATAL:  terminating connection due to conflict with recovery
 </pre>
+<br>
 
 <pre>
 受信したWALログは再実行済み
@@ -971,6 +972,7 @@ Conflictが発生したので、
 max_standby_streaming_delayだけ待って、
 conflictが解消しなければ、FATALエラー
 </pre>
+<br>
 
 <table border=1>
 <caption>[<図2-70>] Conflictの例</caption>
@@ -1028,7 +1030,6 @@ Conflictは上記の例以外に、データベースやテーブルスペース
 
 <div class="jumpmenu"></div><h4>Conflictを避ける方法</h4>
 
-
 <p>
 トランザクションの可視性に起因するConflictを避ける方法が、２つ用意されています。
 </p>
@@ -1056,18 +1057,18 @@ Conflictは上記の例以外に、データベースやテーブルスペース
 </p>
 
 <pre>
-sampledb=# SELECT datname, confl_snapshot FROM pg_stat_database_conflicts 
+sampledb=# SELECT datname, confl_snapshot FROM pg_stat_database_conflicts
 sampledb-#                             WHERE datname = 'sampledb';
- datname  | confl_snapshot 
+ datname  | confl_snapshot
 ----------+----------------
  sampledb |              1
 (1 row)
 </pre>
-
+<br>
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-11
+Last-modified: 2023-3-12
 </div>
 </body>
 </html>

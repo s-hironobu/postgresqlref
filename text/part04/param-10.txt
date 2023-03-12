@@ -10,40 +10,40 @@
 <tr bgcolor="#cccccc">
 <th><sup>変更<br>可能性</sup></th> <th>設定項目</th>	<th>パラメータ<br>[デフォルト]</th>		<th>説明</th>
 </tr><tr>
-<td>×	</td>	<td>autovacuum		</td>	<td>	on/off[on]	</td>	<td>AUTOVACUUMを有効とするか否か。デフォルトはon</td>
+<td>△	</td>	<td>autovacuum		</td>	<td>	on/off[on]	</td>	<td>AUTOVACUUMを有効とするか否か。デフォルトはon</td>
 </tr><tr>
 <td>△	</td>	<td>log_autovacuum_min_duration	</td>	<td>整数[-1]	</td>	<td>	AUTOVACUUMの実行ログを書き込むか否か。-1なら書き込まない。0ならすべての実行ログを書き込む。整数値なら、その値のミリ秒以上かかったときのみ書き込む。バージョン13まで</td>
 </tr><tr>
-<td>△</td>	<td>	autovacuum_max_workers	</td>	<td>	整数[3]		</td>	<td>	同時に起動するWorkerプロセスの最大数</td>
+<td>×</td>	<td>	autovacuum_max_workers	</td>	<td>	整数[3]		</td>	<td>	同時に起動するWorkerプロセスの最大数</td>
 </tr><tr>
-<td>×	</td>	<td>autovacuum_naptime	</td>	<td>	整数[1m]	</td>	<td>	AUTOVACUUMを起動する時間間隔。単位は[秒][分][時]など</td>
+<td>△	</td>	<td>autovacuum_naptime	</td>	<td>	整数[1m]	</td>	<td>	AUTOVACUUMを起動する時間間隔。単位は[秒][分][時]など</td>
 </tr><tr>
-<td>×	</td>	<td>autovacuum_vacuum_threshold	</td>	<td>整数[50]	</td>	<td>	詳細は本文</td>
+<td>△	</td>	<td>autovacuum_vacuum_threshold	</td>	<td>整数[50]	</td>	<td>	詳細は本文</td>
 
 </tr><tr>
-<td></td>	<td>autovacuum_vacuum_insert_threshold	</td>	<td>整数[]	</td>	<td>autovacuum_vacuum_thresholdのINSERT版。autovacuum_vacuum_thresholdは更新と削除だが、これはINSERT。バージョン13から</td>
+<td>△</td>	<td>autovacuum_vacuum_insert_threshold	</td>	<td>整数[]	</td>	<td>autovacuum_vacuum_thresholdのINSERT版。autovacuum_vacuum_thresholdは更新と削除だが、これはINSERT。バージョン13から</td>
 
 </tr><tr>
-<td>×	</td>	<td>autovacuum_analyze_threshold	</td>	<td>整数[50]	</td>	<td>	詳細は本文</td>
+<td>△	</td>	<td>autovacuum_analyze_threshold	</td>	<td>整数[50]	</td>	<td>	詳細は本文</td>
 </tr><tr>
-<td>×	</td>	<td>autovacuum_vacuum_scale_factor	</td>	<td>(0.0-1.0)[0.2]	</td>	<td>	詳細は本文</td>
+<td>△	</td>	<td>autovacuum_vacuum_scale_factor	</td>	<td>(0.0-1.0)[0.2]	</td>	<td>	詳細は本文</td>
 
 </tr><tr>
-<td>	</td>	<td>autovacuum_vacuum_insert_scale_factor	</td>	<td>(0.0-1.0)[]	</td>	<td>autovacuum_vacuum_scale_factorのINSERT版。autovacuum_vacuum_scale_factorは更新と削除だがこれはINSERT。バージョン13から</td>
+<td>△	</td>	<td>autovacuum_vacuum_insert_scale_factor	</td>	<td>(0.0-1.0)[]	</td>	<td>autovacuum_vacuum_scale_factorのINSERT版。autovacuum_vacuum_scale_factorは更新と削除だがこれはINSERT。バージョン13から</td>
 
 </tr><tr>
-<td>×	</td>	<td>autovacuum_analyze_scale_factor	</td>	<td>(0.0-1.0)[0.1]	</td>	<td>	詳細は本文</td>
+<td>△	</td>	<td>autovacuum_analyze_scale_factor	</td>	<td>(0.0-1.0)[0.1]	</td>	<td>	詳細は本文</td>
 </tr><tr>
-<td>△</td><td>	autovacuum_freeze_max_age	</td>	<td>整数[200000000]	</td><td>DB毎に、FREEZEしていない最古のXIDと現時点のXIDの差がこの値以上になったら、vacuum_freeze_min_age以前のt_xminを持つタプルをFREEZEする</td>
+<td>× </td><td>	autovacuum_freeze_max_age	</td>	<td>整数[200000000]	</td><td>DB毎に、FREEZEしていない最古のXIDと現時点のXIDの差がこの値以上になったら、vacuum_freeze_min_age以前のt_xminを持つタプルをFREEZEする</td>
 
 </tr><tr>
 <td>×</td>	<td>	autovacuum_multixact_freeze_max_age	</td>	<td>整数[]	</td>	<td>トランザクションID周回防止でVACUUMが強制実行される前までに、テーブルのpg_class.relminmxid フィールドが到達できる（マルチトランザクションにおける）最大値。バージョン13から</td>
 
 
 </tr><tr>
-<td>×	</td>	<td>autovacuum_vacuum_cost_delay	</td>	<td>整数(-1-1000)[20ms]	</td>	<td>AUTOVACUUMでのVACUUM遅延機能の設定。'-1'ならvacuum_cost_delayと同じ。</td>
+<td>△	</td>	<td>autovacuum_vacuum_cost_delay	</td>	<td>整数(-1-1000)[20ms]	</td>	<td>AUTOVACUUMでのVACUUM遅延機能の設定。'-1'ならvacuum_cost_delayと同じ。</td>
 </tr><tr>
-<td>×	</td>	<td>autovacuum_vacuum_cost_limit	</td>	<td>整数(-1-10000)[-1]	</td>	<td>AUTOVACUUMでのVACUUM遅延機能の設定。'-1'ならvacuum_cost_limitと同じ。</td>
+<td>△	</td>	<td>autovacuum_vacuum_cost_limit	</td>	<td>整数(-1-10000)[-1]	</td>	<td>AUTOVACUUMでのVACUUM遅延機能の設定。'-1'ならvacuum_cost_limitと同じ。</td>
 </tr></table>
 
 <br>
@@ -67,7 +67,7 @@
 %CHAPTER 解説
 
 <p>
-バージョン8.1からAUTOVACUUMが実装されました([<2-07>]参照)。
+バージョン8.1からAUTOVACUUMが実装されました。
 </p>
 
 <p>

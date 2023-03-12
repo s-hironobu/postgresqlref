@@ -403,25 +403,25 @@ objID.className='close';
 ===============================================================================
 関数					返り値型	説明
 ===============================================================================
-pg_advisory_lock(key bigint)	void	
+pg_advisory_lock(key bigint)	void
 pg_advisory_lock(key1 int, key2 int)	void
-pg_advisory_lock_shared(key bigint)	void	
-pg_advisory_lock_shared(key1 int, key2 int)	void	
-pg_try_advisory_lock(key bigint)  boolean	
-pg_try_advisory_lock(key1 int, key2 int)	boolean	
-pg_try_advisory_lock_shared(key bigint)		boolean	
+pg_advisory_lock_shared(key bigint)	void
+pg_advisory_lock_shared(key1 int, key2 int)	void
+pg_try_advisory_lock(key bigint)  boolean
+pg_try_advisory_lock(key1 int, key2 int)	boolean
+pg_try_advisory_lock_shared(key bigint)		boolean
 pg_try_advisory_lock_shared(key1 int, key2 int)		boolean	可能ならば共有勧告的ロックを獲得
-pg_advisory_unlock(key bigint)	 
-pg_advisory_unlock(key1 int, key2 int)	   boolean	
-pg_advisory_unlock_shared(key bigint)	   boolean	
-pg_advisory_unlock_shared(key1 int, key2 int)		boolean	
-pg_advisory_unlock_all()       void 
+pg_advisory_unlock(key bigint)
+pg_advisory_unlock(key1 int, key2 int)	   boolean
+pg_advisory_unlock_shared(key bigint)	   boolean
+pg_advisory_unlock_shared(key1 int, key2 int)		boolean
+pg_advisory_unlock_all()       void
 ===============================================================================
 
 </pre>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-11
+Last-modified: 2023-3-12
 </div>
 </body>
 </html>

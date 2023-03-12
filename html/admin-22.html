@@ -421,7 +421,7 @@ postgres=# INSERT INTO logical_tbl VALUES (1,1), (2,2), (3,3);
 INSERT 0 3
 
 postgres=# SELECT * FROM logical_tbl;
- id | data 
+ id | data
 ----+------
   1 |    1
   2 |    2
@@ -448,14 +448,14 @@ CREATE PUBLICATION
 
 <pre>
 postgres=# SELECT * FROM pg_publication;
-  oid  | pubname | pubowner | puballtables | pubinsert | pubupdate | pubdelete | pubtruncate | pubviaroot 
+  oid  | pubname | pubowner | puballtables | pubinsert | pubupdate | pubdelete | pubtruncate | pubviaroot
 -------+---------+----------+--------------+-----------+-----------+-----------+-------------+------------
  25682 | pub_1   |       10 | f            | t         | t         | t         | t           | f
 (1 row)
 
 postgres=# \dRp
                                List of publications
- Name  | Owner  | All tables | Inserts | Updates | Deletes | Truncates | Via root 
+ Name  | Owner  | All tables | Inserts | Updates | Deletes | Truncates | Via root
 -------+--------+------------+---------+---------+---------+-----------+----------
  pub_1 | ubuntu | f          | t       | t       | t       | t         | f
 (1 row)
@@ -468,15 +468,15 @@ postgres=# \dRp
 
 <pre>
 postgres=# SELECT * FROM pg_publication_tables;
- pubname | schemaname |  tablename  | attnames  | rowfilter 
+ pubname | schemaname |  tablename  | attnames  | rowfilter
 ---------+------------+-------------+-----------+-----------
- pub_1   | public     | logical_tbl | {id,data} | 
+ pub_1   | public     | logical_tbl | {id,data} |
 (1 row)
 
 postgres=# SELECT * from pg_publication_rel;
-  oid  | prpubid | prrelid | prqual | prattrs 
+  oid  | prpubid | prrelid | prqual | prattrs
 -------+---------+---------+--------+---------
- 25683 |   25682 |   25677 |        | 
+ 25683 |   25682 |   25677 |        |
 (1 row)
 </pre>
 
@@ -519,7 +519,7 @@ CREATE SUBSCRIPTION
 
 <pre>
 postgres=# SELECT slot_name, active FROM pg_replication_slots;
- slot_name | active 
+ slot_name | active
 -----------+--------
  sub_1     | t
 (1 row)
@@ -555,7 +555,7 @@ postgres=# SELECT * FROM pg_stat_subscription;
 subid                 | 25682
 subname               | sub_1
 pid                   | 397781
-relid                 | 
+relid                 |
 received_lsn          | 0/1205B3B0
 last_msg_send_time    | 2023-03-07 10:33:35.51157+09
 last_msg_receipt_time | 2023-03-07 10:33:35.511784+09
@@ -581,7 +581,7 @@ srsublsn   | 0/1205ADA0
 Expanded display is off.
 
 postgres=# SELECT  * FROM logical_tbl;
-id | data 
+id | data
 ----+------
   1 |    1
   2 |    2
@@ -598,7 +598,7 @@ id | data
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-11
+Last-modified: 2023-3-12
 </div>
 </body>
 </html>

@@ -415,19 +415,19 @@ objID.className='close';
 
 <pre>
 sampledb=# SELECT pg_column_size('this is test');
- pg_column_size 
+ pg_column_size
 ----------------
              13
 (1 row)
 
 sampledb=# SELECT pg_column_size('これはテストです');
- pg_column_size 
+ pg_column_size
 ----------------
              17
 (1 row)
 
 sampledb=# SELECT pg_column_size(aid) FROM pgbench_accounts LIMIT 5;
- pg_column_size 
+ pg_column_size
 ----------------
               4
               4
@@ -437,16 +437,15 @@ sampledb=# SELECT pg_column_size(aid) FROM pgbench_accounts LIMIT 5;
 (5 rows)
 
 sampledb=# SELECT pg_column_compression(aid) FROM pgbench_accounts LIMIT 5;
- pg_column_compression 
+ pg_column_compression
 -----------------------
- 
- 
- 
- 
- 
+
+
+
+
+
 (5 rows)
 </pre>
-
 <br>
 
 <p>
@@ -455,24 +454,23 @@ sampledb=# SELECT pg_column_compression(aid) FROM pgbench_accounts LIMIT 5;
 
 <pre>
 sampledb=# SELECT pg_tablespace_size('pg_global');
- pg_tablespace_size 
+ pg_tablespace_size
 --------------------
              259227
 (1 row)
 
 sampledb=# SELECT pg_database_size('sampledb');
- pg_database_size 
+ pg_database_size
 ------------------
          11182728
 (1 row)
 
 sampledb=# SELECT pg_size_pretty(pg_database_size('sampledb'));
- pg_size_pretty 
+ pg_size_pretty
 ----------------
  11 MB
 (1 row)
 </pre>
-
 <br>
 
 <p>
@@ -483,30 +481,29 @@ sampledb=# SELECT pg_size_pretty(pg_database_size('sampledb'));
 
 <pre>
 sampledb=# SELECT pg_relation_size('test');
- pg_relation_size 
+ pg_relation_size
 ------------------
           2629632
 (1 row)
 
 sampledb=# SELECT pg_size_pretty(pg_relation_size('test'));
- pg_size_pretty 
+ pg_size_pretty
 ----------------
  2568 kB
 (1 row)
 
 sampledb=# SELECT pg_total_relation_size('test');
- pg_total_relation_size 
+ pg_total_relation_size
 ------------------------
                 6627328
 (1 row)
 
 sampledb=# SELECT pg_size_pretty(pg_total_relation_size('test'));
- pg_size_pretty 
+ pg_size_pretty
 ----------------
  6472 kB
 (1 row)
 </pre>
-
 <br>
 
 <p>
@@ -516,25 +513,23 @@ sampledb=# SELECT pg_size_pretty(pg_total_relation_size('test'));
 
 <pre>
 sampledb=# SELECT pg_relation_filepath('itemlist');
- pg_relation_filepath 
+ pg_relation_filepath
 ----------------------
  base/16384/25599
 (1 row)
 
 sampledb=# SELECT pg_relation_filenode('itemlist');
- pg_relation_filenode 
+ pg_relation_filenode
 ----------------------
                 25599
 (1 row)
 </pre>
-
 <br>
 
 <pre>
-$ ls -la data/base/16384/25599 
+$ ls -la data/base/16384/25599
 -rw------- 1 postgres users 8192  5月 13 23:19 data/base/16384/25599
 </pre>
-
 <br>
 
 <p>
@@ -542,27 +537,28 @@ $ ls -la data/base/16384/25599
 </p>
 
 <pre>
-postgres=# SELECT oid, spcname FROM pg_tablespace WHERE spcname = 'new_space' ;
-  oid  |  spcname  
+postgres=# SELECT oid, spcname FROM pg_tablespace WHERE spcname = 'new_space';
+  oid  |  spcname
 -------+-----------
  17215 | new_space
 (1 row)
 
 postgres=# SELECT pg_relation_filepath('tblsp');
-          pg_relation_filepath           
+          pg_relation_filepath
 -----------------------------------------
  pg_tblspc/17215/PG_15_202209061/5/17227
 (1 row)
 
 postgres=# SELECT pg_filenode_relation(17215, 17227);
- pg_filenode_relation 
+ pg_filenode_relation
 ----------------------
  tblsp
 (1 row)
 </pre>
+<br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-11
+Last-modified: 2023-3-12
 </div>
 </body>
 </html>

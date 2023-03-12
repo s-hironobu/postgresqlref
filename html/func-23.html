@@ -397,9 +397,9 @@ objID.className='close';
 ===============================================================================
 関数								返り値型	説明
 ===============================================================================
-pg_ls_dir(dirname text)						setof text	
-pg_read_file(filename text, offset bigint, length bigint)	text		
-pg_stat_file(filename text)	   record  
+pg_ls_dir(dirname text)						setof text
+pg_read_file(filename text, offset bigint, length bigint)	text
+pg_stat_file(filename text)	   record
 ===============================================================================
 </pre>
 
@@ -450,7 +450,7 @@ SELECT (pg_stat_file('filename')).modification;
 
 <pre>
 postgres=# SELECT pg_ls_archive_statusdir();
-                  pg_ls_archive_statusdir                   
+                  pg_ls_archive_statusdir
 ------------------------------------------------------------
  (000000010000000000000005.done,0,"2023-02-12 00:04:32+09")
 (1 row)
@@ -459,7 +459,7 @@ postgres=# SELECT pg_ls_archive_statusdir();
 <br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-11
+Last-modified: 2023-3-12
 </div>
 </body>
 </html>

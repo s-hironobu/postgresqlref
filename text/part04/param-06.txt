@@ -19,24 +19,24 @@
 
 
 </tr><tr>
-<td></td> <td>max_replication_slots</td>	<td></td> <td></td>
+<td>×</td> <td>max_replication_slots</td>	<td></td> <td></td>
 
 
 </tr><tr>
 <td>△ </td> <td>		wal_keep_segments </td> <td>		整数[0]	 </td> <td>		スレーブが過去のWALログを必要とした場合に備えて、pg_wal以下に最低限保存するWALログの数。バージョン12まで</td>
 
 </tr><tr>
-<td></td> <td>wal_keep_size</td>	<td></td> <td>バージョン13から</td>
+<td>△</td> <td>wal_keep_size</td>	<td></td> <td>バージョン13から</td>
 
 
 </tr><tr>
-<td></td> <td>max_slot_wal_keep_size</td>	<td></td> <td></td>
+<td>△</td> <td>max_slot_wal_keep_size</td>	<td></td> <td></td>
 
 </tr><tr>
-<td>△</td>	<td>wal_sender_timeout </td> <td>時間[60s]</td>		<td>(接続は維持しているが)設定した時間以上、スレーブからのデータ送信(ACKやHeartbeat信号)が途絶えた場合はコネクションを切断してwalsenderを終了する</td>
+<td>◎(バージョン11までは△)</td>	<td>wal_sender_timeout </td> <td>時間[60s]</td>		<td>(接続は維持しているが)設定した時間以上、スレーブからのデータ送信(ACKやHeartbeat信号)が途絶えた場合はコネクションを切断してwalsenderを終了する</td>
 
 </tr><tr>
-<td></td> <td>track_commit_timestamp</td>	<td></td> <td></td>
+<td>×</td> <td>track_commit_timestamp</td>	<td></td> <td></td>
 
 
 
@@ -57,13 +57,13 @@
 
 
 </tr><tr>
-<td></td> <td>primary_conninfo</td>	<td></td> <td></td>
+<td>△（バージョン12までは×)</td> <td>primary_conninfo</td>	<td></td> <td></td>
 
 </tr><tr>
-<td></td> <td>primary_slot_name</td>	<td></td> <td></td>
+<td>△（バージョン12までは×)</td> <td>primary_slot_name</td>	<td></td> <td></td>
 
 </tr><tr>
-<td></td> <td>promote_trigger_file</td>	<td></td> <td></td>
+<td>△</td> <td>promote_trigger_file</td>	<td></td> <td></td>
 
 
 
@@ -79,7 +79,7 @@
 
 
 </tr><tr>
-<td></td> <td>wal_receiver_create_temp_slot</td>	<td></td> <td></td>
+<td>△</td> <td>wal_receiver_create_temp_slot</td>	<td></td> <td></td>
 
 
 </tr><tr>
@@ -92,10 +92,10 @@
 
 
 </tr><tr>
-<td></td> <td>wal_retrieve_retry_interval</td>	<td></td> <td></td>
+<td>△</td> <td>wal_retrieve_retry_interval</td>	<td></td> <td></td>
 
 </tr><tr>
-<td></td> <td>recovery_min_apply_delay</td>	<td></td> <td></td>
+<td>△</td> <td>recovery_min_apply_delay</td>	<td></td> <td></td>
 
 
 
@@ -103,10 +103,10 @@
 <th colspan=4 align=left>Subscribers</th>
 
 </tr><tr>
-<td></td> <td>max_logical_replication_workers</td>	<td></td> <td></td>
+<td>×</td> <td>max_logical_replication_workers</td>	<td></td> <td></td>
 
 </tr><tr>
-<td></td> <td>max_sync_workers_per_subscription</td>	<td></td> <td></td>
+<td>△</td> <td>max_sync_workers_per_subscription</td>	<td></td> <td></td>
 
 
 </tr></table>

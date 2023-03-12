@@ -523,7 +523,7 @@ INSERT 0 2
 pubdb=# DELETE FROM logical_insert_only_tbl WHERE id = 2;
 DELETE 1
 pubdb=# SELECT * FROM logical_insert_only_tbl;
- id | data 
+ id | data
 ----+------
   1 |    1
 (1 row)
@@ -536,7 +536,7 @@ pubdb=# SELECT * FROM logical_insert_only_tbl;
 
 <pre>
 subscribedb=# SELECT * FROM logical_insert_only_tbl;
- id | data 
+ id | data
 ----+------
   1 |    1
   2 |    2
@@ -585,7 +585,7 @@ idが1から4までのデータをINSERTします。
 pubdb=# INSERT INTO logical_even_number_tbl VALUES (1,1),(2,2),(3,3),(4,4);
 INSERT 0 4
 pubdb=# SELECT * FROM logical_even_number_tbl;
- id | data 
+ id | data
 ----+------
   1 |    1
   2 |    2
@@ -601,7 +601,7 @@ pubdb=# SELECT * FROM logical_even_number_tbl;
 
 <pre>
 subscribedb=# SELECT * FROM logical_even_number_tbl;
- id | data 
+ id | data
 ----+------
   2 |    2
   4 |    4
@@ -656,7 +656,7 @@ CREATE SUBSCRIPTION
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-11
+Last-modified: 2023-3-12
 </div>
 </body>
 </html>

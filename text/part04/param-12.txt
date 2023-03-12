@@ -12,7 +12,7 @@
 </tr><tr bgcolor="#cccccc">
 <th colspan=4 align=left>ロック管理 LOCK MANAGEMENT</th>
 </tr><tr>
-<td>△ </td>	<td>deadlock_timeout	 </td>	<td>	整数[1s]	 </td>	<td>	デッドロック状態にあるか否か判断開始するまでの待ち時間。単位は[秒][分]など。</td>
+<td>○ </td>	<td>deadlock_timeout	 </td>	<td>	整数[1s]	 </td>	<td>	デッドロック状態にあるか否か判断開始するまでの待ち時間。単位は[秒][分]など。</td>
 </tr><tr>
 <td>×	</td>	<td>max_locks_per_transaction	</td>	<td>整数[64]	</td>
 <td>アプリケーションが利用するロックのトランザクション毎の最大数(max_locks_per_transaction * (max_connections + max_prepared_transactions))を規定する。最低限10以上</td>
@@ -22,11 +22,11 @@
 
 
 </tr><tr>
-<td>×	</td>	<td>
+<td>△	</td>	<td>
 max_pred_locks_per_relation	</td>	<td>整数 [-2]</td>	<td>リレーション全体をカバーするロックに昇格する前に、一つリレーションの中で述語ロックできるページ数あるいはタプル数を指定。負数の場合、max_pred_locks_per_transactionをその絶対値で割ったもの</td>
 
 </tr><tr>
-<td>×	</td>	<td>
+<td>△	</td>	<td>
 max_pred_locks_per_page	</td>	<td>整数 [2]</td>	<td>ページ全体をカバーするロックに昇格する前に、一つページの中で述語ロックできる行数を指定</td>
 
 

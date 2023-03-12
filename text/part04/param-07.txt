@@ -82,23 +82,23 @@
 <td>◎</td>	<td>	cpu_operator_cost	</td>	<td>浮動小数[0.0025]	</td>	<td>	問い合わせ文の何らかの演算を行う場合のコスト</td>
 
 </tr><tr>
-<td></td>	<td>parallel_setup_cost</td>	<td>浮動小数 [1000]</td>	<td>パラレルワーカープロセスのセットアップコスト</td>
+<td>◎</td>	<td>parallel_setup_cost</td>	<td>浮動小数 [1000]</td>	<td>パラレルワーカープロセスのセットアップコスト</td>
 </tr><tr>
-<td></td>	<td>parallel_tuple_cost</td>	<td>浮動小数 [0.1]	</td>	<td>パラレルワーカープロセスが1行を他のプロセスに転送するためのコスト</td>
+<td>◎</td>	<td>parallel_tuple_cost</td>	<td>浮動小数 [0.1]	</td>	<td>パラレルワーカープロセスが1行を他のプロセスに転送するためのコスト</td>
 </tr><tr>
-<td></td>	<td>min_parallel_table_scan_size</td>	<td>整数 [8MB]</td>	<td>パラレルスキャンを考慮するテーブルの最低限のページサイズ</td>
+<td>◎</td>	<td>min_parallel_table_scan_size</td>	<td>整数 [8MB]</td>	<td>パラレルスキャンを考慮するテーブルの最低限のページサイズ</td>
 </tr><tr>
-<td></td>	<td>min_parallel_index_scan_size</td>	<td>整数 [512kB]</td>	<td>パラレルインデックススキャンを考慮するインデックスの最低限のページサイズ</td>
+<td>◎</td>	<td>min_parallel_index_scan_size</td>	<td>整数 [512kB]</td>	<td>パラレルインデックススキャンを考慮するインデックスの最低限のページサイズ</td>
 
 </tr><tr>
 <td>◎</td>	<td>	effective_cache_size	</td>	<td>整数[128MB]		</td>	<td>ディスクキャッシュの実効サイズ</td>
 
 </tr><tr>
-<td></td>	<td>jit_above_cost</td>	<td>浮動小数 [100000]</td>	<td>JITを使うか否かの閾値</td>
+<td>◎</td>	<td>jit_above_cost</td>	<td>浮動小数 [100000]</td>	<td>JITを使うか否かの閾値</td>
 </tr><tr>
-<td></td>	<td>jit_inline_above_cost</td>	<td>浮動小数 [500000]</td>	<td>JITで関数や演算子のインライン化をするか否かの閾値</td>
+<td>◎</td>	<td>jit_inline_above_cost</td>	<td>浮動小数 [500000]</td>	<td>JITで関数や演算子のインライン化をするか否かの閾値</td>
 </tr><tr>
-<td></td>	<td>jit_optimize_above_cost</td>	<td>浮動小数 [500000]</td>	<td>JITで最適化をするか否かの閾値</td>
+<td>◎</td>	<td>jit_optimize_above_cost</td>	<td>浮動小数 [500000]</td>	<td>JITで最適化をするか否かの閾値</td>
 
 
 
@@ -139,7 +139,7 @@
 
 
 </tr><tr>
-<td></td>	<td>jit</td>	<td>on/off [on]	</td>	<td>JITを有効にするか否か</td>
+<td>◎</td>	<td>jit</td>	<td>on/off [on]	</td>	<td>JITを有効にするか否か</td>
 
 
 </tr><tr>
@@ -147,10 +147,10 @@
 
 
 </tr><tr>
-<td></td>	<td>plan_cache_mode</td>	<td>auto/force_custom_plan/force_generic_plan [auto]</td>	<td>プリペアドステートメント</td>
+<td>◎</td>	<td>plan_cache_mode</td>	<td>auto/force_custom_plan/force_generic_plan [auto]</td>	<td>プリペアドステートメント</td>
 
 </tr><tr>
-<td></td>	<td>recursice_worktable_factor</td>	<td>浮動少数 [10.0]</td>	<td></td>
+<td>◎</td>	<td>recursvce_worktable_factor</td>	<td>浮動少数 [10.0]</td>	<td></td>
 
 </tr></table>
 

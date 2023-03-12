@@ -23,13 +23,13 @@
 <td>△</td>	<td>	full_page_writes	</td>	<td>on/off[on]	</td>	<td>WALバッファページ全体をWALに書き込むが否か</td>
 
 </tr><tr>
-<td></td>	<td>wal_log_hints</td>	<td>on/off [off]</td>	<td>フルページライトのタイミングでヒントビットを書き込むか否か。チェックサムがonの場合はヒントビットの更新もWALに書き込まれるので、このオプションは無視される。</td>
+<td>×</td>	<td>wal_log_hints</td>	<td>on/off [off]</td>	<td>フルページライトのタイミングでヒントビットを書き込むか否か。チェックサムがonの場合はヒントビットの更新もWALに書き込まれるので、このオプションは無視される。</td>
 </tr><tr>
-<td></td>	<td>wal_compression</td>	<td>off/pglz/lz4/zstd [off]</td>	<td>WALの圧縮方法</td>
+<td>○</td>	<td>wal_compression</td>	<td>off/pglz/lz4/zstd [off]</td>	<td>WALの圧縮方法</td>
 </tr><tr>
-<td></td>	<td>wal_init_zero</td>	<td>on/off [on]</td>	<td>WALファイルを0で初期化するか否か。バージョン12から</td>
+<td>○</td>	<td>wal_init_zero</td>	<td>on/off [on]</td>	<td>WALファイルを0で初期化するか否か。バージョン12から</td>
 </tr><tr>
-<td></td>	<td>wal_recycle</td>	<td>on/off [on]</td>	<td>WALファイルをリサイクルするか否か。バージョン12から</td>
+<td>○</td>	<td>wal_recycle</td>	<td>on/off [on]</td>	<td>WALファイルをリサイクルするか否か。バージョン12から</td>
 
 
 </tr><tr>
@@ -37,15 +37,15 @@
 </tr><tr>
 <td>△</td>	<td>	wal_writer_delay	</td>	<td>時間[200ms]		</td>	<td>WALライタの検査周期。範囲は1から10000ミリ秒。</td>
 
+</tr><tr>
+<td>△</td>	<td>wal_writer_flush_after</td>	<td>整数 [1MB]</td>	<td>WALライタがWALをflushする頻度。最後のflushが過去wal_writer_delay以内に起こなわれ、かつそれ以降wal_writer_flush_after相当のWALが生成されている場合は、WALはオペレーティングシステムに書き込まれますが、ディスクにはflushしない。</td>
 
 </tr><tr>
-<td></td>	<td>wal_writer_flush_after</td>	<td>整数 [1MB]</td>	<td>WALライタがWALをflushする頻度。最後のflushが過去wal_writer_delay以内に起こなわれ、かつそれ以降wal_writer_flush_after相当のWALが生成されている場合は、WALはオペレーティングシステムに書き込まれますが、ディスクにはflushしない。</td>
-</tr><tr>
-<td></td>	<td>wal_skip_threshold</td>	<td>整数 [2MB]</td>	<td>wal_levelがminimalで、トランザクションのコミットが永続リレーションを作るかあるいは書き換えた場合、新しいデータをどのように永続させるかを決定。 データがこの設定よりも少なければ、WALログに書き出し、そうでなければ影響のあるファイルに対してfsyncを実行する。
+<td>◎</td>	<td>wal_skip_threshold</td>	<td>整数 [2MB]</td>	<td>wal_levelがminimalで、トランザクションのコミットが永続リレーションを作るかあるいは書き換えた場合、新しいデータをどのように永続させるかを決定。 データがこの設定よりも少なければ、WALログに書き出し、そうでなければ影響のあるファイルに対してfsyncを実行する。
 </td>
 
 </tr><tr>
-<td>◎</td>	<td>	commit_delay	</td>	<td>	整数(0-100000)[0]	</td>	<td>遅延コミットの遅延時間。コミットまでの猶予時間を指定。単位は[マイクロ秒]</td>
+<td>○</td>	<td>	commit_delay	</td>	<td>	整数(0-100000)[0]	</td>	<td>遅延コミットの遅延時間。コミットまでの猶予時間を指定。単位は[マイクロ秒]</td>
 </tr><tr>
 <td>◎</td>	<td>	commit_siblings	</td>	<td>	整数(0-1000)[5]		</td>	<td>遅延コミットが有効となるpostgresプロセスの数(自分自身を含む)</td>
 
@@ -59,28 +59,28 @@
 <td>△</td>	<td>	checkpoint_completion_target</td>	<td>	0.0-1.0[0.5]</td>	<td>   負荷分散CHECKPOINTにおいて、CHECKPOINT周期(checkpoint_timeout)に対するCHECKPOINT実行時間の割合を設定する。</td>
 
 </tr><tr>
-<td></td>	<td>checkpoint_flush_after</td>	<td>整数 [256kB]</td>	<td>チェックポイント実行中にこのデータ量よりも多く書く度に、OSが記憶装置に書き込むことを強制する。(カーネルのページキャッシュが持つダーティデータの量を一定量に制限し、チェックポイントの最後にfsyncが実行される際、あるいはOSがバックグラウンドでデータを大きな塊で書き出す際に性能の急激な低下を招く可能性を減らす。)</td>
+<td>△</td>	<td>checkpoint_flush_after</td>	<td>整数 [256kB]</td>	<td>チェックポイント実行中にこのデータ量よりも多く書く度に、OSが記憶装置に書き込むことを強制する。(カーネルのページキャッシュが持つダーティデータの量を一定量に制限し、チェックポイントの最後にfsyncが実行される際、あるいはOSがバックグラウンドでデータを大きな塊で書き出す際に性能の急激な低下を招く可能性を減らす。)</td>
 
 </tr><tr>
 <td>△</td>	<td>	checkpoint_warning	</td>	<td>整数[30s]	</td>	<td>	WALセグメントの溢れによるチェックポイント実行が、設定した秒数以内に発生した場合にメッセージを書き込む。単位は[秒]。0ならばメッセージを出さない。</td>
 
 </tr><tr>
-<td></td>	<td>max_wal_size</td>	<td>整数 [1GB]</td>	<td>保存するWALの最大サイズ</td>
+<td>△</td>	<td>max_wal_size</td>	<td>整数 [1GB]</td>	<td>保存するWALの最大サイズ</td>
 
 </tr><tr>
-<td></td>	<td>min_wal_size</td>	<td>整数 [80MB]</td>	<td>保存するWALの最小サイズ</td>
+<td>△</td>	<td>min_wal_size</td>	<td>整数 [80MB]</td>	<td>保存するWALの最小サイズ</td>
 
 
 </tr><tr bgcolor="#eeeeee">
 <th colspan=4 align=left>Archiving</th>
 
 </tr><tr>
-<td>△</td>	<td>archive_mode　</td>	<td>	 on/off[off]  </td>	<td>  アーカイブロギングを行うか否か、明示的に指定する。</td>
+<td>×</td>	<td>archive_mode　</td>	<td>	 on/off[off]  </td>	<td>  アーカイブロギングを行うか否か、明示的に指定する。</td>
 </tr><tr>
-<td>×	</td>	<td>archive_command</td>	<td>	文字列[''(空文字)]	</td>	<td>WALログをアーカイブログ保存用ディレクトリにコピーするコマンド。詳細は[<3-19>]参照</td>
+<td>△	</td>	<td>archive_command</td>	<td>	文字列[''(空文字)]	</td>	<td>WALログをアーカイブログ保存用ディレクトリにコピーするコマンド。詳細は[<3-19>]参照</td>
 
 </tr><tr>
-<td></td>	<td>archive_library</td>	<td>文字列 [''(空文字)]</td>	<td>archive_commandで使用するコマンドのライブラリを設定。バージョン15から</td>
+<td>△</td>	<td>archive_library</td>	<td>文字列 [''(空文字)]</td>	<td>archive_commandで使用するコマンドのライブラリを設定。バージョン15から</td>
 
 
 </tr><tr>
@@ -93,9 +93,9 @@
 
 
 </tr><tr>
-<td></td>	<td>recovery_prefetch</td>	<td>on/off/try [try]</td>	<td>リカバリ中、まだバッファプールにないWALで参照されているブロックをプリフェッチしようとするかどうか。バージョン15から</td>
+<td>△</td>	<td>recovery_prefetch</td>	<td>on/off/try [try]</td>	<td>リカバリ中、まだバッファプールにないWALで参照されているブロックをプリフェッチしようとするかどうか。バージョン15から</td>
 </tr><tr>
-<td></td>	<td>wal_decode_buffer_size</td>	<td>整数 [512kB]</td>	<td>サーバがプリフェッチするブロックを見つけるためにWAL内をどれだけ先まで見ることができるかの制限。バージョン15から</td>
+<td>×</td>	<td>wal_decode_buffer_size</td>	<td>整数 [512kB]</td>	<td>サーバがプリフェッチするブロックを見つけるためにWAL内をどれだけ先まで見ることができるかの制限。バージョン15から</td>
 
 
 </tr><tr bgcolor="#eeeeee">
@@ -103,42 +103,42 @@
 
 
 </tr><tr>
-<td></td>	<td>restore_command</td>	<td>文字列 [''(空文字)]</td>	<td>リカバリ時にアーカイブからWALファイルを読み込むコマンドを書く。以前はrecovery.confにあった項目。バージョン12から</td>
+<td>△(バージョン13までは×)   </td>	<td>restore_command</td>	<td>文字列 [''(空文字)]</td>	<td>リカバリ時にアーカイブからWALファイルを読み込むコマンドを書く。以前はrecovery.confにあった項目。バージョン12から</td>
 
 </tr><tr>
-<td></td>	<td>archive_cleanup_command</td>	<td>文字列 [''(空文字)]</td>	<td>リカバリ後にアーカイブのWALファイルをクリーンアップするコマンドを書く。バージョン12から</td>
+<td>△</td>	<td>archive_cleanup_command</td>	<td>文字列 [''(空文字)]</td>	<td>リカバリ後にアーカイブのWALファイルをクリーンアップするコマンドを書く。バージョン12から</td>
 
 </tr><tr>
-<td></td>	<td>recovery_end_command</td>	<td>文字列 [''(空文字)]</td>	<td>リカバリ終了後に実行するコマンドを書く。バージョン12から</td>
+<td>△</td>	<td>recovery_end_command</td>	<td>文字列 [''(空文字)]</td>	<td>リカバリ終了後に実行するコマンドを書く。バージョン12から</td>
 
 </tr><tr bgcolor="#eeeeee">
 <th colspan=4 align=left>Recovery Target</th>
 
 </tr><tr>
-<td></td>	<td>recovery_target</td>	<td>文字列''/'immediate' ['']</td>	<td>リカバリが一貫した状態になり次第(できるだけ早く)終了か否か。バージョン12から</td>
+<td>×</td>	<td>recovery_target</td>	<td>文字列''/'immediate' ['']</td>	<td>リカバリが一貫した状態になり次第(できるだけ早く)終了か否か。バージョン12から</td>
 
 </tr><tr>
-<td></td>	<td>recovery_target_name</td>	<td>文字列 ['']</td>	<td>pg_create_restore_point()により作成された）名前付きリストアポイントまでリカバリする。バージョン12から</td>
+<td>×</td>	<td>recovery_target_name</td>	<td>文字列 ['']</td>	<td>pg_create_restore_point()により作成された）名前付きリストアポイントまでリカバリする。バージョン12から</td>
 
 </tr><tr>
-<td></td>	<td>recovery_target_time</td>	<td>文字列 ['']</td>	<td>指定したタイムスタンプまでリカバリする。バージョン12から</td>
-
-
-</tr><tr>
-<td></td>	<td>recovery_target_xid</td>	<td>文字列 ['']</td>	<td>指定したタイムスタンプまでリカバリする。バージョン12から</td>
-
-</tr><tr>
-<td></td>	<td>recovery_target_lsn</td>	<td>文字列 ['']</td>	<td>指定したLSNまでリカバリする。バージョン12から</td>
+<td>×</td>	<td>recovery_target_time</td>	<td>文字列 ['']</td>	<td>指定したタイムスタンプまでリカバリする。バージョン12から</td>
 
 
 </tr><tr>
-<td></td>	<td>recovery_target_inclusive</td>	<td>on/off [on]</td>	<td>指定した値ちょうど(on)でリカバリを停止するか否か。バージョン12から</td>
+<td>×</td>	<td>recovery_target_xid</td>	<td>文字列 ['']</td>	<td>指定したタイムスタンプまでリカバリする。バージョン12から</td>
 
 </tr><tr>
-<td></td>	<td>recovery_target_timeline</td>	<td>整数or'current'/'latest' ['latest']</td>	<td>リカバリのターゲットタイムライン。バージョン12から</td>
+<td>×</td>	<td>recovery_target_lsn</td>	<td>文字列 ['']</td>	<td>指定したLSNまでリカバリする。バージョン12から</td>
+
 
 </tr><tr>
-<td></td>	<td>recovery_target_action</td>	<td>'pause'/'promote'/'shutdown' ['pause']</td>	<td>リカバリ後の動作。pauseからはpg_wal_replay_resume()で再開可能。バージョン12から</td>
+<td>×</td>	<td>recovery_target_inclusive</td>	<td>on/off [on]</td>	<td>指定した値ちょうど(on)でリカバリを停止するか否か。バージョン12から</td>
+
+</tr><tr>
+<td>×</td>	<td>recovery_target_timeline</td>	<td>整数or'current'/'latest' ['latest']</td>	<td>リカバリのターゲットタイムライン。バージョン12から</td>
+
+</tr><tr>
+<td>×</td>	<td>recovery_target_action</td>	<td>'pause'/'promote'/'shutdown' ['pause']</td>	<td>リカバリ後の動作。pauseからはpg_wal_replay_resume()で再開可能。バージョン12から</td>
 
 
 </tr></table>
@@ -162,15 +162,11 @@
 
 %CHAPTER 解説
 
-<p>
-WALについては[<2-09>]を参照してください。
-</p>
-
 
 <p>
 ・wal_level
 <br>
-バージョン9.0からwal_levelをサポートしました。設定できる値は次の３種類です([<表4-02>])。
+設定できる値は次の３種類です([<表4-02>])。
 </p>
 
 <table border=1>
@@ -238,16 +234,11 @@ fsyncを無効(off)にすると、WAL書き込みだけでなくCHECKPOINTも非
 </p>
 
 <p>
-WALログサイズはデフォルトで16[Mbyte]なので、使い切るにはかなりのトランザクションを実行しなければなりません。
-もしもサーバがハードウエアクラッシュして、pg_wal以下のWALログが読み取り不可能になると、
+WALログサイズはデフォルトで16[Mbyte]で、もしもサーバがハードウエアクラッシュして、pg_wal以下のWALログが読み取り不可能になると、
 たとえアーカイブログが残っていても、WALログに記録された多くの更新情報は失われてしまいます。
 </p>
 
 <p>
-このような事態を避けるため、archive_timeoutに設定した時間毎に強制的にWALログを切り替えてアーカイブログ領域にコピーできます。
+archive_timeoutに設定した時間毎に強制的にWALログを切り替えてアーカイブログ領域にコピーできます。
 これによって、たとえpg_wal下のWALログが破壊されても、最悪archive_timeout時間の更新が失われるだけで済みます。
-</p>
-
-<p>
-ただし、データロストを完全には避けることができない上に、16[Mbyte]のアーカイブログがarchive_timeout毎に生成されるので、運用には注意が必要です。
 </p>
