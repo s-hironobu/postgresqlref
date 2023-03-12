@@ -2,7 +2,7 @@
 %LASTMOD
 %KEY pgsql-param07
 
-%TITLE <a href="https://pgsql-jp.github.io/current/html/runtime-config-query.html" target="_blank" rel="noopener noreferrer">問い合わせ計画				QUERY TUNING</a>
+%TITLE <a href="https://www.postgresql.org/docs/current/runtime-config-query.html" target="_blank" rel="noopener noreferrer">問い合わせ計画				QUERY TUNING</a>
 
 <table border=1>
 <caption>[<設定項目一覧>]</caption>
@@ -150,7 +150,8 @@
 <td>◎</td>	<td>plan_cache_mode</td>	<td>auto/force_custom_plan/force_generic_plan [auto]</td>	<td>プリペアドステートメント</td>
 
 </tr><tr>
-<td>◎</td>	<td>recursvce_worktable_factor</td>	<td>浮動少数 [10.0]</td>	<td></td>
+<td>◎</td>
+<td>recursive_worktable_factor</td>	<td>浮動少数 [10.0]</td>	<td>再帰問合せのワーキング・テーブルの平均サイズのプランナの推定値を、問合せの最初の非再帰項の推定サイズの倍数として設定</td>
 
 </tr></table>
 
@@ -184,7 +185,7 @@
 <pre>
 sampledb=# SET enable_seqscan TO off;
 </pre>
-
+<br>
 
 <p>
 ・default_statistics_target

@@ -34,17 +34,17 @@ PostgreSQLは次の関数をサポートしています。本書はその一部�
 <a href="https://www.postgresql.org/docs/current/functions-window.html" target="_blank" rel="noopener noreferrer">ウインドウ関数</a></td>				<td><a href="./func-08.html">[<7-27>]</a></td>
 
 </tr><tr>
-<td><a href="https://pgsql-jp.github.io/current/html/functions-geometry.html" target="_blank" rel="noopener noreferrer">幾何関数</a></td>				<td>省略</td>
+<td><a href="https://www.postgresql.org/docs/current/functions-geometry.html" target="_blank" rel="noopener noreferrer">幾何関数</a></td>				<td>省略</td>
 </tr><tr>
-<td><a href="https://pgsql-jp.github.io/current/html/functions-net.html" target="_blank" rel="noopener noreferrer">ネットワークアドレス関数</a></td>		<td>省略</td>
+<td><a href="https://www.postgresql.org/docs/current/functions-net.html" target="_blank" rel="noopener noreferrer">ネットワークアドレス関数</a></td>		<td>省略</td>
 </tr><tr>
-<td><a href="https://pgsql-jp.github.io/current/html/functions-xml.html" target="_blank" rel="noopener noreferrer">XML関数</a></td>	<td>省略</td>
+<td><a href="https://www.postgresql.org/docs/current/functions-xml.html" target="_blank" rel="noopener noreferrer">XML関数</a></td>	<td>省略</td>
 </tr><tr>
-<td><a href="https://pgsql-jp.github.io/current/html/functions-json.html" target="_blank" rel="noopener noreferrer">JSON関連関数</a></td>	<td>省略</td>
+<td><a href="https://www.postgresql.org/docs/current/functions-json.html" target="_blank" rel="noopener noreferrer">JSON関連関数</a></td>	<td>省略</td>
 </tr><tr>
-<td><a href="https://pgsql-jp.github.io/current/html/functions-textsearch.html" target="_blank" rel="noopener noreferrer">文字列検索(Text Search)関数</a></td>	<td>省略</td>
+<td><a href="https://www.postgresql.org/docs/current/functions-textsearch.html" target="_blank" rel="noopener noreferrer">文字列検索(Text Search)関数</a></td>	<td>省略</td>
 </tr><tr>
-<td><a href="https://pgsql-jp.github.io/current/html/functions-sequence.html" target="_blank" rel="noopener noreferrer">シーケンス操作関数</a></td>	<td><a href="./sql-37.html">[<6-37>]</a>で解説</td>
+<td><a href="https://www.postgresql.org/docs/current/functions-sequence.html" target="_blank" rel="noopener noreferrer">シーケンス操作関数</a></td>	<td><a href="./sql-37.html">[<6-37>]</a>で解説</td>
 
 </tr><tr>
 <td><a href="https://www.postgresql.org/docs/current/functions-info.html#FUNCTIONS-INFO-SESSION-TABLE" target="_blank" rel="noopener noreferrer">セッション情報関数</td>			<td><a href="./func-09.html">[<7-28>]</td>
@@ -69,29 +69,29 @@ PostgreSQLは次の関数をサポートしています。本書はその一部�
 
 </tr><tr>
 <td>
-<a href="https://pgsql-jp.github.io/current/html/functions-admin.html#FUNCTIONS-ADMIN-SET" target="_blank" rel="noopener noreferrer">構成設定関数</a></td>	<td><a href="./func-15.html">[<7-34>]</a></td>
+<a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADMIN-SET" target="_blank" rel="noopener noreferrer">構成設定関数</a></td>	<td><a href="./func-15.html">[<7-34>]</a></td>
 </tr><tr>
-<td><a href="https://pgsql-jp.github.io/current/html/functions-admin.html#FUNCTIONS-ADMIN-SIGNAL" target="_blank" rel="noopener noreferrer">サーバシグナル送信関数</a></td>	<td><a href="./func-16.html">[<7-35>]</a></td>
-</tr><tr>
-<td>
-<a href="https://pgsql-jp.github.io/current/html/functions-admin.html#FUNCTIONS-ADMIN-BACKUP" target="_blank" rel="noopener noreferrer">バックアップ制御関数</a></td>	<td><a href="./func-17.html">[<7-36>]</a></td>
-</tr><tr>
-<td><a href="https://pgsql-jp.github.io/current/html/functions-admin.html#FUNCTIONS-RECOVERY-CONTROL" target="_blank" rel="noopener noreferrer">リカバリ制御関数</a></td>	<td><a href="./func-18.html">[<7-37>]</a></td>
-</tr><tr>
-<td><a href="https://pgsql-jp.github.io/current/html/functions-admin.html#FUNCTIONS-SNAPSHOT-SYNCHRONIZATION" target="_blank" rel="noopener noreferrer">スナップショット同期関数</a></td>	<td><a href="./func-19.html">[<7-38>]</a></td>
-</tr><tr>
-<td><a href="https://pgsql-jp.github.io/current/html/functions-admin.html#FUNCTIONS-REPLICATION" target="_blank" rel="noopener noreferrer">レプリケーション管理関数</a></td>	<td><a href="./func-20.html">[<7-39>]</a></td>
-</tr><tr>
-<td><a href="https://pgsql-jp.github.io/current/html/functions-admin.html#FUNCTIONS-ADMIN-DBOBJECT" target="_blank" rel="noopener noreferrer">データベースオブジェクト管理関数</a></td>	<td><a href="./func-21.html">[<7-40>]</a></td>
+<td><a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADMIN-SIGNAL" target="_blank" rel="noopener noreferrer">サーバシグナル送信関数</a></td>	<td><a href="./func-16.html">[<7-35>]</a></td>
 </tr><tr>
 <td>
-<a href="https://pgsql-jp.github.io/current/html/functions-admin.html#FUNCTIONS-ADMIN-INDEX" target="_blank" rel="noopener noreferrer">インデックス保守関数</a></td>	<td><a href="./func-22.html">[<7-41>]</a></td>
+<a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADMIN-BACKUP" target="_blank" rel="noopener noreferrer">バックアップ制御関数</a></td>	<td><a href="./func-17.html">[<7-36>]</a></td>
 </tr><tr>
-<td><a href="https://pgsql-jp.github.io/current/html/functions-admin.html#FUNCTIONS-ADMIN-GENFILE" target="_blank" rel="noopener noreferrer">汎用ファイルアクセス関数</a></td>	<td><a href="./func-23.html">[<7-42>]</a></td>
+<td><a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-RECOVERY-CONTROL" target="_blank" rel="noopener noreferrer">リカバリ制御関数</a></td>	<td><a href="./func-18.html">[<7-37>]</a></td>
 </tr><tr>
-<td><a href="https://pgsql-jp.github.io/current/html/functions-admin.html#FUNCTIONS-ADVISORY-LOCKS" target="_blank" rel="noopener noreferrer">勧告的ロック用関数</a></td>	<td><a href="./func-24.html">[<7-43>]</a></td>
+<td><a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-SNAPSHOT-SYNCHRONIZATION" target="_blank" rel="noopener noreferrer">スナップショット同期関数</a></td>	<td><a href="./func-19.html">[<7-38>]</a></td>
 </tr><tr>
-<td><a href="https://pgsql-jp.github.io/current/html/functions-statistics.html" target="_blank" rel="noopener noreferrer">統計情報関数</a></td>	<td><a href="./func-25.html">[<7-44>]</a></td>
+<td><a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-REPLICATION" target="_blank" rel="noopener noreferrer">レプリケーション管理関数</a></td>	<td><a href="./func-20.html">[<7-39>]</a></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADMIN-DBOBJECT" target="_blank" rel="noopener noreferrer">データベースオブジェクト管理関数</a></td>	<td><a href="./func-21.html">[<7-40>]</a></td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADMIN-INDEX" target="_blank" rel="noopener noreferrer">インデックス保守関数</a></td>	<td><a href="./func-22.html">[<7-41>]</a></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADMIN-GENFILE" target="_blank" rel="noopener noreferrer">汎用ファイルアクセス関数</a></td>	<td><a href="./func-23.html">[<7-42>]</a></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADVISORY-LOCKS" target="_blank" rel="noopener noreferrer">勧告的ロック用関数</a></td>	<td><a href="./func-24.html">[<7-43>]</a></td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/functions-statistics.html" target="_blank" rel="noopener noreferrer">統計情報関数</a></td>	<td><a href="./func-25.html">[<7-44>]</a></td>
 
 </tr></table>
 
