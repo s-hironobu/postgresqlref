@@ -369,8 +369,8 @@ T1 NATURAL { [INNER] | { LEFT | RIGHT | FULL } [OUTER] } JOIN T2
     [ LATERAL ] function_name ( [ argument [, ...] ] ) AS ( column_definition [, ...] )
     [ LATERAL ] ROWS FROM( function_name ( [ argument [, ...] ] ) [ AS ( column_definition [, ...] ) ] [, ...] )
 
+    * from_itemのパラメータは説明省略
 </pre>
-
 <br>
 
 <table>
@@ -378,23 +378,10 @@ T1 NATURAL { [INNER] | { LEFT | RIGHT | FULL } [OUTER] } JOIN T2
 <tr bgcolor="#cccccc">
 <th>パラメータ</th>	<th>説明</th>
 </tr><tr>
-<td>table_name</td>	<td></td>
-</tr><tr>
-<td>column_alias</td>	<td></td>
-</tr><tr>
-<td>with_query_name</td>	<td></td>
-</tr><tr>
-<td>function_name</td>	<td></td>
-</tr><tr>
-<td>argument</td>	<td></td>
-</tr><tr>
-<td>column_definition</td>	<td></td>
-</tr><tr>
 <td>boolean_expression</td>	<td>論理式</td>
 </tr><tr>
 <td>join_column_list</td>	<td>結合するカラムのリスト</td>
 </tr></table>
-
 <br>
 
 
@@ -411,7 +398,6 @@ T1 NATURAL { [INNER] | { LEFT | RIGHT | FULL } [OUTER] } JOIN T2
 </tr><tr>
 <td>LATERAL</td>	<td>LATERAL結合。FROM句に含まれる他のテーブルの結果を、サブクエリや関数の引数として使える。</td>
 </tr></table>
-
 <br>
 
 
@@ -482,6 +468,7 @@ sampledb=# SELECT * FROM author_list;
         20 | シェークスピア
 (4 rows)
 </pre>
+<br>
 
 <p>
 ・クロス結合
@@ -508,6 +495,7 @@ sampledb=# SELECT * FROM book_list CROSS JOIN author_list;
  幼年期の終わり     |        10 |        20 | シェークスピア
 (32 rows)
 </pre>
+<br>
 
 <p>
 ・内部結合
@@ -531,6 +519,7 @@ sampledb-#                          WHERE b.author_id = a.author_id;
  クヌルプ           | ヘッセ
 (7 rows)
 </pre>
+<br>
 
 <ol>
 <li>NATURAL INNER JOIN </li>
@@ -539,6 +528,7 @@ sampledb-#                          WHERE b.author_id = a.author_id;
 sampledb=# SELECT title, name FROM book_list
 sampledb-#         NATURAL INNER JOIN author_list;
 </pre>
+<br>
 
 <li>INNER JOIN</li>
 
@@ -548,6 +538,7 @@ sampledb-#         INNER JOIN author_list AS a
 sampledb-#                ON (b.author_id = a.author_id);
 
 </pre>
+<br>
 
 <li>INNER JOIN USING</li>
 
@@ -556,6 +547,7 @@ sampledb=# SELECT title, name FROM book_list
 sampledb-#           INNER JOIN author_list AS a
 sampledb-#                (author_id) USING (author_id);
 </pre>
+<br>
 
 </ol>
 
@@ -587,6 +579,7 @@ sampledb=# SELECT title, name FROM book_list AS b
  幼年期の終わり     |
 (8 rows)
 </pre>
+<br>
 
 <li>RIGHT OUTER JOIN句を使った例</li>
 <p>
@@ -609,6 +602,7 @@ sampledb=# SELECT title, name FROM book_list AS b
                     | シェークスピア
 (8 rows)
 </pre>
+<br>
 
 <li>FULL OUTER JOIN句を使った場合</li>
 
@@ -634,7 +628,6 @@ sampledb=# SELECT title, name FROM book_list AS b
                     | シェークスピア
 (9 rows)
 </pre>
-
 <br>
 
 </ol>
@@ -648,7 +641,6 @@ sampledb=# SELECT title, name FROM book_list AS b
 LATERAL結合を使った後者のSELECT文は、サブクエリ内の条件句に外側FROM句のテーブルbook_listを使っていることに注目してください。
 </p>
 
-<br>
 
 <pre>
 sampledb=# -- [<6-29>]の例
@@ -663,7 +655,7 @@ sampledb-#       (SELECT * FROM author_list WHERE author_id = b.author_id) AS a;
 <br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2023-3-13
 </div>
 </body>
 </html>
