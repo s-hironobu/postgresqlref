@@ -13,7 +13,7 @@
 <th>関数</th>				<th>返り値型</th>	<th>説明</th>
 
 </tr><tr>
-<td>pg_current_xact_id() </td>	<td>xid8</td>	<td>現在のトランザクションIDを返す。割り当てていなければ新たに割り当てて返す。バージョン13から</td>
+<td>pg_current_xact_id() </td>	<td>xid8</td>	<td>現在のトランザクションIDを返す。割り当てていなければ新たに割り当てて返す。Primaryのみ実行可能。バージョン13から</td>
 </tr><tr>
 <td>pg_current_xact_id_if_assigned() </td>	<td>xid8</td>	<td>現在のトランザクションIDを返す。割り当てていなければNULLを返す。バージョン13から</td>
 </tr><tr>
@@ -43,7 +43,7 @@
 </tr><tr>
 <td>txid_current()</td>	<td>bigint</td>	<td>pg_current_xact_id()参照</td>
 </tr><tr>
-<td>txid_current_if_assigned()</td>	<td>bigint</td>	<td>pg_current_xact_if_assigned()参照。</td>
+<td>txid_current_if_assigned()</td>	<td>bigint</td>	<td>pg_current_xact_if_assigned()参照</td>
 </tr><tr>
 <td>txid_current_snapshot()</td>	<td>txid_snapshot</td>	<td>pg_current_snapshot()参照</td>
 </tr><tr>
@@ -55,7 +55,7 @@
 </tr><tr>
 <td>txid_visible_in_snapshot(bigint, txid_snapshot) </td>	<td>boolean</td>	<td>pg_visible_in_snapshot()参照</td>
 </tr><tr>
-<td>txid_status(bigint)</td>	<td>text</td>	<td>>pg_xact_status()参照</td>
+<td>txid_status(bigint)</td>	<td>text</td>	<td>pg_xact_status()参照</td>
 </tr><tr>
 </tr></table>
 
@@ -69,54 +69,118 @@
 <th>関数</th>				<th>返り値型</th>	<th>説明</th>
 
 </tr><tr>
-<td></td>	<td></td>	<td></td>
-</tr><tr>
 <td>pg_xact_commit_timestamp(xid)</td>	<td>bigint</td>	<td>track_commit_timestampが有効な場合、指定したXIDがCOMMITされた時刻を返す。ABORTかIN_PROGRESSの場合はNULL</td>
 </tr><tr>
-<td>pg_xact_commit_timestamp_origin(xid)</td>	<td>record(timestamp, roident)</td>	<td>バージョン14から</td>
+<td>pg_xact_commit_timestamp_origin(xid)</td>	<td>record(timestamp, roident)</td>	<td>指定したXIDがCOMMITされた時刻とレプリケーションオリジンを返す。バージョン14から</td>
 </tr><tr>
-<td>pg_last_committed_xact()</td>	<td>record(timestamp, roident)</td>	<td></td>
+<td>pg_last_committed_xact()</td>	<td>record(timestamp, roident)</td>	<td>直近でCOMMITされたXID(とレプリケーションオリジン)を返す。</td>
 </tr></table>
 
 <br>
 
 %CHAPTER 実行例
 
+
 <p>
-・pg_xact_status
+・pg_current_xact_id(),pg_current_xact_id_if_assigned(), pg_xact_status()
 <br>
 </p>
 
 <pre>
-postgres=# SELECT pg_xact_status('800');
+postgres=# SELECT pg_current_xact_id();
+ pg_current_xact_id
+--------------------
+               1405
+(1 row)
+
+postgres=# SELECT pg_current_xact_id_if_assigned();
+ pg_current_xact_id_if_assigned
+--------------------------------
+
+(1 row)
+
+postgres=# SELECT pg_xact_status('1405');
  pg_xact_status
 ----------------
  committed
 (1 row)
 </pre>
+<br>
 
 
 <p>
-・pg_xact_commit_timestamp
+・pg_snapshot_xip(), pg_snapshot_xmax(), pg_visible_in_snapshot()
 <br>
 </p>
 
 <pre>
-postgres=# SHOW track_commit_timestamp;
- track_commit_timestamp
-------------------------
- on
-(1 row)
-
-postgres=# SELECT pg_current_xact_id ();
+postgres=# BEGIN;
+BEGIN
+postgres=*# SELECT pg_current_xact_id();
  pg_current_xact_id
 --------------------
-                912
+               1412
 (1 row)
 
-postgres=# SELECT pg_xact_commit_timestamp('912');
-   pg_xact_commit_timestamp
--------------------------------
- 2023-01-13 09:20:31.609553+09
+postgres=*# SELECT pg_current_snapshot();
+ pg_current_snapshot
+---------------------
+ 1411:1411:
+(1 row)
+
+postgres=*# SELECT pg_snapshot_xip('1411:1411:');
+ pg_snapshot_xip
+-----------------
+(0 rows)
+
+postgres=*# SELECT pg_snapshot_xmax('1411:1411:');
+ pg_snapshot_xmax
+------------------
+             1411
+(1 row)
+
+postgres=*# SELECT pg_snapshot_xmin('1411:1411:');
+ pg_snapshot_xmin
+------------------
+             1411
+(1 row)
+
+postgres=*# SELECT pg_visible_in_snapshot('1411', '1411:1411:');
+ pg_visible_in_snapshot
+------------------------
+ f
+(1 row)
+
+postgres=*# SELECT pg_visible_in_snapshot('1410', '1411:1411:');
+ pg_visible_in_snapshot
+------------------------
+ t
 (1 row)
 </pre>
+<br>
+
+<p>
+・pg_last_committed_xact(), pg_xact_commit_timestamp() ,pg_xact_commit_timestamp_origin()
+<br>
+</p>
+
+<pre>
+postgres=# SELECT pg_last_committed_xact();
+          pg_last_committed_xact
+------------------------------------------
+ (1410,"2023-03-13 15:05:16.314863+09",0)
+(1 row)
+
+postgres=# SELECT pg_xact_commit_timestamp('1410');
+   pg_xact_commit_timestamp
+-------------------------------
+ 2023-03-13 15:05:16.314863+09
+(1 row)
+
+postgres=# SELECT pg_xact_commit_timestamp_origin('1410');
+   pg_xact_commit_timestamp_origin
+-------------------------------------
+ ("2023-03-13 15:05:16.314863+09",0)
+(1 row)
+</pre>
+<br>
