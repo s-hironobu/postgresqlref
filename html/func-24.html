@@ -370,58 +370,35 @@ objID.className='close';
 </tr><tr>
 <td>pg_advisory_unlock_shared(key1 int, key2 int)</td>	<td>bool</td>	<td>共有勧告的ロックを解放</td>
 </tr><tr>
-<td>pg_advisory_xact_lock(key bigint)</td>	<td>void</td>	<td></td>
+<td>pg_advisory_xact_lock(key bigint)</td>	<td>void</td>	<td>排他勧告的ロックを獲得。トランザクション終了で自動的にロックは解放される。</td>
 </tr><tr>
-<td>pg_advisory_xact_lock(key1 int, key2 int)</td>	<td>void</td>	<td></td>
+<td>pg_advisory_xact_lock(key1 int, key2 int)</td>	<td>void</td>	<td>排他勧告的ロックを獲得。トランザクション終了で自動的にロックは解放される。</td>
 </tr><tr>
-<td>pg_advisory_xact_lock_shared(key bigint)</td>	<td>void</td>	<td></td>
+<td>pg_advisory_xact_lock_shared(key bigint)</td>	<td>void</td>	<td>共有勧告的ロックを獲得。トランザクション終了で自動的にロックは解放される。</td>
 </tr><tr>
-<td>pg_advisory_xact_lock_shared(key1 int, key2 int)</td>	<td>void</td>	<td></td>
+<td>pg_advisory_xact_lock_shared(key1 int, key2 int)</td>	<td>void</td>	<td>共有勧告的ロックを獲得。トランザクション終了で自動的にロックは解放される。</td>
 </tr><tr>
-<td>pg_try_advisory_lock(key bigint)</td>	<td>bool</td>	<td>可能ならば排他勧告的ロックを獲得</td>
+<td>pg_try_advisory_lock(key bigint)</td>	<td>bool</td>	<td>可能ならば排他勧告的ロックを獲得してTrueを返す。それ以外はFalseを返す。</td>
 </tr><tr>
-<td>pg_try_advisory_lock(key1 int, key2 int)</td>	<td>bool</td>	<td>可能ならば排他勧告的ロックを獲得</td>
+<td>pg_try_advisory_lock(key1 int, key2 int)</td>	<td>bool</td>	<td>可能ならば排他勧告的ロックを獲得してTrueを返す。それ以外はFalseを返す。</td>
 </tr><tr>
-<td>pg_try_advisory_lock_shared(key bigint)</td>	<td>bool</td>	<td>可能ならば共有勧告的ロックを獲得</td>
+<td>pg_try_advisory_lock_shared(key bigint)</td>	<td>bool</td>	<td>可能ならば共有勧告的ロックを獲得してTrueを返す。それ以外はFalseを返す。</td>
 </tr><tr>
-<td>pg_try_advisory_lock_shared(key1 int, key2 int)</td>	<td>bool</td>	<td>可能ならば共有勧告的ロックを獲得</td>
+<td>pg_try_advisory_lock_shared(key1 int, key2 int)</td>	<td>bool</td>	<td>可能ならば共有勧告的ロックを獲得してTrueを返す。それ以外はFalseを返す。</td>
 </tr><tr>
-<td>pg_try_advisory_xact_lock(key bigint)</td>	<td>bool</td>	<td></td>
+<td>pg_try_advisory_xact_lock(key bigint)</td>	<td>bool</td>	<td>可能ならば排他勧告的ロックを獲得してTrueを返す。それ以外はFalseを返す。トランザクション終了で自動的にロックは解放される。</td>
 </tr><tr>
-<td>pg_try_advisory_xact_lock(key1 int, key2 int)</td>	<td>bool</td>	<td></td>
+<td>pg_try_advisory_xact_lock(key1 int, key2 int)</td>	<td>bool</td>	<td>可能ならば排他勧告的ロックを獲得してTrueを返す。それ以外はFalseを返す。トランザクション終了で自動的にロックは解放される。</td>
 </tr><tr>
-<td>pg_try_advisory_xact_lock_shared(key bigint)</td>	<td>bool</td>	<td></td>
+<td>pg_try_advisory_xact_lock_shared(key bigint)</td>	<td>bool</td>	<td>可能ならば共有勧告的ロックを獲得してTrueを返す。それ以外はFalseを返す。トランザクション終了で自動的にロックは解放される。</td>
 </tr><tr>
-<td>pg_try_advisory_xact_lock_shared(key1 int, key2 int)</td>	<td>bool</td>	<td></td>
+<td>pg_try_advisory_xact_lock_shared(key1 int, key2 int)</td>	<td>bool</td>	<td>可能ならば共有勧告的ロックを獲得してTrueを返す。それ以外はFalseを返す。トランザクション終了で自動的にロックは解放される。</td>
 
 </tr></table>
-
 <br>
-
-
-<pre>
-===============================================================================
-関数					返り値型	説明
-===============================================================================
-pg_advisory_lock(key bigint)	void
-pg_advisory_lock(key1 int, key2 int)	void
-pg_advisory_lock_shared(key bigint)	void
-pg_advisory_lock_shared(key1 int, key2 int)	void
-pg_try_advisory_lock(key bigint)  boolean
-pg_try_advisory_lock(key1 int, key2 int)	boolean
-pg_try_advisory_lock_shared(key bigint)		boolean
-pg_try_advisory_lock_shared(key1 int, key2 int)		boolean	可能ならば共有勧告的ロックを獲得
-pg_advisory_unlock(key bigint)
-pg_advisory_unlock(key1 int, key2 int)	   boolean
-pg_advisory_unlock_shared(key bigint)	   boolean
-pg_advisory_unlock_shared(key1 int, key2 int)		boolean
-pg_advisory_unlock_all()       void
-===============================================================================
-
-</pre>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2023-3-13
 </div>
 </body>
 </html>
