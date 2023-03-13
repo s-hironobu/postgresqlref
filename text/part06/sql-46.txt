@@ -25,7 +25,7 @@ and table_and_columns is:
 
     table_name [ ( column_name [, ...] ) ]
 </pre>
-
+<br>
 
 <table>
 <caption>オプション</caption>
@@ -52,13 +52,12 @@ and table_and_columns is:
 </tr><tr>
 <td>PARALLEL</td>	<td>インデックスのVACUUM処理をmin_parallel_index_scan_sizeからmax_parallel_index_scan_size台数の並列ワーカで行う。バージョン13から</td>
 </tr></table>
-
 <br>
 
 
 %CHAPTER 解説
 
 <p>
-VACUUMは奥深くて難しい。
+VACUUMは難しい。
 </p>
 
