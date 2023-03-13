@@ -377,8 +377,9 @@ SET SESSION CHARACTERISTICS AS TRANSACTION transaction_mode [, ...]
 
 ● トランザクション隔離レベルの確認
 SHOW TRANSACTION ISOLATION LEVEL
-</pre>
 
+</pre>
+<br>
 
 <table>
 <caption>オプション</caption>
@@ -391,7 +392,7 @@ SHOW TRANSACTION ISOLATION LEVEL
 </tr><tr>
 <td>AND CHAIN</td>	<td>COMMIT後、すぐに次のトランザクションが発行される。ラフに言えば"COMMIT; BEGIN;"を実行する感じ。</td>
 </tr><tr>
-<td>DEFERRABLE</td>	<td></td>
+<td>DEFERRABLE</td>	<td>本文参照</td>
 
 </tr></table>
 
@@ -409,16 +410,32 @@ PostgreSQLはトランザクションをサポートしています。
 </p>
 
 <p>
-•隔離レベルの変遷
+• トランザクション隔離レベルの設定
 <br>
+START TRANSACTION文はBEGIN 文と同じくトランザクションを開始するコマンドですが、オプションとしてトランザクションの隔離レベルを設定できます。またバージョン8.0からBEGIN文もオプションとして設定できるようになりました。
+<br>
+また、SET TRANSACTION ISOLATION LEVEL文を使えば、セッション全体のトランザクション隔離レベルのデフォルト値を設定できます。
+</p>
+
+
+<p>
+• DEFERRABLE オプション
+<br>
+DEFERRABLE オプションはトランザクションがSERIALIZABLEかつREAD ONLYである場合のみ効果があり、
+トランザクションを開始してしまえば、SERIALIZE処理のオーバーヘッドを伴わず、シリアライズ異常によるABORTも発生しません。
+ただし、トランザクション開始前のトランザクションスナップショット獲得時にブロックされる可能性があります。
+</p>
+
+<div class="jumpmenu"></div><h4>隔離レベルの変遷</h4>
+
 バージョン9.0までは"SERIALIZABLE"と"READ COMMITTED"の２レベルをサポート、バージョン9.1から"REPEATABLE READ"を加えた３レベルをサポートしました。
 </p>
 <p>
 ただし以下の点に注意してください。
 <br>
-バージョン9.0までの"SERIALIZABLE"の実装は簡略化されており、その挙動は実は"REPEATABLE READ"でした。
+バージョン9.0までのMVCCの実装はSI(Snapshot Isolation)であり、"SERIALIZABLE"と名付けられたレベルの実際の挙動は"REPEATABLE READ"でした。
 <br>
-バージョン9.1で実装が改善され、それまでの"SERIALIZABLE"は"REPEATABLE READ"と呼び名を変え、
+バージョン9.1でSIと共にSSI(Serialize Snapshot Isolation)が実装され、それまでの"SERIALIZABLE"は"REPEATABLE READ"と呼び名を変え、
 新たに仕様に則った"SERIALIZABLE"が実装されました。
 <br>
 つまり、隔離レベルの"呼称"としては"REPEATABLE READ"が追加されましたが、機能としては"真のSERIALIZABLE"が追加されたことになります。
@@ -435,17 +452,7 @@ PostgreSQLはトランザクションをサポートしています。
 </tr><tr>
 <td>READ COMMITTED</td>		<td>READ COMMITTED</td>	<td>READ COMMITTED</td>
 </tr></table>
-
-<br><br>
-
-<p>
-• トランザクション隔離レベルの設定
 <br>
-START TRANSACTION文はBEGIN 文と同じくトランザクションを開始するコマンドですが、オプションとしてトランザクションの隔離レベルを設定できます。またバージョン8.0からBEGIN文もオプションとして設定できるようになりました。
-<br>
-また、SET TRANSACTION ISOLATION LEVEL文を使えば、セッション全体のトランザクション隔離レベルのデフォルト値を設定できます。
-</p>
-
 
 <div class="jumpmenu"></div><h3>実行例</h3>
 
@@ -460,6 +467,7 @@ START TRANSACTION文はBEGIN 文と同じくトランザクションを開始す
 sampledb=#  START TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 START TRANSACTION
 </pre>
+<br>
 
 <p>
 (2)BEGIN文とSET TRANSACTION ISOLATION LEVEL文を使ったトランザクションの開始
@@ -471,6 +479,7 @@ BEGIN
 sampledb=# SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 SET
 </pre>
+<br>
 
 <p>
 (3)BEGIN文にトランザクションの隔離レベルを設定
@@ -480,11 +489,12 @@ SET
 sampledb=# BEGIN ISOLATION LEVEL SERIALIZABLE;
 BEGIN
 </pre>
+<br>
 
 <p>
 ・AND　CHAIN
 <br>
-AND　CHAINの使用例を示す。
+AND　CHAINの使用例を示します。
 </p>
 
 <pre>
@@ -507,10 +517,10 @@ postgres=*# select 2;
 postgres=*# commit;
 COMMIT
 </pre>
-
+<br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2023-3-13
 </div>
 </body>
 </html>
