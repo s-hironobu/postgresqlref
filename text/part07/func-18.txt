@@ -5,52 +5,49 @@
 %TITLE <a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-RECOVERY-CONTROL" target="_blank" rel="noopener noreferrer">リカバリ制御関数</a>
 
 
-[<リカバリ情報関数一覧>]
-
-<table><tr bgcolor="#cccccc">
+<table>
+<caption>リカバリ情報関数一覧</caption>
+<tr bgcolor="#cccccc">
 <th>関数</th>							<th>返り値型</th>	<th>説明</th>	<th>実行側　　</th>
 </tr><tr>
-<td>pg_is_in_recovery()		</td>	<td>boolean	</td>	<td>リカバリ中ならばtrueを返す</td>	<td>マスタ<br>/スレーブ</td>
+<td>pg_is_in_recovery()		</td>	<td>boolean	</td>	<td>リカバリ中ならばtrueを返す</td>	<td>Primary+Standby</td>
 
 </tr><tr>
-<td>pg_last_wal_receive_location()	</td>	<td>text	</td>	<td>受信してHDDに書き込んだWALログのLSN</td>	<td>スレーブ</td>
+<td>pg_last_wal_receive_location()	</td>	<td>text	</td>	<td>受信してHDDに書き込んだWALログのLSN</td>	<td>Standby</td>
 
 </tr><tr>
-<td>pg_last_wal_replay_location()	</td>	<td>text	</td>	<td>受信してHDDに書き込み、さらに再生(replay)したWALログのLSN</td>	<td>スレーブ</td>
+<td>pg_last_wal_replay_location()	</td>	<td>text	</td>	<td>受信してHDDに書き込み、さらに再生(replay)したWALログのLSN</td>	<td>Standby</td>
 
 </tr><tr>
-<td>pg_last_xact_replay_timestamp()	    </td>	<td>timestamp with TZ	</td>	<td>再生(replay)したWALログが、マスタ側で実行された時刻</td>	<td>スレーブ</td>
+<td>pg_last_xact_replay_timestamp()	    </td>	<td>timestamp with TZ	</td>	<td>再生(replay)したWALログが、マスタ側で実行された時刻</td>	<td>Standby</td>
 
 </tr><tr>
-<td>pg_get_wal_resource_managers()</td>	<td>setof record(rm_id, rm_name, rm_builtin)</td>	<td></td>	<td></td>
+<td>pg_get_wal_resource_managers()</td>	<td>setof record(rm_id, rm_name, rm_builtin)</td>	<td>読み込まれているリソースマネージャの一覧</td>	<td>Primary+Standby</td>
 
 </tr></table>
-
 <br>
 
-[<リカバリ制御関数一覧>]
 
-
-<table><tr bgcolor="#cccccc">
+<table>
+<caption>リカバリ制御関数一覧</caption>
+<tr bgcolor="#cccccc">
 <th>関数</th>							<th>返り値型</th>	<th>説明</th>	<th>実行側</th>
 </tr><tr>
-<td>pg_is_wal_replay_paused()</td>	<td>boolean</td>	<td>再生(replay)が停止中であればtrueを返す</td>	<td>スレーブ</td>
+<td>pg_is_wal_replay_paused()</td>	<td>boolean</td>	<td>再生(replay)が停止中であればtrueを返す</td>	<td>Standby</td>
 
 </tr><tr>
-<td>pg_get_wal_replay_pause_state()</td>	<td>text</td>	<td></td>	<td></td>
+<td>pg_get_wal_replay_pause_state()</td>	<td>text</td>	<td>再生(replay)が停止中(paused)か否か(not paused)を返す</td>	<td>Standby</td>
 
 </tr><tr>
-<td>pg_promote(wait boolean DEFAULT true, wait_seconds integer DEFAULT 60)</td>	<td>text</td>	<td></td>	<td></td>
+<td>pg_promote(wait boolean DEFAULT true, wait_seconds integer DEFAULT 60)</td>	<td>text</td>	<td>StandbyをPrimaryにPromoteする。</td>	<td>Standby</td>
 
 </tr><tr>
-<td>pg_wal_replay_pause()	</td>	<td>void</td>	<td>即座に再生(replay)を停止する</td>	<td>スレーブ</td>
+<td>pg_wal_replay_pause()	</td>	<td>void</td>	<td>即座に再生(replay)を停止する</td>	<td>Standby</td>
 
 </tr><tr>
-<td>pg_wal_replay_resume()	</td>	<td>void</td>	<td>再生(replay)停止中であれば再開する </td>	<td>スレーブ</td>
-
+<td>pg_wal_replay_resume()	</td>	<td>void</td>	<td>再生(replay)停止中であれば再開する </td>	<td>Standby</td>
 
 </tr></table>
-
 <br>
 
 
@@ -58,44 +55,10 @@
 
 
 <p>
-・pg_start_backup()、pg_stop_backup()、pg_create_restore_point()
-<br>
-ベースバックアップを取得するための関数である。使い方は<a href="./admin-19.html">[<5-02>]</a>を参照。
-</p>
-
-
-<p>
-・pg_xlogfile_name_offset()、pg_xlogfile_name()、pg_xlog_location_diff()
-<br>
-LSN(Log Sequence Number)からWALログのファイル名やオフセットを得る。
-これらはWALログの管理用関数である。
-</p>
-
-<pre>
-sampledb=# SELECT pg_xlogfile_name_offset('0/F000074');
-    pg_xlogfile_name_offset
---------------------------------
- (00000001000000000000000F,116)
-(1 row)
-
-sampledb=# SELECT pg_xlogfile_name('0/F000074');
-     pg_xlogfile_name
---------------------------
- 00000001000000000000000F
-(1 row)
-
-sampledb=# SELECT pg_xlog_location_diff('0/F0001B0', '0/F000074');
- pg_xlog_location_diff
------------------------
-                   316
-(1 row)
-</pre>
-
-
-<p>
 ・pg_last_xlog_receive_location()
 <br>
-pg_last_xlog_receive_location()は受信してHDDに書き込んだWALログのLSNを返す。"receive"という関数名と異なるので注意。
+pg_last_xlog_receive_location()は受信してHDDに書き込んだWALログのLSNを返します。
+"receive"という関数名と異なるので注意。
 <br>
 
 </p>
@@ -104,7 +67,110 @@ pg_last_xlog_receive_location()は受信してHDDに書き込んだWALログのL
 <p>
 ・pg_xlog_replay_pause()、pg_xlog_replay_resume()
 <br>
-これらの関数を使うと、スレーブ側で明示的に再生(replay)を停止できる。
+これらの関数を使うと、スレーブ側で明示的に再生(replay)を停止、再開できます。
 </p>
 
 
+
+%CHAPTER 実行例
+
+<p>
+・pg_last_wal_receive_lsn(), pg_last_wal_replay_lsn(), pg_last_xact_replay_timestamp()
+<br>
+</p>
+
+<pre>
+postgres=# SELECT pg_is_in_recovery();
+ pg_is_in_recovery
+-------------------
+ t
+(1 row)
+
+postgres=# SELECT pg_last_wal_receive_lsn();
+ pg_last_wal_receive_lsn
+-------------------------
+ 0/12034840
+(1 row)
+
+postgres=# SELECT pg_last_wal_replay_lsn();
+ pg_last_wal_replay_lsn
+------------------------
+ 0/12034840
+(1 row)
+
+postgres=# SELECT pg_last_xact_replay_timestamp();
+ pg_last_xact_replay_timestamp
+-------------------------------
+ 2023-03-13 15:22:54.738431+09
+(1 row)
+</pre>
+<br>
+
+<p>
+・pg_get_wal_resource_managers()
+<br>
+</p>
+
+<pre>
+postgres=# SELECT pg_get_wal_resource_managers();
+ pg_get_wal_resource_managers
+------------------------------
+ (0,XLOG,t)
+ (1,Transaction,t)
+ (2,Storage,t)
+ (3,CLOG,t)
+ (4,Database,t)
+ (5,Tablespace,t)
+ (6,MultiXact,t)
+ (7,RelMap,t)
+ (8,Standby,t)
+ (9,Heap2,t)
+ (10,Heap,t)
+ (11,Btree,t)
+ (12,Hash,t)
+ (13,Gin,t)
+ (14,Gist,t)
+ (15,Sequence,t)
+ (16,SPGist,t)
+ (17,BRIN,t)
+ (18,CommitTs,t)
+ (19,ReplicationOrigin,t)
+ (20,Generic,t)
+ (21,LogicalMessage,t)
+(22 rows)
+</pre>
+<br>
+
+
+
+<p>
+・pg_get_wal_replay_pause_state(), pg_wal_replay_pause(), pg_get_wal_replay_pause_state()
+<br>
+</p>
+
+<pre>
+postgres=# SELECT pg_get_wal_replay_pause_state();
+pg_get_wal_replay_pause_state
+-------------------------------
+ not paused
+(1 row)
+
+postgres=# SELECT pg_wal_replay_pause();
+ pg_wal_replay_pause
+---------------------
+
+(1 row)
+
+postgres=# SELECT pg_get_wal_replay_pause_state();
+ pg_get_wal_replay_pause_state
+-------------------------------
+ paused
+(1 row)
+
+postgres=# SELECT pg_wal_replay_resume();
+ pg_wal_replay_resume
+----------------------
+
+(1 row)
+</pre>
+<br>
