@@ -19,19 +19,19 @@
 <td>pg_ls_waldir()</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>WALディレクトリ以下のWALログファイル名、サイズ、変更時刻を表示</td>
 
 </tr><tr>
-<td>pg_ls_logicalmapdir()</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>バージョン15から</td>
+<td>pg_ls_logicalmapdir()</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>pg_logical/mappings以下のファイルを表示する。バージョン15から</td>
 
 </tr><tr>
-<td>pg_ls_logicalsnapdir()</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>バージョン15から</td>
+<td>pg_ls_logicalsnapdir()</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>pg_logical/snapdir以下のファイルを表示する。バージョン15から</td>
 
 </tr><tr>
-<td>pg_ls_replslotdir(slot_name text)</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>バージョン15から</td>
+<td>pg_ls_replslotdir(slot_name text)</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>pg_replslot/slot_nameディレクトリ以下の物理スロット ディレクトリを表示する。バージョン15から</td>
 
 </tr><tr>
 <td>pg_ls_archive_statusdir()</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>アーカイブステータスを保存するディレクトリ(pg_wal/archive_status/)以下を表示する。バージョン12から</td>
 
 </tr><tr>
-<td>pg_ls_tmpdir([tablespace oid])</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>バージョン12から</td>
+<td>pg_ls_tmpdir([tablespace oid])</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>現時点で作成されているテンポラリファイルを表示する。バージョン12から</td>
 
 </tr><tr>
 <td>pg_read_file(filename text [, offset bigint, length bigint [, missing_ok bool]])</td>	<td>text</td>	<td>テキストファイルfilenameの内容を(offsetからlengthだけ)返す</td>
@@ -47,63 +47,118 @@
 
 <br>
 
-
-
-
-<pre>
-
-===============================================================================
-関数								返り値型	説明
-===============================================================================
-pg_ls_dir(dirname text)						setof text
-pg_read_file(filename text, offset bigint, length bigint)	text
-pg_stat_file(filename text)	   record
-===============================================================================
-</pre>
-
-<br>
-
-<pre>
-表 9-61. 汎用ファイルアクセス関数
-名前	 戻り型	説明
-pg_ls_dir(dirname text)		setof text	ディレクトリ内容のリスト
-pg_read_file(filename text [, offset bigint, length bigint])	text	テキストファイルの内容を返す
-pg_read_binary_file(filename text [, offset bigint, length bigint])	bytea	ファイルの内容を返す
-pg_stat_file(filename text)  record  ファイル情報を返す
-
-pg_ls_dirは、特別なエントリである"."、および　".."を除いた、指定されたディレクトリの全ての名前を返します。
-
-pg_read_fileは与えられたoffsetから始まり、最大lengthバイト（最初にファイルの終りに到達すればこれより少なくなりますが）
-テキストファイルの一部分を返します。offsetが負の場合にはファイルの終りから数えた位置から読み出します。
-もしoffsetとlengthが省略された場合、ファイル全体が返されます。ファイルからのバイトの読み込みは、
-そのサーバ符号化方式に対する文字列と同様の解釈をされます。
-そのため、読み込んだバイト列がその符号化方式において有効でない場合にはエラーが投げられます。
-
-pg_read_binary_fileは、結果がbytea値となり、従って符号化の検査がされないことを除き、pg_read_fileと似ています。
-convert_from関数と組み合わせることで、この指定した符号化方式でファイルの読み込みを行うことができます。
-
-SELECT convert_from(pg_read_binary_file('file_in_utf8.txt'), 'UTF8');
-
-pg_stat_fileはファイル容量、最終アクセス時刻、最終更新時刻、最後にファイルステータスを変更した時刻（これはUnixプラットフォームのみ）、
-ファイル作成時刻（Windowsのみ）およびもしディレクトリであればそれを示すbooleanを返します。典型的な使用法を示します。
-
-SELECT * FROM pg_stat_file('filename');
-SELECT (pg_stat_file('filename')).modification;
-
-
-</pre>
-
-<br>
-
-%CHAPTER 解説
-
 %CHAPTER 実行例
+
+<p>
+・pg_ls_dir()
+<br>
+データベースクラスタのあるディレクトリから、相対パス、絶対パスそれぞれの内容を表示できます。
+</p>
+
+<pre>
+postgres=# SELECT pg_ls_dir('pg_wal');
+        pg_ls_dir
+--------------------------
+ 000000020000000000000014
+ 000000020000000000000015
+ 00000002.history
+ 000000020000000000000013
+ 000000020000000000000012
+ archive_status
+(6 rows)
+
+postgres=# SELECT pg_ls_dir('/usr/local/');
+ pg_ls_dir
+-----------
+ include
+ etc
+ games
+ sbin
+ src
+ lib
+ bin
+ man
+ share
+(9 rows)
+
+</pre>
+<br>
+
+<p>
+・pg_ls_logdir()
+<br>
+
+</p>
+
+<pre>
+postgres=# SELECT pg_ls_logdir();
+                             pg_ls_logdir
+----------------------------------------------------------------------
+ (postgresql-2023-01-17_000000.log,0,"2023-03-07 08:26:15+09")
+ (postgresql-2023-01-23_000000.log,0,"2023-03-07 08:26:15+09")
+ (postgresql-2023-02-25_000000.log,0,"2023-03-07 08:26:15+09")
+
+....
+</pre>
+<br>
+
+<p>
+・pg_ls_waldir()
+<br>
+</p>
+
+<pre>
+postgres=# SELECT pg_ls_waldir();
+                         pg_ls_waldir
+--------------------------------------------------------------
+ (000000020000000000000014,16777216,"2023-03-07 08:26:14+09")
+ (000000020000000000000015,16777216,"2023-03-07 08:26:14+09")
+ (00000002.history,41,"2023-03-07 08:26:14+09")
+ (000000020000000000000013,16777216,"2023-03-07 08:26:14+09")
+ (000000020000000000000012,16777216,"2023-03-10 12:00:44+09")
+(5 rows)
+</pre>
+<br>
+
+
+<p>
+・pg_ls_logicalsnapdir(), pg_ls_replslotdir()
+<br>
+</p>
+
+<pre>
+postgres=# SELECT pg_ls_logicalsnapdir();
+              pg_ls_logicalsnapdir
+------------------------------------------------
+ (0-121220B8.snap,128,"2023-03-10 11:56:27+09")
+ (0-12122708.snap,128,"2023-03-10 12:00:24+09")
+ (0-12121D50.snap,128,"2023-03-10 11:54:57+09")
+ (0-12122360.snap,128,"2023-03-10 11:57:40+09")
+ (0-12122408.snap,128,"2023-03-10 11:58:01+09")
+ (0-121220F0.snap,128,"2023-03-10 11:56:38+09")
+ (0-12122218.snap,128,"2023-03-10 11:57:09+09")
+ (0-12121F08.snap,128,"2023-03-10 11:56:15+09")
+ (0-12122480.snap,128,"2023-03-10 12:00:23+09")
+ (0-121227B8.snap,128,"2023-03-10 12:00:44+09")
+(10 rows)
+
+postgres=# SELECT pg_ls_logicalmapdir();
+ pg_ls_logicalmapdir
+---------------------
+(0 rows)
+
+postgres=# SELECT pg_ls_replslotdir('standby2_slot');
+          pg_ls_replslotdir
+--------------------------------------
+ (state,200,"2023-03-13 13:03:51+09")
+(1 row)
+</pre>
+<br>
 
 
 <p>
 ・pg_ls_archive_statusdir()
 <br>
-
 </p>
 
 <pre>
@@ -113,5 +168,32 @@ postgres=# SELECT pg_ls_archive_statusdir();
  (000000010000000000000005.done,0,"2023-02-12 00:04:32+09")
 (1 row)
 </pre>
+<br>
 
+
+<p>
+・pg_read_file(),pg_stat_file()
+<br>
+</p>
+
+<pre>
+postgres=# SELECT pg_read_file('pg_hba.conf');
+                               pg_read_file
+--------------------------------------------------------------------------
+ # PostgreSQL Client Authentication Configuration File                   +
+ # ===================================================                   +
+ #                                                                       +
+ # Refer to the "Client Authentication" section in the PostgreSQL        +
+ # documentation for a complete description of this file.  A short       +
+ # synopsis follows.                                                     +
+ #                                                                       +
+ ....
+
+
+postgres=# SELECT pg_stat_file('pg_hba.conf');
+                                     pg_stat_file
+--------------------------------------------------------------------------------------
+ (4874,"2023-03-13 13:12:02+09","2023-03-07 08:26:14+09","2023-03-07 08:26:14+09",,f)
+(1 row)
+</pre>
 <br>
