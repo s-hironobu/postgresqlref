@@ -26,59 +26,59 @@
 <tr bgcolor="#cccccc">
 <th>主なオプション</th>	<th>説明</th>
 </tr><tr>
-<td>-A authmethod</td>	<td>pg_hba.confでOSのローカルユーザに使用する認証方法を指定</td>
+<td>-A, --auth=METHOD</td>	<td>pg_hba.confでlocal接続してくるOSのユーザに使用する認証方法(trustやmd5など)を指定</td>
 </tr><tr>
-<td>-auth-host</td>	<td></td>
+<td>--auth-host=METHOD</td>	<td>pg_hba.confでTCP/IP接続してくるOSのユーザに使用する認証方法を指定</td>
 </tr><tr>
-<td>-auth-local</td>	<td></td>
+<td>--auth-local=METHOD</td>	<td>pg_hba.confでsocket接続してくるOSのユーザに使用する認証方法を指定</td>
 </tr><tr>
-<td>-auth-local</td>	<td></td>
+<td>-U, --username=NAME</td>	<td>データベースのスーパーユーザ名を指定[initdbを実行したユーザ名]</td>
+
 </tr><tr>
-<td>-U superuser</td>	<td>データベースのスーパーユーザ名を指定[initdbを実行したユーザ名]</td>
+<td>-E, --encoding=ENCODING</td>	<td>デフォルトのエンコーディングENCODINGを設定[SQL_ASCII]</td>
+
 </tr><tr>
-<td>-E=encoding</td>	<td>デフォルトのエンコーディングencodingを設定[SQL_ASCII]</td>
+<td>-L DIR</td>	<td>各種設定ファイルのテンプレートがあるディレクトリDIRを設定</td>
+
 </tr><tr>
-<td>-L templatedir</td>	<td>各種設定ファイルのテンプレートがあるディレクトリ(templatedir)を設定</td>
-</tr><tr>
-<td>--locale=locale</td>	<td>ロケールlocaleを設定</td>
+<td>--locale=LOCALE</td>	<td>ロケールLOCALEを設定</td>
+
 </tr><tr>
 <td>--no-locale</td>	<td>ロケールを無効にする</td>
+
+<!--
 </tr><tr>
-<td>--locale=locale</td>	<td></td>
+<td>--lc-collate=LOCALE</td>	<td></td>
 </tr><tr>
-<td>--lc-collate=locale</td>	<td></td>
+<td>--lc-ctype=LOCALE</td>	<td></td>
 </tr><tr>
-<td>--lc-ctype=locale</td>	<td></td>
+<td>--lc-messages=LOCALE</td>	<td></td>
 </tr><tr>
-<td>--lc-messages=locale</td>	<td></td>
+<td>--lc-monetary=LOCALE</td>	<td></td>
 </tr><tr>
-<td>--lc-monetary=locale</td>	<td></td>
+<td>--lc-numeric=LOCALE</td>	<td></td>
 </tr><tr>
-<td>--lc-numeric=locale</td>	<td></td>
+<td>--lc-time=LOCALE</td>	<td></td>
+-->
+
 </tr><tr>
-<td>--lc-time=locale</td>	<td></td>
+<td>--locale-provider={libc|icu}</td>	<td>ロケールプロバイダを選択する</td>
+
 </tr><tr>
-<td>--locale-provider={libc|icu}</td>	<td></td>
+<td>-k, --data-checksums</td>	<td>データページのchecksum計算を行う</td>
+
 </tr><tr>
-<td>-g, --allow-group-access</td>	<td></td>
+<td>-pwfile=FILENAME</td>	<td>スーパーユーザのパスワードをファイルFILENAMEから読む</td>
+
 </tr><tr>
-<td>-k, --data-checksums</td>	<td></td>
+<td>-W, --pwprompt</td>	<td>パスワード入力を要求する</td>
+
 </tr><tr>
-<td>-N, --no-sync</td>	<td></td>
+<td>-X, --waldir=DIR</td>	<td>WALディレクトリを指定する</td>
+
 </tr><tr>
-<td>--no-instructions</td>	<td></td>
-</tr><tr>
-<td>-pwfile=filename</td>	<td></td>
-</tr><tr>
-<td>-S, --sync-only</td>	<td></td>
-</tr><tr>
-<td>-T config, --text-search-config=config</td>	<td></td>
-</tr><tr>
-<td>-W, --pwprompt</td>	<td></td>
-</tr><tr>
-<td>-X directory, --waldir=directory</td>	<td></td>
-</tr><tr>
-<td>--wal-segsize=size</td>	<td></td>
+<td>--wal-segsize=SIZE</td>	<td>WALセグメントファイルのサイズを指定する。デフォルト16MB</td>
+
 </tr></table>
 <br>
 
