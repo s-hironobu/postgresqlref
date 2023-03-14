@@ -384,7 +384,7 @@ pg_restore [OPTION ..] [archive_file]
 </tr><tr>
 <td>-W	</td>		<td>パスワード入力プロンプトを表示</td>
 </tr><tr>
-<td>-w	</td>		<td>パスワード入力を促さない。バージョン8.4から</td>
+<td>-w	</td>		<td>パスワード入力を促さない</td>
 </tr><tr>
 <td>-v, --verbose</td>		<td>処理の内容を詳細に表示</td>
 </tr><tr>
@@ -397,73 +397,62 @@ pg_restore [OPTION ..] [archive_file]
 <td>-c, --clean	</td>		<td>データベースとテーブルの削除コマンド(DROP DATABASE文、DROP TABLE文)を含める。プレーンテキスト形式のみ有効</td>
 
 </tr><tr>
-<td>--disable-triggers</td>		<td></td>
+<td>--disable-triggers</td>		<td>データ復元中にターゲットテーブルのトリガを一時的に無効にするコマンドを含める。--data-onlyが設定されたときのみ有効。</td>
 
 </tr><tr>
-<td>--enable-row-security</td>		<td></td>
-
-</tr><tr>
-<td>--if-exists</td>		<td></td>
-
+<td>--enable-row-security</td>		<td>row securityを含める</td>
 
 </tr><tr>
 <td>-F format</td>		<td>出力フォーマット(format)を指定。別表参照</td>
 
 </tr><tr>
-<td><font color="#ff0000">-jobs=NUM</font></td>		<td><font color="#ff0000">ダンプ/リストアを指定した数NUMだけ並行して実行する。バージョン9.3から</font></td>
+<td>-jobs=NUM</td>		<td>ダンプ/リストアを指定した数NUMだけ並行して実行する</td>
 
 </tr><tr>
-<td>-n pattern, --schema=pattern </td> <td></td>
+<td>-n pattern, --schema=pattern </td> <td>patternにマッチするスキーマのみダンプ/リストアする</td>
 </tr><tr>
-<td>-N pattern, --exclude-schema=pattern </td> <td></td>
+<td>-N pattern, --exclude-schema=pattern </td> <td>patternにマッチするスキーマのみダンプ/リストア*しない*</td>
 
 
 </tr><tr>
 <td>-O, --no-owner</td>		<td>所有権に関するSQL文をダンプ/リストアしない(復元時、復元作業を行ったユーザが所有権をもつ)。プレーンテキスト形式のみ有効</td>
 </tr><tr>
-<td>-no-security-labels</td>		<td>セキュリティラベルに関する設定をダンプ/リストアしない。バージョン9.1から</td>
+<td>-no-security-labels</td>		<td>セキュリティラベルに関する設定をダンプ/リストアしない</td>
 </tr><tr>
-<td>--role=ROLENAME</td>		<td>ダンプ/リストアの前に"SET ROLE文でROLENAMEを設定。バージョン8.4から</td>
+<td>--role=ROLENAME</td>		<td>ダンプ/リストアの前に"SET ROLE文でROLENAMEを設定</td>
 
 </tr><tr>
-<td>--no-comments</td>		<td></td>
+<td>--no-comments</td>		<td>コメントをダンプ/リストアしない</td>
 
 
 </tr><tr>
-<td>--no-publications</td>		<td></td>
+<td>--no-publications</td>		<td>パブリケーションをダンプ/リストアしない</td>
 
 </tr><tr>
-<td>--no-security-labels</td>		<td></td>
+<td>--no-subscriptions</td>		<td>サブスクリプションをダンプ/リストアしない</td>
 
 </tr><tr>
-<td>--no-subscriptions</td>		<td></td>
-
-</tr><tr>
-<td>--no-table-access-method</td>		<td>バージョン15から</td>
+<td>--no-table-access-method</td>		<td>アクセスメソッドをダンプ/リストアしない。バージョン15から</td>
 
 
 </tr><tr>
 <td>-R, --no-reconnect</td>		<td>メタコマンド\connectをダンプしない(\connectはリストア時に所有権を反映するために用いる場合がある)。プレーンテキスト形式のみ有効</td>
 </tr><tr>
-<td>--no-tablespaces</td>		<td>テーブルスペースに関する設定をダンプ/リストアしない。バージョン8.4から</td>
+<td>--no-tablespaces</td>		<td>テーブルスペースに関する設定をダンプ/リストアしない</td>
 </tr><tr>
 
 </tr><tr>
-<td>--no-toast-compression</td>		<td>バージョン14から</td>
+<td>--no-toast-compression</td>		<td>TOASTテーブルの圧縮メソッドをダンプ/リストアしない。バージョン14から</td>
 
 </tr><tr>
-<td>--no-unlogged-table-data</td>		<td></td>
+<td>--no-unlogged-table-data</td>		<td>UNLOGGEDテーブルをダンプ/リストアしない</td>
 
-
+<!--
 </tr><tr>
 <td>--section</td>		<td></td>
-
-</tr><tr>
-<td>--ows-per-insert=nrows</td>		<td>バージョン12から</td>
-
-
 </tr><tr>
 <td>--strict-names</td>		<td></td>
+-->
 
 </tr><tr>
 <td>-S user_name</td>		<td>スーパーユーザ権限をもつデータベースユーザ名(user_name)を指定</td>
@@ -482,91 +471,100 @@ pg_restore [OPTION ..] [archive_file]
 <tr bgcolor="#eeeeee">
 <th colspan=2 align=left>pg_dumpだけのオプション</th>
 
+<!--
 </tr><tr>
 <td>--binary-upgrade</td>	<td></td>
-
+-->
 
 </tr><tr>
 <td>--column-inserts</td>		<td>データを(COPY文ではなく)明示的にカラム名をつけたINSERT文としてダンプする</td>
 
+<!--
 </tr><tr>
 <td>--attribute-inserts</td>		<td></td>
-
-
-</tr><tr>
-<td>-b, --blogs</td>		<td></td>
+-->
 
 </tr><tr>
-<td>-B, --no-blogs</td>		<td></td>
-
+<td>-b, --blobs</td>		<td>blobデータを含める</td>
 
 </tr><tr>
-<td>-E encoding, --encoding=encoding</td>		<td></td>
+<td>-B, --no-blobs</td>		<td>blobデータを含めない</td>
+
+<!--
+</tr><tr>
+<td>-E encoding, --encoding=encoding</td>		<td>encodingデータを含める</td>
+-->
 
 </tr><tr>
 <td>-d, --inserts</td>		<td>データを(COPY文ではなく)INSERT文としてダンプする</td>
 </tr><tr>
-<td>--disable-dollar-quoting</td>		<td>関数定義のドル引用符を無効にし、強制的に標準SQLの文字列構文を使用した引用符付けにする。バージョン8.1から</td>
+<td>--disable-dollar-quoting</td>		<td>関数定義のドル引用符を無効にし、強制的に標準SQLの文字列構文を使用した引用符付けにする。</td>
 
-
+<!--
 </tr><tr>
 <td>-e pattern, --extension=pattern </td> <td>バージョン14から</td>
 
 </tr><tr>
 <td>--extra-float-digits=ndigits</td>		<td>バージョン12から</td>
+-->
 
 </tr><tr>
-<td>--exclude-table-data</td>		<td></td>
+<td>--exclude-table-data=PATTERN</td>		<td>PATTERNに一致するテーブルのデータをダンプしない</td>
 
 
 </tr><tr>
-<td>--include-foreign-data=foreignserver</td>		<td>バージョン13から</td>
+<td>--include-foreign-data=foreignserver</td>		<td>FDWのデータをダンプする。バージョン13から</td>
 
-
+<!--
 </tr><tr>
 <td>--load-via-partition-root</td>		<td></td>
+-->
 
 </tr><tr>
-<td>--lock-wait-timeout=timeout</td>		<td></td>
+<td>--lock-wait-timeout=timeout</td>		<td>テーブルが、timeoutより長くロックされた場合、ダンプを失敗する。</td>
 
-
+<!--
 </tr><tr>
 <td>--no-sync</td>		<td></td>
+-->
 
 </tr><tr>
-<td>--on-conflict-do-nothing</td>		<td>バージョン12から</td>
+<td>--on-conflict-do-nothing</td>		<td>INSERTコマンドに"ON CONFLICT DO NOTHING"を加える。バージョン12から</td>
 
+</tr><tr>
+<td>--rows-per-insert=nrows</td>		<td>--inserts設定時、nrows毎にinsertする。バージョン12から</td>
+
+<!--
 </tr><tr>
 <td>--no-synchronized-snapshots</td>		<td></td>
+-->
 
 </tr><tr>
-<td>--rows-per-insert</td>		<td></td>
+<td>--serializable-deferrable</td>		<td>トランザクション隔離レベルSERIALIZABLE、リードオンリー、かつDeferrableでダンプする</td>
 
 </tr><tr>
-<td>--serializable-deferrable</td>		<td></td>
+<td>--snapshot=SNAPSHOT</td>		<td>与えられたSNAPSHOT条件下でダンプする</td>
 
-</tr><tr>
-<td>--snapshot=snapshotname</td>		<td></td>
-
+<!--
 </tr><tr>
 <td>--use-set-session-authorization</td>		<td></td>
-
+-->
 
 </tr><tr>
 <td>-f file_name</td>		<td>アーカイブを書き込むファイル名(file_name)。指定しない場合は標準出力へデータを出力</td>
 </tr><tr>
 <td>-i, --ignore-version</td>		<td> pg_dumpコマンドとPostgreSQLサーバのバージョンの不一致を無視</td>
 </tr><tr>
-<td>--no-unlogged-table-data</td>		<td>WALログを取らないテーブルのデータをダンプしない。バージョン9.1から</td>
+<td>--no-unlogged-table-data</td>		<td>WALログを取らないテーブルのデータをダンプしない</td>
 </tr><tr>
 <td>-o, --oids	</td>		<td>オブジェクトIDをダンプ。バージョン11まで</td>
 </tr><tr>
-<td>--quote-all-identifiers</td>		<td>強制的にすべての識別子を引用符で囲む。バージョン9.1から</td>
+<td>--quote-all-identifiers</td>		<td>強制的にすべての識別子を引用符で囲む</td>
 </tr><tr>
-<td>-T table, --exclude-table=table</td>	<td></td>
+<td>-T table, --exclude-table=PATTERN</td>	<td>PATTENに一致するテーブルをダンプしない</td>
 
 </tr><tr>
-<td>-Z 0..9, --compress=0..9</td>	<td></td>
+<td>-Z 0..9, --compress=0..9</td>	<td>圧縮レベル</td>
 
 </tr>
 
@@ -574,13 +572,13 @@ pg_restore [OPTION ..] [archive_file]
 <th colspan=2 align=left>pg_restoreだけのオプション</th>
 
 </tr><tr>
-<td>-1, --single-transaction</td>		<td></td>
+<td>-1, --single-transaction</td>		<td>シングルトランザクションでリストアする。</td>
 
 </tr><tr>
 <td>-d db_name</td>		<td>リストアするデータベース名(db_name)を設定</td>
 
        </tr><tr>
-       <td>-e, --exit-on-error	</td>		<td>エラーが発生したら終了する。デフォルトはエラーが発生しても終了しない。バージョン8.1から</td>
+       <td>-e, --exit-on-error	</td>		<td>エラーが発生したら終了する。デフォルトはエラーが発生しても終了しない。</td>
 
 </tr><tr>
 <td>-f file_name</td>		<td>作成するスクリプト(file_name)、もしくは、'-l'を使用した場合の一覧用の出力ファイル(file_name)を指定。デフォルトは標準出力</td>
@@ -591,15 +589,15 @@ pg_restore [OPTION ..] [archive_file]
 </tr><tr>
 <td>-P function_name, --function=function_name</td>		<td>リストアするプロシージャや関数(function_name)を指定</td>
 </tr><tr>
-<td>--single-transaction</td>		<td>リストアを１トランザクションで実行する。バージョン8.2から</td>
+<td>--single-transaction</td>		<td>リストアを１トランザクションで実行する。</td>
 </tr><tr>
-<td>-I, --index=NAME</td>		<td>指定したインデックスの定義のみリストアする。バージョン8,1から</td>
+<td>-I, --index=NAME</td>		<td>指定したインデックスの定義のみリストアする。</td>
 </tr><tr>
 <td>-l, --list	</td>		<td>アーカイブの内容を一覧表示</td>
 </tr><tr>
 <td>-L list_file</td>		<td>list_file内の要素のみをファイル内の出現順にリストア。行を移動することも、行の先頭に;をつけてコメントアウトすることも可能</td>
 </tr><tr>
-<td>--no-data-for-failed-tables	</td>		<td>デフォルトでは既にテーブルが存在しても、データをリストアによって追記してしまう可能性がある。このオプションを設定すると(既にテーブルが存在するため)テーブル生成に失敗するとリストアをしない。バージョン8.2から</td>
+<td>--no-data-for-failed-tables	</td>		<td>デフォルトでは既にテーブルが存在しても、データをリストアによって追記してしまう可能性がある。このオプションを設定すると(既にテーブルが存在するため)テーブル生成に失敗するとリストアをしない。</td>
 </tr><tr>
 <td>-N, --orig-order	</td>		<td>OIDによる順番づけを無視し、ダンプした時の順番のままリストア</td>
 </tr><tr>
@@ -699,7 +697,7 @@ postgres> pg_restore -U postgres -d new_sampledb -F c sampledb.car
 <br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2023-3-14
 </div>
 </body>
 </html>
