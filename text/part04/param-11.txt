@@ -82,7 +82,7 @@
 <td>◎ </td><td>	vacuum_freeze_min_age	 </td><td>整数[50000000]	 </td><td></td>
 
 </tr><tr>
-<td>◎</td>	<td>vacuum_failsafe_age</td>	<td></td>	<td></td>
+<td>◎</td>	<td>vacuum_failsafe_age</td>	<td></td>	<td>バージョン14から</td>
 
 </tr><tr>
 <td>◎</td>	<td>vacuum_multixact_freeze_table_age</td>	<td></td>	<td></td>
@@ -92,7 +92,7 @@
 <td>◎</td>	<td>vacuum_multixact_freeze_min_age</td>	<td></td>	<td></td>
 
 </tr><tr>
-<td>◎</td>	<td>vacuum_multixact_failsafe_age</td>	<td></td>	<td></td>
+<td>◎</td>	<td>vacuum_multixact_failsafe_age</td>	<td></td>	<td>バージョン14から</td>
 
 
 </tr><tr>

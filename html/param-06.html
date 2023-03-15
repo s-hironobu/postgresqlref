@@ -361,18 +361,17 @@ objID.className='close';
 
 
 </tr><tr>
-<td>×</td> <td>max_replication_slots</td>	<td></td> <td></td>
+<td>×</td> <td>max_replication_slots</td><td>整数 [10]</td> <td>レプリケーションスロットの最大数</td>
 
 
 </tr><tr>
 <td>△ </td> <td>		wal_keep_segments </td> <td>		整数[0]	 </td> <td>		スレーブが過去のWALログを必要とした場合に備えて、pg_wal以下に最低限保存するWALログの数。バージョン12まで</td>
 
 </tr><tr>
-<td>△</td> <td>wal_keep_size</td>	<td></td> <td>バージョン13から</td>
-
+<td>△</td> <td>wal_keep_size</td><td>整数 [0]</td>	<td>pg_wal以下に保存する最低限のWALサイズ。単位はMB。-1は無効。バージョン13から</td>
 
 </tr><tr>
-<td>△</td> <td>max_slot_wal_keep_size</td>	<td></td> <td></td>
+<td>△</td> <td>max_slot_wal_keep_size</td><td>整数 [-1]</td> <td></td>
 
 </tr><tr>
 <td>◎(バージョン11までは△)</td>	<td>wal_sender_timeout </td> <td>時間[60s]</td>		<td>(接続は維持しているが)設定した時間以上、スレーブからのデータ送信(ACKやHeartbeat信号)が途絶えた場合はコネクションを切断してwalsenderを終了する</td>
@@ -381,10 +380,8 @@ objID.className='close';
 <td>×</td> <td>track_commit_timestamp</td>	<td></td> <td></td>
 
 
-
 </tr><tr bgcolor="#eeeeee">
 <th colspan=4 align=left>Primary Servers</th>
-
 
 </tr><tr>
 <td>△ </td> <td>		synchronous_standby_names </td> <td>		文字列['']	 </td> <td>	同期レプリケーションを行うスレーブ名。詳細は<a href="./admin-20.html">[<3-20>]</a></td>
@@ -393,16 +390,17 @@ objID.className='close';
 <td>△ </td>	<td>vacuum_defer_cleanup_age </td> <td>		整数[0] </td> <td>不要になったタプルの削除を遅延する。遅延はトランザクション数で指定する(スレーブでのConflict対策)</td>
 
 
-
 </tr><tr bgcolor="#eeeeee">
 <th colspan=4 align=left>Standby Servers</th>
 
 
 </tr><tr>
-<td>△（バージョン12までは×)</td> <td>primary_conninfo</td>	<td></td> <td></td>
+<td>△（バージョン12は×)</td> <td>primary_conninfo</td>
+<td>文字列 ['']</td> <td>バージョン12から</td>
 
 </tr><tr>
-<td>△（バージョン12までは×)</td> <td>primary_slot_name</td>	<td></td> <td></td>
+<td>△（バージョン12は×)</td> <td>primary_slot_name</td>
+<td>文字列 ['']</td> <td>バージョン12から</td>
 
 </tr><tr>
 <td>△</td> <td>promote_trigger_file</td>	<td></td> <td></td>
@@ -508,7 +506,7 @@ wal_receiver_status_interval(スレーブ) < replication_timeout(マスタ)
 </p>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2023-3-15
 </div>
 </body>
 </html>

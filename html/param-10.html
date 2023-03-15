@@ -363,7 +363,7 @@ objID.className='close';
 <td>△	</td>	<td>autovacuum_vacuum_threshold	</td>	<td>整数[50]	</td>	<td>	詳細は本文</td>
 
 </tr><tr>
-<td>△</td>	<td>autovacuum_vacuum_insert_threshold	</td>	<td>整数[]	</td>	<td>autovacuum_vacuum_thresholdのINSERT版。autovacuum_vacuum_thresholdは更新と削除だが、これはINSERT。バージョン13から</td>
+<td>△</td>	<td>autovacuum_vacuum_insert_threshold	</td>	<td>整数[1000]	</td>	<td>autovacuum_vacuum_thresholdのINSERT版。autovacuum_vacuum_thresholdは更新と削除だが、これはINSERT。バージョン13から</td>
 
 </tr><tr>
 <td>△	</td>	<td>autovacuum_analyze_threshold	</td>	<td>整数[50]	</td>	<td>	詳細は本文</td>
@@ -371,7 +371,7 @@ objID.className='close';
 <td>△	</td>	<td>autovacuum_vacuum_scale_factor	</td>	<td>(0.0-1.0)[0.2]	</td>	<td>	詳細は本文</td>
 
 </tr><tr>
-<td>△	</td>	<td>autovacuum_vacuum_insert_scale_factor	</td>	<td>(0.0-1.0)[]	</td>	<td>autovacuum_vacuum_scale_factorのINSERT版。autovacuum_vacuum_scale_factorは更新と削除だがこれはINSERT。バージョン13から</td>
+<td>△	</td>	<td>autovacuum_vacuum_insert_scale_factor	</td>	<td>(0.0-1.0)[0.2]	</td>	<td>autovacuum_vacuum_scale_factorのINSERT版。autovacuum_vacuum_scale_factorは更新と削除だがこれはINSERT。バージョン13から</td>
 
 </tr><tr>
 <td>△	</td>	<td>autovacuum_analyze_scale_factor	</td>	<td>(0.0-1.0)[0.1]	</td>	<td>	詳細は本文</td>
@@ -379,8 +379,7 @@ objID.className='close';
 <td>× </td><td>	autovacuum_freeze_max_age	</td>	<td>整数[200000000]	</td><td>DB毎に、FREEZEしていない最古のXIDと現時点のXIDの差がこの値以上になったら、vacuum_freeze_min_age以前のt_xminを持つタプルをFREEZEする</td>
 
 </tr><tr>
-<td>×</td>	<td>	autovacuum_multixact_freeze_max_age	</td>	<td>整数[]	</td>	<td>トランザクションID周回防止でVACUUMが強制実行される前までに、テーブルのpg_class.relminmxid フィールドが到達できる（マルチトランザクションにおける）最大値。バージョン13から</td>
-
+<td>×</td>	<td>	autovacuum_multixact_freeze_max_age	</td>	<td>整数 [400000000]</td>	<td>トランザクションID周回防止でVACUUMが強制実行される前までに、テーブルのpg_class.relminmxid フィールドが到達できる（マルチトランザクションにおける）最大値。バージョン13から</td>
 
 </tr><tr>
 <td>△	</td>	<td>autovacuum_vacuum_cost_delay	</td>	<td>整数(-1-1000)[20ms]	</td>	<td>AUTOVACUUMでのVACUUM遅延機能の設定。'-1'ならvacuum_cost_delayと同じ。</td>
@@ -463,7 +462,7 @@ VACUUM処理の遅延機能でのパラメータ値と同じでよければ'-1'�
 </p>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2023-3-15
 </div>
 </body>
 </html>
