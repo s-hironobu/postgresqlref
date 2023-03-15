@@ -216,7 +216,6 @@ sampledb=# SELECT * FROM customer_view WHERE id < 4;
   3 | アランサイジョー | ルモンド
 (3 rows)
 </pre>
-
 <br>
 
 <p>
@@ -332,7 +331,6 @@ sampledb=# SELECT * FROM itemlist;
   4 | book     |  1200 |
 (4 rows)
 </pre>
-
 <br>
 
 %SECTION マテリアライズドビュー

@@ -373,21 +373,22 @@ ALTER INDEX [ IF EXISTS ] index_name
 			RESET ( storage_param  [, ... ] )
 
 
-
+●
 ALTER INDEX name ATTACH PARTITION index_name
 
+●
 ALTER INDEX name [ NO ] DEPENDS ON EXTENSION extension_name
 
-
+●
 ALTER INDEX [ IF EXISTS ] name ALTER [ COLUMN ] column_number
     SET STATISTICS integer
 
-
+●
 ALTER INDEX ALL IN TABLESPACE name [ OWNED BY role_name [, ... ] ]
     SET TABLESPACE new_tablespace [ NOWAIT ]
 
 
-● 削除
+●インデックスの削除
 DROP INDEX [ CONCURRENTLY ] [ IF EXISTS ] index_name [, ...]
 					  [ CASCADE | RESTRICT ]
 </pre>
@@ -857,7 +858,7 @@ DROP
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2023-3-15
 </div>
 </body>
 </html>

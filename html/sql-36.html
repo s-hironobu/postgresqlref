@@ -377,7 +377,6 @@ REFRESH MATERIALIZED VIEW [ CONCURRENTLY ] view_name
 DROP MATERIALIZED VIEW [ IF EXISTS ] view_name [, ...] [ CASCADE | RESTRICT ]
 
 </pre>
-
 <br>
 
 
@@ -432,7 +431,7 @@ DROP MATERIALIZED VIEW [ IF EXISTS ] view_name [, ...] [ CASCADE | RESTRICT ]
 </tr><tr>
 <td>WITH ( view_option_name [= view_option_value]</td>	<td>view_option_nameは security_barrier (bool), security_invoker (bool), check_option。</td>
 </tr><tr>
-<td>WITH ( storage_parameter [= value]</td>	<td>テーブルの格納パラメータを設定。詳細はCREATE TABLE([<6-04>])参照</td>
+<td>WITH ( storage_parameter [= value]</td>	<td>テーブルの格納パラメータを設定。詳細はCREATE TABLE(<a href="./sql-04.html">[<6-04>]</a>)参照</td>
 </tr><tr>
 <td>WITH DATA</td>	<td>データも引き継ぐ。デフォルト</td>
 </tr><tr>
@@ -487,14 +486,13 @@ CREATE VIEW文でビューを定義します。
 SELECT table_name, is_updatable, is_insertable_into
      FROM information_schema.views WHERE table_name = 'my_view';
 </pre>
-
 <br>
 
 
 <p>
 •RECURSIVE
 <br>
-バージョン9.3から共通テーブル式[<6-21>]を簡略化して表記できるようになりました。
+バージョン9.3から共通テーブル式<a href="./sql-21.html">[<6-21>]</a>を簡略化して表記できるようになりました。
 <br>
 例えば、以下の2つの定義は同等です。
 </p>
@@ -506,7 +504,6 @@ CREATE RECURSIVE VIEW name (columns) AS select_query;
 CREATE VIEW name AS WITH RECURSIVE name (columns)
        AS (select_query) SELECT columns FROM name;
 </pre>
-
 <br>
 
 
@@ -517,9 +514,9 @@ CREATE VIEW name AS WITH RECURSIVE name (columns)
 </p>
 
 <p>
-[<2-03>]の[<コラム2-1>]で述べたように、通常のビューはRuleを使った仮想的な存在です。
+通常のビューはRuleを使った仮想的な存在です。
 それに対してマテリアライズドビューは実際にテーブルスペースにテーブルが作られます。
-よってCREATE MATERIALIZED VIEWの構文はCREATE TABLE AS([<6-07>]参照)によく似ています。
+よってCREATE MATERIALIZED VIEWの構文はCREATE TABLE AS(<a href="./sql-04.html">[<6-07>]</a>参照)によく似ています。
 <br>
 バージョン9.3のマテリアライズドビューは、元になるテーブルの更新が反映されません。
 更新を反映するにはREFRESH MATERIALIZED VIEW文を明示的に実行しなければなりません。
@@ -540,7 +537,6 @@ sampledb=# CREATE VIEW mini_customerlist (id, customer_name)
 sampledb-#           AS SELECT id, name FROM customerlist;
 CREATE VIEW
 </pre>
-
 <br>
 
 <p>
@@ -562,7 +558,6 @@ sampledb=# SELECT * FROM customer_view WHERE id < 4;
   3 | アランサイジョー | ルモンド
 (3 rows)
 </pre>
-
 <br>
 
 <p>
@@ -592,7 +587,6 @@ View definition:
    FROM customerlist a, companylist b
   WHERE a.companycode = b.companycode;
 </pre>
-
 <br>
 
 
@@ -623,7 +617,6 @@ sampledb-#     FROM information_schema.views WHERE table_name = 'my_itemlist';
  my_itemlist | YES          | YES
 (1 row)
 </pre>
-
 <br>
 
 
@@ -650,7 +643,6 @@ sampledb=# SELECT * FROM my_itemlist;
   3 | eraser   |    80
 (3 rows)
 </pre>
-
 <br>
 
 
@@ -681,7 +673,6 @@ sampledb=# SELECT * FROM itemlist;
   4 | book     |  1200 |
 (4 rows)
 </pre>
-
 <br>
 
 <div class="jumpmenu"></div><h4>マテリアライズドビュー</h4>
@@ -705,7 +696,6 @@ sampledb-#  　　　　　　ORDER BY a.abalance DESC LIMIT 3;
  350088 | tokyo    |     4669
 (3 rows)
 </pre>
-
 <br>
 
 
@@ -728,7 +718,6 @@ sampledb=# SELECT pg_relation_filepath('mv_abalance');
  base/16384/16416
 (1 row)
 </pre>
-
 <br>
 
 
@@ -741,7 +730,6 @@ sampledb=# SELECT pg_relation_filepath('mv_abalance');
 $ ls -la data/base/16384/16416
 -rw-------. 1 postgres:postgres 18505728 Sep 10 06:29 data/base/16384/16416
 </pre>
-
 <br>
 
 
@@ -759,7 +747,6 @@ sampledb=# SELECT * FROM mv_abalance ORDER BY abalance DESC LIMIT 3;
  350088 | tokyo    |     4669
 (3 rows)
 </pre>
-
 <br>
 
 
@@ -784,7 +771,6 @@ sampledb=# SELECT * FROM mv_abalance ORDER BY abalance DESC LIMIT 3;
  350088 | tokyo    |     4669
 (3 rows)
 </pre>
-
 <br>
 
 
@@ -806,7 +792,6 @@ sampledb=# SELECT * FROM mv_abalance ORDER BY abalance DESC LIMIT 3;
  350088 | tokyo    |     4669
 (3 rows)
 </pre>
-
 <br>
 
 
@@ -835,12 +820,11 @@ sampledb=# EXPLAIN SELECT * FROM mv_abalance ORDER BY abalance DESC LIMIT 3;
          ->  Seq Scan on mv_abalance  (cost=0.00..4879.44 rows=262044 width=40)
 (4 rows)
 </pre>
-
 <br>
 
 
 <p>
-マテリアライズドビューは物理的な実体があるので、CREATE INDEX文([<6-35>]参照)でインデックスを定義できます。
+マテリアライズドビューは物理的な実体があるので、CREATE INDEX文(<a href="./sql-35.html">[<6-35>]</a>参照)でインデックスを定義できます。
 <br>
 マテリアラズドビューmv_abalanceのカラムabalanceにインデックスを定義すると、
 以降はインデックススキャンが使われます。
@@ -857,10 +841,10 @@ sampledb=#  EXPLAIN SELECT * FROM mv_abalance ORDER BY abalance DESC LIMIT 3;
    ->  Index Scan Backward using mv_abalance_idx on mv_abalance  (cost=0.42..12666.55 rows=400000 width=14)
 (2 rows)
 </pre>
-
+<br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2023-3-15
 </div>
 </body>
 </html>
