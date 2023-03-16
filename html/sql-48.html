@@ -453,6 +453,26 @@ sampledb=# EXPLAIN (FORMAT json) SELECT * FROM pgbench_accounts WHERE (aid BETWE
 <br>
 
 <p>
+・テンポラリファイル
+<br>
+テンポラリファイルが使われた場合、Diskに使用量が記載されます。
+</p>
+
+<pre>
+testdb=# EXPLAIN ANALYZE SELECT id, data FROM tbl_25m ORDER BY id;
+                                                        QUERY PLAN
+--------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=3944070.01..3945895.01 rows=730000 width=4104) (actual time=885.648..1033.746 rows=730000 loops=1)
+   Sort Key: id
+   Sort Method: external sort  Disk: 10000kB
+   ->  Seq Scan on tbl_25m  (cost=0.00..10531.00 rows=730000 width=4104) (actual time=0.024..102.548 rows=730000 loops=1)
+ Planning time: 1.548 ms
+ Execution time: 1109.571 ms
+(6 rows)
+</pre>
+<br>
+
+<p>
 ・ANALYZE、BUFFERS
 <br>
 ANALYZE、SETTINGS、BUFFERSオプションの例を示します。
@@ -531,7 +551,7 @@ postgres=# EXPLAIN (ANALYZE true, FORMAT json, WAL true) SELECT * FROM pgbench_a
 <br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2023-3-16
 </div>
 </body>
 </html>
