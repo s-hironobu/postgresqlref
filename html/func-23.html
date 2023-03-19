@@ -399,7 +399,7 @@ objID.className='close';
 
 <pre>
 postgres=# SELECT pg_ls_dir('pg_wal');
-        pg_ls_dir         
+        pg_ls_dir
 --------------------------
  000000020000000000000014
  000000020000000000000015
@@ -410,7 +410,7 @@ postgres=# SELECT pg_ls_dir('pg_wal');
 (6 rows)
 
 postgres=# SELECT pg_ls_dir('/usr/local/');
- pg_ls_dir 
+ pg_ls_dir
 -----------
  include
  etc
@@ -427,6 +427,34 @@ postgres=# SELECT pg_ls_dir('/usr/local/');
 <br>
 
 <p>
+・pg_ls_tmpdir();
+<br>
+現時点で生成されているテンポラリファイルが表示されます。
+</p>
+
+<pre>
+postgres=# SELECT pg_ls_tmpdir();
+                     pg_ls_tmpdir
+-------------------------------------------------------
+ (pgsql_tmp550815.0,10700000,"2023-03-19 22:40:03+09")
+(1 row)
+</pre>
+<br>
+
+<p>
+念の為、以下にテンポラリファイルを保持するディレクトリ~/base/pgsql_tmp以下の状態を示します。
+</p>
+
+<pre>
+$ ls -la data/base/pgsql_tmp/
+total 10460
+drwx------ 2 postgres postgres     4096 Mar 19 22:40 .
+drwx------ 8 postgres postgres     4096 Mar 13 14:41 ..
+-rw------- 1 postgres postgres 10700000 Mar 19 22:40 pgsql_tmp550815.0
+</pre>
+<br>
+
+<p>
 ・pg_ls_logdir()
 <br>
 
@@ -434,7 +462,7 @@ postgres=# SELECT pg_ls_dir('/usr/local/');
 
 <pre>
 postgres=# SELECT pg_ls_logdir();
-                             pg_ls_logdir                             
+                             pg_ls_logdir
 ----------------------------------------------------------------------
  (postgresql-2023-01-17_000000.log,0,"2023-03-07 08:26:15+09")
  (postgresql-2023-01-23_000000.log,0,"2023-03-07 08:26:15+09")
@@ -451,7 +479,7 @@ postgres=# SELECT pg_ls_logdir();
 
 <pre>
 postgres=# SELECT pg_ls_waldir();
-                         pg_ls_waldir                         
+                         pg_ls_waldir
 --------------------------------------------------------------
  (000000020000000000000014,16777216,"2023-03-07 08:26:14+09")
  (000000020000000000000015,16777216,"2023-03-07 08:26:14+09")
@@ -470,7 +498,7 @@ postgres=# SELECT pg_ls_waldir();
 
 <pre>
 postgres=# SELECT pg_ls_logicalsnapdir();
-              pg_ls_logicalsnapdir              
+              pg_ls_logicalsnapdir
 ------------------------------------------------
  (0-121220B8.snap,128,"2023-03-10 11:56:27+09")
  (0-12122708.snap,128,"2023-03-10 12:00:24+09")
@@ -485,18 +513,12 @@ postgres=# SELECT pg_ls_logicalsnapdir();
 (10 rows)
 
 postgres=# SELECT pg_ls_logicalmapdir();
- pg_ls_logicalmapdir 
+ pg_ls_logicalmapdir
 ---------------------
 (0 rows)
 
-postgres=# SELECT * FROM pg_create_physical_replication_slot('standby2_slot');
-   slot_name   | lsn 
----------------+-----
- standby2_slot | 
-(1 row)
-
 postgres=# SELECT pg_ls_replslotdir('standby2_slot');
-          pg_ls_replslotdir           
+          pg_ls_replslotdir
 --------------------------------------
  (state,200,"2023-03-13 13:03:51+09")
 (1 row)
@@ -526,7 +548,7 @@ postgres=# SELECT pg_ls_archive_statusdir();
 
 <pre>
 postgres=# SELECT pg_read_file('pg_hba.conf');
-                               pg_read_file                               
+                               pg_read_file
 --------------------------------------------------------------------------
  # PostgreSQL Client Authentication Configuration File                   +
  # ===================================================                   +
@@ -539,16 +561,15 @@ postgres=# SELECT pg_read_file('pg_hba.conf');
 
 
 postgres=# SELECT pg_stat_file('pg_hba.conf');
-                                     pg_stat_file                                     
+                                     pg_stat_file
 --------------------------------------------------------------------------------------
  (4874,"2023-03-13 13:12:02+09","2023-03-07 08:26:14+09","2023-03-07 08:26:14+09",,f)
 (1 row)
 </pre>
 <br>
- 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-13
+Last-modified: 2023-3-19
 </div>
 </body>
 </html>

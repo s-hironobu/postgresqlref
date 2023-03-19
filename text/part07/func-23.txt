@@ -85,6 +85,34 @@ postgres=# SELECT pg_ls_dir('/usr/local/');
 <br>
 
 <p>
+・pg_ls_tmpdir();
+<br>
+現時点で生成されているテンポラリファイルが表示されます。
+</p>
+
+<pre>
+postgres=# SELECT pg_ls_tmpdir();
+                     pg_ls_tmpdir
+-------------------------------------------------------
+ (pgsql_tmp550815.0,10700000,"2023-03-19 22:40:03+09")
+(1 row)
+</pre>
+<br>
+
+<p>
+念の為、以下にテンポラリファイルを保持するディレクトリ~/base/pgsql_tmp以下の状態を示します。
+</p>
+
+<pre>
+$ ls -la data/base/pgsql_tmp/
+total 10460
+drwx------ 2 postgres postgres     4096 Mar 19 22:40 .
+drwx------ 8 postgres postgres     4096 Mar 13 14:41 ..
+-rw------- 1 postgres postgres 10700000 Mar 19 22:40 pgsql_tmp550815.0
+</pre>
+<br>
+
+<p>
 ・pg_ls_logdir()
 <br>
 
