@@ -84,6 +84,11 @@ DEFERRABLE オプションはトランザクションがSERIALIZABLEかつREAD O
 ただし、トランザクション開始前のトランザクションスナップショット獲得時にブロックされる可能性があります。
 </p>
 
+<p>
+DEFERRABLEについては<a href="https://qiita.com/ariaki/items/9c9cee0cc763964a4ed2"  target="_blank" rel="noopener noreferrer">この記事</a>も参照してください。
+</p>
+
+
 %SECTION 隔離レベルの変遷
 
 バージョン9.0までは"SERIALIZABLE"と"READ COMMITTED"の２レベルをサポート、バージョン9.1から"REPEATABLE READ"を加えた３レベルをサポートしました。

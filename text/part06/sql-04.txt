@@ -293,6 +293,10 @@ FOREIGN KEY句(外部キー)、REFERENCES句(参照) </td>	<td>外部キー制�
 </tr></table>
 
 <p>
+DEFERRABLEについては<a href="https://qiita.com/ariaki/items/9c9cee0cc763964a4ed2"  target="_blank" rel="noopener noreferrer">この記事</a>を参照してください。
+</p>
+
+<p>
 明示的に検査タイミングを設定できるのは次の制約です。
 </p>
 

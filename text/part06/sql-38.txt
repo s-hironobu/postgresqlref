@@ -264,6 +264,10 @@ CONSTRAINTオプションを設定すると制約トリガとなり、SET CONSTR
 については<a href="./sql-04.html">[<6-04>]</a>の冒頭で解説したので参照してください。
 </p>
 
+<p>
+特に、DEFERRABLEについては<a href="https://qiita.com/ariaki/items/9c9cee0cc763964a4ed2"  target="_blank" rel="noopener noreferrer">この記事</a>を参照してください。
+</p>
+
 
 <blockquote><table BORDER="1"><tr><td>脚注1</td><td>
 <p>
