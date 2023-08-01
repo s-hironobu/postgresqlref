@@ -80,25 +80,69 @@ autovacuum_naptimeで設定された周期でworkerプロセスが起動し、VA
 </p>
 
 
+
 <p>
-・autovacuum_vacuum_threshold, autovacuum_vacuum_scale_factor
+・autovacuum_vacuum_cost_delay, autovacuum_vacuum_cost_limit
 <br>
-これらの設定パラメータはVACUUM処理を行なうか否かの判断に使います。
+autovacuum_vacuum_cost_delayとautovacuum_vacuum_cost_limitは、それぞれVACUUM処理の遅延機能([<2-07>]参照)における設定パラメータvacuum_cost_delayとvacuum_cost_limitの、AUTOVACUUM版です。
+<br>
+VACUUM処理の遅延機能でのパラメータ値と同じでよければ'-1'を設定します。
+例えば、vacuum_cost_delayの値と同じでよければ、'autovacuum_vacuum_cost_delay = -1'とします。
+</p>
+
+
+%SECTION VACUUM実行条件
+
+<p>
+Autovacuumプロセスは対象とするテーブルについて、以下の3つの条件を調べ、いずれかが成立している場合にVACUUM処理を実行します。
+</p>
+
+<ol>
+<li>FREEZEしていない最古のXIDと現時点のXIDの差が設定した値を超えた場合</li>
+<li>dead tupleの数が設定した数を超えた場合</li>
+<li>insertされたtupleの数が設定した数を超えた場合(バージョン13から)</li>
+</ol>
+
+
+<p>
+・autovacuum_freeze_max_age
+<br>
+FREEZEしていない最古のXIDと現時点のXIDの差が、autovacuum_freeze_max_ageを超えた場合、VACUUM処理が起動し、FREEZE処理が行われます。
+</p>
+
+<p>
+・Dead Tupleの数に関する条件
 <br>
 例えば1万レコードのテーブルtbl_1は、以下の式で得られるレコード数 = 2050レコード以上の更新か削除が行なわれた場合に、AUTOVACUUM処理を行います。
 </p>
 
 <pre>
-autovacuum_vacuum_threshold
-       + autovacuum_vacuum_scale_factor * テーブル総レコード数
+autovacuum_vacuum_threshold  + autovacuum_vacuum_scale_factor * テーブル総レコード数
    = 50 + 0.2 * 10000
    = 2050
 </pre>
 
+
+<p>
+・Insert Tupleの数に関する条件
+<br>
+例えば1万レコードのテーブルtbl_1は、以下の式で得られるレコード数 = 3000レコード以上のINSERTが行なわれた場合に、AUTOVACUUM処理を行います。
+</p>
+
+<pre>
+autovacuum_vacuum_insert_threshold  + autovacuum_vacuum_insert_scale_factor * テーブル総レコード数
+   = 1000 + 0.2 * 10000
+   = 3000
+</pre>
+
+
+
+%SECTION ANALYZE実行条件
+
 <p>
 ・autovacuum_analyze_threshold, autovacuum_analyze_scale_factor
 <br>
-これらの設定パラメータはANALYZE処理を行なうか否かの判断に使います。
+Autovacuumプロセスは対象とするテーブルについて、以下の条件を調べ、成立している場合にVACUUM内でANALYZE処理を実行します。
 <br>
 例えば1万レコードのテーブルtbl_1は以下の式で得られるレコード数 = 1050レコード以上の更新か削除が行なわれた場合に、ANALYZE処理を行います。
 </pre>
@@ -110,11 +154,3 @@ autovacuum_analyze_threshold
    = 1050
 </pre>
 
-<p>
-・autovacuum_vacuum_cost_delay, autovacuum_vacuum_cost_limit
-<br>
-autovacuum_vacuum_cost_delayとautovacuum_vacuum_cost_limitは、それぞれVACUUM処理の遅延機能([<2-07>]参照)における設定パラメータvacuum_cost_delayとvacuum_cost_limitの、AUTOVACUUM版です。
-<br>
-VACUUM処理の遅延機能でのパラメータ値と同じでよければ'-1'を設定します。
-例えば、vacuum_cost_delayの値と同じでよければ、'autovacuum_vacuum_cost_delay = -1'とします。
-</p>
