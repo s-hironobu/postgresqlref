@@ -345,8 +345,7 @@ objID.className='close';
       
 
 
-<h2>その他のメタコマンド</h2>
-
+<h2><a href="https://www.postgresql.org/docs/current/app-psql.html" target="_blank" rel="noopener noreferrer">その他のメタコマンド</a></h2>
 
 <table>
 <caption>メタコマンド</caption>
@@ -373,6 +372,13 @@ objID.className='close';
 </tr><tr>
 <td>\timing</td>	<td>問い合わせの処理時間を表示するか否か</td>
 </tr><tr>
+
+<td>\watch [seconds]</td>	<td>current query bufferの内容をseconds秒毎に繰り返す。</td>
+</tr><tr>
+
+<td>\watch [i[nterval]=seconds] [c[ount]=times]</td>	<td>current query bufferの内容をseconds秒毎にtimes回繰り返す。バージョン16から</td>
+</tr><tr>
+
 <td>\! [ command ]</td>	<td>コマンドを実行する</td>
 </tr></table>
 
@@ -475,7 +481,7 @@ sampledb=# \echo `date`
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2023-10-8
 </div>
 </body>
 </html>

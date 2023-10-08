@@ -360,6 +360,14 @@ pg_upgrade -b oldbindir [-B newbindir] -d oldconfigdir -D newconfigdir [option..
 </tr><tr>
 <td>-c, --check</td>	<td>チェックのみ。</td>
 </tr><tr>
+
+<td>-clone</td>	<td>効率化のためcopyでなくreflinkでファイルを複製。PG12から</td>
+</tr><tr>
+
+<td>-copy</td>	<td>-cloneでなくcopyを使う。デフォルト。PG16から</td>
+</tr><tr>
+
+
 <td>-j njobs</td>	<td>並列処理</td>
 </tr><tr>
 <td>-k, --link</td>	<td>ハードリンクを使う</td>
@@ -524,7 +532,7 @@ version 9.2以上ならば、analyze_new_cluster.shというANALYZEを実行す�
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2023-10-8
 </div>
 </body>
 </html>

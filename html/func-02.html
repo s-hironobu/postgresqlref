@@ -364,6 +364,10 @@ objID.className='close';
 </tr><tr>
 <td>div(y, x)</td>	<td>numeric</td>	<td>y/xの整数部分</td>	<td>div(9, 4)</td>	<td>2 </td>
 
+</tr><tr>
+<td>erf(x)</td>	<td>double precision</td>	<td>エラー関数。バージョン16から</td>	<td>erf(1.0)</td>	<td>0.8427007929497149 </td>
+</tr><tr>
+<td>erfc(x)</td>	<td>double precision</td>	<td>エラー関数の残り(1-erf(x))。バージョン16から</td>	<td>erfc(1.0)</td>	<td>0.15729920705028513 </td>
 
 </tr><tr>
 <td>exp(x)</td>	<td>引数と同じ型</td>	<td>指数</td>		<td>exp(1.0)</td>	<td>2.7182818284590452 </td>
@@ -396,8 +400,13 @@ objID.className='close';
 </tr><tr>
 <td>radians(d)</td>	<td>倍精度</td>	<td>xラジアンに対応する度</td>	<td>radians(45)</td>	<td>0.785398163397448 </td>
 </tr><tr>
+
 <td>random()</td>	<td>倍精度</td>	<td>0.0〜1.0の乱数</td>	<td>	</td>	<td>		 </td>
 </tr><tr>
+
+<td>random_normal(m,s)</td>	<td>倍精度</td>	<td>平均値mと標準偏差sを指定した正規分布の乱数。バージョン16から</td>	<td>random_normal(0.0, 1.0) </td>	<td>0.051285419 </td>
+</tr><tr>
+
 <td>round(x)</td>	<td>引数と同じ型</td>	<td>四捨五入</td>	<td>round(42.2)</td>	<td>42 </td>
 </tr><tr>
 <td>round(x, i)</td>	<td>numeric</td>	<td>少数点位置iで四捨五入</td>	<td>round(42.2765,2)</td>	<td>42.28 </td>
@@ -497,7 +506,7 @@ sampledb=# SELECT sin(radians(90));	← sin(90度)
 <br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2023-10-8
 </div>
 </body>
 </html>

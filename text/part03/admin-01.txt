@@ -14,6 +14,12 @@
 UNIX系OSでPostgreSQLをソースコードからインストールする手順を示します。
 </p>
 
+<p>
+バージョン16から<a href="https://mesonbuild.com/" target="_blank" rel="noopener noreferrer">Meson</a>によるビルドも可能になりました。
+しかし本文書では従来のMakeによる方法を解説します。
+</p>
+
+
 %CHAPTER [1] グループとユーザの登録
 
 <p>
@@ -45,13 +51,20 @@ postgres> cd postgresql-15.1
 
 <p>
 次にconfigureコマンド、gmakeコマンドを実行します。本書では/usr/local/pgsqlにインストールします。
-<br>
-なおバイナリパッケージをインストールする場合、
-パッケージ毎にインストールディレクトリが異なるので、本書の説明を逐次読みかえてください。
+<p>
+
+<p>
+バージョン16から、configure実行時にicuの設定が必須になりました。
+しかし日本ではこの値は不要なので、エラーを回避するために"--without-icu"を設定します。
 </p>
 
+<p>
+なおバイナリパッケージをインストールする場合、パッケージ毎にインストールディレクトリが異なるので、本書の説明を逐次読みかえてください。
+</p>
+
+
 <pre>
-postgres> ./configure --prefix=/usr/local/pgsql
+postgres> ./configure --prefix=/usr/local/pgsql --without-icu
 postgres> gmake
 postgres> cd contrib
 postgres> gmake

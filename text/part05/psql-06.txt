@@ -3,8 +3,7 @@
 %KEY pgsql-psql06
 
 
-%TITLE 情報表示
-
+%TITLE <a href="https://www.postgresql.org/docs/current/app-psql.html" target="_blank" rel="noopener noreferrer">情報表示</a>
 
 <table>
 <caption>メタコマンド</caption>
@@ -83,6 +82,10 @@
 </tr><tr>
 <td>\drds [ROLEPTRN [DBPTRN]]</td>	<td>データベース毎のロールの設定表示</td>
 </tr><tr>
+
+<td>\drg[S] [ pattern ]</td>	<td>ロールのgrandのリスト。ロール名、ロールのメンバー、許可された権限、許可したロールを表示。バージョン16から</td>
+</tr><tr>
+
 <td>\dRp[+] [PATTERN]</td>	<td>レプリケーションpublicationの一覧を表示</td>
 </tr><tr>
 <td>\dRs[+] [PATTERN]</td>	<td>レプリケーションsubscriptionの一覧を表示</td>

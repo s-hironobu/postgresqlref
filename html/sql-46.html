@@ -363,11 +363,26 @@ where option can be one of:
     TRUNCATE [ boolean ]
     PARALLEL integer
 
+x    FULL [ boolean ]
+x    FREEZE [ boolean ]
+x    VERBOSE [ boolean ]
+x    ANALYZE [ boolean ]
+x    DISABLE_PAGE_SKIPPING [ boolean ]
+x    SKIP_LOCKED [ boolean ]
+x    INDEX_CLEANUP { AUTO | ON | OFF }
+    PROCESS_MAIN [ boolean ]
+x    PROCESS_TOAST [ boolean ]
+x    TRUNCATE [ boolean ]
+x    PARALLEL integer
+    SKIP_DATABASE_STATS [ boolean ]
+    ONLY_DATABASE_STATS [ boolean ]
+    BUFFER_USAGE_LIMIT [ size ]
+
 and table_and_columns is:
 
     table_name [ ( column_name [, ...] ) ]
 </pre>
-
+<br>
 
 <table>
 <caption>オプション</caption>
@@ -394,7 +409,6 @@ and table_and_columns is:
 </tr><tr>
 <td>PARALLEL</td>	<td>インデックスのVACUUM処理をmin_parallel_index_scan_sizeからmax_parallel_index_scan_size台数の並列ワーカで行う。バージョン13から</td>
 </tr></table>
-
 <br>
 
 
@@ -406,7 +420,7 @@ VACUUMは難しい。
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-13
+Last-modified: 2023-10-8
 </div>
 </body>
 </html>

@@ -21,6 +21,8 @@ GET DIAGNOSTICS variable = item [ , ... ]
 <td>ROW_COUNT</td>	<td>SQL文で処理された行数</td>
 </tr><tr>
 <td>RESULT_OID</td>	<td>INSERT文で挿入された(最後の)行のoid(オブジェクトID)</td>
+</tr><tr>
+<td>PG_ROUTINE_OID</td>	<td>現在の関数のoid(オブジェクトID)。バージョン16から</td>
 </tr></table>
 
 <br>
@@ -29,7 +31,7 @@ GET DIAGNOSTICS variable = item [ , ... ]
 %CHAPTER 解説
 
 <p>
-GET DIAGNOSTICS文で、結果ステータスを取り出します。現在使用可能なステータス項目は、ROW_COUNTとRESULT_OIDの2つです。
+GET DIAGNOSTICS文で、結果ステータスを取り出します。現在使用可能なステータス項目は、ROW_COUNTとRESULT_OIDの2つ(バージョン16からPG_ROUTINE_OIDが追加)です。
 実行例は(<a href="./plpgsql-06.html">[<8-06>]</a>)の例を参照してください。
 </p>
 

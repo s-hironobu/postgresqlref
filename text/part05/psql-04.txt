@@ -4,8 +4,7 @@
 %KEY pgsql-psql04
 
 
-%TITLE コマンドラインからSQL実行
-
+%TITLE <a href="https://www.postgresql.org/docs/current/app-psql.html" target="_blank" rel="noopener noreferrer">コマンドラインからSQL実行</a>
 
 
 <pre>

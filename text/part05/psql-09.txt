@@ -3,7 +3,7 @@
 %KEY pgsql-psql09
 
 
-%TITLE データのコピー
+%TITLE <a href="https://www.postgresql.org/docs/current/app-psql.html" target="_blank" rel="noopener noreferrer">データのコピー</a>
 
 <pre>
 [<書式>]

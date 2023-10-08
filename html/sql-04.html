@@ -351,7 +351,7 @@ objID.className='close';
 
 ● CREATE TABLE
 CREATE [ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } | UNLOGGED ] TABLE [ IF NOT EXISTS ] table_name ( [
-  { column_name data_type [ COMPRESSION compression_method ] [ COLLATE collation ] [ column_constraint [ ... ] ]
+  { column_name data_type [ STORAGE { PLAIN | EXTERNAL | EXTENDED | MAIN | DEFAULT } ] [ COMPRESSION compression_method ] [ COLLATE collation ] [ column_constraint [ ... ] ]
     | table_constraint
     | LIKE source_table [ like_option ... ] }
     [, ... ]
@@ -479,6 +479,26 @@ WITH ( MODULUS numeric_literal, REMAINDER numeric_literal )
 </tr></table>
 
 <br>
+
+
+<table>
+<caption>カラムのSTORAGE(バージョン16から)</caption>
+<tr bgcolor="#cccccc">
+<th>STORAGE</th>	<th>説明</th>
+</tr><tr>
+<td>PLAIN</td>		<td>intなど固定長データに使用。INLINE、非圧縮。</td>
+</tr><tr>
+<td>EXTERNAL</td>	<td>External、非圧縮</td>
+</tr><tr>
+<td>EXTENDED</td>	<td>External、圧縮</td>
+</tr><tr>
+<td>MAIN</td>		<td>INLINE、圧縮</td>
+</tr><tr>
+<td>DEFAULT</td>	<td>デフォルト</td>
+</tr></table>
+
+<br>
+
 
 <table>
 <caption>テーブル全体のオプション</caption>
@@ -633,6 +653,10 @@ FOREIGN KEY句(外部キー)、REFERENCES句(参照) </td>	<td>外部キー制�
 </tr><tr>
 <td>DEFERRABLE INITIALLY DEFERRED</td>	 <td>遅延検査する。 </td>
 </tr></table>
+
+<p>
+DEFERRABLEについては<a href="https://qiita.com/ariaki/items/9c9cee0cc763964a4ed2"  target="_blank" rel="noopener noreferrer">この記事</a>を参照してください。
+</p>
 
 <p>
 明示的に検査タイミングを設定できるのは次の制約です。
@@ -1348,7 +1372,7 @@ sampledb=# \d new
 <br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2023-10-8
 </div>
 </body>
 </html>

@@ -3,7 +3,8 @@
 %KEY pgsql-psql05
 
 
-%TITLE バッチファイルの実行(メタコマンド)
+%TITLE <a href="https://www.postgresql.org/docs/current/app-psql.html" target="_blank" rel="noopener noreferrer">バッチファイルの実行(メタコマンド)</a>
+
 
 
 <table>

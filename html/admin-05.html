@@ -347,8 +347,10 @@ objID.className='close';
 
 <h2><a href="https://www.postgresql.org/docs/current/catalogs.html" target="_blank" rel="noopener noreferrer">システムカタログ</a> / <a href="https://www.postgresql.org/docs/current/views.html" target="_blank" rel="noopener noreferrer">システムビュー</a></h2>
 
-
-<!--
+<table border=1>
+<caption>[<表3-01>] システムカタログ一覧</caption>
+<tr bgcolor="#cccccc">
+<th>システムカタログ名</th>	<th>用途</th>						<th>備考</th>
 
 </tr><tr>
 <td><a href="https://www.postgresql.org/docs/current/view-pg-available-extensions.html" target="_blank" rel="noopener noreferrer">pg_available_extensions</a></td>		<td>ビュー</td>		<td></td>
@@ -390,9 +392,15 @@ objID.className='close';
 </tr><tr>
 <td><a href="https://www.postgresql.org/docs/current/view-pg-stats-ext-exprs.html" target="_blank" rel="noopener noreferrer">pg_stats_ext_exprs</a></td>		<td>ビュー</td>		<td></td>
 
+</tr></table>
+
+<br>
 
 
--->
+<!--- ========================== -->
+<!--- ========================== -->
+<!--- ========================== -->
+<!--- ========================== -->
 
 
 <p>
@@ -423,9 +431,9 @@ objID.className='close';
 </tr><tr>
 <td><a href="https://www.postgresql.org/docs/current/view-pg-user.html" target="_blank" rel="noopener noreferrer">pg_user</a></td>		<td>ユーザ/ロールに関する情報を表示するビュー</td>		<td></td>
 </tr><tr>
-<td><a href="https://www.postgresql.org/docs/current/catalog-pg-init-privs.html" target="_blank" rel="noopener noreferrer">pg_init_privs</a></td>		<td></td>		<td></td>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-init-privs.html" target="_blank" rel="noopener noreferrer">pg_init_privs</a></td>		<td>各種オブジェクトの権限の初期値</td>		<td></td>
 </tr><tr>
-<td><a href="https://www.postgresql.org/docs/current/view-pg-group.html" target="_blank" rel="noopener noreferrer">pg_group</a></td>		<td>ビュー</td>		<td></td>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-group.html" target="_blank" rel="noopener noreferrer">pg_group</a></td>		<td>グループに関するビュー</td>		<td></td>
 
 
 </tr><tr>
@@ -497,9 +505,9 @@ pg_operator</a></td>		<td>演算子</td>		<td></td>
 </tr><tr>
 <td><a href="https://www.postgresql.org/docs/current/catalog-pg-parameter-acl.html" target="_blank" rel="noopener noreferrer">pg_parameter_acl</a></td>		<td></td>		<td>バージョン15から</td>
 </tr><tr>
-<td><a href="https://www.postgresql.org/docs/current/catalog-pg-partitioned-table.html" target="_blank" rel="noopener noreferrer">pg_partitioned_table</a></td>		<td></td>		<td></td>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-partitioned-table.html" target="_blank" rel="noopener noreferrer">pg_partitioned_table</a></td>		<td>パーティションテーブル</td>		<td></td>
 </tr><tr>
-<td><a href="https://www.postgresql.org/docs/current/catalog-pg-policy.html" target="_blank" rel="noopener noreferrer">pg_policy</a></td>		<td></td>		<td></td>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-policy.html" target="_blank" rel="noopener noreferrer">pg_policy</a></td>		<td>テーブルのrow-level securityポリシー</td>		<td></td>
 
 </tr><tr>
 <td>pg_pltemplate</td>		<td>手続き言語のテンプレート</td>		<td>バージョン12まで</td>
@@ -508,11 +516,11 @@ pg_operator</a></td>		<td>演算子</td>		<td></td>
 <td><a href="https://www.postgresql.org/docs/current/catalog-pg-proc.html" target="_blank" rel="noopener noreferrer">pg_proc</a></td>		<td>関数とプロシージャ</td>		<td></td>
 
 </tr><tr>
-<td><a href="https://www.postgresql.org/docs/current/catalog-pg-publication.html" target="_blank" rel="noopener noreferrer">pg_publication</a></td>		<td></td>		<td></td>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-publication.html" target="_blank" rel="noopener noreferrer">pg_publication</a></td>		<td>パブリケーション</td>		<td></td>
 </tr><tr>
-<td><a href="https://www.postgresql.org/docs/current/catalog-pg-publication-namespace.html" target="_blank" rel="noopener noreferrer">pg_publication_namespace</a></td>		<td></td>		<td>バージョン15から</td>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-publication-namespace.html" target="_blank" rel="noopener noreferrer">pg_publication_namespace</a></td>		<td>パブリケーションとスキーマのマッピング</td>		<td>バージョン15から</td>
 </tr><tr>
-<td><a href="https://www.postgresql.org/docs/current/catalog-pg-publication-rel.html" target="_blank" rel="noopener noreferrer">pg_publication_rel</a></td>		<td></td>		<td></td>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-publication-rel.html" target="_blank" rel="noopener noreferrer">pg_publication_rel</a></td>		<td>パブリケーションとリレーションのマッピング</td>		<td></td>
 
 </tr><tr>
 <td><a href="https://www.postgresql.org/docs/current/catalog-pg-range.html" target="_blank" rel="noopener noreferrer">pg_range</a></td>		<td>レンジ型</td>			<td></td>
@@ -526,7 +534,7 @@ pg_operator</a></td>		<td>演算子</td>		<td></td>
 </tr><tr>
 <td><a href="https://www.postgresql.org/docs/current/catalog-pg-seclabel.html" target="_blank" rel="noopener noreferrer">pg_seclablel</a></td>		<td></td>		<td></td>
 </tr><tr>
-<td><a href="https://www.postgresql.org/docs/current/catalog-pg-sequence.html" target="_blank" rel="noopener noreferrer">pg_sequence</a></td>		<td></td>		<td></td>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-sequence.html" target="_blank" rel="noopener noreferrer">pg_sequence</a></td>		<td>シーケンス</td>		<td></td>
 
 </tr><tr>
 <td><a href="https://www.postgresql.org/docs/current/catalog-pg-shdepend.html" target="_blank" rel="noopener noreferrer">pg_shdepend</a></td>		<td>共有オブジェクト間の依存関係</td>		<td></td>
@@ -536,9 +544,9 @@ pg_operator</a></td>		<td>演算子</td>		<td></td>
 </tr><tr>
 <td><a href="https://www.postgresql.org/docs/current/catalog-pg-shseclabel.html" target="_blank" rel="noopener noreferrer">pg_shseclabel</a></td>	<td></td>		<td></td>
 </tr><tr>
-<td><a href="https://www.postgresql.org/docs/current/catalog-pg-subscription.html" target="_blank" rel="noopener noreferrer">pg_subscription</a></td>	<td></td>		<td></td>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-subscription.html" target="_blank" rel="noopener noreferrer">pg_subscription</a></td>	<td>サブスクリプション</td>		<td></td>
 </tr><tr>
-<td><a href="https://www.postgresql.org/docs/current/catalog-pg-subscription-rel.html" target="_blank" rel="noopener noreferrer">pg_subscription_rel</a></td>	<td></td>		<td></td>
+<td><a href="https://www.postgresql.org/docs/current/catalog-pg-subscription-rel.html" target="_blank" rel="noopener noreferrer">pg_subscription_rel</a></td>	<td>サブスクリプション毎のレプリケーションリレーションの状態</td>		<td></td>
 
 </tr><tr>
 <td><a href="https://www.postgresql.org/docs/current/catalog-pg-tablespace.html" target="_blank" rel="noopener noreferrer">pg_tablespace</a></td>		<td>テーブルスペース</td>		<td></td>
@@ -564,7 +572,7 @@ pg_operator</a></td>		<td>演算子</td>		<td></td>
 <td><a href="https://www.postgresql.org/docs/current/view-pg-indexes.html" target="_blank" rel="noopener noreferrer">pg_indexes</a></td>		<td>インデックス定義などを表示するビュー</td>		<td></td>
 
 </tr><tr>
-<td><a href="https://www.postgresql.org/docs/current/view-pg-sequences.html" target="_blank" rel="noopener noreferrer">pg_sequences</a></td>		<td>ビュー</td>		<td></td>
+<td><a href="https://www.postgresql.org/docs/current/view-pg-sequences.html" target="_blank" rel="noopener noreferrer">pg_sequences</a></td>		<td>シーケンスのビュー。pg_sequenceよりも情報豊富</td>		<td></td>
 
 </tr><tr>
 <td><a href="https://www.postgresql.org/docs/current/view-pg-rules.html" target="_blank" rel="noopener noreferrer">pg_rules</a></td>		<td>書き換えルールに関する情報を表示するビュー</td>		<td></td>
@@ -670,7 +678,7 @@ sampledb-#      FROM pg_shadow;
 <br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2023-10-8
 </div>
 </body>
 </html>

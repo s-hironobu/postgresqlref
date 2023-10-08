@@ -3,8 +3,7 @@
 %KEY pgsql-psql01
 
 
-%TITLE psqlとは
-
+%TITLE <a href="https://www.postgresql.org/docs/current/app-psql.html" target="_blank" rel="noopener noreferrer">対話型インタフェースpsql</a>
 
 <p>
 psqlはPostgreSQLの対話型インタフェースです。

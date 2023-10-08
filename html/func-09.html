@@ -398,6 +398,10 @@ objID.className='close';
 <td>pg_trigger_depth()	</td>	<td>int	</td>	<td>トリガーの入れ子の深さを返す。</td>
 </tr><tr>
 <td>session_user</td>	<td>name	</td>	<td>データベースに接続したロール名を返す</td>
+
+</tr><tr>
+<td>system_user</td>	<td>text	</td>	<td>認証方式などの情報を返す。バージョン16から。</td>
+
 </tr><tr>
 <td>user</td>	<td>name	</td>	<td>current_userと等価</td>
 </tr><tr>
@@ -477,7 +481,7 @@ sampledb=# SELECT pg_postmaster_start_time(), pg_conf_load_time(), pg_backend_pi
 <br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2023-10-8
 </div>
 </body>
 </html>

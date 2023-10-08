@@ -3,7 +3,7 @@
 %KEY pgsql-psql08
 
 
-%TITLE ラージオブジェクトの扱い
+%TITLE <a href="https://www.postgresql.org/docs/current/app-psql.html" target="_blank" rel="noopener noreferrer">ラージオブジェクトの扱い</a>
 
 
 <table>

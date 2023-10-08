@@ -58,6 +58,9 @@
 </tr><tr>
 <td>◎</td>	<td>enable_partitionwize_aggregate</td>	<td>on/off[[on]	</td>	<td>パーティション同士の集約を有効とするか否か</td>
 
+</tr><tr>
+<td>◎</td>
+<td>enable_presorted_aggregate</td>	<td>on/off[[on]	</td>	<td>バージョン16から</td>
 
 </tr><tr>
 <td>◎</td>	<td>	enable_seqscan</td>	<td>	on/off[[on]	</td>	<td>	シーケンシャルスキャンを有効とするか否か</td>

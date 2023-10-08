@@ -403,7 +403,7 @@ objID.className='close';
 <td>文字列 ['']</td> <td>バージョン12から</td>
 
 </tr><tr>
-<td>△</td> <td>promote_trigger_file</td>	<td></td> <td></td>
+<td>△</td> <td>promote_trigger_file</td>	<td></td> <td>バージョン15まで</td>
 
 
 
@@ -443,10 +443,18 @@ objID.className='close';
 <th colspan=4 align=left>Subscribers</th>
 
 </tr><tr>
-<td>×</td> <td>max_logical_replication_workers</td>	<td></td> <td></td>
+<td>×</td>
+<td>max_replication_slots</td>	<td>整数 [10]</td> <td>バージョン16から</td>
 
 </tr><tr>
-<td>△</td> <td>max_sync_workers_per_subscription</td>	<td></td> <td></td>
+<td>×</td> <td>max_logical_replication_workers</td><td>整数 [4]</td> <td></td>
+
+</tr><tr>
+<td>△</td><td>max_sync_workers_per_subscription</td>	<td>整数 [2]</td> <td></td>
+
+</tr><tr>
+<td>×</td>
+<td>max_parallel_apply_workers_per_subscription</td>	<td>整数 [2]</td> <td>バージョン16から</td>
 
 
 </tr></table>
@@ -506,7 +514,7 @@ wal_receiver_status_interval(スレーブ) < replication_timeout(マスタ)
 </p>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-15
+Last-modified: 2023-10-8
 </div>
 </body>
 </html>

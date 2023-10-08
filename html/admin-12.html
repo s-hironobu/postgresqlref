@@ -485,10 +485,10 @@ pg_restore [OPTION ..] [archive_file]
 -->
 
 </tr><tr>
-<td>-b, --blobs</td>		<td>blobデータを含める</td>
+<td>-b, --large-objects, <s>--blobs</s></td>		<td>blobデータを含める。PG16で"--blobs"は非推奨になった。</td>
 
 </tr><tr>
-<td>-B, --no-blobs</td>		<td>blobデータを含めない</td>
+<td>-B, --no-large-objects, <s>--no-blobs</s></td>		<td>blobデータを含めない。PG16で"--no-blobs"は非推奨になった。</td>
 
 <!--
 </tr><tr>
@@ -567,6 +567,12 @@ pg_restore [OPTION ..] [archive_file]
 <td>-Z 0..9, --compress=0..9</td>	<td>圧縮レベル</td>
 
 </tr>
+
+</tr><tr>
+<td>-Z method</td>	<td>圧縮アルゴリズム。[gzip|lz4|zstd|none]。PG16から</td>
+
+</tr>
+
 
 <tr bgcolor="#eeeeee">
 <th colspan=2 align=left>pg_restoreだけのオプション</th>
@@ -697,7 +703,7 @@ postgres> pg_restore -U postgres -d new_sampledb -F c sampledb.car
 <br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-14
+Last-modified: 2023-10-8
 </div>
 </body>
 </html>

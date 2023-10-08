@@ -16,6 +16,7 @@ CREATE DATABASE db_name
     [ LOCALE [=] locale ]
     [ LC_COLLATE [=] lc_collate ]
     [ LC_CTYPE [=] lc_ctype ]
+    [ ICU_RULES [=] icu_rules ]
     [ ICU_LOCALE [=] icu_locale ]
     [ LOCALE_PROVIDER [=] locale_provider ]
     [ COLLATION_VERSION = collation_version ]
@@ -76,6 +77,11 @@ DROP DATABASE [ IF EXISTS ] db_name [ [ WITH FORCE]
 <td>lc_collate</td>	<td>データベースで使用する照合順（LC_COLLATE)</td>
 </tr><tr>
 <td>lc_ctype</td>	<td>データベースで使用する文字のクラス（LC_CTYPE）</td>
+
+</tr><tr>
+<td>icu_rules</td>	<td>ICUロケールプロバイダを使用する場合の追加ルールの設定。
+<a href="https://www.postgresql.org/docs/current/collation.html#ICU-TAILORING-RULES" target="_blank" rel="noopener noreferrer">詳細</a>。バージョン16から</td>
+
 </tr><tr>
 <td>icu_locale</td>	<td>ICUロケールプロバイダを使用する場合のID。バージョン15から</td>
 </tr><tr>

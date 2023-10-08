@@ -18,6 +18,14 @@ pg_upgrade -b oldbindir [-B newbindir] -d oldconfigdir -D newconfigdir [option..
 </tr><tr>
 <td>-c, --check</td>	<td>チェックのみ。</td>
 </tr><tr>
+
+<td>-clone</td>	<td>効率化のためcopyでなくreflinkでファイルを複製。PG12から</td>
+</tr><tr>
+
+<td>-copy</td>	<td>-cloneでなくcopyを使う。デフォルト。PG16から</td>
+</tr><tr>
+
+
 <td>-j njobs</td>	<td>並列処理</td>
 </tr><tr>
 <td>-k, --link</td>	<td>ハードリンクを使う</td>

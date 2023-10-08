@@ -3,9 +3,7 @@
 %KEY pgsql-psql07
 
 
-%TITLE 表示の制御
-
-
+%TITLE <a href="https://www.postgresql.org/docs/current/app-psql.html" target="_blank" rel="noopener noreferrer">表示の制御</a>
 
 <table>
 <caption>メタコマンド</caption>

@@ -88,6 +88,9 @@
 </tr><tr>
 <td>◎</td>	<td>	vacuum_cost_limit	</td>	<td>	整数(0-10000)[200]	</td>	<td>累積されたコストがこの値を超えると、vacuum_cost_delayで設定した時間だけ、VACUUMやANALYZEを休止する</td>
 
+</tr><tr>
+<td>◎</td>
+<td>	vacuum_buffer_usage_limit	</td>	<td>	整数(128kB-16GB)[256kB]	</td>	<td>Vacuum処理がshared_bufferを使用できるリミット。バージョン16から</td>
 
 </tr><tr bgcolor="#eeeeee">
 <th colspan=4 align=left>Background writer</th>

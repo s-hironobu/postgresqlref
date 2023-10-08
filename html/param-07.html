@@ -344,7 +344,7 @@ objID.className='close';
     <div id="body">
       
 
-<h2><a href="https://pgsql-jp.github.io/current/html/runtime-config-query.html" target="_blank" rel="noopener noreferrer">問い合わせ計画				QUERY TUNING</a></h2>
+<h2><a href="https://www.postgresql.org/docs/current/runtime-config-query.html" target="_blank" rel="noopener noreferrer">問い合わせ計画				QUERY TUNING</a></h2>
 
 <table border=1>
 <caption>[<設定項目一覧>]</caption>
@@ -400,6 +400,9 @@ objID.className='close';
 </tr><tr>
 <td>◎</td>	<td>enable_partitionwize_aggregate</td>	<td>on/off[[on]	</td>	<td>パーティション同士の集約を有効とするか否か</td>
 
+</tr><tr>
+<td>◎</td>
+<td>enable_presorted_aggregate</td>	<td>on/off[[on]	</td>	<td>バージョン16から</td>
 
 </tr><tr>
 <td>◎</td>	<td>	enable_seqscan</td>	<td>	on/off[[on]	</td>	<td>	シーケンシャルスキャンを有効とするか否か</td>
@@ -492,7 +495,8 @@ objID.className='close';
 <td>◎</td>	<td>plan_cache_mode</td>	<td>auto/force_custom_plan/force_generic_plan [auto]</td>	<td>プリペアドステートメント</td>
 
 </tr><tr>
-<td>◎</td>	<td>recursvce_worktable_factor</td>	<td>浮動少数 [10.0]</td>	<td></td>
+<td>◎</td>
+<td>recursive_worktable_factor</td>	<td>浮動少数 [10.0]</td>	<td>再帰問合せのワーキング・テーブルの平均サイズのプランナの推定値を、問合せの最初の非再帰項の推定サイズの倍数として設定</td>
 
 </tr></table>
 
@@ -526,7 +530,7 @@ objID.className='close';
 <pre>
 sampledb=# SET enable_seqscan TO off;
 </pre>
-
+<br>
 
 <p>
 ・default_statistics_target
@@ -542,7 +546,7 @@ sampledb=# SET enable_seqscan TO off;
 </p>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2023-10-8
 </div>
 </body>
 </html>

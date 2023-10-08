@@ -527,14 +527,14 @@ FOR EACH ROWは、呼び出しタイミングがAFTERかBEFOREの場合テーブ
 <tr bgcolor="#cccccc">
 <th>実行タイミング</th>	<th>実行可能なSQL文</th>	<th>FOR EACH ROW</th>	<th>FOR EACH STATEMENT</th>
 </tr><tr>
-<td rowspan=2 valign=top>BEFORE</td>	<td>INSERT/UPDATE/DELETE</td>	<td>テーブル</td>	<td>テーブルおよびビュー</td>
+<td rowspan=2 valign=top>BEFORE</td>	<td>INSERT/UPDATE/DELETE</td>	<td>テーブル</td>	<td>テーブル、ビュー、外部テーブル</td>
 </tr><tr>
-	<td>TRUNCATE	</td>	<td>—	</td>	<td>テーブル</td>
+	<td>TRUNCATE	</td>	<td>—	</td>	<td>テーブル。バージョン16から外部テーブルも</td>
 
 </tr><tr>
-<td rowspan=2 valign=top>AFTER</td>	<td>INSERT/UPDATE/DELETE</td>	<td>テーブル</td>	<td>テーブルおよびビュー</td>
+<td rowspan=2 valign=top>AFTER</td>	<td>INSERT/UPDATE/DELETE</td>	<td>テーブル</td>	<td>テーブル、ビュー、外部テーブル</td>
 </tr><tr>
-	<td>TRUNCATE	</td>	<td>	—	</td>	<td>		テーブル</td>
+	<td>TRUNCATE	</td>	<td>	—	</td>	<td>テーブル。バージョン16から外部テーブルも</td>
 
 </tr><tr>
 <td rowspan=2 valign=top>INSTEAD OF</td>	<td>INSERT/UPDATE/DELETE</td>	<td>ビュー</td>		<td>—</td>
@@ -604,6 +604,10 @@ CONSTRAINTオプションを設定すると制約トリガとなり、SET CONSTR
 <br>
 検査タイミングそのもの、およびデフォルト設定オプション(DEFERRABLE INITIALLY IMMEDIATE、DEFERRABLE INITIALLY DEFERRED)
 については<a href="./sql-04.html">[<6-04>]</a>の冒頭で解説したので参照してください。
+</p>
+
+<p>
+特に、DEFERRABLEについては<a href="https://qiita.com/ariaki/items/9c9cee0cc763964a4ed2"  target="_blank" rel="noopener noreferrer">この記事</a>を参照してください。
 </p>
 
 
@@ -842,7 +846,7 @@ sampledb=# SELECT * FROM itemlist_discount_log;
 <br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2023-10-8
 </div>
 </body>
 </html>

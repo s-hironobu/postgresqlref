@@ -364,6 +364,8 @@ objID.className='close';
 </tr><tr>
 <td>current_timestamp</td>		<td>timestamp</td>		<td>トランザクションが開始した日付と時刻</td>
 
+</tr><tr>
+<td>date_add(timestamp with time zone, interval [,text])</td>		<td>timestamp with time zone</td>	<td>timestampにintervalを追加する。バージョン16から</td>
 
 </tr><tr>
 <td>date_bin(stride interval, source timestamp1,origin timestamp2)</td>		<td>timestamp</td>		<td>sourceがoriginからstride単位で(ヒストグラムの)どのビンに入るかを返す。実行例を参照。バージョン14から</td>
@@ -372,6 +374,9 @@ objID.className='close';
 <td>date_part(field, timestamp)</td>		<td>倍精度</td>		<td>部分フィールドの取得。extractと同じ。fieldについては別表</td>
 </tr><tr>
 <td>date_part(field, interval)</td>		<td>倍精度</td>		<td>部分フィールドの取得。extractと同じ。fieldについては別表</td>
+
+</tr><tr>
+<td>date_subtract(timestamp with time zone, interval [,text ])</td>		<td>timestamp with time zone</td>	<td>timestampからintervalを引く。バージョン16から</td>
 
 </tr><tr>
 <td>date_trunc(field, timestamp)</td>		<td>timestamp</td>		<td>指定した精度で切捨て。fieldについては別表</td>
@@ -794,7 +799,7 @@ postgres=# SELECT to_timestamp(982384720.120000);
 <br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2023-10-8
 </div>
 </body>
 </html>

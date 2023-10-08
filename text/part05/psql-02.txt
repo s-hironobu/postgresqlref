@@ -3,7 +3,8 @@
 %KEY pgsql-psql02
 
 
-%TITLE PostgreSQLサーバとの接続/切断/再接続
+%TITLE <a href="https://www.postgresql.org/docs/current/app-psql.html" target="_blank" rel="noopener noreferrer">PostgreSQLサーバとの接続/切断/再接続</a>
+
 
 <pre>
 [<書式>]

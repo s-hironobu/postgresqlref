@@ -354,6 +354,8 @@ objID.className='close';
 </tr><tr>
 <td>pg_export_snapshot()</td>	<td>text	</td>	<td>トランザクションのスナップショットを返す</td>
 
+</tr><tr>
+<td>pg_log_standby_snapshot()</td>	<td>pg_lsn	</td>	<td>Take a snapshot of running transactions and write it to WAL. Since PG16</td>
 
 </tr></table>
 
@@ -386,7 +388,7 @@ postgres=*# SELECT pg_export_snapshot();
 </pre>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2023-10-8
 </div>
 </body>
 </html>

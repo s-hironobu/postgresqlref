@@ -21,6 +21,21 @@ where option can be one of:
     TRUNCATE [ boolean ]
     PARALLEL integer
 
+x    FULL [ boolean ]
+x    FREEZE [ boolean ]
+x    VERBOSE [ boolean ]
+x    ANALYZE [ boolean ]
+x    DISABLE_PAGE_SKIPPING [ boolean ]
+x    SKIP_LOCKED [ boolean ]
+x    INDEX_CLEANUP { AUTO | ON | OFF }
+    PROCESS_MAIN [ boolean ]
+x    PROCESS_TOAST [ boolean ]
+x    TRUNCATE [ boolean ]
+x    PARALLEL integer
+    SKIP_DATABASE_STATS [ boolean ]
+    ONLY_DATABASE_STATS [ boolean ]
+    BUFFER_USAGE_LIMIT [ size ]
+
 and table_and_columns is:
 
     table_name [ ( column_name [, ...] ) ]

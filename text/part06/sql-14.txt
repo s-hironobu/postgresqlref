@@ -49,12 +49,23 @@ REVOKE [ GRANT OPTION FOR ]
 ●ロール
 GRANT role_name [, ...] TO role_specification [, ...]
     [ WITH ADMIN OPTION ]
-    [ GRANTED BY role_specification ]
+    [ GRANTED BY role_specification ]			(バージョン15まで)
+
+GRANT role_name [, ...] TO role_specification [, ...]
+    [ WITH { ADMIN | INHERIT | SET } { OPTION | TRUE | FALSE } ]
+    [ GRANTED BY role_specification ]  	      	       	(バージョン16から)
+
 
 REVOKE [ ADMIN OPTION FOR ]
     role_name [, ...] FROM role_specification [, ...]
     [ GRANTED BY role_specification ]
-    [ CASCADE | RESTRICT ]
+    [ CASCADE | RESTRICT ]				(バージョン15まで)
+
+REVOKE [ { ADMIN | INHERIT | SET } OPTION FOR ]
+    role_name [, ...] FROM role_specification [, ...]
+    [ GRANTED BY role_specification ]
+    [ CASCADE | RESTRICT ]				(バージョン16から)
+
 
 ●ドメイン
 GRANT { USAGE | ALL [ PRIVILEGES ] }

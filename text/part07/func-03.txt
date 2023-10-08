@@ -10,6 +10,9 @@
 <th>集約関数</th>	<th>引数の型</th>		<th>説明</th>	<th>Partial Mode</th>
 </tr><tr>
 
+<td>any_value (anyelement)</td>	<td>入力と同じ</td>	<td>任意の値を返す。バージョン16から。</td>	<td>Yes</td>
+</tr><tr>
+
 <td>array_agg (anynoarray)</td>	<td>配列型</td>		<td>すべての入力値を配列にして返す。実行例参照。</td>	<td>No</td>
 </tr><tr>
 

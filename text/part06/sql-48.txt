@@ -15,6 +15,7 @@ EXPLAIN [ ANALYZE ] [ VERBOSE ] statement
     VERBOSE [ boolean ]
     COSTS [ boolean ]
     SETTINGS [ boolean ]
+    GENERIC_PLAN [ boolean ]
     BUFFERS [ boolean ]
     WAL [ boolean ]
     TIMING [ boolean ]
@@ -46,6 +47,8 @@ EXPLAIN [ ANALYZE ] [ VERBOSE ] statement
 <td>COSTS   [true|false]</td>	<td>問い合わせプランのコストを表示。[true]</td>
 </tr><tr>
 <td>SETTINGS	[true|false]</td>	<td>EXPLAIN表示に関連する設定パラメータのうち、デフォルト値以外の値が設定されたパラメータとその値を表示。バージョン12から。[false]</td>
+</tr><tr>
+<td>GENERIC_PLAN	[true|false]</td>	<td>どうでもいい機能。バージョン16から。[false]</td>
 </tr><tr>
 <td>BUFFERS [true|false]</td>	<td>バッファの利用状況を表示。ANALYZEも設定しなければならない。[false]</td>
 </tr><tr>

@@ -3,7 +3,7 @@
 %KEY pgsql-psql03
 
 
-%TITLE データベース一覧表示
+%TITLE <a href="https://www.postgresql.org/docs/current/app-psql.html" target="_blank" rel="noopener noreferrer">データベース一覧表示</a>
 
 
 <pre>

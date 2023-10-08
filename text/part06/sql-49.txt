@@ -18,6 +18,7 @@ where option can be one of:
     FREEZE [ boolean ]
     DELIMITER 'delimiter_character'
     NULL 'null_string'
+    DEFAULT 'default_string'
     HEADER [ boolean | MATCH ]
     QUOTE 'quote_character'
     ESCAPE 'escape_character'
@@ -53,6 +54,8 @@ where option can be one of:
 
 </tr><tr>
 <td>FREEZE [ boolean ]</td>	<td>VACUUM FREEZE後にデータを読み込む</td>
+</tr><tr>
+<td>DEFAULT 'default_string'</td>	<td>デフォルト値'default_string'を設定。バージョン16から</td>
 </tr><tr>
 <td>DELIMITER [ AS ] 'delimiter'</td>	<td>入力ファイルのレコードの区切り文字を指定。[タブスペースか、任意の数の空白文字列]</td>
 </tr><tr>

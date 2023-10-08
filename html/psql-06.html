@@ -345,8 +345,7 @@ objID.className='close';
       
 
 
-<h2>情報表示</h2>
-
+<h2><a href="https://www.postgresql.org/docs/current/app-psql.html" target="_blank" rel="noopener noreferrer">情報表示</a></h2>
 
 <table>
 <caption>メタコマンド</caption>
@@ -425,6 +424,10 @@ objID.className='close';
 </tr><tr>
 <td>\drds [ROLEPTRN [DBPTRN]]</td>	<td>データベース毎のロールの設定表示</td>
 </tr><tr>
+
+<td>\drg[S] [ pattern ]</td>	<td>ロールのgrandのリスト。ロール名、ロールのメンバー、許可された権限、許可したロールを表示。バージョン16から</td>
+</tr><tr>
+
 <td>\dRp[+] [PATTERN]</td>	<td>レプリケーションpublicationの一覧を表示</td>
 </tr><tr>
 <td>\dRs[+] [PATTERN]</td>	<td>レプリケーションsubscriptionの一覧を表示</td>
@@ -598,7 +601,7 @@ sampledb=# \d book_list
 <br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2023-10-8
 </div>
 </body>
 </html>

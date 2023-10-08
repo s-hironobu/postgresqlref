@@ -2,5 +2,4 @@
 %LASTMOD
 %KEY pgsql-psql
 
-%TITLE 対話型インタフェースpsql
-
+%TITLE <a href="https://www.postgresql.org/docs/current/app-psql.html" target="_blank" rel="noopener noreferrer">対話型インタフェースpsql</a>

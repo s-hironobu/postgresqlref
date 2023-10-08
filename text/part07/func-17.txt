@@ -54,6 +54,10 @@
 <td>pg_walfile_name_offset(lsn pg_lsn)</td>	<td>record(ile_name, file_offset)</td>	<td>WALログの位置を表す文字列を、ファイル名とファイル内の10進のバイトオフセットに変換</td> <td>Primary</td>
 </tr><tr>
 
+<td>pg_split_walfile_name(file_name text)</td>	<td>record(segment_number numeric, timeline_id bigint)</td>	<td>バージョン16から。</td> <td>Primary</td>
+</tr><tr>
+
+
 <td>pg_wal_lsn_diff(lsn1 pg_lsn, lsn2 pg_lsn)</td>	<td>numeric</td>	<td>LSNの差を返す</td> <td>Primary</td>
 
 </tr></table>

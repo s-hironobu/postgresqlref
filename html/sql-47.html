@@ -355,6 +355,7 @@ where option can be one of:
 
     VERBOSE [ boolean ]
     SKIP_LOCKED [ boolean ]
+    BUFFER_USAGE_LIMIT [ size ]
 
 and table_and_columns is:
 
@@ -382,6 +383,8 @@ and table_and_columns is:
 <td>VERBOSE</td>	<td>処理の詳細表示</td>
 </tr><tr>
 <td>SKIP_LOCKED</td>	<td>対象テーブルのロックが即座にリリースされない場合、対象テーブルのANALYZE処理をスキップする。バージョン12から</td>
+</tr><tr>
+<td>BUFFER_USAGE_LIMIT</td>	<td>共有バッファの最大利用サイズ。バージョン16から</td>
 </tr></table>
 
 <br>
@@ -405,7 +408,7 @@ ANALYZE文はテーブルの統計情報を集計します。
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2023-10-8
 </div>
 </body>
 </html>

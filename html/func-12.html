@@ -376,6 +376,11 @@ objID.className='close';
 </tr><tr>
 <td>pg_get_keywords()</td>	<td>setof record ( word text, catcode "char", barelabel boolean, catdesc text, baredesc text )</td>	<td>SQLキーワードとそれらの種類のリストを取得</td>
 </tr><tr>
+
+<td>pg_get_partkeydef(table oid)</td>	<td>text</td>	<td>Reconstructs the definition of a partitioned table's partition key, in the form it would have in the PARTITION BY clause of CREATE TABLE. Since PG16</td>
+</tr><tr>
+
+
 <td>pg_get_ruledef(rule_oid [,pretty_bool])</td>	<td>text</td>	<td>ルールに対するCREATE RULEコマンドを取得</td>
 </tr><tr>
 <td>pg_get_serial_sequence(table_name, column_name)</td>	<td>text</td>	<td>serialまたはbigserial列が使用するシーケンス名の取得</td>
@@ -433,7 +438,7 @@ objID.className='close';
 <br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2023-10-8
 </div>
 </body>
 </html>
