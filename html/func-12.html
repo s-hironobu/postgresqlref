@@ -104,9 +104,10 @@ objID.className='close';
   <hr>
 [耐障害性、高可用性]<br>
 <li><a href="./admin-19.html">アーカイブログとPITR</a><br></li>
-<li><a href="./admin-20.html">レプリケーションの設定</a><br></li>
-<li><a href="./admin-21.html">レプリケーションの故障対応</a><br></li>
-<li><a href="./admin-22.html">ロジカルレプリケーション</a><br></li>
+<li><a href="./admin-20.html">pg_basebackup</a><br></li>
+<li><a href="./admin-21.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-22.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-23.html">ロジカルレプリケーション</a><br></li>
 
 </ol>
 
@@ -267,25 +268,26 @@ objID.className='close';
 <li><a href="./func-07.html">Range型関数</a><br></li>
 <li><a href="./func-08.html">Window関数</a><br></li>
   <hr>
-
-<li><a href="./func-09.html">セッション情報関数</a><br></li>
-<li><a href="./func-10.html">アクセス権限照会関数</a><br></li>
-<li><a href="./func-11.html">スキーマ可視性照会関数</a><br></li>
-<li><a href="./func-12.html">システムカタログ情報関数</a><br></li>
-<li><a href="./func-13.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
-<li><a href="./func-14.html">制御データ関数</a><br></li>
+<li><a href="./func-09.html">Merge Support関数</a><br></li>
+<li><a href="./func-10.html">セッション情報関数</a><br></li>
+<li><a href="./func-11.html">アクセス権限照会関数</a><br></li>
+<li><a href="./func-12.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-13.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-14.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
+<li><a href="./func-15.html">制御データ関数</a><br></li>
   <hr>
-<li><a href="./func-15.html">構成設定関数</a><br></li>
-<li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-17.html">バックアップ制御関数</a><br></li>
-<li><a href="./func-18.html">リカバリ制御関数</a><br></li>
-<li><a href="./func-19.html">スナップショット同期関数</a><br></li>	
-<li><a href="./func-20.html">レプリケーション管理関数</a><br></li>	
-<li><a href="./func-21.html">データベースオブジェクト管理関数</a><br></li>
-<li><a href="./func-22.html">インデックス保守関数</a><br></li>	
-<li><a href="./func-23.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-24.html">勧告的ロック用関数</a><br></li>
-<li><a href="./func-25.html">統計情報関数</a><br></li>	
+<li><a href="./func-16.html">構成設定関数</a><br></li>
+<li><a href="./func-17.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-18.html">バックアップ制御関数</a><br></li>
+<li><a href="./func-19.html">リカバリ制御関数</a><br></li>
+<li><a href="./func-20.html">スナップショット同期関数</a><br></li>
+<li><a href="./func-21.html">レプリケーション管理関数</a><br></li>
+<li><a href="./func-22.html">データベースオブジェクト管理関数</a><br></li>
+<li><a href="./func-23.html">インデックス保守関数</a><br></li>
+<li><a href="./func-24.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-25.html">勧告的ロック用関数</a><br></li>
+<li><a href="./func-26.html">WAL summarization情報関数</a><br></li>
+<li><a href="./func-27.html">統計情報関数</a><br></li>
 
 </ol>
 
@@ -344,101 +346,48 @@ objID.className='close';
     <div id="body">
       
 
-<h2><a href="https://www.postgresql.org/docs/current/functions-info.html#FUNCTIONS-INFO-CATALOG-TABLE" target="_blank" rel="noopener noreferrer">システムカタログ情報関数</a></h2>
+<h2><a href="https://www.postgresql.org/docs/current/functions-info.html#FUNCTIONS-INFO-SCHEMA-TABLE" target="_blank" rel="noopener noreferrer">スキーマ可視性照会関数</a></h2>
+
 
 <table border=1>
-<caption>システムカタログ情報関数</caption>
+<caption>スキーマ可視性照会関数</caption>
 <tr bgcolor="#cccccc">
 <th>関数</th>				<th>返り値型</th>	<th>説明</th>
 
 </tr><tr>
-<td>format_type(type_oid, typemod)</td>	<td>text</td>	<td>データ型のSQL名の取得</td>
+<td>pg_collation_is_visible(collation_oid)</td>	<td>boolean</td>	<td>collationが可視か否か</td>
 </tr><tr>
-<td>pg_char_to_encoding(encoding_name)</td>	<td>integer</td>	<td></td>
+<td>pg_conversion_is_visible(conversion_oid)</td>	<td>boolean</td>	<td>変換が可視か否か</td>
 </tr><tr>
-<td>pg_char_to_char(encoding_int)</td>	<td>name</td>	<td></td>
+<td>pg_function_is_visible(function_oid)</td>	<td>boolean</td>	<td>関数が可視か否か</td>
 </tr><tr>
-<td>pg_get_catalog_foreign_keys()</td>	<td>setof record (fktable regclass, fkcols text[], pktable regclass, pkcols text[], is_array boolean, is_opt boolean )</td>	<td></td>
+<td>pg_opclass_is_visible(opclass_oid)</td>	<td>boolean</td>	<td>演算子クラスが可視か否か</td>
 </tr><tr>
-<td>pg_get_constraintdef(constraint_oid [,pretty_bool])</td>	<td>text</td>	<td>制約の定義を取得</td>
+<td>pg_operator_is_visible(operator_oid)</td>	<td>boolean</td>	<td>演算子が可視か否か</td>
 </tr><tr>
-<td>pg_get_expr(expr_text, relation_oid, pretty_bool)</td>	<td>text</td>	<td>式中のいかなるVarも、２番目のパラメータによって指定されるリレーションを参照すると仮定して、式の内部形式を逆コンパイル</td>
+<td>pg_opfamily_is_visible(opclass_oid)</td>	<td>boolean</td>	<td>演算子ファミリーが可視か否か</td>
 </tr><tr>
-<td>pg_get_functiondef(func_oid)</td>	<td>text</td>	<td>関数定義の取得</td>
+<td>pg_statistics_obj_is_visible(stat_oid)</td>	<td>boolean</td>	<td>統計オブジェクトが可視か否か。<br><font color="#0000ff">statistics objectとは何か、よくわからない。必要になったら調べる。</font></td>
 </tr><tr>
-<td>pg_get_function_arguments(func_oid)</td>	<td>text</td>	<td>関数定義（デフォルト値付き）の引数リストを取得</td>
+<td>pg_table_is_visible(table_oid)</td>	<td>boolean</td>	<td>テーブルが可視か否か</td>
 </tr><tr>
-<td>pg_get_function_identity_arguments(func_oid)</td>	<td>text</td>	<td>関数（デフォルト値の付いていない）特定の引数リストを取得</td>
+<td>pg_ts_config_is_visible(config_oid)</td>	<td>boolean</td>	<td>テキスト検索構成が可視か否か</td>
 </tr><tr>
-<td>pg_get_function_result(func_oid)</td>	<td>text</td>	<td>関数に対するRETURNS句の取得</td>
+<td>pg_ts_dict_is_visible(dict_oid)</td>	<td>boolean</td>	<td>テキスト検索辞書が可視か否か</td>
 </tr><tr>
-<td>pg_get_indexdef(index_oid [,column_no, pretty_bool])</td>	<td>text</td>	<td>インデックスに対するCREATE INDEXコマンドの取得、またはcolumn_noが非ゼロの場合は、１つのインデックス列のみの定義の取得</td>
+<td>pg_ts_parser_is_visible (parser_oid)</td>	<td>boolean</td>	<td>テキスト検索パーサが可視か否か</td>
 </tr><tr>
-<td>pg_get_keywords()</td>	<td>setof record ( word text, catcode "char", barelabel boolean, catdesc text, baredesc text )</td>	<td>SQLキーワードとそれらの種類のリストを取得</td>
+<td>pg_ts_template_is_visible(template_oid)</td>	<td>boolean</td>	<td>テキスト検索テンプレートが可視か否か</td>
 </tr><tr>
-
-<td>pg_get_partkeydef(table oid)</td>	<td>text</td>	<td>Reconstructs the definition of a partitioned table's partition key, in the form it would have in the PARTITION BY clause of CREATE TABLE. Since PG16</td>
-</tr><tr>
-
-
-<td>pg_get_ruledef(rule_oid [,pretty_bool])</td>	<td>text</td>	<td>ルールに対するCREATE RULEコマンドを取得</td>
-</tr><tr>
-<td>pg_get_serial_sequence(table_name, column_name)</td>	<td>text</td>	<td>serialまたはbigserial列が使用するシーケンス名の取得</td>
-</tr><tr>
-<td>pg_get_statisticsobjdef(statobj_oid)</td>	<td>text</td>	<td></td>
-</tr><tr>
-<td>pg_get_triggerdef(trigger_oid [,prety_bool])</td>	<td>text</td>	<td>トリガに対するCREATE [ CONSTRAINT ] TRIGGERコマンドの取得</td>
-</tr><tr>
-<td>pg_get_userbyid(role_oid)</td>	<td>name</td>	<td>与えられたOIDでロール名を取得</td>
-</tr><tr>
-<td>pg_get_viewdef(view_name [,pretty_bool])</td>	<td>text</td>	<td>ビューに対する現在のSELECTコマンドを取得（廃止予定）</td>
-</tr><tr>
-<td>pg_get_viewdef(view_oid [,pretty_bool])</td>	<td>text</td>	<td>ビューに対する現在のSELECTコマンドを取得</td>
-</tr><tr>
-<td>pg_get_viewdef(view_oid, wrap_column_int)</td>	<td>text</td>	<td></td>
-</tr><tr>
-<td>pg_get_viewdef (view+text[,pretty_bool])</td>	<td>text</td>	<td></td>
-</tr><tr>
-<td>pg_index_column_has_property(index_regclass,column_int,property_text)</td>	<td>boolean</td>	<td></td>
-</tr><tr>
-<td>pg_index_has_property(index_regclass, property_text)</td>	<td>boolean</td>	<td></td>
-</tr><tr>
-<td>pg_indexam_has_property(am_oid, property_text)</td>	<td>boolean</td>	<td></td>
-</tr><tr>
-<td>pg_options_to_table(options_array_text[])</td>	<td>setof record(option_name, option_value)</td>	<td></td>
-</tr><tr>
-<td>pg_settings_get_flags(guc_text)</td>	<td>text[]</td>	<td></td>
-</tr><tr>
-<td>pg_tablespace_databases(tablespace_oid)</td>	<td>setof oid</td>	<td>テーブル空間内にオブジェクトを所有するデータベースOID集合を取得</td>
-</tr><tr>
-<td>pg_tablespace_location(tablespace_oid)</td>	<td>text</td>	<td></td>
-</tr><tr>
-<td>pg_typeof("any")</td>	<td> regtype</td>	<td>指定した値のデータ型を取得</td>
-</tr><tr>
-<td>to_regclass(text)</td>	<td>regclass</td>	<td></td>
-</tr><tr>
-<td>to_regcollation(text)</td>	<td>regcollation</td>	<td></td>
-</tr><tr>
-<td>to_regnamespace(text)</td>	<td>regnamespace</td>	<td></td>
-</tr><tr>
-<td>to_regoper(text)</td>	<td>regoper</td>	<td></td>
-</tr><tr>
-<td>to_regoperator(text)</td>	<td>regoperator</td>	<td></td>
-</tr><tr>
-<td>to_regproc(text)</td>	<td>regproc</td>	<td></td>
-</tr><tr>
-<td>to_regprocedure(text)</td>	<td>regprocedure</td>	<td></td>
-</tr><tr>
-<td>to_regrole(text)</td>	<td>regrole</td>	<td></td>
-</tr><tr>
-<td>to_regtype(text)</td>	<td>regtype</td>	<td></td>
+<td>pg_type_is_visible(type_oid)</td>	<td>boolean</td>	<td>型（またはドメイン）が可視か否か</td>
 
 </tr></table>
 
 <br>
+
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-10-8
+Last-modified: 2024-10-17
 </div>
 </body>
 </html>

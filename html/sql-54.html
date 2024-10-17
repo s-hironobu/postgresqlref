@@ -104,9 +104,10 @@ objID.className='close';
   <hr>
 [耐障害性、高可用性]<br>
 <li><a href="./admin-19.html">アーカイブログとPITR</a><br></li>
-<li><a href="./admin-20.html">レプリケーションの設定</a><br></li>
-<li><a href="./admin-21.html">レプリケーションの故障対応</a><br></li>
-<li><a href="./admin-22.html">ロジカルレプリケーション</a><br></li>
+<li><a href="./admin-20.html">pg_basebackup</a><br></li>
+<li><a href="./admin-21.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-22.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-23.html">ロジカルレプリケーション</a><br></li>
 
 </ol>
 
@@ -267,25 +268,26 @@ objID.className='close';
 <li><a href="./func-07.html">Range型関数</a><br></li>
 <li><a href="./func-08.html">Window関数</a><br></li>
   <hr>
-
-<li><a href="./func-09.html">セッション情報関数</a><br></li>
-<li><a href="./func-10.html">アクセス権限照会関数</a><br></li>
-<li><a href="./func-11.html">スキーマ可視性照会関数</a><br></li>
-<li><a href="./func-12.html">システムカタログ情報関数</a><br></li>
-<li><a href="./func-13.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
-<li><a href="./func-14.html">制御データ関数</a><br></li>
+<li><a href="./func-09.html">Merge Support関数</a><br></li>
+<li><a href="./func-10.html">セッション情報関数</a><br></li>
+<li><a href="./func-11.html">アクセス権限照会関数</a><br></li>
+<li><a href="./func-12.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-13.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-14.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
+<li><a href="./func-15.html">制御データ関数</a><br></li>
   <hr>
-<li><a href="./func-15.html">構成設定関数</a><br></li>
-<li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-17.html">バックアップ制御関数</a><br></li>
-<li><a href="./func-18.html">リカバリ制御関数</a><br></li>
-<li><a href="./func-19.html">スナップショット同期関数</a><br></li>	
-<li><a href="./func-20.html">レプリケーション管理関数</a><br></li>	
-<li><a href="./func-21.html">データベースオブジェクト管理関数</a><br></li>
-<li><a href="./func-22.html">インデックス保守関数</a><br></li>	
-<li><a href="./func-23.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-24.html">勧告的ロック用関数</a><br></li>
-<li><a href="./func-25.html">統計情報関数</a><br></li>	
+<li><a href="./func-16.html">構成設定関数</a><br></li>
+<li><a href="./func-17.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-18.html">バックアップ制御関数</a><br></li>
+<li><a href="./func-19.html">リカバリ制御関数</a><br></li>
+<li><a href="./func-20.html">スナップショット同期関数</a><br></li>
+<li><a href="./func-21.html">レプリケーション管理関数</a><br></li>
+<li><a href="./func-22.html">データベースオブジェクト管理関数</a><br></li>
+<li><a href="./func-23.html">インデックス保守関数</a><br></li>
+<li><a href="./func-24.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-25.html">勧告的ロック用関数</a><br></li>
+<li><a href="./func-26.html">WAL summarization情報関数</a><br></li>
+<li><a href="./func-27.html">統計情報関数</a><br></li>
 
 </ol>
 
@@ -431,45 +433,47 @@ DROP SUBSCRIPTION [ IF EXISTS ] name [ CASCADE | RESTRICT ]
 <tr bgcolor="#cccccc">
 <th>subscription_parameter</th>	<th>型[デフォルト]</th>		<th>説明</th>
 </tr><tr>
-<td>connect</td>	<td>on/off [on]</td>	<td></td>
+<td>connect</td>	<td>boolean [true]</td>	<td></td>
 
 </tr><tr>
-<td>create_slot</td>	<td>on/off [on]</td>	<td></td>
+<td>create_slot</td>	<td>boolean [true]</td>	<td></td>
 
 </tr><tr>
-<td>enabled</td>	<td>on/off [on]</td>	<td></td>
+<td>enabled</td>	<td>boolean [true]</td>	<td></td>
 
 </tr><tr>
 <td>slot_name</td>	<td>string</td>	<td></td>
 
 </tr><tr>
-<td>binary</td>		<td>on/off [off]</td>	<td></td>
+<td>binary</td>		<td>boolean [false]</td>	<td></td>
 
 </tr><tr>
-<td>copy_data</td>	<td>on/off [on]</td>	<td></td>
+<td>copy_data</td>	<td>boolean [true]</td>	<td></td>
 
 </tr><tr>
-<td>streaming</td>	<td>on/off [off]</td>	<td></td>
+<td>streaming</td>	<td>boolean [false]</td>	<td></td>
 
 </tr><tr>
 <td>synchronous_commit</td>	<td>remote_apply/on/remote_write/local/off [off]</td>	<td></td>
 
 </tr><tr>
-<td>two_phase</td>	<td>on/off [off]</td>	<td></td>
+<td>two_phase</td>	<td>boolean [false]</td>	<td></td>
 
 </tr><tr>
-<td>disable_on_error</td>	<td>on/off [off]</td>	<td></td>
+<td>disable_on_error</td>	<td>boolean [false]</td>	<td></td>
 
 
 </tr><tr>
-<td>password_required</td>	<td>on/off [off]</td>	<td>バージョン16から</td>
+<td>password_required</td>	<td>boolean [false]</td>	<td>バージョン16から</td>
 
 </tr><tr>
-<td>run_as_owner</td>	<td>on/off [off]</td>	<td>バージョン16から</td>
+<td>run_as_owner</td>	<td>boolean [false]</td>	<td>バージョン16から</td>
 
 </tr><tr>
 <td>origin</td>	<td>string</td>	<td>バージョン16から</td>
 
+</tr><tr>
+<td>failover</td>	<td>boolean [false]</td>	<td>バージョン17から</td>
 
 </tr></table>
 
@@ -478,9 +482,12 @@ DROP SUBSCRIPTION [ IF EXISTS ] name [ CASCADE | RESTRICT ]
 
 <div class="jumpmenu"></div><h3>解説</h3>
 
+<p>
+詳細は<a href="./admin-23.html">[<3-23>]</a>を参照。
+</p>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-10-8
+Last-modified: 2024-10-17
 </div>
 </body>
 </html>

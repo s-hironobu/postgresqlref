@@ -104,9 +104,10 @@ objID.className='close';
   <hr>
 [耐障害性、高可用性]<br>
 <li><a href="./admin-19.html">アーカイブログとPITR</a><br></li>
-<li><a href="./admin-20.html">レプリケーションの設定</a><br></li>
-<li><a href="./admin-21.html">レプリケーションの故障対応</a><br></li>
-<li><a href="./admin-22.html">ロジカルレプリケーション</a><br></li>
+<li><a href="./admin-20.html">pg_basebackup</a><br></li>
+<li><a href="./admin-21.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-22.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-23.html">ロジカルレプリケーション</a><br></li>
 
 </ol>
 
@@ -267,25 +268,26 @@ objID.className='close';
 <li><a href="./func-07.html">Range型関数</a><br></li>
 <li><a href="./func-08.html">Window関数</a><br></li>
   <hr>
-
-<li><a href="./func-09.html">セッション情報関数</a><br></li>
-<li><a href="./func-10.html">アクセス権限照会関数</a><br></li>
-<li><a href="./func-11.html">スキーマ可視性照会関数</a><br></li>
-<li><a href="./func-12.html">システムカタログ情報関数</a><br></li>
-<li><a href="./func-13.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
-<li><a href="./func-14.html">制御データ関数</a><br></li>
+<li><a href="./func-09.html">Merge Support関数</a><br></li>
+<li><a href="./func-10.html">セッション情報関数</a><br></li>
+<li><a href="./func-11.html">アクセス権限照会関数</a><br></li>
+<li><a href="./func-12.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-13.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-14.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
+<li><a href="./func-15.html">制御データ関数</a><br></li>
   <hr>
-<li><a href="./func-15.html">構成設定関数</a><br></li>
-<li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-17.html">バックアップ制御関数</a><br></li>
-<li><a href="./func-18.html">リカバリ制御関数</a><br></li>
-<li><a href="./func-19.html">スナップショット同期関数</a><br></li>	
-<li><a href="./func-20.html">レプリケーション管理関数</a><br></li>	
-<li><a href="./func-21.html">データベースオブジェクト管理関数</a><br></li>
-<li><a href="./func-22.html">インデックス保守関数</a><br></li>	
-<li><a href="./func-23.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-24.html">勧告的ロック用関数</a><br></li>
-<li><a href="./func-25.html">統計情報関数</a><br></li>	
+<li><a href="./func-16.html">構成設定関数</a><br></li>
+<li><a href="./func-17.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-18.html">バックアップ制御関数</a><br></li>
+<li><a href="./func-19.html">リカバリ制御関数</a><br></li>
+<li><a href="./func-20.html">スナップショット同期関数</a><br></li>
+<li><a href="./func-21.html">レプリケーション管理関数</a><br></li>
+<li><a href="./func-22.html">データベースオブジェクト管理関数</a><br></li>
+<li><a href="./func-23.html">インデックス保守関数</a><br></li>
+<li><a href="./func-24.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-25.html">勧告的ロック用関数</a><br></li>
+<li><a href="./func-26.html">WAL summarization情報関数</a><br></li>
+<li><a href="./func-27.html">統計情報関数</a><br></li>
 
 </ol>
 
@@ -344,35 +346,264 @@ objID.className='close';
     <div id="body">
       
 
-<h2><a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADMIN-INDEX" target="_blank" rel="noopener noreferrer">インデックス保守関数</a></h2>
+<h2><a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADMIN-DBOBJECT" target="_blank" rel="noopener noreferrer">データベースオブジェクト容量関数 / データベースオブジェクト位置関数</a></h2>
 
 
-<table>
+<table border=1>
+<caption>データベースオブジェクト容量関数</caption>
 <tr bgcolor="#cccccc">
 <th>関数</th>							<th>返り値型</th>	<th>説明</th>
+</tr><tr>
+<td>pg_column_size(any)	</td>	<td>int</td>	<td>特定の値を格納するのに必要なバイト数。単位は[byte]</td>
+</tr><tr>
+<td>pg_column_compression(any)	</td>	<td>text</td>	<td>指定したカラムの圧縮方法。圧縮されてなければNULLを返す。バージョン14から</td>
 
 </tr><tr>
-<td>brin_summarize_new_values(index regclass)</td>	<td>int</td>	<td>説明略</td>
+<td>pg_column_toast_chunk_id(any)</td>	<td>oid</td>	<td>TOASTデータのchunk_idを表示。バージョン17から</td>
+
 </tr><tr>
-<td>brin_summarize_range(index regclass, blockNumber bigint)</td>	<td>int</td>	<td>説明略</td>
+<td>pg_database_size(database_oid)	</td>	<td>bigint</td>	<td>指定したOIDを持つデータベースが使用するディスク領域。単位は[byte]</td>
+
+
 </tr><tr>
-<td>brin_desummarize_range(index regclass, blockNumber bigint)</td>	<td>void</td>	<td>説明略</td>
+<td>pg_database_size(database_name)	</td>	<td>bigint</td>	<td>データベースが使用するディスク領域。単位は[byte]</td>
 </tr><tr>
-<td>gin_clean_pending_list(index regclass)</td>	<td>bigint</td>	<td>説明略</td>
+<td>pg_indexes_size(regclass)</td>	<td>bigint</td>	<td>指定したOID、もしくは名前のテーブルに関連したインデックスが使用するディスク領域。単位は[byte]</td>
+</tr><tr>
+<td>pg_relation_size(table_name)	</td>	<td>bigint</td>	<td>テーブル、もしくはインデックスが使用するディスク領域。単位は[byte]</td>
+</tr><tr>
+<td>pg_relation_size(table_oid)	</td>	<td>bigint</td>	<td>指定したOIDを持つテーブル、もしくはインデックスが使用するディスク領域。単位は[byte]</td>
+
+
+</tr><tr>
+<td>pg_size_bytes(text)	</td>	<td>bigint</td>	<td>(pg_size_pretty()の出力のような)可読なバイトサイズをbigintに変換して返す。<br>例：pg_size_bytes('11 MB') ->  11534336</td>
+</tr><tr>
+<td>pg_size_pretty(bigint)	</td>	<td>text</td>	<td>適切な単位[kB, MB, GB,TBのいずれか]に変換して出力</td>
+</tr><tr>
+<td>pg_table_size(regclass)</td>	<td>bigint</td>	<td>指定したOID、もしくは名前のテーブルが使用するディスク領域(TOAST、空き領域マップ、ビジビリティマップ含む)。インデックスは含まない。単位は[byte]</td>
+
+</tr><tr>
+<td>pg_tablespace_size(tablespace_oid)</td>	<td>bigint</td>	<td>指定したOIDを持つテーブルスペースが使用するディスク領域。単位は[byte]</td>
+</tr><tr>
+<td>pg_tablespace_size(tablespace_name)	</td>	<td>bigint</td>	<td>テーブルスペースが使用するディスク領域。単位は[byte]</td>
+
+</tr><tr>
+<td>pg_total_relation_size(table_oid)</td>	<td>bigint</td>	<td>指定したOIDを持つテーブルが使用するディスク領域(インデックスとtoastされたデータを含む)。単位は[byte]</td>
 
 </tr></table>
 
 <br>
 
 
-<div class="jumpmenu"></div><h3>解説</h3>
+<table border=1>
+<caption>データベースオブジェクト位置関数</caption>
+<tr bgcolor="#cccccc">
+<th>関数</th>							<th>返り値型</th>	<th>説明</th>
+</tr><tr>
+<td>pg_relation_filenode(regclass)</td>		<td>oid</td>	<td>指定したOID、または名前に関連するリレーションのファイルノード番号</td>
+
+</tr><tr>
+<td>pg_relation_filepath(regclass)</td>		<td>text</td>	<td>指定したOID、または名前に関連するリレーションのファイルパス</td>
+
+</tr><tr>
+<td>pg_filenode_relation(tablespace oid, filenode oid)</td>	<td>regclass</td>	<td>指定したテーブルスペースのOIDとファイルノードから、リレーション名を返す。pg_relation_filepath()の逆関数。</td>
+
+
+</tr></table>
+
+<br>
+
+
+<div class="jumpmenu"></div><h3>実行例</h3>
 
 <p>
-BRINやGINを使ったインデックスの保守のための関数群です。今回は説明を省略します。
+・pg_column_size(), pg_column_compressionの実行例
 </p>
+
+<pre>
+sampledb=# SELECT pg_column_size('this is test');
+ pg_column_size
+----------------
+             13
+(1 row)
+
+sampledb=# SELECT pg_column_size('これはテストです');
+ pg_column_size
+----------------
+             17
+(1 row)
+
+sampledb=# SELECT pg_column_size(aid) FROM pgbench_accounts LIMIT 5;
+ pg_column_size
+----------------
+              4
+              4
+              4
+              4
+              4
+(5 rows)
+
+sampledb=# SELECT pg_column_compression(aid) FROM pgbench_accounts LIMIT 5;
+ pg_column_compression
+-----------------------
+
+
+
+
+
+(5 rows)
+</pre>
+<br>
+
+<p>
+・pg_tablespace_size(), pg_database_size()の実行例
+</p>
+
+<pre>
+sampledb=# SELECT pg_tablespace_size('pg_global');
+ pg_tablespace_size
+--------------------
+             259227
+(1 row)
+
+sampledb=# SELECT pg_database_size('sampledb');
+ pg_database_size
+------------------
+         11182728
+(1 row)
+
+sampledb=# SELECT pg_size_pretty(pg_database_size('sampledb'));
+ pg_size_pretty
+----------------
+ 11 MB
+(1 row)
+</pre>
+<br>
+
+<p>
+・pg_relation_size(), pg_total_relation_size()の実行例
+<br>
+関数pg_relation_size()と関数pg_total_relation_size()の違いは、後者はインデックスなど指定したテーブルに関連するすべてのデータ容量を返す点です。
+</p>
+
+<pre>
+sampledb=# SELECT pg_relation_size('test');
+ pg_relation_size
+------------------
+          2629632
+(1 row)
+
+sampledb=# SELECT pg_size_pretty(pg_relation_size('test'));
+ pg_size_pretty
+----------------
+ 2568 kB
+(1 row)
+
+sampledb=# SELECT pg_total_relation_size('test');
+ pg_total_relation_size
+------------------------
+                6627328
+(1 row)
+
+sampledb=# SELECT pg_size_pretty(pg_total_relation_size('test'));
+ pg_size_pretty
+----------------
+ 6472 kB
+(1 row)
+</pre>
+<br>
+
+<p>
+・pg_relation_filepath(), pg_total_relation_filenode()の実行例
+</p>
+
+
+<pre>
+sampledb=# SELECT pg_relation_filepath('itemlist');
+ pg_relation_filepath
+----------------------
+ base/16384/25599
+(1 row)
+
+sampledb=# SELECT pg_relation_filenode('itemlist');
+ pg_relation_filenode
+----------------------
+                25599
+(1 row)
+</pre>
+<br>
+
+<pre>
+$ ls -la data/base/16384/25599
+-rw------- 1 postgres users 8192  5月 13 23:19 data/base/16384/25599
+</pre>
+<br>
+
+<p>
+・pg_filenode_relation()の実行例
+</p>
+
+<pre>
+postgres=# SELECT oid, spcname FROM pg_tablespace WHERE spcname = 'new_space';
+  oid  |  spcname
+-------+-----------
+ 17215 | new_space
+(1 row)
+
+postgres=# SELECT pg_relation_filepath('tblsp');
+          pg_relation_filepath
+-----------------------------------------
+ pg_tblspc/17215/PG_15_202209061/5/17227
+(1 row)
+
+postgres=# SELECT pg_filenode_relation(17215, 17227);
+ pg_filenode_relation
+----------------------
+ tblsp
+(1 row)
+</pre>
+<br>
+
+<p>
+・pg_column_toast_chunk_id()の実行例
+</p>
+
+<pre>
+testdb=# CREATE TABLE test_chunk_id (a TEXT, b TEXT STORAGE EXTERNAL);
+CREATE TABLE
+testdb=#  INSERT INTO test_chunk_id VALUES ('x', repeat('x', 8192));
+INSERT 0 1
+
+testdb=# SELECT pg_column_toast_chunk_id(b) FROM test_chunk_id;
+ pg_column_toast_chunk_id
+--------------------------
+                    16489
+(1 row)
+
+testdb=# -- 同様の結果を得る別の方法
+testdb=# SELECT t.relname AS toastrel FROM pg_class c
+  LEFT JOIN pg_class t ON c.reltoastrelid = t.oid
+  WHERE c.relname = 'test_chunk_id';
+    toastrel
+----------------
+ pg_toast_16484
+(1 row)
+
+testdb=# SELECT chunk_id FROM pg_toast.pg_toast_16484;
+ chunk_id
+----------
+    16489
+    16489
+    16489
+    16489
+    16489
+(5 rows)
+</pre>
+
+
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2024-10-17
 </div>
 </body>
 </html>

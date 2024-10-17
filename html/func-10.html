@@ -104,9 +104,10 @@ objID.className='close';
   <hr>
 [耐障害性、高可用性]<br>
 <li><a href="./admin-19.html">アーカイブログとPITR</a><br></li>
-<li><a href="./admin-20.html">レプリケーションの設定</a><br></li>
-<li><a href="./admin-21.html">レプリケーションの故障対応</a><br></li>
-<li><a href="./admin-22.html">ロジカルレプリケーション</a><br></li>
+<li><a href="./admin-20.html">pg_basebackup</a><br></li>
+<li><a href="./admin-21.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-22.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-23.html">ロジカルレプリケーション</a><br></li>
 
 </ol>
 
@@ -267,25 +268,26 @@ objID.className='close';
 <li><a href="./func-07.html">Range型関数</a><br></li>
 <li><a href="./func-08.html">Window関数</a><br></li>
   <hr>
-
-<li><a href="./func-09.html">セッション情報関数</a><br></li>
-<li><a href="./func-10.html">アクセス権限照会関数</a><br></li>
-<li><a href="./func-11.html">スキーマ可視性照会関数</a><br></li>
-<li><a href="./func-12.html">システムカタログ情報関数</a><br></li>
-<li><a href="./func-13.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
-<li><a href="./func-14.html">制御データ関数</a><br></li>
+<li><a href="./func-09.html">Merge Support関数</a><br></li>
+<li><a href="./func-10.html">セッション情報関数</a><br></li>
+<li><a href="./func-11.html">アクセス権限照会関数</a><br></li>
+<li><a href="./func-12.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-13.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-14.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
+<li><a href="./func-15.html">制御データ関数</a><br></li>
   <hr>
-<li><a href="./func-15.html">構成設定関数</a><br></li>
-<li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-17.html">バックアップ制御関数</a><br></li>
-<li><a href="./func-18.html">リカバリ制御関数</a><br></li>
-<li><a href="./func-19.html">スナップショット同期関数</a><br></li>	
-<li><a href="./func-20.html">レプリケーション管理関数</a><br></li>	
-<li><a href="./func-21.html">データベースオブジェクト管理関数</a><br></li>
-<li><a href="./func-22.html">インデックス保守関数</a><br></li>	
-<li><a href="./func-23.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-24.html">勧告的ロック用関数</a><br></li>
-<li><a href="./func-25.html">統計情報関数</a><br></li>	
+<li><a href="./func-16.html">構成設定関数</a><br></li>
+<li><a href="./func-17.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-18.html">バックアップ制御関数</a><br></li>
+<li><a href="./func-19.html">リカバリ制御関数</a><br></li>
+<li><a href="./func-20.html">スナップショット同期関数</a><br></li>
+<li><a href="./func-21.html">レプリケーション管理関数</a><br></li>
+<li><a href="./func-22.html">データベースオブジェクト管理関数</a><br></li>
+<li><a href="./func-23.html">インデックス保守関数</a><br></li>
+<li><a href="./func-24.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-25.html">勧告的ロック用関数</a><br></li>
+<li><a href="./func-26.html">WAL summarization情報関数</a><br></li>
+<li><a href="./func-27.html">統計情報関数</a><br></li>
 
 </ol>
 
@@ -344,133 +346,150 @@ objID.className='close';
     <div id="body">
       
 
-<h2><a href="https://www.postgresql.org/docs/current/functions-info.html#FUNCTIONS-INFO-ACCESS-TABLE" target="_blank" rel="noopener noreferrer">アクセス権限照会関数</a></h2>
+<h2><a href="https://www.postgresql.org/docs/current/functions-info.html#FUNCTIONS-INFO-SESSION-TABLE" target="_blank" rel="noopener noreferrer">セッション情報関数</a></h2>
 
 <table><tr bgcolor="#cccccc">
-<th>関数</th>							<th>返り値型</th>	<th>説明</th>	<th>権限</th>
+<th>関数</th>			<th>返り値型</th>	<th>説明</th>
+</tr><tr>
+<td>current_catalog	</td>	<td>name</td>	<td>現在接続しているデータベース名を返す</td>
+</tr><tr>
+<td>current_database()	</td>	<td>name</td>	<td>現在接続しているデータベース名を返す</td>
+</tr><tr>
+<td>current_query()</td>	<td>name</td>	<td>現在実行中のSQLを返す</td>
+</tr><tr>
+<td>current_role()	</td>	<td>name	</td>	<td>現在のロール名を返す。current_userと同じ。</td>
+</tr><tr>
+<td>current_schema	</td>	<td>name	</td>	<td>現在のスキーマ名を返す</td>
+</tr><tr>
+<td>current_schema()	</td>	<td>name	</td>	<td>current_schemaと同じ</td>
+</tr><tr>
+<td>current_schemas(boolean)</td>	<td>name[]	</td>	<td>引数がtrueならば検索パス内のすべてのスキーマ名、falseならカレントのスキーマ名を返す</td>
+</tr><tr>
+<td>current_user</td>	<td>name	</td>	<td>現在のロール名を返す</td>
+</tr><tr>
+<td>inet_client_addr()	</td>	<td>inet	</td>	<td>リモート接続のアドレスを返す。UNIXドメイン接続の場合はNULL</td>
+</tr><tr>
+<td>inet_client_port()	</td>	<td>int	</td>	<td>リモート接続のポートを返す。UNIXドメイン接続の場合はNULL</td>
+</tr><tr>
+<td>inet_server_addr()	</td>	<td>inet	</td>	<td>ローカル接続のアドレスを返す。UNIXドメイン接続の場合はNULL</td>
+</tr><tr>
+<td>inet_server_port()	</td>	<td>int	</td>	<td>ローカル接続のポートを返す。UNIXドメイン接続の場合はNULL</td>
+</tr><tr>
+<td>pg_backend_pid()	</td>	<td>int	</td>	<td>現在のセッションを実行しているサーバのプロセスID</td>
+</tr><tr>
+<td>pg_blocking_pids(pid)	</td>	<td>integer[]	</td>	<td>バックエンドpidのLOCK取得をブロックしているプロセスのPID群を返す。</td>
+</tr><tr>
+<td>pg_conf_load_time()	</td>	<td>timestamp</td>	<td>設定を読み込んだ時刻</td>
+</tr><tr>
+<td>pg_current_logfile([format])	</td>	<td>text	</td>	<td>フォーマット[stderr|csvlog|jsonlog]の現在のログファイル名を返す。デフォルトは'stderr'</td>
+</tr><tr>
+<td>pg_my_temp_schema()	</td>	<td>oid	</td>	<td>セッションの一時スキーマのOID。もしなければ０</td>
+</tr><tr>
+<td>pg_is_other_temp_schema(oid)</td>	<td>boolean		</td>	<td>スキーマが他のセッションの一時スキーマかどうか否か</td>
+</tr><tr>
+<td>pg_jit_available()	</td>	<td>boolean	</td>	<td>JITが有効か否か</td>
+</tr><tr>
+<td>pg_listening_channels()</td>	<td>setof text</td>	<td>今のセッションにおいて現在LISTEN中のチャンネル名</td>
+</tr><tr>
+<td>pg_notification_queue_usage()	</td>	<td>double precision	</td>	<td>非同期通知キューの最大サイズのうち、処理待ちの通知によって占められている現在の割合(0から1まで)を返す</td>
+</tr><tr>
+<td>pg_postmaster_start_time()</td>	<td>timestamp</td>	<td>postmasterの開始時刻を返す</td>
+</tr><tr>
+<td>pg_safe_snapshot_blocking_pids(pid)	</td>	<td>integer[]	</td>	<td>バックエンドpidのスナップショット取得をブロックしているプロセスのPID群を返す。</td>
+</tr><tr>
+<td>pg_trigger_depth()	</td>	<td>int	</td>	<td>トリガーの入れ子の深さを返す。</td>
+</tr><tr>
+<td>session_user</td>	<td>name</td>	<td>データベースに接続したロール名を返す</td>
 
 </tr><tr>
-<td>has_any_column_privilege(role, table, privilege)	</td>	<td>bool</td>	<td>ロールroleがテーブルtableの全カラムに権限があるか否か</td>	<td>SELECT,INSERT,UPDATE,REFERENCES</td>
-</tr><tr>
-<td>has_any_column_privilege(table, privilege)		</td>	<td>bool</td>	<td>現在のロールがテーブルtableの全カラムに権限があるか否か</td>	<td>SELECT,INSERT,UPDATE,REFERENCES</td>
-</tr><tr>
-<td>has_column_privilege(role, table, column, privilege)	</td>	<td>bool</td>	<td>ロールroleにテーブルtableのカラムcolumnに対する権限があるか否か</td>	<td>SELECT,INSERT,UPDATE,REFERENCES</td>
-</tr><tr>
-<td>has_column_privilege(table, column, privilege)		</td>	<td>bool</td>	<td>現在のロールにテーブルtableのカラムcolumnに対する権限があるか否か</td>	<td>SELECT,INSERT,UPDATE,REFERENCES</td>
+<td>system_user</td>	<td>text</td>	<td>認証方式などの情報を返す。バージョン16から。</td>
 
 </tr><tr>
-<td>has_database_privilege(role, database, privilege)	</td>	<td>bool</td>	<td>ロールroleにデータベースdatabaseの権限があるか否か</td>	<td>CREATE,CONNECT,TEMPORARY</td>
+<td>user</td>	<td>name</td>	<td>current_userと等価</td>
 </tr><tr>
-<td>has_database_privilege(database, privilege)		</td>	<td>bool</td>	<td>現在のロールにデータベースdatabaseの権限があるか否か</td>	<td>CREATE,CONNECT,TEMPORARY</td>
+<td>version()	</td>	<td>text</td>	<td>PostgreSQLのバージョンを返す</td>
 
 </tr><tr>
-<td>has_foreign_data_wrapper_privilege(role, fdw, privilege)	</td>	<td>bool</td>	<td>ロールroleに外部データラッパfdwに対する権限があるか否か</td>	<td>USAGE</td>
+<td>unicode_version()	</td>	<td>text</td>	<td>PostgreSQLのバージョンをUnicodeで返す。バージョン17から</td>
 </tr><tr>
-<td>has_foreign_data_wrapper_privilege(fdw, privilege)	</td>	<td>bool</td>	<td>現在のロールに外部データラッパfdwに対する権限があるか否か</td>	<td>USAGE</td>
+<td>icu_unicode_version()	</td>	<td>text</td>	<td>PostgreSQLのバージョンをicu_unicodeで返す。バージョン17から</td>
 
-</tr><tr>
-<td>has_function_privilege(role, function, privilege)	</td>	<td>bool</td>	<td>ロールroleに関数functionの権限があるか否か</td>	<td>EXECUTE</td>
-</tr><tr>
-<td>has_function_privilege(function, privilege)		</td>	<td>bool</td>	<td>現在のロールに関数functionの権限があるか否か</td>	<td>EXECUTE</td>
-
-</tr><tr>
-<td>has_language_privilege(role, language, privilege)	</td>	<td>bool</td>	<td>ロールroleに言語languageの権限があるか否か</td>	<td>USAGE</td>
-</tr><tr>
-<td>has_language_privilege(language, privilege)		</td>	<td>bool</td>	<td>現在のロールに言語languageの権限があるか否か</td>	<td>USAGE</td>
-
-
-</tr><tr>
-<td>has_parameter_privilege(role, parameter, privilege)		</td>	<td>bool</td>	<td>ロールroleにパラメータparameter設定の権限があるか否か)</td>	<td>SET,ALTER SYSTEM</td>
-</tr><tr>
-<td>has_parameter_privilege(parameter, privilege)		</td>	<td>bool</td>	<td>現在のロールにパラメータparameter設定の権限があるか否か</td>	<td>SET,ALTER SYSTEM</td>
-
-</tr><tr>
-<td>has_schema_privilege(role, schema, privilege)		</td>	<td>bool</td>	<td>ロールroleにスキーマschemaの権限があるか否か</td>	<td>CREATE,USAGE</td>
-</tr><tr>
-<td>has_schema_privilege(schema, privilege)			</td>	<td>bool</td>	<td>現在のロールにスキーマschemaの権限があるか否か</td>	<td>CREATE,USAGE</td>
-
-</tr><tr>
-<td>has_sequence_privilege(role, sequence, privilege)	</td>	<td>bool</td>	<td>ロールroleにシーケンスsequenceに対する権限があるか否か</td>	<td>USAGE,SELECT,UPDATE</td>
-</tr><tr>
-<td>has_sequence_privilege(sequence, privilege)		</td>	<td>bool</td>	<td>現在のロールにシーケンスsequenceに対する権限があるか否か</td>	<td>USAGE,SELECT,UPDATE</td>
-
-</tr><tr>
-<td>has_server_privilege(role, server, privilege)		</td>	<td>bool</td>	<td>ロールroleに外部サーバserverに対する権限があるか否か</td>	<td>USAGE</td>
-</tr><tr>
-<td>has_server_privilege(server, privilege)			</td>	<td>bool</td>	<td>現在のロールに外部サーバserverに対する権限があるか否か</td>	<td>USAGE</td>
-
-</tr><tr>
-<td>has_table_privilege(role, table, privilege)		</td>	<td>bool</td>	<td>テーブルtableにロールroleの権限があるか否か</td>	<td>SELECT,INSERT,UPDATE,<br>DELETE,<br>TRUNCATE,REFERENCES,TRIGGER</td>
-</tr><tr>
-<td>has_table_privilege(table, privilege)			</td>	<td>bool</td>	<td>テーブルtableに現在のロールの権限があるか否か</td>	<td>SELECT,INSERT,UPDATE,DELETE,<br>TRUNCATE,REFERENCES,TRIGGER</td>
-
-</tr><tr>
-<td>has_tablespace_privilege(role, tablespace, privilege)	</td>	<td>bool</td>	<td>ロールにテーブルスペースtablespaceの権限があるか否か</td>	<td>CREATE</td>
-</tr><tr>
-<td>has_tablespace_privilege(tablespace, privilege)		</td>	<td>bool</td>	<td>現在のロールにテーブルスペースtablespaceの権限があるか否か</td>	<td>CREATE</td>
-
-</tr><tr>
-<td>pg_type_role(role, type, privilege)			</td>	<td>bool</td>	<td>ロールroleにデータ型typeの権限があるか否か</td>	<td>USAGE</td>
-
-</tr><tr>
-<td>pg_type_role(type, privilege)			</td>	<td>bool</td>	<td>現在のロールにデータ型typeの権限があるか否か</td>	<td>USAGE</td>
-
-
-</tr><tr>
-<td>pg_has_role(role1, role2, privilege)			</td>	<td>bool</td>	<td>ロールrole1がロールrole2の権限を所有しているか否か</td>	<td>MEMBER,USAGE</td>
-</tr><tr>
-<td>pg_has_role(role, privilege)				</td>	<td>bool</td>	<td>現在のロールがロールroleの権限を所有しているか否か</td>	<td>MEMBER,USAGE</td>
 </tr></table>
-<p>
-※ privilege:権限は<a href="./admin-09.html"> [<3-09></a>]参照
-</p>
 
 <br>
+
 
 <div class="jumpmenu"></div><h3>解説</h3>
 
 <p>
-PostgreSQLは上記のアクセス権限照会関数をサポートしています。
-検査する権限(privilege)は<a href="./admin-09.html">[<3-09>]の[<表3-05>]を参照してください。
+・session_user、current_user
+<br>
+関数session_userはデータベースに接続したときのロール名を返します。
+関数current_userは現時点でのロール名を返します。
+<br>
+SET ROLE文などで別のロールに成り変わった場合、session_userの返す値は変わりませんが、current_userの返す値は新しいロール名になります。
 </p>
 
+<p>
+・current_schemas()
+<br>
+関数current_schemas()で検索パス内のすべてのスキーマ名を表示します。
+他方、メタコマンド\dnはPostgreSQLサーバ内のすべてのスキーマ名を列挙します。
+</p>
+
+<p>
+・pg_postmaster_start_time(), pg_conf_loadl_time(), pg_backend_pid()
+<br>
+サーバ側の情報を得るためのいくつかの関数が用意されています。
+</p>
 
 <div class="jumpmenu"></div><h3>実行例</h3>
 
 <p>
-テーブルcompanylistは所有者postgresだけがアクセスできます。
+・関数current_schemasの実行例
 </p>
 
 <pre>
-sampledb=# SELECT current_user;
- current_user
---------------
- postgres
-(1 row)
-
-sampledb=# \z companylist
-                              Access privileges
- Schema |     Name    | Type  | Access privileges | Column access privileges
---------+-------------+-------+-------------------+--------------------------
- public | companylist | table |                   |
-(1 row)
-
-sampledb=# SELECT has_table_privilege('customerlist', 'SELECT');
- has_table_privilege
+sampledb=# SELECT current_schemas(true);
+   current_schemas
 ---------------------
- t
+ {pg_catalog,public}
 (1 row)
 
-sampledb=# SELECT has_table_privilege('webuser3', 'customerlist', 'SELECT');
- has_table_privilege
----------------------
- f
+sampledb=# SELECT current_schemas(false);
+ current_schemas
+-----------------
+ {public}
+(1 row)
+
+sampledb=# \dn
+        List of schemas
+        Name        |  Owner
+--------------------+----------
+ information_schema | postgres
+ my_schema          | postgres
+ pg_catalog         | postgres
+ pg_toast           | postgres
+ public             | postgres
+(5 rows)
+</pre>
+<br>
+
+<p>
+・pg_postmaster_start_time(), pg_conf_loadl_time(), pg_backend_pid()の実行例
+</p>
+
+<pre>
+sampledb=# SELECT pg_postmaster_start_time(), pg_conf_load_time(), pg_backend_pid();
+   pg_postmaster_start_time    |       pg_conf_load_time       | pg_backend_pid
+-------------------------------+-------------------------------+----------------
+ 2011-05-19 12:01:11.965922+09 | 2011-05-19 12:01:11.439937+09 |          29847
 (1 row)
 </pre>
 <br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2024-10-17
 </div>
 </body>
 </html>

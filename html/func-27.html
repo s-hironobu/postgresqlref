@@ -346,77 +346,50 @@ objID.className='close';
     <div id="body">
       
 
+<h2><a href="https://www.postgresql.org/docs/current/functions-statistics.html" target="_blank" rel="noopener noreferrer">統計情報関数</a></h2>
 
-<h2><a href="https://www.postgresql.org/docs/current/plpgsql-cursors.html#PLPGSQL-CURSOR-FOR-LOOP" target="_blank" rel="noopener noreferrer">FOR IN LOOPによるカーソル行の取得</a></h2>
-
-<pre>
-[<書式>]
-
-FOR recordvar IN bound_cursorvar [ ( [ argument_name := ] argument_value [, ...] ) ] LOOP
-    statements
-END LOOP;
-
-</pre>
-
-<br>
 
 <table>
-<caption>パラメータ</caption>
+<caption>MCVリスト表示</caption>
 <tr bgcolor="#cccccc">
-<th>パラメータ</th>	<th>説明</th>
+<th>関数</th>							<th>返り値型</th>	<th>説明</th>
+
 </tr><tr>
-<td>recordvar</td>	<td>カーソル変数から取り出す値</td>
-</tr><tr>
-<td>bound_cursorvar</td>	<td>カーソル変数</td>
+<td>pg_mcv_list_items(pg_mcv_list)</td>	<td>setof record</td>	<td></td>
 </tr></table>
 
 <br>
 
+<table>
+<caption>pg_mcv_list_itemsの項目</caption>
+<tr bgcolor="#cccccc">
+<th>item</th>							<th>型</th>	<th>説明</th>
+
+</tr><tr>
+<td>index</td>	<td>int</td>	<td></td>
+
+</tr><tr>
+<td>values</td>	<td>text[]</td>	<td></td>
+
+</tr><tr>
+<td>nulls</td>	<td>bool[]</td>	<td></td>
+
+</tr><tr>
+<td>frequency</td>	<td>double precision</td>	<td></td>
+
+</tr><tr>
+<td>base_frequency</td>	<td>double precision</td>	<td></td>
+
+
+</tr></table>
+
+<br>
+
+
 <div class="jumpmenu"></div><h3>解説</h3>
 
-<p>
-boundカーソルから連続してデータを取得する場合、FOR IN LOOPを利用すると簡単に実装できます。
-</p>
+<a href="https://www.postgresql.org/docs/current/sql-createstatistics.html" target="_blank" rel="noopener noreferrer">CREATE STATISTICS</a>で作った統計情報の情報を表示する。
 
-<p>
-FOR IN LOOPを使う場合、カーソル変数は自動的に設定されるため、宣言は不要です。
-また、カーソルのOPENとCLOSEも不要です。
-</p>
-
-<div class="jumpmenu"></div><h3>プログラム例</h3>
-
-<br>
-
-<pre>
-postgres=# CREATE OR REPLACE FUNCTION item_names() RETURNS SETOF text AS
- $$
-  DECLARE
-    names text;		/* 商品名を格納 */
-    bound_cursor CURSOR FOR SELECT name FROM itemlist;
-  BEGIN
-
-    FOR tmp IN bound_cursor LOOP  /* カーソル変数 tmpの宣言は不要 */
-      names := tmp;
-      RETURN NEXT names;
-    END LOOP;
-
-    RETURN;
-  END;
- $$
-LANGUAGE PLpgSQL;
-CREATE FUNCTION
-
-postgres=# select * from item_names();
- item_names
-------------
- (aaa)
- (bbb)
- (ccc)
- (bbb)
- (ccc)
-(5 rows)
-</pre>
-<br>
 <hr class="full_hr">
 <div id="lastmodified">
 Last-modified: 2024-10-17

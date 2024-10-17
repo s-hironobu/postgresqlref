@@ -104,9 +104,10 @@ objID.className='close';
   <hr>
 [耐障害性、高可用性]<br>
 <li><a href="./admin-19.html">アーカイブログとPITR</a><br></li>
-<li><a href="./admin-20.html">レプリケーションの設定</a><br></li>
-<li><a href="./admin-21.html">レプリケーションの故障対応</a><br></li>
-<li><a href="./admin-22.html">ロジカルレプリケーション</a><br></li>
+<li><a href="./admin-20.html">pg_basebackup</a><br></li>
+<li><a href="./admin-21.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-22.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-23.html">ロジカルレプリケーション</a><br></li>
 
 </ol>
 
@@ -267,25 +268,26 @@ objID.className='close';
 <li><a href="./func-07.html">Range型関数</a><br></li>
 <li><a href="./func-08.html">Window関数</a><br></li>
   <hr>
-
-<li><a href="./func-09.html">セッション情報関数</a><br></li>
-<li><a href="./func-10.html">アクセス権限照会関数</a><br></li>
-<li><a href="./func-11.html">スキーマ可視性照会関数</a><br></li>
-<li><a href="./func-12.html">システムカタログ情報関数</a><br></li>
-<li><a href="./func-13.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
-<li><a href="./func-14.html">制御データ関数</a><br></li>
+<li><a href="./func-09.html">Merge Support関数</a><br></li>
+<li><a href="./func-10.html">セッション情報関数</a><br></li>
+<li><a href="./func-11.html">アクセス権限照会関数</a><br></li>
+<li><a href="./func-12.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-13.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-14.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
+<li><a href="./func-15.html">制御データ関数</a><br></li>
   <hr>
-<li><a href="./func-15.html">構成設定関数</a><br></li>
-<li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-17.html">バックアップ制御関数</a><br></li>
-<li><a href="./func-18.html">リカバリ制御関数</a><br></li>
-<li><a href="./func-19.html">スナップショット同期関数</a><br></li>	
-<li><a href="./func-20.html">レプリケーション管理関数</a><br></li>	
-<li><a href="./func-21.html">データベースオブジェクト管理関数</a><br></li>
-<li><a href="./func-22.html">インデックス保守関数</a><br></li>	
-<li><a href="./func-23.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-24.html">勧告的ロック用関数</a><br></li>
-<li><a href="./func-25.html">統計情報関数</a><br></li>	
+<li><a href="./func-16.html">構成設定関数</a><br></li>
+<li><a href="./func-17.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-18.html">バックアップ制御関数</a><br></li>
+<li><a href="./func-19.html">リカバリ制御関数</a><br></li>
+<li><a href="./func-20.html">スナップショット同期関数</a><br></li>
+<li><a href="./func-21.html">レプリケーション管理関数</a><br></li>
+<li><a href="./func-22.html">データベースオブジェクト管理関数</a><br></li>
+<li><a href="./func-23.html">インデックス保守関数</a><br></li>
+<li><a href="./func-24.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-25.html">勧告的ロック用関数</a><br></li>
+<li><a href="./func-26.html">WAL summarization情報関数</a><br></li>
+<li><a href="./func-27.html">統計情報関数</a><br></li>
 
 </ol>
 
@@ -366,7 +368,9 @@ where option can be one of:
     ESCAPE 'escape_character'
     FORCE_NOT_NULL ( column_name [, ...] )
     FORCE_NULL ( column_name [, ...] )
+    ON_ERROR [ stop | ignore ]
     ENCODING 'encoding_name'
+    LOG_VERBOSITY [ default | verbose ]
 </pre>
 <br>
 
@@ -416,7 +420,13 @@ where option can be one of:
 <td>FORCE_NULL ( column_name [, ...] )</td>	<td>CSV形式で、たとえ引用符で囲まれていようとも、NULLはNULLとしてcolumnに読み込む。</td>
 
 </tr><tr>
+<td>ON_ERROR [stop | ignore]</td>	<td>(FORMATがtextかcsvのとき、)データの型変換でエラーが発生した時に停止stopするか、無視ignoreするか。デフォルトstop。バージョン17から</td>
+
+</tr><tr>
 <td>ENCODING 'encoding_name'</td>	<td>ファイルのエンコーディングencoding_nameを指定</td>
+
+</tr><tr>
+<td>LOG_VERBOSITY [default | verbose]</td>	<td>ON_ERROR=stopの時のみ有効。バージョン17から</td>
 
 </tr></table>
 
@@ -499,90 +509,139 @@ CSV形式のファイルを読み込める。
 <p>
 ・テキスト形式のデータ読み込み
 <br>
-以下に示すデータファイル'/home/postgres/customerlist.txt'を、テーブルcustomerlistにコピーします。
+以下に示すデータファイル'/usr/local/pgsql/sample.txt'を、テーブルsampleにコピーします。
 <br>
-データの不備などによってコピー中にエラーが発生すると処理が止まります。
+デフォルトの動作の場合、データの不備などによってコピー中にエラーが発生すると処理が止まります。
 その場合、COPY文はロールバックされ、テーブルにデータは入りません。
 </p>
 
 <pre>
-postgres> cat /home/postgres/customerlist.txt
-1       デューク東郷    1
-2       アーネスト東郷  2
-3       アランサイジョー        4
-4       ダグラストウゴウ        5
-5       宗経民  6
-6       周雷峰  1
+$ cat sample.txt
+1	Alice	30	manager
+2	Bob	40	engineer
+3	Candy	25	engineer
 </pre>
 <br>
 
 <pre>
-sampledb=# COPY customerlist FROM '/home/postgres/customerlist.txt';
-COPY
+testdb=# COPY sample FROM '/usr/local/pgsql/sample.txt';
+COPY 3
+
+testdb=# SELECT * FROM sample;
+ id | name  | age |  title
+----+-------+-----+----------
+  1 | Alice |  30 | manager
+  2 | Bob   |  40 | engineer
+  3 | Candy |  25 | engineer
+(3 rows)
 </pre>
 <br>
 
 <p>
-・バイナリ形式のデータ読み込み
-<br>
-バイナリ形式のデータファイル'/home/postgres/customerlist.bin'を、テーブルcustomerlistにコピーします。
+バージョン17から、読み込み時の型変換でエラーが発生した場合、ON_ERRORオプションでそのエラーをスキップできるようになりました。
+</p>
+
+<p>
+例えば、２行目にデータ型がテーブルと合わないデータがあったとしても、
+ON_ERRORにignoreを設定した場合はその行をスキップして最後までデータを読み込みます。
 </p>
 
 <pre>
-postgres> od -c /home/postgres/customerlist.bin
-0000000   P   G   C   O   P   Y  \n 377  \r  \n  \0  \0  \0  \0  \0  \0
-0000020  \0  \0  \0  \0 003  \0  \0  \0 004  \0  \0  \0 001  \0  \0  \0
-0000040  \f 245 307 245 345 241 274 245 257 305 354 266 277  \0  \0  \0
-.... 略 ....
+$ cat sample_bad.txt
+1	Alice	30	manager
+2	Bob	fourty	engineer
+3	Candy	25	engineer
 </pre>
 <br>
 
 <pre>
-sampledb=# COPY customerlist FROM '/home/postgres/customerlist.bin' BINARY;
-COPY
+testdb=# COPY sample FROM '/usr/local/pgsql/sample_bad.txt' (FORMAT text, ON_ERROR ignore);
+NOTICE:  1 row was skipped due to data type incompatibility
+COPY 2
+testdb=# SELECT * FROM sample;
+ id | name  | age |  title
+----+-------+-----+----------
+  1 | Alice |  30 | manager
+  3 | Candy |  25 | engineer
+(2 rows)
+</pre>
 
-sampledb=# SELECT * FROM customerlist;
- id |       name       | companycode
-----+------------------+-------------
-  1 | デューク東郷     |           1
-  2 | アーネスト東郷   |           2
-  3 | アランサイジョー |           4
-  4 | ダグラストウゴウ |           5
-  5 | 宗経民           |           6
-  6 | 周雷峰           |           1
-(6 rows)
+
+<p>
+・バイナリ形式のデータ読み込み
+<br>
+バイナリ形式のデータファイル'/usr/local/pgsql/sample.bin'を、テーブルsampleにコピーします。
+</p>
+
+<pre>
+$ od -c sample.bin
+0000000    P   G   C   O   P   Y  \n 377  \r  \n  \0  \0  \0  \0  \0  \0
+0000020   \0  \0  \0  \0 004  \0  \0  \0 004  \0  \0  \0 001  \0  \0  \0
+0000040  005   A   l   i   c   e  \0  \0  \0 004  \0  \0  \0 036  \0  \0
+0000060   \0  \a   m   a   n   a   g   e   r  \0 004  \0  \0  \0 004  \0
+0000100   \0  \0 002  \0  \0  \0 003   B   o   b  \0  \0  \0 004  \0  \0
+0000120   \0   (  \0  \0  \0  \b   e   n   g   i   n   e   e   r  \0 004
+0000140   \0  \0  \0 004  \0  \0  \0 003  \0  \0  \0 005   C   a   n   d
+0000160    y  \0  \0  \0 004  \0  \0  \0 031  \0  \0  \0  \b   e   n   g
+0000200    i   n   e   e   r 377 377
+0000207
+</pre>
+<br>
+
+<pre>
+testdb=# COPY sample FROM '/usr/local/pgsql/sample.bin' (FORMAT binary);
+COPY 3
 </pre>
 <br>
 
 <p>
 ・CSV形式のデータ読み込み
 <br>
-以下に示す、ヘッダ情報(第1行がカラム名)付きのCSV形式のファイル'/home/postgres/literature.csv'をテーブルliteratureに読み込みます。
+CSV形式のファイル'/usr/local/pgsql/sample.csv'をテーブルsampleに読み込みます。
 </p>
 
 <pre>
-postgres> cat /home/postgres/literature.csv
-title,author,context
-"Oscar Wilde","The Happy Prince","High above the city, on a tall column,.."
-"夏目漱石","我輩は猫である","我輩は猫である。名前はまだ無い。"
+$ cat sample.csv
+1,Alice,30,manager
+2,Bob,40,engineer
+3,Candy,25,engineer
 </pre>
 <br>
 
 <pre>
-sampledb=# COPY literature FROM '/home/postgres/literature.csv' CSV HEADER;
-COPY
+testdb=# COPY sample FROM '/usr/local/pgsql/sample.csv' (FORMAT csv);
+COPY 3
+testdb=# SELECT * FROM sample;
+ id | name  | age |  title
+----+-------+-----+----------
+  1 | Alice |  30 | manager
+  2 | Bob   |  40 | engineer
+  3 | Candy |  25 | engineer
+(3 rows)
+</pre>
+<br>
 
-sampledb=# SELECT * FROM  literature;
-    title    |      author      |                      context
--------------+------------------+-------------------------------------------
- Oscar Wilde | The Happy Prince | High above the city, on a tall column,...
- 夏目漱石    | 我輩は猫である   | 我輩は猫である。名前はまだ無い。
-(2 rows)
+<p>
+ヘッダ情報(第1行がカラム名)付きのCSV形式のファイル'/usr/local/pgsql/sample2.csv'をテーブルsampleに読み込みます。
+</p>
+
+<pre>
+$ cat sample2.csv
+id,name,age,title
+1,Alice,30,manager
+2,Bob,40,engineer
+3,Candy,25,engineer
+</pre>
+<br>
+
+<pre>
+testdb=# COPY sample FROM '/usr/local/pgsql/sample2.csv' (FORMAT csv, HEADER true);
+COPY 3
 </pre>
 <br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-10-8
+Last-modified: 2024-10-17
 </div>
 </body>
 </html>

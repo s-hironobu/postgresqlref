@@ -104,9 +104,10 @@ objID.className='close';
   <hr>
 [耐障害性、高可用性]<br>
 <li><a href="./admin-19.html">アーカイブログとPITR</a><br></li>
-<li><a href="./admin-20.html">レプリケーションの設定</a><br></li>
-<li><a href="./admin-21.html">レプリケーションの故障対応</a><br></li>
-<li><a href="./admin-22.html">ロジカルレプリケーション</a><br></li>
+<li><a href="./admin-20.html">pg_basebackup</a><br></li>
+<li><a href="./admin-21.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-22.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-23.html">ロジカルレプリケーション</a><br></li>
 
 </ol>
 
@@ -267,25 +268,26 @@ objID.className='close';
 <li><a href="./func-07.html">Range型関数</a><br></li>
 <li><a href="./func-08.html">Window関数</a><br></li>
   <hr>
-
-<li><a href="./func-09.html">セッション情報関数</a><br></li>
-<li><a href="./func-10.html">アクセス権限照会関数</a><br></li>
-<li><a href="./func-11.html">スキーマ可視性照会関数</a><br></li>
-<li><a href="./func-12.html">システムカタログ情報関数</a><br></li>
-<li><a href="./func-13.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
-<li><a href="./func-14.html">制御データ関数</a><br></li>
+<li><a href="./func-09.html">Merge Support関数</a><br></li>
+<li><a href="./func-10.html">セッション情報関数</a><br></li>
+<li><a href="./func-11.html">アクセス権限照会関数</a><br></li>
+<li><a href="./func-12.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-13.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-14.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
+<li><a href="./func-15.html">制御データ関数</a><br></li>
   <hr>
-<li><a href="./func-15.html">構成設定関数</a><br></li>
-<li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-17.html">バックアップ制御関数</a><br></li>
-<li><a href="./func-18.html">リカバリ制御関数</a><br></li>
-<li><a href="./func-19.html">スナップショット同期関数</a><br></li>	
-<li><a href="./func-20.html">レプリケーション管理関数</a><br></li>	
-<li><a href="./func-21.html">データベースオブジェクト管理関数</a><br></li>
-<li><a href="./func-22.html">インデックス保守関数</a><br></li>	
-<li><a href="./func-23.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-24.html">勧告的ロック用関数</a><br></li>
-<li><a href="./func-25.html">統計情報関数</a><br></li>	
+<li><a href="./func-16.html">構成設定関数</a><br></li>
+<li><a href="./func-17.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-18.html">バックアップ制御関数</a><br></li>
+<li><a href="./func-19.html">リカバリ制御関数</a><br></li>
+<li><a href="./func-20.html">スナップショット同期関数</a><br></li>
+<li><a href="./func-21.html">レプリケーション管理関数</a><br></li>
+<li><a href="./func-22.html">データベースオブジェクト管理関数</a><br></li>
+<li><a href="./func-23.html">インデックス保守関数</a><br></li>
+<li><a href="./func-24.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-25.html">勧告的ロック用関数</a><br></li>
+<li><a href="./func-26.html">WAL summarization情報関数</a><br></li>
+<li><a href="./func-27.html">統計情報関数</a><br></li>
 
 </ol>
 
@@ -344,7 +346,7 @@ objID.className='close';
     <div id="body">
       
 
-<h2><a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADVISORY-LOCKS" target="_blank" rel="noopener noreferrer">勧告的ロック用関数</a></h2>
+<h2><a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADMIN-GENFILE" target="_blank" rel="noopener noreferrer">汎用ファイルアクセス関数</a></h2>
 
 
 <table><tr bgcolor="#cccccc">
@@ -352,53 +354,224 @@ objID.className='close';
 <th>関数</th>							<th>返り値型</th>	<th>説明</th>
 
 </tr><tr>
-<td>pg_advisory_lock(key bigint)</td>	<td>void</td>	<td>排他勧告的ロックを獲得</td>
+<td>pg_ls_dir(dirname text [, missing_ok bool, include_dot_dirs bool])</td>	<td>setof text</td>	<td>ディレクトリdirnameのファイルなどを表示する</td>
+
 </tr><tr>
-<td>pg_advisory_lock(key1 int, key2 int)</td>	<td>void</td>	<td>排他勧告的ロックを獲得</td>
+<td>pg_ls_logdir()</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>ログディレクトリ以下のログファイル名、サイズ、変更時刻を表示</td>
+
 </tr><tr>
-<td>pg_advisory_lock_shared(key bigint)</td>	<td>void</td>	<td>共有勧告的ロックを獲得</td>
+<td>pg_ls_waldir()</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>WALディレクトリ以下のWALログファイル名、サイズ、変更時刻を表示</td>
+
 </tr><tr>
-<td>pg_advisory_lock_shared(key1 int, key2 int)</td>	<td>void</td>	<td>共有勧告的ロックを獲得</td>
+<td>pg_ls_logicalmapdir()</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>pg_logical/mappings以下のファイルを表示する。バージョン15から</td>
+
 </tr><tr>
-<td>pg_advisory_unlock(key bigint)</td>	<td>bool</td>	<td>排他勧告的ロックを解放</td>
+<td>pg_ls_logicalsnapdir()</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>pg_logical/snapdir以下のファイルを表示する。バージョン15から</td>
+
 </tr><tr>
-<td>pg_advisory_unlock(key1 int, key2 int)</td>	<td>bool</td>	<td>排他勧告的ロックを解放</td>
+<td>pg_ls_replslotdir(slot_name text)</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>pg_replslot/slot_nameディレクトリ以下の物理スロット ディレクトリを表示する。バージョン15から</td>
+
 </tr><tr>
-<td>pg_advisory_unlock_all()</td>	<td>void</td>	<td>現在のセッションで保持している勧告的ロックをすべて解放</td>
+<td>pg_ls_archive_statusdir()</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>アーカイブステータスを保存するディレクトリ(pg_wal/archive_status/)以下を表示する。バージョン12から</td>
+
 </tr><tr>
-<td>pg_advisory_unlock_shared(key bigint)</td>	<td>bool</td>	<td>共有勧告的ロックを解放</td>
+<td>pg_ls_tmpdir([tablespace oid])</td>	<td>setof record(name text, size bigint, modification timestamp)</td>	<td>現時点で作成されているテンポラリファイルを表示する。バージョン12から</td>
+
 </tr><tr>
-<td>pg_advisory_unlock_shared(key1 int, key2 int)</td>	<td>bool</td>	<td>共有勧告的ロックを解放</td>
+<td>pg_read_file(filename text [, offset bigint, length bigint [, missing_ok bool]])</td>	<td>text</td>	<td>テキストファイルfilenameの内容を(offsetからlengthだけ)返す</td>
+
 </tr><tr>
-<td>pg_advisory_xact_lock(key bigint)</td>	<td>void</td>	<td>排他勧告的ロックを獲得。トランザクション終了で自動的にロックは解放される。</td>
+<td>pg_read_binary_file(filename text [, offset bigint, length bigint [, missing_ok bool]])</td>	<td>bytea</td>	<td>バイナリファイルfilenameの内容を(offsetからlengthだけ)返す</td>
+
 </tr><tr>
-<td>pg_advisory_xact_lock(key1 int, key2 int)</td>	<td>void</td>	<td>排他勧告的ロックを獲得。トランザクション終了で自動的にロックは解放される。</td>
-</tr><tr>
-<td>pg_advisory_xact_lock_shared(key bigint)</td>	<td>void</td>	<td>共有勧告的ロックを獲得。トランザクション終了で自動的にロックは解放される。</td>
-</tr><tr>
-<td>pg_advisory_xact_lock_shared(key1 int, key2 int)</td>	<td>void</td>	<td>共有勧告的ロックを獲得。トランザクション終了で自動的にロックは解放される。</td>
-</tr><tr>
-<td>pg_try_advisory_lock(key bigint)</td>	<td>bool</td>	<td>可能ならば排他勧告的ロックを獲得してTrueを返す。それ以外はFalseを返す。</td>
-</tr><tr>
-<td>pg_try_advisory_lock(key1 int, key2 int)</td>	<td>bool</td>	<td>可能ならば排他勧告的ロックを獲得してTrueを返す。それ以外はFalseを返す。</td>
-</tr><tr>
-<td>pg_try_advisory_lock_shared(key bigint)</td>	<td>bool</td>	<td>可能ならば共有勧告的ロックを獲得してTrueを返す。それ以外はFalseを返す。</td>
-</tr><tr>
-<td>pg_try_advisory_lock_shared(key1 int, key2 int)</td>	<td>bool</td>	<td>可能ならば共有勧告的ロックを獲得してTrueを返す。それ以外はFalseを返す。</td>
-</tr><tr>
-<td>pg_try_advisory_xact_lock(key bigint)</td>	<td>bool</td>	<td>可能ならば排他勧告的ロックを獲得してTrueを返す。それ以外はFalseを返す。トランザクション終了で自動的にロックは解放される。</td>
-</tr><tr>
-<td>pg_try_advisory_xact_lock(key1 int, key2 int)</td>	<td>bool</td>	<td>可能ならば排他勧告的ロックを獲得してTrueを返す。それ以外はFalseを返す。トランザクション終了で自動的にロックは解放される。</td>
-</tr><tr>
-<td>pg_try_advisory_xact_lock_shared(key bigint)</td>	<td>bool</td>	<td>可能ならば共有勧告的ロックを獲得してTrueを返す。それ以外はFalseを返す。トランザクション終了で自動的にロックは解放される。</td>
-</tr><tr>
-<td>pg_try_advisory_xact_lock_shared(key1 int, key2 int)</td>	<td>bool</td>	<td>可能ならば共有勧告的ロックを獲得してTrueを返す。それ以外はFalseを返す。トランザクション終了で自動的にロックは解放される。</td>
+<td>pg_stat_file(filename text [, missing_ok bool])</td>	<td>record (size bigint, access timestamp, modification timestamp, change timestamp, creation timestamp, isdir bool)</td>	<td>ファイル情報を返す</td>
+
 
 </tr></table>
+
+<br>
+
+<div class="jumpmenu"></div><h3>実行例</h3>
+
+<p>
+・pg_ls_dir()
+<br>
+データベースクラスタのあるディレクトリから、相対パス、絶対パスそれぞれの内容を表示できます。
+</p>
+
+<pre>
+postgres=# SELECT pg_ls_dir('pg_wal');
+        pg_ls_dir
+--------------------------
+ 000000020000000000000014
+ 000000020000000000000015
+ 00000002.history
+ 000000020000000000000013
+ 000000020000000000000012
+ archive_status
+(6 rows)
+
+postgres=# SELECT pg_ls_dir('/usr/local/');
+ pg_ls_dir
+-----------
+ include
+ etc
+ games
+ sbin
+ src
+ lib
+ bin
+ man
+ share
+(9 rows)
+
+</pre>
+<br>
+
+<p>
+・pg_ls_tmpdir();
+<br>
+現時点で生成されているテンポラリファイルが表示されます。
+</p>
+
+<pre>
+postgres=# SELECT pg_ls_tmpdir();
+                     pg_ls_tmpdir
+-------------------------------------------------------
+ (pgsql_tmp550815.0,10700000,"2023-03-19 22:40:03+09")
+(1 row)
+</pre>
+<br>
+
+<p>
+念の為、以下にテンポラリファイルを保持するディレクトリ~/base/pgsql_tmp以下の状態を示します。
+</p>
+
+<pre>
+$ ls -la data/base/pgsql_tmp/
+total 10460
+drwx------ 2 postgres postgres     4096 Mar 19 22:40 .
+drwx------ 8 postgres postgres     4096 Mar 13 14:41 ..
+-rw------- 1 postgres postgres 10700000 Mar 19 22:40 pgsql_tmp550815.0
+</pre>
+<br>
+
+<p>
+・pg_ls_logdir()
+<br>
+
+</p>
+
+<pre>
+postgres=# SELECT pg_ls_logdir();
+                             pg_ls_logdir
+----------------------------------------------------------------------
+ (postgresql-2023-01-17_000000.log,0,"2023-03-07 08:26:15+09")
+ (postgresql-2023-01-23_000000.log,0,"2023-03-07 08:26:15+09")
+ (postgresql-2023-02-25_000000.log,0,"2023-03-07 08:26:15+09")
+
+....
+</pre>
+<br>
+
+<p>
+・pg_ls_waldir()
+<br>
+</p>
+
+<pre>
+postgres=# SELECT pg_ls_waldir();
+                         pg_ls_waldir
+--------------------------------------------------------------
+ (000000020000000000000014,16777216,"2023-03-07 08:26:14+09")
+ (000000020000000000000015,16777216,"2023-03-07 08:26:14+09")
+ (00000002.history,41,"2023-03-07 08:26:14+09")
+ (000000020000000000000013,16777216,"2023-03-07 08:26:14+09")
+ (000000020000000000000012,16777216,"2023-03-10 12:00:44+09")
+(5 rows)
+</pre>
+<br>
+
+
+<p>
+・pg_ls_logicalsnapdir(), pg_ls_replslotdir()
+<br>
+</p>
+
+<pre>
+postgres=# SELECT pg_ls_logicalsnapdir();
+              pg_ls_logicalsnapdir
+------------------------------------------------
+ (0-121220B8.snap,128,"2023-03-10 11:56:27+09")
+ (0-12122708.snap,128,"2023-03-10 12:00:24+09")
+ (0-12121D50.snap,128,"2023-03-10 11:54:57+09")
+ (0-12122360.snap,128,"2023-03-10 11:57:40+09")
+ (0-12122408.snap,128,"2023-03-10 11:58:01+09")
+ (0-121220F0.snap,128,"2023-03-10 11:56:38+09")
+ (0-12122218.snap,128,"2023-03-10 11:57:09+09")
+ (0-12121F08.snap,128,"2023-03-10 11:56:15+09")
+ (0-12122480.snap,128,"2023-03-10 12:00:23+09")
+ (0-121227B8.snap,128,"2023-03-10 12:00:44+09")
+(10 rows)
+
+postgres=# SELECT pg_ls_logicalmapdir();
+ pg_ls_logicalmapdir
+---------------------
+(0 rows)
+
+postgres=# SELECT pg_ls_replslotdir('standby2_slot');
+          pg_ls_replslotdir
+--------------------------------------
+ (state,200,"2023-03-13 13:03:51+09")
+(1 row)
+</pre>
+<br>
+
+
+<p>
+・pg_ls_archive_statusdir()
+<br>
+</p>
+
+<pre>
+postgres=# SELECT pg_ls_archive_statusdir();
+                  pg_ls_archive_statusdir
+------------------------------------------------------------
+ (000000010000000000000005.done,0,"2023-02-12 00:04:32+09")
+(1 row)
+</pre>
+<br>
+
+
+<p>
+・pg_read_file(),pg_stat_file()
+<br>
+</p>
+
+<pre>
+postgres=# SELECT pg_read_file('pg_hba.conf');
+                               pg_read_file
+--------------------------------------------------------------------------
+ # PostgreSQL Client Authentication Configuration File                   +
+ # ===================================================                   +
+ #                                                                       +
+ # Refer to the "Client Authentication" section in the PostgreSQL        +
+ # documentation for a complete description of this file.  A short       +
+ # synopsis follows.                                                     +
+ #                                                                       +
+ ....
+
+
+postgres=# SELECT pg_stat_file('pg_hba.conf');
+                                     pg_stat_file
+--------------------------------------------------------------------------------------
+ (4874,"2023-03-13 13:12:02+09","2023-03-07 08:26:14+09","2023-03-07 08:26:14+09",,f)
+(1 row)
+</pre>
 <br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-13
+Last-modified: 2024-10-17
 </div>
 </body>
 </html>

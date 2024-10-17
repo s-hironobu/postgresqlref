@@ -104,9 +104,10 @@ objID.className='close';
   <hr>
 [耐障害性、高可用性]<br>
 <li><a href="./admin-19.html">アーカイブログとPITR</a><br></li>
-<li><a href="./admin-20.html">レプリケーションの設定</a><br></li>
-<li><a href="./admin-21.html">レプリケーションの故障対応</a><br></li>
-<li><a href="./admin-22.html">ロジカルレプリケーション</a><br></li>
+<li><a href="./admin-20.html">pg_basebackup</a><br></li>
+<li><a href="./admin-21.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-22.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-23.html">ロジカルレプリケーション</a><br></li>
 
 </ol>
 
@@ -267,25 +268,26 @@ objID.className='close';
 <li><a href="./func-07.html">Range型関数</a><br></li>
 <li><a href="./func-08.html">Window関数</a><br></li>
   <hr>
-
-<li><a href="./func-09.html">セッション情報関数</a><br></li>
-<li><a href="./func-10.html">アクセス権限照会関数</a><br></li>
-<li><a href="./func-11.html">スキーマ可視性照会関数</a><br></li>
-<li><a href="./func-12.html">システムカタログ情報関数</a><br></li>
-<li><a href="./func-13.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
-<li><a href="./func-14.html">制御データ関数</a><br></li>
+<li><a href="./func-09.html">Merge Support関数</a><br></li>
+<li><a href="./func-10.html">セッション情報関数</a><br></li>
+<li><a href="./func-11.html">アクセス権限照会関数</a><br></li>
+<li><a href="./func-12.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-13.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-14.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
+<li><a href="./func-15.html">制御データ関数</a><br></li>
   <hr>
-<li><a href="./func-15.html">構成設定関数</a><br></li>
-<li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-17.html">バックアップ制御関数</a><br></li>
-<li><a href="./func-18.html">リカバリ制御関数</a><br></li>
-<li><a href="./func-19.html">スナップショット同期関数</a><br></li>	
-<li><a href="./func-20.html">レプリケーション管理関数</a><br></li>	
-<li><a href="./func-21.html">データベースオブジェクト管理関数</a><br></li>
-<li><a href="./func-22.html">インデックス保守関数</a><br></li>	
-<li><a href="./func-23.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-24.html">勧告的ロック用関数</a><br></li>
-<li><a href="./func-25.html">統計情報関数</a><br></li>	
+<li><a href="./func-16.html">構成設定関数</a><br></li>
+<li><a href="./func-17.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-18.html">バックアップ制御関数</a><br></li>
+<li><a href="./func-19.html">リカバリ制御関数</a><br></li>
+<li><a href="./func-20.html">スナップショット同期関数</a><br></li>
+<li><a href="./func-21.html">レプリケーション管理関数</a><br></li>
+<li><a href="./func-22.html">データベースオブジェクト管理関数</a><br></li>
+<li><a href="./func-23.html">インデックス保守関数</a><br></li>
+<li><a href="./func-24.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-25.html">勧告的ロック用関数</a><br></li>
+<li><a href="./func-26.html">WAL summarization情報関数</a><br></li>
+<li><a href="./func-27.html">統計情報関数</a><br></li>
 
 </ol>
 
@@ -551,98 +553,98 @@ objID.className='close';
 
 
 <pre>
-2024-01-23 10:01:43.929 UTC [99952] 0 STATEMENT:  select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:01:44.320 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.0", size 57344
-2024-01-23 10:01:44.338 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.29", size 302702592
-2024-01-23 10:01:44.345 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.28", size 295657472
-2024-01-23 10:01:44.354 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.27", size 299769856
-2024-01-23 10:01:44.361 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.26", size 302112768
-2024-01-23 10:01:44.367 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.25", size 286277632
-2024-01-23 10:01:44.375 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.24", size 290971648
-2024-01-23 10:01:44.385 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.23", size 292134912
-2024-01-23 10:01:44.393 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.22", size 290963456
-2024-01-23 10:01:44.399 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.21", size 283926528
-2024-01-23 10:01:44.415 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.20", size 315023360
-2024-01-23 10:01:44.429 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.19", size 305045504
-2024-01-23 10:01:44.437 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.18", size 273956864
-2024-01-23 10:01:44.444 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.17", size 270434304
-2024-01-23 10:01:44.451 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.16", size 303284224
-2024-01-23 10:01:44.458 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.15", size 310910976
-2024-01-23 10:01:44.458 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.14", size 57344
-2024-01-23 10:01:44.458 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.13", size 57344
-2024-01-23 10:01:44.459 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.12", size 57344
-2024-01-23 10:01:44.459 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.11", size 49152
-2024-01-23 10:01:44.459 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.10", size 57344
-2024-01-23 10:01:44.459 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.9", size 57344
-2024-01-23 10:01:44.459 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.8", size 57344
-2024-01-23 10:01:44.459 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.7", size 49152
-2024-01-23 10:01:44.459 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.6", size 57344
-2024-01-23 10:01:44.459 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.5", size 57344
-2024-01-23 10:01:44.459 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.4", size 49152
-2024-01-23 10:01:44.460 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.3", size 49152
-2024-01-23 10:01:44.460 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.2", size 57344
-2024-01-23 10:01:44.460 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.1", size 57344
-2024-01-23 10:04:44.421 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.34", size 54639
-2024-01-23 10:04:44.421 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:04:48.555 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.48", size 810712000
-2024-01-23 10:04:48.555 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:04:48.557 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.36", size 62829
-2024-01-23 10:04:48.557 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:04:51.226 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.50", size 932232000
-2024-01-23 10:04:51.226 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:04:51.229 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.32", size 60489
-2024-01-23 10:04:51.229 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:04:53.776 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.46", size 897512000
-2024-01-23 10:04:53.776 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:04:53.777 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.44", size 60372
-2024-01-23 10:04:53.777 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:04:56.286 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.59", size 895776000
-2024-01-23 10:04:56.286 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:04:56.289 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.30", size 59904
-2024-01-23 10:04:56.289 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:04:58.796 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.57", size 887096000
-2024-01-23 10:04:58.796 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:04:58.798 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.37", size 56628
-2024-01-23 10:04:58.798 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:05:01.204 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.51", size 840224000
-2024-01-23 10:05:01.204 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:05:01.206 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.31", size 62010
-2024-01-23 10:05:01.206 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:05:03.871 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.45", size 920080000
-2024-01-23 10:05:03.871 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:05:03.873 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.42", size 60255
-2024-01-23 10:05:03.873 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:05:06.443 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.56", size 894040000
-2024-01-23 10:05:06.443 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:05:06.445 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.40", size 58032
-2024-01-23 10:05:06.445 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:05:09.005 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.54", size 861056000
-2024-01-23 10:05:09.005 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:05:09.006 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.43", size 58968
-2024-01-23 10:05:09.006 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:05:11.503 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.58", size 874944000
-2024-01-23 10:05:11.503 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:05:11.505 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.33", size 53937
-2024-01-23 10:05:11.505 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:05:13.800 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.47", size 800296000
-2024-01-23 10:05:13.800 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:05:13.801 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.35", size 60840
-2024-01-23 10:05:13.801 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:05:16.434 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.49", size 902720000
-2024-01-23 10:05:16.434 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:05:16.438 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.38", size 58032
-2024-01-23 10:05:16.438 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:05:18.899 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.52", size 861056000
-2024-01-23 10:05:18.899 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:05:18.901 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.39", size 58266
-2024-01-23 10:05:18.901 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:05:21.355 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.53", size 864528000
-2024-01-23 10:05:21.355 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:05:21.356 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.41", size 57096
-2024-01-23 10:05:21.356 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:05:23.804 UTC [99952] 0 LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.55", size 847168000
-2024-01-23 10:05:23.804 UTC [99952] 0 STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
-2024-01-23 10:05:23.808 UTC [99952] 0 LOG:  duration: 214483.195 ms  statement: explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:01:43.929 UTC [99952] STATEMENT:  select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:01:44.320 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.0", size 57344
+2024-01-23 10:01:44.338 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.29", size 302702592
+2024-01-23 10:01:44.345 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.28", size 295657472
+2024-01-23 10:01:44.354 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.27", size 299769856
+2024-01-23 10:01:44.361 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.26", size 302112768
+2024-01-23 10:01:44.367 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.25", size 286277632
+2024-01-23 10:01:44.375 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.24", size 290971648
+2024-01-23 10:01:44.385 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.23", size 292134912
+2024-01-23 10:01:44.393 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.22", size 290963456
+2024-01-23 10:01:44.399 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.21", size 283926528
+2024-01-23 10:01:44.415 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.20", size 315023360
+2024-01-23 10:01:44.429 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.19", size 305045504
+2024-01-23 10:01:44.437 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.18", size 273956864
+2024-01-23 10:01:44.444 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.17", size 270434304
+2024-01-23 10:01:44.451 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.16", size 303284224
+2024-01-23 10:01:44.458 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.15", size 310910976
+2024-01-23 10:01:44.458 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.14", size 57344
+2024-01-23 10:01:44.458 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.13", size 57344
+2024-01-23 10:01:44.459 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.12", size 57344
+2024-01-23 10:01:44.459 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.11", size 49152
+2024-01-23 10:01:44.459 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.10", size 57344
+2024-01-23 10:01:44.459 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.9", size 57344
+2024-01-23 10:01:44.459 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.8", size 57344
+2024-01-23 10:01:44.459 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.7", size 49152
+2024-01-23 10:01:44.459 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.6", size 57344
+2024-01-23 10:01:44.459 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.5", size 57344
+2024-01-23 10:01:44.459 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.4", size 49152
+2024-01-23 10:01:44.460 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.3", size 49152
+2024-01-23 10:01:44.460 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.2", size 57344
+2024-01-23 10:01:44.460 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.1", size 57344
+2024-01-23 10:04:44.421 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.34", size 54639
+2024-01-23 10:04:44.421 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:04:48.555 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.48", size 810712000
+2024-01-23 10:04:48.555 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:04:48.557 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.36", size 62829
+2024-01-23 10:04:48.557 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:04:51.226 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.50", size 932232000
+2024-01-23 10:04:51.226 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:04:51.229 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.32", size 60489
+2024-01-23 10:04:51.229 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:04:53.776 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.46", size 897512000
+2024-01-23 10:04:53.776 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:04:53.777 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.44", size 60372
+2024-01-23 10:04:53.777 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:04:56.286 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.59", size 895776000
+2024-01-23 10:04:56.286 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:04:56.289 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.30", size 59904
+2024-01-23 10:04:56.289 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:04:58.796 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.57", size 887096000
+2024-01-23 10:04:58.796 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:04:58.798 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.37", size 56628
+2024-01-23 10:04:58.798 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:05:01.204 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.51", size 840224000
+2024-01-23 10:05:01.204 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:05:01.206 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.31", size 62010
+2024-01-23 10:05:01.206 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:05:03.871 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.45", size 920080000
+2024-01-23 10:05:03.871 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:05:03.873 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.42", size 60255
+2024-01-23 10:05:03.873 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:05:06.443 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.56", size 894040000
+2024-01-23 10:05:06.443 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:05:06.445 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.40", size 58032
+2024-01-23 10:05:06.445 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:05:09.005 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.54", size 861056000
+2024-01-23 10:05:09.005 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:05:09.006 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.43", size 58968
+2024-01-23 10:05:09.006 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:05:11.503 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.58", size 874944000
+2024-01-23 10:05:11.503 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:05:11.505 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.33", size 53937
+2024-01-23 10:05:11.505 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:05:13.800 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.47", size 800296000
+2024-01-23 10:05:13.800 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:05:13.801 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.35", size 60840
+2024-01-23 10:05:13.801 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:05:16.434 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.49", size 902720000
+2024-01-23 10:05:16.434 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:05:16.438 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.38", size 58032
+2024-01-23 10:05:16.438 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:05:18.899 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.52", size 861056000
+2024-01-23 10:05:18.899 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:05:18.901 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.39", size 58266
+2024-01-23 10:05:18.901 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:05:21.355 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.53", size 864528000
+2024-01-23 10:05:21.355 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:05:21.356 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.41", size 57096
+2024-01-23 10:05:21.356 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:05:23.804 UTC [99952] LOG:  temporary file: path "base/pgsql_tmp/pgsql_tmp99952.55", size 847168000
+2024-01-23 10:05:23.804 UTC [99952] STATEMENT:  explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
+2024-01-23 10:05:23.808 UTC [99952] LOG:  duration: 214483.195 ms  statement: explain analyze select * from pgbench_accounts as a, pgbench_accounts as b, pgbench_accounts as c where a.aid > b.bid and a.aid = c.aid;
 </pre>
 
 <p>
@@ -652,7 +654,7 @@ objID.className='close';
 </p>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2024-1-23
+Last-modified: 2024-10-17
 </div>
 </body>
 </html>

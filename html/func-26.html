@@ -346,75 +346,145 @@ objID.className='close';
     <div id="body">
       
 
+<h2><a href="https://www.postgresql.org/docs/current/functions-info.html#FUNCTIONS-INFO-WAL-SUMMARY" target="_blank" rel="noopener noreferrer">WAL summarization情報関数</a></h2>
 
-<h2><a href="https://www.postgresql.org/docs/current/plpgsql-cursors.html#PLPGSQL-CURSOR-FOR-LOOP" target="_blank" rel="noopener noreferrer">FOR IN LOOPによるカーソル行の取得</a></h2>
+<table><tr bgcolor="#cccccc">
+<th>関数</th>			<th>返り値型</th>	<th>説明</th>
 
-<pre>
-[<書式>]
-
-FOR recordvar IN bound_cursorvar [ ( [ argument_name := ] argument_value [, ...] ) ] LOOP
-    statements
-END LOOP;
-
-</pre>
-
-<br>
-
-<table>
-<caption>パラメータ</caption>
-<tr bgcolor="#cccccc">
-<th>パラメータ</th>	<th>説明</th>
 </tr><tr>
-<td>recordvar</td>	<td>カーソル変数から取り出す値</td>
+<td>pg_available_wal_summaries()</td>	<td>setof record(tli bigint, start_lsn pg_lsn, end_lsn pg_lsn)</td>	<td>pg_wal/summaries/以下のサマリファイルの状態を返す。バージョン17から</td>
+
 </tr><tr>
-<td>bound_cursorvar</td>	<td>カーソル変数</td>
+<td>pg_wal_summary_contents(tli bigint, start_lsn pg_lsn, end_lsn pg_lsn)</td>	<td>setof record  relfilenode oid, reltablespace oid, reldatabase oid, relforknumber smallint, relblocknumber bigint, is_limit_block boolean)</td>	<td>指定したサマリーファイルの内容を表示する。バージョン17から</td>
+
+
+</tr><tr>
+<td>pg_get_wal_summarizer_state()</td>	<td>record(summarized_tli bigint, summarized_lsn pg_lsn, pending_lsn pg_lsn, summarizer_pid int)</td>	<td>バージョン17から</td>
+
+
 </tr></table>
 
 <br>
 
+
 <div class="jumpmenu"></div><h3>解説</h3>
 
 <p>
-boundカーソルから連続してデータを取得する場合、FOR IN LOOPを利用すると簡単に実装できます。
+バージョン17でインクリメンタルバックアップ<a href="./admin-20.html">[<3-20>]</a>がサポートされことに伴い、上記の関数がサポートされました。
+</p>
+
+<div class="jumpmenu"></div><h3>実行例</h3>
+
+<p>
+・pg_available_wal_summaries()
+<br>
+pg_wal/summaries以下のサマリーファイルの状態を表示します。
 </p>
 
 <p>
-FOR IN LOOPを使う場合、カーソル変数は自動的に設定されるため、宣言は不要です。
-また、カーソルのOPENとCLOSEも不要です。
+現時点で、pg_wal/summariesに以下のファイルがあるとします。
 </p>
 
-<div class="jumpmenu"></div><h3>プログラム例</h3>
-
+<pre>
+$ ls -1 data/pg_wal/summaries/ | sort
+00000001000000000100002800000000010B1D30.summary
+0000000100000000010B1D300000000001473DE0.summary
+000000010000000001473DE00000000001473EE0.summary
+000000010000000001473EE0000000000147A8A8.summary
+00000001000000000147A8A8000000000147A9A8.summary
+00000001000000000147A9A8000000000147ACE0.summary
+00000001000000000147ACE00000000003000028.summary
+0000000100000000030000280000000003025F18.summary
+000000010000000003025F180000000004000028.summary
+0000000100000000040000280000000007000028.summary
+000000010000000007000028000000000A000028.summary
+00000001000000000A000028000000000C000028.summary
+</pre>
 <br>
 
+<p>
+この時、pg_available_wal_summaries()は以下のようなフォーマットでサマリーファイルの状態を表示します。
+</p>
+
 <pre>
-postgres=# CREATE OR REPLACE FUNCTION item_names() RETURNS SETOF text AS
- $$
-  DECLARE
-    names text;		/* 商品名を格納 */
-    bound_cursor CURSOR FOR SELECT name FROM itemlist;
-  BEGIN
+testdb=# SELECT tli, start_lsn, end_lsn FROM pg_available_wal_summaries() ORDER BY start_lsn;
+ tli | start_lsn |  end_lsn
+-----+-----------+-----------
+   1 | 0/1000028 | 0/10B1D30
+   1 | 0/10B1D30 | 0/1473DE0
+   1 | 0/1473DE0 | 0/1473EE0
+   1 | 0/1473EE0 | 0/147A8A8
+   1 | 0/147A8A8 | 0/147A9A8
+   1 | 0/147A9A8 | 0/147ACE0
+   1 | 0/147ACE0 | 0/3000028
+   1 | 0/3000028 | 0/3025F18
+   1 | 0/3025F18 | 0/4000028
+   1 | 0/4000028 | 0/7000028
+   1 | 0/7000028 | 0/A000028
+   1 | 0/A000028 | 0/C000028
+(12 rows)
+</pre>
+<br>
 
-    FOR tmp IN bound_cursor LOOP  /* カーソル変数 tmpの宣言は不要 */
-      names := tmp;
-      RETURN NEXT names;
-    END LOOP;
+<p>
+・pg_wal_summary_contents()
+<br>
+サマリーファイルの内容はpg_wal_summary_contents()で表示できます。
+</p>
 
-    RETURN;
-  END;
- $$
-LANGUAGE PLpgSQL;
-CREATE FUNCTION
+<p>
+以下はサマリーファイル'0000000100000000030000280000000003025F18.summary'の内容で、
+実体はLSN:0/3000028から0/3025F18の間に変更されたテーブル、FSM、VMのブロック番号の一覧です。
+</p>
 
-postgres=# select * from item_names();
- item_names
-------------
- (aaa)
- (bbb)
- (ccc)
- (bbb)
- (ccc)
-(5 rows)
+<pre>
+testdb=# SELECT * FROM pg_wal_summary_contents(1, '0/3000028', '0/3025F18');
+ relfilenode | reltablespace | reldatabase | relforknumber | relblocknumber | is_limit_block
+-------------+---------------+-------------+---------------+----------------+----------------
+        1259 |          1663 |           1 |             0 |              3 | f
+        1259 |          1663 |           1 |             0 |              0 | f
+        2619 |          1663 |           1 |             0 |              0 | f
+        2619 |          1663 |           1 |             0 |              1 | f
+        2619 |          1663 |           1 |             0 |              2 | f
+        2619 |          1663 |           1 |             0 |              3 | f
+        2619 |          1663 |           1 |             0 |              4 | f
+        2619 |          1663 |           1 |             0 |              5 | f
+        2619 |          1663 |           1 |             0 |              6 | f
+        2619 |          1663 |           1 |             0 |              7 | f
+        2619 |          1663 |           1 |             0 |             12 | f
+        2619 |          1663 |           1 |             0 |             13 | f
+        2619 |          1663 |           1 |             0 |             14 | f
+        2619 |          1663 |           1 |             0 |             15 | f
+        2619 |          1663 |           1 |             0 |             16 | f
+        2619 |          1663 |           1 |             0 |             17 | f
+        2619 |          1663 |           1 |             0 |             18 | f
+        2619 |          1663 |           1 |             0 |             19 | f
+        2619 |          1663 |           1 |             0 |             20 | f
+        2619 |          1663 |           1 |             0 |             21 | f
+        2619 |          1663 |           1 |             0 |             22 | f
+        2619 |          1663 |           1 |             0 |             23 | f
+        2619 |          1663 |           1 |             0 |             24 | f
+        2619 |          1663 |           1 |             2 |              0 | f
+        2696 |          1663 |           1 |             0 |              1 | f
+        2696 |          1663 |           1 |             0 |              2 | f
+        2696 |          1663 |           1 |             0 |              4 | f
+        1249 |          1663 |           5 |             0 |             16 | f
+(28 rows)
+</pre>
+<br>
+
+<p>
+・pg_get_wal_summarizer_state()
+<br>
+walsummarizerプロセスの状態を表示します。
+</p>
+
+<pre>
+testdb=# SELECT * FROM pg_get_wal_summarizer_state();
+ summarized_tli | summarized_lsn | pending_lsn | summarizer_pid 
+----------------+----------------+-------------+----------------
+              1 | 0/C0000D8      | 0/C0001E0   |         257932
+(1 row)
 </pre>
 <br>
 <hr class="full_hr">

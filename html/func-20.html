@@ -104,9 +104,10 @@ objID.className='close';
   <hr>
 [耐障害性、高可用性]<br>
 <li><a href="./admin-19.html">アーカイブログとPITR</a><br></li>
-<li><a href="./admin-20.html">レプリケーションの設定</a><br></li>
-<li><a href="./admin-21.html">レプリケーションの故障対応</a><br></li>
-<li><a href="./admin-22.html">ロジカルレプリケーション</a><br></li>
+<li><a href="./admin-20.html">pg_basebackup</a><br></li>
+<li><a href="./admin-21.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-22.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-23.html">ロジカルレプリケーション</a><br></li>
 
 </ol>
 
@@ -267,25 +268,26 @@ objID.className='close';
 <li><a href="./func-07.html">Range型関数</a><br></li>
 <li><a href="./func-08.html">Window関数</a><br></li>
   <hr>
-
-<li><a href="./func-09.html">セッション情報関数</a><br></li>
-<li><a href="./func-10.html">アクセス権限照会関数</a><br></li>
-<li><a href="./func-11.html">スキーマ可視性照会関数</a><br></li>
-<li><a href="./func-12.html">システムカタログ情報関数</a><br></li>
-<li><a href="./func-13.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
-<li><a href="./func-14.html">制御データ関数</a><br></li>
+<li><a href="./func-09.html">Merge Support関数</a><br></li>
+<li><a href="./func-10.html">セッション情報関数</a><br></li>
+<li><a href="./func-11.html">アクセス権限照会関数</a><br></li>
+<li><a href="./func-12.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-13.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-14.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
+<li><a href="./func-15.html">制御データ関数</a><br></li>
   <hr>
-<li><a href="./func-15.html">構成設定関数</a><br></li>
-<li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-17.html">バックアップ制御関数</a><br></li>
-<li><a href="./func-18.html">リカバリ制御関数</a><br></li>
-<li><a href="./func-19.html">スナップショット同期関数</a><br></li>	
-<li><a href="./func-20.html">レプリケーション管理関数</a><br></li>	
-<li><a href="./func-21.html">データベースオブジェクト管理関数</a><br></li>
-<li><a href="./func-22.html">インデックス保守関数</a><br></li>	
-<li><a href="./func-23.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-24.html">勧告的ロック用関数</a><br></li>
-<li><a href="./func-25.html">統計情報関数</a><br></li>	
+<li><a href="./func-16.html">構成設定関数</a><br></li>
+<li><a href="./func-17.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-18.html">バックアップ制御関数</a><br></li>
+<li><a href="./func-19.html">リカバリ制御関数</a><br></li>
+<li><a href="./func-20.html">スナップショット同期関数</a><br></li>
+<li><a href="./func-21.html">レプリケーション管理関数</a><br></li>
+<li><a href="./func-22.html">データベースオブジェクト管理関数</a><br></li>
+<li><a href="./func-23.html">インデックス保守関数</a><br></li>
+<li><a href="./func-24.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-25.html">勧告的ロック用関数</a><br></li>
+<li><a href="./func-26.html">WAL summarization情報関数</a><br></li>
+<li><a href="./func-27.html">統計情報関数</a><br></li>
 
 </ol>
 
@@ -344,82 +346,18 @@ objID.className='close';
     <div id="body">
       
 
-<h2><a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-REPLICATION" target="_blank" rel="noopener noreferrer">レプリケーション管理関数</a></h2>
+<h2><a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-SNAPSHOT-SYNCHRONIZATION" target="_blank" rel="noopener noreferrer">スナップショット同期関数</a></h2>
 
 
-<table>
-<caption>[<レプリケーション管理関数>]</caption>
-<tr bgcolor="#cccccc">
+[<スナップショット同期関数>]
 
+<table><tr bgcolor="#cccccc">
 <th>関数</th>							<th>返り値型</th>	<th>説明</th>
 </tr><tr>
-<td>pg_create_physical_replication_slot(slot_name [, immediately_reserve bool, temporary bool ] </td>	<td>record(slot_name, lsn)</td>	<td></td>
+<td>pg_export_snapshot()</td>	<td>text	</td>	<td>トランザクションのスナップショットを返す</td>
 
 </tr><tr>
-<td>pg_drop_replication_slot(slot_name)</td>	<td>void</td>	<td></td>
-
-</tr><tr>
-<td>pg_create_logical_replication_slot(slot_name, plugin [, temporary bool, twophase bool ]) </td>	<td>record(slot_name, lsn)</td>	<td></td>
-
-</tr><tr>
-<td>pg_copy_physical_replication_slot(src_slot_name, dst_slot_name [, temporary bool ]) </td>	<td>record(slot_name, lsn)</td>	<td></td>
-
-</tr><tr>
-<td>pg_copy_logical_replication_slot(src_slot_name, dst_slot_name [, temporary bool [, plugin ]]) </td>	<td>record(slot_name, lsn)</td>	<td></td>
-
-</tr><tr>
-<td>pg_logical_slot_get_changes(slot_name, upto_lsn, upto_nchanges integer, VARIADIC options text[]) </td>	<td>setof record(lsn, xid, data text)</td>	<td></td>
-
-</tr><tr>
-<td>pg_logical_slot_peek_changes(slot_name, upto_lsn, upto_nchanges integer, VARIADIC options text[])</td>	<td>setof record(lsn, xid, data text)</td>	<td></td>
-
-</tr><tr>
-<td>pg_logical_slot_get_binary_changes(slot_name, upto_lsn, upto_nchanges integer, VARIADIC options text[])</td>	<td>setof record(lsn, xid, data bytea)</td>	<td></td>
-
-</tr><tr>
-<td>pg_logical_slot_peek_binary_changes(slot_name, upto_lsn, upto_nchanges integer, VARIADIC options text[]) </td>	<td>setof record(lsn, xid, data bytea)</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_slot_advance(slot_name, upto_lsn)</td>	<td>record(slot_name, end_lsn)</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_origin_create(node_name text)</td>	<td>oid</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_origin_drop(node_name text)</td>	<td>void</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_origin_oid(node_name text)</td>	<td>oid</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_origin_session_setup(node_name text) </td>	<td>void</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_origin_session_reset() </td>	<td>void</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_origin_session_is_setup() </td>	<td>bool</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_origin_session_progress(flush bool)</td>	<td>pg_lsn</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_origin_xact_setup(origin_lsn, origin_timestamp timestamp with time zone) </td>	<td>void</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_origin_xact_reset()</td>	<td>void</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_origin_advance(node_name text, lsn)</td>	<td>void</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_origin_progress(node_name text, flush bool)</td>	<td>pg_lsn</td>	<td></td>
-
-</tr><tr>
-<td>pg_logical_emit_message(transactional bool, prefix text, content text)</td>	<td>pg_lsn</td>	<td></td>
-
-</tr><tr>
-<td>pg_logical_emit_message(transactional bool, prefix text, content bytea) </td>	<td>pg_lsn</td>	<td></td>
+<td>pg_log_standby_snapshot()</td>	<td>pg_lsn	</td>	<td>Take a snapshot of running transactions and write it to WAL. Since PG16</td>
 
 </tr></table>
 
@@ -428,9 +366,31 @@ objID.className='close';
 
 <div class="jumpmenu"></div><h3>実行例</h3>
 
+<pre>
+postgres=# SELECT pg_export_snapshot();
+ pg_export_snapshot
+---------------------
+ 00000004-000033C8-1
+(1 row)
+
+postgres=# BEGIN;
+BEGIN
+
+postgres=*# SELECT pg_current_xact_id();
+ pg_current_xact_id
+--------------------
+                978
+(1 row)
+
+postgres=*# SELECT pg_export_snapshot();
+ pg_export_snapshot
+---------------------
+ 00000004-000033C9-1
+(1 row)
+</pre>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2024-10-17
 </div>
 </body>
 </html>

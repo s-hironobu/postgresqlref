@@ -104,9 +104,10 @@ objID.className='close';
   <hr>
 [耐障害性、高可用性]<br>
 <li><a href="./admin-19.html">アーカイブログとPITR</a><br></li>
-<li><a href="./admin-20.html">レプリケーションの設定</a><br></li>
-<li><a href="./admin-21.html">レプリケーションの故障対応</a><br></li>
-<li><a href="./admin-22.html">ロジカルレプリケーション</a><br></li>
+<li><a href="./admin-20.html">pg_basebackup</a><br></li>
+<li><a href="./admin-21.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-22.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-23.html">ロジカルレプリケーション</a><br></li>
 
 </ol>
 
@@ -267,25 +268,26 @@ objID.className='close';
 <li><a href="./func-07.html">Range型関数</a><br></li>
 <li><a href="./func-08.html">Window関数</a><br></li>
   <hr>
-
-<li><a href="./func-09.html">セッション情報関数</a><br></li>
-<li><a href="./func-10.html">アクセス権限照会関数</a><br></li>
-<li><a href="./func-11.html">スキーマ可視性照会関数</a><br></li>
-<li><a href="./func-12.html">システムカタログ情報関数</a><br></li>
-<li><a href="./func-13.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
-<li><a href="./func-14.html">制御データ関数</a><br></li>
+<li><a href="./func-09.html">Merge Support関数</a><br></li>
+<li><a href="./func-10.html">セッション情報関数</a><br></li>
+<li><a href="./func-11.html">アクセス権限照会関数</a><br></li>
+<li><a href="./func-12.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-13.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-14.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
+<li><a href="./func-15.html">制御データ関数</a><br></li>
   <hr>
-<li><a href="./func-15.html">構成設定関数</a><br></li>
-<li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-17.html">バックアップ制御関数</a><br></li>
-<li><a href="./func-18.html">リカバリ制御関数</a><br></li>
-<li><a href="./func-19.html">スナップショット同期関数</a><br></li>	
-<li><a href="./func-20.html">レプリケーション管理関数</a><br></li>	
-<li><a href="./func-21.html">データベースオブジェクト管理関数</a><br></li>
-<li><a href="./func-22.html">インデックス保守関数</a><br></li>	
-<li><a href="./func-23.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-24.html">勧告的ロック用関数</a><br></li>
-<li><a href="./func-25.html">統計情報関数</a><br></li>	
+<li><a href="./func-16.html">構成設定関数</a><br></li>
+<li><a href="./func-17.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-18.html">バックアップ制御関数</a><br></li>
+<li><a href="./func-19.html">リカバリ制御関数</a><br></li>
+<li><a href="./func-20.html">スナップショット同期関数</a><br></li>
+<li><a href="./func-21.html">レプリケーション管理関数</a><br></li>
+<li><a href="./func-22.html">データベースオブジェクト管理関数</a><br></li>
+<li><a href="./func-23.html">インデックス保守関数</a><br></li>
+<li><a href="./func-24.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-25.html">勧告的ロック用関数</a><br></li>
+<li><a href="./func-26.html">WAL summarization情報関数</a><br></li>
+<li><a href="./func-27.html">統計情報関数</a><br></li>
 
 </ol>
 
@@ -601,9 +603,49 @@ sampledb=# SELECT rolname, rolpassword FROM pg_authid WHERE rolname = 'webrole3'
 <p>
 設定を反映させるため、PostgreSQLサーバを再起動します。
 </p>
+
+<p>
+バージョン16までpg_hba.confファイルを直接見る以外に権限を確認できませんでしたが、
+バージョン17からシステムニュー<a href="https://www.postgresql.org/docs/current/view-pg-hba-file-rules.html" target="_blank" rel="noopener noreferrer">pg_hba_file_rules</a>によてアクセス制御状況をコマンドラインで確認できるようになりました。
+</p>
+
+<pre>
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+
+# "local" is for Unix domain socket connections only
+local   all             all                                     trust
+# IPv4 local connections:
+host    all             all             127.0.0.1/32            trust
+host    all             all             192.168.1.0/8            trust
+host    all             all             192.168.2.0/8            trust
+# IPv6 local connections:
+host    all             all             ::1/128                 trust
+# Allow replication connections from localhost, by a user with the
+# replication privilege.
+local   replication     all                                     trust
+host    replication     all             127.0.0.1/32            trust
+host    replication     all             ::1/128                 trust
+</pre>
+
+<br>
+
+<pre>
+postgres=# SELECT pg_hba_file_rules();
+                                                    pg_hba_file_rules
+--------------------------------------------------------------------------------------------------------------------------
+ (1,/usr/local/pgsql17/data/pg_hba.conf,117,local,{all},{all},,,trust,,)
+ (2,/usr/local/pgsql17/data/pg_hba.conf,119,host,{all},{all},127.0.0.1,255.255.255.255,trust,,)
+ (3,/usr/local/pgsql17/data/pg_hba.conf,120,host,{all},{all},192.168.1.0,255.0.0.0,trust,,)
+ (4,/usr/local/pgsql17/data/pg_hba.conf,121,host,{all},{all},192.168.2.0,255.0.0.0,trust,,)
+ (5,/usr/local/pgsql17/data/pg_hba.conf,123,host,{all},{all},::1,ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff,trust,,)
+ (6,/usr/local/pgsql17/data/pg_hba.conf,126,local,{replication},{all},,,trust,,)
+ (7,/usr/local/pgsql17/data/pg_hba.conf,127,host,{replication},{all},127.0.0.1,255.255.255.255,trust,,)
+ (8,/usr/local/pgsql17/data/pg_hba.conf,128,host,{replication},{all},::1,ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff,trust,,)
+(8 rows)
+</pre>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-3-12
+Last-modified: 2024-10-17
 </div>
 </body>
 </html>

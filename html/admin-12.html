@@ -104,9 +104,10 @@ objID.className='close';
   <hr>
 [耐障害性、高可用性]<br>
 <li><a href="./admin-19.html">アーカイブログとPITR</a><br></li>
-<li><a href="./admin-20.html">レプリケーションの設定</a><br></li>
-<li><a href="./admin-21.html">レプリケーションの故障対応</a><br></li>
-<li><a href="./admin-22.html">ロジカルレプリケーション</a><br></li>
+<li><a href="./admin-20.html">pg_basebackup</a><br></li>
+<li><a href="./admin-21.html">レプリケーションの設定</a><br></li>
+<li><a href="./admin-22.html">レプリケーションの故障対応</a><br></li>
+<li><a href="./admin-23.html">ロジカルレプリケーション</a><br></li>
 
 </ol>
 
@@ -267,25 +268,26 @@ objID.className='close';
 <li><a href="./func-07.html">Range型関数</a><br></li>
 <li><a href="./func-08.html">Window関数</a><br></li>
   <hr>
-
-<li><a href="./func-09.html">セッション情報関数</a><br></li>
-<li><a href="./func-10.html">アクセス権限照会関数</a><br></li>
-<li><a href="./func-11.html">スキーマ可視性照会関数</a><br></li>
-<li><a href="./func-12.html">システムカタログ情報関数</a><br></li>
-<li><a href="./func-13.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
-<li><a href="./func-14.html">制御データ関数</a><br></li>
+<li><a href="./func-09.html">Merge Support関数</a><br></li>
+<li><a href="./func-10.html">セッション情報関数</a><br></li>
+<li><a href="./func-11.html">アクセス権限照会関数</a><br></li>
+<li><a href="./func-12.html">スキーマ可視性照会関数</a><br></li>
+<li><a href="./func-13.html">システムカタログ情報関数</a><br></li>
+<li><a href="./func-14.html">トランザクションIDとスナップショット情報関数 / コミットされたトランザクションに関する情報関数</a><br></li>
+<li><a href="./func-15.html">制御データ関数</a><br></li>
   <hr>
-<li><a href="./func-15.html">構成設定関数</a><br></li>
-<li><a href="./func-16.html">サーバシグナル送信関数</a><br></li>
-<li><a href="./func-17.html">バックアップ制御関数</a><br></li>
-<li><a href="./func-18.html">リカバリ制御関数</a><br></li>
-<li><a href="./func-19.html">スナップショット同期関数</a><br></li>	
-<li><a href="./func-20.html">レプリケーション管理関数</a><br></li>	
-<li><a href="./func-21.html">データベースオブジェクト管理関数</a><br></li>
-<li><a href="./func-22.html">インデックス保守関数</a><br></li>	
-<li><a href="./func-23.html">汎用ファイルアクセス関数</a><br></li>
-<li><a href="./func-24.html">勧告的ロック用関数</a><br></li>
-<li><a href="./func-25.html">統計情報関数</a><br></li>	
+<li><a href="./func-16.html">構成設定関数</a><br></li>
+<li><a href="./func-17.html">サーバシグナル送信関数</a><br></li>
+<li><a href="./func-18.html">バックアップ制御関数</a><br></li>
+<li><a href="./func-19.html">リカバリ制御関数</a><br></li>
+<li><a href="./func-20.html">スナップショット同期関数</a><br></li>
+<li><a href="./func-21.html">レプリケーション管理関数</a><br></li>
+<li><a href="./func-22.html">データベースオブジェクト管理関数</a><br></li>
+<li><a href="./func-23.html">インデックス保守関数</a><br></li>
+<li><a href="./func-24.html">汎用ファイルアクセス関数</a><br></li>
+<li><a href="./func-25.html">勧告的ロック用関数</a><br></li>
+<li><a href="./func-26.html">WAL summarization情報関数</a><br></li>
+<li><a href="./func-27.html">統計情報関数</a><br></li>
 
 </ol>
 
@@ -403,6 +405,9 @@ pg_restore [OPTION ..] [archive_file]
 <td>--enable-row-security</td>		<td>row securityを含める</td>
 
 </tr><tr>
+<td>--filter=filename</td>		<td>テーブルなどdump/restoreするオブジェクトを指定するファイルを設定する。詳細は解説を参照。バージョン17から</td>
+
+</tr><tr>
 <td>-F format</td>		<td>出力フォーマット(format)を指定。別表参照</td>
 
 </tr><tr>
@@ -485,6 +490,10 @@ pg_restore [OPTION ..] [archive_file]
 -->
 
 </tr><tr>
+<td>--exclude-extension=pattern</td>		<td>バージョン17から</td>
+
+
+</tr><tr>
 <td>-b, --large-objects, <s>--blobs</s></td>		<td>blobデータを含める。PG16で"--blobs"は非推奨になった。</td>
 
 </tr><tr>
@@ -523,10 +532,8 @@ pg_restore [OPTION ..] [archive_file]
 </tr><tr>
 <td>--lock-wait-timeout=timeout</td>		<td>テーブルが、timeoutより長くロックされた場合、ダンプを失敗する。</td>
 
-<!--
 </tr><tr>
-<td>--no-sync</td>		<td></td>
--->
+<td>--no-sync</td>		<td>ファイル書き込みの時にsyncしない。</td>
 
 </tr><tr>
 <td>--on-conflict-do-nothing</td>		<td>INSERTコマンドに"ON CONFLICT DO NOTHING"を加える。バージョン12から</td>
@@ -549,6 +556,13 @@ pg_restore [OPTION ..] [archive_file]
 </tr><tr>
 <td>--use-set-session-authorization</td>		<td></td>
 -->
+
+</tr><tr>
+<td>--strict-names</td>		<td>バージョン17から</td>
+
+</tr><tr>
+<td>--sync-method=method</td>		<td>formatがdirectoryのとき、'fsync'ならばファイルを書き出すたびにsyncシステムコールで同期する。デフォルト。'syncfs'ならはsyncfsシステムコールでファイル全体を同期する。バージョン17から</td>
+
 
 </tr><tr>
 <td>-f file_name</td>		<td>アーカイブを書き込むファイル名(file_name)。指定しない場合は標準出力へデータを出力</td>
@@ -610,6 +624,10 @@ pg_restore [OPTION ..] [archive_file]
 <td>-o, --oid-order	</td>		<td>OIDによる順番づけに従ってリストア</td>
 </tr><tr>
 <td>-r, --rearrange	</td>		<td>変更されたOIDによる順番づけに従ってリストア。デフォルトで有効</td>
+
+</tr><tr>
+<td>--transaction-size</td>		<td>バージョン17から</td>
+
 </tr>
 </table>
 
@@ -623,6 +641,10 @@ pg_restore [OPTION ..] [archive_file]
 <td>p</td>		<td>プレーンテキスト形式</td>		<td>プレーンテキストのSQLスクリプトファイルを出力(デフォルト)</td>
 </tr><tr>
 <td>t</td>		<td>tarアーカイブ形式</td>		<td>pg_restoreコマンドが読み込み可能なtarアーカイブを出力</td>
+
+</tr><tr>
+<td>d</td>		<td>ディレクトリ形式</td>		<td>ディレクトリ以下に、pg_restoreコマンドが読み込み可能な圧縮されたデータと内容(toc.dat)を出力</td>
+
 </tr><tr>
 <td>c</td>		<td>カスタムアーカイブ形式</td>		<td>pg_restoreコマンドが読み込み可能なカスタムアーカイブを出力</td>
 </tr>
@@ -643,7 +665,8 @@ pg_restore [OPTION ..] [archive_file]
 <br>
 -Fオプションでアーカイブファイルの出力フォーマットを設定します。
 <br>
-設定する値は'p'(プレーンテキスト形式)、't'(tarアーカイブ形式)、'c'(カスタムアーカイブ形式)のいずれかです。特にPostgreSQLのカスタムアーカイブ形式は圧縮してダンプするため、サイズの大きなデータベースをバックアップする際に有効です。
+設定する値は'p'(プレーンテキスト形式)、't'(tarアーカイブ形式)、'd'(ディレクトリ形式)、'c'(カスタムアーカイブ形式)のいずれかです。
+ディレクトリ形式とカスタムアーカイブ形式は圧縮してダンプするため、サイズの大きなデータベースをバックアップする際に有効です。
 </p>
 
 <p>
@@ -661,6 +684,46 @@ pg_restore [OPTION ..] [archive_file]
 <br>
 バージョン8.1からラージオブジェクトを特別扱いする必要がなくなり、-bオプションと-Fオプションなしでもラージオブジェクトをダンプできるようになりました。
 </p>
+
+<p>
+・--filterオプション
+<br>
+バージョン17から、filterオプションに設定したファイルfileに、dump/restoreするテーブルなどのオブジェクトを正規表現で列挙できるようになりました。<br>
+これにより、より細かくdumpやrestoreが可能になりました。
+</p>
+
+<p>
+ファイルフォーマットは以下の通りです
+</p>
+
+<p>
+* pg_dump, pg_dumpall
+</p>
+<pre>
+{ include | exclude } { extension | foreign_data | table | table_and_children | table_data | table_data_and_children | schema } PATTERN
+</pre>
+
+<p>
+* pg_restore
+</p>
+<pre>
+{ include | exclude } { function | index | schema | table | trigger } PATTERN
+</pre>
+
+
+<p>
+例えば、以下のファイルfile.txtを設定した場合、テーブル名(test3を除く)testNがdumpされます。
+</p>
+
+<pre>
+$ cat file.txt
+include table test*
+exclude table test3
+
+$ pg_dump --filter=file.txt testdb > db.sql
+</pre>
+
+<br>
 
 <div class="jumpmenu"></div><h3>実行例</h3>
 
@@ -701,9 +764,45 @@ postgres> createdb -U postgres new_sampledb
 postgres> pg_restore -U postgres -d new_sampledb -F c sampledb.car
 </pre>
 <br>
+
+
+<pre>
+pg_dump
+
+--exclude-extension=pattern
+Do not dump any extensions matching pattern. The pattern is interpreted according to the same rules as for -e.
+--exclude-extension can be given more than once to exclude extensions matching any of several patterns.
+When both -e and --exclude-extension are given,
+the behavior is to dump just the extensions that match at least one -e switch but no --exclude-extension switches.
+If --exclude-extension appears without -e,
+then extensions matching --exclude-extension are excluded from what is otherwise a normal dump.
+
+--strict-names
+Require that each extension (-e/--extension),
+schema (-n/--schema) and table (-t/--table) pattern match at least one extension/schema/table in the database to be dumped.
+This also applies to filters used with --filter.
+Note that if none of the extension/schema/table patterns find matches,
+pg_dump will generate an error even without --strict-names.
+This option has no effect on --exclude-extension,
+-N/--exclude-schema, -T/--exclude-table, or --exclude-table-data. An exclude pattern failing to match any objects is not considered an error.
+
+
+pg_restore
+
+--transaction-size=N
+Execute the restore as a series of transactions, each processing up to N database objects.
+This option implies --exit-on-error.
+
+--transaction-size offers an intermediate choice between the default behavior (one transaction per SQL command) and -1/--single-transaction (one transaction for all restored objects).
+While --single-transaction has the least overhead,
+it may be impractical for large databases because the transaction will take a lock on each restored object,
+possibly exhausting the server's lock table space.
+Using --transaction-size with a size of a few thousand objects offers nearly the same performance benefits while capping the amount of lock table space needed.
+
+</pre>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2023-10-8
+Last-modified: 2024-10-17
 </div>
 </body>
 </html>
