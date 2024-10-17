@@ -16,6 +16,7 @@ CREATE DATABASE db_name
     [ LOCALE [=] locale ]
     [ LC_COLLATE [=] lc_collate ]
     [ LC_CTYPE [=] lc_ctype ]
+    [ BUILTIN_LOCALE [=] builtin_locale ]
     [ ICU_RULES [=] icu_rules ]
     [ ICU_LOCALE [=] icu_locale ]
     [ LOCALE_PROVIDER [=] locale_provider ]
@@ -25,6 +26,7 @@ CREATE DATABASE db_name
     [ CONNECTION LIMIT [=] connlimit ] ]
     [ IS_TEMPLATE [=] istemplate ]
 
+    * BUILTIN_LOCALE はバージョン17から
     * STRATEGY, ICU_LOCALE, LOCATE_PROVIDER, COLLECTION_VERSIONはバージョン15から
     * LOCALEはバージョン13から
 

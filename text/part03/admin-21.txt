@@ -3,750 +3,285 @@
 %KEY pgsql-admin21
 
 
-%TITLE 同期レプリケーションの故障対応
+%TITLE レプリケーションの設定
 
 <p>
-同期レプリケーションでの故障対応について、
-先に結論をまとめます([<表3-25>]参照)。
-</p>
-
-<table border=1>
-<caption>[<表3-25>] 同期レプリケーションの故障対応</caption>
-<tr bgcolor="#cccccc">
-<th>＼故障箇所<br>-------<br>構成　　＼ </th>
-<th>Primary故障　　　　　　　　　　　</th>
-<th>Standby故障　　　　　　　　　　　　　　　　　　　　</th>
-</tr><tr>
-<td>1:1 <br>(1-Primary : 1-Standby)</td>
-
-<td>
-<ul>
- <li>Standbyを新Primaryに昇格(promote)。</li>
- <li>Primary故障から新Primary昇格の期間、データ更新ができない。</li>
- <li>故障の瞬間に開いていたトランザクションは不定(COMMITかABORTか状況依存)になる。</li>
-</ul>
-</td>
-
-<td>
-<ul>
- <li>Primaryの更新ができなくなる。<br>ただし、非同期レプリケーションに移行すれば、稼働し続けることができる。</li>
- <li>Standby故障から非同期に移行する期間、データ更新ができない。</li>
-</ul>
-</td>
-
-</tr><tr>
-<td>1:N <br>(1-Primary : N-Standby)</td>
-
-<td>
-<ul>
- <li>Standbyを新Primaryに昇格(promote)。</li>
- <li>残りのStandbyを新Primaryに再接続(Follow Master)しなければならない。</li>
- <li>Primary故障からStandbyの再接続完了までの期間、データが更新できない。</li>
-</ul>
-</td>
-
-<td>
-<ul>
-<li>(N-1台までのStandby故障は)Primaryの動作に影響しない。
-<br>
-ただし、同期モード(sync_state=sync)のStandbyが故障した場合、Primaryがその故障を検出して他のStandbyに切り替える期間、データ更新ができない。
-</li>
-</ul>
-
-
-</td>
-</tr></table>
-
-<br>
-
-<p>
-ここで「(Primaryの)データ更新ができない」との記述について補足します。
-<br>
-厳密に言えば更新系SQLが実行できないだけでなく、WALログを書き込むSQLの実行もできません。
-よって、検索系SQLでも実行できない場合があります。
-例えば、SELECT文の実行中にHOTの不要なタプルを削除すると、WALログ書き込みが発生するからです。
-</p>
-
-
-<p>
-次にPrimary故障の対応について、注意点を示します。
-</p>
-
-<ol>
-<li>Streaming ReplicationはPrimary故障時、Standbyを新Primaryにpromote(昇格)させることができる。
-ただし、故障の瞬間に開いていたトランザクションは不定(COMMITかABORTか状況依存)になる。
-</li>
-
-<li>
-N-Standby構成でPrimary故障した場合、
-Standbyを新Primaryに昇格した後に残りのStandbyを新Primaryに再接続しなければならない。
-この再接続手順を(pgpool-IIに倣って)フォローPrimary(Follow Master)と呼ぶことにする。
-</li>
-
-</ol>
-
-
-<p>
-以下、故障対応について詳細に解説します。
-</p>
-
-
-%CHAPTER 全般的な注意点
-
-%SECTION 新Primary選択の任意性
-
-<p>
-複数のStandbyがあると、どのStandbyを新Primaryにpromote(昇格)すべきか決定しなければなりません。
-</p>
-
-<p>
-Standbyの数をnとすると、Primary故障時のシナリオ数は2<sup>n</sup>となりますが、
-それらは3つのパターンに分類できます。
-</p>
-
-<ul>
-<li>パターン[1]</li>
-<p>
-すべてのStandbyがWALログデータを受信しない。
-</p>
-
-<li>パターン[2]</li>
-<p>
-すべてのStandbyがWALログデータを受信してHDDに書き込む。
-</p>
-
-<li>パターン[3]</li>
-<p>
-Standbyによって受信したWALログデータが異なる。
-[<図3-09>]は、パターン[3]に属するシナリオのひとつである。
-
-</p>
-</ul>
-
-
-<br>
-
-
-<table BORDER="1">
-<caption>[<図3-09>] 1:N Primary故障時、Standby間の受信WALログに差違が生じるシナリオ</caption>
-<tr><td><center>
-<img src="./fig-3-23-03.png" width=800><br>
-</center></td></tr>
-</table>
-
-<br>
-
-
-
-<p>
-パターン[1]とパターン[2]の場合、
-すべてのStandbyは同じ状態にあるので、どのStandbyを新Primaryに選択しても違いはありません。
-<br>
-パターン[3]の場合、どのStandbyをPrimaryにpromote(昇格)すべきか決めなければなりません。
-
-<p>
-ほとんどのユーザは、次に示すどちらかの戦略を採用しています。
-それぞれ一長一短があります。
-</p>
-
-<ul>
-<li>戦略1: LSNが最も進んでいるStandbyを新Primaryに昇格(promote)</li>
-<p>
-データロストの可能性を最小限にとどめるという立場からすると、合理的な戦略です。
-<br>
-受信したWALログのLSNを知るには、関数pg_last_wal_receive_location()などが使えます(<a href="func-18.html">[<7-37>]</a></a>参照)。
-ただし、関数の実行タイミングによっては正確な値を返さない可能性があります。
-</p>
-
-<li>戦略2: sync_priority=1のStandbyを新Primaryに昇格(promote)</li>
-<p>
-SRの実装上、Primaryと同期しているのはsync_state=syncのStandbyなので、
-sync_priority=1のStandbyはsync_state=syncであると仮定すれば、合理的な戦略です。
-<br>
-ただし、Primary故障の瞬間にどのStandbyがsync_state=syncだったのかを知る術はありません。
-例えば、ネットワークの不調でsync_priority=1のStandbyを切り離した１秒後に、Primaryが故障したとします。
-このStandbyを新Primaryにpromote(昇格)すると、切り離されていた1秒間のデータは失われます。
-</p>
-
-</ul>
-
-<br>
-
-<p>
-筆者の意見としては、データロストの可能性を最小にする戦略1が望ましいと考えます。
-戦略2は(説明でも述べたように)データロストの可能性があります。
-実際、実運用では戦略1が多いようです。
-</p>
-
-
-%SECTION PrimaryによるStandbyの故障検出と、故障の影響
-
-<p>
-PrimaryがStandbyの故障を検出するタイミングを列挙します。
-</p>
-
-<ol>
-<li>libpqの内部関数が異常が検出した場合</li>
-<p>
-Streaming Replicationを司るwalsenderプロセスとwalreceiverプロセスは、libpqという(PostgreSQLの)通信ライブラリの内部関数を使ってデータ通信している。
-<br>
-libpqは高機能で、
-walreceiverプロセスがクラッシュしてコネクションが切断したりStandbyが終了した場合、
-その旨を通知する。
-Standbyの異常を通知されたwalsenderプロセスは<u>即座にStandby故障と判断</u>する。
-<br>
-また、walreceiverプロセスへの(socket)読み書きが失敗したりEOFを返すなど、
-libpqの内部関数がエラーを返した場合も、<u>即座にStandby故障と判断</u>する。
-</p>
-
-
-<li>ネットワークやStandbyが稼働しているサーバに異常が発生した場合</li>
-<p>
-パラメータwal_sender_timeoutに設定した時間(デフォルト60[秒])内に返ってこなければ、故障と判断する。
-故障の発生から検出まで<u>最大でwal_sender_timeoutのタイムラグが発生</u>する。
-</p>
-
-</ol>
-
-
-<p>
-このように、状況によって故障発生の直後に検出できる場合もあれば、
-発生から検出までにタイムラグが生じる場合もあります。
-<br>
-このタイムラグがシステムに影響を及ぼす一例を示します。
-</p>
-
-<p>
-同期モード(sync_state=sync)のStandbyが故障し、その故障を検出して対処するまでの間、
-Primaryの更新はできなくなります。
-<br>
-複数Standbyで冗長性を持たせたシステム構成であっても、
-同期モードのStandby故障によってシステムの可用性が低下する場合があるのです。
-</p>
-
-
-
-%SECTION 同期/非同期の切り替え
-
-<p>
-レプリケーションを同期から非同期に切り替えるのは、非常に簡単です。
-<br>
-設定パラメータsynchronous_standby_namesをコメントアウトして無効にし、再読み込み(reload)するだけです。
-</p>
-
-<p>
-逆も同様で、
-非同期から同期に切り替えるには、
-設定パラメータsynchronous_standby_namesを有効にして、再読み込み(reload)するだけです。
-</p>
-
-<p>
-postgresql.confの再読み込み(reload)は、クライアントには直接影響せず、
-<u>セッションもトランザクションも保持したまま行われます</u>。
-</p>
-
-
-%SECTION <font color="#0000ff">レプリケーションスロット</font>
-
-<p>
-レプリケーションスロットを使っている場合、
-Standbyの故障やプロモートなど、レプリケーションの構成が変化する場合には、レプリケーションスロットも更新する必要があります。
-更新しない場合、pg_wal以下にWALファイルが残り続け、HDD/SSDの容量を食い潰す可能性があります。
-</p>
-
-<p>
-具体的には以下のような対応が必要となります。
-</p>
-
-<ol>
-<li>Standbyが故障した場合、Primary側で対応するStandbyのレプリケーションスロットを削除する。</li>
-<li>Primaryが故障した場合、プロモートした新Primaryは古いレプリケーションスロットを削除して新たにレプリケーションスロットを作成する。</li>
-</ol>
-
-
-%CHAPTER 故障対応 (Primary:Standby = 1:1の場合)
-
-<p>
-Primary1台、Standby1台構成について、PostgreSQLの操作方法を説明します。
-</p>
-
-%SECTION Standby故障:Standbyが1台の場合
-
-<p>
-同期レプリケーションは、1台しかないStandbyが故障すると、Primaryの更新もできなくなります。
-<br>
-この場合、Primaryを非同期レプリケーションに切り替えて運用を続けます。
-</p>
-
-
-<table BORDER="1">
-<caption>[<図3-10>] 1:1  Standby故障</caption>
-<tr><td><center>
-<img src="./fig-3-23-04.png" width=800><br>
-</center></td></tr>
-</table>
-
-<br>
-
-<p>
-同期/非同期レプリケーション切り替えの手順を示します。
-</p>
-
-<ol>
-<li>postgresql.confファイルを編集し、synchronous_standby_namesをコメントアウトする。</li>
-
-[< postgresql.confの設定例>]
-<pre>
-# コメントアウトして、非同期モードにする
-# synchronous_standby_names = 'standby1'
-</pre>
-
-<br>
-
-<li>編集後、再読み込み(reload)する。</li>
-
-<pre>
-primary> pg_ctl -D /usr/local/pgsql/data reload
-</pre>
-<br>
-
-</ol>
-
-<p>
-再読み込み(reload)を実行しても、クライアントのセッションやトランザクションは継続しています。
-よって、ユーザは切り替わったことに気づきません。
-</p>
-
-<p>
-<font color="#0000ff">レプリケーションスロットを使用している場合、故障したStandbyに対応するレプリケーションスロットを削除します。</font>
-</p>
-
-<pre>
-sampledb=# SELECT * FROM pg_drop_replication_slot('standby1_slot');
- pg_drop_replication_slot
---------------------------
-
-(1 row)
-</pre>
-
-<br>
-
-
-%SECTION Primary故障:Standbyが1台の場合
-
-<p>
-Primaryが故障した場合の対処を説明します。
-</p>
-
-
-<p>
-今、Primaryをimmediateモードでshutdownし(Primary故障をシミュレート)、standby1サーバ上でpg_ctl promoteコマンドを実行します。
-</p>
-
-<pre>
-standby1> pg_ctl -D /usr/local/pgsql/data/ promote
-</pre>
-
-<br>
-
-<p>
-これで、standby1は検索だけでなく更新も実行できるようになりました。
-</p>
-
-<pre>
-standby1> psql sampledb -q
-sampledb=# SELECT pg_is_in_recovery();
- pg_is_in_recovery
--------------------
- f
-(1 row)
-</pre>
-
-<br>
-
-<p>
-なお、standby1のpostgresql.confは、設定パラメータsynchronous_standby_namesが無効になっていることを確認してください(なんらかの値が設定されていると、同期レプリケーションのPrimaryになってしまい、データ更新ができない)。
-</p>
-
-<pre>
-sampledb=# SHOW synchronous_standby_names;
- synchronous_standby_names
----------------------------
-
-(1 row)
-</pre>
-
-<br>
-
-<p>
-もしも同期モードでpromoteしてしまった場合は、上記の非同期レプリケーションへの切り替え手順を実行してください。
-</p>
-
-
-<p>
-<font color="#0000ff">レプリケーションスロットを使用している場合は、念の為、postgresql.confのprimary_slot_nameをコメントアウトし、設定をreloadするとよいでしょう。</font>
-</p>
-
-[< postgresql.confの設定>]
-<pre>
-# コメントアウトする
-#primary_slot_name = 'standby1_slot'
-</pre>
-
-<br>
-
-<pre>
-standby1> pg_ctl -D data reload
-</pre>
-
-<br>
-
-
-%CHAPTER 故障対応 (Primary:Standby = 1:Nの場合)
-
-<p>
-Standbyが2台の場合について、PostgreSQLの操作方法を説明します。
-</p>
-
-
-%SECTION Standby故障:Standbyが2台の場合
-
-<p>
-それぞれのStandbyが故障した場合の動作を示します。
-</p>
-
-<blockquote>
-(1)sync_state=potential のStandbyが故障がした場合([<図3-11>(1)])<br>
-<p>
-sync_state=syncのStandbyは同期レプリケーションを続ける。Standby故障はユーザからは完全にマスクされる。
-</p>
-
-(2)sync_state=sync のStandbyが故障した場合([<図3-11(2)>])<br>
-<p>
-sync_state=potentialのStandbyが昇格して 同期レプリケーションを続ける。
-Standby故障が発生してから、その故障を検出し他のStandbyを昇格する間、Primaryの更新はできない。
-</p>
-
-</blockquote>
-
-<font color="#ff0000">
-作図用の文章
-</font>
-<pre>
-sync_state = potentialのstandby2がクラッシュしても、
-standby1は同期レプリケーションを続ける
-
-
-sync_state = syncのstandby1がクラッシュすると、
-standby2がsync_state=syncに昇格して、
-同期レプリケーションを続ける
-</pre>
-
-
-<table BORDER=1>
-<caption>[<図3-11>] 1:2  Standby故障</caption>
-<tr><td><center>
-<img src="./fig-3-23-05.png" width=800><br>
-</center></td></tr>
-</table>
-
-<br>
-
-<p>
-(2)の状況をPrimary側で確認してみます。
-<br>
-はじめはStandbyが2台稼働しています。
-</p>
-
-<pre>
-sampledb=# SELECT application_name,state,sync_priority,sync_state
-sampledb-#                                     FROM pg_stat_replication;
- application_name |   state   | sync_priority | sync_state
-------------------+-----------+---------------+------------
- standby1           | streaming |             1 | sync
- standby2           | streaming |             2 | potential
-(2 rows)
-</pre>
-
-<br>
-
-<p>
-ここで、同期レプリケーションをしていたstandby1が故障したとします。
-<br>
-すると、standby2が昇格して同期レプリケーションを続けます。
-<br>
-ただし、前記の「PrimaryによるStandbyの故障検出と、故障の影響」で説明したように、
-状況によっては故障検出に時間がかかり、その間はPrimaryの更新ができないこともあります。
-</p>
-
-<pre>
-sampledb=# SELECT application_name,state,sync_priority,sync_state
-sampledb-#                                     FROM pg_stat_replication;
- application_name |   state   | sync_priority | sync_state
-------------------+-----------+---------------+------------
- standby2           | streaming |             2 | sync
-(1 row)
-</pre>
-
-<br>
-
-<p>
-standby1が復旧できた場合、standby2は予備(potential)に降格します。
-</p>
-
-<pre>
-sampledb=# SELECT application_name,state,sync_priority,sync_state
-sampledb-#                                     FROM pg_stat_replication;
- application_name |   state   | sync_priority | sync_state
-------------------+-----------+---------------+------------
- standby1           | streaming |             1 | sync
- standby2           | streaming |             2 | potential
-(2 rows)
-</pre>
-
-
-<br>
-
-<p>
-<font color="#0000ff">
-レプリケーションスレッドを使用している場合、故障したStandbyに対応するスレッドを削除します。
-</font>
-</p>
-
-<pre>
-sampledb=# SELECT * FROM pg_drop_replication_slot('standby1_slot');
- pg_drop_replication_slot
---------------------------
-
-(1 row)
-</pre>
-
-<br>
-
-
-%SECTION Primary故障：Standbyが2台の場合
-
-<p>
-Primaryが故障し、2台体制の縮退運転に移行する手順を説明します([<図3-12>])。
-<br>
-なお、ここでは解説を簡略化するため、Primary選択は戦略2を用いることにします。
+構築するシステム構成を[<図3-06>]に示します。
 </p>
 
 
 <table BORDER=1>
-<caption>[<図3-12>] 1:2  Primary故障</caption>
+<caption>[<図3-06>] システム構成</caption>
 <tr><td><center>
-<img src="./fig-3-23-06.png" width=800><br>
+<img src="./fig-3-22-01.png" width="700"><br>
 </center></td></tr>
 </table>
 
-
-<br>
-
+<p>
+Primary１台に対し、3台のStandbyを接続します。
+standby1とstandby2は同期レプリケーション、standby3は非同期レプリケーションとします。
+</p>
 
 <p>
-フォローマスタの手順が繁雑なのは、
-新Primary(standby1)のTimeLineIDがPrimary昇格(promote)によって1つ繰り上がること、
-および、Standby間でWALログの再生状況が異なるからです。
-<br>
-そのため、
-Standbyは新Primaryのベースバックアップかアーカイブログを取得し、
-リカバリモードで再起動しなければなりません。
+ここでは、設定方法の紹介の意味で非同期も説明します。
+しかしカスケード接続でシステム構築する場合を除き、
+(耐障害性の観点から)実運用では同期レプリケーションを選択すべきでしょう。
 </p>
 
 
+%CHAPTER Primaryの準備
+
 <p>
-フォローPrimaryには2つの方式があります([<脚注1>])。
-どちらの方式も、Standbyのデータベースクラスタをゼロから再構築します。
-ここでは便宜的に[A]と[B]と呼ぶことにします。
+Primary側の設定を説明します。
 </p>
 
-<blockquote>
-[A]: pg_basebackupコマンドでデータベースクラスタを再構築する。
-<br>
-[B]: 手動でベースバックアップを取得し、Standby側でリカバリする。
-</blockquote>
-
-<br>
+%SECTION postgresql.confの設定
 
 <p>
-以下、Primary故障対応の概略を示し、次に方式別のフォローPrimaryの実行手順を説明します。
-</p>
-
-
-
-<blockquote><table BORDER="1"><tr><td>脚注1</td><td>
-<p>
-新Standbyのアーカイブログとhistoryファイルを使う方法もありますが、ここでは説明を省略します。
-</p>
-</td></tr></table></blockquote>
-
-
-
-<p>
-[0] standby1の事前準備/Primary故障
-</p>
-
-<blockquote>
-
-<p>
-[B]を選択する場合、アーカイブログの設定も必要です。
-<br>
-この設定により、Primary昇格後にアーカイブログ機構が有効になります。
+以下、Primaryのpostgresql.confの設定例を示します。
 </p>
 
 [< postgresql.confの設定例>]
+
 <pre>
-archive_mode = on
-archive_command = 'cp %p /home/postgres/archivelogs/%f'
+# 適宜、セキュリティポリシーに合わせて設定する。
+listen_addresses = '*'
+
+# replica か logical。
+wal_level = replica
+
+# Standbyの最大数。ここでは10。
+max_wal_senders = 10
+
+# pg_wal以下に残すWALログのサイズ。max_wal_sizeと同じでよいと思う。
+wal_keep_sizes = 1G
+
+# 同期レプリケーションするStandby。ここではstandby1とstandby2　
+synchronous_standby_names = 'standby1,standby2'
+
+# レプケーションスロットも設定する
+max_replication_slots = 10
+
 </pre>
 
-</blockquote>
+<br>
 
+
+%SECTION pg_hba.confの設定
 
 <p>
-[1] standby1をPrimaryに昇格(promote)
-</p>
-
-<blockquote>
-<p>
-Primaryに故障が発生したら、standby1サーバ上でpg_ctl promoteコマンドを実行して、新Primaryに昇格させます。
+Standbyからの接続を許可するため、pg_hba.confに以下の行を追加します。
+USERはStandbyの実行ユーザを指定します(ここではpostgres)。
 </p>
 
 <pre>
-standby1> pg_ctl -D /usr/local/pgsql/data/ promote
+# TYPE  DATABASE        USER            CIDR-ADDRESS            METHOD
+host    replication     postgres	192.168.1.0/24            trust
+</pre>
+<br>
+
+%SECTION 起動
+
+<p>
+ベースバックアップ取得のため、Primaryを起動します。
+</p>
+
+<pre>
+primary> pg_ctl -D /usr/local/pgsql/data start
+</pre>
+
+<br>
+
+
+%CHAPTER Standbyの準備
+
+<p>
+次に、Standbyのサーバ設定を説明します。
+standby1を例にするので、適宜standby2とstandby3の設定も行ってください。
+</p>
+
+
+%SECTION ベースバックアップの取得
+
+<p>
+<a href="https://www.postgresql.org/docs/current/app-pgbasebackup.html" target="_blank" rel="noopener noreferrer">pg_basebackup</a>でベースバックアップを取得する方法を示します。
+</p>
+
+<p>
+Primaryが起動していることを確認します。
+<br>
+Standby側で既にデータベースクラスタが存在する場合は削除します。
+削除しないとpg_basebackupはエラーメッセージを出力して終了してしまいます。
+</p>
+
+<pre>
+standby1> rm -rf /usr/local/pgsql/data
 </pre>
 
 <br>
 
 <p>
-<font color="#0000ff">
-この系がレプリケーションスロットを使っている場合、念の為、新Primaryにレプリケーションスロットがないことを確認します。
-</font>
-</p>
-
-<pre>
-postgres=# SELECT slot_name, active FROM pg_replication_slots;
- slot_name | active
------------+--------
-(0 rows)
-</pre>
-
-</blockquote>
-
-
-<p>
-[2] standby2を新Primary(standby1)に接続(Follow Master)
-</p>
-
-<blockquote>
-<p>
-概略のみ示します。Standbyのリカバリ準備は後述します。
-</p>
-
-<ol>
-<li>postgresql.conf、pg_hba.confを退避</li>
-<p>
-適当なディレクトリにpostgresql.conf、pg_hba.confを退避しておきます。
-</p>
-
-<pre>
-standby2> cp /usr/local/pgsql/data/postgresql.conf /usr/local/pgsql
-standby2> cp /usr/local/pgsql/data/pg_hba.conf /usr/local/pgsql
-</pre>
-
+Standbyを稼働するサーバ上でpg_basebackupコマンドを実行します。
 <br>
-
-<li>リカバリの準備</li>
-<p>
-手順は後述します。
-</p>
-
-
-<li> postgresql.conf, pg_hba.confをデータベースクラスタに戻す</li>
-
-<pre>
-standby2> cp /usr/local/pgsql/postgresql.conf /usr/local/pgsql/data
-standby2> cp /usr/local/pgsql/pg_hba.conf /usr/local/pgsql/data
-</pre>
-
-<br>
-
-<li> 再起動</li>
-
-<p>
-Standbyを起動します。
+standby1での、pg_basebackupコマンドの実行例を示します。
+ここでは、スロットの問題を避けるため、--no-slotオプションを設定します。
 </p>
 
 <pre>
-standby2> pg_ctl -D data start
-</pre>
-
-<br>
-
-<li> <font color="#0000ff">レプリケーションスロットの確認と削除</font></li>
-
-<p>
-念の為、レプリケーションスロットがあるかどうか、確認します。
-もしも存在している場合はpg_drop_replication_slot()で削除します。
-</p>
-
-<pre>
-postgres=# SELECT slot_name, active FROM pg_replication_slots;
- slot_name | active
------------+--------
-(0 rows)
-</pre>
-
-<br>
-
-</ol>
-
-</blockquote>
-
-
-
-<p>
-[3] 新Primary(standby1)を同期レプリケーションに切り替え
-</p>
-
-<blockquote>
-<p>
-standby1のpostgresql.conf:synchronous_standby_nameに'standby2'を設定し、
-reloadします。
-</p>
-
-[< postgresql.confの設定例>]
-<pre>
-synchronous_standby_names = 'standby2'
+standby1> pg_basebackup -h primary -p 5432 -D /usr/local/pgsql/data  -X stream -P -R -v --no-slot
+pg_basebackup: initiating base backup, waiting for checkpoint to complete
+pg_basebackup: checkpoint completed
+pg_basebackup: write-ahead log start point: 0/11000028 on timeline 2
+pg_basebackup: starting background WAL receiver
+pg_basebackup: created temporary replication slot "pg_basebackup_374922"
+66199/66199 kB (100%), 1/1 tablespace
+pg_basebackup: write-ahead log end point: 0/11000100
+pg_basebackup: waiting for background process to finish streaming ...
+pg_basebackup: syncing data to disk ...
+pg_basebackup: renaming backup_manifest.tmp to backup_manifest
+pg_basebackup: base backup completed
 </pre>
 
 <br>
 
 <p>
-設定後、リロードします。
+バックアップが終了すると、指定したディレクトリ(/usr/local/pgsql/data)にPrimary側のデータベースクラスタの内容がコピーされています。
+また、バックアップ開始から完了までの間に生成されたWALログもコピーされています。
 </p>
 
 <pre>
-standby1> pg_ctl -D /usr/local/pgsql/data reload
+standby1> cd /usr/local/pgsql/data
+standby1> ls data/
+PG_VERSION       current_logfiles  pg_dynshmem    pg_multixact  pg_snapshots  pg_tblspc    postgresql.auto.conf
+backup_label     global            pg_hba.conf    pg_notify     pg_stat       pg_twophase  postgresql.conf
+backup_manifest  log               pg_ident.conf  pg_replslot   pg_stat_tmp   pg_wal       standby.signal
+base             pg_commit_ts      pg_logical     pg_serial     pg_subtrans   pg_xact
+standby1> ls data/pg_wal
+00000002.history  000000020000000000000011  archive_status
 </pre>
 
-</blockquote>
+
+%SECTION postgresql.conf ファイルの設定
+
+<p>
+pg_basebackupコマンドでコピーしたデータベースクラスタには、Primaryのpostgresql.confとpg_hba.confもコピーされますが、
+適宜パラメータ値が変更されています。
+また、primary_conninfoが設定されたpostgresql.auto.confも作成されます。
+</p>
+
+
+<p>
+以下のパラメータについて適切に変更されているか確認します。また、レプリケーションスロットを使用する場合は、hot_standby_feedbackを有効にします。
+</p>
+
+[< postgresql.confの確認>]
+<pre>
+# Standbyはsynchronous_standby_namesがコメントアウトされているか、確認する
+# synchronous_standby_names = 'standby1, standby2'
+
+# HotStandbyがONか、確認する。
+hot_standby = on
+
+# レプリケーションスレッドを使う場合、以下をONにする。
+hot_standby_feedback = on
+</pre>
 
 <br>
 
-
 <p>
-<font color="#0000ff">[4] レプリケーションスロットの設定</font>
+次にStandby用のパラメータを設定します。
+<br>
+バージョン11以前はrecovery.conf、<u>バージョン12以降はpostgresql.confですがpg_basebackupでバックアップを作成した場合にはpostgresql.auto.confを編集する</u>ことになります。
 </p>
 
-<blockquote>
+<p>
+編集が必要な項目を示します。これはstandby1の例です。standby2、standby3でも同様の編集を行ってください。
+</p>
+
+[< recovery.conf | postgresql.conf | postgresql.auto.confの設定例>]
+<pre>
+# Standby名をapplication_nameに設定
+primary_conninfo = 'host=primary port=5432 application_name=standby1'
+</pre>
+
+<br>
+
+%SECTION Standby起動
 
 <p>
-レプリケーションスロットを使用する場合、以下のコマンドで新規にスロットを作成します。
+standby1を起動します。
 </p>
 
 <pre>
+standby1> pg_ctl -D /usr/local/pgsql/data start
+</pre>
+
+<br>
+
+<p>
+standby2、standby3も起動します。
+</p>
+
+%CHAPTER 動作確認
+
+<p>
+Primary側で動作確認を行います。
+<br>
+稼働統計情報pg_stat_replicationの詳細は、<a href="./admin-15.html">[<3-15>]</a>の[<表3-17>]を参照してください。
+</p>
+
+<pre>
+sampledb=# SELECT application_name,state,sync_priority,sync_state
+sampledb-#                                   FROM pg_stat_replication;
+ application_name |   state   | sync_priority | sync_state
+------------------+-----------+---------------+------------
+ standby1         | streaming |             1 | sync
+ standby2         | streaming |             2 | potential
+ standby3         | streaming |             0 | async
+(3 rows)
+</pre>
+
+<br>
+
+<p>
+standby1からstandby3まで、3Standbyの接続が確認できます。
+<br>
+各Standbyの状態(sync_state)について簡単に説明します。
+</p>
+
+<ul>
+<li>standby1: sync
+ <p>
+standby1は同期レプリケーションで稼働している。
+ </p>
+
+<li>standby2: potential
+ <p>
+standby2は現時点では非同期レプリケーションだが、standby1がダウンすると同期レプリケーションに移行する(potentialを持つ)。
+ </p>
+
+<li>standby3: async
+ <p>
+standby3は非同期レプリケーションで稼働している。
+ </p>
+</ul>
+
+%CHAPTER レプリケーションスロット設定
+
+%SECTION Praimaryでの設定
+
+<p>
+Primary側でレプリケーションスロットを作成します。
+</p>
+
+
+<pre>
+postgres=# SELECT * FROM pg_create_physical_replication_slot('standby1_slot');
+   slot_name   | lsn
+---------------+-----
+ standby1_slot |
+(1 row)
+
 postgres=# SELECT * FROM pg_create_physical_replication_slot('standby2_slot');
    slot_name   | lsn
 ---------------+-----
@@ -757,86 +292,55 @@ postgres=# SELECT * FROM pg_create_physical_replication_slot('standby2_slot');
 <br>
 
 <p>
-Standby側でprimary_slot_nameを設定した状態で起動すると、以下の様に設定後すぐにスロットがアクティブになります。
+作成できたかどうかは、以下のコマンドで確認できます。
 </p>
 
 <pre>
 postgres=# SELECT slot_name, active FROM pg_replication_slots;
    slot_name   | active
 ---------------+--------
+ standby1_slot | f
+ standby2_slot | f
+(2 rows)
+</pre>
+
+<br>
+
+%SECTION Standbyでの設定
+
+<p>
+各Standbyでpostgresql.confのprimary_slot_nameにスロット名を設定します。
+</p>
+
+[< standby1のpostgresql.conf>]
+<pre>
+primary_slot_name = 'standby1_slot'
+</pre>
+
+<br>
+
+
+<p>
+設定後、postgresql.confを再読み込みします。
+</p>
+
+<pre>
+standby1> pg_ctl -D data reload
+</pre>
+
+<br>
+
+<p>
+primary側で以下のコマンドを実行することで、レプリケーションスロットの状態を確認できます。
+</p>
+
+<pre>
+postgres=# SELECT slot_name, active FROM pg_replication_slots;
+   slot_name   | active
+---------------+--------
+ standby1_slot | t
  standby2_slot | t
-(1 row)
+(2 rows)
 </pre>
 <br>
 
-</blockquote>
-
-
-%CHAPTER フォローマスタにおけるStandbyのリカバリ準備
-
-<p>
-以下、方式別に手順を説明します。
-</p>
-
-%SECTION [A] pg_basebackupを使う
-
-
-<ol>
-<li> 新Primaryのベースバックアップ</li>
- <p>
-新Primary：standby1のデータベースクラスタをstandby2にベースバックアップします。
- </p>
-
-<pre>
-standby2> rm -rf /usr/local/pgsql/data
-standby2> pg_basebackup -h standby1 -p 5432 -D /usr/local/pgsql/data -X stream -P -R -v --no-slot
-</pre>
-
-<br>
-
-
-<li> postgresql.conf|postgresql.auto.conf編集</li>
- <p>
-primary_conninfo の接続hostを"primary"から"standby1"に変更します。
-<font color="#0000ff">レプリケーションスロットを使用する場合は、primary_slot_nameも設定します。</font>
- </p>
-[< postgresql.conf|postgresql.auto.confの設定例>]
-<pre>
-primary_conninfo = 'host=standby1 port=5432 application_name=standby2'
-
-# レプリケーションスロットを使う場合
-primary_slot_name = 'standby2_slot'
-</pre>
-</ol>
-
-<br>
-
-%SECTION [B]手動でベースバックアップとアーカイブログを取得する
-
-<p>
-pg_basebackupコマンドが使えない場合に利用します。
-</p>
-
-<ol>
-<li> 新Primaryのベースバックアップ</li>
- <p>
-新Primarystandby1のデータベースクラスタをstandby2にベースバックアップします。
-ベースバックアップの取得方法は<a href="./admin-19.html">[<3-19>]</a>を参照してください。
- </p>
-
-<li> postgresql.conf編集</li>
- <p>
-primary_conninfo の接続hostを"primary"から"standby1"に変更します。
-<font color="#0000ff">レプリケーションスロットを使用する場合は、primary_slot_nameも設定します。</font>
-</p>
-
-[< postgresql.confの設定例>]
-<pre>
-primary_conninfo = 'host=standby1 port=5432 application_name=standby2'
-
-# レプリケーションスロットを使う場合
-primary_slot_name = 'standby2_slot'
-</pre>
-</ol>
-
-<br>

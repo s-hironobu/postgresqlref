@@ -221,7 +221,7 @@ Indexes:
 
 <p>
 データベースロールがテーブルに対してアクセス権限を持つか否かは、
-関数has_table_privilege()で判ります(<a href="./func-10.html">[<7-29>]</a>参照)。
+関数has_table_privilege()で判ります(<a href="./func-11.html">[<7-30>]</a>参照)。
 </p>
 
 <p>

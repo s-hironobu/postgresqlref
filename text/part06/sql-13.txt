@@ -113,7 +113,7 @@ DROP ROLE [ IF EXISTS ] role_name [, ...]
 </tr><tr>
 <td>CREATEROLE, NOCREATEROLE</td>	<td>作成するロールによる新しいロールの作成を許可、禁止[NOCREATEROLE]</td>
 </tr><tr>
-<td>CREATEUSER, NOCREATEUSER</td>	<td>CREATEROLE, NOCREATEROLEの別名。廃止予定</td>
+<td>CREATEUSER, NOCREATEUSER</td>	<td>CREATEROLE, NOCREATEROLEの別名。バージョン9.6まで</td>
 </tr><tr>
 <td>LOGIN, NOLOGIN	</td>	<td>LOGIN可能か否か[CREATE ROLE=NOLOGIN, CREATE USER=LOGIN]</td>
 </tr><tr>
@@ -143,13 +143,13 @@ DROP ROLE [ IF EXISTS ] role_name [, ...]
 </tr><tr>
 <td>IN ROLE role_name		</td>	<td>親になるロールを列挙する</td>
 </tr><tr>
-<td>IN GROUP role_name		</td>	<td>IN ROLEの別名。廃止予定</td>
+<td>IN GROUP role_name		</td>	<td>IN ROLEの別名。バージョン16まで</td>
 </tr><tr>
 <td>ROLE role_name		</td>	<td>子にするロールを列挙する</td>
 </tr><tr>
 <td>ADMIN role_name		</td>	<td>WITH ADMIN OPTIONつきで子にするロールを列挙する</td>
 </tr><tr>
-<td>USER role_name		</td>	<td>ROLEの別名。廃止予定</td>
+<td>USER role_name		</td>	<td>ROLEの別名。バージョン16まで</td>
 </tr><tr>
 <td>SYSID uid			</td>	<td>SYSID句は無視される。下位互換性のため存続</td>
 </tr><tr>
@@ -169,7 +169,7 @@ SET ROLE文でロールの権限(SUPERUSER, CREATEDB, CREATEROLEなど)を継承
 <p>
 ロールの権限はメタコマンド\du、より詳細な<a href="./admin-05.html">システムカタログ</a>pg_rolesで表示できます。
 また、ロールが各種データベースオブジェクト(テーブルや関数など)に対してアクセス権限を持つか否か
-調べる関数群(<a href="./func-10.html">[<7-29>]</a>)があります。
+調べる関数群(<a href="./func-11.html">[<7-30>]</a>)があります。
 </p>
 
 <p>

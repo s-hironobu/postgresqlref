@@ -61,6 +61,12 @@ max_pred_locks_per_page	</td>	<td>整数 [2]</td>	<td>ページ全体をカバ�
 
 </tr><tr>
 <td>◎</td>	<td>	transform_null_equals	</td>	<td>on/off[off]		</td>	<td>"expr = NULL"(または"NULL = expr")という形の式を"expr IS NULL"という形の式として扱うか否か </td>
+
+</tr><tr>
+<td>△</td>
+<td>allow_alter_system	</td>	<td>on/off[on]		</td>	<td>ALTER SYSTEMコマンドを実行できるかどうか。詳細はオフィシャルドキュメント参照。バージョン17から </td>
+
+
 </tr></table>
 
 <br>

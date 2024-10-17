@@ -285,6 +285,10 @@ pg_stat_subscription_stats</td>	<td>サブスクリプションごとに1行で�
 </tr><tr>
 <td>
 <a href="https://www.postgresql.org/docs/current/view-pg-views.html" target="_blank" rel="noopener noreferrer">pg_views</a></td>	<td>views</td>
+</tr><tr>
+<td>
+<a href="https://www.postgresql.org/docs/current/view-wait-events.html" target="_blank" rel="noopener noreferrer">pg_wait_events</a></td><td>wait eventsの一覧表示。現時点でのwaitイベントを表示するわけではないので注意。 from PG17</td>
+
 </tr></table>
 
 

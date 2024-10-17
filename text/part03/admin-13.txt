@@ -19,12 +19,17 @@ pg_upgrade -b oldbindir [-B newbindir] -d oldconfigdir -D newconfigdir [option..
 <td>-c, --check</td>	<td>チェックのみ。</td>
 </tr><tr>
 
-<td>-clone</td>	<td>効率化のためcopyでなくreflinkでファイルを複製。PG12から</td>
+<td>--clone</td>	<td>効率化のためcopyでなくreflinkでファイルを複製。Linux with Btrfs/XFS, or OSX with APFSのみ。PG12から</td>
 </tr><tr>
 
-<td>-copy</td>	<td>-cloneでなくcopyを使う。デフォルト。PG16から</td>
+<td>--copy</td>	<td>-cloneでなくcopyを使う。デフォルト。PG16から</td>
 </tr><tr>
 
+<td>--copy-file-range</td>	<td>copy_file_range()システムコールを使う。LinuxとFreeBSDのみ。PG17から</td>
+</tr><tr>
+
+<td>--sync-method=method</td>		<td>'fsync'ならばファイルを書き出すたびにsyncシステムコールで同期する。デフォルト。'syncfs'ならはsyncfsシステムコールでファイル全体を同期する。バージョン17から</td>
+</tr><tr>
 
 <td>-j njobs</td>	<td>並列処理</td>
 </tr><tr>
@@ -70,6 +75,14 @@ pg_upgradeは、バージョン8.3以降のデータベースクラスタを、�
 </tr><tr>
 <td>データベースクラスタ</td>		<td>/usr/local/pgsql-9.0/data</td>		<td>/usr/local/pgsql-9.1/data</td>
 </tr></table>
+
+<br>
+
+<p>
+<font color="#ff0000">
+バージョン17からロジカルレプリケーションを使ったアップグレードも可能になりました。しかし、実現できるのはPG17からPG18以降へのアップグレードなので、現時点(PG17リリース時点)では詳細は記載しません。
+</font>
+</p>
 
 <br>
 

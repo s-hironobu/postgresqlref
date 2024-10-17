@@ -157,6 +157,8 @@ d = データベース, t = テーブル, c = カラム, v = ビュー, s = シ�
 </tr><tr>
 <td>ALTER SYSTEM</td>	<td>A	</td>	<td>	</td>	<td><a href="https://www.postgresql.org/docs/current/sql-altersystem.html" target="_blank" rel="noopener noreferrer">ALTER SYSTEM</a>で変更するシステムパラメータの設定</td>
 
+</tr><tr>
+<td>MAINTAIN</td>	<td>m	</td>	<td>t	</td>	<td>VACUUM, ANALYZE, CLUSTER, REFRESH MATERIALIZED VIEW, REINDEX, LOCK TABLEの実行。バージョン17から</td>
 
 </tr><tr>
 <td>ALL, ALL PRIVILEGES</td>	<td>なし</td>	<td>d,t,v,s,S,f,l</td>	<td>すべての権限</td>
@@ -255,7 +257,7 @@ Column access privileges | aid:
 <p>
 PostgreSQLには、
 データベースユーザ/ロールのテーブルやスキーマへのアクセス権限を調べる関数が多数サポートされています。
-関数の一覧は<a href="./func-10.html">[<7-29>]</a>を参照してください。
+関数の一覧は<a href="./func-11.html">[<7-30>]</a>を参照してください。
 <br>
 例えば、
 ロールrole1のテーブルpgbench_accountsにおけるSELECT権限の有無は、

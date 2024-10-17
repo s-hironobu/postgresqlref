@@ -58,6 +58,9 @@ ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
 ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
       ALTER [ COLUMN ] column_name DROP IDENTITY [ IF EXISTS ]
 
+ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
+    ALTER [ COLUMN ] column SET EXPRESSION AS ( expression )	-- バージョン17から
+
 ●カラムのアトリビュートの設定とリセット
 ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
       ALTER [ COLUMN ] column_name SET ( attribute_option = value [, ... ] )

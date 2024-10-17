@@ -2,62 +2,85 @@
 %LASTMOD
 %KEY pgsql-func21
 
-%TITLE <a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADMIN-DBOBJECT" target="_blank" rel="noopener noreferrer">データベースオブジェクト容量関数 / データベースオブジェクト位置関数</a>
+%TITLE <a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-REPLICATION" target="_blank" rel="noopener noreferrer">レプリケーション管理関数</a>
 
 
-<table border=1>
-<caption>データベースオブジェクト容量関数</caption>
+<table>
+<caption>[<レプリケーション管理関数>]</caption>
 <tr bgcolor="#cccccc">
+
 <th>関数</th>							<th>返り値型</th>	<th>説明</th>
 </tr><tr>
-<td>pg_column_size(any)	</td>	<td>int</td>	<td>特定の値を格納するのに必要なバイト数。単位は[byte]</td>
-</tr><tr>
-<td>pg_column_compression(any)	</td>	<td>text</td>	<td>指定したカラムの圧縮方法。圧縮されてなければNULLを返す。バージョン14から</td>
+<td>pg_create_physical_replication_slot(slot_name [, immediately_reserve bool, temporary bool ] </td>	<td>record(slot_name, lsn)</td>	<td></td>
 
 </tr><tr>
-<td>pg_database_size(database_oid)	</td>	<td>bigint</td>	<td>指定したOIDを持つデータベースが使用するディスク領域。単位は[byte]</td>
-</tr><tr>
-<td>pg_database_size(database_name)	</td>	<td>bigint</td>	<td>データベースが使用するディスク領域。単位は[byte]</td>
-</tr><tr>
-<td>pg_indexes_size(regclass)</td>	<td>bigint</td>	<td>指定したOID、もしくは名前のテーブルに関連したインデックスが使用するディスク領域。単位は[byte]</td>
-</tr><tr>
-<td>pg_relation_size(table_name)	</td>	<td>bigint</td>	<td>テーブル、もしくはインデックスが使用するディスク領域。単位は[byte]</td>
-</tr><tr>
-<td>pg_relation_size(table_oid)	</td>	<td>bigint</td>	<td>指定したOIDを持つテーブル、もしくはインデックスが使用するディスク領域。単位は[byte]</td>
-
+<td>pg_drop_replication_slot(slot_name)</td>	<td>void</td>	<td></td>
 
 </tr><tr>
-<td>pg_size_bytes(text)	</td>	<td>bigint</td>	<td>(pg_size_pretty()の出力のような)可読なバイトサイズをbigintに変換して返す。<br>例：pg_size_bytes('11 MB') ->  11534336</td>
-</tr><tr>
-<td>pg_size_pretty(bigint)	</td>	<td>text</td>	<td>適切な単位[kB, MB, GB,TBのいずれか]に変換して出力</td>
-</tr><tr>
-<td>pg_table_size(regclass)</td>	<td>bigint</td>	<td>指定したOID、もしくは名前のテーブルが使用するディスク領域(TOAST、空き領域マップ、ビジビリティマップ含む)。インデックスは含まない。単位は[byte]</td>
+<td>pg_create_logical_replication_slot(slot_name, plugin [, temporary bool, twophase bool ]) </td>	<td>record(slot_name, lsn)</td>	<td></td>
 
 </tr><tr>
-<td>pg_tablespace_size(tablespace_oid)</td>	<td>bigint</td>	<td>指定したOIDを持つテーブルスペースが使用するディスク領域。単位は[byte]</td>
-</tr><tr>
-<td>pg_tablespace_size(tablespace_name)	</td>	<td>bigint</td>	<td>テーブルスペースが使用するディスク領域。単位は[byte]</td>
+<td>pg_copy_physical_replication_slot(src_slot_name, dst_slot_name [, temporary bool ]) </td>	<td>record(slot_name, lsn)</td>	<td></td>
 
 </tr><tr>
-<td>pg_total_relation_size(table_oid)</td>	<td>bigint</td>	<td>指定したOIDを持つテーブルが使用するディスク領域(インデックスとtoastされたデータを含む)。単位は[byte]</td>
-
-</tr></table>
-
-<br>
-
-
-<table border=1>
-<caption>データベースオブジェクト位置関数</caption>
-<tr bgcolor="#cccccc">
-<th>関数</th>							<th>返り値型</th>	<th>説明</th>
-</tr><tr>
-<td>pg_relation_filenode(regclass)</td>		<td>oid</td>	<td>指定したOID、または名前に関連するリレーションのファイルノード番号</td>
+<td>pg_copy_logical_replication_slot(src_slot_name, dst_slot_name [, temporary bool [, plugin ]]) </td>	<td>record(slot_name, lsn)</td>	<td></td>
 
 </tr><tr>
-<td>pg_relation_filepath(regclass)</td>		<td>text</td>	<td>指定したOID、または名前に関連するリレーションのファイルパス</td>
+<td>pg_logical_slot_get_changes(slot_name, upto_lsn, upto_nchanges integer, VARIADIC options text[]) </td>	<td>setof record(lsn, xid, data text)</td>	<td></td>
 
 </tr><tr>
-<td>pg_filenode_relation(tablespace oid, filenode oid)</td>	<td>regclass</td>	<td>指定したテーブルスペースのOIDとファイルノードから、リレーション名を返す。pg_relation_filepath()の逆関数。</td>
+<td>pg_logical_slot_peek_changes(slot_name, upto_lsn, upto_nchanges integer, VARIADIC options text[])</td>	<td>setof record(lsn, xid, data text)</td>	<td></td>
+
+</tr><tr>
+<td>pg_logical_slot_get_binary_changes(slot_name, upto_lsn, upto_nchanges integer, VARIADIC options text[])</td>	<td>setof record(lsn, xid, data bytea)</td>	<td></td>
+
+</tr><tr>
+<td>pg_logical_slot_peek_binary_changes(slot_name, upto_lsn, upto_nchanges integer, VARIADIC options text[]) </td>	<td>setof record(lsn, xid, data bytea)</td>	<td></td>
+
+</tr><tr>
+<td>pg_replication_slot_advance(slot_name, upto_lsn)</td>	<td>record(slot_name, end_lsn)</td>	<td></td>
+
+</tr><tr>
+<td>pg_replication_origin_create(node_name text)</td>	<td>oid</td>	<td></td>
+
+</tr><tr>
+<td>pg_replication_origin_drop(node_name text)</td>	<td>void</td>	<td></td>
+
+</tr><tr>
+<td>pg_replication_origin_oid(node_name text)</td>	<td>oid</td>	<td></td>
+
+</tr><tr>
+<td>pg_replication_origin_session_setup(node_name text) </td>	<td>void</td>	<td></td>
+
+</tr><tr>
+<td>pg_replication_origin_session_reset() </td>	<td>void</td>	<td></td>
+
+</tr><tr>
+<td>pg_replication_origin_session_is_setup() </td>	<td>bool</td>	<td></td>
+
+</tr><tr>
+<td>pg_replication_origin_session_progress(flush bool)</td>	<td>pg_lsn</td>	<td></td>
+
+</tr><tr>
+<td>pg_replication_origin_xact_setup(origin_lsn, origin_timestamp timestamp with time zone) </td>	<td>void</td>	<td></td>
+
+</tr><tr>
+<td>pg_replication_origin_xact_reset()</td>	<td>void</td>	<td></td>
+
+</tr><tr>
+<td>pg_replication_origin_advance(node_name text, lsn)</td>	<td>void</td>	<td></td>
+
+</tr><tr>
+<td>pg_replication_origin_progress(node_name text, flush bool)</td>	<td>pg_lsn</td>	<td></td>
+
+</tr><tr>
+<td>pg_logical_emit_message(transactional bool, prefix text, content text)</td>	<td>pg_lsn</td>	<td></td>
+
+</tr><tr>
+<td>pg_logical_emit_message(transactional bool, prefix text, content bytea) </td>	<td>pg_lsn</td>	<td></td>
+
+</tr><tr>
+<td>pg_sync_replication_slots ()</td>	<td>void</td>	<td>バージョン17から</td>
 
 
 </tr></table>
@@ -67,150 +90,3 @@
 
 %CHAPTER 実行例
 
-<p>
-・pg_column_size(), pg_column_compressionの実行例
-</p>
-
-<pre>
-sampledb=# SELECT pg_column_size('this is test');
- pg_column_size
-----------------
-             13
-(1 row)
-
-sampledb=# SELECT pg_column_size('これはテストです');
- pg_column_size
-----------------
-             17
-(1 row)
-
-sampledb=# SELECT pg_column_size(aid) FROM pgbench_accounts LIMIT 5;
- pg_column_size
-----------------
-              4
-              4
-              4
-              4
-              4
-(5 rows)
-
-sampledb=# SELECT pg_column_compression(aid) FROM pgbench_accounts LIMIT 5;
- pg_column_compression
------------------------
-
-
-
-
-
-(5 rows)
-</pre>
-<br>
-
-<p>
-・pg_tablespace_size(), pg_database_size()の実行例
-</p>
-
-<pre>
-sampledb=# SELECT pg_tablespace_size('pg_global');
- pg_tablespace_size
---------------------
-             259227
-(1 row)
-
-sampledb=# SELECT pg_database_size('sampledb');
- pg_database_size
-------------------
-         11182728
-(1 row)
-
-sampledb=# SELECT pg_size_pretty(pg_database_size('sampledb'));
- pg_size_pretty
-----------------
- 11 MB
-(1 row)
-</pre>
-<br>
-
-<p>
-・pg_relation_size(), pg_total_relation_size()の実行例
-<br>
-関数pg_relation_size()と関数pg_total_relation_size()の違いは、後者はインデックスなど指定したテーブルに関連するすべてのデータ容量を返す点です。
-</p>
-
-<pre>
-sampledb=# SELECT pg_relation_size('test');
- pg_relation_size
-------------------
-          2629632
-(1 row)
-
-sampledb=# SELECT pg_size_pretty(pg_relation_size('test'));
- pg_size_pretty
-----------------
- 2568 kB
-(1 row)
-
-sampledb=# SELECT pg_total_relation_size('test');
- pg_total_relation_size
-------------------------
-                6627328
-(1 row)
-
-sampledb=# SELECT pg_size_pretty(pg_total_relation_size('test'));
- pg_size_pretty
-----------------
- 6472 kB
-(1 row)
-</pre>
-<br>
-
-<p>
-・pg_relation_filepath(), pg_total_relation_filenode()の実行例
-</p>
-
-
-<pre>
-sampledb=# SELECT pg_relation_filepath('itemlist');
- pg_relation_filepath
-----------------------
- base/16384/25599
-(1 row)
-
-sampledb=# SELECT pg_relation_filenode('itemlist');
- pg_relation_filenode
-----------------------
-                25599
-(1 row)
-</pre>
-<br>
-
-<pre>
-$ ls -la data/base/16384/25599
--rw------- 1 postgres users 8192  5月 13 23:19 data/base/16384/25599
-</pre>
-<br>
-
-<p>
-・pg_filenode_relation()の実行例
-</p>
-
-<pre>
-postgres=# SELECT oid, spcname FROM pg_tablespace WHERE spcname = 'new_space';
-  oid  |  spcname
--------+-----------
- 17215 | new_space
-(1 row)
-
-postgres=# SELECT pg_relation_filepath('tblsp');
-          pg_relation_filepath
------------------------------------------
- pg_tblspc/17215/PG_15_202209061/5/17227
-(1 row)
-
-postgres=# SELECT pg_filenode_relation(17215, 17227);
- pg_filenode_relation
-----------------------
- tblsp
-(1 row)
-</pre>
-<br>

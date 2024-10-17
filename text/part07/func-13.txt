@@ -2,185 +2,103 @@
 %LASTMOD
 %KEY pgsql-func13
 
-%TITLE <a href="https://www.postgresql.org/docs/current/functions-info.html#FUNCTIONS-PG-SNAPSHOT" target="_blank" rel="noopener noreferrer">トランザクションIDとスナップショット情報関数</a> / <a href="https://www.postgresql.org/docs/current/functions-info.html#FUNCTIONS-COMMIT-TIMESTAMP" target="_blank" rel="noopener noreferrer">コミットされたトランザクションに関する情報関数</a>
-
-
-
+%TITLE <a href="https://www.postgresql.org/docs/current/functions-info.html#FUNCTIONS-INFO-CATALOG-TABLE" target="_blank" rel="noopener noreferrer">システムカタログ情報関数</a>
 
 <table border=1>
-<caption>トランザクションIDとスナップショット情報関数</caption>
+<caption>システムカタログ情報関数</caption>
 <tr bgcolor="#cccccc">
 <th>関数</th>				<th>返り値型</th>	<th>説明</th>
 
 </tr><tr>
-<td>pg_current_xact_id() </td>	<td>xid8</td>	<td>現在のトランザクションIDを返す。割り当てていなければ新たに割り当てて返す。Primaryのみ実行可能。バージョン13から</td>
+
+<td>format_type(type_oid, typemod)</td>	<td>text</td>	<td>データ型のSQL名の取得</td>
 </tr><tr>
-<td>pg_current_xact_id_if_assigned() </td>	<td>xid8</td>	<td>現在のトランザクションIDを返す。割り当てていなければNULLを返す。バージョン13から</td>
+
+<td>pg_basetype(regtype)</td>	<td>regtype</td>	<td>Returns the OID of the base type of a domain identified by its type OID。詳細は公式ドキュメント参照。バージョン17から</td>
 </tr><tr>
-<td>pg_xact_status(xid8)</td>	<td>text</td>	<td>指定したトランザクションID xid8の現在のステータスを返す。バージョン13から</td>
+
+<td>pg_char_to_encoding(encoding_name)</td>	<td>integer</td>	<td></td>
 </tr><tr>
-<td>pg_current_snapshot()</td>	<td>pg_snapshot</td>	<td>現在のスナップショットを返す。バージョン13から</td>
+<td>pg_char_to_char(encoding_int)</td>	<td>name</td>	<td></td>
 </tr><tr>
-<td>pg_snapshot_xip(pg_snapshot) </td>	<td>setof xid8</td>	<td>スナップショットにある進行中のトランザクションIDを返す。バージョン13から</td>
+<td>pg_get_catalog_foreign_keys()</td>	<td>setof record (fktable regclass, fkcols text[], pktable regclass, pkcols text[], is_array boolean, is_opt boolean )</td>	<td></td>
 </tr><tr>
-<td>pg_snapshot_xmax(pg_snapshot)</td>	<td>xid8</td>	<td>スナップショットのxmaxを返す。バージョン13から</td>
+<td>pg_get_constraintdef(constraint_oid [,pretty_bool])</td>	<td>text</td>	<td>制約の定義を取得</td>
 </tr><tr>
-<td>pg_snapshot_xmim(pg_snapshot)</td>	<td>xid8</td>	<td>スナップショットのxminを返す。バージョン13から</td>
+<td>pg_get_expr(expr_text, relation_oid, pretty_bool)</td>	<td>text</td>	<td>式中のいかなるVarも、２番目のパラメータによって指定されるリレーションを参照すると仮定して、式の内部形式を逆コンパイル</td>
 </tr><tr>
-<td>pg_visible_in_snapshot (xid8, pg_snapshot) </td>	<td>boolean</td>	<td>スナップショットにあるトランザクションIDは可視か？<br>（サブトランザクションIDと一緒に使用しないこと）。バージョン13から</td>
+<td>pg_get_functiondef(func_oid)</td>	<td>text</td>	<td>関数定義の取得</td>
+</tr><tr>
+<td>pg_get_function_arguments(func_oid)</td>	<td>text</td>	<td>関数定義（デフォルト値付き）の引数リストを取得</td>
+</tr><tr>
+<td>pg_get_function_identity_arguments(func_oid)</td>	<td>text</td>	<td>関数（デフォルト値の付いていない）特定の引数リストを取得</td>
+</tr><tr>
+<td>pg_get_function_result(func_oid)</td>	<td>text</td>	<td>関数に対するRETURNS句の取得</td>
+</tr><tr>
+<td>pg_get_indexdef(index_oid [,column_no, pretty_bool])</td>	<td>text</td>	<td>インデックスに対するCREATE INDEXコマンドの取得、またはcolumn_noが非ゼロの場合は、１つのインデックス列のみの定義の取得</td>
+</tr><tr>
+<td>pg_get_keywords()</td>	<td>setof record ( word text, catcode "char", barelabel boolean, catdesc text, baredesc text )</td>	<td>SQLキーワードとそれらの種類のリストを取得</td>
+</tr><tr>
+
+<td>pg_get_partkeydef(table oid)</td>	<td>text</td>	<td>Reconstructs the definition of a partitioned table's partition key, in the form it would have in the PARTITION BY clause of CREATE TABLE. Since PG16</td>
+</tr><tr>
+
+
+<td>pg_get_ruledef(rule_oid [,pretty_bool])</td>	<td>text</td>	<td>ルールに対するCREATE RULEコマンドを取得</td>
+</tr><tr>
+<td>pg_get_serial_sequence(table_name, column_name)</td>	<td>text</td>	<td>serialまたはbigserial列が使用するシーケンス名の取得</td>
+</tr><tr>
+<td>pg_get_statisticsobjdef(statobj_oid)</td>	<td>text</td>	<td></td>
+</tr><tr>
+<td>pg_get_triggerdef(trigger_oid [,prety_bool])</td>	<td>text</td>	<td>トリガに対するCREATE [ CONSTRAINT ] TRIGGERコマンドの取得</td>
+</tr><tr>
+<td>pg_get_userbyid(role_oid)</td>	<td>name</td>	<td>与えられたOIDでロール名を取得</td>
+</tr><tr>
+<td>pg_get_viewdef(view_name [,pretty_bool])</td>	<td>text</td>	<td>ビューに対する現在のSELECTコマンドを取得（廃止予定）</td>
+</tr><tr>
+<td>pg_get_viewdef(view_oid [,pretty_bool])</td>	<td>text</td>	<td>ビューに対する現在のSELECTコマンドを取得</td>
+</tr><tr>
+<td>pg_get_viewdef(view_oid, wrap_column_int)</td>	<td>text</td>	<td></td>
+</tr><tr>
+<td>pg_get_viewdef (view+text[,pretty_bool])</td>	<td>text</td>	<td></td>
+</tr><tr>
+<td>pg_index_column_has_property(index_regclass,column_int,property_text)</td>	<td>boolean</td>	<td></td>
+</tr><tr>
+<td>pg_index_has_property(index_regclass, property_text)</td>	<td>boolean</td>	<td></td>
+</tr><tr>
+<td>pg_indexam_has_property(am_oid, property_text)</td>	<td>boolean</td>	<td></td>
+</tr><tr>
+<td>pg_options_to_table(options_array_text[])</td>	<td>setof record(option_name, option_value)</td>	<td></td>
+</tr><tr>
+<td>pg_settings_get_flags(guc_text)</td>	<td>text[]</td>	<td></td>
+</tr><tr>
+<td>pg_tablespace_databases(tablespace_oid)</td>	<td>setof oid</td>	<td>テーブル空間内にオブジェクトを所有するデータベースOID集合を取得</td>
+</tr><tr>
+<td>pg_tablespace_location(tablespace_oid)</td>	<td>text</td>	<td></td>
+</tr><tr>
+<td>pg_typeof("any")</td>	<td> regtype</td>	<td>指定した値のデータ型を取得</td>
+</tr><tr>
+<td>to_regclass(text)</td>	<td>regclass</td>	<td></td>
+</tr><tr>
+<td>to_regcollation(text)</td>	<td>regcollation</td>	<td></td>
+</tr><tr>
+<td>to_regnamespace(text)</td>	<td>regnamespace</td>	<td></td>
+</tr><tr>
+<td>to_regoper(text)</td>	<td>regoper</td>	<td></td>
+</tr><tr>
+<td>to_regoperator(text)</td>	<td>regoperator</td>	<td></td>
+</tr><tr>
+<td>to_regproc(text)</td>	<td>regproc</td>	<td></td>
+</tr><tr>
+<td>to_regprocedure(text)</td>	<td>regprocedure</td>	<td></td>
+</tr><tr>
+<td>to_regrole(text)</td>	<td>regrole</td>	<td></td>
+</tr><tr>
+<td>to_regtype(text)</td>	<td>regtype</td>	<td></td>
+
+</tr><tr>
+<td>to_regtypemod(text)</td>	<td>integer</td>	<td>バージョン17から</td>
 
 </tr></table>
 
-<br>
-
-
-
-<table border=1>
-<caption>廃止予定のトランザクションIDとスナップショット情報関数</caption>
-<tr bgcolor="#cccccc">
-<th>関数</th>				<th>返り値型</th>	<th>説明</th>
-
-</tr><tr>
-<td>txid_current()</td>	<td>bigint</td>	<td>pg_current_xact_id()参照</td>
-</tr><tr>
-<td>txid_current_if_assigned()</td>	<td>bigint</td>	<td>pg_current_xact_if_assigned()参照</td>
-</tr><tr>
-<td>txid_current_snapshot()</td>	<td>txid_snapshot</td>	<td>pg_current_snapshot()参照</td>
-</tr><tr>
-<td>txid_snapshot_xip(txid_snapshot)</td>	<td>setof bigint</td>	<td>pg_snapshot_xip()参照</td>
-</tr><tr>
-<td>txid_snapshot_xmax(txid_snapshot)</td>	<td>bigint</td>	<td>pg_snapshot_xmax()参照</td>
-</tr><tr>
-<td>txid_snapshot_xmin(txid_snapshot)</td>	<td>bigint</td>	<td>pg_snapshot_xmin()参照</td>
-</tr><tr>
-<td>txid_visible_in_snapshot(bigint, txid_snapshot) </td>	<td>boolean</td>	<td>pg_visible_in_snapshot()参照</td>
-</tr><tr>
-<td>txid_status(bigint)</td>	<td>text</td>	<td>pg_xact_status()参照</td>
-</tr><tr>
-</tr></table>
-
-<br>
-
-
-
-<table border=1>
-<caption> コミットされたトランザクションに関する情報関数</caption>
-<tr bgcolor="#cccccc">
-<th>関数</th>				<th>返り値型</th>	<th>説明</th>
-
-</tr><tr>
-<td>pg_xact_commit_timestamp(xid)</td>	<td>bigint</td>	<td>track_commit_timestampが有効な場合、指定したXIDがCOMMITされた時刻を返す。ABORTかIN_PROGRESSの場合はNULL</td>
-</tr><tr>
-<td>pg_xact_commit_timestamp_origin(xid)</td>	<td>record(timestamp, roident)</td>	<td>指定したXIDがCOMMITされた時刻とレプリケーションオリジンを返す。バージョン14から</td>
-</tr><tr>
-<td>pg_last_committed_xact()</td>	<td>record(timestamp, roident)</td>	<td>直近でCOMMITされたXID(とレプリケーションオリジン)を返す。</td>
-</tr></table>
-
-<br>
-
-%CHAPTER 実行例
-
-
-<p>
-・pg_current_xact_id(),pg_current_xact_id_if_assigned(), pg_xact_status()
-<br>
-</p>
-
-<pre>
-postgres=# SELECT pg_current_xact_id();
- pg_current_xact_id
---------------------
-               1405
-(1 row)
-
-postgres=# SELECT pg_current_xact_id_if_assigned();
- pg_current_xact_id_if_assigned
---------------------------------
-
-(1 row)
-
-postgres=# SELECT pg_xact_status('1405');
- pg_xact_status
-----------------
- committed
-(1 row)
-</pre>
-<br>
-
-
-<p>
-・pg_snapshot_xip(), pg_snapshot_xmax(), pg_visible_in_snapshot()
-<br>
-</p>
-
-<pre>
-postgres=# BEGIN;
-BEGIN
-postgres=*# SELECT pg_current_xact_id();
- pg_current_xact_id
---------------------
-               1412
-(1 row)
-
-postgres=*# SELECT pg_current_snapshot();
- pg_current_snapshot
----------------------
- 1411:1411:
-(1 row)
-
-postgres=*# SELECT pg_snapshot_xip('1411:1411:');
- pg_snapshot_xip
------------------
-(0 rows)
-
-postgres=*# SELECT pg_snapshot_xmax('1411:1411:');
- pg_snapshot_xmax
-------------------
-             1411
-(1 row)
-
-postgres=*# SELECT pg_snapshot_xmin('1411:1411:');
- pg_snapshot_xmin
-------------------
-             1411
-(1 row)
-
-postgres=*# SELECT pg_visible_in_snapshot('1411', '1411:1411:');
- pg_visible_in_snapshot
-------------------------
- f
-(1 row)
-
-postgres=*# SELECT pg_visible_in_snapshot('1410', '1411:1411:');
- pg_visible_in_snapshot
-------------------------
- t
-(1 row)
-</pre>
-<br>
-
-<p>
-・pg_last_committed_xact(), pg_xact_commit_timestamp() ,pg_xact_commit_timestamp_origin()
-<br>
-</p>
-
-<pre>
-postgres=# SELECT pg_last_committed_xact();
-          pg_last_committed_xact
-------------------------------------------
- (1410,"2023-03-13 15:05:16.314863+09",0)
-(1 row)
-
-postgres=# SELECT pg_xact_commit_timestamp('1410');
-   pg_xact_commit_timestamp
--------------------------------
- 2023-03-13 15:05:16.314863+09
-(1 row)
-
-postgres=# SELECT pg_xact_commit_timestamp_origin('1410');
-   pg_xact_commit_timestamp_origin
--------------------------------------
- ("2023-03-13 15:05:16.314863+09",0)
-(1 row)
-</pre>
 <br>

@@ -2,79 +2,46 @@
 %LASTMOD
 %KEY pgsql-func16
 
-%TITLE <a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADMIN-SIGNAL" target="_blank" rel="noopener noreferrer">サーバシグナル送信関数</a>
-
+%TITLE <a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADMIN-SET" target="_blank" rel="noopener noreferrer">構成設定関数</a>
 
 
 <table border=1>
-<caption>サーバシグナル送信関数</caption>
+<caption>構成設定関数</caption>
 <tr bgcolor="#cccccc">
 <th>関数</th>				<th>返り値型</th>	<th>説明</th>
 
 </tr><tr>
-<td>pg_cancel_backend(pid int)</td>	<td>boolean</td>	<td>バックエンドの現在の問い合わせを取り消す</td>
-</tr><tr>
-<td>pg_log_backend_memory_contexts(pid int)</td>	<td>boolean</td>	<td>バックエンドのメモリコンテキストをログに書き込む。バージョン14から</td>
-</tr><tr>
-<td>pg_reload_conf()</td>	<td>boolean</td>	<td>サーバプロセスにpostgresql.confを再読み込みさせる</td>
-</tr><tr>
-<td>pg_rotate_logfile()</td>	<td>boolean</td>	<td>サーバログファイルを循環させる</td>
-</tr><tr>
-<td>pg_terminate_backend(pid int, timeout bigint)</td>	<td>boolean</td>	<td>バックエンドを終了させる。timeoutについては解説参照</td>
+<td>current_setting ( setting_name text [, missing_ok boolean ] ) </td>	<td>text</td>	<td>設定パラメータの値を表示する。SHOWと同じ</td>
 
+</tr><tr>
+<td>set_config ( setting_name text, new_value text, is_local boolean ) </td>	<td>text</td>	<td>設定パラメータの値を設定する。SETと同じ</td>
 
 </tr></table>
 
 <br>
 
 
-%CHAPTER 解説
-
-<p>
-・pg_terminate_backend
-<br>
-timeoutが未設定か0の場合、即座にバックエンドを終了させてtrueを返す。仮に終了できなくともtrueを返すので注意。
-<br>
-timeoutの設定値はms単位で、設定した時間後にバックエンドを終了させる。終了した場合はtrue、終了しなかった場合はfalseが返る。
-</p>
-
-
-<p>
-・pg_log_backend_memory_contexts
-<br>
-以下に出力例の一部を示す。
-<font color="#0000ff">直近に実行されたコマンドのメモリコンテキストを記録しているようにみえるが、実際のところはまだ調査が進んでいない。</font>
-</p>
+%CHAPTER 実行例
 
 
 <pre>
-2023-01-15 13:59:29.753 JST [107445] LOG:  logging memory contexts of PID 107445
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 0; TopMemoryContext: 97680 total in 5 blocks; 11808 free (24 chunks); 85872 used
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 1; TopTransactionContext: 8192 total in 1 blocks; 7736 free (0 chunks); 456 used
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 1; TableSpace cache: 8192 total in 1 blocks; 2088 free (0 chunks); 6104 used
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 1; Type information cache: 24376 total in 2 blocks; 2616 free (0 chunks); 21760 used
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 1; Operator lookup cache: 24576 total in 2 blocks; 10752 free (3 chunks); 13824 used
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 1; RowDescriptionContext: 8192 total in 1 blocks; 6888 free (0 chunks); 1304 used
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 1; MessageContext: 16384 total in 2 blocks; 4744 free (0 chunks); 11640 used
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 1; Operator class cache: 8192 total in 1 blocks; 552 free (0 chunks); 7640 used
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 1; smgr relation table: 32768 total in 3 blocks; 16824 free (8 chunks); 15944 used
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 1; PgStat Shared Ref Hash: 7224 total in 2 blocks; 680 free (0 chunks); 6544 used
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 1; PgStat Shared Ref: 8192 total in 4 blocks; 3728 free (2 chunks); 4464 used
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 1; PgStat Pending: 8192 total in 4 blocks; 7808 free (43 chunks); 384 used
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 1; TransactionAbortContext: 32768 total in 1 blocks; 32504 free (0 chunks); 264 used
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 1; Portal hash: 8192 total in 1 blocks; 552 free (0 chunks); 7640 used
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 1; TopPortalContext: 8192 total in 1 blocks; 7656 free (0 chunks); 536 used
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 2; PortalContext: 1024 total in 1 blocks; 592 free (0 chunks); 432 used: <unnamed>
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 3; ExecutorState: 8192 total in 1 blocks; 3392 free (0 chunks); 4800 used
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 4; printtup: 8192 total in 1 blocks; 7928 free (0 chunks); 264 used
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 4; ExprContext: 8192 total in 1 blocks; 7928 free (0 chunks); 264 used
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 1; Relcache by OID: 16384 total in 2 blocks; 3504 free (2 chunks); 12880 used
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 1; CacheMemoryContext: 1048576 total in 8 blocks; 421944 free (0 chunks); 626632 used
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 2; index info: 2048 total in 2 blocks; 920 free (0 chunks); 1128 used: test1_id_idx
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 2; index info: 2048 total in 2 blocks; 920 free (0 chunks); 1128 used: pg_am_oid_index
-2023-01-15 13:59:29.753 JST [107445] LOG:  level: 2; index info: 2048 total in 2 blocks; 904 free (0 chunks); 1144 used: pg_am_name_index
+postgres=# select current_setting('enable_hashjoin');
+ current_setting
+-----------------
+ on
+(1 row)
 
-....続く...
+postgres=# select set_config('enable_hashjoin', 'off', true);
+ set_config
+------------
+ off
+(1 row)
+
+postgres=# select current_setting('enable_hashjoin');
+ current_setting
+-----------------
+ on
+(1 row)
 
 </pre>
 <br>

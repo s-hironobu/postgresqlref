@@ -46,6 +46,9 @@
 </tr><tr>
 <td>--no-locale</td>	<td>ロケールを無効にする</td>
 
+</tr><tr>
+<td>--builtin-locale=locale</td>	<td>ビルトインロケールを使う際のロケール名。バージョン17から</td>
+
 <!--
 </tr><tr>
 <td>--lc-collate=LOCALE</td>	<td></td>
@@ -78,6 +81,10 @@
 
 </tr><tr>
 <td>--wal-segsize=SIZE</td>	<td>WALセグメントファイルのサイズを指定する。デフォルト16MB</td>
+
+</tr><tr>
+<td>--sync-method=method</td>	<td>詳細は省略。バージョン17から</td>
+
 
 </tr></table>
 <br>

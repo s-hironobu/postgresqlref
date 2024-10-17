@@ -74,7 +74,7 @@
 
 
 </tr><tr>
-<td>△	</td> <td>db_user_namespace	</td> <td>	on/off[off]		</td> <td>データベース毎にロールを定義するか否か</td>
+<td>△	</td> <td>db_user_namespace	</td> <td>	on/off[off]		</td> <td>データベース毎にロールを定義するか否か。バージョン16まで</td>
 
 </tr><tr bgcolor="#eeeeee">
 <th colspan=4 align=left>SSL</th>

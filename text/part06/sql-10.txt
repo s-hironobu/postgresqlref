@@ -40,7 +40,7 @@ ALTER TABLE [ ONLY ] table_name [ * ]
 
 ●アクセスメソッドの設定
 ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]
-    SET ACCESS METHOD new_access_method
+    SET ACCESS METHOD { new_access_method | DEFAULT }
 
 ●LOGGED、UNLOGGEDの設定
 ALTER TABLE [ IF EXISTS ] [ ONLY ] table_name [ * ]

@@ -114,7 +114,7 @@ sampledb=# SELECT * FROM my_schema.sample_table;
 スキーマの作成者(所有者)は、そのスキーマ内のすべてのオブジェクトにアクセスできますが、それ以外のロールがアクセスするには、スキーマとオブジェクト両方のアクセス権限が必要です。
 <br>
 ロールがスキーマに対してアクセス権限を持つか否かは、
-関数has_schema_privilege()でわかります(<a href="./func-10.html">[<7-29>]</a>参照)。
+関数has_schema_privilege()でわかります(<a href="./func-11.html">[<7-30>]</a>参照)。
 </p>
 
 <p>
@@ -140,7 +140,7 @@ GRANT
 ・スキーマに関する関数とメタコマンド
 <br>
 関数current_schema()で現在のスキーマを表示できます。
-関数current_schemas()で検索パス内のすべてのスキーマ名がわかります(<a href="./func-09.html">[<7-28>]</a>参照)。
+関数current_schemas()で検索パス内のすべてのスキーマ名がわかります(<a href="./func-10.html">[<7-29>]</a>参照)。
 存在するスキーマのリストはメタコマンド\dn(<a href="./psql-06.html">[<5-06>]</a>参照)で表示できます。
 </p>
 

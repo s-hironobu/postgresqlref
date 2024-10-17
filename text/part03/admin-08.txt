@@ -259,3 +259,43 @@ sampledb=# SELECT rolname, rolpassword FROM pg_authid WHERE rolname = 'webrole3'
 <p>
 設定を反映させるため、PostgreSQLサーバを再起動します。
 </p>
+
+<p>
+バージョン16までpg_hba.confファイルを直接見る以外に権限を確認できませんでしたが、
+バージョン17からシステムニュー<a href="https://www.postgresql.org/docs/current/view-pg-hba-file-rules.html" target="_blank" rel="noopener noreferrer">pg_hba_file_rules</a>によてアクセス制御状況をコマンドラインで確認できるようになりました。
+</p>
+
+<pre>
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+
+# "local" is for Unix domain socket connections only
+local   all             all                                     trust
+# IPv4 local connections:
+host    all             all             127.0.0.1/32            trust
+host    all             all             192.168.1.0/8            trust
+host    all             all             192.168.2.0/8            trust
+# IPv6 local connections:
+host    all             all             ::1/128                 trust
+# Allow replication connections from localhost, by a user with the
+# replication privilege.
+local   replication     all                                     trust
+host    replication     all             127.0.0.1/32            trust
+host    replication     all             ::1/128                 trust
+</pre>
+
+<br>
+
+<pre>
+postgres=# SELECT pg_hba_file_rules();
+                                                    pg_hba_file_rules
+--------------------------------------------------------------------------------------------------------------------------
+ (1,/usr/local/pgsql17/data/pg_hba.conf,117,local,{all},{all},,,trust,,)
+ (2,/usr/local/pgsql17/data/pg_hba.conf,119,host,{all},{all},127.0.0.1,255.255.255.255,trust,,)
+ (3,/usr/local/pgsql17/data/pg_hba.conf,120,host,{all},{all},192.168.1.0,255.0.0.0,trust,,)
+ (4,/usr/local/pgsql17/data/pg_hba.conf,121,host,{all},{all},192.168.2.0,255.0.0.0,trust,,)
+ (5,/usr/local/pgsql17/data/pg_hba.conf,123,host,{all},{all},::1,ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff,trust,,)
+ (6,/usr/local/pgsql17/data/pg_hba.conf,126,local,{replication},{all},,,trust,,)
+ (7,/usr/local/pgsql17/data/pg_hba.conf,127,host,{replication},{all},127.0.0.1,255.255.255.255,trust,,)
+ (8,/usr/local/pgsql17/data/pg_hba.conf,128,host,{replication},{all},::1,ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff,trust,,)
+(8 rows)
+</pre>

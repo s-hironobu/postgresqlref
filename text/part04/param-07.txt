@@ -19,6 +19,9 @@
 </tr><tr>
 <td>◎</td>	<td>enable_gather_merge</td>	<td>on/off[[on]	</td>	<td>gather mergeを有効とするか否か</td>
 
+</tr><tr><td>◎</td>
+<td>enable_group_by_reordering</td>	<td>on/off[[on]	</td>	<td>GROUP BYを含むクエリの実行計画を効率的にするか否か。技術的詳細は調べていない。onの場合より効率的なプランを出力するらしい。バージョン17から</td>
+
 </tr><tr>
 <td>◎</td>	<td>	enable_hashagg	</td>	<td>	on/off[[on]	</td>	<td>	ハッシュされた集約計画型を有効とするか否か</td>
 </tr><tr>

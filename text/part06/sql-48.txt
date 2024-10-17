@@ -17,9 +17,11 @@ EXPLAIN [ ANALYZE ] [ VERBOSE ] statement
     SETTINGS [ boolean ]
     GENERIC_PLAN [ boolean ]
     BUFFERS [ boolean ]
+    SERIALIZE [ { NONE | TEXT | BINARY } ]
     WAL [ boolean ]
     TIMING [ boolean ]
     SUMMARY [ boolean ]
+    MEMORY [ boolean ]
     FORMAT { TEXT | XML | JSON | YAML }
 </pre>
 <br>
@@ -51,12 +53,21 @@ EXPLAIN [ ANALYZE ] [ VERBOSE ] statement
 <td>GENERIC_PLAN	[true|false]</td>	<td>どうでもいい機能。バージョン16から。[false]</td>
 </tr><tr>
 <td>BUFFERS [true|false]</td>	<td>バッファの利用状況を表示。ANALYZEも設定しなければならない。[false]</td>
+
+</tr><tr>
+<td>SERIALIZE [ { NONE | TEXT | BINARY } ]</td>	<td>ANALYZEオプションと併用して、TEXTかBINARY形式で結果を送信する際にどの程度の変換時間timeと送信データ量outputになるかを実際に計測して表示する[NONE]。バージョン17から</td>
+
 </tr><tr>
 <td>WAL	[true|false]</td>	<td>jsonフォーマットの場合、WAL関連情報：WALの書き込み量とFPWの値を表示。TEXTフォーマットの場合は0以外の値の時のみ表示。バージョン13から。[false]</td>
 </tr><tr>
 <td>TIMING	[true|false]</td>	<td>各ノードで消費した時間を表示。ANALYZEと同時に使う。デフォルトがTrueなのでANALYZEなら常に時間が表示される。[true]</td>
+
 </tr><tr>
 <td>SUMMARY	[true|false]</td>	<td>消費時間などの要約情報を表示する。ANALYZEが設定されるとデフォルトでTrue、それ以外はFalse。[false]</td>
+
+</tr><tr>
+<td>MEMORY [true|false]</td>	<td>クエリ計画実行時のメモリ消費量を表示するか否か[false]。バージョン17から</td>
+
 </tr><tr>
 <td>FORMAT { TEXT | XML | JSON | YAML }	</td>	<td>出力形式を設定。[TEXT]</td>
 
@@ -209,4 +220,59 @@ postgres=# EXPLAIN (ANALYZE true, FORMAT json, WAL true) SELECT * FROM pgbench_a
  ]
 (1 row)
 </pre>
+<br>
+
+<p>
+・SERIALIZE
+<br>
+SERIALIZEオプションの例を示します。
+</p>
+
+</pre>
+testdb=# EXPLAIN (ANALYZE, SERIALIZE TEXT) SELECT * FROM pgbench_accounts AS a, pgbench_branches AS b WHERE a.aid > b.bid;
+                                                                         QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Nested Loop  (cost=0.29..1835.96 rows=33333 width=461) (actual time=0.107..16.814 rows=99999 loops=1)
+   ->  Seq Scan on pgbench_branches b  (cost=0.00..1.01 rows=1 width=364) (actual time=0.033..0.034 rows=1 loops=1)
+   ->  Index Scan using pgbench_accounts_pkey on pgbench_accounts a  (cost=0.29..1501.62 rows=33333 width=97) (actual time=0.061..9.586 rows=99999 loops=1)
+         Index Cond: (aid > b.bid)
+ Planning Time: 0.413 ms
+ Serialization: time=15.378 ms  output=12001kB  format=text
+ Execution Time: 37.539 ms
+(7 rows)
+
+testdb=# EXPLAIN (ANALYZE, SERIALIZE BINARY) SELECT * FROM pgbench_accounts AS a, pgbench_branches AS b WHERE a.aid > b.bid;
+                                                                         QUERY PLAN
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Nested Loop  (cost=0.29..1835.96 rows=33333 width=461) (actual time=0.082..18.861 rows=99999 loops=1)
+   ->  Seq Scan on pgbench_branches b  (cost=0.00..1.01 rows=1 width=364) (actual time=0.037..0.038 rows=1 loops=1)
+   ->  Index Scan using pgbench_accounts_pkey on pgbench_accounts a  (cost=0.29..1501.62 rows=33333 width=97) (actual time=0.038..10.646 rows=99999 loops=1)
+         Index Cond: (aid > b.bid)
+ Planning Time: 0.367 ms
+ Serialization: time=20.002 ms  output=13086kB  format=binary
+ Execution Time: 44.823 ms
+(7 rows)
+</pre>
+
+<br>
+
+<p>
+・MEMORY
+<br>
+MEMORYオプションの例を示します。
+</p>
+
+<pre>
+testdb=# EXPLAIN (MEMORY true) SELECT * FROM pgbench_accounts AS a, pgbench_branches AS b WHERE a.aid > b.bid;
+                                                  QUERY PLAN
+--------------------------------------------------------------------------------------------------------------
+ Nested Loop  (cost=0.29..1835.96 rows=33333 width=461)
+   ->  Seq Scan on pgbench_branches b  (cost=0.00..1.01 rows=1 width=364)
+   ->  Index Scan using pgbench_accounts_pkey on pgbench_accounts a  (cost=0.29..1501.62 rows=33333 width=97)
+         Index Cond: (aid > b.bid)
+ Planning:
+   Memory: used=23kB  allocated=32kB
+(6 rows)
+</pre>
+
 <br>

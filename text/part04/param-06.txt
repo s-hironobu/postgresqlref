@@ -37,12 +37,15 @@
 </tr><tr>
 <td>×</td> <td>track_commit_timestamp</td>	<td></td> <td></td>
 
+</tr><tr>
+<td>△</td>
+<td>synchronized_standby_slots</td>	<td></td>	<td>同期を待つスロットを設定。使用方法は<a href="./admin-23.html">[3-23]</a>のフェールオーバーの章参照。バージョン17から</td>
 
 </tr><tr bgcolor="#eeeeee">
 <th colspan=4 align=left>Primary Servers</th>
 
 </tr><tr>
-<td>△ </td> <td>		synchronous_standby_names </td> <td>		文字列['']	 </td> <td>	同期レプリケーションを行うスレーブ名。詳細は<a href="./admin-20.html">[<3-20>]</a></td>
+<td>△ </td> <td>		synchronous_standby_names </td> <td>		文字列['']	 </td> <td>	同期レプリケーションを行うスレーブ名。詳細は<a href="./admin-21.html">[<3-21>]</a></td>
 
 </tr><tr>
 <td>△ </td>	<td>vacuum_defer_cleanup_age </td> <td>		整数[0] </td> <td>不要になったタプルの削除を遅延する。遅延はトランザクション数で指定する(スレーブでのConflict対策)</td>
@@ -94,6 +97,12 @@
 
 </tr><tr>
 <td>△</td> <td>recovery_min_apply_delay</td>	<td></td> <td></td>
+
+
+</tr><tr>
+<td>△</td> <td>sync_replication_slots</td>	<td>bool [false]</td>
+<td>物理スタンバイがプライマリ サーバーから論理フェイルオーバー スロットを同期できるようになり、論理サブスクライバーはフェイルオーバー後に新しいプライマリ サーバーからレプリケーションを再開できる。バージョン17から</td>
+
 
 
 

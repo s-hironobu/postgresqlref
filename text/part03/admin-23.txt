@@ -1,0 +1,499 @@
+%FILE internal/admin-23.html
+%LASTMOD
+%KEY pgsql-admin23
+
+
+%TITLE <a href="https://www.postgresql.org/docs/current/logical-replication.html" target="_blank" rel="noopener noreferrer">ロジカルレプリケーション</a>
+
+
+<table>
+<caption></caption>
+<tr bgcolor="#cccccc">
+<th>項目</th>	<th>ロジカルレプリケーション</th>	<th>レプリケーション</th>
+</tr><tr>
+<td>転送タイミング</td>	<td>COMMIT 完了時</td>	<td>WALレコードの生成に応じて連続して送る</td>
+
+</tr><tr>
+<td>送信プロセス</td>	<td>wal_sender</td>	<td>wal_sender</td>
+
+</tr><tr>
+<td>受信プロセス</td>	<td>logical replication launcher, logical replication worker</td>	<td>walreceiver, startup</td>
+
+</tr><tr>
+<td>単位</td>	<td>テーブル、データベース</td>	<td>データベースクラスタ</td>
+
+</tr><tr>
+<td>レプリケーションされない操作</td>	<td>TRUNCATE</td>	<td></td>
+
+</tr><tr>
+<td>レプリケーションされないオブジェクト</td>	<td>テーブル以外(シーケンス、インデックスなど)</td>	<td>UNLOGGEDテーブル</td>
+
+</tr><tr>
+<td>異メジャーバージョン間</td>	<td>可能</td>	<td>不可</td>
+
+</tr><tr>
+<td>異OS間</td>	<td>可能</td>	<td>不可</td>
+
+</tr><tr>
+<td>スタンバイの更新</td>	<td>可能</td>	<td>不可</td>
+
+</tr><tr>
+<td>スタンバイのトリガ起動</td>	<td>可能</td>	<td>不可</td>
+</tr></table>
+
+
+<a href="https://www.sraoss.co.jp/tech-blog/pgsql/logical-replication-1/">参照元</a>
+
+%CHAPTER 解説
+
+<a href="https://www.postgresql.org/docs/current/logical-replication-config.html" target="_blank" rel="noopener noreferrer">設定の詳細</a>。
+
+%SECTION パブリッシャー側の必須設定
+
+<ul>
+<li>wal_level: 'logical'</li>
+<li>max_replication_slots:  接続する予定のサブスクリプション数と、テーブル同期のために予約された数を加えた数以上</li>
+<li>max_wal_senders: max_replication_slotsに同時に接続されている物理レプリカの数も加えたものと同じ数以上</li>
+</ul>
+
+%SECTION サブスクライバ側の必須設定
+
+<ul>
+<li>max_replication_slots:  接続する予定のサブスクリプション数と、テーブル同期のために予約された数を加えた数以上</li>
+<li>max_logical_replication_workers: サブスクリプション数（リーダー適用ワーカー用）に加えて、テーブル同期ワーカーとパラレル適用ワーカー用に予約された数を加えた数以上</li>
+<li>max_sync_workers_per_subscription: サブスクリプション初期化時や新しいテーブルが追加されたときの初期データコピーの並列度</li>
+<li>max_parallel_apply_workers_per_subscription: サブスクリプションパラメータstreaming = parallelで進行中のトランザクションのストリーミングに対する並列度</li>
+</ul>
+
+
+%CHAPTER 初期設定
+
+
+%SECTION パブリケーションの作成
+
+<p>
+初めにロジカルレプリケーションするテーブルを作成します。ここではカラムidにPRIMAERY KEYを設定します。
+</p>
+
+<pre>
+testdb=# CREATE TABLE logical_tbl (id int PRIMARY KEY, data int);
+CREATE TABLE
+
+testdb=# INSERT INTO logical_tbl VALUES (1,1), (2,2), (3,3);
+INSERT 0 3
+
+testdb=# SELECT * FROM logical_tbl;
+ id | data
+----+------
+  1 |    1
+  2 |    2
+  3 |    3
+(3 rows)
+</pre>
+<br>
+
+<p>
+<a href="https://www.postgresql.org/docs/current/sql-createpublication.html" target="_blank" rel="noopener noreferrer">CREATE PUBLICATION</a>で
+テーブルlogical_tblにパブリケーションを作成します<a href="./sql-53.html">[<6-53>]</a>。
+今回は全ての操作(SELECT/UPDATE/DELETEなど)をレプリケーションします。
+</p>
+
+<pre>
+testdb=# CREATE PUBLICATION pub_1 FOR TABLE logical_tbl;
+CREATE PUBLICATION
+</pre>
+<br>
+
+
+<p>
+設定したパブリケーションの情報は以下のコマンドで表示できます。
+</p>
+
+<pre>
+testdb=# SELECT * FROM pg_publication;
+  oid  | pubname | pubowner | puballtables | pubinsert | pubupdate | pubdelete | pubtruncate | pubviaroot
+-------+---------+----------+--------------+-----------+-----------+-----------+-------------+------------
+ 25682 | pub_1   |       10 | f            | t         | t         | t         | t           | f
+(1 row)
+
+testdb=# \dRp
+                               List of publications
+ Name  |  Owner   | All tables | Inserts | Updates | Deletes | Truncates | Via root
+-------+----------+------------+---------+---------+---------+-----------+----------
+ pub_1 | postgres | f          | t       | t       | t       | t         | f
+(1 row)
+</pre>
+<br>
+
+<p>
+パブリケーションとテーブル間の関係は以下のシステムテーブルに保存されています。
+</p>
+
+<pre>
+testdb=# SELECT * FROM pg_publication_tables;
+ pubname | schemaname |  tablename  | attnames  | rowfilter
+---------+------------+-------------+-----------+-----------
+ pub_1   | public     | logical_tbl | {id,data} |
+(1 row)
+
+testdb=# SELECT * from pg_publication_rel;
+  oid  | prpubid | prrelid | prqual | prattrs
+-------+---------+---------+--------+---------
+ 25683 |   25682 |   25677 |        |
+(1 row)
+</pre>
+
+<br>
+
+
+
+%SECTION サブスクリプションの作成と削除
+
+<p>
+<a href="https://www.postgresql.org/docs/current/sql-createsubscription.html" target="_blank" rel="noopener noreferrer">CREATE SUBSCRIPTION</a>でサブスクリプション側にテーブルを作成します<a href="./sql-54.html">[<6-54>]</a>。
+</p>
+
+<pre>
+testdb=# CREATE TABLE logical_tbl (id int PRIMARY KEY, data int);
+CREATE TABLE
+</pre>
+<br>
+
+<p>
+以下のコマンドでサブスクリプションを作成します。
+</p>
+
+<pre>
+testdb=# CREATE SUBSCRIPTION sub_1
+         CONNECTION 'host=primary port=5432 dbname=testdb application_name=subscription_1'
+         PUBLICATION pub_1;
+NOTICE:  created replication slot "sub_1" on publisher
+CREATE SUBSCRIPTION
+</pre>
+<br>
+
+
+<p>
+サブスクリプション作成時に明示的に既存のレプリケーションスロットを指定しないと、
+パブリケーション側でレプリケーションスロットが作成されます。
+<br>
+以下のコマンドで、パブリケーション側にレプリケーションスロットが作成されたことを確認できます。
+</p>
+
+<pre>
+testdb=# SELECT slot_name, active FROM pg_replication_slots;
+ slot_name | active
+-----------+--------
+ sub_1     | t
+(1 row)
+</pre>
+<br>
+
+<p>
+サブスクリプションの情報は以下のシステムカタログで表示できます。
+</p>
+
+<pre>
+testdb=# \x
+Expanded display is on.
+testdb=# SELECT * FROM pg_subscription;
+-[ RECORD 1 ]----+----------------------------------------------------------------------------
+oid              | 25682
+subdbid          | 5
+subskiplsn       | 0/0
+subname          | sub_1
+subowner         | 10
+subenabled       | t
+subbinary        | f
+substream        | f
+subtwophasestate | d
+subdisableonerr  | f
+subconninfo      | host=192.168.64.4 port=5432 dbname=testdb application_name=subscription_1
+subslotname      | sub_1
+subsynccommit    | off
+subpublications  | {pub_1}
+
+testdb=# SELECT * FROM pg_stat_subscription;
+-[ RECORD 1 ]---------+------------------------------
+subid                 | 25682
+subname               | sub_1
+pid                   | 397781
+relid                 |
+received_lsn          | 0/1205B3B0
+last_msg_send_time    | 2023-03-07 10:33:35.51157+09
+last_msg_receipt_time | 2023-03-07 10:33:35.511784+09
+latest_end_lsn        | 0/1205B3B0
+latest_end_time       | 2023-03-07 10:33:35.51157+09
+
+
+testdb=# SELECT * FROM pg_subscription_rel;
+-[ RECORD 1 ]----------
+srsubid    | 25682
+srrelid    | 25677
+srsubstate | r
+srsublsn   | 0/1205ADA0
+</pre>
+<br>
+
+<p>
+サブスクリプションを作成した時点で、パブリケーション側のデータが送信されます。
+</p>
+
+<pre>
+\x
+Expanded display is off.
+
+testdb=# SELECT  * FROM logical_tbl;
+id | data
+----+------
+  1 |    1
+  2 |    2
+  3 |    3
+(3 rows)
+</pre>
+
+<br>
+
+<p>
+作成したサブスクリプションの削除は<a href="https://www.postgresql.org/docs/current/sql-dropsubscription.html" target="_blank" rel="noopener noreferrer">DROP SUBSCRIPTION</a>で行います<a href="./sql-54.html">[<6-54>]</a>。
+</p>
+
+<pre>
+testdb=# DROP SUBSCRIPTION sub_1;
+</pre>
+
+<br>
+
+
+%SECTION <a href="https://www.postgresql.org/docs/17/app-pgcreatesubscriber.html" target="_blank" rel="noopener noreferrer">pg_createsubscriber</a>コマンドによるサブスクリプションの作成
+
+<p>
+バージョン17から、<a href="https://www.postgresql.org/docs/17/app-pgcreatesubscriber.html" target="_blank" rel="noopener noreferrer">pg_createsubscriber</a>コマンドを使ってサブスクライバを作成する方法がサポートされました。
+<br>
+これは、最初にストリーミングレプリケーションでスタンバイサーバを作成し、そのスタンバイのデータクラスタをロジカルレプリケーションのサブスクライバに変更します。
+利点は、初期化時にプライマリのデータを転送する手間が省けることです。
+</p>
+
+<pre>
+$ ./bin/pg_basebackup -p 5432 -D ./logical_standby -R -c fast
+$ ./bin/pg_createsubscriber -d testdb -P "dbname=testdb user=postgres port=5432" \
+> -p 5433 -D ./logical_standby --publication=pub_2 --subscription=sub_2
+</pre>
+
+<br>
+
+<p>
+サブスクライバの起動時、port番号は明示的に指定するか、postgresql.confを編集します。
+</p>
+
+<pre>
+$ ./bin/pg_ctl -D ./logical_standby -o '-c port=5433' start 
+</pre>
+
+<br>
+
+%CHAPTER 運用
+
+<ul>
+<li>
+<a href="https://www.fujitsu.com/jp/products/software/resources/feature-stories/postgres/engineer-blog19/" target="_blank" rel="noopener noreferrer">https://www.fujitsu.com/jp/products/software/resources/feature-stories/postgres/engineer-blog19/</a>
+</li>
+<li>
+<a href="https://www.sraoss.co.jp/tech-blog/pgsql/logical-replication-1/" target="_blank" rel="noopener noreferrer">https://www.sraoss.co.jp/tech-blog/pgsql/logical-replication-1/</a>
+</li>
+<li>
+<a href="https://www.fujitsu.com/jp/products/software/resources/feature-stories/postgres/engineer-blog14/" target="_blank" rel="noopener noreferrer">https://www.fujitsu.com/jp/products/software/resources/feature-stories/postgres/engineer-blog14/</a>
+</li>
+<li>
+<a href="https://www.fujitsu.com/jp/products/software/resources/feature-stories/postgres/engineer-blog11/" target="_blank" rel="noopener noreferrer">https://www.fujitsu.com/jp/products/software/resources/feature-stories/postgres/engineer-blog11/</a>
+</li>
+<li>
+<a href="https://qiita.com/ester41/items/bea287a78bf08c965c10" target="_blank" rel="noopener noreferrer">https://qiita.com/ester41/items/bea287a78bf08c965c10</a>
+</li>
+<li>
+<a href="https://cloud.google.com/sql/docs/postgres/replication/configure-logical-replication?hl=ja" target="_blank" rel="noopener noreferrer">https://cloud.google.com/sql/docs/postgres/replication/configure-logical-replication?hl=ja</a>
+</li>
+</ul>
+
+%SECTION パブリケーションの停止と再開
+
+<p>
+<a href="https://www.postgresql.org/docs/current/sql-alterpublication.html" target="_blank" rel="noopener noreferrer">ALTER PUBLICATION</a>でレプリケーションの一時的な停止と再開ができます<a href="./sql-53.html">[<6-53>]</a>。
+<u>
+パブリケーションが停止している間の変更は、再開した後もサブスクライバ側には反映されません。</u>
+これはパブリケーション停止中はテーブルの変更を検知しないことから明らかです。
+</p>
+
+<br>
+<pre>
+testdb=#ALTER PUBLICATION pub_1 SET (publish = '');
+
+
+... この間の変更は無視される ....
+
+
+testdb=# ALTER PUBLICATION pub_1 SET (publish = 'insert, update, delete, truncate');
+</pre>
+
+<br>
+
+
+%SECTION サブスクリプションの停止と再開
+
+<p>
+<a href="https://www.postgresql.org/docs/17/sql-altersubscription.html" target="_blank" rel="noopener noreferrer">ALTER SUBSCRIPTION</a>でレプリケーションの一時的な停止と再開ができます<a href="./sql-54.html">[<6-54>]</a>。
+</p>
+
+<pre>
+testdb=# ALTER SUBSCRIPTION sub_1 DISABLE;
+ALTER SUBSCRIPTION
+testdb=# ALTER SUBSCRIPTION sub_1 ENABLE;
+ALTER SUBSCRIPTION
+</pre>
+
+<br>
+
+%CHAPTER フェールオーバー
+
+<p>
+参照: <a href="https://www.sraoss.co.jp/tech-blog/wp-content/uploads/2024/09/pg17_report_20240917.pdf" target="_blank" rel="noopener noreferrer">PostgreSQL 17検証レポート</a>
+</p>
+
+<table BORDER="1">
+<caption>[<図3-13>] </caption>
+<tr><td><center>
+<img src="./fig-3-23-13.png" width=800><br>
+</center></td></tr>
+</table>
+
+<br>
+
+%SECTION logical_standbyの設定
+
+<p>
+logocal_stanby側でFAILOVERを有効にします。もちろん、
+<a href="https://www.postgresql.org/docs/current/sql-createsubscription.html" target="_blank" rel="noopener noreferrer">CREATE SUBSCRIPTION</a>でサブスクリプション作成時に設定することもできます。
+</p>
+
+<pre>
+testdb=# ALTER SUBSCRIPTION sub_1 DISABLE;
+testdb=# ALTER SUBSCRIPTION sub_1 SET (failover = true);
+testdb=# ALTER SUBSCRIPTION sub_1 ENABLE;
+</pre>
+
+<br>
+
+<p>
+FAILOVERがパブリッシャに反映しているかどうか、primary上で確認します。
+</p>
+
+<pre>
+testdb=# SELECT slot_name, failover FROM pg_replication_slots;
+ slot_name | failover 
+-----------+----------
+ sub_1     | t
+(1 row)
+</pre>
+
+<br>
+
+
+%SECTION SR standbyの作成
+
+<pre>
+$ ./bin/pg_basebackup -p 5432 -D ./standby -R --create-slot --slot=pslot1 -c fast
+</pre>
+<br>
+
+<p>
+postgresql.confを編集します。
+</p>
+
+<pre>
+port = 5434
+
+sync_replication_slots = on
+hot_standby_feedback = on
+</pre>
+
+<br>
+
+<p>
+postgresql.auto.confのprimary_conninfoにdbnameを追加します。
+</p>
+
+<pre>
+変更前: primary_conninfo = 'user=postgres ....
+
+変更後: primary_conninfo = 'dbname=testdb user=postgres ....
+</pre>
+<br>
+
+<p>
+Streaming Replicationのstandbyを起動します。
+</p>
+
+<pre>
+$ ./bin/pg_ctl -D ./standby -o '-c port=5434' start
+</pre>
+<br>
+
+<p>
+pg_replslot以下にsub_1が作成されていることを確認します。
+</p>
+
+<pre>
+$ ls standby/pg_replslot/
+sub_1
+</pre>
+<br>
+
+
+%SECTION SR Primaryの追加設定
+
+<p>
+standbyとlogical_standbyの同期について、primary側でどちらを先に行うか指定できます。
+<br>
+FAILOVER後のコンフリクトを避けるにはStandbyがlogical_standbyに先行している必要があるため、
+パラメータsynchronized_standby_slotsに同期するまで待機するスロットとしてSR standbyのpslot1を設定します。
+</p>
+
+<pre>
+synchronized_standby_slots = 'pslot1'
+</pre>
+<br>
+
+<p>
+設定を反映させます。
+</p>
+
+<pre>
+$ ./bin/pg_ctl -D primary/ reload
+</pre>
+<br>
+
+%SECTION フェールオーバー
+
+<p>
+SRのprimaryに障害は発生したと仮定し、SRのstandbyをpromoteします。
+</p>
+
+<pre>
+./bin/pg_ctl -D standby promote
+</pre>
+<br>
+
+<p>
+次にlogical_standbyで接続先を変更します。
+</p>
+
+<pre>
+testdb=# ALTER SUBSCRIPTION sub_1 DISABLE;
+testdb=# ALTER SUBSCRIPTION sub_1 CONNECTION 'user=postgres port=5434 dbname=testdb';
+testdb=# ALTER SUBSCRIPTION sub_1 ENABLE;
+</pre>
+<br>
+
+<p>
+これらの操作によって、logical_standbyは新たにstandbyをパブリッシャとして論理レプリケーションを継続します。
+</p>

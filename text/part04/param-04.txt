@@ -23,7 +23,7 @@
 
 
 </tr><tr>
-<td>◎</td>	<td>temp_buffers	</td>	<td>整数[8M]	</td>	<td>(セッション毎の)一時テーブルを確保するローカルバッファのサイズ。単位は[byte]</td>
+<td>◎</td>	<td>tempbuffers	</td>	<td>整数[8M]	</td>	<td>(セッション毎の)一時テーブルを確保するローカルバッファのサイズ。単位は[byte]</td>
 </tr><tr>
 <td>×	</td>	<td>max_prepared_transactions</td>	<td>整数[0]</td>	<td>2相コミットを同時に保持できる最大数。0なら2相コミットは無効。</td>
 </tr><tr>
@@ -41,6 +41,29 @@
 
 </tr><tr>
 <td>◎</td>	<td>logical_decoding_work_mem</td>	<td>整数 [64MB]</td>	<td>デコードされた更新がローカルディスクに書かれる前にロジカルデコーディングが使用する最大のメモリ量。確保されるのはサーバ毎に1領域で、Postgresプロセス毎でないので、ロジカルデコードのためにwork_memを大きくするより効率的。</td>
+
+
+</tr><tr>
+<td>×</td>
+<td>commit_timestamp_buffers </td>	<td>整数 [0]</td>	<td>Specifies the amount of memory to use to cache the contents of pg_commit_ts (see Table 65.1). If this value is specified without units, it is taken as blocks, that is BLCKSZ bytes, typically 8kB. The default value is 0, which requests shared_buffers/512 up to 1024 blocks, but not fewer than 16 blocks. This parameter can only be set at server start.。バージョン17から</td>
+</tr><tr>
+<td>×</td>
+<td>multixact_member_buffers </td>	<td>整数 [32]</td>	<td>Specifies the amount of shared memory to use to cache the contents of pg_multixact/members (see Table 65.1). If this value is specified without units, it is taken as blocks, that is BLCKSZ bytes, typically 8kB. The default value is 32. This parameter can only be set at server start.。バージョン17から</td>
+</tr><tr>
+<td>×</td>
+<td>multixact_offset_buffers </td>	<td>整数 [16]</td>	<td>Specifies the amount of shared memory to use to cache the contents of pg_multixact/offsets (see Table 65.1). If this value is specified without units, it is taken as blocks, that is BLCKSZ bytes, typically 8kB. The default value is 16. This parameter can only be set at server start.。バージョン17から</td>
+</tr><tr>
+<td>×</td>
+<td>notify_buffers </td>	<td>整数 [16]</td>	<td>Specifies the amount of shared memory to use to cache the contents of pg_notify (see Table 65.1). If this value is specified without units, it is taken as blocks, that is BLCKSZ bytes, typically 8kB. The default value is 16. This parameter can only be set at server start.。バージョン17から</td>
+</tr><tr>
+<td>×</td>
+<td>serializable_buffers </td>	<td>整数 [32]</td>	<td>Specifies the amount of shared memory to use to cache the contents of pg_serial (see Table 65.1). If this value is specified without units, it is taken as blocks, that is BLCKSZ bytes, typically 8kB. The default value is 32. This parameter can only be set at server start.。バージョン17から</td>
+</tr><tr>
+<td>×</td>
+<td>subtransaction_buffers </td>	<td>整数 [0]</td>	<td>Specifies the amount of shared memory to use to cache the contents of pg_subtrans (see Table 65.1). If this value is specified without units, it is taken as blocks, that is BLCKSZ bytes, typically 8kB. The default value is 0, which requests shared_buffers/512 up to 1024 blocks, but not fewer than 16 blocks. This parameter can only be set at server start.。バージョン17から</td>
+</tr><tr>
+<td>×</td>
+<td>transaction_buffers </td>	<td>整数 [0]</td>	<td>Specifies the amount of shared memory to use to cache the contents of pg_xact (see Table 65.1). If this value is specified without units, it is taken as blocks, that is BLCKSZ bytes, typically 8kB. The default value is 0, which requests shared_buffers/512 up to 1024 blocks, but not fewer than 16 blocks. This parameter can only be set at server start.。バージョン17から</td>
 
 </tr><tr>
 <td>○</td>	<td>	max_stack_depth	</td>	<td>整数[2MB]	</td>	<td>サーバの実行スタックの最大深度を設定</td>
@@ -62,6 +85,9 @@
 </tr><tr>
 <td>○</td>	<td>temp_file_limit</td>	<td>整数 [-1]</td>	<td>一時ファイルとして使用できるディスクの最大容量。単位はkB。-1の場合は無制限</td>
 
+</tr><tr>
+<td>×</td>
+<td>max_notify_queue_pages </td>	<td>整数 [1048576]</td>	<td>NOTIFY / LISTEN queueで確保するページの最大値。バージョン17から</td>
 
 </tr><tr bgcolor="#eeeeee">
 <th colspan=4 align=left>Kernel Resource Usage</th>
@@ -111,8 +137,14 @@
 <td>◎</td>	<td>backend_flush_after</td>	<td>整数 [0]</td>	<td>Postgresプロセスがこの値より多く書く度にOSが強制的にSSD・HDDに書き込む。0の場合、無効</td>
 </tr><tr>
 <td>◎</td>	<td>effective_io_concurrency</td>	<td>整数 [1]</td>	<td>PostgreSQLが同時実行可能であると想定する同時ディスクI/O操作の数</td>
+
 </tr><tr>
 <td>◎</td>	<td>maintenance_io_concurrency</td>	<td>整数 [10]</td>	<td>PostgreSQLがmaintenance作業時に同時実行可能であると想定する同時ディスクI/O操作の数</td>
+
+</tr><tr>
+<td>◎</td
+><td>io_combine_limit</td>	<td>整数 [128kB]</td>  <td>(マルチブロック読み込み)combine I/Oの最大値。src/backend/storage/aio/read_stream.cで使われる。バージョン17から</td>
+
 </tr><tr>
 <td>×</td>	<td>max_worker_processes</td>	<td>整数 [8]</td>	<td>(パラレルワーカなど)ワーカープロセスの最大数</td>
 </tr><tr>
@@ -124,7 +156,7 @@
 </tr><tr>
 <td>◎</td>	<td>parallel_leader_participation</td>	<td>on/off [on]</td>	<td>ワーカープロセスを待つ代わりに、GatherノードとGather Mergeノード配下の問い合わせプランをリーダープロセスが実行できるか否か</td>
 </tr><tr>
-<td>×</td>	<td>old_snapshot_threshold</td>	<td>整数 [-1]</td>	<td>スナップショットを使用する際に、「snapshot too old」エラーが起こるリスク無しに問い合わせスナップショットが利用できる最小の期間。この制限値を越えてデッド状態のままになったデータはバキュームしてしまうことが許可される。 これにより、長い間残っていたスナップショットによりデータが溢れてしまうのを防ぐことができる。</td>
+<td>×</td>	<td>old_snapshot_threshold</td>	<td>整数 [-1]</td>	<td>スナップショットを使用する際に、「snapshot too old」エラーが起こるリスク無しに問い合わせスナップショットが利用できる最小の期間。この制限値を越えてデッド状態のままになったデータはバキュームしてしまうことが許可される。 これにより、長い間残っていたスナップショットによりデータが溢れてしまうのを防ぐことができる。バージョン16まで</td>
 
 
 </tr></table>

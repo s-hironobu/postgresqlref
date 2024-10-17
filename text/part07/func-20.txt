@@ -2,82 +2,18 @@
 %LASTMOD
 %KEY pgsql-func20
 
-%TITLE <a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-REPLICATION" target="_blank" rel="noopener noreferrer">レプリケーション管理関数</a>
+%TITLE <a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-SNAPSHOT-SYNCHRONIZATION" target="_blank" rel="noopener noreferrer">スナップショット同期関数</a>
 
 
-<table>
-<caption>[<レプリケーション管理関数>]</caption>
-<tr bgcolor="#cccccc">
+[<スナップショット同期関数>]
 
+<table><tr bgcolor="#cccccc">
 <th>関数</th>							<th>返り値型</th>	<th>説明</th>
 </tr><tr>
-<td>pg_create_physical_replication_slot(slot_name [, immediately_reserve bool, temporary bool ] </td>	<td>record(slot_name, lsn)</td>	<td></td>
+<td>pg_export_snapshot()</td>	<td>text	</td>	<td>トランザクションのスナップショットを返す</td>
 
 </tr><tr>
-<td>pg_drop_replication_slot(slot_name)</td>	<td>void</td>	<td></td>
-
-</tr><tr>
-<td>pg_create_logical_replication_slot(slot_name, plugin [, temporary bool, twophase bool ]) </td>	<td>record(slot_name, lsn)</td>	<td></td>
-
-</tr><tr>
-<td>pg_copy_physical_replication_slot(src_slot_name, dst_slot_name [, temporary bool ]) </td>	<td>record(slot_name, lsn)</td>	<td></td>
-
-</tr><tr>
-<td>pg_copy_logical_replication_slot(src_slot_name, dst_slot_name [, temporary bool [, plugin ]]) </td>	<td>record(slot_name, lsn)</td>	<td></td>
-
-</tr><tr>
-<td>pg_logical_slot_get_changes(slot_name, upto_lsn, upto_nchanges integer, VARIADIC options text[]) </td>	<td>setof record(lsn, xid, data text)</td>	<td></td>
-
-</tr><tr>
-<td>pg_logical_slot_peek_changes(slot_name, upto_lsn, upto_nchanges integer, VARIADIC options text[])</td>	<td>setof record(lsn, xid, data text)</td>	<td></td>
-
-</tr><tr>
-<td>pg_logical_slot_get_binary_changes(slot_name, upto_lsn, upto_nchanges integer, VARIADIC options text[])</td>	<td>setof record(lsn, xid, data bytea)</td>	<td></td>
-
-</tr><tr>
-<td>pg_logical_slot_peek_binary_changes(slot_name, upto_lsn, upto_nchanges integer, VARIADIC options text[]) </td>	<td>setof record(lsn, xid, data bytea)</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_slot_advance(slot_name, upto_lsn)</td>	<td>record(slot_name, end_lsn)</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_origin_create(node_name text)</td>	<td>oid</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_origin_drop(node_name text)</td>	<td>void</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_origin_oid(node_name text)</td>	<td>oid</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_origin_session_setup(node_name text) </td>	<td>void</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_origin_session_reset() </td>	<td>void</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_origin_session_is_setup() </td>	<td>bool</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_origin_session_progress(flush bool)</td>	<td>pg_lsn</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_origin_xact_setup(origin_lsn, origin_timestamp timestamp with time zone) </td>	<td>void</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_origin_xact_reset()</td>	<td>void</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_origin_advance(node_name text, lsn)</td>	<td>void</td>	<td></td>
-
-</tr><tr>
-<td>pg_replication_origin_progress(node_name text, flush bool)</td>	<td>pg_lsn</td>	<td></td>
-
-</tr><tr>
-<td>pg_logical_emit_message(transactional bool, prefix text, content text)</td>	<td>pg_lsn</td>	<td></td>
-
-</tr><tr>
-<td>pg_logical_emit_message(transactional bool, prefix text, content bytea) </td>	<td>pg_lsn</td>	<td></td>
+<td>pg_log_standby_snapshot()</td>	<td>pg_lsn	</td>	<td>Take a snapshot of running transactions and write it to WAL. Since PG16</td>
 
 </tr></table>
 
@@ -86,3 +22,25 @@
 
 %CHAPTER 実行例
 
+<pre>
+postgres=# SELECT pg_export_snapshot();
+ pg_export_snapshot
+---------------------
+ 00000004-000033C8-1
+(1 row)
+
+postgres=# BEGIN;
+BEGIN
+
+postgres=*# SELECT pg_current_xact_id();
+ pg_current_xact_id
+--------------------
+                978
+(1 row)
+
+postgres=*# SELECT pg_export_snapshot();
+ pg_export_snapshot
+---------------------
+ 00000004-000033C9-1
+(1 row)
+</pre>

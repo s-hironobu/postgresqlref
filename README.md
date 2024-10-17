@@ -49,7 +49,9 @@ OpenOfficeで作成した図表があります。
 
 ## 説明が未完、もしくは理解が曖昧な箇所
 
-- 3-04 システムカタログ
+- 3.02 initdb
+       - sync-method
+- 3-05 システムカタログ
 	- 32システムカタログの説明
 - 3-22 ロジカルレプリケーション
 	- 運用関連の説明
@@ -83,17 +85,17 @@ OpenOfficeで作成した図表があります。
 	- DISABLE_PAGE_SKIPPINGとSKIP_LOCKEDの関係
 - 6-53, 6-54 PUBLICATION and SUBSCRIPTION
 	- 説明無し
-- 7-30 スキーマ可視性照会関数
+- 7-31 スキーマ可視性照会関数
 	- pg_statistics_obj_is_visible()
-- 7-35 サーバシグナル送信関数
+- 7-36 サーバシグナル送信関数
 	- pg_log_backend_memory_contexts()
-- 7-39 レプリケーション関数
+- 7-40 レプリケーション関数
 	- 説明無し
-- 7-41 インデックス保守関数
+- 7-42 インデックス保守関数
 	- brinやginに関する4関数の説明
-- 7-42 汎用ファイルアクセス関数
+- 7-43 汎用ファイルアクセス関数
 	- pg_ls_logicalmapdir()
-- 7-44 統計情報関数
+- 7-46 統計情報関数
 	- pg_mcv_list_items()
 
 

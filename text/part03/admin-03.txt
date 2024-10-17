@@ -79,7 +79,7 @@ postmasterにSIGHUPシグナルを送り、postgresql.confやpg_hba.confなど�
 ・promote
 <br>
 レプリケーションモードで稼働しているスレーブに対してpromoteで実行すると、リカバリモードを終了して通常の書き込み可能なモードに移行します。
-詳細は<a href="./admin-21.html">[<3-21>]</a>を参照してください。
+詳細は<a href="./admin-22.html">[<3-22>]</a>を参照してください。
 </p>
 
 <p>

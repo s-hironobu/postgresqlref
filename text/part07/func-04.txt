@@ -350,6 +350,11 @@
 
 
 </tr><tr>
+<td>to_oct(int)	</td>	<td>	text</td>	<td>数値int/bigintを8進数に変換。バージョン17から</td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=2 align=left>	to_oct(2147483647)	</th>	<th align=left>' 17777777777'</th>
+
+</tr><tr>
 <td>translate(string, from_char, to_char)</td>	<td>text</td>	<td>文字列string中の、文字from_charを文字to_charに置き換える</td>
 </tr><tr bgcolor="#eeeeee">
 <th colspan=2 align=left>	translate('abcdef', 'cd', 'CD')	</th>	<th align=left>'abCDef'</th>

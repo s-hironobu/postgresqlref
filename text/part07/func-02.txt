@@ -62,6 +62,14 @@
 <td>random()</td>	<td>倍精度</td>	<td>0.0〜1.0の乱数</td>	<td>	</td>	<td>		 </td>
 </tr><tr>
 
+<td>random(min, max)</td>	<td>INT</td>	<td>INT min 〜maxの乱数。バージョン17から</td>	<td>	</td>	<td>		 </td>
+</tr><tr>
+<td>random(min, max)</td>	<td>倍精度</td>	<td>倍精度min 〜maxの乱数。バージョン17から</td>	<td>	</td>	<td>		 </td>
+</tr><tr>
+<td>random(min, max)</td>	<td>NUMERIC</td>	<td>NUMERIC min 〜maxの乱数。バージョン17から</td>	<td>	</td>	<td>		 </td>
+</tr><tr>
+
+
 <td>random_normal(m,s)</td>	<td>倍精度</td>	<td>平均値mと標準偏差sを指定した正規分布の乱数。バージョン16から</td>	<td>random_normal(0.0, 1.0) </td>	<td>0.051285419 </td>
 </tr><tr>
 

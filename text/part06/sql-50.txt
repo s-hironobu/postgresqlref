@@ -129,23 +129,20 @@ NULLは引用符のない空文字で表し、空文字そのものは引用符�
 <p>
 ・テキスト形式のデータ書き出し
 <br>
-テーブルcustomerlistの内容を、デフォルトの区切り文字(タブスペース)で区切ったテキスト形式で書き出します。
+テーブルsampleの内容を、デフォルトの区切り文字(タブスペース)で区切ったテキスト形式で書き出します。
 </p>
 
 <pre>
-sampledb=# SELECT * FROM customerlist;
- id |       name       | companycode
-----+------------------+-------------
-  1 | デューク東郷     |           1
-  2 | アーネスト東郷   |           2
-  3 | アランサイジョー |           4
-  4 | ダグラストウゴウ |           5
-  5 | 宗経民           |           6
-  6 | 周雷峰           |           1
-(6 rows)
+estdb=# SELECT * FROM sample;
+ id | name  | age |  title
+----+-------+-----+----------
+  1 | Alice |  30 | manager
+  2 | Bob   |  40 | engineer
+  3 | Candy |  25 | engineer
+(3 rows)
 
-sampledb=# COPY customerlist TO '/home/postgres/customerlist.txt';
-COPY
+testdb=# COPY sample TO '/usr/local/pgsql/sample.txt';
+COPY 3
 </pre>
 <br>
 
@@ -154,46 +151,49 @@ COPY
 </p>
 
 <pre>
-postgres> cat /home/postgres/customerlist.txt
-1       デューク東郷    1
-2       アーネスト東郷  2
-3       アランサイジョー        4
-4       ダグラストウゴウ        5
-5       宗経民  6
-6       周雷峰  1
+$ cat sample.txt
+1	Alice	30	manager
+2	Bob	40	engineer
+3	Candy	25	engineer
 </pre>
 <br>
 
 <p>
 ・バイナリ形式のデータ書き出し
 <br>
-テーブルcustomerlistの内容をバイナリ形式で書き出します。
+テーブルsampleの内容をバイナリ形式で書き出します。
 </p>
 
 <pre>
-sampledb=# COPY customerlist TO '/home/postgres/customerlist.bin' BINARY;
-COPY
+testdb=# COPY sample TO '/usr/local/pgsql/sample.bin' (FORMAT binary);
+COPY 3
 </pre>
+
 <br>
 
+<pre>
+$ od -c sample.bin
+0000000    P   G   C   O   P   Y  \n 377  \r  \n  \0  \0  \0  \0  \0  \0
+0000020   \0  \0  \0  \0 004  \0  \0  \0 004  \0  \0  \0 001  \0  \0  \0
+0000040  005   A   l   i   c   e  \0  \0  \0 004  \0  \0  \0 036  \0  \0
+0000060   \0  \a   m   a   n   a   g   e   r  \0 004  \0  \0  \0 004  \0
+0000100   \0  \0 002  \0  \0  \0 003   B   o   b  \0  \0  \0 004  \0  \0
+0000120   \0   (  \0  \0  \0  \b   e   n   g   i   n   e   e   r  \0 004
+0000140   \0  \0  \0 004  \0  \0  \0 003  \0  \0  \0 005   C   a   n   d
+0000160    y  \0  \0  \0 004  \0  \0  \0 031  \0  \0  \0  \b   e   n   g
+0000200    i   n   e   e   r 377 377
+0000207
+</pre>
 
 <p>
 ・CSV形式のデータ書き出し
 <br>
-テーブルliteratureのデータを、ヘッダ情報を含むCSV形式でファイル'/home/postgres/literature.csv'に書き出します。
+テーブルsampleのデータを、ヘッダ情報を含むCSV形式でファイル'/usr/local/pgsql/sample.csv'に書き出します。
 </p>
 
 <pre>
-sampledb=# SELECT * FROM  literature;
-    title    |      auther      |                  context
--------------+------------------+-------------------------------------------
- Oscar Wilde | The Happy Prince | High above the city, on a tall column,...
- 夏目漱石    | 我輩は猫である   | 我輩は猫である。名前はまだ無い。
-(2 rows)
-
-sampledb=# COPY literature TO '/home/postgres/literature.csv' CSV HEADER
-sampledb-#                               FORCE QUOTE title, auther, context;
-COPY
+testdb=# COPY sample TO '/usr/local/pgsql1/sample.csv' (FORMAT csv);
+COPY 3
 </pre>
 <br>
 
@@ -202,10 +202,10 @@ COPY
 </p>
 
 <pre>
-postgres> cat /home/postgres/literature.csv
-title,auther,context
-"Oscar Wilde","The Happy Prince","High above the city, on a tall column,..."
-"夏目漱石","我輩は猫である","我輩は猫である。名前はまだ無い。"
+$ cat sample.csv
+1,Alice,30,manager
+2,Bob,40,engineer
+3,Candy,25,engineer
 </pre>
 <br>
 

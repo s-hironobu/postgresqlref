@@ -8,12 +8,14 @@
 [<書式>]
 
 ● テーブルの権限付与/取り上げ
-GRANT { { SELECT | INSERT | UPDATE | DELETE | TRUNCATE | REFERENCES | TRIGGER }
+GRANT { { SELECT | INSERT | UPDATE | DELETE | TRUNCATE | REFERENCES | TRIGGER | MAINTAIN }
     [, ...] | ALL [ PRIVILEGES ] }
     ON { [ TABLE ] table_name [, ...]
          | ALL TABLES IN SCHEMA schema_name [, ...] }
     TO role_specification [, ...] [ WITH GRANT OPTION ]
     [ GRANTED BY role_specification ]
+
+    * MAINTAINはバージョン17から
 
 REVOKE [ GRANT OPTION FOR ]
     { { SELECT | INSERT | UPDATE | DELETE | TRUNCATE | REFERENCES | TRIGGER }
@@ -210,6 +212,8 @@ where role_specification can be:
 </tr><tr>
 <td>TRIGGER	</td>		<td>テーブル/ビューのトリガ作成</td>
 </tr><tr>
+<td>MAINTAIN	</td>		<td>VACUUM, ANALYZE, CLUSTER, REFRESH MATERIALIZED VIEW, REINDEX, LOCK TABLEの実行を許可するか否か。バージョン17から</td>
+</tr><tr>
 
 <th align=left bgcolor="#eeeeee" colspan=2>テーブルのカラム</th>
 </tr><tr>
@@ -288,6 +292,6 @@ where role_specification can be:
 
 <p>
 PostgreSQLは、ロールが各種データベースオブジェクト(スキーマ、テーブル、関数など)に対してアクセス権限を持つか否か調べる関数群を持ちます。
-関数の一覧は<a href="./func-10.html">[<7-29>]</a>を参照してください。
+関数の一覧は<a href="./func-11.html">[<7-30>]</a>を参照してください。
 </p>
 

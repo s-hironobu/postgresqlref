@@ -3,138 +3,31 @@
 %KEY pgsql-admin20
 
 
-%TITLE レプリケーションの設定
+%TITLE pg_basebackupによるフルバックアップとインクリメンタルバックアップ
 
 <p>
-構築するシステム構成を[<図3-06>]に示します。
-</p>
-
-
-<table BORDER=1>
-<caption>[<図3-06>] システム構成</caption>
-<tr><td><center>
-<img src="./fig-3-22-01.png" width="700"><br>
-</center></td></tr>
-</table>
-
-<p>
-Primary１台に対し、3台のStandbyを接続します。
-standby1とstandby2は同期レプリケーション、standby3は非同期レプリケーションとします。
+<a href="https://www.postgresql.org/docs/current/app-pgbasebackup.html" target="_blank" rel="noopener noreferrer">pg_basebackup</a>コマンドを使ったバックアップ方法を説明します。
 </p>
 
 <p>
-ここでは、設定方法の紹介の意味で非同期も説明します。
-しかしカスケード接続でシステム構築する場合を除き、
-(耐障害性の観点から)実運用では同期レプリケーションを選択すべきでしょう。
+はじめにpg_bsebackupコマンドについて説明します。
+次にフルバックアップとリストアの手順を説明します。
+最後にバージョン17からサポートされたインクリメンタルバックアップについて説明します。
 </p>
 
 
-%CHAPTER Primaryの準備
-
-<p>
-Primary側の設定を説明します。
-</p>
-
-%SECTION postgresql.confの設定
-
-<p>
-以下、Primaryのpostgresql.confの設定例を示します。
-</p>
-
-[< postgresql.confの設定例>]
-
-<pre>
-# 適宜、セキュリティポリシーに合わせて設定する。
-listen_addresses = '*'
-
-# replica か logical。
-wal_level = replica
-
-# Standbyの最大数。ここでは10。
-max_wal_senders = 10
-
-# pg_wal以下に残すWALログのサイズ。max_wal_sizeと同じでよいと思う。
-wal_keep_sizes = 1G
-
-# 同期レプリケーションするStandby。ここではstandby1とstandby2　
-synchronous_standby_names = 'standby1,standby2'
-
-# レプケーションスロットも設定する
-max_replication_slots = 10
-
-</pre>
-
-<br>
-
-
-%SECTION pg_hba.confの設定
-
-<p>
-Standbyからの接続を許可するため、pg_hba.confに以下の行を追加します。
-USERはStandbyの実行ユーザを指定します(ここではpostgres)。
-</p>
-
-<pre>
-# TYPE  DATABASE        USER            CIDR-ADDRESS            METHOD
-host    replication     postgres	192.168.1.0/24            trust
-</pre>
-<br>
-
-%SECTION 起動
-
-<p>
-ベースバックアップ取得のため、Primaryを起動します。
-</p>
-
-<pre>
-primary> pg_ctl -D /usr/local/pgsql/data start
-</pre>
-
-<br>
-
-
-%CHAPTER Standbyの準備
-
-<p>
-次に、Standbyのサーバ設定を説明します。
-standby1を例にするので、適宜standby2とstandby3の設定も行ってください。
-</p>
-
-
-%SECTION ベースバックアップの取得
-
-<p>
-<a href="admin-19.html">[<3-19>]</a>において、手動でベースバックアップを取得する方法を説明しました。
-ここでは、バージョン9.1でサポートされた<a href="https://www.postgresql.org/docs/current/app-pgbasebackup.html" target="_blank" rel="noopener noreferrer">pg_basebackup</a>コマンドによる方法を説明します。
-</p>
+%CHAPTER <a href="https://www.postgresql.org/docs/current/app-pgbasebackup.html" target="_blank" rel="noopener noreferrer">pg_basebackup</a>
 
 <p>
 pg_basebackupコマンドはStreamingReplicationに依存したツールです。
 <br>
-pg_basebackupはPrimaryサーバのwalsenderプロセスに接続し、
+pg_basebackupはPostgreSQLサーバのwalsenderプロセスに接続して<a href="./admin-19.html">[<3-19>]</a>で示した手順を自動で行い、
 すべてのテーブルスペース以下のファイルと、
 指定されていれば最新のWALログファイルを転送します。
 </p>
 
-%SUBSECTION <a href="https://www.postgresql.org/docs/current/app-pgbasebackup.html" target="_blank" rel="noopener noreferrer">pg_basebackup</a>の使い方
-
 <p>
-Primaryが起動していることを確認します。
-<br>
-Standby側で既にデータベースクラスタが存在する場合は削除します。
-削除しないとpg_basebackupはエラーメッセージを出力して終了してしまいます。
-</p>
-
-<pre>
-standby1> rm -rf /usr/local/pgsql/data
-</pre>
-
-<br>
-
-<p>
-Standbyを稼働するサーバ上でpg_basebackupコマンドを実行します。
-<br>
-コマンドの構文とオプションを以下に示します。
+<a href="https://www.postgresql.org/docs/current/app-pgbasebackup.html" target="_blank" rel="noopener noreferrer">pg_basebackup</a>コマンドの構文とオプションを以下に示します。
 </p>
 
 
@@ -151,7 +44,7 @@ Standbyを稼働するサーバ上でpg_basebackupコマンドを実行します
 </tr><tr bgcolor="#eeeeee">
 <th colspan=2 align=left>Options controlling the output:</th>
 </tr><tr>
-<td>-D, --pgdata=DIRECTORY </td>	<td>Standby側で作成するデータベースクラスタのディレクトリを指定</td>
+<td>-D, --pgdata=DIRECTORY </td>	<td>リストア側で作成するデータベースクラスタのディレクトリを指定</td>
 
 </tr><tr>
 <td>-F, --format=plain|tar  </td>	<td>バックアップしたデータのフォーマット。plainはデータベースクラスタそのもの。tarはtarコマンドでアーカイブ化したもの。デフォルトはplain</td>
@@ -159,20 +52,23 @@ Standbyを稼働するサーバ上でpg_basebackupコマンドを実行します
 </tr><tr>
 <td>-R, --write-recovery-conf</td>	<td>データベースクラスタにstandby.signalファイルを生成する。(バージョン11以下では最低限の記述のみされているrecovery.confファイルを生成する。)</td>
 
+</tr><tr>
+<td>-i old_manifest_file, --incremental=old_manifest_file</td>	<td>インクリメンタルバックアップで、前のマニュフェストファイルold_manifest_fileを設定する。バージョン17から</td>
 
 </tr><tr>
 <td>-t, --target=TARGET[:TARGET]</td>	<td></td>
+
 
 </tr><tr>
 <td>-T, --tablespace-mapping=OLDDIR=NEWDIR</td>	<td></td>
 
 
 </tr><tr>
-<td>--waldir=WALDIR  </td>	<td>Primary側pg_wal以下のWALログをバックアップする。このオプションを設定しないとWALログをバックアップしない。</td>
+<td>--waldir=WALDIR  </td>	<td>バックアップ元のpg_wal以下のWALログをバックアップする。このオプションを設定しないとWALログをバックアップしない。</td>
 
 
 </tr><tr>
-<td>--wal-method=none|fetch|stream    </td>	<td>Primary側pg_wal以下のWALログをバックアップする。</td>
+<td>--wal-method=none|fetch|stream    </td>	<td>バックアップ元側pg_wal以下のWALログをバックアップする。</td>
 
 </tr><tr>
 <td>--gzip   </td>	<td>--format=tarと併用。tarアーカイブをgzipで圧縮する</td>
@@ -237,10 +133,10 @@ Standbyを稼働するサーバ上でpg_basebackupコマンドを実行します
 <td>  -h HOSTNAME   </td>	<td> Primaryのホスト名</td>
 
 </tr><tr>
-<td>  -p PORT     </td>	<td> Primaryのポート番号</td>
+<td>  -p PORT     </td>	<td> バックアップ元のポート番号</td>
 
 </tr><tr>
-<td>-U, --username=NAME   </td>	<td> Primaryへの接続ユーザ名</td>
+<td>-U, --username=NAME   </td>	<td> バックアップ元への接続ユーザ名</td>
 
 </tr><tr>
 <td>-w, --no-password  </td>	<td>  パスワード入力しない</td>
@@ -252,21 +148,91 @@ Standbyを稼働するサーバ上でpg_basebackupコマンドを実行します
 
 <br>
 
+
+%CHAPTER フルバックアップ
+
 <p>
-standby1での、pg_basebackupコマンドの実行例を示します。
+はじめにフルバックアップの方法を説明します。
+</p>
+
+%SECTION [1] postgresql.confの設定
+
+<p>
+バックアップ元のpostgresql.confの設定例を示します。
+</p>
+
+[< postgresql.confの設定例>]
+
+<pre>
+# 適宜、セキュリティポリシーに合わせて設定する。
+listen_addresses = '*'
+
+# replica か logical。
+wal_level = replica
+
+# Standbyの最大数。ここでは10。
+max_wal_senders = 10
+
+# pg_wal以下に残すWALログのサイズ。max_wal_sizeと同じでよいと思う。
+wal_keep_sizes = 1G
+
+# レプケーションスロットも設定する
+max_replication_slots = 10
+
+# archiveログも利用する場合は以下の設定も必要
+archive_mode = on
+archive_command = '/bin/cp %p /home/postgres/archivelogs/%f'
+</pre>
+
+<br>
+
+
+%SECTION [2] pg_hba.confの設定
+
+<p>
+pg_basebackupを実行するための権限を適宜設定します。
+</p>
+
+<pre>
+# TYPE  DATABASE        USER            CIDR-ADDRESS            METHOD
+local   replication     all                                     trust
+host    replication     all             127.0.0.1/32            trust
+host    replication     postgres	192.168.1.0/24           trust
+</pre>
+<br>
+
+%SECTION [3] 再起動
+
+<p>
+設定を反映させるために再起動します。
+</p>
+
+<pre>
+$ pg_ctl -D /usr/local/pgsql/data start
+</pre>
+
+<br>
+
+%SECTION [4] ベースバックアップの取得
+
+<p>
+バックアップを取得するサーバ上でpg_basebackupコマンドを実行します。
+<p>
+
+<p>
+pg_basebackupコマンドの実行例を示します。
 <br>
 ここでは、スロットの問題を避けるため、--no-slotオプションを設定します。
 </p>
 
 <pre>
-standby1> pg_basebackup -h primary -p 5432 -D /usr/local/pgsql/data  -X stream -P -R -v --no-slot
+$ pg_basebackup -h primary -p 5432 -D /usr/local/pgsql/data -X stream -P -R -v --no-slot
 pg_basebackup: initiating base backup, waiting for checkpoint to complete
 pg_basebackup: checkpoint completed
-pg_basebackup: write-ahead log start point: 0/11000028 on timeline 2
+pg_basebackup: write-ahead log start point: 0/12000028 on timeline 1
 pg_basebackup: starting background WAL receiver
-pg_basebackup: created temporary replication slot "pg_basebackup_374922"
-66199/66199 kB (100%), 1/1 tablespace
-pg_basebackup: write-ahead log end point: 0/11000100
+42476/42476 kB (100%), 1/1 tablespace
+pg_basebackup: write-ahead log end point: 0/12000120
 pg_basebackup: waiting for background process to finish streaming ...
 pg_basebackup: syncing data to disk ...
 pg_basebackup: renaming backup_manifest.tmp to backup_manifest
@@ -276,204 +242,236 @@ pg_basebackup: base backup completed
 <br>
 
 <p>
-バックアップが終了すると、指定したディレクトリ(/usr/local/pgsql/data)にPrimary側のデータベースクラスタの内容がコピーされています。
+バックアップが終了すると、指定したディレクトリ(/usr/local/pgsql/base_backup)にバックアップ元のデータベースクラスタの内容がコピーされています。
 また、バックアップ開始から完了までの間に生成されたWALログもコピーされています。
 </p>
 
 <pre>
-standby1> cd /usr/local/pgsql/data
-standby1> ls data/
+$ cd /usr/local/pgsql/base_backup
+$ ls
 PG_VERSION       current_logfiles  pg_dynshmem    pg_multixact  pg_snapshots  pg_tblspc    postgresql.auto.conf
 backup_label     global            pg_hba.conf    pg_notify     pg_stat       pg_twophase  postgresql.conf
 backup_manifest  log               pg_ident.conf  pg_replslot   pg_stat_tmp   pg_wal       standby.signal
 base             pg_commit_ts      pg_logical     pg_serial     pg_subtrans   pg_xact
-standby1> ls data/pg_wal
-00000002.history  000000020000000000000011  archive_status
+ ls pg_wal/
+000000010000000000000012  archive_status  summaries
 </pre>
 
 <br>
 
+<p>
+ちなみに、--formatと--gzipオプションを併用するとベースバックアップ以下が圧縮された状態で出力されます。
+</p>
 
-%SECTION postgresql.conf ファイルの設定
+<pre>
+$ ./bin/pg_basebackup -D /usr/local/pgsql/base_backup -X stream -P -R -v --no-slot --format tar --gzip
+
+... 略 ...
+
+$ find base_backup/
+base_backup/
+base_backup/pg_wal.tar.gz
+base_backup/base.tar.gz
+base_backup/backup_manifest
+</pre>
+
+<br>
+
+%SECTION [5] postgresql.conf ファイルの確認
 
 <p>
-pg_basebackupコマンドでコピーしたデータベースクラスタには、Primaryのpostgresql.confとpg_hba.confもコピーされますが、
+pg_basebackupコマンドでコピーしたデータベースクラスタには、バックアップ元のpostgresql.confとpg_hba.confもコピーされますが、
 適宜パラメータ値が変更されています。
 また、primary_conninfoが設定されたpostgresql.auto.confも作成されます。
 </p>
 
-
 <p>
-以下のパラメータについて適切に変更されているか確認します。また、レプリケーションスロットを使用する場合は、hot_standby_feedbackを有効にします。
+archiveログも使ってリカバリする場合は、restore_commandの設定も行います。
 </p>
 
-[< postgresql.confの確認>]
 <pre>
-# Standbyはsynchronous_standby_namesがコメントアウトされているか、確認する
-# synchronous_standby_names = 'standby1, standby2'
-
-# HotStandbyがONか、確認する。
-hot_standby = on
-
-# レプリケーションスレッドを使う場合、以下をONにする。
-hot_standby_feedback = on
+restore_command = '/bin/cp /home/postgres/archivelogs/%f %p'
 </pre>
 
 <br>
 
-<p>
-次にStandby用のパラメータを設定します。
-<br>
-バージョン11以前はrecovery.conf、<u>バージョン12以降はpostgresql.confですがpg_basebackupでバックアップを作成した場合にはpostgresql.auto.confを編集する</u>ことになります。
-</p>
+%SECTION [6] リストア側の起動
 
 <p>
-編集が必要な項目を示します。これはstandby1の例です。standby2、standby3でも同様の編集を行ってください。
+recovery.signalファイルを作成してから、リストア側のサーバを起動します。
 </p>
 
-[< recovery.conf | postgresql.conf | postgresql.auto.confの設定例>]
 <pre>
-# Standby名をapplication_nameに設定
-primary_conninfo = 'host=primary port=5432 application_name=standby1'
+$ touch base_backup/restored/recovery.signal
+$ pg_ctl -D /usr/local/pgsql/base_backup start
 </pre>
 
 <br>
 
-%SECTION Standby起動
+%CHAPTER インクリメンタルバックアップ
 
 <p>
-standby1を起動します。
+バージョン17からインクリメンタルバックアップがサポートされました。
+</p>
+
+<p>
+バージョン16までは、pg_basebackupで取得したフルバックアップとそれ以降に生成されたarchiveログを使ってリカバリを行いましたが、
+バージョン17以降は、フルバックアップとインクリメンタルバックアップを適宜取得してリカバリを行う方法も可能になります。
+</p>
+
+<p>
+アーカイブログを使う場合、postgresqlのリカバリはかなり速いとはいえ、それまでに実行されたトランザクションを全て再実行するのでそれなりに時間がかかります。
+一方、インクリメンタルバックアップはバックアップデータをファイルレベルで更新するだけなので、アーカイブログによるリストアと比較すると早い実行が期待できます。
+</p>
+
+<p>
+しかし、アーカイブログが不要になるわけでありません。
+直近のインクリメンタルバックアップ以降の変更を反映させるには、アーカイブログが必要になります。
+</p>
+
+%SECTION [1] postgresql.confの設定
+
+<p>
+summarize_walオプションは必須です。
+</p>
+
+<br>
+
+<pre>
+summarize_wal = on
+
+# 直近のインクリメンタルバックアップ以降の変更をリストアに反映させるため。
+archive_mode = on
+archive_command = '/bin/cp %p /home/postgres/archivelogs/%f'
+</pre>
+
+
+%SECTION [2] Fullbackup
+
+<p>
+最初はフルバックアップが必要です。
 </p>
 
 <pre>
-standby1> pg_ctl -D /usr/local/pgsql/data start
+$ ./bin/pg_basebackup --checkpoint=fast -D /usr/local/pgsql/incremental_backup/full \
+> -X stream -P -v --no-slot
 </pre>
 
-<br>
-
 <p>
-standby2、standby3も起動します。
+バージョン17の時点では、pg_basebackupの圧縮機能を使っても、リストアする際にさまざまな手間(base.tar.gzを展開する、pg_wal.tar.gzをpg_wal以下で展開する、展開後はtar.gzファイルを削除しなければならない)がかかります。
+よって、
+<u>
+pg_basebackupでは通常のファイルでバックアップし、後から手動で圧縮することをお勧めします。
+</u>
 </p>
 
-%CHAPTER 動作確認
+<p>
+また、-Rオプションなどでオリジナルのデータベースクラスタに存在しないファイルを生成すると、manifestファイルとの不一致で、あとで示すverificationに失敗する場合があります。
+よって、
+<u>
+一般にインクリメンタルバックアップを行う場合には、manifestファイルに存在しないファイルを作成しないように注意する必要があります。
+</u>
+</p>
+
+<br>
+
+%SECTION [3] インクリメンタルバックアップ
 
 <p>
-Primary側で動作確認を行います。
-<br>
-稼働統計情報pg_stat_replicationの詳細は、<a href="./admin-15.html">[<3-15>]</a>の[<表3-17>]を参照してください。
+インクリメンタルバックアップは、--incrementalオプションに直前のバックアップのbackup_manifestを設定することで行います。
+</p>
+
+<p>
+初回のインクリメンタルバックアップは、--incrementalオプションにフルバックアップのbackaup_manifestを設定します。
 </p>
 
 <pre>
-sampledb=# SELECT application_name,state,sync_priority,sync_state
-sampledb-#                                   FROM pg_stat_replication;
- application_name |   state   | sync_priority | sync_state
-------------------+-----------+---------------+------------
- standby1         | streaming |             1 | sync
- standby2         | streaming |             2 | potential
- standby3         | streaming |             0 | async
-(3 rows)
+$ ./bin/pg_basebackup --checkpoint=fast --incremental /usr/local/pgsql/incremental_backup/full/backup_manifest \
+> -D /usr/local/pgsql/incremental_backup/inc01 -X stream -P -v --no-slot
+pg_basebackup: initiating base backup, waiting for checkpoint to complete
+pg_basebackup: checkpoint completed
+pg_basebackup: write-ahead log start point: 0/1C000028 on timeline 1
+pg_basebackup: starting background WAL receiver
+ 5070/42472 kB (100%), 1/1 tablespace
+pg_basebackup: write-ahead log end point: 0/1C000120
+pg_basebackup: waiting for background process to finish streaming ...
+pg_basebackup: syncing data to disk ...
+pg_basebackup: renaming backup_manifest.tmp to backup_manifest
+pg_basebackup: base backup completed
 </pre>
 
-<br>
-
 <p>
-standby1からstandby3まで、3Standbyの接続が確認できます。
-<br>
-各Standbyの状態(sync_state)について簡単に説明します。
+２回目のインクリメンタルバックアップは、--incrementalオプションに1回目のインクリメンタルバックアップのbackaup_manifestを設定します。
 </p>
 
-<ul>
-<li>standby1: sync
- <p>
-standby1は同期レプリケーションで稼働している。
- </p>
+<pre>
+$ ./bin/pg_basebackup --checkpoint=fast --incremental /usr/local/pgsql/incremental_backup/inc01/backup_manifest \
+> -D /usr/local/pgsql/incremental_backup/inc02 -X stream -P -v --no-slot
+pg_basebackup: initiating base backup, waiting for checkpoint to complete
+pg_basebackup: checkpoint completed
+pg_basebackup: write-ahead log start point: 0/1E000028 on timeline 1
+pg_basebackup: starting background WAL receiver
+ 5070/42472 kB (100%), 1/1 tablespace
+pg_basebackup: write-ahead log end point: 0/1E000120
+pg_basebackup: waiting for background process to finish streaming ...
+pg_basebackup: syncing data to disk ...
+pg_basebackup: renaming backup_manifest.tmp to backup_manifest
+pg_basebackup: base backup completed
+</pre>
 
-<li>standby2: potential
- <p>
-standby2は現時点では非同期レプリケーションだが、standby1がダウンすると同期レプリケーションに移行する(potentialを持つ)。
- </p>
 
-<li>standby3: async
- <p>
-standby3は非同期レプリケーションで稼働している。
- </p>
-</ul>
+<br>
 
-%CHAPTER レプリケーションスロット設定
-
-%SECTION Praimaryでの設定
+%SECTION [4] リカバリ準備
 
 <p>
-Primary側でレプリケーションスロットを作成します。
+インクリメンタルバックアップからリカバリするには、
+事前に
+<a href="https://www.postgresql.org/docs/current/app-pgcombinebackup.html" target="_blank" rel="noopener noreferrer">pg_combinebackup</a>コマンドで、バックアップを構築します。
+</p>
+
+<p>
+はじめにドライランで動作確認を行います。
+</p>
+
+<pre>
+$ ./bin/pg_combinebackup -d -n -o /usr/local/pgsql/restored  \
+> /usr/local/pgsql/incremental_backup/full/  \
+> /usr/local/pgsql/incremental_backup/inc01/ \
+> /usr/local/pgsql/incremental_backup/inc02
+</pre>
+
+<p>
+問題がなければリストア用のデータベースクラスタを作成します。
+</p>
+
+<pre>
+$ ./bin/pg_combinebackup -o /usr/local/pgsql/restored  \
+> /usr/local/pgsql/incremental_backup/full/  \
+> /usr/local/pgsql/incremental_backup/inc01/ \
+> /usr/local/pgsql/incremental_backup/inc02
+</pre>
+
+<p>
+<a href="https://www.postgresql.org/docs/current/app-pgverifybackup.html" target="_blank" rel="noopener noreferrer">pg_verifybackup</a>コマンドで
+作成したデータベースクラスタを検証します。
+</p>
+
+<pre>
+$ ./bin/pg_verifybackup  -P --progress /usr/local/pgsql/restored/
+41797/41797 kB (100%) verified
+backup successfully verified
+</pre>
+
+%SECTION [5] リカバリ
+
+<p>
+適宜、~/restored/postgresql.confを修正して、recovery.signalファイルを生成し、リカバリを開始します。
 </p>
 
 
 <pre>
-postgres=# SELECT * FROM pg_create_physical_replication_slot('standby1_slot');
-   slot_name   | lsn
----------------+-----
- standby1_slot |
-(1 row)
-
-postgres=# SELECT * FROM pg_create_physical_replication_slot('standby2_slot');
-   slot_name   | lsn
----------------+-----
- standby2_slot |
-(1 row)
+$ touch restored/recovery.signal
+$ ./bin/pg_ctl -D restored start
 </pre>
-
-<br>
-
-<p>
-作成できたかどうかは、以下のコマンドで確認できます。
-</p>
-
-<pre>
-postgres=# SELECT slot_name, active FROM pg_replication_slots;
-   slot_name   | active
----------------+--------
- standby1_slot | f
- standby2_slot | f
-(2 rows)
-</pre>
-
-<br>
-
-%SECTION Standbyでの設定
-
-<p>
-各Standbyでpostgresql.confのprimary_slot_nameにスロット名を設定します。
-</p>
-
-[< standby1のpostgresql.conf>]
-<pre>
-primary_slot_name = 'standby1_slot'
-</pre>
-
-<br>
-
-
-<p>
-設定後、postgresql.confを再読み込みします。
-</p>
-
-<pre>
-standby1> pg_ctl -D data reload
-</pre>
-
-<br>
-
-<p>
-primary側で以下のコマンドを実行することで、レプリケーションスロットの状態を確認できます。
-</p>
-
-<pre>
-postgres=# SELECT slot_name, active FROM pg_replication_slots;
-   slot_name   | active
----------------+--------
- standby1_slot | t
- standby2_slot | t
-(2 rows)
-</pre>
-<br>
 

@@ -12,3 +12,379 @@ PostgreSQLがサポートするSQLについて解説します。
 オフィシャルドキュメントが充実してきたこともあり、
 本書では必要最低限の解説を行います。
 </p>
+
+
+<table>
+<caption>SQL</caption>
+<tr bgcolor="#cccccc">
+<th>SQL</th>	<th>説明</th>	<th>参照</th>
+
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-abort.html" target="_blank" rel="noopener noreferrer">ABORT</a></td>	<td>abort the current transaction</td>	<td>[<a href="./sql-41.html">6-41</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alteraggregate.html" target="_blank" rel="noopener noreferrer">ALTER AGGREGATE</a></td>	<td>change the definition of an aggregate function</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-altercollation.html" target="_blank" rel="noopener noreferrer">ALTER COLLATION</a></td>	<td>change the definition of a collation</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alterconversion.html" target="_blank" rel="noopener noreferrer">ALTER CONVERSION</a></td>	<td>change the definition of a conversion</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alterdatabase.html" target="_blank" rel="noopener noreferrer">ALTER DATABASE</a></td>	<td>change a database</td>	<td>[<a href="./sql-03.html">6-03</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alterdefaultprivileges.html" target="_blank" rel="noopener noreferrer">ALTER DEFAULT PRIVILEGES</a></td>	<td>define default access privileges</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alterdomain.html" target="_blank" rel="noopener noreferrer">ALTER DOMAIN</a></td>	<td>change the definition of a domain</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-altereventtrigger.html" target="_blank" rel="noopener noreferrer">ALTER EVENT TRIGGER</a></td>	<td>change the definition of an event trigger</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alterextension.html" target="_blank" rel="noopener noreferrer">ALTER EXTENSION</a></td>	<td>change the definition of an extension</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alterforeigndatawrapper.html" target="_blank" rel="noopener noreferrer">ALTER FOREIGN DATA WRAPPER</a></td>	<td>change the definition of a foreign-data wrapper</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alterforeigntable.html" target="_blank" rel="noopener noreferrer">ALTER FOREIGN TABLE</a></td>	<td>change the definition of a foreign table</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alterfunction.html" target="_blank" rel="noopener noreferrer">ALTER FUNCTION</a></td>	<td>change the definition of a function</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-altergroup.html" target="_blank" rel="noopener noreferrer">ALTER GROUP</a></td>	<td>change role name or membership</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alterindex.html" target="_blank" rel="noopener noreferrer">ALTER INDEX</a></td>	<td>change the definition of an index</td>	<td>[<a href="./sql-35.html">6-35</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alterlanguage.html" target="_blank" rel="noopener noreferrer">ALTER LANGUAGE</a></td>	<td>change the definition of a procedural language</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alterlargeobject.html" target="_blank" rel="noopener noreferrer">ALTER LARGE OBJECT</a></td>	<td>change the definition of a large object</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-altermaterializedview.html" target="_blank" rel="noopener noreferrer">ALTER MATERIALIZED VIEW</a></td>	<td>change the definition of a materialized view</td>	<td>[<a href="./sql-36.html">6-36</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alteroperator.html" target="_blank" rel="noopener noreferrer">ALTER OPERATOR</a></td>	<td>change the definition of an operator</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alteropclass.html" target="_blank" rel="noopener noreferrer">ALTER OPERATOR CLASS</a></td>	<td>change the definition of an operator class</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alteropfamily.html" target="_blank" rel="noopener noreferrer">ALTER OPERATOR FAMILY</a></td>	<td>change the definition of an operator family</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alterpolicy.html" target="_blank" rel="noopener noreferrer">ALTER POLICY</a></td>	<td>change the definition of a row-level security policy</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alterprocedure.html" target="_blank" rel="noopener noreferrer">ALTER PROCEDURE</a></td>	<td>change the definition of a procedure</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alterpublication.html" target="_blank" rel="noopener noreferrer">ALTER PUBLICATION</a></td>	<td>change the definition of a publication</td>	<td>[<a href="./sql-53.html">6-53</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alterrole.html" target="_blank" rel="noopener noreferrer">ALTER ROLE</a></td>	<td>change a database role</td>	<td>[<a href="./sql-13.html">6-13</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alterroutine.html" target="_blank" rel="noopener noreferrer">ALTER ROUTINE</a></td>	<td>change the definition of a routine</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alterrule.html" target="_blank" rel="noopener noreferrer">ALTER RULE</a></td>	<td>change the definition of a rule</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alterschema.html" target="_blank" rel="noopener noreferrer">ALTER SCHEMA</a></td>	<td>change the definition of a schema</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-altersequence.html" target="_blank" rel="noopener noreferrer">ALTER SEQUENCE</a></td>	<td>change the definition of a sequence generator</td>	<td>[<a href="./sql-37.html">6-37</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alterserver.html" target="_blank" rel="noopener noreferrer">ALTER SERVER</a></td>	<td>change the definition of a foreign server</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alterstatistics.html" target="_blank" rel="noopener noreferrer">ALTER STATISTICS</a></td>	<td>change the definition of an extended statistics object</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-altersubscription.html" target="_blank" rel="noopener noreferrer">ALTER SUBSCRIPTION</a></td>	<td>change the definition of a subscription</td>	<td>[<a href="./sql-54.html">6-54</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-altersystem.html" target="_blank" rel="noopener noreferrer">ALTER SYSTEM</a></td>	<td>change a server configuration parameter</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-altertable.html" target="_blank" rel="noopener noreferrer">ALTER TABLE</a></td>	<td>change the definition of a table</td>	<td>[<a href="./sql-10.html">6-10</a>], [<a href="./sql-11.html">6-11</a>], [<a href="./sql-12.html">6-12</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-altertablespace.html" target="_blank" rel="noopener noreferrer">ALTER TABLESPACE</a></td>	<td>change the definition of a tablespace</td>	<td>[<a href="./sql-02.html">6-02</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-altertsconfig.html" target="_blank" rel="noopener noreferrer">ALTER TEXT SEARCH CONFIGURATION</a></td>	<td>change the definition of a text search configuration</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-altertsdictionary.html" target="_blank" rel="noopener noreferrer">ALTER TEXT SEARCH DICTIONARY</a></td>	<td>change the definition of a text search dictionary</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-altertsparser.html" target="_blank" rel="noopener noreferrer">ALTER TEXT SEARCH PARSER</a></td>	<td>change the definition of a text search parser</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-altertstemplate.html" target="_blank" rel="noopener noreferrer">ALTER TEXT SEARCH TEMPLATE</a></td>	<td>change the definition of a text search template</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-altertrigger.html" target="_blank" rel="noopener noreferrer">ALTER TRIGGER</a></td>	<td>change the definition of a trigger</td>	<td>[<a href="./sql-38.html">6-38</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-altertype.html" target="_blank" rel="noopener noreferrer">ALTER TYPE</a></td>	<td>change the definition of a type</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alteruser.html" target="_blank" rel="noopener noreferrer">ALTER USER</a></td>	<td>change a database role</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alterusermapping.html" target="_blank" rel="noopener noreferrer">ALTER USER MAPPING</a></td>	<td>change the definition of a user mapping</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-alterview.html" target="_blank" rel="noopener noreferrer">ALTER VIEW</a></td>	<td>change the definition of a view</td>	<td>[<a href="./sql-36.html">6-36</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-analyze.html" target="_blank" rel="noopener noreferrer">ANALYZE</a></td>	<td>collect statistics about a database</td>	<td>[<a href="./sql-47.html">6-47</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-begin.html" target="_blank" rel="noopener noreferrer">BEGIN</a></td>	<td>start a transaction block</td>	<td>[<a href="./sql-41.html">6-41</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-call.html" target="_blank" rel="noopener noreferrer">CALL</a></td>	<td>invoke a procedure</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-checkpoint.html" target="_blank" rel="noopener noreferrer">CHECKPOINT</a></td>	<td>force a write-ahead log checkpoint</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-close.html" target="_blank" rel="noopener noreferrer">CLOSE</a></td>	<td>close a cursor</td>	<td>[<a href="./sql-39.html">6-39</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-cluster.html" target="_blank" rel="noopener noreferrer">CLUSTER</a></td>	<td>cluster a table according to an index</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-comment.html" target="_blank" rel="noopener noreferrer">COMMENT</a></td>	<td>define or change the comment of an object</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-commit.html" target="_blank" rel="noopener noreferrer">COMMIT</a></td>	<td>commit the current transaction</td>	<td>[<a href="./sql-41.html">6-41</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-commit-prepared.html" target="_blank" rel="noopener noreferrer">COMMIT PREPARED</a></td>	<td>commit a transaction that was earlier prepared for two-phase commit</td>	<td>[<a href="./sql-43.html">6-43</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-copy.html" target="_blank" rel="noopener noreferrer">COPY</a></td>	<td>copy data between a file and a table</td>	<td>[<a href="./sql-49.html">6-49</a>], [<a href="./sql-50.html">6-50</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-create-access-method.html" target="_blank" rel="noopener noreferrer">CREATE ACCESS METHOD</a></td>	<td>define a new access method</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createaggregate.html" target="_blank" rel="noopener noreferrer">CREATE AGGREGATE</a></td>	<td>define a new aggregate function</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createcast.html" target="_blank" rel="noopener noreferrer">CREATE CAST</a></td>	<td>define a new cast</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createcollation.html" target="_blank" rel="noopener noreferrer">CREATE COLLATION</a></td>	<td>define a new collation</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createconversion.html" target="_blank" rel="noopener noreferrer">CREATE CONVERSION</a></td>	<td>define a new encoding conversion</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createdatabase.html" target="_blank" rel="noopener noreferrer">CREATE DATABASE</a></td>	<td>create a new database</td>	<td>[<a href="./sql-03.html">6-03</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createdomain.html" target="_blank" rel="noopener noreferrer">CREATE DOMAIN</a></td>	<td>define a new domain</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createeventtrigger.html" target="_blank" rel="noopener noreferrer">CREATE EVENT TRIGGER</a></td>	<td>define a new event trigger</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createextension.html" target="_blank" rel="noopener noreferrer">CREATE EXTENSION</a></td>	<td>install an extension</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createforeigndatawrapper.html" target="_blank" rel="noopener noreferrer">CREATE FOREIGN DATA WRAPPER</a></td>	<td>define a new foreign-data wrapper</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createforeigntable.html" target="_blank" rel="noopener noreferrer">CREATE FOREIGN TABLE</a></td>	<td>define a new foreign table</td>	<td>[<a href="./sql-52.html">6-52</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createfunction.html" target="_blank" rel="noopener noreferrer">CREATE FUNCTION</a></td>	<td>define a new function</td>	<td>[<a href="./sql-51.html">6-51</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-creategroup.html" target="_blank" rel="noopener noreferrer">CREATE GROUP</a></td>	<td>define a new database role</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createindex.html" target="_blank" rel="noopener noreferrer">CREATE INDEX</a></td>	<td>define a new index</td>	<td>[<a href="./sql-35.html">6-35</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createlanguage.html" target="_blank" rel="noopener noreferrer">CREATE LANGUAGE</a></td>	<td>define a new procedural language</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-creatematerializedview.html" target="_blank" rel="noopener noreferrer">CREATE MATERIALIZED VIEW</a></td>	<td>define a new materialized view</td>	<td>[<a href="./sql-36.html">6-36</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createoperator.html" target="_blank" rel="noopener noreferrer">CREATE OPERATOR</a></td>	<td>define a new operator</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createopclass.html" target="_blank" rel="noopener noreferrer">CREATE OPERATOR CLASS</a></td>	<td>define a new operator class</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createopfamily.html" target="_blank" rel="noopener noreferrer">CREATE OPERATOR FAMILY</a></td>	<td>define a new operator family</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createpolicy.html" target="_blank" rel="noopener noreferrer">CREATE POLICY</a></td>	<td>define a new row-level security policy for a table</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createprocedure.html" target="_blank" rel="noopener noreferrer">CREATE PROCEDURE</a></td>	<td>define a new procedure</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createpublication.html" target="_blank" rel="noopener noreferrer">CREATE PUBLICATION</a></td>	<td>define a new publication</td>	<td>[<a href="./sql-53.html">6-53</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createrole.html" target="_blank" rel="noopener noreferrer">CREATE ROLE</a></td>	<td>define a new database role</td>	<td>[<a href="./sql-13.html">6-13</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createrule.html" target="_blank" rel="noopener noreferrer">CREATE RULE</a></td>	<td>define a new rewrite rule</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createschema.html" target="_blank" rel="noopener noreferrer">CREATE SCHEMA</a></td>	<td>define a new schema</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createsequence.html" target="_blank" rel="noopener noreferrer">CREATE SEQUENCE</a></td>	<td>define a new sequence generator</td>	<td>[<a href="./sql-37.html">6-37</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createserver.html" target="_blank" rel="noopener noreferrer">CREATE SERVER</a></td>	<td>define a new foreign server</td>	<td>[<a href="./sql-52.html">6-52</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createstatistics.html" target="_blank" rel="noopener noreferrer">CREATE STATISTICS</a></td>	<td>define extended statistics</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createsubscription.html" target="_blank" rel="noopener noreferrer">CREATE SUBSCRIPTION</a></td>	<td>define a new subscription</td>	<td>[<a href="./sql-54.html">6-54</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createtable.html" target="_blank" rel="noopener noreferrer">CREATE TABLE</a></td>	<td>define a new table</td>	<td>[<a href="./sql-04.html">6-04</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createtableas.html" target="_blank" rel="noopener noreferrer">CREATE TABLE AS</a></td>	<td>define a new table from the results of a query</td>	<td>[<a href="./sql-04.html">6-04</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createtablespace.html" target="_blank" rel="noopener noreferrer">CREATE TABLESPACE</a></td>	<td>define a new tablespace</td>	<td>[<a href="./sql-02.html">6-02</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createtsconfig.html" target="_blank" rel="noopener noreferrer">CREATE TEXT SEARCH CONFIGURATION</a></td>	<td>define a new text search configuration</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createtsdictionary.html" target="_blank" rel="noopener noreferrer">CREATE TEXT SEARCH DICTIONARY</a></td>	<td>define a new text search dictionary</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createtsparser.html" target="_blank" rel="noopener noreferrer">CREATE TEXT SEARCH PARSER</a></td>	<td>define a new text search parser</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createtstemplate.html" target="_blank" rel="noopener noreferrer">CREATE TEXT SEARCH TEMPLATE</a></td>	<td>define a new text search template</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createtransform.html" target="_blank" rel="noopener noreferrer">CREATE TRANSFORM</a></td>	<td>define a new transform</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createtrigger.html" target="_blank" rel="noopener noreferrer">CREATE TRIGGER</a></td>	<td>define a new trigger</td>	<td>[<a href="./sql-38.html">6-38</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createtype.html" target="_blank" rel="noopener noreferrer">CREATE TYPE</a></td>	<td>define a new data type</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createuser.html" target="_blank" rel="noopener noreferrer">CREATE USER</a></td>	<td>define a new database role</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createusermapping.html" target="_blank" rel="noopener noreferrer">CREATE USER MAPPING</a></td>	<td>define a new mapping of a user to a foreign server</td>	<td>[<a href="./sql-52.html">6-52</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-createview.html" target="_blank" rel="noopener noreferrer">CREATE VIEW</a></td>	<td>define a new view</td>	<td>[<a href="./sql-36.html">6-36</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-deallocate.html" target="_blank" rel="noopener noreferrer">DEALLOCATE</a></td>	<td>deallocate a prepared statement</td>	<td>[<a href="./sql-40.html">6-40</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-declare.html" target="_blank" rel="noopener noreferrer">DECLARE</a></td>	<td>define a cursor</td>	<td>[<a href="./sql-39.html">6-39</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-delete.html" target="_blank" rel="noopener noreferrer">DELETE</a></td>	<td>delete rows of a table</td>	<td>[<a href="./sql-33.html">6-33</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-discard.html" target="_blank" rel="noopener noreferrer">DISCARD</a></td>	<td>discard session state</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-do.html" target="_blank" rel="noopener noreferrer">DO</a></td>	<td>execute an anonymous code block</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-drop-access-method.html" target="_blank" rel="noopener noreferrer">DROP ACCESS METHOD</a></td>	<td>remove an access method</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropaggregate.html" target="_blank" rel="noopener noreferrer">DROP AGGREGATE</a></td>	<td>remove an aggregate function</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropcast.html" target="_blank" rel="noopener noreferrer">DROP CAST</a></td>	<td>remove a cast</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropcollation.html" target="_blank" rel="noopener noreferrer">DROP COLLATION</a></td>	<td>remove a collation</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropconversion.html" target="_blank" rel="noopener noreferrer">DROP CONVERSION</a></td>	<td>remove a conversion</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropdatabase.html" target="_blank" rel="noopener noreferrer">DROP DATABASE</a></td>	<td>remove a database</td>	<td>[<a href="./sql-03.html">6-03</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropdomain.html" target="_blank" rel="noopener noreferrer">DROP DOMAIN</a></td>	<td>remove a domain</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropeventtrigger.html" target="_blank" rel="noopener noreferrer">DROP EVENT TRIGGER</a></td>	<td>remove an event trigger</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropextension.html" target="_blank" rel="noopener noreferrer">DROP EXTENSION</a></td>	<td>remove an extension</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropforeigndatawrapper.html" target="_blank" rel="noopener noreferrer">DROP FOREIGN DATA WRAPPER</a></td>	<td>remove a foreign-data wrapper</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropforeigntable.html" target="_blank" rel="noopener noreferrer">DROP FOREIGN TABLE</a></td>	<td>remove a foreign table</td>	<td>[<a href="./sql-52.html">6-52</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropfunction.html" target="_blank" rel="noopener noreferrer">DROP FUNCTION</a></td>	<td>remove a function</td>	<td>[<a href="./sql-51.html">6-51</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropgroup.html" target="_blank" rel="noopener noreferrer">DROP GROUP</a></td>	<td>remove a database role</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropindex.html" target="_blank" rel="noopener noreferrer">DROP INDEX</a></td>	<td>remove an index</td>	<td>[<a href="./sql-35.html">6-35</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-droplanguage.html" target="_blank" rel="noopener noreferrer">DROP LANGUAGE</a></td>	<td>remove a procedural language</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropmaterializedview.html" target="_blank" rel="noopener noreferrer">DROP MATERIALIZED VIEW</a></td>	<td>remove a materialized view</td>	<td>[<a href="./sql-36.html">6-36</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropoperator.html" target="_blank" rel="noopener noreferrer">DROP OPERATOR</a></td>	<td>remove an operator</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropopclass.html" target="_blank" rel="noopener noreferrer">DROP OPERATOR CLASS</a></td>	<td>remove an operator class</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropopfamily.html" target="_blank" rel="noopener noreferrer">DROP OPERATOR FAMILY</a></td>	<td>remove an operator family</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-drop-owned.html" target="_blank" rel="noopener noreferrer">DROP OWNED</a></td>	<td>remove database objects owned by a database role</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-droppolicy.html" target="_blank" rel="noopener noreferrer">DROP POLICY</a></td>	<td>remove a row-level security policy from a table</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropprocedure.html" target="_blank" rel="noopener noreferrer">DROP PROCEDURE</a></td>	<td>remove a procedure</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-droppublication.html" target="_blank" rel="noopener noreferrer">DROP PUBLICATION</a></td>	<td>remove a publication</td>	<td>[<a href="./sql-53.html">6-53</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-droprole.html" target="_blank" rel="noopener noreferrer">DROP ROLE</a></td>	<td>remove a database role</td>	<td>[<a href="./sql-13.html">6-13</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-droproutine.html" target="_blank" rel="noopener noreferrer">DROP ROUTINE</a></td>	<td>remove a routine</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-droprule.html" target="_blank" rel="noopener noreferrer">DROP RULE</a></td>	<td>remove a rewrite rule</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropschema.html" target="_blank" rel="noopener noreferrer">DROP SCHEMA</a></td>	<td>remove a schema</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropsequence.html" target="_blank" rel="noopener noreferrer">DROP SEQUENCE</a></td>	<td>remove a sequence</td>	<td>[<a href="./sql-37.html">6-37</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropserver.html" target="_blank" rel="noopener noreferrer">DROP SERVER</a></td>	<td>remove a foreign server descriptor</td>	<td>[<a href="./sql-52.html">6-52</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropstatistics.html" target="_blank" rel="noopener noreferrer">DROP STATISTICS</a></td>	<td>remove extended statistics</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropsubscription.html" target="_blank" rel="noopener noreferrer">DROP SUBSCRIPTION</a></td>	<td>remove a subscription</td>	<td>[<a href="./sql-54.html">6-54</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-droptable.html" target="_blank" rel="noopener noreferrer">DROP TABLE</a></td>	<td>remove a table</td>	<td>[<a href="./sql-08.html">6-08</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-droptablespace.html" target="_blank" rel="noopener noreferrer">DROP TABLESPACE</a></td>	<td>remove a tablespace</td>	<td>[<a href="./sql-02.html">6-02</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-droptsconfig.html" target="_blank" rel="noopener noreferrer">DROP TEXT SEARCH CONFIGURATION</a></td>	<td>remove a text search configuration</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-droptsdictionary.html" target="_blank" rel="noopener noreferrer">DROP TEXT SEARCH DICTIONARY</a></td>	<td>remove a text search dictionary</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-droptsparser.html" target="_blank" rel="noopener noreferrer">DROP TEXT SEARCH PARSER</a></td>	<td>remove a text search parser</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-droptstemplate.html" target="_blank" rel="noopener noreferrer">DROP TEXT SEARCH TEMPLATE</a></td>	<td>remove a text search template</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-droptransform.html" target="_blank" rel="noopener noreferrer">DROP TRANSFORM</a></td>	<td>remove a transform</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-droptrigger.html" target="_blank" rel="noopener noreferrer">DROP TRIGGER</a></td>	<td>remove a trigger</td>	<td>[<a href="./sql-38.html">6-38</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-droptype.html" target="_blank" rel="noopener noreferrer">DROP TYPE</a></td>	<td>remove a data type</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropuser.html" target="_blank" rel="noopener noreferrer">DROP USER</a></td>	<td>remove a database role</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropusermapping.html" target="_blank" rel="noopener noreferrer">DROP USER MAPPING</a></td>	<td>remove a user mapping for a foreign server</td>	<td>[<a href="./sql-52.html">6-52</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-dropview.html" target="_blank" rel="noopener noreferrer">DROP VIEW</a></td>	<td>remove a view</td>	<td>[<a href="./sql-36.html">6-36</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-end.html" target="_blank" rel="noopener noreferrer">END</a></td>	<td>commit the current transaction</td>	<td>[<a href="./sql-41.html">6-41</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-execute.html" target="_blank" rel="noopener noreferrer">EXECUTE</a></td>	<td>execute a prepared statement</td>	<td>[<a href="./sql-40.html">6-40</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-explain.html" target="_blank" rel="noopener noreferrer">EXPLAIN</a></td>	<td>show the execution plan of a statement</td>	<td>[<a href="./sql-48.html">6-48</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-fetch.html" target="_blank" rel="noopener noreferrer">FETCH</a></td>	<td>retrieve rows from a query using a cursor</td>	<td>[<a href="./sql-39.html">6-39</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-grant.html" target="_blank" rel="noopener noreferrer">GRANT</a></td>	<td>define access privileges</td>	<td>[<a href="./sql-14.html">6-14</a>], [<a href="./sql-15.html">6-15</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-importforeignschema.html" target="_blank" rel="noopener noreferrer">IMPORT FOREIGN SCHEMA</a></td>	<td>import table definitions from a foreign server</td>	<td>[<a href="./sql-52.html">6-52</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-insert.html" target="_blank" rel="noopener noreferrer">INSERT</a></td>	<td>create new rows in a table</td>	<td>[<a href="./sql-16.html">6-15</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-listen.html" target="_blank" rel="noopener noreferrer">LISTEN</a></td>	<td>listen for a notification</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-load.html" target="_blank" rel="noopener noreferrer">LOAD</a></td>	<td>load a shared library file</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-lock.html" target="_blank" rel="noopener noreferrer">LOCK</a></td>	<td>lock a table</td>	<td>[<a href="./sql-44.html">6-44</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-merge.html" target="_blank" rel="noopener noreferrer">MERGE</a></td>	<td>conditionally insert, update, or delete rows of a table. From PG15</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-move.html" target="_blank" rel="noopener noreferrer">MOVE</a></td>	<td>position a cursor</td>	<td>[<a href="./sql-39.html">6-39</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-notify.html" target="_blank" rel="noopener noreferrer">NOTIFY</a></td>	<td>generate a notification</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-prepare.html" target="_blank" rel="noopener noreferrer">PREPARE</a></td>	<td>prepare a statement for execution</td>	<td>[<a href="./sql-40.html">6-40</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-prepare-transaction.html" target="_blank" rel="noopener noreferrer">PREPARE TRANSACTION</a></td>	<td>prepare the current transaction for two-phase commit</td>	<td>[<a href="./sql-43.html">6-43</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-reassign-owned.html" target="_blank" rel="noopener noreferrer">REASSIGN OWNED</a></td>	<td>change the ownership of database objects owned by a database role</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-refreshmaterializedview.html" target="_blank" rel="noopener noreferrer">REFRESH MATERIALIZED VIEW</a></td>	<td>replace the contents of a materialized view</td>	<td>[<a href="./sql-36.html">6-36</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-reindex.html" target="_blank" rel="noopener noreferrer">REINDEX</a></td>	<td>rebuild indexes</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-release-savepoint.html" target="_blank" rel="noopener noreferrer">RELEASE SAVEPOINT</a></td>	<td>release a previously defined savepoint</td>	<td>[<a href="./sql-42.html">6-42</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-reset.html" target="_blank" rel="noopener noreferrer">RESET</a></td>	<td>restore the value of a run-time parameter to the default value</td>	<td>[<a href="./sql-45.html">6-45</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-revoke.html" target="_blank" rel="noopener noreferrer">REVOKE</a></td>	<td>remove access privileges</td>	<td>[<a href="./sql-14.html">6-14</a>], [<a href="./sql-15.html">6-15</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-rollback.html" target="_blank" rel="noopener noreferrer">ROLLBACK</a></td>	<td>abort the current transaction</td>	<td>[<a href="./sql-41.html">6-41</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-rollback-prepared.html" target="_blank" rel="noopener noreferrer">ROLLBACK PREPARED</a></td>	<td>cancel a transaction that was earlier prepared for two-phase commit</td>	<td>[<a href="./sql-43.html">6-43</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-rollback-to.html" target="_blank" rel="noopener noreferrer">ROLLBACK TO SAVEPOINT</a></td>	<td>roll back to a savepoint</td>	<td>[<a href="./sql-42.html">6-42</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-savepoint.html" target="_blank" rel="noopener noreferrer">SAVEPOINT</a></td>	<td>define a new savepoint within the current transaction</td>	<td>[<a href="./sql-42.html">6-42</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-security-label.html" target="_blank" rel="noopener noreferrer">SECURITY LABEL</a></td>	<td>define or change a security label applied to an object</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-select.html" target="_blank" rel="noopener noreferrer">SELECT</a></td>	<td>retrieve rows from a table or view</td>	<td>[<a href="./sql-17.html">6-17</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-selectinto.html" target="_blank" rel="noopener noreferrer">SELECT INTO</a></td>	<td>define a new table from the results of a query</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-set.html" target="_blank" rel="noopener noreferrer">SET</a></td>	<td>change a run-time parameter</td>	<td>[<a href="./sql-45.html">6-45</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-set-constraints.html" target="_blank" rel="noopener noreferrer">SET CONSTRAINTS</a></td>	<td>set constraint check timing for the current transaction</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-set-role.html" target="_blank" rel="noopener noreferrer">SET ROLE</a></td>	<td>set the current user identifier of the current session</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-set-session-authorization.html" target="_blank" rel="noopener noreferrer">SET SESSION AUTHORIZATION</a></td>	<td>set the session user identifier and the current user identifier of the current session</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-set-transaction.html" target="_blank" rel="noopener noreferrer">SET TRANSACTION</a></td>	<td>set the characteristics of the current transaction</td>	<td>[<a href="./sql-41.html">6-41</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-show.html" target="_blank" rel="noopener noreferrer">SHOW</a></td>	<td>show the value of a run-time parameter</td>	<td>[<a href="./sql-45.html">6-45</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-start-transaction.html" target="_blank" rel="noopener noreferrer">START TRANSACTION</a></td>	<td>start a transaction block</td>	<td>[<a href="./sql-41.html">6-41</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-truncate.html" target="_blank" rel="noopener noreferrer">TRUNCATE</a></td>	<td>empty a table or set of tables</td>	<td>[<a href="./sql-34.html">6-34</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-unlisten.html" target="_blank" rel="noopener noreferrer">UNLISTEN</a></td>	<td>stop listening for a notification</td>	<td>略	</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-update.html" target="_blank" rel="noopener noreferrer">UPDATE</a></td>	<td>update rows of a table</td>	<td>[<a href="./sql-32.html">6-32</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-vacuum.html" target="_blank" rel="noopener noreferrer">VACUUM</a></td>	<td>garbage-collect and optionally analyze a database</td>	<td>[<a href="./sql-46.html">6-46</a>]</td>
+</tr><tr>
+<td><a href="https://www.postgresql.org/docs/current/sql-values.html" target="_blank" rel="noopener noreferrer">VALUES</a></td>	<td>compute a set of rows</td>	<td>[<a href="./sql-30.html">6-30</a>]</td>
+
+</tr></table>
+

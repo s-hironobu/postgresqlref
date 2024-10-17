@@ -68,6 +68,10 @@
 
 
 </tr><tr>
+<td>◎ </td>
+<td>transaction_timeout </td><td>	整数[0]		 </td><td>設定した時間以上トランザクションが継続した場合にタイムアウトする。単位は[ミリ秒]。"0"の場合は無効。バージョン17から</td>
+
+</tr><tr>
 <td>◎</td><td>lock_timeout </td>	<td>整数[0]</td>	<td>LOCK状態のタイムアウト時間を設定。テーブルがロックされたまま設定した時間が過ぎるとエラーを返す。単位は[ミリ秒]。"0"の場合は無効。</td>
 
 </tr><tr>
@@ -109,6 +113,15 @@
 </tr><tr>
 <td>◎</td>
 <td>createrole_self_grant</td>	<td>文字列 ['']</td>	<td>バージョン16から</td>
+
+
+</tr><tr>
+<td>◎</td>
+<td>event_triggers</td>	<td>boolean [true]</td>	<td>トリガーを無効にする。デバッグ用。バージョン17から</td>
+
+</tr><tr>
+<td>◎</td>
+<td>restrict_nonsystem_relation_kind</td>	<td>文字列 ['']</td>	<td></td>
 
 
 </tr><tr bgcolor="#eeeeee">

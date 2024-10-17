@@ -34,7 +34,7 @@ pg_dumpはデータベース単位のデータをダンプ、pg_dumpallは全デ
 %SECTION 物理バックアップ
 
 <p>
-PostgreSQLの物理バックアップ手段であるベースバックアップとアーカイブログは、<a href="./admin-19.html">[<3-19>]</a>と<a href="./admin-20.html">[<3-20>]</a>で詳しく解説しています。
+PostgreSQLの物理バックアップ手段であるベースバックアップとアーカイブログは、<a href="./admin-19.html">[<3-19>]</a>と<a href="./admin-20.html">[<3-20>]</a>, <a href="./admin-21.html">[<3-21>]</a>で詳しく解説しています。
 </p>
 
 
