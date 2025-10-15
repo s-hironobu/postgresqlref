@@ -36,6 +36,8 @@
 </tr><tr>
 <td>has_language_privilege(language, privilege)		</td>	<td>bool</td>	<td>現在のロールに言語languageの権限があるか否か</td>	<td>USAGE</td>
 
+</tr><tr>
+<td>has_largeobject_privilege ( [ user name or oid, ] largeobject oid, privilege text )</td>	<td>bool</td>	<td>Largeobjectの権限があるか否か。PG18から</td>	<td>USAGE</td>
 
 </tr><tr>
 <td>has_parameter_privilege(role, parameter, privilege)		</td>	<td>bool</td>	<td>ロールroleにパラメータparameter設定の権限があるか否か)</td>	<td>SET,ALTER SYSTEM</td>

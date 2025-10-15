@@ -2,7 +2,7 @@
 %LASTMOD
 %KEY pgsql-func22
 
-%TITLE <a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADMIN-DBOBJECT" target="_blank" rel="noopener noreferrer">データベースオブジェクト容量関数 / データベースオブジェクト位置関数</a>
+%TITLE <a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-ADMIN-DBOBJECT" target="_blank" rel="noopener noreferrer">データベースオブジェクト管理関数</a>
 
 
 <table border=1>
@@ -64,10 +64,71 @@
 </tr><tr>
 <td>pg_filenode_relation(tablespace oid, filenode oid)</td>	<td>regclass</td>	<td>指定したテーブルスペースのOIDとファイルノードから、リレーション名を返す。pg_relation_filepath()の逆関数。</td>
 
+</tr></table>
+
+<br>
+
+
+<table border=1>
+<caption> Collation Management Functions</caption>
+<tr bgcolor="#cccccc">
+<th>関数</th>							<th>返り値型</th>	<th>説明</th>
+
+</tr><tr>
+<td>pg_collation_actual_version ( oid ) </td>		<td>text</td>	<td></td>
+
+</tr><tr>
+<td>pg_database_collation_actual_version ( oid )</td>		<td>text</td>	<td></td>
+
+</tr><tr>
+<td>pg_import_system_collations ( schema regnamespace ) </td>		<td>integer</td>	<td></td>
 
 </tr></table>
 
 <br>
+
+
+<table border=1>
+<caption>Database Object Statistics Manipulation Functions (PG18から)</caption>
+<tr bgcolor="#cccccc">
+<th>関数</th>							<th>返り値型</th>	<th>説明</th>
+</tr><tr>
+
+<td>pg_restore_relation_stats ( VARIADIC kwargs "any" ) </td>		<td>bool</td>	<td>テーブルレベルの統計情報を更新する</td>
+</tr><tr>
+
+<td>pg_clear_relation_stats ( schemaname text, relname text ) </td>		<td>void</td>	<td>指定したrelnameの統計情報をクリア(０リセット)する</td>
+</tr><tr>
+
+<td>pg_restore_attribute_stats ( VARIADIC kwargs "any" )</td>		<td>bool</td>	<td>カラムレベルの統計情報を更新する</td>
+</tr><tr>
+
+<td>pg_clear_attribute_stats ( schemaname text, relname text, attname text, inherited boolean ) </td>		<td>void</td>	<td>カラムレベルの統計情報をクリア(０リセット)する</td>
+
+</tr></table>
+
+<br>
+
+
+<table border=1>
+<caption> Partitioning Information Functions</caption>
+<tr bgcolor="#cccccc">
+<th>関数</th>							<th>返り値型</th>	<th>説明</th>
+
+</tr><tr>
+<td>pg_partition_tree ( regclass ) </td>		<td>setof record ( relid regclass, parentrelid regclass, isleaf boolean, level integer )</td>	<td>指定されたパーティションテーブルのパーティションツリー内のテーブルまたはインデックスを一覧表示</td>
+
+</tr><tr>
+<td>pg_partition_ancestors ( regclass ) </td>		<td>setof regclass</td>	<td>指定したパーティションの祖先関係を表示</td>
+
+</tr><tr>
+<td>pg_partition_root ( regclass )</td>		<td>regclass</td>	<td>指定したリレーションの一番上のレベルのリレーションを表示</td>
+
+</tr></table>
+
+<br>
+
+
 
 
 %CHAPTER 実行例

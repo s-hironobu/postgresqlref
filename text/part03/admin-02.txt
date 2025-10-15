@@ -70,6 +70,10 @@
 </tr><tr>
 <td>-k, --data-checksums</td>	<td>データページのchecksum計算を行う</td>
 
+
+</tr><tr>
+<td>--no-data-checksums</td>	<td>データページのchecksum計算を行わない。バージョン18から</td>
+
 </tr><tr>
 <td>-pwfile=FILENAME</td>	<td>スーパーユーザのパスワードをファイルFILENAMEから読む</td>
 
@@ -84,6 +88,9 @@
 
 </tr><tr>
 <td>--sync-method=method</td>	<td>詳細は省略。バージョン17から</td>
+
+</tr><tr>
+<td>--no-sync-data-files</td>	<td>詳細は省略。バージョン18から</td>
 
 
 </tr></table>

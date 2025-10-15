@@ -9,84 +9,102 @@
 <caption>[<レプリケーション管理関数>]</caption>
 <tr bgcolor="#cccccc">
 
-<th>関数</th>							<th>返り値型</th>	<th>説明</th>
+<th>関数</th>							<th>返り値型</th>	<th>説明</th>		<th>Primary/Standby</th>
 </tr><tr>
-<td>pg_create_physical_replication_slot(slot_name [, immediately_reserve bool, temporary bool ] </td>	<td>record(slot_name, lsn)</td>	<td></td>
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>共通</th>
 
 </tr><tr>
-<td>pg_drop_replication_slot(slot_name)</td>	<td>void</td>	<td></td>
+<td>pg_drop_replication_slot(slot_name)</td>	<td>void</td>	<td>Slotを削除する</td>		<td>Primary+Standby</td>
+
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>Physical</th>
 
 </tr><tr>
-<td>pg_create_logical_replication_slot(slot_name, plugin [, temporary bool, twophase bool ]) </td>	<td>record(slot_name, lsn)</td>	<td></td>
+<td>pg_create_physical_replication_slot(slot_name [, immediately_reserve bool, temporary bool ] </td>	<td>record(slot_name, lsn)</td>	<td>物理Slotを作成</td>		<td>Primary+Standby</td>
 
 </tr><tr>
-<td>pg_copy_physical_replication_slot(src_slot_name, dst_slot_name [, temporary bool ]) </td>	<td>record(slot_name, lsn)</td>	<td></td>
+<td>pg_copy_physical_replication_slot(src_slot_name, dst_slot_name [, temporary bool ]) </td>	<td>record(slot_name, lsn)</td>	<td>物理Slotをコピーする</td>		<td>Primary+Standby</td>
+
 
 </tr><tr>
-<td>pg_copy_logical_replication_slot(src_slot_name, dst_slot_name [, temporary bool [, plugin ]]) </td>	<td>record(slot_name, lsn)</td>	<td></td>
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>Logical</th>
 
 </tr><tr>
-<td>pg_logical_slot_get_changes(slot_name, upto_lsn, upto_nchanges integer, VARIADIC options text[]) </td>	<td>setof record(lsn, xid, data text)</td>	<td></td>
+<td>pg_create_logical_replication_slot(slot_name, plugin [, temporary bool, twophase bool ]) </td>	<td>record(slot_name, lsn)</td>	<td>論理Slotを作成</td>		<td>Primary+Standby</td>
 
 </tr><tr>
-<td>pg_logical_slot_peek_changes(slot_name, upto_lsn, upto_nchanges integer, VARIADIC options text[])</td>	<td>setof record(lsn, xid, data text)</td>	<td></td>
+<td>pg_copy_logical_replication_slot(src_slot_name, dst_slot_name [, temporary bool [, plugin ]]) </td>	<td>record(slot_name, lsn)</td>	<td>論理Slotをコピーする</td>	<td>Primary+Standby</td>
 
 </tr><tr>
-<td>pg_logical_slot_get_binary_changes(slot_name, upto_lsn, upto_nchanges integer, VARIADIC options text[])</td>	<td>setof record(lsn, xid, data bytea)</td>	<td></td>
+<td>pg_logical_slot_get_changes(slot_name, upto_lsn, upto_nchanges integer, VARIADIC options text[]) </td>	<td>setof record(lsn, xid, data text)</td>	<td></td>		<td>	</td>
 
 </tr><tr>
-<td>pg_logical_slot_peek_binary_changes(slot_name, upto_lsn, upto_nchanges integer, VARIADIC options text[]) </td>	<td>setof record(lsn, xid, data bytea)</td>	<td></td>
+<td>pg_logical_slot_peek_changes(slot_name, upto_lsn, upto_nchanges integer, VARIADIC options text[])</td>	<td>setof record(lsn, xid, data text)</td>	<td></td>		<td>	</td>
 
 </tr><tr>
-<td>pg_replication_slot_advance(slot_name, upto_lsn)</td>	<td>record(slot_name, end_lsn)</td>	<td></td>
+<td>pg_logical_slot_get_binary_changes(slot_name, upto_lsn, upto_nchanges integer, VARIADIC options text[])</td>	<td>setof record(lsn, xid, data bytea)</td>	<td></td>		<td>	</td>
 
 </tr><tr>
-<td>pg_replication_origin_create(node_name text)</td>	<td>oid</td>	<td></td>
+<td>pg_logical_slot_peek_binary_changes(slot_name, upto_lsn, upto_nchanges integer, VARIADIC options text[]) </td>	<td>setof record(lsn, xid, data bytea)</td>	<td></td>		<td>	</td>
 
 </tr><tr>
-<td>pg_replication_origin_drop(node_name text)</td>	<td>void</td>	<td></td>
+<td>pg_replication_slot_advance(slot_name, upto_lsn)</td>	<td>record(slot_name, end_lsn)</td>	<td> <font color="#ff0000">物理論理共通かも？</font> </td>		<td>	</td>
 
 </tr><tr>
-<td>pg_replication_origin_oid(node_name text)</td>	<td>oid</td>	<td></td>
+<td>pg_replication_origin_create(node_name text)</td>	<td>oid</td>	<td></td>		<td>	</td>
 
 </tr><tr>
-<td>pg_replication_origin_session_setup(node_name text) </td>	<td>void</td>	<td></td>
+<td>pg_replication_origin_drop(node_name text)</td>	<td>void</td>	<td></td>		<td>	</td>
 
 </tr><tr>
-<td>pg_replication_origin_session_reset() </td>	<td>void</td>	<td></td>
+<td>pg_replication_origin_oid(node_name text)</td>	<td>oid</td>	<td></td>		<td>	</td>
 
 </tr><tr>
-<td>pg_replication_origin_session_is_setup() </td>	<td>bool</td>	<td></td>
+<td>pg_replication_origin_session_setup(node_name text) </td>	<td>void</td>	<td></td>		<td>	</td>
 
 </tr><tr>
-<td>pg_replication_origin_session_progress(flush bool)</td>	<td>pg_lsn</td>	<td></td>
+<td>pg_replication_origin_session_reset() </td>	<td>void</td>	<td></td>		<td>	</td>
 
 </tr><tr>
-<td>pg_replication_origin_xact_setup(origin_lsn, origin_timestamp timestamp with time zone) </td>	<td>void</td>	<td></td>
+<td>pg_replication_origin_session_is_setup() </td>	<td>bool</td>	<td></td>		<td>	</td>
 
 </tr><tr>
-<td>pg_replication_origin_xact_reset()</td>	<td>void</td>	<td></td>
+<td>pg_replication_origin_session_progress(flush bool)</td>	<td>pg_lsn</td>	<td></td>		<td>	</td>
 
 </tr><tr>
-<td>pg_replication_origin_advance(node_name text, lsn)</td>	<td>void</td>	<td></td>
+<td>pg_replication_origin_xact_setup(origin_lsn, origin_timestamp timestamp with time zone) </td>	<td>void</td>	<td></td>		<td>	</td>
 
 </tr><tr>
-<td>pg_replication_origin_progress(node_name text, flush bool)</td>	<td>pg_lsn</td>	<td></td>
+<td>pg_replication_origin_xact_reset()</td>	<td>void</td>	<td></td>		<td>	</td>
 
 </tr><tr>
-<td>pg_logical_emit_message(transactional bool, prefix text, content text)</td>	<td>pg_lsn</td>	<td></td>
+<td>pg_replication_origin_advance(node_name text, lsn)</td>	<td>void</td>	<td></td>		<td>	</td>
 
 </tr><tr>
-<td>pg_logical_emit_message(transactional bool, prefix text, content bytea) </td>	<td>pg_lsn</td>	<td></td>
+<td>pg_replication_origin_progress(node_name text, flush bool)</td>	<td>pg_lsn</td>	<td></td>		<td>	</td>
 
 </tr><tr>
-<td>pg_sync_replication_slots ()</td>	<td>void</td>	<td>バージョン17から</td>
+<td>pg_logical_emit_message(transactional bool, prefix text, content text)</td>	<td>pg_lsn</td>	<td></td>		<td>	</td>
+
+</tr><tr>
+<td>pg_logical_emit_message(transactional bool, prefix text, content bytea) </td>	<td>pg_lsn</td>	<td></td>		<td>	</td>
+
+
+</tr><tr>
+<td>pg_sync_replication_slots ()</td>	<td>void</td>	<td>バージョン17から</td>		<td>	</td>
+
 
 
 </tr></table>
 
 <br>
 
+
+カスケード構成すればstandbyが孫standbyのprimaryに当たるので、これらの関数はprimary/standby両方で実行できるようだ。
 
 %CHAPTER 実行例
 

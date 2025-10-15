@@ -75,7 +75,11 @@ DROP PUBLICATION [ IF EXISTS ] name [, ...] [ CASCADE | RESTRICT ]
 <td>publish</td>	<td>レプリケーションする操作。設定可能値は"insert", "update", "delete", "truncate"。コンマで連結できる。<br>デフォルトは"insert,update,delete,truncate"</td>
 
 </tr><tr>
+<td>publish_generated_columns</td>	<td>Generated columnsをレプリケーションするか。設定値は"none"か"stored"。デフォルト"none"。PG18から</td>
+
+</tr><tr>
 <td>publish_via_partition_root</td>	<td>設定値はbool。</td>
+
 </tr></table>
 
 <br>
@@ -91,8 +95,6 @@ DROP PUBLICATION [ IF EXISTS ] name [, ...] [ CASCADE | RESTRICT ]
 <li>シーケンスをSUBSCRIPUTION側でどう対処するか？</li>
 <li>後からインデックスを追加する場合、ALTER　REPLICA　IDENTITYを使う？</li>
 <li>now()の扱いは？</li>
-<li></li>
-<li>PUBRICATION SUBSRCIPTIONは両立できるか？</li>
 <li></li>
 
 </ul>

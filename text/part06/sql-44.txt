@@ -67,6 +67,9 @@ LOCK文はトランザクションブロック内でのみ有効です。
 トランザクションが終了するとロックが解除されます。
 </p>
 
+<p>
+全てのコマンドなどでどのようなLOCKが取得されるか示した<a href="https://pglocks.org/" target="_blank" rel="noopener noreferrer">WEBサイト</a>。
+</p>
 
 <p>
 他のトランザクションが先にテーブルをロックすると、

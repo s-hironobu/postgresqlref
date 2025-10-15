@@ -96,6 +96,8 @@
 </tr><tr bgcolor="#eeeeee">
 <th colspan=2 align=left>	initcap('hello world')	   </th>	<th align=left>'Hello World'</th>
 
+</tr><tr>
+<td>casefold ( text ) </td>	<td> text	</td>	<td>PG18から</td>
 
 </tr><tr>
 <td>left(str text, n int)</td>	<td>text</td>	<td>文字列strの先頭からn文字返す。</td>

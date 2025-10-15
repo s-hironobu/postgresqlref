@@ -47,8 +47,14 @@ https://www.postgresql.org/docs/devel/app-psql.html#APP-PSQL-META-COMMAND-PARSE
 <br>
 
 <p>
-プリペアードステートメント関連は省略：/bind, /bind_name, /parse, /close
+プリペアードステートメント関連は省略：\bind, \bind_named, \parse, \close, \close_prepared
 </p>
+
+<p>
+パイプライン関連(PG18から)は省略：\startpipeline, \sendpipeline, \syncpipeline, \endpipeline, \flushrequest, \flush, \getresults [ number_results ]
+</p>
+
+
 
 %CHAPTER 解説
 

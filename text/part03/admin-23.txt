@@ -265,10 +265,10 @@ testdb=# DROP SUBSCRIPTION sub_1;
 <br>
 
 
-%SECTION <a href="https://www.postgresql.org/docs/17/app-pgcreatesubscriber.html" target="_blank" rel="noopener noreferrer">pg_createsubscriber</a>コマンドによるサブスクリプションの作成
+%SECTION <a href="https://www.postgresql.org/docs/current/app-pgcreatesubscriber.html" target="_blank" rel="noopener noreferrer">pg_createsubscriber</a>コマンドによるサブスクリプションの作成
 
 <p>
-バージョン17から、<a href="https://www.postgresql.org/docs/17/app-pgcreatesubscriber.html" target="_blank" rel="noopener noreferrer">pg_createsubscriber</a>コマンドを使ってサブスクライバを作成する方法がサポートされました。
+バージョン17から、<a href="https://www.postgresql.org/docs/current/app-pgcreatesubscriber.html" target="_blank" rel="noopener noreferrer">pg_createsubscriber</a>コマンドを使ってサブスクライバを作成する方法がサポートされました。
 <br>
 これは、最初にストリーミングレプリケーションでスタンバイサーバを作成し、そのスタンバイのデータクラスタをロジカルレプリケーションのサブスクライバに変更します。
 利点は、初期化時にプライマリのデータを転送する手間が省けることです。
@@ -341,7 +341,7 @@ testdb=# ALTER PUBLICATION pub_1 SET (publish = 'insert, update, delete, truncat
 %SECTION サブスクリプションの停止と再開
 
 <p>
-<a href="https://www.postgresql.org/docs/17/sql-altersubscription.html" target="_blank" rel="noopener noreferrer">ALTER SUBSCRIPTION</a>でレプリケーションの一時的な停止と再開ができます<a href="./sql-54.html">[<6-54>]</a>。
+<a href="https://www.postgresql.org/docs/current/sql-altersubscription.html" target="_blank" rel="noopener noreferrer">ALTER SUBSCRIPTION</a>でレプリケーションの一時的な停止と再開ができます<a href="./sql-54.html">[<6-54>]</a>。
 </p>
 
 <pre>

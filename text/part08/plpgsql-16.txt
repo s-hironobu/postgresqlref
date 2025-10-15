@@ -13,7 +13,8 @@
 OPEN [ [NO] SCROLL ] unbound-cursor FOR SELECT ...
 OPEN [ [NO] SCROLL ] unbound-cursor FOR EXECUTE query-string [ USING expression [, ... ] ]
 
-OPEN bound-cursor [ ( argument_values ) ]
+OPEN bound_cursorvar [ ( [ argument_name { :=  } ] argument_value [, ...] ) ];
+OPEN bound_cursorvar [ ( [ argument_name { := | => } ] argument_value [, ...] ) ];  // PG18から
 
 ● カーソルのクローズ
 CLOSE cursor

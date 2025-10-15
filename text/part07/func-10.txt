@@ -39,11 +39,15 @@
 </tr><tr>
 <td>pg_current_logfile([format])	</td>	<td>text	</td>	<td>フォーマット[stderr|csvlog|jsonlog]の現在のログファイル名を返す。デフォルトは'stderr'</td>
 </tr><tr>
+<td>pg_get_loaded_modules()	</td>	<td>setof record	</td>	<td>読み込んでいるモジュールのリストを返す。PG18から</td>
+</tr><tr>
 <td>pg_my_temp_schema()	</td>	<td>oid	</td>	<td>セッションの一時スキーマのOID。もしなければ０</td>
 </tr><tr>
 <td>pg_is_other_temp_schema(oid)</td>	<td>boolean		</td>	<td>スキーマが他のセッションの一時スキーマかどうか否か</td>
 </tr><tr>
 <td>pg_jit_available()	</td>	<td>boolean	</td>	<td>JITが有効か否か</td>
+</tr><tr>
+<td>pg_numa_available()	</td>	<td>boolean	</td>	<td>NUMAが有効か否か。PG18から</td>
 </tr><tr>
 <td>pg_listening_channels()</td>	<td>setof text</td>	<td>今のセッションにおいて現在LISTEN中のチャンネル名</td>
 </tr><tr>

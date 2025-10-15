@@ -21,7 +21,6 @@
 </tr><tr>
 <td>×</td> <td>max_replication_slots</td><td>整数 [10]</td> <td>レプリケーションスロットの最大数</td>
 
-
 </tr><tr>
 <td>△ </td> <td>		wal_keep_segments </td> <td>		整数[0]	 </td> <td>		スレーブが過去のWALログを必要とした場合に備えて、pg_wal以下に最低限保存するWALログの数。バージョン12まで</td>
 
@@ -30,6 +29,10 @@
 
 </tr><tr>
 <td>△</td> <td>max_slot_wal_keep_size</td><td>整数 [-1]</td> <td></td>
+
+</tr><tr>
+<td>△</td>
+<td>idle_replication_slot_timeout</td><td>整数 [0]</td> <td>PG18から</td>
 
 </tr><tr>
 <td>◎(バージョン11までは△)</td>	<td>wal_sender_timeout </td> <td>時間[60s]</td>		<td>(接続は維持しているが)設定した時間以上、スレーブからのデータ送信(ACKやHeartbeat信号)が途絶えた場合はコネクションを切断してwalsenderを終了する</td>

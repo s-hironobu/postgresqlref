@@ -2,17 +2,24 @@
 %LASTMOD
 %KEY pgsql-param10
 
-%TITLE <a href="https://www.postgresql.org/docs/current/runtime-config-autovacuum.html" target="_blank" rel="noopener noreferrer">AUTOVACUUM		AUTOVACUUM PARAMETERS</a>
+%TITLE <a href="https://www.postgresql.org/docs/current/runtime-config-vacuum.html" target="_blank" rel="noopener noreferrer">AUTOVACUUM	VACUUM PARAMETERS</a>
 
 
 <table border=1>
 <caption>[<設定項目一覧>]</caption>
 <tr bgcolor="#cccccc">
 <th><sup>変更<br>可能性</sup></th> <th>設定項目</th>	<th>パラメータ<br>[デフォルト]</th>		<th>説明</th>
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>Autovacuum</th>
+
 </tr><tr>
 <td>△	</td>	<td>autovacuum		</td>	<td>	on/off[on]	</td>	<td>AUTOVACUUMを有効とするか否か。デフォルトはon</td>
+
 </tr><tr>
-<td>△	</td>	<td>log_autovacuum_min_duration	</td>	<td>整数[-1]	</td>	<td>	AUTOVACUUMの実行ログを書き込むか否か。-1なら書き込まない。0ならすべての実行ログを書き込む。整数値なら、その値のミリ秒以上かかったときのみ書き込む。バージョン13まで</td>
+<td>×</td>
+<td>	autovacuum_worker_slots	</td>	<td>	整数[16]		</td>	<td>autovacuum worker process用に予約するバックエンド スロットの数。PG18から</td>
+
 </tr><tr>
 <td>×</td>	<td>	autovacuum_max_workers	</td>	<td>	整数[3]		</td>	<td>	同時に起動するWorkerプロセスの最大数</td>
 </tr><tr>
@@ -33,6 +40,13 @@
 
 </tr><tr>
 <td>△	</td>	<td>autovacuum_analyze_scale_factor	</td>	<td>(0.0-1.0)[0.1]	</td>	<td>	詳細は本文</td>
+
+
+</tr><tr>
+<td>△	</td>	<td>
+autovacuum_vacuum_max_threshold	</td>	<td>integer[100,000,000]	</td>	<td>autovacuumを起動するために必要な更新または削除されたタプルの最大数。PG18から</td>
+
+
 </tr><tr>
 <td>× </td><td>	autovacuum_freeze_max_age	</td>	<td>整数[200000000]	</td><td>DB毎に、FREEZEしていない最古のXIDと現時点のXIDの差がこの値以上になったら、vacuum_freeze_min_age以前のt_xminを持つタプルをFREEZEする</td>
 
@@ -43,6 +57,57 @@
 <td>△	</td>	<td>autovacuum_vacuum_cost_delay	</td>	<td>整数(-1-1000)[20ms]	</td>	<td>AUTOVACUUMでのVACUUM遅延機能の設定。'-1'ならvacuum_cost_delayと同じ。</td>
 </tr><tr>
 <td>△	</td>	<td>autovacuum_vacuum_cost_limit	</td>	<td>整数(-1-10000)[-1]	</td>	<td>AUTOVACUUMでのVACUUM遅延機能の設定。'-1'ならvacuum_cost_limitと同じ。</td>
+
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>Cost-based Vacuum Delay</th>
+
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>Default Behavior</th>
+
+</tr><tr>
+<td>◎</td>	<td>	vacuum_cost_delay		</td>	<td>整数(0-1000)[0ms]	</td>	<td>	VACUUM,ANALYZE処理を休止する時間。単位は[ミリ秒]。0なら遅延機能が無効</td>
+</tr><tr>
+<td>◎</td>	<td>	vacuum_cost_page_hit	</td>	<td>	整数(0-10000)[1]</td>	<td>	共有バッファのデータにキャッシュヒットした場合のコスト</td>
+</tr><tr>
+<td>◎</td>	<td>	vacuum_cost_page_miss	</td>	<td>	整数(0-10000)[10]	</td>	<td>共有バッファのデータにキャッシュミスした場合のコスト</td>
+</tr><tr>
+<td>◎</td>	<td>	vacuum_cost_page_dirty	</td>	<td>	整数(0-10000)[20]	</td>	<td>共有バッファのデータを書き換えた場合のコスト</td>
+</tr><tr>
+<td>◎</td>	<td>	vacuum_cost_limit	</td>	<td>	整数(0-10000)[200]	</td>	<td>累積されたコストがこの値を超えると、vacuum_cost_delayで設定した時間だけ、VACUUMやANALYZEを休止する</td>
+
+</tr><tr>
+<td>◎</td>
+<td>	vacuum_buffer_usage_limit	</td>	<td>	整数(128kB-16GB)[256kB]	</td>	<td>Vacuum処理がshared_bufferを使用できるリミット。バージョン16から</td>
+
+</tr><tr>
+<td>◎ </td><td>	vacuum_truncate  </td><td>on/off[on]	 </td><td></td>
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>Freezing</th>
+
+</tr><tr>
+<td>◎ </td><td>	vacuum_freeze_table_age	 </td><td>整数[150000000]	 </td><td></td>
+</tr><tr>
+<td>◎ </td><td>	vacuum_freeze_min_age	 </td><td>整数[50000000]	 </td><td></td>
+
+</tr><tr>
+<td>◎</td>	<td>vacuum_failsafe_age</td>	<td></td>	<td>バージョン14から</td>
+
+</tr><tr>
+<td>◎</td>	<td>vacuum_multixact_freeze_table_age</td>	<td></td>	<td></td>
+
+
+</tr><tr>
+<td>◎</td>	<td>vacuum_multixact_freeze_min_age</td>	<td></td>	<td></td>
+
+</tr><tr>
+<td>◎</td>	<td>vacuum_multixact_failsafe_age</td>	<td></td>	<td>バージョン14から</td>
+
+</tr><tr>
+<td>◎</td>	<td>vacuum_max_eager_freeze_failure_rate</td>	<td></td>	<td>バージョン18から</td>
+
 </tr></table>
 
 <br>

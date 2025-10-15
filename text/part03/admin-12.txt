@@ -85,9 +85,23 @@ pg_restore [OPTION ..] [archive_file]
 </tr><tr>
 <td>--no-comments</td>		<td>コメントをダンプ/リストアしない</td>
 
+</tr><tr>
+<td>--no-data</td>		<td>データをダンプ/リストアしない。PG18から</td>
+
+</tr><tr>
+<td>--no-policies</td>		<td>ポリシーをダンプ/リストアしない。PG18から</td>
+
 
 </tr><tr>
 <td>--no-publications</td>		<td>パブリケーションをダンプ/リストアしない</td>
+
+
+</tr><tr>
+<td>--no-schema</td>		<td>スキーマをダンプ/リストアしない。PG18から</td>
+
+
+</tr><tr>
+<td>--no-statistics</td>		<td>統計情報をダンプ/リストアしない。PG18から</td>
 
 </tr><tr>
 <td>--no-subscriptions</td>		<td>サブスクリプションをダンプ/リストアしない</td>
@@ -114,6 +128,10 @@ pg_restore [OPTION ..] [archive_file]
 </tr><tr>
 <td>--strict-names</td>		<td></td>
 -->
+
+</tr><tr>
+<td>--sequence-data</td>		<td>シーケンスデータをダンプ/リストア。PG18から</td>
+
 
 </tr><tr>
 <td>-S user_name</td>		<td>スーパーユーザ権限をもつデータベースユーザ名(user_name)を指定</td>
@@ -212,6 +230,13 @@ pg_restore [OPTION ..] [archive_file]
 </tr><tr>
 <td>--use-set-session-authorization</td>		<td></td>
 -->
+
+</tr><tr>
+<td>--statistics</td>		<td>バージョン18から</td>
+
+</tr><tr>
+<td>--statistics-only</td>		<td>バージョン18から</td>
+
 
 </tr><tr>
 <td>--strict-names</td>		<td>バージョン17から</td>

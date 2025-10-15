@@ -100,7 +100,8 @@
 </tr><tr>
 <td>△</td>		<td>	log_checkpoints	</td>		<td>      on/off[off]	</td>		<td>	CHECKPOINTの開始と完了時にログを書き出すか否か</td>
 </tr><tr>
-<td>×</td>		<td>	log_connections		</td>		<td>on/off[off]	</td>		<td>接続情報をsyslogファイルに出力するか否か </td>
+<td>×</td>
+<td>	log_connections		</td>		<td>on/off[off] | [receipt|authentication|authorization|setup_durations|all]	</td>		<td>接続情報をsyslogファイルに出力するか否か、PG17まで。PG18からはより詳細な設定を行うようになった。詳細はオフィシャルドキュメント参照 </td>
 </tr><tr>
 <td>×	</td>		<td>log_disconnections	</td>		<td>on/off[off]	</td>		<td>セッション終了時に、セッションの接続時間を記録するか否か</td>
 </tr><tr>
@@ -113,6 +114,9 @@
 <td>△</td>		<td>	log_hostname	</td>		<td>	on/off[off]	</td>		<td>(IPアドレスでなく)ホスト名を表示するか否か</td>
 </tr><tr>
 <td>○</td>		<td>	log_lock_waits	</td>		<td>	on/off[off]	</td>		<td>	deadlock_timeoutよりもロック待ち時間が長くなった場合にログを書き出すか否か</td>
+
+</tr><tr>
+<td>○</td>		<td>	log_lock_failures	</td>		<td>	on/off[off]	</td>		<td>	lock取得失敗の理由を書き出すか否か。PG18から</td>
 
 </tr><tr>
 <td>△</td> <td>log_recovery_conflict_waits</td>	<td>on/off [off]</td>	<td>スタートアッププロセスがdeadlock_timeoutよりも長くリカバリコンフリクトを待つ場合にログメッセージを出力するか否か。バージョン14から</td>

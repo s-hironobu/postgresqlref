@@ -9,7 +9,8 @@
 
 ● CREATE TABLE
 CREATE [ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } | UNLOGGED ] TABLE [ IF NOT EXISTS ] table_name ( [
-  { column_name data_type [ STORAGE { PLAIN | EXTERNAL | EXTENDED | MAIN | DEFAULT } ] [ COMPRESSION compression_method ] [ COLLATE collation ] [ column_constraint [ ... ] ]
+  { column_name data_type [ STORAGE { PLAIN | EXTERNAL | EXTENDED | MAIN | DEFAULT } ]
+    [ COMPRESSION compression_method ] [ COLLATE collation ] [ column_constraint [ ... ] ]
     | table_constraint
     | LIKE source_table [ like_option ... ] }
     [, ... ]
@@ -20,7 +21,6 @@ CREATE [ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } | UNLOGGED ] TABLE [ IF NOT EXI
 [ WITH ( storage_parameter [= value] [, ... ] ) | WITHOUT OIDS ]
 [ ON COMMIT { PRESERVE ROWS | DELETE ROWS | DROP } ]
 [ TABLESPACE tablespace_name ]
-
 
 
 CREATE [ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } | UNLOGGED ] TABLE [ IF NOT EXISTS ] table_name
@@ -61,31 +61,31 @@ CREATE [ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } | UNLOGGED ] TABLE [ IF NOT EXI
 
 
 ・column_constraint is:
-
 [ CONSTRAINT constraint_name ]
-{ NOT NULL |
+{ NOT NULL [ NO INHERIT ]  |
   NULL |
   CHECK ( expression ) [ NO INHERIT ] |
   DEFAULT default_expr |
-  GENERATED ALWAYS AS ( generation_expr ) STORED |
+  GENERATED ALWAYS AS ( generation_expr ) [ STORED | VIRTUAL ] |
   GENERATED { ALWAYS | BY DEFAULT } AS IDENTITY [ ( sequence_options ) ] |
   UNIQUE [ NULLS [ NOT ] DISTINCT ] index_parameters |
   PRIMARY KEY index_parameters |
   REFERENCES reftable [ ( refcolumn ) ] [ MATCH FULL | MATCH PARTIAL | MATCH SIMPLE ]
     [ ON DELETE referential_action ] [ ON UPDATE referential_action ] }
-[ DEFERRABLE | NOT DEFERRABLE ] [ INITIALLY DEFERRED | INITIALLY IMMEDIATE ]
+[ DEFERRABLE | NOT DEFERRABLE ] [ INITIALLY DEFERRED | INITIALLY IMMEDIATE ] [ ENFORCED | NOT ENFORCED ]
 
 
 ・table_constraint is:
 
 [ CONSTRAINT constraint_name ]
 { CHECK ( expression ) [ NO INHERIT ] |
-  UNIQUE [ NULLS [ NOT ] DISTINCT ] ( column_name [, ... ] ) index_parameters |
-  PRIMARY KEY ( column_name [, ... ] ) index_parameters |
+  NOT NULL column_name [ NO INHERIT ] |
+  UNIQUE [ NULLS [ NOT ] DISTINCT ] ( column_name [, ... ] [, column_name WITHOUT OVERLAPS ] ) index_parameters |
+  PRIMARY KEY ( column_name [, ... ] [, column_name WITHOUT OVERLAPS ] ) index_parameters |
   EXCLUDE [ USING index_method ] ( exclude_element WITH operator [, ... ] ) index_parameters [ WHERE ( predicate ) ] |
-  FOREIGN KEY ( column_name [, ... ] ) REFERENCES reftable [ ( refcolumn [, ... ] ) ]
+  FOREIGN KEY ( column_name [, ... ] [, PERIOD column_name ] ) REFERENCES reftable [ ( refcolumn [, ... ] [, PERIOD refcolumn ] ) ]
     [ MATCH FULL | MATCH PARTIAL | MATCH SIMPLE ] [ ON DELETE referential_action ] [ ON UPDATE referential_action ] }
-[ DEFERRABLE | NOT DEFERRABLE ] [ INITIALLY DEFERRED | INITIALLY IMMEDIATE ]
+[ DEFERRABLE | NOT DEFERRABLE ] [ INITIALLY DEFERRED | INITIALLY IMMEDIATE ] [ ENFORCED | NOT ENFORCED ]
 
 
 ・like_option is:
@@ -256,9 +256,9 @@ CREATE TABLEは構文が複雑なので、いくつかに分割して説明し�
 </tr><tr>
 <td>CHECK制約</td>	<td>CHECK制約</td>	<td>	</td>
 </tr><tr>
-<td>UNIQUE制約</td>	<td>UNIQUE制約(一意性制約)</td>	<td>	</td>
+<td>UNIQUE制約</td>	<td>UNIQUE制約(一意性制約)</td>	<td>WITHOUT OVERLAPSはPG18から</td>
 </tr><tr>
-<td>PRIMARY KEY制約</td>	<td>主キー制約</td>	<td>	</td>
+<td>PRIMARY KEY制約</td>	<td>主キー制約</td>	<td>WITHOUT OVERLAPSはPG18から</td>
 </tr><tr>
 <td>
 FOREIGN KEY句(外部キー)、REFERENCES句(参照) </td>	<td>外部キー制約</td>	<td><a href="./sql-05.html">[<6-05>]</a>参照</td>
@@ -271,13 +271,17 @@ FOREIGN KEY句(外部キー)、REFERENCES句(参照) </td>	<td>外部キー制�
 </tr><tr>
 <td>DEFAULT</td>	<td>デフォルト値を設定</td>	<td>関数も設定可能</td>
 </tr><tr>
-<td>NULL, NOT NULL</td>	<td>'NULL'を許すか、許さないか</td>	<td>デフォルトはNULL</td>
+<td>NULL, NOT NULL [NO INHERIT]</td>	<td>'NULL'を許すか、許さないか</td>	<td>デフォルトはNULL。[NO INHERIT]はPG18から</td>
 </tr><tr>
 <td>COLLATE</td>	<td>collationを指定</td>	<td></td>
 
 
 </tr><tr>
-<td>GENERATED句</td>		<td>シーケンスを発行する、もしくはGENRATEDカラムを生成する。<a href="https://www.postgresql.org/docs/current/ddl-generated-columns.html" target="_blank" rel="noopener noreferrer">Generated Columns</a>	</td>	<td>GENERATEDカラムはバージョン12から</td>
+<td>GENERATED句</td>		<td>シーケンスを発行する、もしくはGENRATEDカラムを生成する。<a href="https://www.postgresql.org/docs/current/ddl-generated-columns.html" target="_blank" rel="noopener noreferrer">Generated Columns</a>	</td>	<td>GENERATEDカラムはバージョン12から。VIRTUALオプションはバージョン18から</td>
+
+</tr><tr>
+<td>[ ENFORCED | NOT ENFORCED ]</td>	<td></td>	<td>バージョン18から</td>
+
 
 </tr></table>
 
@@ -289,7 +293,8 @@ FOREIGN KEY句(外部キー)、REFERENCES句(参照) </td>	<td>外部キー制�
 
 
 
-%SECTION 各種制約の検査タイミング: DEFERRABLE、INITIALLY DEFERRED、INITIALLY IMMEDIATE
+%SECTION 各種制約の検査タイミング: DEFERRABLE、INITIALLY DEFERRED、INITIALLY IMMEDIATE, ENFORCED
+
 
 
 <p>
@@ -310,6 +315,7 @@ FOREIGN KEY句(外部キー)、REFERENCES句(参照) </td>	<td>外部キー制�
 <td>DEFERRABLE INITIALLY IMMEDIATE</td>	 <td>遅延可能。初期状態では即座に検査する。 </td>
 </tr><tr>
 <td>DEFERRABLE INITIALLY DEFERRED</td>	 <td>遅延検査する。 </td>
+
 </tr></table>
 
 <p>
@@ -559,10 +565,12 @@ sampledb(#      CONSTRAINT examination CHECK(180 >= height AND 100 >= weight));
 <pre>
 [<書式>]
 
-　UNIQUE ( column_name [, ... ] ) [ WITH ( storage_parameter [= value] [, ... ] ) ]
+UNIQUE ( column_name [, ... ] [, column_name WITHOUT OVERLAPS ] ) [ WITH ( storage_parameter [= value] [, ... ] ) ]
 	    [ USING INDEX TABLESPACE tablespace ]
             [ DEFERRABLE | NOT DEFERRABLE ]
             [ INITIALLY DEFERRED | INITIALLY IMMEDIATE ]
+
+* WITHOUT OVERLAPSはPG18から
 </pre>
 
 <br>
@@ -635,10 +643,12 @@ ERROR:  duplicate key violates unique constraint "member_list_user_name_key"
 <pre>
 [<書式>]
 
- PRIMARY KEY ( column_name [, ... ] ) [ WITH ( storage_parameter [= value] [, ... ] ) ]
+ PRIMARY KEY ( column_name [, ... ] [, column_name WITHOUT OVERLAPS ] ) [ WITH ( storage_parameter [= value] [, ... ] ) ]
        [ USING INDEX TABLESPACE tablespace ]
        [ DEFERRABLE | NOT DEFERRABLE ]
        [ INITIALLY DEFERRED | INITIALLY IMMEDIATE ]
+
+* WITHOUT OVERLAPSはPG18から
 </pre>
 
 <br>
@@ -847,20 +857,25 @@ sampledb=# SELECT * FROM default_test;
 
 %SECTION GENERATED
 
-%SUBSECTION <a href="https://www.postgresql.org/docs/current/ddl-generated-columns.html" target="_blank" rel="noopener noreferrer">GENERATED ALWAYS AS ( generation_expr ) STORED</a>
+%SUBSECTION <a href="https://www.postgresql.org/docs/current/ddl-generated-columns.html" target="_blank" rel="noopener noreferrer">GENERATED ALWAYS AS ( generation_expr ) [ STORED | VIRTUAL ]</a>
 
 <br>
 
 <pre>
 [<書式>]
 
-GENERATED ALWAYS AS ( generation_expr ) STORED
+GENERATED ALWAYS AS ( generation_expr ) [ STORED | VIRTUAL ]
 </pre>
 
 <br>
 
 <p>
-他のカラムの値から生成されるカラム。バージョン12から導入された。以下にオフィシャルドキュメントの例を示す。
+他のカラムの値から生成されるカラム。バージョン12から導入された。
+VIRTUALはPG１８から。
+</p>
+
+<p>
+以下にSTOREDについてオフィシャルドキュメントの例を示す。
 </p>
 
 <br>

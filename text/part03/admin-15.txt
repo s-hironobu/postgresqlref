@@ -185,7 +185,12 @@ pg_stat_subscription_stats</td>	<td>サブスクリプションごとに1行で�
 <th>ビュー名</th>		<th>説明</th>
 </tr><tr>
 <td>
+<a href="https://www.postgresql.org/docs/current/view-pg-aios.html" target="_blank" rel="noopener noreferrer">pg_aios</a></td>	<td> Asynchronous I/O. from PG18</td>
+
+</tr><tr>
+<td>
 <a href="https://www.postgresql.org/docs/current/view-pg-available-extensions.html" target="_blank" rel="noopener noreferrer">pg_available_extensions</a></td>	<td>available extensions</td>
+
 </tr><tr>
 <td>
 <a href="https://www.postgresql.org/docs/current/view-pg-available-extension-versions.html" target="_blank" rel="noopener noreferrer">pg_available_extension_versions</a></td>	<td>available versions of extensions</td>
@@ -260,6 +265,11 @@ pg_stat_subscription_stats</td>	<td>サブスクリプションごとに1行で�
 <a href="https://www.postgresql.org/docs/current/view-pg-shmem-allocations.html" target="_blank" rel="noopener noreferrer">pg_shmem_allocations</a></td>	<td>shared memory allocations</td>
 </tr><tr>
 <td>
+
+<a href="https://www.postgresql.org/docs/current/view-pg-shmem-allocations-numa.html" target="_blank" rel="noopener noreferrer">pg_shmem_allocations_numa</a></td>	<td>shared memory allocations on NUMA nodes. from PG18</td>
+</tr><tr>
+<td>
+
 <a href="https://www.postgresql.org/docs/current/view-pg-stats.html" target="_blank" rel="noopener noreferrer">pg_stats</a></td>	<td>planner statistics</td>
 </tr><tr>
 <td>

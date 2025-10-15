@@ -38,7 +38,7 @@ x    PARALLEL integer
 
 and table_and_columns is:
 
-    table_name [ ( column_name [, ...] ) ]
+    [ ONLY ] table_name [ * ] [ ( column_name [, ...] ) ]
 </pre>
 <br>
 

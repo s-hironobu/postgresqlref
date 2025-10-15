@@ -37,6 +37,19 @@
 
 </tr><tr>
 <td>floor(x)</td>	<td>引数と同じ型</td>	<td>切り下げ(引数より小さい最大の整数)</td>	<td>floor(42.2)</td>	<td>42 </td>
+
+</tr><tr>
+<td>gamma(x double)</td>	<td>double</td>	<td>gamma関数。PG18から</td>	<td>gamma(6)</td>	<td>120 </td>
+
+</tr><tr>
+<td>gcd(numeric_type, numeric_type)</td>	<td>numeric_type, numeric_type</td>	<td>最大公約数</td>	<td>gcd(1071, 462)</td>	<td>21 </td>
+
+</tr><tr>
+<td>lcm(numeric_type, numeric_type)</td>	<td>numeric_type, numeric_type</td>	<td>最小公倍数</td>	<td>lcm(1071, 462)</td>	<td>23562 </td>
+
+</tr><tr>
+<td>lgamma(x double)</td>	<td>double</td>	<td>lgamma関数。PG18から</td>	<td>lgamma(1000)</td>	<td>5905.220423209181 </td>
+
 </tr><tr>
 <td>ln(x)</td>	<td>引数と同じ型</td>	<td>自然対数</td>	<td>ln(2.0)</td>	<td>0.6931471805599453 </td>
 </tr><tr>

@@ -8,12 +8,12 @@
 [<スナップショット同期関数>]
 
 <table><tr bgcolor="#cccccc">
-<th>関数</th>							<th>返り値型</th>	<th>説明</th>
+<th>関数</th>							<th>返り値型</th>	<th>説明</th>	<th>P/S</th>
 </tr><tr>
-<td>pg_export_snapshot()</td>	<td>text	</td>	<td>トランザクションのスナップショットを返す</td>
+<td>pg_export_snapshot()</td>	<td>text	</td>	<td>トランザクションのスナップショットを返す</td>	<td>Primary/Standby</td>
 
 </tr><tr>
-<td>pg_log_standby_snapshot()</td>	<td>pg_lsn	</td>	<td>Take a snapshot of running transactions and write it to WAL. Since PG16</td>
+<td>pg_log_standby_snapshot()</td>	<td>pg_lsn	</td>	<td>Take a snapshot of running transactions and write it to WAL. Since PG16</td>	<td>Primary</td>
 
 </tr></table>
 

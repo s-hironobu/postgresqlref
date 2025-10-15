@@ -23,6 +23,9 @@
 <td>○ </td>	<td>     track_counts	</td>	<td>		on/off[on]	</td>	<td>	テーブルとインデックスアクセスの稼働統計情報を収集するか否か</td>
 
 </tr><tr>
+<td>○ </td>	<td>     track_cost_delay_timing	</td>	<td>		on/off[off]	</td>	<td>	cost-based vacuum delayを有効にするか否か。PG18から</td>
+
+</tr><tr>
 <td>○ </td>	<td>    track_io_timing	</td>	<td>		on/off[off]	</td><td>共有バッファに対するデータ読み込みや書き込みの総時間を集計するか否か</td>
 
 </tr><tr>

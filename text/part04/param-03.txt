@@ -62,9 +62,17 @@
 
 </tr><tr>
 <td>△	</td> <td>authentication_timeout</td> <td>整数(1s-600s)[1m]	</td> <td>クライアント認証完了までの最大待ち時間。この時間以内に認証が完了しなかった場合、PostgreSQLサーバは接続を中止する。単位は[秒]、[分]など</td>
+
 </tr><tr>
 <td>◎</td> <td>	password_encryption	</td> <td>on/off[on]	</td> <td>CREATE ROLE文、ALTER ROLE文にパスワードが指定された場合、そのパスワードを暗号化するか否か</td>
 
+</tr><tr>
+<td>◎</td> <td>
+scram_iterations</td> <td>整数[4096]	</td> <td>SCRAM-SHA-256で暗号化計算する回数</td>
+
+</tr><tr>
+<td>◎</td> <td>
+md5_password_warnings</td> <td>on/off[on]	</td> <td>CREATE ROLEでMD5パスワードを設定した場合にWARNINGを出すか否か。PG18から</td>
 
 </tr><tr>
 <td>△</td> <td>krb_server_keyfile</td> <td>FILE名</td> <td>Kerberosサーバーキーファイルの場所</td>
@@ -72,12 +80,20 @@
 </tr><tr>
 <td>△</td> <td>krb_caseins_users</td> <td>on/off [off]</td> <td>KerberosのGSSAPIユーザ名の大文字小文字を区別するか否か。offの場合は区別する。</td>
 
+</tr><tr>
+<td>△</td> <td>
+gss_accept_delegation</td> <td>on/off[off]	</td> <td></td>
+
+</tr><tr>
+<td>△</td> <td>
+oauth_validator_libraries</td> <td>文字列['':空白]	</td> <td>Oauth接続するときの検証ライブラリを設定。PG18から</td>
+
 
 </tr><tr>
 <td>△	</td> <td>db_user_namespace	</td> <td>	on/off[off]		</td> <td>データベース毎にロールを定義するか否か。バージョン16まで</td>
 
 </tr><tr bgcolor="#eeeeee">
-<th colspan=4 align=left>SSL</th>
+<th colspan=4 align=left>SSL (かなり省略しているので詳細はオフィシャルドキュメント参照)</th>
 
 </tr><tr>
 <td>△</td> <td>ssl	</td> <td>on/off[off]</td> <td>SSLによる接続を行うか否か</td>
@@ -92,9 +108,12 @@
 <td>△</td> <td>ssl_crl_dir	</td> <td>文字列列[''空文字]</td> <td>SSLクライアント証明書失効リスト（CRL）が入っているディレクトリ名を設定</td>
 </tr><tr>
 <td>△</td> <td>ssl_key_file	</td> <td>文字列列['server.key']</td> <td>SSLサーバの秘密鍵が入っているファイル名を設定</td>
+
+<td>△</td>
+<td>ssl_tls13_cipher</td> <td>文字列列</td> <td>TLS1.3を使う時のcipherを設定。PG18から</td>
+
 </tr><tr>
 <td>△</td> <td>ssl_ciphers	</td> <td>文字列</td> <td>SSL接続で使うことのできるSSL暗号スイートのリストを指定</td>
-
 
 </tr></table>
 

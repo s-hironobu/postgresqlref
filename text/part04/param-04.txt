@@ -86,6 +86,10 @@
 <td>○</td>	<td>temp_file_limit</td>	<td>整数 [-1]</td>	<td>一時ファイルとして使用できるディスクの最大容量。単位はkB。-1の場合は無制限</td>
 
 </tr><tr>
+<td>○</td>
+<td>file_copy_method</td>	<td>COPY/CLONE[COPY]</td>	<td>ファイルコピーのデフォルト。詳細はオフィシャルドキュメント参照。バージョン18から</td>
+
+</tr><tr>
 <td>×</td>
 <td>max_notify_queue_pages </td>	<td>整数 [1048576]</td>	<td>NOTIFY / LISTEN queueで確保するページの最大値。バージョン17から</td>
 
@@ -101,7 +105,7 @@
 
 
 </tr><tr bgcolor="#eeeeee">
-<th colspan=4 align=left>Cost-Based Vacuum Delay</th>
+<th colspan=4 align=left>Cost-Based Vacuum Delay (PG18から<a href="./param-10.html">[3-10] VACUUM</a>へ)</th>
 
 </tr><tr>
 <td>◎</td>	<td>	vacuum_cost_delay		</td>	<td>整数(0-1000)[0ms]	</td>	<td>	VACUUM,ANALYZE処理を休止する時間。単位は[ミリ秒]。0なら遅延機能が無効</td>
@@ -130,8 +134,49 @@
 </tr><tr>
 <td>△</td>	<td>bgwriter_flush_after</td>	<td>整数 [512kB]</td>	<td>バックグラウンドライタがこの値より多く書く度にOSが強制的にSSD・HDDに書き込む</td>
 
+
 </tr><tr bgcolor="#eeeeee">
-<th colspan=4 align=left>Asynchronous Behavior</th>
+<th colspan=4 align=left>I/O (PG18から)</th>
+
+</tr><tr>
+<td>◎</td>	<td>backend_flush_after</td>	<td>整数 [0]</td>	<td>Postgresプロセスがこの値より多く書く度にOSが強制的にSSD・HDDに書き込む。0の場合、無効</td>
+</tr><tr>
+<td>◎</td>	<td>effective_io_concurrency</td>	<td>整数 [1]</td>	<td>PostgreSQLが同時実行可能であると想定する同時ディスクI/O操作の数</td>
+
+</tr><tr>
+<td>◎</td>	<td>maintenance_io_concurrency</td>	<td>整数 [10]</td>	<td>PostgreSQLがmaintenance作業時に同時実行可能であると想定する同時ディスクI/O操作の数</td>
+
+</tr><tr>
+<td>◎</td><td>io_combine_limit</td>	<td>整数 [128kB]</td>  <td>(マルチブロック読み込み)combine I/Oの最大値。src/backend/storage/aio/read_stream.cで使われる。バージョン17から</td>
+
+</tr><tr>
+<td>◎</td>
+<td>io_method</td>	<td>worker|io_uring|sync[worker]</td>	<td>非同期I/O。PG18から</td>
+
+</tr><tr>
+<td>◎</td>
+<td>io_workers</td>	<td>整数 [3]</td>	<td>非同期I/Oのworker数。PG18から</td>
+
+
+
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>Worker Processes (PG18から)</th>
+
+</tr><tr>
+<td>×</td>	<td>max_worker_processes</td>	<td>整数 [8]</td>	<td>(パラレルワーカなど)ワーカープロセスの最大数</td>
+</tr><tr>
+<td>◎</td>	<td>max_parallel_workers_per_gather</td>	<td>整数 [2]</td>	<td>1クエリ毎の最大のパラレルワーカー数</td>
+</tr><tr>
+<td>◎</td>	<td>max_parallel_maintenance_workers</td>	<td>整数 [2]</td>	<td>(CREATE INDEXでbtreeを作成、VACUUM処理など単一ユーティリティコマンドで使われる)最大パラレルワーカー数</td>
+</tr><tr>
+<td>◎</td>	<td>max_parallel_workers</td>	<td>整数 [8]</td>	<td>最大のパラレルワーカー数</td>
+</tr><tr>
+<td>◎</td>	<td>parallel_leader_participation</td>	<td>on/off [on]</td>	<td>ワーカープロセスを待つ代わりに、GatherノードとGather Mergeノード配下の問い合わせプランをリーダープロセスが実行できるか否か</td>
+</tr><tr>
+
+</tr><tr bgcolor="#eeeeee">
+<th colspan=4 align=left>Asynchronous Behavior (PG18からI/OとWorkerProcessesに分裂)</th>
 
 </tr><tr>
 <td>◎</td>	<td>backend_flush_after</td>	<td>整数 [0]</td>	<td>Postgresプロセスがこの値より多く書く度にOSが強制的にSSD・HDDに書き込む。0の場合、無効</td>
@@ -157,6 +202,7 @@
 <td>◎</td>	<td>parallel_leader_participation</td>	<td>on/off [on]</td>	<td>ワーカープロセスを待つ代わりに、GatherノードとGather Mergeノード配下の問い合わせプランをリーダープロセスが実行できるか否か</td>
 </tr><tr>
 <td>×</td>	<td>old_snapshot_threshold</td>	<td>整数 [-1]</td>	<td>スナップショットを使用する際に、「snapshot too old」エラーが起こるリスク無しに問い合わせスナップショットが利用できる最小の期間。この制限値を越えてデッド状態のままになったデータはバキュームしてしまうことが許可される。 これにより、長い間残っていたスナップショットによりデータが溢れてしまうのを防ぐことができる。バージョン16まで</td>
+
 
 
 </tr></table>
