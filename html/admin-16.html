@@ -448,8 +448,28 @@ PostgreSQLのログファイルについて、設定パラメータlog_rotation_
 <br>
 log_connectionsを有効(on)にすると、PostgreSQLサーバに接続したクライアントのIPアドレスなどの情報を書き込みます。
 <br>
+バージョン18からbooleanではなくstringで設定することになりました。詳細は以下の表を参照してください。
+
+<table border=1>
+<tr bgcolor="#cccccc">
+<th>Name</th> 	<th>Description</th>
+</tr><tr>
+<td>receipt</td>	<td>Logs receipt of a connection.</td>
+</tr><tr>
+<td>authentication</td>	<td> Logs the original identity used by an authentication method to identify a user. In most cases, the identity string matches the PostgreSQL username, but some third-party authentication methods may alter the original user identifier before the server stores it. Failed authentication is always logged regardless of the value of this setting.</td>
+</tr><tr>
+<td>authorization</td>	<td>Logs successful completion of authorization. At this point the connection has been established but the backend is not yet fully set up. The log message includes the authorized username as well as the database name and application name, if applicable.</td>
+</tr><tr>
+<td>setup_durations</td>	<td>Logs the time spent establishing the connection and setting up the backend until the connection is ready to execute its first query. The log message includes three durations: the total setup duration (starting from the postmaster accepting the incoming connection and ending when the connection is ready for query), the time it took to fork the new backend, and the time it took to authenticate the user.</td>
+</tr><tr>
+<td>all</td>	<td>A convenience alias equivalent to specifying all options. If all is specified in a list of other options, all connection aspects will be logged.</td>
+</tr></table>
+<br>
+
+<p>
 log_disconnectionsを有効(on)にすると、セッション終了時にセッションの接続時間を書き込みます。
 </p>
+
 
 <p>
 ・log_duration, log_min_duration_statement
@@ -483,7 +503,11 @@ log_line_prefixに使用できる特殊文字を[<表3-20>]に示します。
 <tr bgcolor="#cccccc">
 <th>特殊文字</th>		<th>説明</th>
 </tr><tr>
+<td>%a</td>	<td>アプリケーション名</td>
+
+</tr><tr>
 <td>%u</td>	<td>データベースユーザ/ロール名</td>
+
 </tr><tr>
 <td>%d</td>	<td>データベース名</td>
 </tr><tr>
@@ -491,26 +515,57 @@ log_line_prefixに使用できる特殊文字を[<表3-20>]に示します。
 </tr><tr>
 <td>%h</td>	<td>リモートホスト名、もしくはIPアドレス</td>
 </tr><tr>
+
+<td>%L</td>	<td>ローカルアドレス。バージョン18から</td>
+</tr><tr>
+
+<td>%b</td>	<td>バックエンドのタイプ</td>
+</tr><tr>
+
 <td>%p</td>	<td>プロセス番号</td>
 </tr><tr>
+
+<td>%P</td>	<td>パラレルクエリー実行時のリーダのプロセス番号。PG14から</td>
+</tr><tr>
+
 <td>%t</td>	<td>タイムスタンプ(ミリ秒無し)</td>
 </tr><tr>
+
 <td>%m</td>	<td>タイムスタンプ(ミリ秒有り)</td>
 </tr><tr>
+
+<td>%n</td>	<td>UNIX epochタイムスタンプ(ミリ秒有り)</td>
+</tr><tr>
+
 <td>%i</td>	<td>実行されたSQL文</td>
 </tr><tr>
+
+<td>%e</td>	<td>エラーコード</td>
+</tr><tr>
+
 <td>%c</td>	<td>セッションID</td>
 </tr><tr>
 <td>%l</td>	<td>プロセス毎のログ行の番号。(1から始まる)</td>
 </tr><tr>
 <td>%s</td>	<td>セッション開始時のタイムスタンプ</td>
+
+</tr><tr>
+<td>%v</td>	<td>virtual transaction id</td>
+
 </tr><tr>
 <td>%x</td>	<td>トランザクションID</td>
+
+</tr><tr>
+<td>%q</td>	<td></td>
+
+</tr><tr>
+<td>%Q</td>	<td>Query ID。PG14から</td>
+
 </tr></table>
 <br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2024-10-17
+Last-modified: 2025-10-16
 </div>
 </body>
 </html>

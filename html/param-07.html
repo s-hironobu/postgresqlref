@@ -355,66 +355,73 @@ objID.className='close';
 </tr><tr bgcolor="#eeeeee">
 <th colspan=4 align=left>Planner Method Configuration</th>
 </tr><tr>
-<td>◎</td>	<td>enable_async_append</td>	<td>on/off[[on]	</td>	<td>非同期appendを有効とするか否か</td>
+<td>◎</td>	<td>enable_async_append</td>	<td>on/off[on]	</td>	<td>非同期appendを有効とするか否か</td>
 
 </tr><tr>
-<td>◎	</td>	<td>enable_bitmapscan	</td>	<td>on/off[[on]	</td><td>	ビットマップスキャンを有効とするか否か</td>
+<td>◎	</td>	<td>enable_bitmapscan	</td>	<td>on/off[on]	</td><td>	ビットマップスキャンを有効とするか否か</td>
 
 </tr><tr>
-<td>◎</td>	<td>enable_gather_merge</td>	<td>on/off[[on]	</td>	<td>gather mergeを有効とするか否か</td>
+<td>◎	</td>
+<td>enable_distinct_reordering	</td>	<td>on/off[on]	</td><td>クエリプランナーが入力パスのパスキーと一致するようにDISTINCTキーを並べ替えるか否か。PG18から</td>
+
+</tr><tr>
+<td>◎</td>	<td>enable_gather_merge</td>	<td>on/off[on]	</td>	<td>gather mergeを有効とするか否か</td>
 
 </tr><tr><td>◎</td>
-<td>enable_group_by_reordering</td>	<td>on/off[[on]	</td>	<td>GROUP BYを含むクエリの実行計画を効率的にするか否か。技術的詳細は調べていない。onの場合より効率的なプランを出力するらしい。バージョン17から</td>
+<td>enable_group_by_reordering</td>	<td>on/off[on]	</td>	<td>GROUP BYを含むクエリの実行計画を効率的にするか否か。技術的詳細は調べていない。onの場合より効率的なプランを出力するらしい。バージョン17から</td>
 
 </tr><tr>
-<td>◎</td>	<td>	enable_hashagg	</td>	<td>	on/off[[on]	</td>	<td>	ハッシュされた集約計画型を有効とするか否か</td>
+<td>◎</td>	<td>	enable_hashagg	</td>	<td>	on/off[on]	</td>	<td>	ハッシュされた集約計画型を有効とするか否か</td>
 </tr><tr>
-<td>◎</td>	<td>	enable_hashjoin	</td>	<td>	on/off[[on]	</td>	<td>	ハッシュ結合を有効とするか否か</td>
-
-
-</tr><tr>
-<td>◎</td>	<td>enable_incremental_sort</td>	<td>on/off[[on]	</td>	<td>incremental sortを有効とするか否か</td>
-
-</tr><tr>
-<td>◎</td>	<td>	enable_indexscan</td>	<td>	on/off[[on]	</td>	<td>	インデックススキャンを有効とするか否か</td>
-
-</tr><tr>
-<td>◎</td><td>	enable_indexonlyscan</td>	<td>	on/off[[on]	</td>	<td>	インデックススキャンを有効とするか否か</td>
-
-</tr><tr>
-<td>◎</td>	<td>enable_material</td>	<td>on/off[[on]	</td>	<td>ノードのmaterializeを有効とするか否か</td>
-</tr><tr>
-<td>◎</td>	<td>enable_memoize</td>	<td>on/off[[on]	</td>	<td>NESTED LOOP内のパラメタライズパスの結果をキャッシュするか否か</td>
-
-</tr><tr>
-<td>◎</td>	<td>	enable_mergejoin</td>	<td>	on/off[[on]	</td>	<td>	マージソート結合を有効とするか否か</td>
-</tr><tr>
-<td>◎</td>	<td>	enable_nestloop</td>	<td>	on/off[[on]	</td>	<td>	ネステッドループ結合を有効とするか否か</td>
+<td>◎</td>	<td>	enable_hashjoin	</td>	<td>	on/off[on]	</td>	<td>	ハッシュ結合を有効とするか否か</td>
 
 
 </tr><tr>
-<td>◎</td>	<td>enable_parallel_append</td>	<td>on/off[[on]	</td>	<td>parallel appendを有効とするか否か</td>
+<td>◎</td>	<td>enable_incremental_sort</td>	<td>on/off[on]	</td>	<td>incremental sortを有効とするか否か</td>
 
 </tr><tr>
-<td>◎</td>	<td>enable_parallel_hash</td>	<td>on/off[[on]	</td>	<td>parallel hashを有効とするか否か</td>
+<td>◎</td>	<td>	enable_indexscan</td>	<td>	on/off[on]	</td>	<td>	インデックススキャンを有効とするか否か</td>
 
 </tr><tr>
-<td>◎</td>	<td>enable_partition_pruning</td>	<td>on/off[[on]	</td>	<td>クエリプランからパーティション化テーブルのパーティションを除く機能を有効とするか否か</td>
+<td>◎</td><td>	enable_indexonlyscan</td>	<td>	on/off[on]	</td>	<td>	インデックススキャンを有効とするか否か</td>
+
 </tr><tr>
-<td>◎</td>	<td>enable_partitionwise_join</td>	<td>on/off[[on]	</td>	<td>パーティション同士のJOINを有効とするか否か</td>
+<td>◎</td>	<td>enable_material</td>	<td>on/off[on]	</td>	<td>ノードのmaterializeを有効とするか否か</td>
 </tr><tr>
-<td>◎</td>	<td>enable_partitionwize_aggregate</td>	<td>on/off[[on]	</td>	<td>パーティション同士の集約を有効とするか否か</td>
+<td>◎</td>	<td>enable_memoize</td>	<td>on/off[on]	</td>	<td>NESTED LOOP内のパラメタライズパスの結果をキャッシュするか否か</td>
+
+</tr><tr>
+<td>◎</td>	<td>	enable_mergejoin</td>	<td>	on/off[on]	</td>	<td>	マージソート結合を有効とするか否か</td>
+</tr><tr>
+<td>◎</td>	<td>	enable_nestloop</td>	<td>	on/off[on]	</td>	<td>	ネステッドループ結合を有効とするか否か</td>
+
+
+</tr><tr>
+<td>◎</td>	<td>enable_parallel_append</td>	<td>on/off[on]	</td>	<td>parallel appendを有効とするか否か</td>
+
+</tr><tr>
+<td>◎</td>	<td>enable_parallel_hash</td>	<td>on/off[on]	</td>	<td>parallel hashを有効とするか否か</td>
+
+</tr><tr>
+<td>◎</td>	<td>enable_partition_pruning</td>	<td>on/off[on]	</td>	<td>クエリプランからパーティション化テーブルのパーティションを除く機能を有効とするか否か</td>
+</tr><tr>
+<td>◎</td>	<td>enable_partitionwise_join</td>	<td>on/off[on]	</td>	<td>パーティション同士のJOINを有効とするか否か</td>
+</tr><tr>
+<td>◎</td>	<td>enable_partitionwize_aggregate</td>	<td>on/off[on]	</td>	<td>パーティション同士の集約を有効とするか否か</td>
 
 </tr><tr>
 <td>◎</td>
-<td>enable_presorted_aggregate</td>	<td>on/off[[on]	</td>	<td>バージョン16から</td>
+<td>enable_presorted_aggregate</td>	<td>on/off[on]	</td>	<td>バージョン16から</td>
+
+<td>◎</td>
+<td>enable_self_join_elimination</td>	<td>on/off[on]	</td>	<td>自己結合を単一のスキャンに置き換えるか否か。バージョン18から</td>
 
 </tr><tr>
-<td>◎</td>	<td>	enable_seqscan</td>	<td>	on/off[[on]	</td>	<td>	シーケンシャルスキャンを有効とするか否か</td>
+<td>◎</td>	<td>	enable_seqscan</td>	<td>	on/off[on]	</td>	<td>	シーケンシャルスキャンを有効とするか否か</td>
 </tr><tr>
-<td>◎</td>	<td>	enable_sort</td>	<td>	on/off[[on]	</td>	<td>	ソートを有効とするか否か</td>
+<td>◎</td>	<td>	enable_sort</td>	<td>	on/off[on]	</td>	<td>	ソートを有効とするか否か</td>
 </tr><tr>
-<td>◎</td>	<td>	enable_tidscan</td>	<td>	on/off[[on]	</td>	<td>	TIDスキャンを有効とするか否か</td>
+<td>◎</td>	<td>	enable_tidscan</td>	<td>	on/off[on]	</td>	<td>	TIDスキャンを有効とするか否か</td>
 
 
 </tr><tr bgcolor="#eeeeee">
@@ -551,7 +558,7 @@ sampledb=# SET enable_seqscan TO off;
 </p>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2024-10-17
+Last-modified: 2025-10-16
 </div>
 </body>
 </html>

@@ -372,8 +372,18 @@ pg_upgrade -b oldbindir [-B newbindir] -d oldconfigdir -D newconfigdir [option..
 <td>--copy-file-range</td>	<td>copy_file_range()システムコールを使う。LinuxとFreeBSDのみ。PG17から</td>
 </tr><tr>
 
+<td>--no-statistics</td>	<td>統計情報をコピーしない。PG18から</td>
+</tr><tr>
+
+<td>--set-char-signedness=option</td>	<td>PG18から</td>
+</tr><tr>
+
+<td>--swap</td>	<td>新しいモード。早いが古いディレクトリを破壊する(失敗したら終わり)。詳細はオリジナルドキュメント参照。PG18から</td>
+</tr><tr>
+
 <td>--sync-method=method</td>		<td>'fsync'ならばファイルを書き出すたびにsyncシステムコールで同期する。デフォルト。'syncfs'ならはsyncfsシステムコールでファイル全体を同期する。バージョン17から</td>
 </tr><tr>
+
 
 <td>-j njobs</td>	<td>並列処理</td>
 </tr><tr>
@@ -547,7 +557,7 @@ version 9.2以上ならば、analyze_new_cluster.shというANALYZEを実行す�
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2024-10-17
+Last-modified: 2025-10-16
 </div>
 </body>
 </html>

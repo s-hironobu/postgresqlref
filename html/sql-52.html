@@ -368,12 +368,14 @@ DROP USER MAPPING [ IF EXISTS ] FOR { user_name | USER | CURRENT_ROLE | CURRENT_
 ●外部テーブルの定義と削除
 CREATE FOREIGN TABLE [ IF NOT EXISTS ] table_name ( [
   { column_name data_type [ OPTIONS ( option 'value' [, ... ] ) ] [ COLLATE collation ] [ column_constraint [ ... ] ]
-    | table_constraint }
+    | table_constraint
+    | LIKE source_table [ like_option ... ] }
     [, ... ]
 ] )
 [ INHERITS ( parent_table [, ... ] ) ]
   SERVER server_name
 [ OPTIONS ( option 'value' [, ... ] ) ]
+
 
 CREATE FOREIGN TABLE [ IF NOT EXISTS ] table_name
   PARTITION OF parent_table [ (
@@ -389,19 +391,29 @@ CREATE FOREIGN TABLE [ IF NOT EXISTS ] table_name
 DROP FOREIGN TABLE [ IF EXISTS ] table_name [, ...] [ CASCADE | RESTRICT ]
 
 
-・column_constraint is:
+・where column_constraint is:
+
 [ CONSTRAINT constraint_name ]
-{ NOT NULL |
+{ NOT NULL [ NO INHERIT ] |
   NULL |
   CHECK ( expression ) [ NO INHERIT ] |
   DEFAULT default_expr |
-  GENERATED ALWAYS AS ( generation_expr ) STORED }
+  GENERATED ALWAYS AS ( generation_expr ) [ STORED | VIRTUAL ] }
+[ ENFORCED | NOT ENFORCED ]
 
 ・table_constraint is:
+
 [ CONSTRAINT constraint_name ]
 CHECK ( expression ) [ NO INHERIT ]
 
+
+・like_option is (バージョン18から):
+
+{ INCLUDING | EXCLUDING } { COMMENTS | CONSTRAINTS | DEFAULTS | GENERATED | STATISTICS | ALL }
+
+
 ・partition_bound_spec is:
+
 IN ( partition_bound_expr [, ...] ) |
 FROM ( { partition_bound_expr | MINVALUE | MAXVALUE } [, ...] )
   TO ( { partition_bound_expr | MINVALUE | MAXVALUE } [, ...] ) |
@@ -462,6 +474,16 @@ IMPORT FOREIGN SCHEMA remote_schema
 <td>NOT NULL</td>	<td>NOT NULL制約を付与する</td>
 </tr><tr>
 <td>NULL</td>	<td>NULLを許可する。デフォルト</td>
+
+</tr><tr>
+<td>STORED | VIRTUAL</td>	<td>バージョン18から</td>
+
+</tr><tr>
+<td>ENFORCED | NOT ENFORCED</td>	<td>バージョン18から</td>
+
+</tr><tr>
+<td>NO INHERIT</td>	<td>バージョン18から</td>
+
 </tr></table>
 
 <br>
@@ -474,6 +496,10 @@ IMPORT FOREIGN SCHEMA remote_schema
 <td>OPTIONS ( option 'value' [, ... ] )</td>	<td>ユーザ名、データベース名、ホスト名などを指定する。項目はFDW毎に異なる</td>
 </tr><tr>
 <td>DEFAULT default_expr</td>	<td>デフォルト値default_exprを設定</td>
+
+</tr><tr>
+<td>LIKE source_table [ like_option ... ]</td>	<td>source_tableのようなフォーリンテーブルを作成。バージョン18から</td>
+
 </tr></table>
 <br>
 
@@ -764,7 +790,7 @@ Client_BはClient_Aが先に更新したテーブルmakerlistのトランザク�
 </p>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2024-10-17
+Last-modified: 2025-10-16
 </div>
 </body>
 </html>

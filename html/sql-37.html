@@ -356,7 +356,9 @@ CREATE [ { TEMPORARY | TEMP } | UNLOGGED ] SEQUENCE [ IF NOT EXISTS ] name
     [ AS data_type ]
     [ INCREMENT [ BY ] increment ]
     [ MINVALUE minvalue | NO MINVALUE ] [ MAXVALUE maxvalue | NO MAXVALUE ]
-    [ START [ WITH ] start ] [ CACHE cache ] [ [ NO ] CYCLE ]
+    [ [ NO ] CYCLE ]
+    [ START [ WITH ] start ]
+    [ CACHE cache ]
     [ OWNED BY { table_name.column_name | NONE } ]
 
 ● シーケンスの変更
@@ -776,7 +778,7 @@ DROP SEQUENCE
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2024-10-17
+Last-modified: 2025-10-16
 </div>
 </body>
 </html>

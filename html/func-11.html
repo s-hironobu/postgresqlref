@@ -380,6 +380,8 @@ objID.className='close';
 </tr><tr>
 <td>has_language_privilege(language, privilege)		</td>	<td>bool</td>	<td>現在のロールに言語languageの権限があるか否か</td>	<td>USAGE</td>
 
+</tr><tr>
+<td>has_largeobject_privilege ( [ user name or oid, ] largeobject oid, privilege text )</td>	<td>bool</td>	<td>Largeobjectの権限があるか否か。PG18から</td>	<td>USAGE</td>
 
 </tr><tr>
 <td>has_parameter_privilege(role, parameter, privilege)		</td>	<td>bool</td>	<td>ロールroleにパラメータparameter設定の権限があるか否か)</td>	<td>SET,ALTER SYSTEM</td>
@@ -472,7 +474,7 @@ sampledb=# SELECT has_table_privilege('webuser3', 'customerlist', 'SELECT');
 <br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2024-10-17
+Last-modified: 2025-10-16
 </div>
 </body>
 </html>

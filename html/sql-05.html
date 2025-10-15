@@ -350,7 +350,7 @@ objID.className='close';
 
 <pre>
 [<書式>]
-FOREIGN KEY ( column_name [, ... ] )
+FOREIGN KEY ( column_name [, ... ] [, PERIOD column_name ] )
 	REFERENCES reftable [ ( refcolumn [, ... ] ) ]
 	    [ MATCH FULL | MATCH PARTIAL | MATCH SIMPLE ]
 	    [ ON DELETE referential_action ] [ ON UPDATE referential_action ] }
@@ -387,6 +387,9 @@ REFERENCES reftable [ ( refcolumn ) ]
 <td>ON DELETE referantial_action</td>	<td>被参照テーブルの被参照レコードが削除された場合の動作actionを指定。actionは[<表6-03>]</td>
 </tr><tr>
 <td>ON UPDATE referential_action</td>	<td>被参照テーブルの被参照レコードが更新された場合の動作actionを指定。actionは[<表6-03>]</td>
+
+</tr><tr>
+<td>PERIOD column_name</td>	<td>よく分からない。PG18から</td>
 </tr></table>
 <br>
 
@@ -668,7 +671,7 @@ ON UPDATE句には被参照レコードが更新された場合の動作を指�
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2024-10-17
+Last-modified: 2025-10-16
 </div>
 </body>
 </html>

@@ -352,12 +352,12 @@ objID.className='close';
 [<スナップショット同期関数>]
 
 <table><tr bgcolor="#cccccc">
-<th>関数</th>							<th>返り値型</th>	<th>説明</th>
+<th>関数</th>							<th>返り値型</th>	<th>説明</th>	<th>P/S</th>
 </tr><tr>
-<td>pg_export_snapshot()</td>	<td>text	</td>	<td>トランザクションのスナップショットを返す</td>
+<td>pg_export_snapshot()</td>	<td>text	</td>	<td>トランザクションのスナップショットを返す</td>	<td>Primary/Standby</td>
 
 </tr><tr>
-<td>pg_log_standby_snapshot()</td>	<td>pg_lsn	</td>	<td>Take a snapshot of running transactions and write it to WAL. Since PG16</td>
+<td>pg_log_standby_snapshot()</td>	<td>pg_lsn	</td>	<td>Take a snapshot of running transactions and write it to WAL. Since PG16</td>	<td>Primary</td>
 
 </tr></table>
 
@@ -390,7 +390,7 @@ postgres=*# SELECT pg_export_snapshot();
 </pre>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2024-10-17
+Last-modified: 2025-10-16
 </div>
 </body>
 </html>

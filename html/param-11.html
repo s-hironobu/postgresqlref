@@ -425,22 +425,22 @@ objID.className='close';
 <td>◎</td>	<td>idle_session_timeout</td>	<td>整数 [0]</td>	<td>設定した時間以上アイドルの場合、セッションを閉じる。単位はms。0なら無効。</td>
 
 </tr><tr>
-<td>◎ </td><td>	vacuum_freeze_table_age	 </td><td>整数[150000000]	 </td><td></td>
+<td>◎ </td><td>	vacuum_freeze_table_age	 </td><td>整数[150000000]	 </td><td>PG18から<a href="./param-10.html">[4-10] VACUUM</a>へ</td>
 </tr><tr>
-<td>◎ </td><td>	vacuum_freeze_min_age	 </td><td>整数[50000000]	 </td><td></td>
+<td>◎ </td><td>	vacuum_freeze_min_age	 </td><td>整数[50000000]	 </td><td>PG18から<a href="./param-10.html">[4-10] VACUUM</a>へ</td>
 
 </tr><tr>
-<td>◎</td>	<td>vacuum_failsafe_age</td>	<td></td>	<td>バージョン14から</td>
+<td>◎</td>	<td>vacuum_failsafe_age</td>	<td></td>	<td>バージョン14から。PG18から<a href="./param-10.html">[4-10] VACUUM</a>へ</td>
 
 </tr><tr>
-<td>◎</td>	<td>vacuum_multixact_freeze_table_age</td>	<td></td>	<td></td>
+<td>◎</td>	<td>vacuum_multixact_freeze_table_age</td>	<td></td>	<td>PG18から<a href="./param-10.html">[4-10] VACUUM</a>へ</td>
 
 
 </tr><tr>
-<td>◎</td>	<td>vacuum_multixact_freeze_min_age</td>	<td></td>	<td></td>
+<td>◎</td>	<td>vacuum_multixact_freeze_min_age</td>	<td></td>	<td>PG18から<a href="./param-10.html">[4-10] VACUUM</a>へ</td>
 
 </tr><tr>
-<td>◎</td>	<td>vacuum_multixact_failsafe_age</td>	<td></td>	<td>バージョン14から</td>
+<td>◎</td>	<td>vacuum_multixact_failsafe_age</td>	<td></td>	<td>バージョン14から。PG18から<a href="./param-10.html">[4-10] VACUUM</a>へ</td>
 
 
 </tr><tr>
@@ -512,8 +512,15 @@ objID.className='close';
 
 </tr><tr>
 <td>◎ </td><td>	explain_pretty_print  </td><td> on/off[on]	 </td><td>	問い合わせプランを整形して出力するか否か。デバッグ用</td>
+
+</tr><tr>
+<td>◎ </td>
+<td>	extension_control_path  </td><td> string	 </td><td>	extensionのサーチパス。PG18から</td>
+
 </tr><tr>
 <td>○ </td><td>	dynamic_library_path	 </td><td>文字列['$libdir']	 </td><td>ライブラリを検索するディレクトリ名。複数のディレクトリを指定する場合には"："で区切る。$libdirはPostgreSQLのライブラリディレクトリで置換する</td>
+
+
 </tr></table>
 
 <br>
@@ -577,7 +584,7 @@ lc_messages, lc_monetary, lc_numeric, lc_timeには表示する言語や書式�
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2024-10-17
+Last-modified: 2025-10-16
 </div>
 </body>
 </html>

@@ -395,6 +395,11 @@ SELECT select_list
 細かな注意点が多数あるので、使用にあたっては公式ドキュメントを参照してください。
 </p>
 
+<p>
+<b>
+SELECT FOR UPDATEで、count(*)を使いたくなる場合がありますが、集計関数とFOR UPDATEなどは併用できません。注意。
+</b>
+</p>
 
 
 <p>
@@ -588,7 +593,7 @@ SELECT FOR SHARE文どうしは競合しないので、ブロックされるこ�
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2024-10-17
+Last-modified: 2025-10-16
 </div>
 </body>
 </html>

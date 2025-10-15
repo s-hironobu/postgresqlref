@@ -361,7 +361,7 @@ where option can be one of:
 
 and table_and_columns is:
 
-    table_name [ ( column_name [, ...] ) ]
+    [ ONLY ] table_name [ ( column_name [, ...] ) ]
 
 </pre>
 <br>
@@ -371,7 +371,7 @@ and table_and_columns is:
 <tr bgcolor="#cccccc">
 <th>パラメータ</th>	<th>説明</th>
 </tr><tr>
-<td>table_name</td>	<td>テーブルtableの統計情報のみ集計</td>
+<td>table_name</td>	<td>テーブルtableの統計情報のみ集計。ONLYはPG18から</td>
 
 </tr></table>
 
@@ -410,7 +410,7 @@ ANALYZE文はテーブルの統計情報を集計します。
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2024-10-17
+Last-modified: 2025-10-16
 </div>
 </body>
 </html>

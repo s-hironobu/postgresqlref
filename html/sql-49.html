@@ -369,6 +369,7 @@ where option can be one of:
     FORCE_NOT_NULL ( column_name [, ...] )
     FORCE_NULL ( column_name [, ...] )
     ON_ERROR [ stop | ignore ]
+    REJECT_LIMIT maxerror
     ENCODING 'encoding_name'
     LOG_VERBOSITY [ default | verbose ]
 </pre>
@@ -421,6 +422,9 @@ where option can be one of:
 
 </tr><tr>
 <td>ON_ERROR [stop | ignore]</td>	<td>(FORMATがtextかcsvのとき、)データの型変換でエラーが発生した時に停止stopするか、無視ignoreするか。デフォルトstop。バージョン17から</td>
+
+</tr><tr>
+<td>REJECT_LIMIT maxerror]</td>	<td>ON_ERRORがignoreでも、maxerrorを超えるとCOPYは失敗する。バージョン18から</td>
 
 </tr><tr>
 <td>ENCODING 'encoding_name'</td>	<td>ファイルのエンコーディングencoding_nameを指定</td>
@@ -641,7 +645,7 @@ COPY 3
 <br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2024-10-17
+Last-modified: 2025-10-16
 </div>
 </body>
 </html>

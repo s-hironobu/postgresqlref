@@ -354,7 +354,8 @@ objID.className='close';
 DELETE FROM [ ONLY ] table [ [ AS ] alias ]
     [ USING usinglist ]
     [ WHERE condition | WHERE CURRENT OF cursor_name ]
-    [ RETURNING * | output_expression [ AS output_name ] [, ...] ]
+    [ RETURNING [ WITH ( { OLD | NEW } AS output_alias [, ...] ) ]
+                { * | output_expression [ [ AS ] output_name ] } [, ...] ]
 </pre>
 <br>
 
@@ -380,7 +381,7 @@ DELETE FROM [ ONLY ] table [ [ AS ] alias ]
 </tr><tr>
 <td>WHERE CURRENT OF cursor_name</td>	<td>カーソルcursor_nameから最近取り出した1レコードを削除する</td>
 </tr><tr>
-<td>RETURNING　output_expression</td>	<td>削除結果を表示する</td>
+<td>RETURNING output_expression</td>	<td>削除結果を表示する。WITH句はPG18から</td>
 </tr></table>
 
 <br>
@@ -488,7 +489,7 @@ sampledb=# SELECT * FROM itemlist;
 <br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2024-10-17
+Last-modified: 2025-10-16
 </div>
 </body>
 </html>

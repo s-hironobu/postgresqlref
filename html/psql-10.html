@@ -391,8 +391,14 @@ https://www.postgresql.org/docs/devel/app-psql.html#APP-PSQL-META-COMMAND-PARSE
 <br>
 
 <p>
-プリペアードステートメント関連は省略：/bind, /bind_name, /parse, /close
+プリペアードステートメント関連は省略：\bind, \bind_named, \parse, \close, \close_prepared
 </p>
+
+<p>
+パイプライン関連(PG18から)は省略：\startpipeline, \sendpipeline, \syncpipeline, \endpipeline, \flushrequest, \flush, \getresults [ number_results ]
+</p>
+
+
 
 <div class="jumpmenu"></div><h3>解説</h3>
 
@@ -490,7 +496,7 @@ sampledb=# \echo `date`
 
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2024-10-17
+Last-modified: 2025-10-16
 </div>
 </body>
 </html>
