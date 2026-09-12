@@ -109,6 +109,9 @@ objID.className='close';
 <li><a href="./admin-22.html">レプリケーションの故障対応</a><br></li>
 <li><a href="./admin-23.html">ロジカルレプリケーション</a><br></li>
 
+  <hr>
+[ヘルスチェック]<br>
+<li><a href="./admin-24.html">チートシート</a><br></li>
 </ol>
 
 
@@ -369,6 +372,7 @@ INSERT INTO table_name [ AS alias ] [ ( column_name [, ...] ) ]
 ・conflict_action is one of:
 
     DO NOTHING
+    DO SELECT [ FOR { UPDATE | NO KEY UPDATE | SHARE | KEY SHARE } ] [ WHERE condition ]  (PG19から)
     DO UPDATE SET { column_name = { expression | DEFAULT } |
                     ( column_name [, ...] ) = [ ROW ] ( { expression | DEFAULT } [, ...] ) |
                     ( column_name [, ...] ) = ( sub-SELECT )
@@ -527,7 +531,7 @@ postgres=# SELECT * FROM upsert_test;
 <br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2025-10-16
+Last-modified: 2026-9-11
 </div>
 </body>
 </html>

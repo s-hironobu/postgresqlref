@@ -109,6 +109,9 @@ objID.className='close';
 <li><a href="./admin-22.html">レプリケーションの故障対応</a><br></li>
 <li><a href="./admin-23.html">ロジカルレプリケーション</a><br></li>
 
+  <hr>
+[ヘルスチェック]<br>
+<li><a href="./admin-24.html">チートシート</a><br></li>
 </ol>
 
 
@@ -357,10 +360,10 @@ objID.className='close';
 <td>pg_is_in_recovery()		</td>	<td>boolean	</td>	<td>リカバリ中ならばtrueを返す</td>	<td>Primary+Standby</td>
 
 </tr><tr>
-<td>pg_last_wal_receive_location()	</td>	<td>text	</td>	<td>受信してHDDに書き込んだWALログのLSN</td>	<td>Standby</td>
+<td>pg_last_wal_receive_lsn()	</td>	<td>text	</td>	<td>受信してHDDに書き込んだWALログのLSN</td>	<td>Standby</td>
 
 </tr><tr>
-<td>pg_last_wal_replay_location()	</td>	<td>text	</td>	<td>受信してHDDに書き込み、さらに再生(replay)したWALログのLSN</td>	<td>Standby</td>
+<td>pg_last_wal_replay_lsn()	</td>	<td>text	</td>	<td>受信してHDDに書き込み、さらに再生(replay)したWALログのLSN</td>	<td>Standby</td>
 
 </tr><tr>
 <td>pg_last_xact_replay_timestamp()	    </td>	<td>timestamp with TZ	</td>	<td>再生(replay)したWALログが、マスタ側で実行された時刻</td>	<td>Standby</td>
@@ -412,9 +415,9 @@ objID.className='close';
 
 
 <p>
-・pg_last_xlog_receive_location()
+・pg_last_xlog_receive_lsn()
 <br>
-pg_last_xlog_receive_location()は受信してHDDに書き込んだWALログのLSNを返します。
+pg_last_xlog_receive_lsn()は受信してHDDに書き込んだWALログのLSNを返します。
 "receive"という関数名と異なるので注意。
 <br>
 
@@ -533,7 +536,7 @@ postgres=# SELECT pg_wal_replay_resume();
 <br>
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2025-10-16
+Last-modified: 2026-9-11
 </div>
 </body>
 </html>

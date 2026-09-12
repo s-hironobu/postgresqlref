@@ -109,6 +109,9 @@ objID.className='close';
 <li><a href="./admin-22.html">レプリケーションの故障対応</a><br></li>
 <li><a href="./admin-23.html">ロジカルレプリケーション</a><br></li>
 
+  <hr>
+[ヘルスチェック]<br>
+<li><a href="./admin-24.html">チートシート</a><br></li>
 </ol>
 
 
@@ -1161,9 +1164,303 @@ streaming:　ストリーミング中<br>
 
 </tr></table>
 
+
+<div class="jumpmenu"></div><h3>典型的なクエリ</h3>
+
+
+<div class="jumpmenu"></div><h4>.全構成共通：基本情報</h4>
+
+* 構成
+
+<pre>
+SELECT
+    version(),
+    current_database(),
+    current_user,
+    inet_server_addr(),
+    inet_server_port(),
+    pg_postmaster_start_time(),
+    now() AS current_time;
+</pre>
+
+* Parameters
+
+<pre>
+SELECT name, setting, unit, source
+FROM pg_settings
+WHERE name IN (
+    'server_version',
+    'server_version_num',
+    'cluster_name',
+    'data_directory',
+    'config_file',
+    'hba_file',
+    'port',
+    'listen_addresses',
+    'max_connections',
+    'superuser_reserved_connections',
+    'shared_buffers',
+    'work_mem',
+    'maintenance_work_mem',
+    'effective_cache_size',
+    'huge_pages',
+    'max_worker_processes',
+    'max_parallel_workers',
+    'max_parallel_workers_per_gather',
+    'max_parallel_maintenance_workers',
+    'shared_preload_libraries'
+)
+ORDER BY name;
+</pre>
+
+* Replication COnfig
+
+<pre>
+SELECT name, setting, unit, source
+FROM pg_settings
+WHERE name IN (
+    'wal_level',
+    'wal_buffers',
+    'wal_compression',
+    'wal_keep_size',
+    'max_wal_size',
+    'min_wal_size',
+    'max_wal_senders',
+    'max_replication_slots',
+    'max_slot_wal_keep_size',
+    'wal_sender_timeout',
+    'wal_receiver_timeout',
+    'wal_receiver_status_interval',
+    'hot_standby',
+    'hot_standby_feedback',
+    'synchronous_commit',
+    'synchronous_standby_names',
+    'primary_conninfo',
+    'primary_slot_name'
+)
+ORDER BY name;
+</pre>
+
+* Logical Replication
+
+<pre>
+SELECT name, setting, unit, source
+FROM pg_settings
+WHERE name IN (
+    'max_logical_replication_workers',
+    'max_sync_workers_per_subscription',
+    'max_parallel_apply_workers_per_subscription',
+    'max_replication_origins',
+    'max_active_replication_origins',
+    'logical_decoding_work_mem',
+    'idle_replication_slot_timeout'
+)
+ORDER BY name;
+</pre>
+
+<div class="jumpmenu"></div><h4>pg_stat_activity</h4>
+
+<pre>
+SELECT
+    pid,
+    usename,
+    datname,
+    application_name,
+    client_addr,
+    backend_type,
+    state,
+    wait_event_type,
+    wait_event,
+    xact_start,
+    query_start,
+    state_change,
+    now() - xact_start  AS xact_age,
+    now() - query_start AS query_age,
+    backend_xid,
+    backend_xmin,
+    left(query, 200) AS query
+FROM pg_stat_activity
+ORDER BY xact_start NULLS LAST;
+</pre>
+
+<div class="jumpmenu"></div><h4>Long transaction</h4>
+
+<pre>
+SELECT
+    pid,
+    usename,
+    datname,
+    client_addr,
+    application_name,
+    state,
+    xact_start,
+    now() - xact_start AS xact_age,
+    query_start,
+    now() - query_start AS query_age,
+    backend_xid,
+    backend_xmin,
+    wait_event_type,
+    wait_event,
+    left(query, 300) AS query
+FROM pg_stat_activity
+WHERE xact_start IS NOT NULL
+ORDER BY xact_start;
+</pre>
+
+* 例えば、1時間以上
+
+<pre>
+SELECT
+    pid,
+    usename,
+    datname,
+    application_name,
+    state,
+    now() - xact_start AS xact_age,
+    backend_xid,
+    backend_xmin,
+    left(query, 300) AS query
+FROM pg_stat_activity
+WHERE xact_start IS NOT NULL
+  AND now() - xact_start > interval '1 hour'
+ORDER BY xact_start;
+</pre>
+
+* Idle in Transaction
+
+<pre>
+SELECT
+    pid,
+    usename,
+    datname,
+    application_name,
+    client_addr,
+    xact_start,
+    now() - xact_start AS xact_age,
+    state_change,
+    now() - state_change AS idle_age,
+    backend_xmin,
+    left(query, 300) AS query
+FROM pg_stat_activity
+WHERE state = 'idle in transaction'
+ORDER BY xact_start;
+</pre>
+
+<div class="jumpmenu"></div><h4>Lock</h4>
+
+<pre>
+SELECT
+    pid,
+    locktype,
+    database,
+    relation::regclass AS relation,
+    page,
+    tuple,
+    virtualxid,
+    transactionid,
+    classid,
+    objid,
+    objsubid,
+    mode,
+    granted,
+    waitstart
+FROM pg_locks
+ORDER BY granted, waitstart;
+</pre>
+
+* with blocking relationship
+
+<pre>
+SELECT
+    blocked.pid AS blocked_pid,
+    blocked.usename AS blocked_user,
+    blocked.datname AS blocked_db,
+    blocked.application_name AS blocked_app,
+    now() - blocked.query_start AS blocked_for,
+    blocked.wait_event_type,
+    blocked.wait_event,
+    left(blocked.query, 200) AS blocked_query,
+
+    blocker.pid AS blocker_pid,
+    blocker.usename AS blocker_user,
+    blocker.application_name AS blocker_app,
+    now() - blocker.xact_start AS blocker_xact_age,
+    left(blocker.query, 200) AS blocker_query
+FROM pg_stat_activity blocked
+JOIN LATERAL unnest(pg_blocking_pids(blocked.pid)) AS b(pid)
+    ON true
+JOIN pg_stat_activity blocker
+    ON blocker.pid = b.pid
+WHERE blocked.wait_event_type = 'Lock'
+ORDER BY blocked.query_start;
+</pre>
+
+* Only blocker
+
+<pre>
+SELECT
+    a.pid,
+    a.usename,
+    a.datname,
+    a.application_name,
+    now() - a.xact_start AS xact_age,
+    now() - a.query_start AS query_age,
+    count(*) AS blocked_sessions,
+    left(a.query, 200) AS query
+FROM pg_stat_activity a
+JOIN pg_stat_activity b
+  ON a.pid = ANY(pg_blocking_pids(b.pid))
+WHERE a.pid <> b.pid
+GROUP BY
+    a.pid, a.usename, a.datname,
+    a.application_name,
+    a.xact_start,
+    a.query_start,
+    a.query
+ORDER BY blocked_sessions DESC;
+</pre>
+
+<div class="jumpmenu"></div><h4>Table / vacuum / analyze</h4>
+
+<pre>
+SELECT
+    schemaname,
+    relname,
+    n_live_tup,
+    n_dead_tup,
+    n_mod_since_analyze,
+    last_vacuum,
+    last_autovacuum,
+    last_analyze,
+    last_autoanalyze,
+    vacuum_count,
+    autovacuum_count,
+    analyze_count,
+    autoanalyze_count
+FROM pg_stat_user_tables
+ORDER BY n_dead_tup DESC;
+</pre>
+
+<div class="jumpmenu"></div><h4>Vacuum Progress</h4>
+
+<pre>
+SELECT
+    pid,
+    datname,
+    relid::regclass AS relation,
+    phase,
+    heap_blks_total,
+    heap_blks_scanned,
+    heap_blks_vacuumed,
+    index_vacuum_count,
+    max_dead_tuples,
+    num_dead_tuples
+FROM pg_stat_progress_vacuum;
+</pre>
+
 <hr class="full_hr">
 <div id="lastmodified">
-Last-modified: 2025-10-16
+Last-modified: 2026-9-11
 </div>
 </body>
 </html>
