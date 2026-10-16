@@ -1,0 +1,13 @@
+baseURL = "http://localhost:1313/"
+title = "自分用PostgreSQLマニュアル"
+uglyURLs = true
+canonifyURLs = true
+relativeURLs = true
+
+theme = "relearn"
+defaultContentLanguage = "ja"
+hasCJKLanguage = true
+
+[markup.goldmark.renderer]
+  # 原稿中のHTML(表、<pre>、<img>など)をそのまま出力するために必須
+  unsafe = true

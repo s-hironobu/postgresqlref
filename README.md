@@ -6,7 +6,7 @@
 しかし、まだ10％程度完了していない箇所があります。
 
 
-内容はPostgreSQL version17対応(一部未対応)です。
+内容はPostgreSQL version18対応(一部未対応)です。
 
 
 自分用なので、自分がわかっていることについての解説は省略しています。よって、他人が読んでもわからない記述が多々あります。
@@ -46,6 +46,46 @@ Headerファイルには目次が含まれています。もしも文書を追�
 OpenOfficeで作成した図表があります。
 
 図表を原稿に反映させるには、反映させたい画像をキャプチャして適当な画像ファイル名にして、htmlディレクトリに保存します。
+
+
+## Hugo 対応(Experimental)
+
+[Hugo](https://gohugo.io/)を使って表示する機構を追加しました。
+
+
+### 設定
+
+設定はpgrefディレクトリで実行します。
+
+```
+$ cd pgref
+```
+
+1. Hugoをインストールする。
+
+2. themeをインストールする。
+
+```
+$ git clone --depth 1 --branch 9.0.3 https://github.com/McShelby/hugo-theme-relearn.git themes/relearn
+```
+
+
+3. 以下のコマンドを実行する。
+
+```
+$ python ./ref2hugo.py
+$ hugo
+```
+
+4. ブラウザでアクセスする
+
+"~/pgref/public/index.html"にアクセスする。
+
+
+### トラブルシューティング
+
++ hugo と themeのバージョン不一致: [relearn](https://themes.gohugo.io/themes/hugo-theme-relearn/)から適切なバージョンを入れ直す。
+
 
 ## 説明が未完、もしくは理解が曖昧な箇所
 
