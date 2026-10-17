@@ -73,7 +73,7 @@ $ git clone --depth 1 --branch 9.0.3 https://github.com/McShelby/hugo-theme-rele
 3. 以下のコマンドを実行する。
 
 ```
-$ python ./ref2hugo.py
+$ python ./ref2hugo.py --static-dir static
 $ hugo
 ```
 
